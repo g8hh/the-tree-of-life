@@ -52,7 +52,7 @@ function format(decimal, precision=2) {
 }
 
 function formatWhole(a) {
-	if (Decimal.lt(a, 1e10)) return format(a, 0)
+	if (Decimal.lt(a, 1e8)) return format(a, 0)
 	return format(a)
 }
 
@@ -516,6 +516,10 @@ function buyBuyable(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canAfford) return
+	if (layers[layer].buyables[id].buyMax && canBuyMax(layer, id)) {
+		buyMaxBuyable(layer, id)
+		return
+	}
 
 	layers[layer].buyables[id].buy()
 	updateBuyableTemp(layer)

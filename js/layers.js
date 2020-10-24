@@ -11,6 +11,11 @@ function filter(list, keep){
         return list.filter(x => keep.includes(x))
 }
 
+function canBuyMax(layer, id) {
+        if (layer == "i") return hasAMUpgrade(13)
+	return false
+}
+
 function hasIUpg(id){
         return hasUpgrade("i", id)
 }
@@ -48,6 +53,34 @@ function hasAMUpgrade(id){
         return hasUpgrade("am", id)
 }
 
+function formatNextIUpgText(id, amt){
+        let start = "You need " + formatWhole(amt) + " levels of "
+        let end = " to unlock the next upgrade"
+        let mid = layers.i.buyables[id].title
+        return start + mid + end
+}
+
+function canSeeIUpgrade(id){
+        return layers.i.upgrades[id].unlocked()
+}
+
+function canUnlIUpgForText(id){
+        if (id <= 31) {
+                if (hasAMUpgrade(12)) return false //we already see it
+                if (id % 10 == 1) return !canSeeIUpgrade(id) && canSeeIUpgrade(id-7)
+                return !canSeeIUpgrade(id) && canSeeIUpgrade(id-1)
+        }
+        if (!hasAMUpgrade(13)) return false
+        if (id <= 34) {
+                if (id % 10 == 1) return !canSeeIUpgrade(id) && canSeeIUpgrade(id-7)
+                return !canSeeIUpgrade(id) && canSeeIUpgrade(id-1)
+        }
+        
+        return false //for now
+}
+
+var incGainFactor = new Decimal(1)
+
 addLayer("i", {
         name: "Incrementy", // This is optional, only used in a few places, If absent it just uses the layer id.
         symbol: "I", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -69,7 +102,7 @@ addLayer("i", {
                 let exp = layers.i.getGainExp()
                 let pst = layers.i.getGainMultPost()
                 let ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
-                return ret
+                return ret.times(incGainFactor).max(0)
         },
         getGainExp(){
                 let x = new Decimal(1)
@@ -78,13 +111,16 @@ addLayer("i", {
         },
         getGainMultPre(){
                 let x = new Decimal(1)
+                if (hasIUpg(32)) x = x.times(layers.am.effect())
+                if (hasAMUpgrade(14)) x = x.times(getBuyableAmount("i", 12).max(1))
+                if (hasAMUpgrade(22)) x = x.times(getBuyableAmount("i", 11).max(1))
                 return x
         },
         getGainMultPost(){
                 let x = new Decimal(1)
                 x = x.times(getIBuyableEff(11))
                 x = x.times(getIBuyableEff(12))
-                x = x.times(layers.am.effect())
+                if (!hasIUpg(32)) x = x.times(layers.am.effect())
                 if (hasAMUpgrade(11)) x = x.times(getAMUpgEff(11))
                 if (hasAMUpgrade(12)) x = x.times(3)
                 return x
@@ -105,9 +141,24 @@ addLayer("i", {
         canReset(){
                 return false
         },
+        nextUpgradeText(){
+                let t = ""
+                if (canUnlIUpgForText(13)) t = formatNextIUpgText(11, 10)
+                if (canUnlIUpgForText(14)) t = formatNextIUpgText(12, 3)
+                if (canUnlIUpgForText(21)) t = formatNextIUpgText(11, 15)
+                if (canUnlIUpgForText(22)) t = formatNextIUpgText(12, 5)
+                if (canUnlIUpgForText(23)) t = formatNextIUpgText(11, 66)
+                if (canUnlIUpgForText(24)) t = formatNextIUpgText(13, 10)
+                if (canUnlIUpgForText(31)) t = formatNextIUpgText(12, 14)
+                if (canUnlIUpgForText(32)) t = formatNextIUpgText(11, 82)
+                if (canUnlIUpgForText(33)) t = formatNextIUpgText(11, 89)
+                if (canUnlIUpgForText(34)) t = formatNextIUpgText(13, 19)
+                
+                return t
+        },
         upgrades: {
-                rows: 4,
-                cols: 5,
+                rows: 3,
+                cols: 4,
                 11: {
                         title: "Cache",
                         description: "Incrementy multiplies point gain",
@@ -176,17 +227,40 @@ addLayer("i", {
                         },
                 },
                 31: {
-                        title: "Kernel", //Colonel
+                        title: "Kernel", 
                         description: "Nerf the superexponential Incrementy Stamina scaling",
                         cost: new Decimal(2e21),
                         unlocked(){
                                 return getBuyableAmount("i", 12).gte(14) || hasAMUpgrade(12) || hasIUpg(31)
-                                //next is 71st 11
+                        },
+                },
+                32: {
+                        title: "Colonel", 
+                        description: "Antimatter effect is applied before Stamina",
+                        cost: new Decimal(2e29),
+                        unlocked(){
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 11).gte(82)) || hasIUpg(32)
+                        },
+                },
+                33: {
+                        title: "Hall", //haul
+                        description: "Each Incrementy Strength adds .02 to the Incrementy Strength base (capped at 10)",
+                        cost: new Decimal(1e34),
+                        unlocked(){
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 11).gte(89)) || hasIUpg(33)
+                        },
+                },
+                34: {
+                        title: "Haul", //haul
+                        description: "Each Incrementy Speed adds .01 to the Incrementy Speed base (capped at 10)",
+                        cost: new Decimal(1e37),
+                        unlocked(){
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 13).gte(19)) || hasIUpg(33)
                         },
                 },
         },
         buyables: {
-                rows: 3,
+                rows: 1,
                 cols: 3,
                 11: {
                         title: "Incrementy Speed",
@@ -204,7 +278,9 @@ addLayer("i", {
                         },
                         effect(){
                                 let x = getBuyableAmount("i", 11)
-                                return Decimal.pow(1.5, x)
+                                let base = new Decimal(1.5)
+                                if (hasIUpg(34)) base = base.plus(x.div(100).min(8.5))
+                                return Decimal.pow(base, x)
                         },
                         canAfford(){
                                 return player.i.points.gte(getIBuyableCost(11))
@@ -214,7 +290,32 @@ addLayer("i", {
                                 if (player.i.points.lt(cost)) return
                                 player.i.buyables[11] = player.i.buyables[11].plus(1)
                                 // some upgrade should make them not actually remove inc
-                                player.i.points = player.i.points.minus(cost)
+                                if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
+                        },
+                        buyMax(){       
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                player.i.buyables[11] = player.i.buyables[11].max(target)
+
+                                //so ew, make sure to do the rest, but ew
+                                
                         },
                         unlocked(){ return hasIUpg(12) },
                 },
@@ -233,7 +334,9 @@ addLayer("i", {
                         },
                         effect(){
                                 let x = getBuyableAmount("i", 12)
-                                return Decimal.pow(2, x)
+                                let base = new Decimal(2)
+                                if (hasIUpg(33)) base = base.plus(x.div(50).min(8))
+                                return Decimal.pow(base, x)
                         },
                         canAfford(){
                                 return player.i.points.gte(getIBuyableCost(12))
@@ -243,7 +346,32 @@ addLayer("i", {
                                 if (player.i.points.lt(cost)) return
                                 player.i.buyables[12] = player.i.buyables[12].plus(1)
                                 // some upgrade should make them not actually remove inc
-                                player.i.points = player.i.points.minus(cost)
+                                if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
+                        },
+                        buyMax(){       
+                                if (player.i.points.lt(1e4)) return
+                                if (player.i.points.lt(4e4)) {
+                                        layers.i.buyables[12].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(23) ? 1 : 4) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                //let exp2 = x.times(x)
+                                let pttarget = player.i.points.div(1e4).log(1.25)
+                                let bfactor = Math.log(base1) / Math.log(1.25)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                player.i.buyables[12] = player.i.buyables[12].max(target)
+
+                                //so ew, make sure to do the rest, but ew
+                                
                         },
                         unlocked(){ return hasIUpg(13) },
                 },
@@ -257,8 +385,9 @@ addLayer("i", {
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 13).plus(a)
+                                let xcopy = getBuyableAmount("i", 13).plus(a)
                                 let b1 = hasIUpg(24) ? 1 : 2
-                                let ret = Decimal.pow(b1, x).times(Decimal.pow(1.25, x.times(x))).times(1e5)
+                                
                                 let y = x.minus(4).max(1)
                                 if (hasIUpg(31)) {
                                         y = new Decimal(1)
@@ -266,11 +395,13 @@ addLayer("i", {
                                 }
                                 let base1 = y.div(10).plus(1)
                                 let base2 = y.sqrt().div(5).plus(1)
+                                
+                                let ret = Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))).times(1e5)
                                 return ret.times(Decimal.pow(base1, Decimal.pow(base2, x)))
                         },
                         effect(){
                                 let x = getBuyableAmount("i", 13)
-                                //if (x.gt(10)) x = x.div(10).pow(.99).times(10)
+                                if (x.gt(40)) x = x.div(40).pow(.5).times(40)
                                 return Decimal.pow(1.05, x)
                         },
                         canAfford(){
@@ -281,7 +412,14 @@ addLayer("i", {
                                 if (player.i.points.lt(cost)) return
                                 player.i.buyables[13] = player.i.buyables[13].plus(1)
                                 // some upgrade should make them not actually remove inc
-                                player.i.points = player.i.points.minus(cost)
+                                if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
+                        },
+                        buyMax(){
+                                let pts = player.i.points
+                                //eventually we can remove all the scalings except b1^b2^x
+                                for (i = 0; i <= 30; i++){
+                                        layers.i.buyables[13].buy()
+                                }
                         },
                         unlocked(){ return hasIUpg(14) },
                 },
@@ -292,6 +430,7 @@ addLayer("i", {
                 ["display-text",
                         function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
                         {"font-size": "20px"}],
+                ["display-text", function () {return layers.i.nextUpgradeText()}],
                 "blank",
                 "buyables", 
                 "blank", 
@@ -303,7 +442,7 @@ addLayer("i", {
                 //upgrades
                 let keep = []
                 if (hasUpgrade("am", 12)) keep.push(11, 12, 13, 14)
-                player.i.upgrades = filter(player.i.upgrades, keep)
+                if (!hasUpgrade("am", 13)) player.i.upgrades = filter(player.i.upgrades, keep)
 
                 //incrementy
                 player.i.points = new Decimal(0)
@@ -334,8 +473,13 @@ addLayer("am", {
         branches: ["i"],
         type: "custom", 
         effect(){
-                let ret = player.am.points.plus(1)
-                if (ret.gt(10)) ret = ret.div(10).sqrt().times(10)
+                let ret = player.am.points.plus(1).pow(Math.log(3)/Math.log(2))
+                if (ret.gt(100)) ret = ret.div(100).sqrt().times(100)
+                if (ret.gt(1000)) ret = ret.div(1000).pow(.25).times(1000)
+                if (ret.gt(1e4)) ret = ret.div(1e4).pow(.125).times(1e4)
+                if (ret.gt(1e5)) ret = ret.log10().times(2).pow(5)
+                
+                if (hasAMUpgrade(23)) ret = ret.pow(2)
                 return ret
         },
         effectDescription(){
@@ -352,6 +496,7 @@ addLayer("am", {
         },
         getGainExp(){
                 let x = new Decimal(.5)
+                if (hasAMUpgrade(23)) x = x.times(2)
                 return x
         },
         getGainMultPre(){
@@ -371,6 +516,7 @@ addLayer("am", {
         update(diff){
                 if (!player.am.best) player.am.best = new Decimal(0)
                 player.am.best = player.am.best.max(player.am.points)
+                if (hasAMUpgrade(21)) player.am.points = player.am.points.plus(layers.am.getResetGain().times(diff))
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -381,26 +527,77 @@ addLayer("am", {
                 rows: 3,
                 cols: 4,
                 11: {
-                        title: "Plane", //plain
-                        description: "Incrementy multiplies incrementy gain",
+                        title: "Plane", 
+                        description: "Incrementy multiplies Incrementy gain",
                         cost: new Decimal(2),
-                        unlocked(){
-                                return player.am.best.gte(2)
-                        },
                         effect(){
                                 let exp = 1
                                 return player.i.points.plus(10).log10().pow(exp)
                         },
                 },
                 12: {
-                        title: "Plane", //plain
-                        description: "Triple Incrementy gain and keep the first row of Incrementy Upgrades",
+                        title: "Plain", 
+                        description: "Triple Incrementy gain, keep the first row of Incrementy Upgrades, and nerf the Incrementy Stamina formula",
                         cost: new Decimal(2),
                         unlocked(){
                                 return hasAMUpgrade(11)
                         },
                 },
+                13: {
+                        title: "Sale", //sail
+                        description: "Unlock new I upgrades, keep them on AM reset, you can buy max Incrementy Boosts, and they don't cost Incrementy",
+                        cost: new Decimal(10),
+                        unlocked(){
+                                return hasAMUpgrade(12)
+                        },
+                },
+                14: {
+                        title: "Sail", //sail
+                        description: "Incrementy Strength levels multiply base incrementy gain",
+                        cost: new Decimal(1e172),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        unlocked(){
+                                return hasIUpg(34) || hasAMUpgrade(14)
+                        },
+                },
+                21: {
+                        title: "Coarse", 
+                        description: "Remove the Antimatter prestige, but gain 100% of gain on reset per second",
+                        cost: new Decimal(200),
+                        unlocked(){
+                                return hasAMUpgrade(14) || hasAMUpgrade(21)
+                        },
+                },
+                22: {
+                        title: "Course",
+                        description: "Incrementy Speed levels multiply base incrementy gain",
+                        cost: new Decimal(2000),
+                        unlocked(){
+                                return hasAMUpgrade(21) || hasAMUpgrade(22)
+                        },
+                },
+                23: {
+                        title: "Waive", //wave
+                        description: "Square antimatter gain and effect",
+                        cost: new Decimal(3000),
+                        unlocked(){
+                                return hasAMUpgrade(22) || hasAMUpgrade(23)
+                        },
+                }, //next upgrade: e417 inc
         },
+        tabFormat: ["main-display",
+                ["display-text",
+                        function() {
+                                return hasAMUpgrade(21) ? "You are gaining " + format(layers.am.getResetGain()) + " Antimatter per second" : ""
+                        },
+                        {"font-size": "20px"}],
+                ["prestige-button", "", function (){ return hasAMUpgrade(21) ? {'display': 'none'} : {}}],
+                "blank",
+                "buyables", 
+                "blank", 
+                "upgrades"],
 })
 
 
