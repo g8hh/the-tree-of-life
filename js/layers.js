@@ -124,7 +124,7 @@ addLayer("i", {
                         description: "Unlock the first repeatable upgrade",
                         cost: new Decimal(50),
                         unlocked(){
-                                return hasIUpg(11)
+                                return hasIUpg(11) || hasAMUpgrade(12) || hasIUpg(12)
                         },
                 },
                 13: {
@@ -132,7 +132,7 @@ addLayer("i", {
                         description: "Unlock the second repeatable upgrade",
                         cost: new Decimal(1e4),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(10)
+                                return getBuyableAmount("i", 11).gte(10) || hasAMUpgrade(12) || hasIUpg(13)
                         }
                 },
                 14: {
@@ -140,7 +140,7 @@ addLayer("i", {
                         description: "Unlock the third repeatable upgrade",
                         cost: new Decimal(2e5),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(3)
+                                return getBuyableAmount("i", 12).gte(3) || hasAMUpgrade(12) || hasIUpg(14)
                         }
                 },
                 21: {
@@ -148,7 +148,7 @@ addLayer("i", {
                         description: "Square Cache",
                         cost: new Decimal(2e5),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(15)
+                                return getBuyableAmount("i", 11).gte(15) || hasAMUpgrade(12) || hasIUpg(21)
                         },
                 },
                 22: {
@@ -156,7 +156,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Speed",
                         cost: new Decimal(15e7),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(5)
+                                return getBuyableAmount("i", 12).gte(5) || hasAMUpgrade(12) || hasIUpg(22)
                         },
                 },
                 23: {
@@ -164,7 +164,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Strength",
                         cost: new Decimal(1e19),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(66)
+                                return getBuyableAmount("i", 11).gte(66) || hasAMUpgrade(12) || hasIUpg(23)
                         },
                 },
                 24: {
@@ -172,7 +172,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Stamina and Cache is based on best Incrmenty",
                         cost: new Decimal(1e20),
                         unlocked(){
-                                return getBuyableAmount("i", 13).gte(10)
+                                return getBuyableAmount("i", 13).gte(10) || hasAMUpgrade(12) || hasIUpg(24)
                         },
                 },
                 31: {
@@ -180,7 +180,7 @@ addLayer("i", {
                         description: "Nerf the superexponential Incrementy Stamina scaling",
                         cost: new Decimal(2e21),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(14) 
+                                return getBuyableAmount("i", 12).gte(14) || hasAMUpgrade(12) || hasIUpg(31)
                                 //next is 71st 11
                         },
                 },
