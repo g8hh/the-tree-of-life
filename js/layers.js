@@ -3,7 +3,12 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
         if (hasIUpg(11)) gain = gain.times(getIUpgEff(11))
+        gain = gain.times(layers.am.effect())
 	return gain
+}
+
+function filter(list, keep){
+        return list.filter(x => keep.includes(x))
 }
 
 function hasIUpg(id){
@@ -22,10 +27,25 @@ function getIBuyableEff(id){
         return layers.i.buyables[id].effect()
 }
 
+function getIBuyablesTotalRow(row){
+        a = new Decimal(0)
+        for (i = 1; i <= layers.i.buyables.cols; i++){
+                a = a.plus(getBuyableAmount("i", 10*row+i))
+        }
+        return a
+}
+
 function getIBuyableFormat(id){
         let a = getBuyableAmount("i", id)
-        if (a.lt(1000000)) return format(a, 0)
-        return format(a, 3)
+        return formatWhole(a)
+}
+
+function getAMUpgEff(id){
+        return upgradeEffect("am", id)
+}
+
+function hasAMUpgrade(id){
+        return hasUpgrade("am", id)
 }
 
 addLayer("i", {
@@ -48,7 +68,7 @@ addLayer("i", {
                 let pre = layers.i.getGainMultPre()
                 let exp = layers.i.getGainExp()
                 let pst = layers.i.getGainMultPost()
-                let ret = pts.max(10).log10().pow(exp).times(pre).minus(1).times(pst)
+                let ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
                 return ret
         },
         getGainExp(){
@@ -58,19 +78,16 @@ addLayer("i", {
         },
         getGainMultPre(){
                 let x = new Decimal(1)
-                x = x.times(getIBuyableEff(12))
                 return x
         },
         getGainMultPost(){
                 let x = new Decimal(1)
                 x = x.times(getIBuyableEff(11))
+                x = x.times(getIBuyableEff(12))
+                x = x.times(layers.am.effect())
+                if (hasAMUpgrade(11)) x = x.times(getAMUpgEff(11))
+                if (hasAMUpgrade(12)) x = x.times(3)
                 return x
-        },
-        prestigeButtonText(){
-                return "You are gaining " + format(layers.i.getResetGain()) + " incrmenty per second"
-        },
-        canReset(){
-                return false
         },
         update(diff){
                 player.i.points = player.i.points.plus(layers.i.getResetGain().times(diff))
@@ -79,9 +96,15 @@ addLayer("i", {
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
-            {key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){return true},
+        prestigeButtonText(){
+                return "if you see this bug"
+        },
+        canReset(){
+                return false
+        },
         upgrades: {
                 rows: 4,
                 cols: 5,
@@ -262,5 +285,124 @@ addLayer("i", {
                         },
                         unlocked(){ return hasIUpg(14) },
                 },
-        }
+        },
+        tabFormat: ["main-display",
+                ["display-text",
+                        function() {return hasIUpg(24) ? "Your best incrementy is " + format(player.i.best) : ""}],
+                ["display-text",
+                        function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
+                        {"font-size": "20px"}],
+                "blank",
+                "buyables", 
+                "blank", 
+                "upgrades"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 0) return
+
+                //upgrades
+                let keep = []
+                if (hasUpgrade("am", 12)) keep.push(11, 12, 13, 14)
+                player.i.upgrades = filter(player.i.upgrades, keep)
+
+                //incrementy
+                player.i.points = new Decimal(0)
+                player.i.best = new Decimal(0)
+
+                //buyables
+                let resetBuyables = [11,12,13]
+                for (let j = 0; j < resetBuyables.length; j++) {
+                        player.i.buyables[resetBuyables[j]] = new Decimal(0)
+                }
+
+        },
 })
+
+addLayer("am", {
+        name: "Antimatter", 
+        symbol: "AM", 
+        position: 0,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#DB4C83",
+        requires: new Decimal(100), // Can be a function that takes requirement increases into account
+        resource: "Antimatter", // Name of prestige currency
+        baseAmount() {return getIBuyablesTotalRow(1)}, 
+        branches: ["i"],
+        type: "custom", 
+        effect(){
+                let ret = player.am.points.plus(1)
+                if (ret.gt(10)) ret = ret.div(10).sqrt().times(10)
+                return ret
+        },
+        effectDescription(){
+                return "which multiplies incrementy and point gain by " + formatWhole(layers.am.effect())
+        },
+        getResetGain() {
+                let amt = layers.am.baseAmount()
+                let pre = layers.am.getGainMultPre()
+                let exp = layers.am.getGainExp()
+                let pst = layers.am.getGainMultPost()
+                let ret = amt.sub(99).max(0).times(pre).pow(exp).times(pst).floor()
+                if (player.am.best.eq(0)) return ret.min(1)
+                return ret
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                return "Reset to gain " + formatWhole(layers.am.getResetGain()) + " Antimatter"
+        },
+        canReset(){
+                return layers.am.getResetGain().gt(0)
+        },
+        update(diff){
+                if (!player.am.best) player.am.best = new Decimal(0)
+                player.am.best = player.am.best.max(player.am.points)
+        },
+        row: 1, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return getIBuyablesTotalRow(1).gte(100) || player.am.best.gt(0)},
+        upgrades: {
+                rows: 3,
+                cols: 4,
+                11: {
+                        title: "Plane", //plain
+                        description: "Incrementy multiplies incrementy gain",
+                        cost: new Decimal(2),
+                        unlocked(){
+                                return player.am.best.gte(2)
+                        },
+                        effect(){
+                                let exp = 1
+                                return player.i.points.plus(10).log10().pow(exp)
+                        },
+                },
+                12: {
+                        title: "Plane", //plain
+                        description: "Triple Incrementy gain and keep the first row of Incrementy Upgrades",
+                        cost: new Decimal(2),
+                        unlocked(){
+                                return hasAMUpgrade(11)
+                        },
+                },
+        },
+})
+
+
+
+
