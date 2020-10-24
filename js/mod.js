@@ -1,13 +1,13 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
+	name: "The Incremtreeverse",
+	id: "incrementy",
+	author: "pg",
 	pointsName: "points",
 	discordName: "",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
-    offlineLimit: 1,  // In hours
-    initialStartPoints: new Decimal (10) // Used for hard resets and new players
+    	offlineLimit: 1,  // In hours
+    	initialStartPoints: new Decimal (0) // Used for hard resets and new players
 }
 
 // Set your version in num and name
@@ -27,15 +27,6 @@ function getStartPoints(){
 // Determines if it should show points/sec
 function canGenPoints(){
 	return true
-}
-
-// Calculate points/sec!
-function getPointGen() {
-	if(!canGenPoints())
-		return new Decimal(0)
-
-	let gain = new Decimal(1)
-	return gain
 }
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values

@@ -51,8 +51,9 @@ function format(decimal, precision=2) {
 	else return regularFormat(decimal, precision)
 }
 
-function formatWhole(decimal) {
-	return format(decimal, 0)
+function formatWhole(a) {
+	if (Decimal.lt(a, 1e10)) return format(a, 0)
+	return format(a)
 }
 
 function formatTime(s) {

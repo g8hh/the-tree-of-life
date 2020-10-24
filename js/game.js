@@ -54,7 +54,7 @@ function getNextAt(layer, canMax=false, useType = null) {
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
 		if (tmp[layer].roundUpCost) next = next.ceil()
 		return next;
-	} else if (type=="custom"){
+	} else if (type=="custom" && layers[layer].getNextAt != undefined){
 		return layers[layer].getNextAt(canMax)
 	} else {
 		return new Decimal(0)
@@ -79,14 +79,15 @@ function shouldNotify(layer){
 
 function canReset(layer)
 {
-	if(tmp[layer].type == "normal")
+	if (tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
-	else if(tmp[layer].type== "static")
+	else if (tmp[layer].type== "static")
 		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-	if(tmp[layer].type == "none")
+	if (tmp[layer].type == "none")
 		return false
-	else
+	else if (layers[layer].canReset != undefined)
 		return layers[layer].canReset()
+	else return tmp[layer].baseAmount.gte(tmp[layer].requires)
 }
 
 function rowReset(row, layer) {
