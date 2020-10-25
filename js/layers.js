@@ -4,7 +4,11 @@ function getPointGen() {
 	let gain = new Decimal(1)
         if (hasIUpg(11)) gain = gain.times(getIUpgEff(11))
         gain = gain.times(layers.am.effect())
+        gain = gain.times(layers.m.effect()[0])
         gain = gain.times(layers.a.effect()[0])
+        
+
+        if (inChallenge("am", 12)) gain = gain.pow(.1)
 	return gain
 }
 
@@ -80,6 +84,18 @@ function canUnlIUpgForText(id){
         return false //for now
 }
 
+function hasAUpgrade(id){
+        return hasUpgrade("a", id)
+}
+
+function getEUpgEff(id){
+        return upgradeEffect("e", id)
+}
+
+function getIStaminaSoftcapStart(){
+        return hasChallenge("am", 11) ? 45 : 40
+}
+
 var incGainFactor = new Decimal(1)
 
 // http://www.singularis.ltd.uk/bifroest/misc/homophones-list.html for list of homophones
@@ -106,7 +122,11 @@ addLayer("i", {
                 let exp = layers.i.getGainExp()
                 let pst = layers.i.getGainMultPost()
                 let ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
-                return ret.times(incGainFactor).max(0)
+                ret = ret.times(incGainFactor).max(0)
+
+                if (inChallenge("am", 11)) ret = ret.pow(.1)
+
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(1)
@@ -129,6 +149,8 @@ addLayer("i", {
                 if (hasAMUpgrade(11)) x = x.times(getAMUpgEff(11))
                 if (hasAMUpgrade(12)) x = x.times(3)
                 x = x.times(layers.a.effect()[0])
+                x = x.times(layers.m.effect()[0])
+                if (hasUpgrade("e", 23)) x = x.times(player.e.points.plus(1))
                 return x
         },
         update(diff){
@@ -304,7 +326,7 @@ addLayer("i", {
                         effect(){
                                 let x = getBuyableAmount("i", 11)
                                 let base = new Decimal(1.5)
-                                if (hasIUpg(34)) base = base.plus(x.div(100).min(8.5))
+                                if (hasIUpg(34)) base = base.plus(x.div(100).min(10))
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
@@ -362,7 +384,7 @@ addLayer("i", {
                         effect(){
                                 let x = getBuyableAmount("i", 12)
                                 let base = new Decimal(2)
-                                if (hasIUpg(33)) base = base.plus(x.div(50).min(8))
+                                if (hasIUpg(33)) base = base.plus(x.div(50).min(10))
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
@@ -408,7 +430,8 @@ addLayer("i", {
                         title: "Incrementy Stamina",
                         display(){
                                 let start = "<b><h2>Amount</h2>: " + getIBuyableFormat(13) + "</b><br>"
-                                let eff = "<b><h2>Effect</h2>: ^" + format(getIBuyableEff(13)) + "</b><br>"
+                                let softcapped = getBuyableAmount("i", 13).gt(getIStaminaSoftcapStart())
+                                let eff = "<b><h2>Effect</h2>: ^" + format(getIBuyableEff(13)) + (softcapped ? " (softcapped)" : "") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(13)) + " Incrementy</b><br>"
                                 return "<br>"+start+eff+cost
                         },
@@ -430,7 +453,8 @@ addLayer("i", {
                         },
                         effect(){
                                 let x = getBuyableAmount("i", 13)
-                                if (x.gt(40)) x = x.div(40).pow(.5).times(40)
+                                let scs = getIStaminaSoftcapStart()
+                                if (x.gt(scs)) x = x.div(scs).pow(.5).times(scs)
                                 return Decimal.pow(1.05, x)
                         },
                         canAfford(){
@@ -457,7 +481,7 @@ addLayer("i", {
         },
         tabFormat: ["main-display",
                 ["display-text",
-                        function() {return hasIUpg(24) ? "Your best incrementy is " + format(player.i.best) : ""}],
+                        function() {return hasIUpg(24) && !hasAMUpgrade(13) ? "Your best incrementy is " + format(player.i.best) : ""}],
                 ["display-text",
                         function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
                         {"font-size": "20px"}],
@@ -504,7 +528,9 @@ addLayer("am", {
         branches: ["i"],
         type: "custom", 
         effect(){
-                let ret = player.am.points.plus(1).pow(Math.log(3)/Math.log(2))
+                let a = player.am.points
+
+                let ret = a.plus(1).pow(Math.log(3)/Math.log(2))
                 if (ret.gt(100)) ret = ret.div(100).sqrt().times(100)
                 if (ret.gt(1000)) ret = ret.div(1000).pow(.25).times(1000)
                 if (ret.gt(1e4)) ret = ret.div(1e4).pow(.125).times(1e4)
@@ -537,6 +563,7 @@ addLayer("am", {
         getGainMultPost(){
                 let x = new Decimal(1)
                 x = x.times(layers.a.effect()[1])
+                x = x.times(layers.m.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -583,7 +610,7 @@ addLayer("am", {
                 },
                 13: {
                         title: "Sale", //sail
-                        description: "Unlock new I upgrades, keep them on AM reset, you can buy max Incrementy Boosts, and they don't cost Incrementy",
+                        description: "Unlock new I upgrades, keep them on AM reset, you can buy max Incrementy Buyables, and they don't cost Incrementy",
                         cost: new Decimal(10),
                         unlocked(){
                                 return hasAMUpgrade(12)
@@ -633,6 +660,30 @@ addLayer("am", {
                         },
                 }, 
         },
+        challenges:{
+                rows: 1,
+                cols: 2,
+                11: {
+                        name: "Know?", 
+                        challengeDescription: "Get ^.1 of your normal Incrementy gain",
+                        rewardDescription: "Incrementy Stamina softcap starts 5 later (40 -> 45)",
+                        unlocked(){
+                                return hasAUpgrade(11)
+                        },
+                        goal: new Decimal(1e100),
+                        currencyInternalName: "points",
+                },
+                12: {
+                        name: "No!", 
+                        challengeDescription: "Get ^.1 of your normal point gain",
+                        rewardDescription: "Unlock Matter",
+                        unlocked(){
+                                return hasAUpgrade(11)
+                        },
+                        goal: new Decimal(2.22e222),
+                        currencyInternalName: "points",
+                },
+        },
         tabFormat: ["main-display",
                 ["display-text",
                         function() {
@@ -641,7 +692,9 @@ addLayer("am", {
                         {"font-size": "20px"}],
                 ["prestige-button", "", function (){ return hasAMUpgrade(21) ? {'display': 'none'} : {}}],
                 "blank", 
-                "upgrades"],
+                "upgrades",
+                "blank",
+                "challenges"],
         doReset(layer){
                 if (false) console.log(layer)
                 if (layers[layer].row <= 1) return
@@ -707,7 +760,7 @@ addLayer("a", {
                 return layers.a.getResetGain().gt(0)
         },
         update(diff){
-                if (!player.am.best) player.a.best = new Decimal(0)
+                if (!player.a.best) player.a.best = new Decimal(0)
                 player.a.best = player.a.best.max(player.a.points)
                 if (hasMilestone("a", 3)) player.a.points = player.a.points.plus(layers.a.getResetGain().times(diff))
         },
@@ -716,38 +769,34 @@ addLayer("a", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){return player.i.best.gt(Decimal.pow(10, 417)) || player.a.best.gt(0)},
-        upgrades: {
-                rows: 2,
-                cols: 4,
-        },
         milestones:{
                 1: {
                         requirementDescription: "<b>Right</b><br>Requires: 2 Amoebas", 
                         //right, rite, wright, write
                         effectDescription: "You keep antimatter upgrades upon reset",
                         done(){
-                                return player.a.points.gte(2)
+                                return player.a.best.gte(2)
                         },
                 },
                 2: {
                         requirementDescription: "<b>Rite</b><br>Requires: 5 Amoebas", 
                         effectDescription: "Once per second buy one of each Incrementy buyable",
                         done(){
-                                return player.a.points.gte(5)
+                                return player.a.best.gte(5)
                         },
                 },
                 3: {
                         requirementDescription: "<b>Wright</b><br>Requires: 20 Amoebas", 
                         effectDescription: "Remove the ability to prestige, but gain 100% of amoebas on prestige per second",
                         done(){
-                                return player.a.points.gte(20)
+                                return player.a.best.gte(20)
                         },
                 },
                 4: {
                         requirementDescription: "<b>Write</b><br>Requires: 5,000 Amoebas", 
                         effectDescription: "<b>Rite</b> buys max, and unlock Amoeba upgrades and Wave",
                         done(){
-                                return player.a.points.gte(5e3)
+                                return player.a.best.gte(5e3)
                         },
                 },
         },
@@ -756,10 +805,18 @@ addLayer("a", {
                 cols: 4,
                 11: {
                         title: "Here", //hear
-                        description: "Unlock two Antimatter Challenges (not yet)",
+                        description: "Unlock two Antimatter Challenges",
                         cost: new Decimal(5e5),
                         unlocked(){
                                 return hasMilestone("a", 4)
+                        },
+                },
+                12: {
+                        title: "Hear", //hear
+                        description: "Unlock two Matter Challenges (not yet)",
+                        cost: new Decimal(5e13),
+                        unlocked(){
+                                return hasUpgrade("e", 24)
                         },
                 },
         },
@@ -788,4 +845,263 @@ addLayer("a", {
         },
 })
 
+addLayer("m", {
+        name: "Matter", 
+        symbol: "M", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#3B1053",
+        requires: Decimal.pow(10, 1170), // Can be a function that takes requirement increases into account
+        resource: "Matter", // Name of prestige currency
+        baseAmount() {return player.i.points}, 
+        branches: ["i"],
+        type: "custom", 
+        effect(){
+                let a = player.m.points
+                let b = player.am.points
+                if (!hasMilestone("m", 2)) a = a.minus(b).max(0)
+                else a = a.minus(b).max(a.div(2))
+                let eff1 = Decimal.add(10, a).div(10).pow(10)
+                let eff2 = Decimal.add(2, a).div(2).pow(.5)
 
+                if (eff1.gt(1e100)) eff1 = eff1.log10().pow(50)
+                if (eff2.gt(1e50)) eff2 = eff2.log10().times(2).pow(25)
+                return [eff1, eff2]
+        },
+        effectDescription(){
+                let eff = layers.m.effect()
+                return "which multiplies incrementy and point gain by " + format(eff[0]) + " and antimatter gain by " + format(eff[1])
+        },
+        getResetGain() {
+                let amt = layers.m.baseAmount().max(1)
+                let mlt = layers.m.getGainMult()
+                return amt.root(1170).minus(9).times(mlt).max(0).floor()
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+                if (hasUpgrade("e", 12)) x = x.times(getEUpgEff(12))
+                if (hasUpgrade("e", 13)) x = x.times(getEUpgEff(13))
+                if (hasUpgrade("e", 21)) x = x.times(player.a.points.plus(1))
+                if (hasUpgrade("e", 22)) x = x.times(getEUpgEff(22))
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.m.getResetGain()
+                let start =  "Reset to gain " + formatWhole(gain) + " Matter (based on incrementy)"
+                let nextAt = ""
+                let mlt = layers.m.getGainMult()
+                if (gain.lt(1000) && player.m.best.gt(0)){
+                        nextAt = "<br>Next at " + format(gain.plus(1).div(mlt).plus(9).pow(1170)) + " incrementy"
+                }
+                return start + nextAt
+        },
+        canReset(){
+                return layers.m.getResetGain().gt(0)
+        },
+        update(diff){
+                if (hasUpgrade("e", 13)) player.m.points = player.m.points.plus(layers.m.getResetGain().times(diff))
+                if (!player.m.best) player.m.best = new Decimal(0)
+                player.m.best = player.m.best.max(player.m.points)
+        },
+        row: 1, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return hasChallenge("am", 12)},
+        milestones:{
+                1: {
+                        requirementDescription: "<b>Rain</b><br>Requires: 1 Matter", 
+                        //rain, reign, rein
+                        effectDescription: "Unlock Energy",
+                        done(){
+                                return player.m.points.gte(1)
+                        },
+                },
+                2: {
+                        requirementDescription: "<b>Reign</b><br>Requires: 1,000 Matter", 
+                        //rain, reign, rein
+                        effectDescription: "Antimatter can only destory half of your matter",
+                        done(){
+                                return player.m.points.gte(1000)
+                        },
+                },
+                3: {
+                        requirementDescription: "<b>Rein</b><br>Requires: 50,000 Matter", 
+                        //rain, reign, rein
+                        effectDescription: "Unlock new Energy upgrades",
+                        done(){
+                                return player.m.points.gte(5e4)
+                        },
+                },
+        },
+        tabFormat: ["main-display",
+                ["display-text",
+                        function() {
+                                return hasUpgrade("e", 13) ? "You are gaining " + format(layers.m.getResetGain()) + " Matter per second" : ""
+                        },
+                        {"font-size": "20px"}],
+                ["prestige-button", "", function (){ return hasUpgrade("e", 13) ? {'display': 'none'} : {}}],
+                "blank",
+                "milestones",
+                "blank", 
+                "challenges"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 1) return
+
+                /*
+                //upgrades
+                let keep = []
+                if (!hasMilestone("a", 1)) player.m.upgrades = filter(player.am.upgrades, keep)
+                */
+
+                //resource
+                player.m.points = new Decimal(0)
+                player.m.best = new Decimal(0)
+        },
+})
+
+addLayer("e", {
+        name: "Energy", 
+        symbol: "E", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#E3FF00",
+        requires: Decimal.pow(10, 1170), // not needed
+        resource: "Energy", // Name of prestige currency
+        baseAmount() {return player.m.points.min(player.am.points)},
+        branches: ["am", "m"],
+        type: "custom", 
+        getResetGain() {
+                let amt = layers.e.baseAmount()
+                let mlt = layers.e.getGainMult()
+                return amt.times(mlt)
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+                if (hasUpgrade("e", 11)) x = x.times(getEUpgEff(11))
+                return x
+        },
+        prestigeButtonText(){
+                return "if you see this bug"
+        },
+        canReset(){
+                return false
+        },
+        update(diff){
+                player.e.points = player.e.points.plus(layers.e.getResetGain().times(diff))
+
+                if (!player.e.best) player.e.best = new Decimal(0)
+                player.e.best = player.e.best.max(player.e.points)
+        },
+        row: 2, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return hasMilestone("m", 1)},
+        upgrades:{
+                rows: 2,
+                cols: 4,
+                11:{
+                        title: "Peace", //piece
+                        description: "Incrementy buffs Energy gain",
+                        cost: new Decimal(500),
+                        effect(){
+                                return player.i.points.plus(10).log10().sqrt()
+                        }
+                },
+                12:{
+                        title: "Piece", //piece
+                        description: "Energy buffs matter gain",
+                        cost: new Decimal(1e4),
+                        effect(){
+                                return player.e.points.plus(1).pow(.5)
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 11)
+                        }
+                },
+                13:{
+                        title: "Vial", //Vile
+                        description: "Each level of Incrementy Speed boosts matter gain by 1%",
+                        cost: new Decimal(1e8),
+                        effect(){
+                                return Decimal.pow(1.01, getBuyableAmount("i", 11)).pow(hasUpgrade("e", 24) ? 2 : 1)
+                        },
+                        unlocked(){
+                                return hasMilestone("m", 3)
+                        }
+                },
+                14:{
+                        title: "Vile", 
+                        description: "Remove the ability to Matter prestige, but get 100% of Matter upon prestige per second",
+                        cost: new Decimal(1e12),
+                        unlocked(){
+                                return hasUpgrade("e", 13)
+                        },
+                },
+                21:{
+                        title: "Mind", 
+                        description: "Amoebas multiply matter gain",
+                        cost: new Decimal(1e16),
+                        unlocked(){
+                                return hasUpgrade("e", 14)
+                        },
+                },
+                22:{
+                        title: "Mined", 
+                        description: "Each level of Incrementy Stamina boosts matter gain by 33%",
+                        cost: new Decimal(1e42),
+                        effect(){
+                                return Decimal.pow(1.33, getBuyableAmount("i", 13))
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 21)
+                        },
+                },
+                23:{
+                        title: "Cell",  //sell
+                        description: "Energy multiplies Incrementy gain",
+                        cost: new Decimal(1e71),
+                        unlocked(){
+                                return hasUpgrade("e", 22)
+                        },
+                },
+                24:{
+                        title: "Sell",  //sell
+                        description: "Square vial",
+                        cost: new Decimal(1e75),
+                        unlocked(){
+                                return hasUpgrade("e", 23)
+                        },
+                },
+        },
+        tabFormat: ["main-display",
+                ["display-text", "Energy generation is based on the least amount of Matter and Antimatter"],
+                ["display-text", function(){return "You are getting " + format(layers.e.getResetGain()) + " Energy per second"}],
+                "blank",
+                "blank", 
+                "upgrades"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 2) return
+
+                /*
+                //upgrades
+                let keep = []
+                if (!hasMilestone("a", 1)) player.m.upgrades = filter(player.am.upgrades, keep)
+                */
+
+                //resource
+                player.m.points = new Decimal(0)
+                player.m.best = new Decimal(0)
+        },
+})
