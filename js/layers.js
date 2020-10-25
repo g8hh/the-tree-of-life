@@ -99,6 +99,45 @@ function getIStaminaSoftcapStart(){
         return ret
 }
 
+
+function getIncBuyableFormulaText(id){
+        if (id == 11){
+                let base = (hasIUpg(22) ? 1 : 2)/1.01
+                let linear = format(base, 2) + "^x"
+                return "10*" + linear + "*1.01^(x^2)"
+                //Decimal.pow(base1, x).times(Decimal.pow(1.01, exp2)).times(10)
+        } 
+        if (id == 12){
+                let base = hasIUpg(23) ? 1 : 4
+                let linear = ""
+                if (base != 1) linear = format(base, 2) + "^x*"
+                return "1e4*" + linear + "1.25^(x^2)"
+        }
+        if (id == 13){
+                let linear = ""
+                let b1 = hasIUpg(24) ? 1 : 2
+                if (b1 != 1) linear = format(b1, 2) + "^x*"
+                let quad = "1.25^(x^2)*"
+                let start = "1e5*"
+                if (!hasUpgrade("a", 14)) start = "1e5*" + linear + quad
+
+                let y = getBuyableAmount("i", 13).minus(4).max(1)
+                if (hasIUpg(31)) {
+                        y = new Decimal(1)
+                        //if (x.gt(5/3)) x = x.div(2.5).plus(1)
+                }
+                let base1 = y.div(10).plus(1)
+                let base2 = y.sqrt().div(5).plus(1)
+
+                let formatNum = hasIUpg(31) ? 1 : 2
+
+                let exp = format(base1, formatNum) + "^(" + format(base2, formatNum) + "^"
+                let end = hasIUpg(31) ? "(x/2.5+1)" : "x"
+                
+                return start + exp + end + ")"
+        }
+}
+
 var incGainFactor = new Decimal(1)
 
 // http://www.singularis.ltd.uk/bifroest/misc/homophones-list.html for list of homophones
@@ -144,6 +183,9 @@ addLayer("i", {
                 if (hasAMUpgrade(14)) x = x.times(getBuyableAmount("i", 12).max(1))
                 if (hasAMUpgrade(22)) x = x.times(getBuyableAmount("i", 11).max(1))
                 if (hasAMUpgrade(24)) x = x.times(getBuyableAmount("i", 13).max(1))
+                if (hasAUpgrade(21))  x = x.times(upgradeEffect("a", 21))
+                if (hasAUpgrade(22))  x = x.times(upgradeEffect("a", 22))
+                if (hasAUpgrade(23))  x = x.times(upgradeEffect("a", 23))
                 return x
         },
         getGainMultPost(){
@@ -321,7 +363,9 @@ addLayer("i", {
                                 let start = "<b><h2>Amount</h2>: " + getIBuyableFormat(11) + "</b><br>"
                                 let eff = "<b><h2>Effect</h2>: x" + format(getIBuyableEff(11)) + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(11)) + " Incrementy</b><br>"
-                                return "<br>"+start+eff+cost
+                                let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.i.buyables[11].effectBase()) + "^x</b><br>"
+                                return "<br>"+start+eff+cost+cformula+eformula
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 11).plus(a)
@@ -329,10 +373,17 @@ addLayer("i", {
                                 let exp2 = x.minus(1).max(0).times(x)
                                 return Decimal.pow(base1, x).times(Decimal.pow(1.01, exp2)).times(10)
                         },
-                        effect(){
+                        effectBase(){
                                 let x = getBuyableAmount("i", 11)
                                 let base = new Decimal(1.5)
-                                if (hasIUpg(34)) base = base.plus(x.div(100).min(10))
+                                let hauleff = x.div(100)
+                                if (!hasUpgrade("a", 24)) hauleff = hauleff.min(10)
+                                if (hasIUpg(34)) base = base.plus(hauleff)
+                                return base
+                        },
+                        effect(){
+                                let x = getBuyableAmount("i", 11)
+                                let base = layers.i.buyables[11].effectBase()
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
@@ -380,17 +431,24 @@ addLayer("i", {
                                 let start = "<b><h2>Amount</h2>: " + getIBuyableFormat(12) + "</b><br>"
                                 let eff = "<b><h2>Effect</h2>: x" + format(getIBuyableEff(12)) + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(12)) + " Incrementy</b><br>"
-                                return "<br>"+start+eff+cost
+                                let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(12) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.i.buyables[12].effectBase()) + "^x</b><br>"
+                                return "<br>" + start + eff + cost + cformula + eformula
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 12).plus(a)
                                 let base1 = hasIUpg(23) ? 1 : 4
                                 return Decimal.pow(base1, x).times(Decimal.pow(1.25, x.times(x))).times(1e4)
                         },
-                        effect(){
+                        effectBase(){
                                 let x = getBuyableAmount("i", 12)
                                 let base = new Decimal(2)
                                 if (hasIUpg(33)) base = base.plus(x.div(50).min(10))
+                                return base
+                        },
+                        effect(){
+                                let x = getBuyableAmount("i", 12)
+                                let base = layers.i.buyables[12].effectBase()
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
@@ -435,11 +493,18 @@ addLayer("i", {
                 13: {
                         title: "Incrementy Stamina",
                         display(){
+                                let eform = "1.05^x"
+                                let scs = getIStaminaSoftcapStart()
+                                if (getBuyableAmount("i", 13).gt(scs)) eform = "1.05^(sqrt(x*" + formatWhole(scs) + "))"
+
+
                                 let start = "<b><h2>Amount</h2>: " + getIBuyableFormat(13) + "</b><br>"
                                 let softcapped = getBuyableAmount("i", 13).gt(getIStaminaSoftcapStart())
                                 let eff = "<b><h2>Effect</h2>: ^" + format(getIBuyableEff(13)) + (softcapped ? " (softcapped)" : "") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(13)) + " Incrementy</b><br>"
-                                return "<br>"+start+eff+cost
+                                let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(13) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + eform + "</b><br>"
+                                return "<br>" + start + eff + cost + cformula + eformula
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 13).plus(a)
@@ -454,7 +519,8 @@ addLayer("i", {
                                 let base1 = y.div(10).plus(1)
                                 let base2 = y.sqrt().div(5).plus(1)
                                 
-                                let ret = Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))).times(1e5)
+                                let ret = new Decimal(1e5)
+                                if (!hasUpgrade("a", 14)) ret = ret.times(Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))))
                                 return ret.times(Decimal.pow(base1, Decimal.pow(base2, x)))
                         },
                         effect(){
@@ -476,6 +542,17 @@ addLayer("i", {
                         buyMax(maximum){
                                 let pts = player.i.points
                                 //eventually we can remove all the scalings except b1^b2^x
+                                if (hasUpgrade("a", 14)) {
+                                        let pttarget = player.i.points.div(1e5)
+                                        if (pttarget.lt(1.1)) return
+                                        let xtarget = pttarget.log(1.1).log(1.2)
+                                        let target = xtarget.minus(1).times(2.5).floor().plus(1)
+                                        
+                                        let diff = target.minus(player.i.buyables[13]).max(0)
+                                        if (maximum != undefined) diff = diff.min(maximum)
+                                        player.i.buyables[13] = player.i.buyables[13].plus(diff)
+                                        return 
+                                }
                                 let max = 30
                                 if (maximum != undefined) max = Math.min(maximum, 30)
                                 for (i = 0; i < max; i++){
@@ -850,7 +927,60 @@ addLayer("a", {
                         unlocked(){
                                 return hasUpgrade("e", 34)
                         },
+                }, 
+                21: {
+                        title: "Steal",
+                        description: "Amoebas boost base Incrementy gain",
+                        cost: Decimal.pow(10, 7960),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        effect(){
+                                return player.a.points.max(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("a", 14)
+                        },
+                }, 
+                22: {
+                        title: "Steel",
+                        description: "Antimatter boosts base Incrementy gain",
+                        cost: Decimal.pow(10, 8115),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        effect(){
+                                return player.am.points.max(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("a", 21)
+                        },
                 },
+                23: {
+                        title: "Sign",
+                        description: "Matter boosts base Incrementy gain",
+                        cost: Decimal.pow(10, 8460),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        effect(){
+                                return player.m.points.max(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("a", 22)
+                        },
+                }, 
+                24: {
+                        title: "Sine",
+                        description: "Uncap Haul",
+                        cost: Decimal.pow(10, 8700),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        unlocked(){
+                                return hasUpgrade("a", 23)
+                        },
+                }, 
         },
         tabFormat: ["main-display",
                 ["display-text",
@@ -894,9 +1024,8 @@ addLayer("m", {
         type: "custom", 
         effect(){
                 let a = player.m.points
-                let b = player.am.points
-                if (!hasMilestone("m", 2)) a = a.minus(b).max(0)
-                else a = a.minus(b).max(a.div(2))
+                if (!hasMilestone("m", 2)) a = a.plus(1).log10()
+                
                 let eff1 = Decimal.add(10, a).div(10).pow(10)
                 let eff2 = Decimal.add(2, a).div(2).pow(.5)
 
@@ -956,7 +1085,7 @@ addLayer("m", {
                 2: {
                         requirementDescription: "<b>Reign</b><br>Requires: 1,000 Matter", 
                         //rain, reign, rein
-                        effectDescription: "Antimatter can only destory half of your matter",
+                        effectDescription: "Severly buff matter effect",
                         done(){
                                 return player.m.points.gte(1000)
                         },
@@ -1064,7 +1193,7 @@ addLayer("e", {
         ],
         layerShown(){return hasMilestone("m", 1)},
         upgrades:{
-                rows: 3,
+                rows: 4,
                 cols: 4,
                 11:{
                         title: "Peace", //piece
@@ -1175,6 +1304,14 @@ addLayer("e", {
                         cost: new Decimal(1e220),
                         unlocked(){
                                 return hasUpgrade("e", 33)
+                        },
+                },
+                41:{
+                        title: "Hare", //hair
+                        description: "Will prb cost 1e263 (not yet)",
+                        cost: new Decimal("1e2630"),
+                        unlocked(){
+                                return hasUpgrade("a", 24)
                         },
                 },
         },

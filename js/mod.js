@@ -1,7 +1,7 @@
 let modInfo = {
 	name: "The Incremtreeverse",
 	id: "incrementy",
-	author: "pg",
+	author: "pg132",
 	pointsName: "points",
 	discordName: "",
 	discordLink: "",
@@ -12,8 +12,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.7",
+	name: "Why do versions have names?",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -35,6 +35,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+	"Current endgame: The upgrade that says not yet."
 ]
 
 // Determines when the game "ends"
