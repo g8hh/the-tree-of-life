@@ -93,7 +93,10 @@ function getEUpgEff(id){
 }
 
 function getIStaminaSoftcapStart(){
-        return hasChallenge("am", 11) ? 45 : 40
+        let ret = 40
+        if (hasChallenge("am", 11)) ret += 5
+        if (hasChallenge("m", 11)) ret += 5
+        return ret
 }
 
 var incGainFactor = new Decimal(1)
@@ -124,7 +127,9 @@ addLayer("i", {
                 let ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
                 ret = ret.times(incGainFactor).max(0)
 
-                if (inChallenge("am", 11)) ret = ret.pow(.1)
+                if (inChallenge("am", 11)) ret = ret.root(10)
+                if (inChallenge("m", 11))  ret = ret.root(2)
+                if (inChallenge("m", 12))  ret = ret.root(3)
 
                 return ret
         },
@@ -150,7 +155,8 @@ addLayer("i", {
                 if (hasAMUpgrade(12)) x = x.times(3)
                 x = x.times(layers.a.effect()[0])
                 x = x.times(layers.m.effect()[0])
-                if (hasUpgrade("e", 23)) x = x.times(player.e.points.plus(1))
+                if (hasUpgrade("e", 23)) x = x.times(player.e.points.max(1))
+                if (hasChallenge("m", 11)) x = x.times(player.e.points.max(1))
                 return x
         },
         update(diff){
@@ -528,13 +534,17 @@ addLayer("am", {
         branches: ["i"],
         type: "custom", 
         effect(){
+                if (inChallenge("m", 12)) return new Decimal(1)
                 let a = player.am.points
 
                 let ret = a.plus(1).pow(Math.log(3)/Math.log(2))
-                if (ret.gt(100)) ret = ret.div(100).sqrt().times(100)
-                if (ret.gt(1000)) ret = ret.div(1000).pow(.25).times(1000)
-                if (ret.gt(1e4)) ret = ret.div(1e4).pow(.125).times(1e4)
-                if (ret.gt(1e5)) ret = ret.log10().times(2).pow(5)
+                if (!hasUpgrade("e", 33)) {
+                        if (ret.gt(100)) ret = ret.div(100).sqrt().times(100)
+                        if (ret.gt(1000)) ret = ret.div(1000).pow(.25).times(1000)
+                        if (ret.gt(1e4)) ret = ret.div(1e4).pow(.125).times(1e4)
+                        if (ret.gt(1e5)) ret = ret.log10().times(2).pow(5)
+                }
+                if (ret.gt(1e10)) ret = ret.log10().pow(10)
                 
                 if (hasAMUpgrade(23)) ret = ret.pow(2)
                 return ret
@@ -725,9 +735,14 @@ addLayer("a", {
         branches: ["am"],
         type: "custom", 
         effect(){
+                if (inChallenge("m", 11) || inChallenge("m", 12)) return [new Decimal(1), new Decimal(1)]
                 let a = player.a.points
                 let eff1 = Decimal.add(1, a).pow(10)
                 let eff2 = Decimal.add(2, a).div(2).pow(5)
+
+                if (eff1.log10().gt(400)) eff1 = eff1.log10().div(4).pow(200)
+                if (eff2.log10().gt(200)) eff2 = eff2.log10().div(2).pow(100)
+
                 return [eff1, eff2]
         },
         effectDescription(){
@@ -804,7 +819,7 @@ addLayer("a", {
                 rows: 3,
                 cols: 4,
                 11: {
-                        title: "Here", //hear
+                        title: "Here", 
                         description: "Unlock two Antimatter Challenges",
                         cost: new Decimal(5e5),
                         unlocked(){
@@ -812,11 +827,27 @@ addLayer("a", {
                         },
                 },
                 12: {
-                        title: "Hear", //hear
-                        description: "Unlock two Matter Challenges (not yet)",
+                        title: "Hear",
+                        description: "Unlock two Matter Challenges",
                         cost: new Decimal(5e13),
                         unlocked(){
                                 return hasUpgrade("e", 24)
+                        },
+                },
+                13: {
+                        title: "Crews",
+                        description: "Unlock new Energy Upgrades",
+                        cost: new Decimal(1e17),
+                        unlocked(){
+                                return hasChallenge("m", 12)
+                        },
+                },
+                14: {
+                        title: "Cruise",
+                        description: "Remove the quadratic cost scaling of Incrementy Stamina (not yet)",
+                        cost: new Decimal(1e35),
+                        unlocked(){
+                                return hasUpgrade("e", 34)
                         },
                 },
         },
@@ -938,6 +969,30 @@ addLayer("m", {
                         },
                 },
         },
+        challenges:{
+                rows: 1,
+                cols: 2,
+                11: {
+                        name: "Creak", 
+                        challengeDescription: "Amoebas base effects are 1 and square root Incrementy gain",
+                        rewardDescription: "Incrementy Stamina softcap starts 5 later (45 -> 50)",
+                        unlocked(){
+                                return hasAUpgrade(12)
+                        },
+                        goal: new Decimal("1e840"),
+                        currencyInternalName: "points",
+                },
+                12: {
+                        name: "Creek", 
+                        challengeDescription: "Amoebas and Antimatter base effects are 1 and cube root Incrementy gain",
+                        rewardDescription: "Energy multiples Incrementy gain",
+                        unlocked(){
+                                return hasAUpgrade(12)
+                        },
+                        goal: new Decimal("1e410"),
+                        currencyInternalName: "points",
+                },
+        },
         tabFormat: ["main-display",
                 ["display-text",
                         function() {
@@ -1008,7 +1063,7 @@ addLayer("e", {
         ],
         layerShown(){return hasMilestone("m", 1)},
         upgrades:{
-                rows: 2,
+                rows: 3,
                 cols: 4,
                 11:{
                         title: "Peace", //piece
@@ -1034,7 +1089,11 @@ addLayer("e", {
                         description: "Each level of Incrementy Speed boosts matter gain by 1%",
                         cost: new Decimal(1e8),
                         effect(){
-                                return Decimal.pow(1.01, getBuyableAmount("i", 11)).pow(hasUpgrade("e", 24) ? 2 : 1)
+                                let exp = 1
+                                if (hasUpgrade("e", 24)) exp *= 2
+                                if (hasUpgrade("e", 31)) exp *= 2
+                                if (hasUpgrade("e", 32)) exp *= 2
+                                return Decimal.pow(1.01, getBuyableAmount("i", 11)).pow(exp)
                         },
                         unlocked(){
                                 return hasMilestone("m", 3)
@@ -1061,14 +1120,16 @@ addLayer("e", {
                         description: "Each level of Incrementy Stamina boosts matter gain by 33%",
                         cost: new Decimal(1e42),
                         effect(){
-                                return Decimal.pow(1.33, getBuyableAmount("i", 13))
+                                let exp = 1
+                                if (hasUpgrade("e", 34)) exp *= 2
+                                return Decimal.pow(1.33, getBuyableAmount("i", 13)).pow(exp)
                         },
                         unlocked(){
                                 return hasUpgrade("e", 21)
                         },
                 },
                 23:{
-                        title: "Cell",  //sell
+                        title: "Cell",
                         description: "Energy multiplies Incrementy gain",
                         cost: new Decimal(1e71),
                         unlocked(){
@@ -1076,11 +1137,43 @@ addLayer("e", {
                         },
                 },
                 24:{
-                        title: "Sell",  //sell
+                        title: "Sell",
                         description: "Square vial",
                         cost: new Decimal(1e75),
                         unlocked(){
                                 return hasUpgrade("e", 23)
+                        },
+                },
+                31:{
+                        title: "War",  
+                        description: "Square vial",
+                        cost: new Decimal(1e95),
+                        unlocked(){
+                                return hasUpgrade("a", 13)
+                        },
+                },
+                32:{
+                        title: "Wore",  
+                        description: "Square vial",
+                        cost: new Decimal(1e110),
+                        unlocked(){
+                                return hasUpgrade("e", 31)
+                        },
+                },
+                33:{
+                        title: "Rose",  
+                        description: "Remove the current Antimatter to Incrementy multiplier softcaps",
+                        cost: new Decimal(1e140),
+                        unlocked(){
+                                return hasUpgrade("e", 32)
+                        },
+                },
+                34:{
+                        title: "Rows",  
+                        description: "Square Mined",
+                        cost: new Decimal(1e220),
+                        unlocked(){
+                                return hasUpgrade("e", 33)
                         },
                 },
         },
