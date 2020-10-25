@@ -545,6 +545,7 @@ addLayer("am", {
                         if (ret.gt(1e5)) ret = ret.log10().times(2).pow(5)
                 }
                 if (ret.gt(1e10)) ret = ret.log10().pow(10)
+                if (ret.gt(1e25)) ret = ret.log10().times(4000).pow(5)
                 
                 if (hasAMUpgrade(23)) ret = ret.pow(2)
                 return ret
@@ -783,7 +784,7 @@ addLayer("a", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.i.best.gt(Decimal.pow(10, 417)) || player.a.best.gt(0)},
+        layerShown(){return player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0)},
         milestones:{
                 1: {
                         requirementDescription: "<b>Right</b><br>Requires: 2 Amoebas", 
@@ -934,7 +935,7 @@ addLayer("m", {
                 return layers.m.getResetGain().gt(0)
         },
         update(diff){
-                if (hasUpgrade("e", 13)) player.m.points = player.m.points.plus(layers.m.getResetGain().times(diff))
+                if (hasUpgrade("e", 14)) player.m.points = player.m.points.plus(layers.m.getResetGain().times(diff))
                 if (!player.m.best) player.m.best = new Decimal(0)
                 player.m.best = player.m.best.max(player.m.points)
         },
@@ -996,10 +997,10 @@ addLayer("m", {
         tabFormat: ["main-display",
                 ["display-text",
                         function() {
-                                return hasUpgrade("e", 13) ? "You are gaining " + format(layers.m.getResetGain()) + " Matter per second" : ""
+                                return hasUpgrade("e", 14) ? "You are gaining " + format(layers.m.getResetGain()) + " Matter per second" : ""
                         },
                         {"font-size": "20px"}],
-                ["prestige-button", "", function (){ return hasUpgrade("e", 13) ? {'display': 'none'} : {}}],
+                ["prestige-button", "", function (){ return hasUpgrade("e", 14) ? {'display': 'none'} : {}}],
                 "blank",
                 "milestones",
                 "blank", 
