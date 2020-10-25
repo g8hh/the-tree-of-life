@@ -92,12 +92,11 @@ function canReset(layer)
 
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
-		if(layers[lr].doReset) {
+		if (layers[lr].doReset) {
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
 			layers[lr].doReset(layer)
 		}
-		else
-			if(tmp[layer].row > tmp[lr].row && row !== "side") layerDataReset(lr)
+		else if(tmp[layer].row > tmp[lr].row && row !== "side") layerDataReset(lr)
 	}
 }
 
@@ -123,8 +122,7 @@ function layerDataReset(layer, keep = []) {
 }
 
 function resetBuyables(layer){
-	if (layers[layer].buyables) 
-		player[layer].buyables = getStartBuyables(layer)
+	if (layers[layer].buyables) player[layer].buyables = getStartBuyables(layer)
 	player[layer].spentOnBuyables = new Decimal(0)
 }
 
@@ -224,8 +222,7 @@ function startChallenge(layer, x) {
 	updateChallengeTemp(layer)
 }
 
-function canCompleteChallenge(layer, x)
-{
+function canCompleteChallenge(layer, x){
 	if (x != player[layer].activeChallenge) return
 
 	let challenge = tmp[layer].challenges[x]
@@ -246,13 +243,12 @@ function canCompleteChallenge(layer, x)
 	else {
 		return !(player[layer].points.lt(challenge.goal))
 	}
-
 }
 
 function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
-	if (! canCompleteChallenge(layer, x)){
+	if (!canCompleteChallenge(layer, x)){
 		delete player[layer].activeChallenge
 		return
 	}
@@ -268,8 +264,6 @@ function completeChallenge(layer, x) {
 VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.pre ? " Beta " + VERSION.beta : "")
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
-
-
 function gameLoop(diff) {
 	if (isEndgame() || gameEnded) gameEnded = 1
 
@@ -281,8 +275,7 @@ function gameLoop(diff) {
 	if (player.devSpeed) diff *= player.devSpeed
 
 	let limit = maxTickLength()
-	if(diff > limit)
-		diff = limit
+	if (diff > limit) diff = limit
 
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)

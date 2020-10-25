@@ -46,7 +46,7 @@ function format(decimal, precision=2) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
-	} else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
+	} else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0)
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return regularFormat(decimal, precision)
@@ -509,7 +509,9 @@ function buyMaxBuyable(layer, id) {
 	if (!tmp[layer].buyables[id].canAfford) return
 	if (!layers[layer].buyables[id].buyMax) return
 
-	layers[layer].buyables[id].buyMax()
+	let arg 
+	if (layer == "i") arg = 100
+	layers[layer].buyables[id].buyMax(arg)
 	updateBuyableTemp(layer)
 }
 

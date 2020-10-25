@@ -218,9 +218,9 @@ addLayer("i", {
                                         layers.i.buyables[12].buyMax(times)
                                         layers.i.buyables[13].buyMax(times)
                                 } else {
-                                        layers.i.buyables[11].buyMax()
-                                        layers.i.buyables[12].buyMax()
-                                        layers.i.buyables[13].buyMax()
+                                        layers.i.buyables[11].buyMax(times*100)
+                                        layers.i.buyables[12].buyMax(times*100)
+                                        layers.i.buyables[13].buyMax(times*100)
                                 }
                         }
                 }
@@ -698,7 +698,7 @@ addLayer("am", {
                 },
                 13: {
                         title: "Sale", //sail
-                        description: "Unlock new I upgrades, keep them on AM reset, you can buy max Incrementy Buyables, and they don't cost Incrementy",
+                        description: "Unlock new I upgrades, keep them on AM reset, you can buy 100 Incrementy Buyables, and they don't cost Incrementy",
                         cost: new Decimal(10),
                         unlocked(){
                                 return hasAMUpgrade(12)
@@ -865,7 +865,6 @@ addLayer("a", {
         milestones:{
                 1: {
                         requirementDescription: "<b>Right</b><br>Requires: 2 Amoebas", 
-                        //right, rite, wright, write
                         effectDescription: "You keep antimatter upgrades upon reset",
                         done(){
                                 return player.a.best.gte(2)
@@ -887,7 +886,7 @@ addLayer("a", {
                 },
                 4: {
                         requirementDescription: "<b>Write</b><br>Requires: 5,000 Amoebas", 
-                        effectDescription: "<b>Rite</b> buys max, and unlock Amoeba upgrades and Wave",
+                        effectDescription: "<b>Rite</b> buys 100, and unlock Amoeba upgrades and Wave",
                         done(){
                                 return player.a.best.gte(5e3)
                         },
@@ -922,7 +921,7 @@ addLayer("a", {
                 },
                 14: {
                         title: "Cruise",
-                        description: "Remove the quadratic cost scaling of Incrementy Stamina (not yet)",
+                        description: "Remove the quadratic cost scaling of Incrementy Stamina",
                         cost: new Decimal(1e35),
                         unlocked(){
                                 return hasUpgrade("e", 34)
@@ -1325,14 +1324,12 @@ addLayer("e", {
                 if (false) console.log(layer)
                 if (layers[layer].row <= 2) return
 
-                /*
                 //upgrades
                 let keep = []
-                if (!hasMilestone("a", 1)) player.m.upgrades = filter(player.am.upgrades, keep)
-                */
+                player.e.upgrades = filter(player.e.upgrades, keep)
 
                 //resource
-                player.m.points = new Decimal(0)
-                player.m.best = new Decimal(0)
+                player.e.points = new Decimal(0)
+                player.e.best = new Decimal(0)
         },
 })
