@@ -96,6 +96,8 @@ function getIStaminaSoftcapStart(){
         let ret = 40
         if (hasChallenge("am", 11)) ret += 5
         if (hasChallenge("m", 11)) ret += 5
+        if (hasUpgrade("e", 43)) ret += 1
+        if (hasUpgrade("e", 54)) ret += 1
         return ret
 }
 
@@ -179,13 +181,15 @@ addLayer("i", {
         },
         getGainMultPre(){
                 let x = new Decimal(1)
-                if (hasIUpg(32)) x = x.times(layers.am.effect())
-                if (hasAMUpgrade(14)) x = x.times(getBuyableAmount("i", 12).max(1))
-                if (hasAMUpgrade(22)) x = x.times(getBuyableAmount("i", 11).max(1))
-                if (hasAMUpgrade(24)) x = x.times(getBuyableAmount("i", 13).max(1))
-                if (hasAUpgrade(21))  x = x.times(upgradeEffect("a", 21))
-                if (hasAUpgrade(22))  x = x.times(upgradeEffect("a", 22))
-                if (hasAUpgrade(23))  x = x.times(upgradeEffect("a", 23))
+                if (hasIUpg(32))          x = x.times(layers.am.effect())
+                if (hasAMUpgrade(14))     x = x.times(getBuyableAmount("i", 12).max(1))
+                if (hasAMUpgrade(22))     x = x.times(getBuyableAmount("i", 11).max(1))
+                if (hasAMUpgrade(24))     x = x.times(getBuyableAmount("i", 13).max(1))
+                if (hasAUpgrade(21))      x = x.times(upgradeEffect("a", 21))
+                if (hasAUpgrade(22))      x = x.times(upgradeEffect("a", 22))
+                if (hasAUpgrade(23))      x = x.times(upgradeEffect("a", 23))
+                if (hasUpgrade("e", 41))  x = x.times(upgradeEffect("e", 41))
+                if (hasUpgrade("e", 44))  x = x.times(upgradeEffect("e", 44))
                 return x
         },
         getGainMultPost(){
@@ -218,9 +222,9 @@ addLayer("i", {
                                         layers.i.buyables[12].buyMax(times)
                                         layers.i.buyables[13].buyMax(times)
                                 } else {
-                                        layers.i.buyables[11].buyMax(times*100)
-                                        layers.i.buyables[12].buyMax(times*100)
-                                        layers.i.buyables[13].buyMax(times*100)
+                                        layers.i.buyables[11].buyMax(times*1000)
+                                        layers.i.buyables[12].buyMax(times*1000)
+                                        layers.i.buyables[13].buyMax(times*1000)
                                 }
                         }
                 }
@@ -365,7 +369,8 @@ addLayer("i", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(11)) + " Incrementy</b><br>"
                                 let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
                                 let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.i.buyables[11].effectBase()) + "^x</b><br>"
-                                return "<br>"+start+eff+cost+cformula+eformula
+                                let end = shiftDown ? cformula + eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 11).plus(a)
@@ -433,7 +438,8 @@ addLayer("i", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(12)) + " Incrementy</b><br>"
                                 let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(12) + "</b><br>"
                                 let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.i.buyables[12].effectBase()) + "^x</b><br>"
-                                return "<br>" + start + eff + cost + cformula + eformula
+                                let end = shiftDown ? cformula + eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 12).plus(a)
@@ -504,7 +510,8 @@ addLayer("i", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getIBuyableCost(13)) + " Incrementy</b><br>"
                                 let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(13) + "</b><br>"
                                 let eformula = "<b><h2>Effect formula</h2>:<br>" + eform + "</b><br>"
-                                return "<br>" + start + eff + cost + cformula + eformula
+                                let end = shiftDown ? cformula + eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
                         },
                         cost(a){
                                 let x = getBuyableAmount("i", 13).plus(a)
@@ -652,6 +659,7 @@ addLayer("am", {
                 let x = new Decimal(1)
                 x = x.times(layers.a.effect()[1])
                 x = x.times(layers.m.effect()[1])
+                if (hasUpgrade("e", 42)) x = x.times(upgradeEffect("e", 42))
                 return x
         },
         prestigeButtonText(){
@@ -886,7 +894,7 @@ addLayer("a", {
                 },
                 4: {
                         requirementDescription: "<b>Write</b><br>Requires: 5,000 Amoebas", 
-                        effectDescription: "<b>Rite</b> buys 100, and unlock Amoeba upgrades and Wave",
+                        effectDescription: "<b>Rite</b> buys 1000, and unlock Amoeba upgrades and Wave",
                         done(){
                                 return player.a.best.gte(5e3)
                         },
@@ -1192,14 +1200,16 @@ addLayer("e", {
         ],
         layerShown(){return hasMilestone("m", 1)},
         upgrades:{
-                rows: 4,
+                rows: 5,
                 cols: 4,
                 11:{
-                        title: "Peace", //piece
+                        title: "Peace", 
                         description: "Incrementy buffs Energy gain",
                         cost: new Decimal(500),
                         effect(){
-                                return player.i.points.plus(10).log10().sqrt()
+                                let exp = .5
+                                if (hasUpgrade("e", 51)) exp *= Math.max(player.e.upgrades.length, 1)
+                                return player.i.points.plus(10).log10().pow(exp)
                         }
                 },
                 12:{
@@ -1207,7 +1217,9 @@ addLayer("e", {
                         description: "Energy buffs matter gain",
                         cost: new Decimal(1e4),
                         effect(){
-                                return player.e.points.plus(1).pow(.5)
+                                let ret = player.e.points.plus(1).pow(.5)
+                                if (ret.gt(1e200)) ret = ret.log10().div(2).pow(100)
+                                return ret
                         },
                         unlocked(){
                                 return hasUpgrade("e", 11)
@@ -1306,13 +1318,91 @@ addLayer("e", {
                         },
                 },
                 41:{
-                        title: "Hare", //hair
-                        description: "Will prb cost 1e263 (not yet)",
-                        cost: new Decimal("1e2630"),
+                        title: "Hare",
+                        description: "The number of energy upgrades boost base incrementy gain",
+                        cost: new Decimal("1e263"),
+                        effect(){
+                                let l = player.e.upgrades.length
+                                if (l < 1) l = 1
+                                return Decimal.pow(l, l / 4) 
+                        },
                         unlocked(){
                                 return hasUpgrade("a", 24)
                         },
                 },
+                42:{
+                        title: "Hair",
+                        description: "The number of energy upgrades boosts Antimatter gain",
+                        cost: new Decimal("1e9450"),
+                        effect(){
+                                let l = player.e.upgrades.length
+                                if (l < 1) l = 1
+                                let exp = l
+                                if (hasUpgrade("e", 52)) exp *= 2 
+                                if (hasUpgrade("e", 53)) exp *= 2 
+                                return Decimal.pow(l, exp) 
+                        },
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        unlocked(){
+                                return hasUpgrade("e", 41)
+                        },
+                },
+                43:{
+                        title: "Morning",
+                        description: "Incrementy Stamina softcap starts 1 later (50 -> 51)",
+                        cost: new Decimal("1e287"),
+                        unlocked(){
+                                return hasUpgrade("e", 42)
+                        },
+                },
+                44:{
+                        title: "Mourning", //rename to me in 2020?
+                        description: "Energy boosts base Incrementy gain",
+                        cost: new Decimal("1e290"),
+                        effect(){
+                                return player.e.points.max(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 43)
+                        },
+                },
+                51:{
+                        title: "Gate",
+                        description: "Peace is rasied to the power of Energy upgrades",
+                        cost: new Decimal("1e10370"),
+                        currencyDisplayName: "Incrementy",
+                        currencyInternalName: "points",
+                        currencyLayer: "i",
+                        unlocked(){
+                                return hasUpgrade("e", 44)
+                        },
+                },
+                52:{
+                        title: "Gait",
+                        description: "Square Hair",
+                        cost: new Decimal("1e328"),
+                        unlocked(){
+                                return hasUpgrade("e", 51)
+                        },
+                },
+                53:{
+                        title: "Boar",
+                        description: "Square Hair",
+                        cost: new Decimal("1e355"),
+                        unlocked(){
+                                return hasUpgrade("e", 52)
+                        },
+                },
+                54:{
+                        title: "Bore",
+                        description: "Incrementy Stamina softcap starts 1 later (51 -> 52)",
+                        cost: new Decimal("1e385"),
+                        unlocked(){
+                                return hasUpgrade("e", 53)
+                        },
+                },//1e11475 inc
         },
         tabFormat: ["main-display",
                 ["display-text", "Energy generation is based on the least amount of Matter and Antimatter"],
@@ -1331,5 +1421,80 @@ addLayer("e", {
                 //resource
                 player.e.points = new Decimal(0)
                 player.e.best = new Decimal(0)
+        },
+})
+
+addLayer("p", {
+        name: "Particles", 
+        symbol: "P", 
+        position: 2,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#FFC0F0",
+        requires: Decimal.pow(10, 11475), // not needed
+        resource: "Particles", // Name of prestige currency
+        baseAmount() {return player.i.points},
+        branches: ["i"],
+        type: "custom", 
+        getResetGain() {
+                let amt = layers.p.baseAmount()
+                let log = amt.max(10).log10().div(18.36)
+                let ret = log.sqrt().div(25)
+                if (ret.lt(1)) return new Decimal(0)
+                return ret.times(layers.p.getGainMult())
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                return "if you see this bug"
+        },
+        canReset(){
+                return false
+        },
+        update(diff){
+                let gain = layers.p.getResetGain()
+                player.p.points = player.p.points.plus(gain.times(diff)).min(gain.times(60))
+
+                if (!player.p.best) player.p.best = new Decimal(0)
+                player.p.best = player.p.best.max(player.e.points)
+        },
+        upgrades:{
+                rows: 1,
+                cols: 4,
+                11:{
+                        title: "Groan", // grown
+                        description: "Unlock Neutrinos (This is v.8 endgame, Neutrinos are a row 1 layer)",
+                        cost: new Decimal(50),
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        row: 2, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0)},
+        tabFormat: ["main-display",
+                ["display-text", function(){return "You are getting " + format(layers.p.getResetGain()) + " Particles per second, maxed at 60 seconds worth of production"}],
+                "blank",
+                "blank", 
+                "upgrades"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 2) return
+
+                //upgrades
+                let keep = []
+                player.p.upgrades = filter(player.p.upgrades, keep)
+
+                //resource
+                player.p.points = new Decimal(0)
+                player.p.best = new Decimal(0)
         },
 })

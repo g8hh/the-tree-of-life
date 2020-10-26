@@ -10,8 +10,7 @@ var hotkeys = {};
 
 var maxRow = 0;
 
-function updateHotkeys()
-{
+function updateHotkeys(){
     hotkeys = {};
     for (layer in layers){
         hk = layers[layer].hotkeys

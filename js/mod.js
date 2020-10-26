@@ -6,14 +6,15 @@ let modInfo = {
 	discordName: "",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
-    	offlineLimit: 1,  // In hours
+    	offlineLimit: 10/3600,   
+	// In hours, so the current (10/3600) is 10 seconds
     	initialStartPoints: new Decimal (0) // Used for hard resets and new players
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.7",
-	name: "Why do versions have names?",
+	num: "0.8",
+	name: "She Sells Sea Shells by the Sea Shore",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -35,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: The upgrade that says not yet."
+	"Current endgame: The upgrade that says v.8 endgame."
 ]
 
 // Determines when the game "ends"
@@ -51,3 +52,17 @@ function isEndgame() {
 function maxTickLength() {
 	return 1000 // in ms
 }
+
+var controlDown = false
+var shiftDown = false
+
+window.addEventListener('keydown', function(event) {
+	if (event.keyCode == 16) shiftDown = true;
+	if (event.keyCode == 17) controlDown = true;
+}, false);
+
+window.addEventListener('keyup', function(event) {
+	if (event.keyCode == 16) shiftDown = false;
+	if (event.keyCode == 17) controlDown = false;
+}, false);
+
