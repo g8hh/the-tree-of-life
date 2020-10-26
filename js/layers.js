@@ -209,6 +209,7 @@ addLayer("i", {
                 if (hasUpgrade("e", 41))  x = x.times(upgradeEffect("e", 41))
                 if (hasUpgrade("e", 44))  x = x.times(upgradeEffect("e", 44))
                 x = x.times(getNBuyableEff(13))
+                if (hasUpgrade("g", 24))  x = x.times(upgradeEffect("g", 24))
                 return x
         },
         getGainMultPost(){
@@ -223,6 +224,7 @@ addLayer("i", {
                 if (hasUpgrade("e", 23)) x = x.times(player.e.points.max(1))
                 if (hasChallenge("m", 11)) x = x.times(player.e.points.max(1))
                 x = x.times(getNBuyableEff(21))
+                if (hasUpgrade("g", 31)) x = x.times(player.n.points.max(1))
                 return x
         },
         update(diff){
@@ -1521,6 +1523,9 @@ addLayer("p", {
                 x = x.times(getNBuyableEff(12))
                 x = x.times(getNBuyableEff(22))
                 if (hasUpgrade("g", 12)) x = x.times(upgradeEffect("g", 12))
+                if (hasUpgrade("g", 13)) x = x.times(upgradeEffect("g", 13))
+                if (hasUpgrade("g", 22)) x = x.times(upgradeEffect("g", 22))
+                if (hasUpgrade("g", 23)) x = x.times(upgradeEffect("g", 23))
                 return x
         },
         prestigeButtonText(){
@@ -1537,10 +1542,10 @@ addLayer("p", {
                 player.p.best = player.p.best.max(player.p.points)
         },
         upgrades:{
-                rows: 2,
+                rows: 3,
                 cols: 4,
                 11:{
-                        title: "Groan", // grown
+                        title: "Groan",
                         description: "Unlock Neutrinos",
                         cost: new Decimal(50),
                         unlocked(){
@@ -1548,7 +1553,7 @@ addLayer("p", {
                         },
                 },
                 12:{
-                        title: "Grown", // grown
+                        title: "Grown",
                         description: "Amoebas boost Neutrino gain",
                         cost: new Decimal(6e4),
                         effect(){
@@ -1559,7 +1564,7 @@ addLayer("p", {
                         },
                 },
                 13:{
-                        title: "Flea", // idk
+                        title: "Flea",
                         description: "Particles boost Neutrino gain",
                         cost: new Decimal(11e5),
                         effect(){
@@ -1570,7 +1575,7 @@ addLayer("p", {
                         },
                 },
                 14:{
-                        title: "Flee", // idk
+                        title: "Flee",
                         description: "Neutrinos boost Neutrino gain",
                         cost: new Decimal(11e7),
                         effect(){
@@ -1581,13 +1586,80 @@ addLayer("p", {
                         },
                 },
                 21:{
-                        title: "Tier", //tear
+                        title: "Tier",
                         description: "Unlock Gluons",
                         cost: new Decimal(3.5e34),
                         unlocked(){
                                 return getBuyableAmount("n", 12).gte(31)
                         }
                 },
+                22:{
+                        title: "Tear",
+                        description: "Gluons boost Neutrinos",
+                        cost: new Decimal(3e40),
+                        effect(){
+                                let ret = player.g.points
+                                if (ret.gt(1e10)) ret = ret.log10().pow(10)
+                                return ret
+                        },
+                        unlocked(){
+                                return getBuyableAmount("n", 12).gte(33)
+                        }
+                },
+                23:{
+                        title: "Tide", 
+                        description: "Each Gluon Upgrade adds .05 to the Neutrino Generation base",
+                        cost: new Decimal(2e96),
+                        unlocked(){
+                                return getBuyableAmount("n", 11).gte(54)
+                        }
+                },
+                24:{
+                        title: "Tied", 
+                        description: "Energy boosts Gluon generation",
+                        cost: new Decimal(1.5e128),
+                        effect(){
+                                return player.e.points.max(10).log10()
+                        },
+                        unlocked(){
+                                return getBuyableAmount("n", 12).gte(64)
+                        }
+                },
+                31:{
+                        title: "Break", 
+                        description: "Unlock Quarks (this is v.87 endgame, will cost 1.5e198)",
+                        //challenge layer on R0, 4 challenges
+                        //each chall unlocks 5th col of upgrades for I/G/AM/P
+                        cost: new Decimal(1.5e222),
+                        unlocked(){
+                                return hasUpgrade("g", 54)
+                        }
+                },
+                32:{
+                        title: "Brake",
+                        description: "Unlock a 5th Column of Amoeba Upgrades",
+                        cost: new Decimal("1.5e1222"),
+                        unlocked(){
+                                return false
+                        }
+                },
+                33:{
+                        title: "idk", //idk 
+                        description: "Unlock a buyable",
+                        cost: new Decimal("1.5e1222"),
+                        unlocked(){
+                                return false
+                        }
+                },
+                34:{
+                        title: "idk", //idk 
+                        description: "Buff [something]", 
+                        cost: new Decimal("1.5e1222"),
+                        unlocked(){
+                                return false
+                        }
+                },
+                //15 unlocks buyable, 25 unlocks buyable, 35 unlocks a layer 3 layer
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -1645,6 +1717,7 @@ addLayer("n", {
                 if (hasUpgrade("e", 35)) x = x.times(upgradeEffect("e", 35))
                 if (hasUpgrade("e", 55)) x = x.times(upgradeEffect("e", 55))
                 if (hasUpgrade("g", 11)) x = x.times(upgradeEffect("g", 11))
+                if (hasUpgrade("p", 22)) x = x.times(upgradeEffect("p", 22))
                 return x
         },
         prestigeButtonText(){
@@ -1698,6 +1771,8 @@ addLayer("n", {
                                         diff = diff.min(10)
                                         ret = ret.plus(diff)
                                 }
+                                if (hasUpgrade("g", 21)) ret = ret.plus(.3)
+                                if (hasUpgrade("p", 23)) ret = ret.plus(player.g.upgrades.length / 20)
                                 return ret
                         },
                         canAfford(){
@@ -1779,7 +1854,10 @@ addLayer("n", {
                                 return player.n.points.gte(getNBuyableCost(12))
                         },
                         extra(){
-                                return layers.n.buyables[22].total().plus(layers.n.buyables[13].total()).plus(layers.n.buyables[32].total())
+                                let ret = layers.n.buyables[22].total().plus(layers.n.buyables[13].total()).plus(layers.n.buyables[32].total())
+                                if (hasUpgrade("g", 41)) ret = ret.plus(layers.n.buyables[31].total())
+                                if (hasUpgrade("g", 54)) ret = ret.plus(layers.n.buyables[33].total())
+                                return ret
                         },
                         buy(){
                                 let cost = getNBuyableCost(12)
@@ -1858,7 +1936,10 @@ addLayer("n", {
                                 return player.n.points.gte(getNBuyableCost(13))
                         },
                         extra(){
-                                return layers.n.buyables[23].total().plus(layers.n.buyables[33].total())
+                                let ret = layers.n.buyables[23].total().plus(layers.n.buyables[33].total())
+                                if (hasUpgrade("g", 14)) ret = ret.plus(2)
+                                if (hasUpgrade("g", 53)) ret = ret.plus(layers.n.buyables[32].total())
+                                return ret
                         },
                         buy(){
                                 let cost = getNBuyableCost(13)
@@ -1933,7 +2014,9 @@ addLayer("n", {
                                 return player.n.points.gte(getNBuyableCost(21))
                         },
                         extra(){
-                                return layers.n.buyables[22].total().plus(layers.n.buyables[23].total()).plus(layers.n.buyables[31].total())
+                                let ret = layers.n.buyables[22].total().plus(layers.n.buyables[23].total()).plus(layers.n.buyables[31].total())
+                                if (hasUpgrade("g", 52)) ret = ret.plus(layers.n.buyables[32].total())
+                                return ret
                         },
                         buy(){
                                 let cost = getNBuyableCost(21)
@@ -2002,13 +2085,18 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return player.n.best.plus(10).log10().root(2)
+                                let ret = player.n.best.plus(10).log10().root(2)
+                                if (hasUpgrade("g", 32)) ret = ret.plus(layers.n.buyables[11].total().div(100))
+                                if (hasUpgrade("g", 33)) ret = ret.plus(player.g.upgrades.length/4)
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(22))
                         },
                         extra(){
-                                return layers.n.buyables[23].total().plus(layers.n.buyables[32].total())
+                                let ret = layers.n.buyables[23].total().plus(layers.n.buyables[32].total())
+                                if (hasUpgrade("g", 44)) ret = ret.plus(layers.n.buyables[33].total())
+                                return ret
                         },
                         buy(){
                                 let cost = getNBuyableCost(22)
@@ -2077,7 +2165,9 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return new Decimal(100)
+                                let ret = new Decimal(100)
+                                if (hasUpgrade("g", 34)) ret = ret.plus(player.i.buyables[12].div(10))
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(23))
@@ -2154,7 +2244,9 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return new Decimal(25)
+                                let ret = new Decimal(25)
+                                if (hasUpgrade("g", 51)) ret = ret.plus(layers.n.buyables[31].total())
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(31))
@@ -2229,7 +2321,10 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return new Decimal(100)
+                                let ret = new Decimal(100)
+                                if (hasUpgrade("g", 42)) ret = ret.pow(2)
+                                if (hasUpgrade("g", 43)) ret = ret.pow(2)
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(32))
@@ -2290,10 +2385,10 @@ addLayer("n", {
                         },
                         cost(a){
                                 let x = getBuyableAmount("n", 33).plus(a)
-                                let base1 = Decimal.pow(2, 80)
-                                let base2 = 1250
+                                let base1 = Decimal.pow(2, 214)
+                                let base2 = Decimal.pow(5, 10).times(Decimal.pow(2, 18))
                                 let exp2 = x.times(x)
-                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e149)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e150)
                         },
                         total(){
                                 return getBuyableAmount("n", 33).plus(layers.n.buyables[33].extra())
@@ -2304,7 +2399,9 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return new Decimal(10)
+                                let ret = new Decimal(10)
+                                if (hasUpgrade("g", 54)) ret = ret.times(layers.n.buyables[33].total())
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(33))
@@ -2404,6 +2501,7 @@ addLayer("g", {
         },
         getGainMult(){
                 let x = new Decimal(1)
+                if (hasUpgrade("p", 24)) x = x.times(upgradeEffect("p", 24))
                 return x
         },
         prestigeButtonText(){
@@ -2425,7 +2523,7 @@ addLayer("g", {
                 rows: 5,
                 cols: 4,
                 11: {
-                        title: "Won", //idk
+                        title: "Won",
                         description: "Best Gluons boost Neutrino gain",
                         cost: new Decimal(10),
                         effect(){
@@ -2438,7 +2536,7 @@ addLayer("g", {
                         },
                 },
                 12: {
-                        title: "One", //idk
+                        title: "One",
                         description: "Best Gluons boost Particle gain",
                         cost: new Decimal(15),
                         effect(){
@@ -2451,12 +2549,161 @@ addLayer("g", {
                         },
                 },
                 13: {
-                        title: "Build", //Billed
-                        description: "somehow boost particles (will cost 300, v.85 endgame)", 
-                        //NOT IMPLEMENTED should be about by 10x
-                        cost: new Decimal(3e6),
+                        title: "Build", //Pair/pear
+                        description: "Incrementy boosts Particle gain", 
+                        cost: new Decimal(300),
+                        effect(){
+                                let ret = player.i.best.max(10).log10().root(4)
+                                return ret
+                        },
                         unlocked(){
                                 return hasUpgrade("g", 12)
+                        },
+                },
+                14: {
+                        title: "Billed",
+                        description: "Add two free levels to Base Incrementy Gain Neutrino buyable", 
+                        cost: new Decimal(1e15),
+                        unlocked(){
+                                return hasUpgrade("g", 13)
+                        },
+                },
+                21: {
+                        title: "Main",
+                        description: "Add .3 to the Neutrino Generation base", 
+                        cost: new Decimal(5e21),
+                        unlocked(){
+                                return hasUpgrade("g", 14)
+                        },
+                },
+                22: {
+                        title: "Mane",
+                        description: "Boost Particle gain based on Gluon upgrades", 
+                        cost: new Decimal(5e24),
+                        effect(){
+                                let l = player.g.upgrades.length
+                                return Decimal.pow(l, l/2)
+                        },
+                        unlocked(){
+                                return hasUpgrade("g", 21)
+                        },
+                },
+                23: {
+                        title: "Sole",
+                        description: "Boost Particle gain based on Energy", 
+                        cost: new Decimal(1e26),
+                        effect(){
+                                return player.e.points.plus(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("g", 22)
+                        },
+                },
+                24: {
+                        title: "Soul",
+                        description: "Boost Base Incremenety gain based on Gluons", 
+                        cost: new Decimal(1e26),
+                        effect(){
+                                return player.g.points.plus(10).log10().pow(5)
+                        },
+                        unlocked(){
+                                return hasUpgrade("g", 23)
+                        },
+                },
+                31: {
+                        title: "Muscle",
+                        description: "Neutrinos multiply Incrementy gain", 
+                        cost: new Decimal(1e28),
+                        unlocked(){
+                                return hasUpgrade("g", 24)
+                        },
+                },
+                32: {
+                        title: "Mussel",
+                        description: "Each Neutrino Generation Buyable adds .01 to the Particle Boost buyable base", 
+                        cost: new Decimal(1e29),
+                        unlocked(){
+                                return hasUpgrade("g", 31)
+                        },
+                },
+                33: {
+                        title: "Read",
+                        description: "Each Gluon Upgrades adds .25 to the Particle Boost buyable base", 
+                        cost: new Decimal(3e30),
+                        unlocked(){
+                                return hasUpgrade("g", 32)
+                        },
+                },
+                34: {
+                        title: "Reed",
+                        description: "Each Incrementy Strength adds .1 to the Energy Boost buyable base", 
+                        cost: new Decimal(1e32),
+                        unlocked(){
+                                return hasUpgrade("g", 33)
+                        },
+                },
+                41: {
+                        title: "Read?",
+                        description: "Matter Gain buyables also give free levels to Particle Generation", 
+                        cost: new Decimal(1e40),
+                        unlocked(){
+                                return hasUpgrade("g", 34)
+                        },
+                },
+                42: {
+                        title: "Red!",
+                        description: "Square Antimater generation base", 
+                        cost: new Decimal(1e48),
+                        unlocked(){
+                                return hasUpgrade("g", 41)
+                        },
+                },
+                43: {
+                        title: "Idle",
+                        description: "Square Antimater generation base", 
+                        cost: new Decimal(1e51),
+                        unlocked(){
+                                return hasUpgrade("g", 42)
+                        },
+                },
+                44: {
+                        title: "Idol",
+                        description: "Amoeba Gain buyables also give free levels to Particle Boost", 
+                        cost: new Decimal(1e52),
+                        unlocked(){
+                                return hasUpgrade("g", 43)
+                        },
+                },
+                51: {
+                        title: "Moat",
+                        description: "Each Matter Gain buyable adds 1 to its base", 
+                        cost: new Decimal(5e63),
+                        unlocked(){
+                                return hasUpgrade("g", 44)
+                        },
+                },
+                52: {
+                        title: "Mote",
+                        description: "Antimatter Gain buyables also gives free levels to Incrementry Boost", 
+                        cost: new Decimal(2e64),
+                        unlocked(){
+                                return hasUpgrade("g", 51)
+                        },
+                },
+                53: {
+                        title: "Blue",
+                        description: "Antimatter Gain buyables also gives free levels to Base Incrementy Gain", 
+                        cost: new Decimal(1e68),
+                        unlocked(){
+                                return hasUpgrade("g", 52)
+                        },
+                },
+                54: {
+                        title: "Blew",
+                        description: "Amoeba Gain buyables multiply its effect base and give free levels to Particle Generation", 
+                        cost: new Decimal(1e84),
+                        unlocked(){
+                                return hasUpgrade("g", 53)
                         },
                 },
         },
