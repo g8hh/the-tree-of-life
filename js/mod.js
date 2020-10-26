@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.8",
+	num: "0.85",
 	name: "She Sells Sea Shells by the Sea Shore",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: The upgrade that says v.8 endgame."
+	"Current endgame: The upgrade that says v.85 endgame."
 ]
 
 // Determines when the game "ends"

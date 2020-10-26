@@ -33,8 +33,16 @@ function getIBuyableCost(id){
         return layers.i.buyables[id].cost()
 }
 
+function getNBuyableCost(id){
+        return layers.n.buyables[id].cost()
+}
+
 function getIBuyableEff(id){
         return layers.i.buyables[id].effect()
+}
+
+function getNBuyableEff(id){
+        return layers.n.buyables[id].effect()
 }
 
 function getIBuyablesTotalRow(row){
@@ -47,6 +55,16 @@ function getIBuyablesTotalRow(row){
 
 function getIBuyableFormat(id){
         let a = getBuyableAmount("i", id)
+        return formatWhole(a)
+}
+
+function getNBuyableFormat(id){
+        let a = getBuyableAmount("n", id)
+        return formatWhole(a)
+}
+
+function getNExtraBuyableFormat(id){
+        let a = layers.n.buyables[id].extra()
         return formatWhole(a)
 }
 
@@ -190,6 +208,7 @@ addLayer("i", {
                 if (hasAUpgrade(23))      x = x.times(upgradeEffect("a", 23))
                 if (hasUpgrade("e", 41))  x = x.times(upgradeEffect("e", 41))
                 if (hasUpgrade("e", 44))  x = x.times(upgradeEffect("e", 44))
+                x = x.times(getNBuyableEff(13))
                 return x
         },
         getGainMultPost(){
@@ -203,6 +222,7 @@ addLayer("i", {
                 x = x.times(layers.m.effect()[0])
                 if (hasUpgrade("e", 23)) x = x.times(player.e.points.max(1))
                 if (hasChallenge("m", 11)) x = x.times(player.e.points.max(1))
+                x = x.times(getNBuyableEff(21))
                 return x
         },
         update(diff){
@@ -660,6 +680,7 @@ addLayer("am", {
                 x = x.times(layers.a.effect()[1])
                 x = x.times(layers.m.effect()[1])
                 if (hasUpgrade("e", 42)) x = x.times(upgradeEffect("e", 42))
+                x = x.times(getNBuyableEff(32))
                 return x
         },
         prestigeButtonText(){
@@ -846,13 +867,14 @@ addLayer("a", {
         },
         getGainMult(){
                 let x = new Decimal(1)
+                x = x.times(getNBuyableEff(33))
                 return x
         },
         prestigeButtonText(){
                 let gain = layers.a.getResetGain()
                 let start =  "Reset to gain " + formatWhole(gain) + " Amoeba (based on incrementy)"
                 let nextAt = ""
-                if (gain.lt(1000) && player.a.best.gt(0)){
+                if (gain.lt(1000)){
                         nextAt = "<br>Next at " + format(Decimal.pow(10, gain.plus(1).log10().plus(10).times(2).pow(2).plus(17))) + " incrementy"
                 }
                 return start + nextAt
@@ -1055,6 +1077,7 @@ addLayer("m", {
                 if (hasUpgrade("e", 13)) x = x.times(getEUpgEff(13))
                 if (hasUpgrade("e", 21)) x = x.times(player.a.points.plus(1))
                 if (hasUpgrade("e", 22)) x = x.times(getEUpgEff(22))
+                x = x.times(getNBuyableEff(31))
                 return x
         },
         prestigeButtonText(){
@@ -1062,7 +1085,7 @@ addLayer("m", {
                 let start =  "Reset to gain " + formatWhole(gain) + " Matter (based on incrementy)"
                 let nextAt = ""
                 let mlt = layers.m.getGainMult()
-                if (gain.lt(1000) && player.m.best.gt(0)){
+                if (gain.lt(1000)){
                         nextAt = "<br>Next at " + format(gain.plus(1).div(mlt).plus(9).pow(1170)) + " incrementy"
                 }
                 return start + nextAt
@@ -1180,6 +1203,7 @@ addLayer("e", {
         getGainMult(){
                 let x = new Decimal(1)
                 if (hasUpgrade("e", 11)) x = x.times(getEUpgEff(11))
+                x = x.times(getNBuyableEff(23))
                 return x
         },
         prestigeButtonText(){
@@ -1201,7 +1225,7 @@ addLayer("e", {
         layerShown(){return hasMilestone("m", 1)},
         upgrades:{
                 rows: 5,
-                cols: 4,
+                cols: 5,
                 11:{
                         title: "Peace", 
                         description: "Incrementy buffs Energy gain",
@@ -1402,7 +1426,53 @@ addLayer("e", {
                         unlocked(){
                                 return hasUpgrade("e", 53)
                         },
-                },//1e11475 inc
+                },
+                15:{
+                        title: "Homophones?",
+                        description: "Base Incrementy Gain buyable effect is raised to the tenth power",
+                        cost: new Decimal("1e408"),
+                        unlocked(){
+                                return getBuyableAmount("n", 31).gte(2)
+                        },
+                },
+                25:{
+                        title: "How",
+                        description: "Gain a free Energy Boost buyable",
+                        cost: new Decimal("1e418"),
+                        unlocked(){
+                                return hasUpgrade("e", 15)
+                        },
+                }, 
+                35:{
+                        title: "Could", 
+                        description: "Energy effects Neutrino gain",
+                        cost: new Decimal("1e426"),
+                        effect(){
+                                return player.e.points.plus(10).log10().pow(.5)
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 25)
+                        },
+                },
+                45:{
+                        title: "You", //suggest
+                        description: "Each Neutrino Generation level past 100 boosts its base by .01 (capped at 10)",
+                        cost: new Decimal("1e439"),
+                        unlocked(){
+                                return getBuyableAmount("n", 12).gte(24)
+                        },
+                },
+                55:{
+                        title: "Suggest?", //suggest
+                        description: "Incrementy buffs Neutrino gain",
+                        cost: new Decimal("1e457"),
+                        effect(){
+                                return player.i.points.plus(10).log10().root(3)
+                        },
+                        unlocked(){
+                                return hasUpgrade("e", 45)
+                        },
+                },
         },
         tabFormat: ["main-display",
                 ["display-text", "Energy generation is based on the least amount of Matter and Antimatter"],
@@ -1437,7 +1507,7 @@ addLayer("p", {
         requires: Decimal.pow(10, 11475), // not needed
         resource: "Particles", // Name of prestige currency
         baseAmount() {return player.i.points},
-        branches: ["i"],
+        branches: ["i", "n", "g"],
         type: "custom", 
         getResetGain() {
                 let amt = layers.p.baseAmount()
@@ -1448,6 +1518,9 @@ addLayer("p", {
         },
         getGainMult(){
                 let x = new Decimal(1)
+                x = x.times(getNBuyableEff(12))
+                x = x.times(getNBuyableEff(22))
+                if (hasUpgrade("g", 12)) x = x.times(upgradeEffect("g", 12))
                 return x
         },
         prestigeButtonText(){
@@ -1461,18 +1534,59 @@ addLayer("p", {
                 player.p.points = player.p.points.plus(gain.times(diff)).min(gain.times(60))
 
                 if (!player.p.best) player.p.best = new Decimal(0)
-                player.p.best = player.p.best.max(player.e.points)
+                player.p.best = player.p.best.max(player.p.points)
         },
         upgrades:{
-                rows: 1,
+                rows: 2,
                 cols: 4,
                 11:{
                         title: "Groan", // grown
-                        description: "Unlock Neutrinos (This is v.8 endgame, Neutrinos are a row 1 layer)",
+                        description: "Unlock Neutrinos",
                         cost: new Decimal(50),
                         unlocked(){
                                 return true
                         },
+                },
+                12:{
+                        title: "Grown", // grown
+                        description: "Amoebas boost Neutrino gain",
+                        cost: new Decimal(6e4),
+                        effect(){
+                                return player.a.points.plus(10).log10().pow(.5)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("n", 12).gte(9)
+                        },
+                },
+                13:{
+                        title: "Flea", // idk
+                        description: "Particles boost Neutrino gain",
+                        cost: new Decimal(11e5),
+                        effect(){
+                                return player.p.points.plus(10).log10()
+                        },
+                        unlocked(){
+                                return getBuyableAmount("n", 21).gte(6)
+                        },
+                },
+                14:{
+                        title: "Flee", // idk
+                        description: "Neutrinos boost Neutrino gain",
+                        cost: new Decimal(11e7),
+                        effect(){
+                                return player.n.points.plus(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("p", 13)
+                        },
+                },
+                21:{
+                        title: "Tier", //tear
+                        description: "Unlock Gluons",
+                        cost: new Decimal(3.5e34),
+                        unlocked(){
+                                return getBuyableAmount("n", 12).gte(31)
+                        }
                 },
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
@@ -1481,7 +1595,7 @@ addLayer("p", {
         ],
         layerShown(){return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0)},
         tabFormat: ["main-display",
-                ["display-text", function(){return "You are getting " + format(layers.p.getResetGain()) + " Particles per second, maxed at 60 seconds worth of production"}],
+                ["display-text", function(){return "You are getting " + format(layers.p.getResetGain()) + " Particles per second (based on Incrementy, requires 1e11475), <br>maxed at 60 seconds worth of production (" + format(layers.p.getResetGain().times(60)) + ")"}],
                 "blank",
                 "blank", 
                 "upgrades"],
@@ -1496,5 +1610,876 @@ addLayer("p", {
                 //resource
                 player.p.points = new Decimal(0)
                 player.p.best = new Decimal(0)
+        },
+})
+
+
+addLayer("n", {
+        name: "Neutrinos", 
+        symbol: "N", 
+        position: 2,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#B5F146",
+        requires: Decimal.pow(10, 11475), // not needed
+        resource: "Neutrinos", // Name of prestige currency
+        baseAmount() {return player.p.points},
+        branches: [],
+        type: "custom", 
+        getResetGain() {
+                if (layers.n.layerShown() == false) return new Decimal(0)
+                let amt = layers.n.baseAmount()
+                let base = amt.div(60).sqrt()
+                if (base.gt(1e10)) base = base.log10().pow(10)
+                return base.times(layers.n.getGainMult())
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+                x = x.times(getNBuyableEff(11))
+                if (hasUpgrade("p", 12)) x = x.times(upgradeEffect("p", 12))
+                if (hasUpgrade("p", 13)) x = x.times(upgradeEffect("p", 13))
+                if (hasUpgrade("p", 14)) x = x.times(upgradeEffect("p", 14))
+                if (hasUpgrade("e", 35)) x = x.times(upgradeEffect("e", 35))
+                if (hasUpgrade("e", 55)) x = x.times(upgradeEffect("e", 55))
+                if (hasUpgrade("g", 11)) x = x.times(upgradeEffect("g", 11))
+                return x
+        },
+        prestigeButtonText(){
+                return "if you see this bug"
+        },
+        canReset(){
+                return false
+        },
+        update(diff){
+                let gain = layers.n.getResetGain()
+                player.n.points = player.n.points.plus(gain.times(diff))
+
+                if (!player.n.best) player.n.best = new Decimal(0)
+                player.n.best = player.n.best.max(player.n.points)
+        },
+        buyables:{
+                rows: 3,
+                cols: 3,
+                11: {
+                        title: "Neutrino Generation",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[11].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(11)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(11) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(11)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(11)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[11].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 11).plus(a)
+                                let base1 = 4
+                                let base2 = 1.25
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(25)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 11).plus(layers.n.buyables[11].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[11].total()
+                                let base = layers.n.buyables[11].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                let ret = new Decimal(3)
+                                if (hasUpgrade("e", 25)) {
+                                        let diff = layers.n.buyables[11].total().div(100).minus(1).max(0)
+                                        diff = diff.min(10)
+                                        ret = ret.plus(diff)
+                                }
+                                return ret
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(11))
+                        },
+                        extra(){
+                                return layers.n.buyables[12].total().plus(layers.n.buyables[21].total()).plus(layers.n.buyables[13].total()).plus(layers.n.buyables[31].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(11)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[11] = player.n.buyables[11].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return true },
+                },
+                12: {
+                        title: "Particle Generation",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[12].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(12)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(12) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(12)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(12)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[12].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 12).plus(a)
+                                let base1 = 8
+                                let base2 = 1.25
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(500)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 12).plus(layers.n.buyables[12].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[12].total()
+                                let base = layers.n.buyables[12].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return new Decimal(1.5)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(12))
+                        },
+                        extra(){
+                                return layers.n.buyables[22].total().plus(layers.n.buyables[13].total()).plus(layers.n.buyables[32].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(12)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[12] = player.n.buyables[12].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(2) },
+                },
+                13: {
+                        title: "Base Incrementy Gain",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[13].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(13)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(13) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(13)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(13)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[13].effectBase()) + "^x (based on best Incrementy)</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 13).plus(a)
+                                let base1 = 1024
+                                let base2 = 25
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e21)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 13).plus(layers.n.buyables[13].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[13].total()
+                                let base = layers.n.buyables[13].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                let ret = player.i.best.plus(10).log10().max(1e4).div(1e4)
+                                if (ret.lt(1)) return new Decimal(1)
+                                if (ret.gt(2)) ret = ret.times(50).log10()
+                                if (hasUpgrade("e", 15)) ret = ret.pow(10)
+                                return ret
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(13))
+                        },
+                        extra(){
+                                return layers.n.buyables[23].total().plus(layers.n.buyables[33].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(13)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[13] = player.n.buyables[13].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(12) },
+                },
+                21: {
+                        title: "Incrementy Boost",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[21].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(21)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(21) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(21)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(21)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[21].effectBase()) + "^x (based on best Neutrinos)</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 21).plus(a)
+                                let base1 = 8
+                                let base2 = 2.5
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(5e5)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 21).plus(layers.n.buyables[21].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[21].total()
+                                let base = layers.n.buyables[21].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return player.n.best.plus(10).log10().pow(2)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(21))
+                        },
+                        extra(){
+                                return layers.n.buyables[22].total().plus(layers.n.buyables[23].total()).plus(layers.n.buyables[31].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(21)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[21] = player.n.buyables[21].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(5) },
+                },
+                22: {
+                        title: "Particle Boost",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[22].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(22)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(22) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(22)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(22)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[22].effectBase()) + "^x (based on best Neutrinos)</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 22).plus(a)
+                                let base1 = 256
+                                let base2 = 5
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e10)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 22).plus(layers.n.buyables[22].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[22].total()
+                                let base = layers.n.buyables[22].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return player.n.best.plus(10).log10().root(2)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(22))
+                        },
+                        extra(){
+                                return layers.n.buyables[23].total().plus(layers.n.buyables[32].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(22)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[22] = player.n.buyables[22].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(5) },
+                },
+                23: {
+                        title: "Energy Boost",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[23].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(23)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(23) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(23)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(23)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[23].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 23).plus(a)
+                                let base1 = Decimal.pow(2, 15)
+                                let base2 = 125
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e35)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 23).plus(layers.n.buyables[23].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[23].total()
+                                let base = layers.n.buyables[23].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return new Decimal(100)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(23))
+                        },
+                        extra(){
+                                let ret = layers.n.buyables[33].total()
+                                if (hasUpgrade("e", 25)) ret = ret.plus(1)
+                                return ret
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(23)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[23] = player.n.buyables[23].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(12) },
+                },
+                31: {
+                        title: "Matter Gain",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[31].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(31)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(31) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(31)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(31)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[31].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 31).plus(a)
+                                let base1 = Decimal.pow(2, 19)
+                                let base2 = 1250
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e49)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 31).plus(layers.n.buyables[31].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[31].total()
+                                let base = layers.n.buyables[31].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return new Decimal(25)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(31))
+                        },
+                        extra(){
+                                return layers.n.buyables[32].total().plus(layers.n.buyables[33].total())
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(31)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[31] = player.n.buyables[31].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(20) },
+                },
+                32: {
+                        title: "Antimatter Gain",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[32].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(32)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(32) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(32)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(32)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[32].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 32).plus(a)
+                                let base1 = Decimal.pow(2, 49)
+                                let base2 = 1250
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e82)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 32).plus(layers.n.buyables[32].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[32].total()
+                                let base = layers.n.buyables[32].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return new Decimal(100)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(32))
+                        },
+                        extra(){
+                                return layers.n.buyables[33].total()
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(32)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[32] = player.n.buyables[32].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(20) },
+                },
+                33: {
+                        title: "Amoeba Gain",
+                        display(){
+                                let additional = ""
+                                if (layers.n.buyables[33].extra().gt(0)) additional = "+" + getNExtraBuyableFormat(33)
+                                let start = "<b><h2>Amount</h2>: " + getNBuyableFormat(33) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: x" + format(getNBuyableEff(33)) + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getNBuyableCost(33)) + " Neutrinos</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.n.buyables[33].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("n", 33).plus(a)
+                                let base1 = Decimal.pow(2, 80)
+                                let base2 = 1250
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, x).times(Decimal.pow(base2, exp2)).times(1e149)
+                        },
+                        total(){
+                                return getBuyableAmount("n", 33).plus(layers.n.buyables[33].extra())
+                        },
+                        effect(){
+                                let x = layers.n.buyables[33].total()
+                                let base = layers.n.buyables[33].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        effectBase(){
+                                return new Decimal(10)
+                        },
+                        canAfford(){
+                                return player.n.points.gte(getNBuyableCost(33))
+                        },
+                        extra(){
+                                return new Decimal(0)
+                        },
+                        buy(){
+                                let cost = getNBuyableCost(33)
+                                if (player.n.points.lt(cost)) return
+                                player.n.buyables[33] = player.n.buyables[33].plus(1)
+                                player.n.points = player.n.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                                /*
+                                if (player.i.points.lt(10)) return
+                                if (player.i.points.lt(20)) {
+                                        layers.i.buyables[11].buy()
+                                        return
+                                }
+                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
+                                //this wont quite work if we are buying the very first one and only the very first one
+
+                                // let exp2 = x.minus(1).max(0).times(x)
+                                let pttarget = player.i.points.div(10).log(1.01)
+                                let bfactor = Math.log(base1)/Math.log(1.01)
+                                //want to find ax^2+bx = c
+                                let c = pttarget //on other side
+                                let b = bfactor - 1
+                                // let a = 1 this is constant so remove it
+
+                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
+                                //-b + sqrt(b*b+4*c)
+
+                                let diff = target.minus(player.i.buyables[11]).max(0)
+                                if (maximum != undefined) diff = diff.min(maximum)
+                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
+
+                                //so ew, make sure to do the rest, but ew
+                                */
+                                
+                        },
+                        unlocked(){ return player.n.buyables[11].gte(20) },
+                },
+        },
+        row: 1, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return hasUpgrade("p", 11)},
+        tabFormat: ["main-display",
+                ["display-text", function(){return "You are getting " + format(layers.n.getResetGain()) + " Neutrinos per second (based on particles)"}],
+                ["display-text", "Each buyable has an effect and gives a free level to all upgrades directly to the left or above it"],
+                "blank",
+                "blank", 
+                "buyables"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 1) return
+
+                //resource
+                player.n.points = new Decimal(0)
+                player.n.best = new Decimal(0)
+
+                //buyables
+                let resetBuyables = [11,12,13,21,22,23,31,32,33]
+                for (let j = 0; j < resetBuyables.length; j++) {
+                        player.n.buyables[resetBuyables[j]] = new Decimal(0)
+                }
+        },
+})
+
+addLayer("g", {
+        name: "Gluons", 
+        symbol: "G", 
+        position: 3,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#744100",
+        requires: Decimal.pow(10, 11475), // not needed
+        resource: "Gluons", // Name of prestige currency
+        baseAmount() {return player.p.points},
+        branches: [],
+        type: "custom", 
+        getResetGain() {
+                if (layers.g.layerShown() == false) return new Decimal(0)
+                let amt = layers.g.baseAmount()
+                let base = amt.div(3.5e34).sqrt()
+                if (base.lt(1)) return new Decimal(0)
+                base = base.minus(1)
+                if (base.lt(1)) base = base.sqrt()
+                return base.times(layers.g.getGainMult())
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                return "if you see this bug"
+        },
+        canReset(){
+                return false
+        },
+        update(diff){
+                let gain = layers.g.getResetGain()
+                player.g.points = player.g.points.plus(gain.times(diff))
+
+                if (!player.g.best) player.g.best = new Decimal(0)
+                player.g.best = player.g.best.max(player.g.points)
+        },
+        upgrades:{
+                //1st col boosts left col, 4th col boosts right col
+                //bot 2 row boost bot row, top 2 rows boost top row 
+                rows: 5,
+                cols: 4,
+                11: {
+                        title: "Won", //idk
+                        description: "Best Gluons boost Neutrino gain",
+                        cost: new Decimal(10),
+                        effect(){
+                                let ret = player.g.best.max(1).root(10).times(20)
+                                if (ret.gt(1000)) ret = ret.log10().plus(7).pow(3)
+                                return ret
+                        },
+                        unlocked(){
+                                return true
+                        },
+                },
+                12: {
+                        title: "One", //idk
+                        description: "Best Gluons boost Particle gain",
+                        cost: new Decimal(15),
+                        effect(){
+                                let ret = player.g.best.max(1).root(20).times(20)
+                                if (ret.gt(100)) ret = ret.log10().times(5).pow(2)
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("g", 11)
+                        },
+                },
+                13: {
+                        title: "Build", //Billed
+                        description: "somehow boost particles (will cost 300, v.85 endgame)", 
+                        //NOT IMPLEMENTED should be about by 10x
+                        cost: new Decimal(3e6),
+                        unlocked(){
+                                return hasUpgrade("g", 12)
+                        },
+                },
+        },
+        row: 1, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return hasUpgrade("p", 21)},
+        tabFormat: ["main-display",
+                ["display-text", function(){return "You are getting " + format(layers.g.getResetGain()) + " Gluons per second (based on particles)"}],
+                "blank",
+                "blank", 
+                "upgrades"],
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 1) return
+
+                //upgrades
+                let keep = []
+                player.g.upgrades = filter(player.g.upgrades, keep)
+
+                //resource
+                player.g.points = new Decimal(0)
+                player.g.best = new Decimal(0)
         },
 })
