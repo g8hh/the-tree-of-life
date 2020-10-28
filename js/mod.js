@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.9",
+	num: "0.9.1",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: The tenth upgrade of the Shard layer."
+	"Current endgame: The fifteenth upgrade of the Shard layer."
 ]
 
 // Determines when the game "ends"
