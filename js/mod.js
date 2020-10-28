@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.88",
-	name: "She Sells Sea Shells by the Sea Shore",
+	num: "0.9",
+	name: "Peter Piper picked a peck of pickled peppers",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: The upgrade that says v.88 endgame."
+	"Current endgame: The tenth upgrade of the Shard layer."
 ]
 
 // Determines when the game "ends"

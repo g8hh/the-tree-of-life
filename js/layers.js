@@ -3278,7 +3278,7 @@ addLayer("s", {
                 best: new Decimal(0),
         }},
         color: "#1346DF",
-        requires: Decimal.pow(10, 502).times(2), 
+        requires: Decimal.pow(10, 502), 
         resource: "Shards",
         baseAmount() {return player.p.points}, 
         branches: ["p"],
