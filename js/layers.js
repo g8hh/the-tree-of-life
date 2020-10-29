@@ -3401,7 +3401,7 @@ addLayer("s", {
                         description: "Gain a free Incrementy Stamina level, gain 100x Matter and Amoeba, and Shard upgrades multiply Neutrino gain",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("s", 11)
+                                return true
                         },
                 },
                 13: {
@@ -3409,7 +3409,7 @@ addLayer("s", {
                         description: "Add one to the base of Neutrino Generation and Incrementy Speed, make particle gain 100x faster but cap it at 1 second",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("s", 12)
+                                return hasUpgrade("s", 12) && hasUpgrade("s", 11)
                         },
                 },
                 14: {
