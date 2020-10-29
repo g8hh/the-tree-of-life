@@ -9,6 +9,10 @@ const TMT_VERSION = {
 	tmtName: "We should have thought of this sooner!"
 }
 
+function finishedChallenges(layer, data){
+	return challengeCompletions(layer, data) == (layers[layer].challenges[data].completionLimit || 1)
+}
+
 function getResetGain(layer, useType = null) {
 	let type = useType
 	if (!useType) type = tmp[layer].type

@@ -162,6 +162,10 @@ function getIncBuyableFormulaText(id){
         }
 }
 
+function getBChallengeTotal(){
+        return challengeCompletions("b", 11) + challengeCompletions("b", 12) + challengeCompletions("b", 21) + challengeCompletions("b", 22)
+}
+
 var incGainFactor = new Decimal(1)
 
 // http://www.singularis.ltd.uk/bifroest/misc/homophones-list.html for list of homophones
@@ -457,6 +461,7 @@ addLayer("i", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("s", 22)) ret = ret.plus(player.s.upgrades.length)
+                                ret = ret.plus(layers.b.challenges[12].rewardEffect().times(layers.i.buyables[13].total()).floor())
                                 return ret
                         },
                         buy(){
@@ -514,7 +519,12 @@ addLayer("i", {
                         effectBase(){
                                 let x = layers.i.buyables[12].total()
                                 let base = new Decimal(2)
-                                if (hasIUpg(33)) base = base.plus(x.div(50).min(10))
+                                if (hasIUpg(33)) {
+                                        let a = x.div(50)
+                                        if (!hasUpgrade("b", 11)) a = a.min(10)
+                                        base = base.plus(a)
+                                }
+                                base = base.plus(layers.b.challenges[11].rewardEffect())
                                 return base
                         },
                         effect(){
@@ -607,7 +617,9 @@ addLayer("i", {
                                 let x = layers.i.buyables[13].total()
                                 let scs = getIStaminaSoftcapStart()
                                 if (x.gt(scs)) x = x.div(scs).pow(.5).times(scs)
-                                return Decimal.pow(1.05, x)
+                                let ret = Decimal.pow(1.05, x)
+                                if (inChallenge("b", 11)) return x.div(20).plus(1)
+                                return ret
                         },
                         canAfford(){
                                 return player.i.points.gte(getIBuyableCost(13))
@@ -2219,6 +2231,7 @@ addLayer("n", {
                                         ret = ret.plus(a / 2)
                                 }
                                 if (hasUpgrade("s", 13)) ret = ret.plus(1)
+                                ret = ret.plus(layers.b.challenges[11].rewardEffect())
                                 return ret
                         },
                         canAfford(){
@@ -2363,6 +2376,7 @@ addLayer("n", {
                                 if (ret.lt(1)) return new Decimal(1)
                                 if (ret.gt(2)) ret = ret.times(50).log10()
                                 if (hasUpgrade("e", 15)) ret = ret.pow(10)
+                                if (inChallenge("b", 12)) ret = ret.pow(new Decimal(2).div(3 + challengeCompletions("b", 12)))
                                 return ret
                         },
                         canAfford(){
@@ -2443,6 +2457,7 @@ addLayer("n", {
                                 if (hasUpgrade("g", 52)) ret = ret.plus(layers.n.buyables[32].total())
                                 if (hasIUpg(35)) ret = ret.plus(layers.n.buyables[33].total())
                                 if (hasUpgrade("p", 25)) ret = ret.plus(layers.p.buyables[11].total())
+                                if (hasUpgrade("b", 11)) ret = ret.plus(layers.i.buyables[13].total())
                                 return ret
                         },
                         buy(){
@@ -2795,6 +2810,7 @@ addLayer("n", {
                                 if (hasUpgrade("g", 54)) ret = ret.times(layers.n.buyables[33].total())
                                 ret = ret.pow(.1)
                                 if (hasUpgrade("g", 55)) ret = ret.pow(2)
+                                if (hasUpgrade("b", 12)) ret = ret.plus(challengeCompletions("b", 11))
                                 return ret
                         },
                         canAfford(){
@@ -2804,6 +2820,7 @@ addLayer("n", {
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("p", 34)) ret = ret.plus(layers.p.buyables[13].total())
                                 if (hasUpgrade("s", 15)) ret = ret.plus(1)
+                                if (hasUpgrade("b", 12)) ret = ret.plus(challengeCompletions("b", 11))
                                 return ret
                         },
                         buy(){
@@ -3524,17 +3541,20 @@ addLayer("b", {
                 unlocked: true,
 		points: new Decimal(0),
                 best: new Decimal(0),
+                tokens: new Decimal(0),
         }},
         color: "#D346DF",
         requires: Decimal.pow(10, 694), 
         resource: "Bosons",
-        baseAmount() {return player.q.points.max(player.g.points)}, 
+        baseAmount() {return player.p.points}, 
         branches: ["p", "g", "q"],
         type: "custom", 
         effect(){
                 let amt = player.b.points
                 let ret = amt.times(9).plus(1).log10()
-                if (ret.gt(10)) ret = ret.log10().times(10)
+                if (hasUpgrade("b", 13)) {
+                        if (ret.gt(20)) ret = ret.times(5).log10().times(10)
+                } else if (ret.gt(10)) ret = ret.log10().times(10)
                 return ret
         },
         effectDescription(){
@@ -3543,15 +3563,16 @@ addLayer("b", {
         },
         getResetGain() {
                 if (!hasUpgrade("s", 35)) return new Decimal(0)
-                let amt = layers.s.baseAmount()
-                let pre = layers.s.getGainMultPre()
-                let exp = layers.s.getGainExp()
-                let pst = layers.s.getGainMultPost()
+                let amt = layers.b.baseAmount()
+                let pre = layers.b.getGainMultPre()
+                let exp = layers.b.getGainExp()
+                let pst = layers.b.getGainMultPost()
                 let ret = amt.div("1e692").max(1).log10().div(2).times(pre).pow(exp).times(pst)
-                return ret.floor()
+                return ret
         },
         getGainExp(){
-                let x = new Decimal(2)
+                let x = new Decimal(1.5)
+                if (hasUpgrade("b", 14)) x = x.times(Decimal.pow(getBChallengeTotal(), .5).max(1))
                 return x
         },
         getGainMultPre(){
@@ -3559,7 +3580,7 @@ addLayer("b", {
                 return x
         },
         getGainMultPost(){
-                let x = new Decimal(1)
+                let x = new Decimal(5e5)
                 return x
         },
         prestigeButtonText(){
@@ -3581,35 +3602,91 @@ addLayer("b", {
                 if (!player.s.best) player.b.best = new Decimal(0)
                 player.b.best = player.b.best.max(player.b.points)
                 player.b.points = player.b.points.plus(layers.b.getResetGain().times(diff))
+                player.b.tokens = player.b.tokens.plus(layers.b.tokenGain().times(diff))
         },
         challengesUnlocked(){
-                return 0
+                let ret = 1
+                if (hasUpgrade("b", 13)) ret = Math.max(2, ret)
+                return ret
+        },
+        tokenGain(){
+                let ret = Decimal.pow(getBChallengeTotal(), 2)
+                if (hasUpgrade("b", 13)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
+                return ret
         },
         challenges:{
                 rows: 2,
                 cols: 2,
                 11: {
-                        name: "idk1", 
-                        challengeDescription: "do thing",
-                        rewardDescription: "reward",
+                        name: "Been", 
+                        challengeDescription: "Incrementy Stamina effect is linear instead of exponential",
+                        rewardDescription: "Add to the base of Incrementy Strength and Neutrino generation based on total Boson Challenge completions",
+                        rewardEffect(){
+                                let tot = new Decimal(getBChallengeTotal() + 1)
+                                let comps = challengeCompletions("b", 11)
+
+                                if (tot.gt(3)) tot = tot.log(3).plus(2)
+                                if (tot.gt(4)) tot = tot.log(4).plus(3)
+                                if (comps >= 4) comps = Math.log10(comps * 33 + 1) + 1
+
+                                let ret = Decimal.pow(tot, comps).minus(1)
+
+                                if (ret.gt(50)) ret = ret.times(2).log10().times(25)
+
+                                return ret
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(challengeCompletions("b", 11)) + " challenge completions, "
+                                let eff = "add " + format(layers.b.challenges[11].rewardEffect()) + " to the base."
+                                return comps + eff
+                        },
                         unlocked(){
                                 return layers.b.challengesUnlocked() >= 1
                         },
-                        goal: Decimal.pow(10, 1e6),
+                        goal(){
+                                let comps = challengeCompletions("b", 11)
+                                let base = 91.3e3
+                                base += comps * (comps + 9) * 800
+                                if (comps >= 3) base += Math.pow(comps, 4) * 136
+                                if (comps >= 5) base += Math.pow(comps, 3) * 58
+                                return Decimal.pow(10, base)
+                        },
                         currencyInternalName: "points",
+                        completionLimit: 10,
                 },
                 12: {
-                        name: "idk1", 
-                        challengeDescription: "do thing",
-                        rewardDescription: "reward",
+                        name: "Bean", 
+                        challengeDescription() {
+                                return "Base Incrementy Gain buyable base is raised to the " + format(new Decimal(2).div(3 + challengeCompletions("b", 12)), 3)
+                        },
+                        rewardDescription: "Incrementy Stamina gives free levels to Incrementy Speed",
+                        rewardEffect(){
+                                let comps = challengeCompletions("b", 12)
+
+                                let ret = Decimal.pow(comps + 8, 1.5).times(2)
+
+                                if (comps == 0) ret = new Decimal(0)
+
+                                return ret
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(challengeCompletions("b", 12)) + " challenge completions, "
+                                let eff = "you get " + format(layers.b.challenges[12].rewardEffect()) + " free Speed levels per Stamina."
+                                return comps + eff
+                        },
                         unlocked(){
                                 return layers.b.challengesUnlocked() >= 2
                         },
-                        goal: Decimal.pow(10, 1e7),
+                        goal(){
+                                let comps = challengeCompletions("b", 12)
+                                let base = 2.2e6 - 1e3
+                                return Decimal.pow(10, base)
+                        },
                         currencyInternalName: "points",
+                        completionLimit: 10,
                 },
                 21: {
-                        name: "idk2", 
+                        name: "Band", 
                         challengeDescription: "do thing",
                         rewardDescription: "reward",
                         unlocked(){
@@ -3618,8 +3695,8 @@ addLayer("b", {
                         goal: Decimal.pow(10, 1e8),
                         currencyInternalName: "points",
                 },
-                21: {
-                        name: "idk2", 
+                22: {
+                        name: "Banned", 
                         challengeDescription: "do thing",
                         rewardDescription: "reward",
                         unlocked(){
@@ -3627,6 +3704,42 @@ addLayer("b", {
                         },
                         goal: Decimal.pow(10, 1e9),
                         currencyInternalName: "points",
+                },
+        },
+        upgrades: {
+                rows: 4,
+                cols: 4, 
+                11: {
+                        title: "Few", //phew
+                        description: "Uncap Hall and Incrementy Stamina gives free levels to Incrementy Boost",
+                        cost: new Decimal(30),
+                        unlocked(){
+                                return true
+                        },
+                },
+                12: {
+                        title: "Phew", //phew
+                        description: "Been completions add to the Amoeba Gain base and give free Amoeba Gain levels",
+                        cost: new Decimal(300),
+                        unlocked(){
+                                return hasUpgrade("b", 11)
+                        },
+                },
+                13: {
+                        title: "idk", //phew
+                        description: "Push the Boson softcap to 20, each challenge completion doubles token gain, and unlock the second challenge",
+                        cost: new Decimal(1000),
+                        unlocked(){
+                                return hasUpgrade("b", 12)
+                        },
+                },
+                14: {
+                        title: "idk", //phew
+                        description: "Boson gain is rasied to the square root of Boson Challenge completions",
+                        cost: new Decimal(5e5),
+                        unlocked(){
+                                return hasUpgrade("b", 13)
+                        },
                 },
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -3639,13 +3752,10 @@ addLayer("b", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a = "Gain is based on the least amount of Gluons and Quarks." 
-                                        let c = " Starting challenges resets Bosons and Incrementy." 
-                                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
-                                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
+                                        let a = "Gain is based Particles. Starting challenges resets Bosons and Incrementy." 
+                                        let b = "<br>You are getting " + format(layers.b.getResetGain()) + " Bosons per second"
                                         return a+b
                                 }],
-                                //["prestige-button", "", function (){ return true ? {'display': 'none'} : {}}],
                                 "blank", 
                                 "challenges"
                         ],
@@ -3655,35 +3765,22 @@ addLayer("b", {
                 }, 
                 "Upgrades": {
                         content: [
-                                "main-display",
                                 ["display-text", function(){
-                                        let a = "Gain is based on the least amount of Gluons and Quarks." 
-                                        let c = " Starting challenges resets Bosons and Incrementy." 
-                                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
-                                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
-                                        return a+b
+                                        let a = "You have <h3>" + formatWhole(player.b.tokens) + "</h3> tokens"
+                                        return a
+                                }],
+                                ["display-text", function(){
+                                        let a = "You are gaining " + formatWhole(layers.b.tokenGain()) + " tokens per second"
+                                        return a
                                 }],
                                 "blank",
                                 "upgrades"
                         ],
                         unlocked(){
-                                return false // for now
+                                return challengeCompletions("b", 11) > 0 // for now
                         },
                 }
         },
-/*
-                ["main-display",
-                ["display-text", function(){
-                        let a = "Gain is based on the least amount of Gluons and Quarks." 
-                        let c = " Starting challenges resets Bosons and Incrementy." 
-                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
-                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
-                        return a+b
-                }],
-                //["prestige-button", "", function (){ return true ? {'display': 'none'} : {}}],
-                "blank", 
-                "challenges"], 
-*/
         //4 challenges repeatable 10? 20? Infinite? times
         doReset(layer){
                 if (false) console.log(layer)

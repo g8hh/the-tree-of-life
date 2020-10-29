@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: The fifteenth upgrade of the Shard layer."
+	"Current endgame: 6/1 Challenges."
 ]
 
 // Determines when the game "ends"
