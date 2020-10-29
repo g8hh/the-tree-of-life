@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.9.1",
+	num: "0.9.4",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,12 +36,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 6/1 Challenges."
+	"Current endgame: 10/10/5 Challenges."
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.points.gte(new Decimal("e280000000")) //280e6 
 }
 
 
