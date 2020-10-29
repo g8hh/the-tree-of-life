@@ -234,6 +234,7 @@ addLayer("i", {
                 x = x.times(getNBuyableEff(21))
                 if (hasUpgrade("g", 31)) x = x.times(player.n.points.max(1))
                 x = x.times(layers.s.effect())
+                x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
                 return x
         },
         update(diff){
@@ -880,7 +881,7 @@ addLayer("am", {
                 12: {
                         name: "No!", 
                         challengeDescription: "Get ^.1 of your normal point gain",
-                        rewardDescription: "Unlock Matter",
+                        rewardDescription: "Unlock Matter and the ability to Matter Prestige",
                         unlocked(){
                                 return hasAUpgrade(11) || hasUpgrade("s", 14)
                         },
@@ -1682,7 +1683,7 @@ addLayer("p", {
                 cols: 5,
                 11:{
                         title: "Groan",
-                        description: "Unlock Neutrinos",
+                        description: "Begin production of Neutrinos",
                         cost: new Decimal(50),
                         unlocked(){
                                 return true
@@ -1723,7 +1724,7 @@ addLayer("p", {
                 },
                 21:{
                         title: "Tier",
-                        description: "Unlock Gluons",
+                        description: "Begin production of Gluons",
                         cost: new Decimal(3.5e34),
                         unlocked(){
                                 return getBuyableAmount("n", 12).gte(31) || hasUpgrade("s", 21)
@@ -1763,7 +1764,7 @@ addLayer("p", {
                 },
                 31:{
                         title: "Break", 
-                        description: "Unlock Quarks",
+                        description: "Begin production of Quarks",
                         cost: new Decimal(1.5e198),
                         unlocked(){
                                 return hasUpgrade("g", 54) || hasUpgrade("s", 21)
@@ -2134,6 +2135,7 @@ addLayer("n", {
                 x = x.times(layers.p.buyables[12].effect())
                 if (hasUpgrade("a", 15)) x = x.times(upgradeEffect("a", 15))
                 x = x.times(layers.p.buyables[13].effect())
+                if (hasUpgrade("s", 12)) x = x.times(Math.max(player.s.upgrades.length, 1))
                 if (hasUpgrade("p", 34)) x = x.times(1000)
                 return x
         },
@@ -3379,7 +3381,7 @@ addLayer("s", {
                 },
                 12: {
                         title: "Led",
-                        description: "Gain a free Incrementy Stamina level and gain 100x Matter and Amoeba",
+                        description: "Gain a free Incrementy Stamina level, gain 100x Matter and Amoeba, and Shard upgrades multiply Neutrino gain",
                         cost: new Decimal(1),
                         unlocked(){
                                 return hasUpgrade("s", 11)
@@ -3486,7 +3488,7 @@ addLayer("s", {
                 },
                 35: {
                         title: "Help?", 
-                        description: "Particle Simulation gives free levels to Particle Collision",
+                        description: "Particle Simulation gives free levels to Particle Collision and begin generation of Bosons",
                         cost: new Decimal(2e7),
                         unlocked(){
                                 return hasUpgrade("s", 34)
@@ -3511,6 +3513,187 @@ addLayer("s", {
                 //resource
                 player.s.points = new Decimal(0)
                 player.s.best = new Decimal(0)
+        },
+})
+
+addLayer("b", {
+        name: "Bosons", 
+        symbol: "B", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+        }},
+        color: "#D346DF",
+        requires: Decimal.pow(10, 694), 
+        resource: "Bosons",
+        baseAmount() {return player.q.points.max(player.g.points)}, 
+        branches: ["p", "g", "q"],
+        type: "custom", 
+        effect(){
+                let amt = player.b.points
+                let ret = amt.times(9).plus(1).log10()
+                if (ret.gt(10)) ret = ret.log10().times(10)
+                return ret
+        },
+        effectDescription(){
+                let a = "which multiplies Incrementy gain by Amoebas ^" + format(layers.b.effect()) + "."
+                return a 
+        },
+        getResetGain() {
+                if (!hasUpgrade("s", 35)) return new Decimal(0)
+                let amt = layers.s.baseAmount()
+                let pre = layers.s.getGainMultPre()
+                let exp = layers.s.getGainExp()
+                let pst = layers.s.getGainMultPost()
+                let ret = amt.div("1e692").max(1).log10().div(2).times(pre).pow(exp).times(pst)
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(2)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                return "lul"
+                /*
+                let gain = layers.s.getResetGain()
+                let start =  "Reset to gain " + formatWhole(gain) + " Shards<br>"
+                let pre = layers.s.getGainMultPre()
+                let exp = layers.s.getGainExp()
+                let pst = layers.s.getGainMultPost()
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).root(exp).div(pre).times(2).plus(500))) + " particles"
+                return start + nextAt
+                */
+        },
+        canReset(){
+                return false
+        },
+        update(diff){
+                if (!player.s.best) player.b.best = new Decimal(0)
+                player.b.best = player.b.best.max(player.b.points)
+                player.b.points = player.b.points.plus(layers.b.getResetGain().times(diff))
+        },
+        challengesUnlocked(){
+                return 0
+        },
+        challenges:{
+                rows: 2,
+                cols: 2,
+                11: {
+                        name: "idk1", 
+                        challengeDescription: "do thing",
+                        rewardDescription: "reward",
+                        unlocked(){
+                                return layers.b.challengesUnlocked() >= 1
+                        },
+                        goal: Decimal.pow(10, 1e6),
+                        currencyInternalName: "points",
+                },
+                12: {
+                        name: "idk1", 
+                        challengeDescription: "do thing",
+                        rewardDescription: "reward",
+                        unlocked(){
+                                return layers.b.challengesUnlocked() >= 2
+                        },
+                        goal: Decimal.pow(10, 1e7),
+                        currencyInternalName: "points",
+                },
+                21: {
+                        name: "idk2", 
+                        challengeDescription: "do thing",
+                        rewardDescription: "reward",
+                        unlocked(){
+                                return layers.b.challengesUnlocked() >= 3
+                        },
+                        goal: Decimal.pow(10, 1e8),
+                        currencyInternalName: "points",
+                },
+                21: {
+                        name: "idk2", 
+                        challengeDescription: "do thing",
+                        rewardDescription: "reward",
+                        unlocked(){
+                                return layers.b.challengesUnlocked() >= 4
+                        },
+                        goal: Decimal.pow(10, 1e9),
+                        currencyInternalName: "points",
+                },
+        },
+        row: 0, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return player.b.best.gt(0) || hasUpgrade("s", 35)},
+        tabFormat: {
+                "Challenges": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a = "Gain is based on the least amount of Gluons and Quarks." 
+                                        let c = " Starting challenges resets Bosons and Incrementy." 
+                                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
+                                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
+                                        return a+b
+                                }],
+                                //["prestige-button", "", function (){ return true ? {'display': 'none'} : {}}],
+                                "blank", 
+                                "challenges"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                }, 
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a = "Gain is based on the least amount of Gluons and Quarks." 
+                                        let c = " Starting challenges resets Bosons and Incrementy." 
+                                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
+                                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
+                                        return a+b
+                                }],
+                                "blank",
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return false // for now
+                        },
+                }
+        },
+/*
+                ["main-display",
+                ["display-text", function(){
+                        let a = "Gain is based on the least amount of Gluons and Quarks." 
+                        let c = " Starting challenges resets Bosons and Incrementy." 
+                        a = a + (layers.b.challengesUnlocked() > 0 ? c : "<br>")
+                        let b = true ? " You are getting " + format(layers.b.getResetGain()) + " Bosons per second" : ""
+                        return a+b
+                }],
+                //["prestige-button", "", function (){ return true ? {'display': 'none'} : {}}],
+                "blank", 
+                "challenges"], 
+*/
+        //4 challenges repeatable 10? 20? Infinite? times
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 0) return
+
+                //only reset challenges if row >= 3
+
+                //resource
+                player.b.points = new Decimal(0)
+                player.b.best = new Decimal(0)
         },
 })
 

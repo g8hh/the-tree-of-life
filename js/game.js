@@ -217,7 +217,8 @@ function startChallenge(layer, x) {
 		enter = true
 	}	
 	doReset(layer, true)
-	if(enter) player[layer].activeChallenge = x
+	if (layer == "b") doReset("am", true)
+	if (enter) player[layer].activeChallenge = x
 
 	updateChallengeTemp(layer)
 }
