@@ -3648,14 +3648,14 @@ addLayer("b", {
                                 let base = 91.3e3
                                 base += comps * (comps + 9) * 800
                                 if (comps >= 3) base += Math.pow(comps, 4) * 136
-                                if (comps >= 5) base += Math.pow(comps, 3) * 58
+                                if (comps >= 5) base += -8550
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
                         completionLimit: 10,
                 },
                 12: {
-                        name: "Bean", 
+                        name: "Bin", 
                         challengeDescription() {
                                 return "Base Incrementy Gain buyable base is raised to the " + format(new Decimal(2).div(3 + challengeCompletions("b", 12)), 3)
                         },
@@ -3679,7 +3679,7 @@ addLayer("b", {
                         },
                         goal(){
                                 let comps = challengeCompletions("b", 12)
-                                let base = 2.2e6 - 1e3
+                                let base = 1.86e6
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -3710,7 +3710,7 @@ addLayer("b", {
                 rows: 4,
                 cols: 4, 
                 11: {
-                        title: "Few", //phew
+                        title: "Few",
                         description: "Uncap Hall and Incrementy Stamina gives free levels to Incrementy Boost",
                         cost: new Decimal(30),
                         unlocked(){
@@ -3718,7 +3718,7 @@ addLayer("b", {
                         },
                 },
                 12: {
-                        title: "Phew", //phew
+                        title: "Phew",
                         description: "Been completions add to the Amoeba Gain base and give free Amoeba Gain levels",
                         cost: new Decimal(300),
                         unlocked(){
@@ -3726,7 +3726,7 @@ addLayer("b", {
                         },
                 },
                 13: {
-                        title: "idk", //phew
+                        title: "Maze", 
                         description: "Push the Boson softcap to 20, each challenge completion doubles token gain, and unlock the second challenge",
                         cost: new Decimal(1000),
                         unlocked(){
@@ -3734,11 +3734,19 @@ addLayer("b", {
                         },
                 },
                 14: {
-                        title: "idk", //phew
+                        title: "Maize",
                         description: "Boson gain is rasied to the square root of Boson Challenge completions",
                         cost: new Decimal(5e5),
                         unlocked(){
                                 return hasUpgrade("b", 13)
+                        },
+                },
+                21: {
+                        title: "idk",
+                        description: "idk",
+                        cost: new Decimal(1e6),
+                        unlocked(){
+                                return hasUpgrade("b", 14) && getBChallengeTotal() >= 7 && false
                         },
                 },
         },
