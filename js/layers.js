@@ -252,16 +252,13 @@ addLayer("i", {
                         let times = -Math.floor(player.i.time)
                         player.i.time += times
                         times *= -1
+                        let mult = 1
+                        if (hasMilestone("a", 4)) mult *= 1e3
+                        if (hasUpgrade("b", 23)) mult *= 5
                         if (hasMilestone("a", 2)) {
-                                if (!hasMilestone("a", 4)) {
-                                        layers.i.buyables[11].buyMax(times)
-                                        layers.i.buyables[12].buyMax(times)
-                                        layers.i.buyables[13].buyMax(times)
-                                } else {
-                                        layers.i.buyables[11].buyMax(times*1000)
-                                        layers.i.buyables[12].buyMax(times*1000)
-                                        layers.i.buyables[13].buyMax(times*1000)
-                                }
+                                layers.i.buyables[11].buyMax(times * mult)
+                                layers.i.buyables[12].buyMax(times * mult)
+                                layers.i.buyables[13].buyMax(times * mult)
                         }
                 }
         },
@@ -541,6 +538,7 @@ addLayer("i", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("s", 22)) ret = ret.plus(player.s.upgrades.length)
+                                if (hasUpgrade("b", 31)) ret = ret.plus(layers.b.challenges[12].rewardEffect().times(layers.i.buyables[13].total()).floor())
                                 return ret
                         },
                         buy(){
@@ -974,6 +972,7 @@ addLayer("a", {
                 let x = new Decimal(1)
                 x = x.times(getNBuyableEff(33))
                 if (hasUpgrade("s", 12)) x = x.times(100)
+                x = x.times(player.q.points.max(10).log10().pow(layers.b.challenges[21].rewardEffect()))
                 return x
         },
         prestigeButtonText(){
@@ -1938,6 +1937,7 @@ addLayer("p", {
                         },
                         effectBase(){
                                 let base = new Decimal(1e7)
+                                if (hasUpgrade("b", 23)) base = base.pow(1 + challengeCompletions("b", 12))
                                 return base
                         },
                         effect(){
@@ -1951,6 +1951,7 @@ addLayer("p", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("s", 35)) ret = ret.plus(layers.p.buyables[13].total())
+                                if (hasUpgrade("b", 21)) ret = ret.plus(challengeCompletions("b", 11))
                                 return ret
                         },
                         canAfford(){
@@ -2029,6 +2030,9 @@ addLayer("p", {
                         },
                         extra(){
                                 let ret = new Decimal(0)
+                                if (hasUpgrade("b", 24)) ret = ret.plus(challengeCompletions("b", 12))
+                                if (hasUpgrade("b", 33)) ret = ret.plus(challengeCompletions("b", 11))
+                                if (hasUpgrade("b", 33)) ret = ret.plus(challengeCompletions("b", 21))
                                 return ret
                         },
                         canAfford(){
@@ -2303,7 +2307,9 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
-                                return new Decimal(1.5)
+                                let ret = new Decimal(1.5)
+                                if (hasUpgrade("b", 22)) ret = ret.plus(layers.b.challenges[11].rewardEffect().root(3))
+                                return ret
                         },
                         canAfford(){
                                 return player.n.points.gte(getNBuyableCost(12))
@@ -2377,6 +2383,7 @@ addLayer("n", {
                                 if (ret.gt(2)) ret = ret.times(50).log10()
                                 if (hasUpgrade("e", 15)) ret = ret.pow(10)
                                 if (inChallenge("b", 12)) ret = ret.pow(new Decimal(2).div(3 + challengeCompletions("b", 12)))
+                                if (inChallenge("b", 21)) return new Decimal(1)
                                 return ret
                         },
                         canAfford(){
@@ -2747,6 +2754,7 @@ addLayer("n", {
                         extra(){
                                 let ret = layers.n.buyables[33].total()
                                 if (hasUpgrade("p", 33)) ret = ret.plus(layers.p.buyables[12].total())
+                                if (hasUpgrade("b", 32)) ret = ret.plus(challengeCompletions("b", 21) * 20)
                                 return ret
                         },
                         buy(){
@@ -3553,7 +3561,7 @@ addLayer("b", {
                 let amt = player.b.points
                 let ret = amt.times(9).plus(1).log10()
                 if (hasUpgrade("b", 13)) {
-                        if (ret.gt(20)) ret = ret.times(5).log10().times(10)
+                        if (ret.gt(20)) ret = ret.times(5).log10().pow(4).times(1.25)
                 } else if (ret.gt(10)) ret = ret.log10().times(10)
                 return ret
         },
@@ -3607,11 +3615,15 @@ addLayer("b", {
         challengesUnlocked(){
                 let ret = 1
                 if (hasUpgrade("b", 13)) ret = Math.max(2, ret)
+                if (hasUpgrade("b", 31)) ret = Math.max(3, ret)
+                if (hasUpgrade("b", 33)) ret = Math.max(4, ret)
                 return ret
         },
         tokenGain(){
                 let ret = Decimal.pow(getBChallengeTotal(), 2)
                 if (hasUpgrade("b", 13)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
+                if (hasUpgrade("b", 24)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
+                if (hasUpgrade("b", 21)) ret = ret.times(Decimal.max(1, challengeCompletions("b", 11)))
                 return ret
         },
         challenges:{
@@ -3649,6 +3661,10 @@ addLayer("b", {
                                 base += comps * (comps + 9) * 800
                                 if (comps >= 3) base += Math.pow(comps, 4) * 136
                                 if (comps >= 5) base += -8550
+                                if (comps == 6) base += 8994
+                                if (comps == 7) base += 1114
+                                if (comps == 8) base += -76106
+                                if (comps >= 9) base = 954e3
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -3680,6 +3696,15 @@ addLayer("b", {
                         goal(){
                                 let comps = challengeCompletions("b", 12)
                                 let base = 1.86e6
+                                if (comps >= 1) base = 1.577e6
+                                if (comps >= 2) base = 1.483e6
+                                if (comps >= 3) base = 1.302e6
+                                if (comps >= 4) base = 1.304e6
+                                if (comps >= 5) base = 1.574e6
+                                if (comps >= 6) base = 1.607e6
+                                if (comps >= 7) base = 1.827e6
+                                if (comps >= 8) base = 1.862e6
+                                if (comps >= 9) base = 1.896e6
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -3687,23 +3712,47 @@ addLayer("b", {
                 },
                 21: {
                         name: "Band", 
-                        challengeDescription: "do thing",
-                        rewardDescription: "reward",
+                        challengeDescription: "Base Incrementy Gain buyable effect base is 1",
+                        rewardDescription: "Log10 of your Quarks raised to a power boosts Amoeba gain",
+                        rewardEffect(){
+                                let comps = challengeCompletions("b", 21)
+
+                                let ret = Decimal.pow(comps * 5 + 11, 1.5)
+
+                                if (comps == 0) ret = new Decimal(0)
+
+                                return ret
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(challengeCompletions("b", 21)) + " challenge completions, "
+                                let eff = "you get a log(Quarks)^" + format(layers.b.challenges[21].rewardEffect()) + " multiplier to Amoeba gain."
+                                return comps + eff
+                        },
                         unlocked(){
                                 return layers.b.challengesUnlocked() >= 3
                         },
-                        goal: Decimal.pow(10, 1e8),
+                        goal(){
+                                let comps = challengeCompletions("b", 21)
+                                let base = 483e3
+                                base += comps ** 2 * 13e3
+                                if (comps >= 2) base += 16e3 * comps
+                                if (comps >= 3) base += 16e3
+                                if (comps >= 4) base += 24e3
+                                return Decimal.pow(10, base)
+                        },
                         currencyInternalName: "points",
+                        completionLimit: 10,
                 },
                 22: {
                         name: "Banned", 
-                        challengeDescription: "do thing",
+                        challengeDescription: "this doesnt work yet, you can try it but its goal is super high i.e. banned",
                         rewardDescription: "reward",
                         unlocked(){
                                 return layers.b.challengesUnlocked() >= 4
                         },
                         goal: Decimal.pow(10, 1e9),
                         currencyInternalName: "points",
+                        completionLimit: 10,
                 },
         },
         upgrades: {
@@ -3743,12 +3792,68 @@ addLayer("b", {
                 },
                 21: {
                         title: "idk",
-                        description: "idk",
+                        description: "Been Completions give Particle Collision levels and multiply token gain",
                         cost: new Decimal(1e6),
                         unlocked(){
-                                return hasUpgrade("b", 14) && getBChallengeTotal() >= 7 && false
+                                return hasUpgrade("b", 14) && getBChallengeTotal() >= 7
                         },
                 },
+                22: {
+                        title: "idk",
+                        description: "Been effects Particle Generation at cube root the rate",
+                        cost: new Decimal(1e7),
+                        unlocked(){
+                                return hasUpgrade("b", 21)
+                        },
+                },
+                23: {
+                        title: "idk",
+                        description: "Raise Particle Collision base to 1 + Bin completions and <b>Rite</b> buys 5,000",
+                        cost: new Decimal(4e7),
+                        unlocked(){
+                                return hasUpgrade("b", 22)
+                        },
+                },
+                24: {
+                        title: "idk",
+                        description: "Bin completions give free Particle Simulation levels and each Boson Challenge doubles token gain",
+                        cost: new Decimal(1e8),
+                        unlocked(){
+                                return hasUpgrade("b", 23)
+                        },
+                },
+                31: {
+                        title: "idk",
+                        description: "Unlock the third challenge and Bin reward effects Strength",
+                        cost: new Decimal(2e12),
+                        unlocked(){
+                                return hasUpgrade("b", 24)
+                        },
+                },
+                32: {
+                        title: "idk",
+                        description: "Band completions give 20 free Antimatter Gain buyables",
+                        cost: new Decimal(2e14),
+                        unlocked(){
+                                return hasUpgrade("b", 31)
+                        },
+                },
+                33: {
+                        title: "idk",
+                        description: "Been completions give free Particle Simulation levels and unlock the fourth challenge",
+                        cost: new Decimal(1e17),
+                        unlocked(){
+                                return hasUpgrade("b", 32)
+                        },
+                },
+                34: {
+                        title: "idk",
+                        description: "Band completions give free Particle Simulation level",
+                        cost: new Decimal(1e18),
+                        unlocked(){
+                                return hasUpgrade("b", 33)
+                        },
+                }, //next 5e20
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
