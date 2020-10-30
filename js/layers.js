@@ -120,6 +120,7 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("e", 43)) ret += 1
         if (hasUpgrade("e", 54)) ret += 1
         if (hasUpgrade("am", 25)) ret += 3
+        if (hasUpgrade("b", 43)) ret += challengeCompletions("b", 22)
         return ret
 }
 
@@ -755,6 +756,7 @@ addLayer("am", {
                 x = x.times(getNBuyableEff(32))
                 if (hasAMUpgrade(15)) x = x.times(upgradeEffect("am", 15))
                 if (hasUpgrade("s", 11)) x = x.times(10)
+                if (hasUpgrade("b", 41)) x = x.times(layers.p.buyables[12].effect())
                 return x
         },
         prestigeButtonText(){
@@ -1127,7 +1129,7 @@ addLayer("a", {
                         },
                 },
                 25: {
-                        title: "Flair", //Flare
+                        title: "Flare", //Flare
                         description: "Particle Acceleration base is multiplied by Neutrino Generation total levels",
                         cost: new Decimal(1e167),
                         unlocked(){
@@ -1857,6 +1859,7 @@ addLayer("p", {
                         effectBase(){
                                 let base = new Decimal(100)
                                 if (hasUpgrade("a", 25)) base = base.times(layers.n.buyables[11].total().max(1))
+                                if (hasUpgrade("b", 44)) base = base.times(Decimal.pow(1.05, Decimal.times(challengeCompletions("b", 22), layers.p.buyables[13].total())))
                                 return base
                         },
                         effect(){
@@ -1952,6 +1955,7 @@ addLayer("p", {
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("s", 35)) ret = ret.plus(layers.p.buyables[13].total())
                                 if (hasUpgrade("b", 21)) ret = ret.plus(challengeCompletions("b", 11))
+                                if (hasUpgrade("b", 41)) ret = ret.plus(challengeCompletions("b", 21))
                                 return ret
                         },
                         canAfford(){
@@ -2033,6 +2037,7 @@ addLayer("p", {
                                 if (hasUpgrade("b", 24)) ret = ret.plus(challengeCompletions("b", 12))
                                 if (hasUpgrade("b", 33)) ret = ret.plus(challengeCompletions("b", 11))
                                 if (hasUpgrade("b", 33)) ret = ret.plus(challengeCompletions("b", 21))
+                                ret = ret.plus(layers.b.challenges[22].rewardEffect()[1])
                                 return ret
                         },
                         canAfford(){
@@ -2309,6 +2314,7 @@ addLayer("n", {
                         effectBase(){
                                 let ret = new Decimal(1.5)
                                 if (hasUpgrade("b", 22)) ret = ret.plus(layers.b.challenges[11].rewardEffect().root(3))
+                                ret = ret.plus(layers.b.challenges[22].rewardEffect()[0])
                                 return ret
                         },
                         canAfford(){
@@ -3560,7 +3566,9 @@ addLayer("b", {
         effect(){
                 let amt = player.b.points
                 let ret = amt.times(9).plus(1).log10()
-                if (hasUpgrade("b", 13)) {
+                if (hasUpgrade("b", 42)) {
+                        if (ret.gt(30)) ret = ret.times(3.3).plus(1).log10().pow(4).plus(14)
+                } else if (hasUpgrade("b", 13)) {
                         if (ret.gt(20)) ret = ret.times(5).log10().pow(4).times(1.25)
                 } else if (ret.gt(10)) ret = ret.log10().times(10)
                 return ret
@@ -3624,6 +3632,7 @@ addLayer("b", {
                 if (hasUpgrade("b", 13)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
                 if (hasUpgrade("b", 24)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
                 if (hasUpgrade("b", 21)) ret = ret.times(Decimal.max(1, challengeCompletions("b", 11)))
+                ret = ret.times(Decimal.pow(3, challengeCompletions("b", 22)))
                 return ret
         },
         challenges:{
@@ -3738,6 +3747,11 @@ addLayer("b", {
                                 if (comps >= 2) base += 16e3 * comps
                                 if (comps >= 3) base += 16e3
                                 if (comps >= 4) base += 24e3
+                                if (comps >= 5) base += 14.4e3 * comps
+                                if (comps >= 6) base += -30.4e3
+                                if (comps >= 7) base += -92.4e3
+                                if (comps >= 8) base += -125.4e3
+                                if (comps >= 9) base += -59.4e3
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -3745,14 +3759,44 @@ addLayer("b", {
                 },
                 22: {
                         name: "Banned", 
-                        challengeDescription: "this doesnt work yet, you can try it but its goal is super high i.e. banned",
-                        rewardDescription: "reward",
+                        challengeDescription: "Be in all 3 prior Challenges at Once",
+                        rewardDescription: "Add to the Particle Generation base, and get extra Particle Simulation levels",
+                        rewardEffect(){
+                                let comps = challengeCompletions("b", 22)
+
+                                let ret = Decimal.pow(comps, 2).plus(9)
+
+                                if (comps == 0) ret = new Decimal(0)
+
+                                return [ret, comps * (comps + 3) / 2 + comps * 4]
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(challengeCompletions("b", 22)) + " challenge completions, "
+                                let eff = "you get +" + format(layers.b.challenges[22].rewardEffect()[0]) + " to the Particle Generation base and "
+                                let eff2 =  formatWhole(layers.b.challenges[22].rewardEffect()[1]) + " extra Particle Simulation levels."
+                                return comps + eff + eff2
+                        },
                         unlocked(){
                                 return layers.b.challengesUnlocked() >= 4
                         },
-                        goal: Decimal.pow(10, 1e9),
+                        goal(){
+                                let comps = challengeCompletions("b", 22)
+                                let base = 850e3
+                                base += comps ** 2 * 15e3
+                                base += comps * 38e3
+                                if (comps >= 2) base += -16e3
+                                if (comps >= 3) base += -66e3
+                                if (comps >= 4) base += -68e3
+                                if (comps >= 5) base += -74e3
+                                if (comps >= 6) base += -104e3
+                                if (comps >= 7) base += -164e3
+                                if (comps >= 8) base += -144e3
+                                if (comps >= 9) base += -211e3
+                                return Decimal.pow(10, base)
+                        },
                         currencyInternalName: "points",
                         completionLimit: 10,
+                        countsAs: [11, 12, 21],
                 },
         },
         upgrades: {
@@ -3762,6 +3806,9 @@ addLayer("b", {
                         title: "Few",
                         description: "Uncap Hall and Incrementy Stamina gives free levels to Incrementy Boost",
                         cost: new Decimal(30),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return true
                         },
@@ -3770,6 +3817,9 @@ addLayer("b", {
                         title: "Phew",
                         description: "Been completions add to the Amoeba Gain base and give free Amoeba Gain levels",
                         cost: new Decimal(300),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 11)
                         },
@@ -3778,6 +3828,9 @@ addLayer("b", {
                         title: "Maze", 
                         description: "Push the Boson softcap to 20, each challenge completion doubles token gain, and unlock the second challenge",
                         cost: new Decimal(1000),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 12)
                         },
@@ -3786,74 +3839,145 @@ addLayer("b", {
                         title: "Maize",
                         description: "Boson gain is rasied to the square root of Boson Challenge completions",
                         cost: new Decimal(5e5),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 13)
                         },
                 },
                 21: {
-                        title: "idk",
+                        title: "Load",
                         description: "Been Completions give Particle Collision levels and multiply token gain",
                         cost: new Decimal(1e6),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 14) && getBChallengeTotal() >= 7
                         },
                 },
                 22: {
-                        title: "idk",
+                        title: "Lode",
                         description: "Been effects Particle Generation at cube root the rate",
                         cost: new Decimal(1e7),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 21)
                         },
                 },
                 23: {
-                        title: "idk",
+                        title: "Born",
                         description: "Raise Particle Collision base to 1 + Bin completions and <b>Rite</b> buys 5,000",
                         cost: new Decimal(4e7),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 22)
                         },
                 },
                 24: {
-                        title: "idk",
+                        title: "Borne",
                         description: "Bin completions give free Particle Simulation levels and each Boson Challenge doubles token gain",
                         cost: new Decimal(1e8),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 23)
                         },
                 },
                 31: {
-                        title: "idk",
+                        title: "Bawl",
                         description: "Unlock the third challenge and Bin reward effects Strength",
                         cost: new Decimal(2e12),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 24)
                         },
                 },
                 32: {
-                        title: "idk",
+                        title: "Ball",
                         description: "Band completions give 20 free Antimatter Gain buyables",
                         cost: new Decimal(2e14),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 31)
                         },
                 },
                 33: {
-                        title: "idk",
+                        title: "Dew",
                         description: "Been completions give free Particle Simulation levels and unlock the fourth challenge",
                         cost: new Decimal(1e17),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 32)
                         },
                 },
                 34: {
-                        title: "idk",
+                        title: "Due",
                         description: "Band completions give free Particle Simulation level",
                         cost: new Decimal(1e18),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
                         unlocked(){
                                 return hasUpgrade("b", 33)
                         },
-                }, //next 5e20
+                }, 
+                41: {
+                        title: "Rye",
+                        description: "Band completions give Particle Collision levels and Particle Collision effects Antimatter gain",
+                        cost: new Decimal(5e20),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
+                        unlocked(){
+                                return hasUpgrade("b", 34)
+                        },
+                }, 
+                42: {
+                        title: "Wry",
+                        description: "Push the Boson effect softcap to 30",
+                        cost: new Decimal(5e23),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
+                        unlocked(){
+                                return hasUpgrade("b", 41)
+                        },
+                }, 
+                43: {
+                        title: "Throne",
+                        description: "Each Banned completion increases the Incrementy Stamina softcap start by one",
+                        cost: new Decimal(5e24),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
+                        unlocked(){
+                                return hasUpgrade("b", 42)
+                        },
+                },
+                44: {
+                        title: "Thrown",
+                        description: "Multiplicatively increase the P Acceleraiton base by 5% per Banned completion per P Simulation level",
+                        cost: new Decimal(5e27),
+                        currencyDisplayName: "Tokens",
+                        currencyInternalName: "tokens",
+                        currencyLayer: "b",
+                        unlocked(){
+                                return hasUpgrade("b", 43)
+                        },
+                }, 
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -3867,9 +3991,9 @@ addLayer("b", {
                                 ["display-text", function(){
                                         let a = "Gain is based Particles. Starting challenges resets Bosons and Incrementy." 
                                         let b = "<br>You are getting " + format(layers.b.getResetGain()) + " Bosons per second"
+                                        if (getBChallengeTotal() >= 40) a = ""
                                         return a+b
                                 }],
-                                "blank", 
                                 "challenges"
                         ],
                         unlocked(){

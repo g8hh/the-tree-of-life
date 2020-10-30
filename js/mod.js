@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "The Incremtreeverse",
+	name: "The Incrementreeverse",
 	id: "incrementy",
 	author: "pg132",
 	pointsName: "points",
@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.9.4",
+	num: "0.91",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 10/10/5 Challenges."
+	"Current endgame: 10/10/10/10 Challenges."
 ]
 
 // Determines when the game "ends"
