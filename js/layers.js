@@ -3370,7 +3370,7 @@ addLayer("s", {
         type: "custom", 
         effect(){
                 let amt = player.s.points
-                if (amt.eq(0) && player.s.best.gte(1)) amt = new Decimal(1)
+                if (amt.eq(0) && player.s.best.plus(player.sp.best).gte(1)) amt = new Decimal(1)
                 if (amt.lt(9)) return Decimal.pow(1e4, amt.root(3))
                 let ret = amt.pow(10)
                 return ret
@@ -3554,7 +3554,7 @@ addLayer("s", {
                         description: "Links and Wrap buy ten and four times more and double Super Prestige point gain",
                         cost: new Decimal(1e69),
                         unlocked(){
-                                return hasUpgrade("s", 35)
+                                return hasUpgrade("s", 35) && hasMilestone("sp", 5)
                         },
                 },
                 42: {
@@ -4174,7 +4174,7 @@ addLayer("b", {
 addLayer("sp", {
         name: "Superprestige", 
         symbol: "SP", 
-        position: 1,
+        position: 3,
         startData() { return {
                 unlocked: true,
 		points: new Decimal(0),
@@ -4194,6 +4194,7 @@ addLayer("sp", {
                 if (amt.gt(10)) amt = amt.times(10).sqrt()
                 if (amt.gt(20)) amt = amt.times(5).log10().times(10)
                 if (amt.gt(40)) amt = amt.div(40).pow(.5).times(40)
+                if (amt.gt(100)) amt = amt.log10().times(50)
                 let a1 = amt.floor()
 
                 let a2 = amt.times(10).max(1).pow(2)
@@ -4201,8 +4202,14 @@ addLayer("sp", {
         },
         effectDescription(){
                 let eff = layers.sp.effect()
-                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " and all previous prestige resources by " + format(eff[1]) + " (based on best Super Prestige Points)."
-                return a 
+                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " (next at "
+                let c = eff[0].plus(1)
+                if (c.gt(100)) c = Decimal.pow(10, c.div(50))
+                if (c.gt(40))  c = c.div(40).pow(2).times(40)
+                if (c.gt(20))  c = Decimal.pow(10, c.div(10)).div(5)
+                if (c.gt(10))  c = c.div(10).pow(2).times(10)
+                let b = ") and all previous prestige resources by " + format(eff[1]) + " (based on best Super Prestige Points)."
+                return a + formatWhole(c.ceil()) + b
         },
         getResetGain() {
                 let amt = layers.sp.baseAmount()
