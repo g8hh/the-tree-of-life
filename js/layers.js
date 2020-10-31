@@ -121,6 +121,7 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("e", 54)) ret += 1
         if (hasUpgrade("am", 25)) ret += 3
         if (hasUpgrade("b", 43)) ret += challengeCompletions("b", 22)
+        ret += layers.sp.effect()[0].toNumber()
         return ret
 }
 
@@ -240,6 +241,7 @@ addLayer("i", {
                 if (hasUpgrade("g", 31)) x = x.times(player.n.points.max(1))
                 x = x.times(layers.s.effect())
                 x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         update(diff){
@@ -248,7 +250,8 @@ addLayer("i", {
                 player.i.best = player.i.best.max(player.i.points)
                 
                 if (!player.i.time) player.i.time = 0
-                player.i.time += diff
+                let mult = hasMilestone("sp", 2) ? 3 : 1
+                player.i.time += diff * mult
                 if (player.i.time > 1) {
                         let times = -Math.floor(player.i.time)
                         player.i.time += times
@@ -757,6 +760,7 @@ addLayer("am", {
                 if (hasAMUpgrade(15)) x = x.times(upgradeEffect("am", 15))
                 if (hasUpgrade("s", 11)) x = x.times(10)
                 if (hasUpgrade("b", 41)) x = x.times(layers.p.buyables[12].effect())
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -780,7 +784,7 @@ addLayer("am", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0)},
+        layerShown(){return getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
         upgrades: {
                 rows: 2,
                 cols: 5,
@@ -975,6 +979,7 @@ addLayer("a", {
                 x = x.times(getNBuyableEff(33))
                 if (hasUpgrade("s", 12)) x = x.times(100)
                 x = x.times(player.q.points.max(10).log10().pow(layers.b.challenges[21].rewardEffect()))
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -998,7 +1003,7 @@ addLayer("a", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0)},
+        layerShown(){return player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
         milestones:{
                 1: {
                         requirementDescription: "<b>Right</b><br>Requires: 2 Amoebas", 
@@ -1152,13 +1157,13 @@ addLayer("a", {
                 if (false) console.log(layer)
                 if (layers[layer].row <= 2) return
 
-                //upgrades
                 let keep = []
                 if (!hasUpgrade("s", 15)) player.a.upgrades = filter(player.a.upgrades, keep)
 
                 //milestones
                 let milekeep = []
                 if (!hasUpgrade("s", 21)) player.a.milestones = filter(player.a.milestones, milekeep)
+                
 
                 //resource
                 player.a.points = new Decimal(0)
@@ -1210,6 +1215,7 @@ addLayer("m", {
                 x = x.times(getNBuyableEff(31))
                 x = x.times(layers.p.buyables[13].effect())
                 if (hasUpgrade("s", 12)) x = x.times(100)
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -1234,7 +1240,7 @@ addLayer("m", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasChallenge("am", 12) || player.s.best.gt(0)},
+        layerShown(){return hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0)},
         milestones:{
                 1: {
                         requirementDescription: "<b>Rain</b><br>Requires: 1 Matter", 
@@ -1341,6 +1347,7 @@ addLayer("e", {
                 let x = new Decimal(1)
                 if (hasUpgrade("e", 11)) x = x.times(getEUpgEff(11))
                 x = x.times(getNBuyableEff(23))
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -1359,7 +1366,7 @@ addLayer("e", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasMilestone("m", 1) || player.s.best.gt(0)},
+        layerShown(){return hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0)},
         upgrades:{
                 rows: 5,
                 cols: 5,
@@ -1621,9 +1628,9 @@ addLayer("e", {
                 if (false) console.log(layer)
                 if (layers[layer].row <= 2) return
 
-                //upgrades
+                
                 let keep = []
-                if (!hasUpgrade("s", 21)) player.e.upgrades = filter(player.e.upgrades, keep)
+                if (!hasUpgrade("s", 22)) player.e.upgrades = filter(player.e.upgrades, keep)
 
                 //resource
                 player.e.points = new Decimal(0)
@@ -1665,6 +1672,7 @@ addLayer("p", {
                 if (hasUpgrade("g", 23)) x = x.times(upgradeEffect("g", 23))
                 x = x.times(layers.p.buyables[11].effect())
                 if (hasUpgrade("s", 13)) x = x.times(100)
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -1681,13 +1689,17 @@ addLayer("p", {
                 if (!player.p.best) player.p.best = new Decimal(0)
                 player.p.best = player.p.best.max(player.p.points)
 
-                player.p.time += diff
+                let mult = hasMilestone("sp", 2) ? 3 : 1
+                player.p.time += diff * mult
                 if (player.p.time > 1){
                         player.p.time += -1
+                        let j = hasUpgrade("s", 41) ? 4 : 1
                         if (hasUpgrade("s", 25)) {
-                                layers.p.buyables[11].buy()
-                                layers.p.buyables[12].buy()
-                                layers.p.buyables[13].buy()
+                                for (let i = 0; i < j; i ++) {
+                                        layers.p.buyables[11].buy()
+                                        layers.p.buyables[12].buy()
+                                        layers.p.buyables[13].buy()
+                                }
                         }
                 }
         },
@@ -1914,7 +1926,7 @@ addLayer("p", {
                                 //so ew, make sure to do the rest, but ew
                                 */
                         },
-                        unlocked(){ return hasUpgrade("p", 15) },
+                        unlocked(){ return hasUpgrade("p", 15) || player.sp.best.gt(0)},
                 },
                 12: {
                         title: "Particle Collision",
@@ -1996,7 +2008,7 @@ addLayer("p", {
                                 //so ew, make sure to do the rest, but ew
                                 */
                         },
-                        unlocked(){ return hasUpgrade("p", 25) },
+                        unlocked(){ return hasUpgrade("p", 25) || player.sp.best.gt(0) },
                 },
                 13: {
                         title: "Particle Simulation",
@@ -2078,14 +2090,14 @@ addLayer("p", {
                                 //so ew, make sure to do the rest, but ew
                                 */
                         },
-                        unlocked(){ return hasUpgrade("p", 33) },
+                        unlocked(){ return hasUpgrade("p", 33) || player.sp.best.gt(0) },
                 },
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0) || player.s.best.gt(0)},
+        layerShown(){return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
         tabFormat: ["main-display",
                 ["display-text", function(){
                         return "You are getting " + format(layers.p.getResetGain()) + " Particles per second (based on Incrementy, requires 1e11475)"
@@ -2103,9 +2115,11 @@ addLayer("p", {
                 if (false) console.log(layer)
                 if (layers[layer].row <= 2) return
 
+
                 //upgrades
                 let keep = []
                 if (!hasUpgrade("s", 21)) player.p.upgrades = filter(player.p.upgrades, keep)
+
 
                 //buyables
                 let resetBuyables = [11, 12, 13]
@@ -2158,6 +2172,7 @@ addLayer("n", {
                 x = x.times(layers.p.buyables[13].effect())
                 if (hasUpgrade("s", 12)) x = x.times(Math.max(player.s.upgrades.length, 1))
                 if (hasUpgrade("p", 34)) x = x.times(1000)
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -2174,12 +2189,14 @@ addLayer("n", {
                 player.n.best = player.n.best.max(player.n.points)
 
                 if (!player.n.time) player.n.time = 0
-                player.n.time += diff
+                let mult = hasMilestone("sp", 2) ? 3 : 1
+                player.n.time += diff * mult
                 if (player.n.time >= 1) {
                         let times = -Math.floor(player.n.time)
                         player.n.time += times
                         times *= -1
                         if (hasUpgrade("s", 23)) times *= 10
+                        if (hasUpgrade("s", 41)) times *= 10
                         if (hasUpgrade("s", 14)) {
                                 layers.n.buyables[11].buyMax(times)
                                 layers.n.buyables[12].buyMax(times)
@@ -2870,7 +2887,7 @@ addLayer("n", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 11) || player.s.best.gt(0)},
+        layerShown(){return hasUpgrade("p", 11) || player.s.best.gt(0) || player.sp.best.gt(0)},
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.n.getResetGain()) + " Neutrinos per second (based on particles)"}],
                 ["display-text", "Each buyable has an effect and gives a free level to all upgrades directly to the left or above it"],
@@ -2921,6 +2938,7 @@ addLayer("g", {
                 let x = new Decimal(1)
                 if (hasUpgrade("p", 24)) x = x.times(upgradeEffect("p", 24))
                 if (hasUpgrade("s", 23)) x = x.times(layers.p.buyables[13].effect())
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -3170,7 +3188,7 @@ addLayer("g", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 21) || player.s.best.gt(0)},
+        layerShown(){return hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0)},
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.g.getResetGain()) + " Gluons per second (based on particles)"}],
                 "blank",
@@ -3218,6 +3236,7 @@ addLayer("q", {
                 let x = new Decimal(1)
                 if (hasIUpg(25)) x = x.times(2)
                 x = x.times(layers.p.buyables[12].effect())
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         getChallGoalExp(){
@@ -3308,7 +3327,7 @@ addLayer("q", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 31) || player.s.best.gt(0)},
+        layerShown(){return hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0)},
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.q.getResetGain()) + " Quarks per second (based on particles)"}],
                 ["display-text", function(){return "Your Quark amount raises Quark challenge goals to the power of " + format(layers.q.getChallGoalExp(), 4)}],
@@ -3380,6 +3399,7 @@ addLayer("s", {
         getGainMultPost(){
                 let x = new Decimal(1)
                 if (hasUpgrade("s", 34)) x = x.times(Decimal.pow(2, layers.n.buyables[33].extra()))
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -3400,7 +3420,7 @@ addLayer("s", {
                 if (hasUpgrade("s", 31)) player.s.points = player.s.points.plus(layers.s.getResetGain().times(diff))
         },
         upgrades: {
-                rows: 3,
+                rows: 4,
                 cols: 5,
                 11: {
                         title: "Lead",
@@ -3525,13 +3545,22 @@ addLayer("s", {
                                 return hasUpgrade("s", 34)
                         },
                 },
-        }, //next thing 1e9 shards
+                41: {
+                        title: "Hoard", //horde 
+                        description: "Links and Wrap buy ten and four times more and double Super Prestige point gain",
+                        cost: new Decimal(1e69),
+                        unlocked(){
+                                return hasUpgrade("s", 35)
+                        },
+                },
+
+        }, 
 
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.s.best.gt(0) || hasUpgrade("p", 35)},
+        layerShown(){return player.s.best.gt(0) || hasUpgrade("p", 35) || player.sp.best.gt(0)},
         tabFormat: ["main-display",
                 ["display-text", function(){return hasUpgrade("s", 31) ? "You are getting " + format(layers.s.getResetGain()) + " Shards per second (based on particles)" : ""}],
                 ["prestige-button", "", function (){ return hasUpgrade("s", 31) ? {'display': 'none'} : {}}],
@@ -3539,7 +3568,17 @@ addLayer("s", {
                 "upgrades"],
         doReset(layer){
                 if (false) console.log(layer)
-                if (layers[layer].row <= 3) return
+                if (layers[layer].row <= 3 && layer != "sp") return
+
+                //upgrades
+                let keep = []
+                let j = Math.min(20, player.sp.times)
+                if (hasMilestone("sp", 1)) {
+                        for (let i = 0; i < j; i ++){
+                                keep.push([11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45][i])
+                        }
+                }
+                player.s.upgrades = filter(player.s.upgrades, keep)
 
                 //resource
                 player.s.points = new Decimal(0)
@@ -3597,6 +3636,7 @@ addLayer("b", {
         },
         getGainMultPost(){
                 let x = new Decimal(5e5)
+                x = x.times(layers.sp.effect()[1])
                 return x
         },
         prestigeButtonText(){
@@ -3633,6 +3673,8 @@ addLayer("b", {
                 if (hasUpgrade("b", 24)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
                 if (hasUpgrade("b", 21)) ret = ret.times(Decimal.max(1, challengeCompletions("b", 11)))
                 ret = ret.times(Decimal.pow(3, challengeCompletions("b", 22)))
+
+                if (hasMilestone("sp", 3)) ret = ret.pow(1.1).times(10)
                 return ret
         },
         challenges:{
@@ -3810,7 +3852,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return true
+                                return challengeCompletions("b", 11) > 0
                         },
                 },
                 12: {
@@ -3983,7 +4025,7 @@ addLayer("b", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.b.best.gt(0) || hasUpgrade("s", 35)},
+        layerShown(){return player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0)},
         tabFormat: {
                 "Challenges": {
                         content: [
@@ -4024,16 +4066,172 @@ addLayer("b", {
                 if (layers[layer].row <= 0) return
 
                 //only reset challenges if row >= 3
+                if (layers[layer].row >= 3) {
+                        let keep = []
+                        if (!hasMilestone("sp", 5)) player.b.upgrades = filter(player.b.upgrades, keep)
+
+                        if (!hasMilestone("sp", 4)) player.b.challenges[11] = 0
+                        if (!hasMilestone("sp", 4)) player.b.challenges[12] = 0
+                        if (!hasMilestone("sp", 5)) player.b.challenges[21] = 0
+                        if (!hasMilestone("sp", 5)) player.b.challenges[22] = 0
+                }
 
                 //resource
                 player.b.points = new Decimal(0)
                 player.b.best = new Decimal(0)
+                if (layer == "sp") player.b.tokens = new  Decimal(0)
         },
 })
 
-/*
-Next two layers will be Voltage and Current
-V, C, each boosts the gain of the other by x^.5 (softcapped after e10) and boost [something] 
-V will have upgrades and 
-C will have 4 challenges which each unlock a V upgrade row and boost something else
-*/
+addLayer("sp", {
+        name: "Superprestige", 
+        symbol: "SP", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                tokens: new Decimal(0),
+                times: 0,
+        }},
+        color: "#1CA2E8",
+        requires: Decimal.pow(10, 65), 
+        resource: "Super Prestige Points",
+        baseAmount() {return player.s.points}, 
+        branches: ["s"],
+        type: "custom", 
+        effect(){
+                let amt = player.sp.best
+                if (amt.gt(10)) amt = amt.times(10).sqrt()
+                if (amt.gt(20)) amt = amt.times(5).log10().times(10)
+                let a1 = amt.floor()
+
+                let a2 = amt.times(10).max(1).pow(2)
+                return [a1, a2]
+        },
+        effectDescription(){
+                let eff = layers.sp.effect()
+                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " and all previous prestige resources by " + format(eff[1]) + " (based on best Super Prestige Points)."
+                return a 
+        },
+        getResetGain() {
+                let amt = layers.sp.baseAmount()
+                let pre = layers.sp.getGainMultPre()
+                let exp = layers.sp.getGainExp()
+                let pst = layers.sp.getGainMultPost()
+                
+                let ret = amt.div(1e64).max(1).log10().times(pre).pow(exp).times(pst)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(.25)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                if (hasUpgrade("s", 41)) x = x.times(2)
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.sp.getResetGain()
+                let start =  "Reset to gain " + formatWhole(gain) + " Super Prestige Points<br>"
+                let pre = layers.sp.getGainMultPre()
+                let exp = layers.sp.getGainExp()
+                let pst = layers.sp.getGainMultPost()
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).root(exp).div(pre)).times(1e64)) + " particles"
+                if (gain.gt(1e6)) nextAt = ""
+                return start + nextAt
+        },
+        canReset(){
+                return layers.sp.getResetGain().gt(0) && getBChallengeTotal() >= 40
+        },
+        update(diff){
+                if (!player.s.best) player.sp.best = new Decimal(0)
+                player.sp.best = player.sp.best.max(player.sp.points)
+        },
+        milestones: {
+                1: {
+                        requirementDescription: "<b>idk</b><br>Requires: 2 Resets", 
+                        effectDescription: "Keep one Shard upgrade per Super Prestige reset",
+                        done(){
+                                return player.sp.times >= 2
+                        },
+                },
+                2: {
+                        requirementDescription: "<b>idk</b><br>Requires: 4 Resets", 
+                        effectDescription: "Autobuyers are triggered three times as often",
+                        done(){
+                                return player.sp.times >= 4
+                        },
+                },
+                3: {
+                        requirementDescription: "<b>idk</b><br>Requires: 5 Resets", 
+                        effectDescription: "Raise token generation to the 1.1th power and then multiply it by 10",
+                        done(){
+                                return player.sp.times >= 5
+                        },
+                },
+                4: {
+                        requirementDescription: "<b>idk</b><br>Requires: 10 Resets", 
+                        effectDescription: "Keep Been and Bin completions",
+                        done(){
+                                return player.sp.times >= 10
+                        },
+                },
+                5: {
+                        requirementDescription: "<b>idk</b><br>Requires: 12 Resets", 
+                        effectDescription: "Keep Band and Banned completions and Token upgrades",
+                        done(){
+                                return player.sp.times >= 12
+                        },
+                },
+        },
+        row: 3, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return getBChallengeTotal() >= 40 || player.sp.best.gt(0)},
+        tabFormat: {
+                "QoL": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        return "You have done a total of " + formatWhole(player.sp.times) + " Super Prestige resets"
+                                }],
+                                ["display-text", function(){
+                                        return "Super Prestige resets all prior layers, even with Shard upgrades"
+                                }],
+                                "prestige-button",
+                                "milestones"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                }, 
+                "Upgrades": {
+                        content: [
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                }
+        },
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 3) return
+
+                //resource
+                player.sp.points = new Decimal(0)
+                player.sp.best = new Decimal(0)
+                player.sp.times = 0
+                player.sp.total = new Decimal(0)
+        },
+})
+

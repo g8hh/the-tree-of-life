@@ -175,6 +175,7 @@ function doReset(layer, force=false) {
 		}
 	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
+		if (layer == "sp") player.sp.times ++
 	}
 
 	if (tmp[layer].resetsNothing) return
