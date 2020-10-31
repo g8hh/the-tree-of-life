@@ -122,6 +122,7 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("am", 25)) ret += 3
         if (hasUpgrade("b", 43)) ret += challengeCompletions("b", 22)
         ret += layers.sp.effect()[0].toNumber()
+        if (hasUpgrade("s", 42)) ret += player.s.upgrades.length
         return ret
 }
 
@@ -1673,6 +1674,7 @@ addLayer("p", {
                 x = x.times(layers.p.buyables[11].effect())
                 if (hasUpgrade("s", 13)) x = x.times(100)
                 x = x.times(layers.sp.effect()[1])
+                if (hasUpgrade("s", 43)) x = x.times(player.i.points.max(1).pow(.0001))
                 return x
         },
         prestigeButtonText(){
@@ -3038,7 +3040,7 @@ addLayer("g", {
                 },
                 24: {
                         title: "Soul",
-                        description: "Boost Base Incremenety gain based on Gluons", 
+                        description: "Boost Base Incrementy gain based on Gluons", 
                         cost: new Decimal(1e27),
                         effect(){
                                 return player.g.points.plus(10).log10().pow(5)
@@ -3264,7 +3266,7 @@ addLayer("q", {
                 cols: 2,
                 11: {
                         name: "Son",
-                        challengeDescription: "Square root Incremenety gain",
+                        challengeDescription: "Square root Incrementy gain",
                         rewardDescription: "Unlock a 5th column of Incrementy Upgrades",
                         unlocked(){
                                 return true
@@ -3279,7 +3281,7 @@ addLayer("q", {
                 },
                 12: {
                         name: "Sun",
-                        challengeDescription: "Cube root Incremenety gain",
+                        challengeDescription: "Cube root Incrementy gain",
                         rewardDescription: "Unlock a 5th column of Gluon Upgrades",
                         unlocked(){
                                 return true
@@ -3294,7 +3296,7 @@ addLayer("q", {
                 },
                 21: {
                         name: "Pole",
-                        challengeDescription: "Fourth root Incremenety gain",
+                        challengeDescription: "Fourth root Incrementy gain",
                         rewardDescription: "Unlock a 5th column of Antimatter Upgrades",
                         unlocked(){
                                 return true
@@ -3309,7 +3311,7 @@ addLayer("q", {
                 },
                 22: {
                         name: "Poll",
-                        challengeDescription: "Fifth root Incremenety gain",
+                        challengeDescription: "Fifth root Incrementy gain",
                         rewardDescription: "Unlock a 5th column of Particle Upgrades",
                         unlocked(){
                                 return true
@@ -3390,6 +3392,7 @@ addLayer("s", {
         getGainExp(){
                 let x = new Decimal(.5)
                 if (hasUpgrade("s", 33)) x = x.times(3)
+                if (hasUpgrade("s", 43)) x = x.times(3)
                 return x
         },
         getGainMultPre(){
@@ -3400,6 +3403,7 @@ addLayer("s", {
                 let x = new Decimal(1)
                 if (hasUpgrade("s", 34)) x = x.times(Decimal.pow(2, layers.n.buyables[33].extra()))
                 x = x.times(layers.sp.effect()[1])
+                if (hasUpgrade("s", 44)) x = x.times(player.i.points.max(1).pow(.0001).pow(.0002))
                 return x
         },
         prestigeButtonText(){
@@ -3420,7 +3424,7 @@ addLayer("s", {
                 if (hasUpgrade("s", 31)) player.s.points = player.s.points.plus(layers.s.getResetGain().times(diff))
         },
         upgrades: {
-                rows: 4,
+                rows: 5,
                 cols: 5,
                 11: {
                         title: "Lead",
@@ -3530,7 +3534,7 @@ addLayer("s", {
                         },
                 },
                 34: {
-                        title: "Laps", //35 is Help?
+                        title: "Laps",
                         description: "Each extra Amoeba Gain buyable doubles Shard gain and Particle Collision gives free levels to Particle Accerelation",
                         cost: new Decimal(3e5),
                         unlocked(){
@@ -3546,11 +3550,95 @@ addLayer("s", {
                         },
                 },
                 41: {
-                        title: "Hoard", //horde 
+                        title: "Hoard", 
                         description: "Links and Wrap buy ten and four times more and double Super Prestige point gain",
                         cost: new Decimal(1e69),
                         unlocked(){
                                 return hasUpgrade("s", 35)
+                        },
+                },
+                42: {
+                        title: "Horde", 
+                        description: "Cube Super Prestige Point gain and each Shard upgrade pushes Incrementy Stamina softcap back by 1",
+                        cost: new Decimal(50),
+                        currencyDisplayName: "Super Prestige Points",
+                        currencyInternalName: "points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("s", 41)
+                        },
+                },
+                43: {
+                        title: "Forth", 
+                        description: "Incrementy raised to .01% multiplies Particle gain and cube base Shard gain",
+                        cost: new Decimal(50),
+                        currencyDisplayName: "Super Prestige Points",
+                        currencyInternalName: "points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("s", 42)
+                        },
+                },
+                44: {
+                        title: "Fourth", 
+                        description: "The previous upgrade works at .02% of the rate for Shards",
+                        cost: new Decimal(400),
+                        currencyDisplayName: "Super Prestige Points",
+                        currencyInternalName: "points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("s", 43)
+                        },
+                },
+                45: {
+                        title: "Ceiling", 
+                        description: "The previous upgrade works at 1% of the rate for Super Prestige Points",
+                        cost: new Decimal(1e97),
+                        unlocked(){
+                                return hasUpgrade("s", 44)
+                        },
+                },
+                51: {
+                        title: "Sealing", 
+                        description: "Incrementy boosts Super Prestige Point gain",
+                        effect(){
+                                return player.i.points.max(10).log10().max(10).log10().div(2).max(1)
+                        },
+                        cost: new Decimal(1e99),
+                        unlocked(){
+                                return hasUpgrade("s", 45)
+                        },
+                },
+                52: {
+                        title: "Daze", 
+                        description: "Each upgrade in this row doubles Super Prestige Point gain",
+                        cost: new Decimal(1e103),
+                        unlocked(){
+                                return hasUpgrade("s", 51)
+                        },
+                },
+                53: {
+                        title: "Days", 
+                        description: "Square Super Prestige Point gain",
+                        cost: new Decimal(5e107),
+                        unlocked(){
+                                return hasUpgrade("s", 52)
+                        },
+                },
+                54: {
+                        title: "Deviser", 
+                        description: "Do nothing",
+                        cost: new Decimal(5e123),
+                        unlocked(){
+                                return hasUpgrade("s", 53)
+                        },
+                },
+                55: {
+                        title: "Devisor", 
+                        description: "Do nothing",
+                        cost: new Decimal(5e129),
+                        unlocked(){
+                                return hasUpgrade("s", 54)
                         },
                 },
 
@@ -3572,10 +3660,10 @@ addLayer("s", {
 
                 //upgrades
                 let keep = []
-                let j = Math.min(20, player.sp.times)
+                let j = Math.min(25, player.sp.times)
                 if (hasMilestone("sp", 1)) {
                         for (let i = 0; i < j; i ++){
-                                keep.push([11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45][i])
+                                keep.push([11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55][i])
                         }
                 }
                 player.s.upgrades = filter(player.s.upgrades, keep)
@@ -4105,6 +4193,7 @@ addLayer("sp", {
                 let amt = player.sp.best
                 if (amt.gt(10)) amt = amt.times(10).sqrt()
                 if (amt.gt(20)) amt = amt.times(5).log10().times(10)
+                if (amt.gt(40)) amt = amt.div(40).pow(.5).times(40)
                 let a1 = amt.floor()
 
                 let a2 = amt.times(10).max(1).pow(2)
@@ -4127,6 +4216,8 @@ addLayer("sp", {
         },
         getGainExp(){
                 let x = new Decimal(.25)
+                if (hasUpgrade("s", 42)) x = x.times(3)
+                if (hasUpgrade("s", 53)) x = x.times(2)
                 return x
         },
         getGainMultPre(){
@@ -4136,6 +4227,15 @@ addLayer("sp", {
         getGainMultPost(){
                 let x = new Decimal(1)
                 if (hasUpgrade("s", 41)) x = x.times(2)
+                if (hasUpgrade("s", 45)) x = x.times(player.i.points.max(1).pow(.0001).pow(.0002).pow(.01))
+                if (hasUpgrade("s", 51)) x = x.times(upgradeEffect("s", 51))
+                if (hasUpgrade("s", 52)) {
+                        if (hasUpgrade("s", 51)) x = x.times(2)
+                        x = x.times(2)
+                        if (hasUpgrade("s", 53)) x = x.times(2)
+                        if (hasUpgrade("s", 54)) x = x.times(2)
+                        if (hasUpgrade("s", 55)) x = x.times(2)
+                }
                 return x
         },
         prestigeButtonText(){
@@ -4144,7 +4244,7 @@ addLayer("sp", {
                 let pre = layers.sp.getGainMultPre()
                 let exp = layers.sp.getGainExp()
                 let pst = layers.sp.getGainMultPost()
-                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).root(exp).div(pre)).times(1e64)) + " particles"
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).root(exp).div(pre)).times(1e64)) + " Shards"
                 if (gain.gt(1e6)) nextAt = ""
                 return start + nextAt
         },
@@ -4157,35 +4257,35 @@ addLayer("sp", {
         },
         milestones: {
                 1: {
-                        requirementDescription: "<b>idk</b><br>Requires: 2 Resets", 
+                        requirementDescription: "<b>Toad</b><br>Requires: 2 Resets", 
                         effectDescription: "Keep one Shard upgrade per Super Prestige reset",
                         done(){
                                 return player.sp.times >= 2
                         },
                 },
                 2: {
-                        requirementDescription: "<b>idk</b><br>Requires: 4 Resets", 
+                        requirementDescription: "<b>Toed</b><br>Requires: 4 Resets", 
                         effectDescription: "Autobuyers are triggered three times as often",
                         done(){
                                 return player.sp.times >= 4
                         },
                 },
                 3: {
-                        requirementDescription: "<b>idk</b><br>Requires: 5 Resets", 
+                        requirementDescription: "<b>Towed</b><br>Requires: 5 Resets", 
                         effectDescription: "Raise token generation to the 1.1th power and then multiply it by 10",
                         done(){
                                 return player.sp.times >= 5
                         },
                 },
                 4: {
-                        requirementDescription: "<b>idk</b><br>Requires: 10 Resets", 
+                        requirementDescription: "<b>Wait</b><br>Requires: 10 Resets", 
                         effectDescription: "Keep Been and Bin completions",
                         done(){
                                 return player.sp.times >= 10
                         },
                 },
                 5: {
-                        requirementDescription: "<b>idk</b><br>Requires: 12 Resets", 
+                        requirementDescription: "<b>Weight</b><br>Requires: 12 Resets", 
                         effectDescription: "Keep Band and Banned completions and Token upgrades",
                         done(){
                                 return player.sp.times >= 12

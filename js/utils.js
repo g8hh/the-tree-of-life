@@ -1,13 +1,23 @@
 // ************ Number formatting ************
 
+function addCommas(s){
+	if (s.length <= 3) return s
+	let rem = s.length % 3
+	if (rem == 0) rem = 3
+	return s.slice(0, rem) + "," + addCommas(s.slice(rem))
+}
+
+
 function exponentialFormat(num, precision) {
 	let e = num.log10().floor()
 	let m = num.div(Decimal.pow(10, e))
-	if(m.toStringWithDecimalPlaces(precision) == 10) {
+	if (m.toStringWithDecimalPlaces(precision) == 10) {
 		m = new Decimal(1)
 		e = e.add(1)
 	}
-	return m.toStringWithDecimalPlaces(precision)+"e"+e.toStringWithDecimalPlaces(0)
+	let end = e.toStringWithDecimalPlaces(0)
+	if (!end.includes("e")) end = addCommas(end)
+	return m.toStringWithDecimalPlaces(precision)+"e"+end
 }
 
 function commaFormat(num, precision) {

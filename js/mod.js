@@ -36,12 +36,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 50 SP."
+	"Current endgame: 5e6 SP."
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(Decimal.pow(10, 1e9))
+	return player.points.gte(Decimal.pow(10, 1e12)) && false
 }
 
 
