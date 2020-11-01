@@ -114,6 +114,7 @@ function getEUpgEff(id){
 }
 
 function getIStaminaSoftcapStart(){
+        if (inChallenge("sp", 21)) return 1
         let ret = 40
         if (hasChallenge("am", 11)) ret += 5
         if (hasChallenge("m", 11)) ret += 5
@@ -123,6 +124,7 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("b", 43)) ret += challengeCompletions("b", 22)
         ret += layers.sp.effect()[0].toNumber()
         if (hasUpgrade("s", 42)) ret += player.s.upgrades.length
+        if (hasUpgrade("sp", 13)) ret += player.sp.upgrades.length
         return ret
 }
 
@@ -204,6 +206,7 @@ addLayer("i", {
                 if (inChallenge("q", 12))  ret = ret.root(3)
                 if (inChallenge("q", 21))  ret = ret.root(4)
                 if (inChallenge("q", 22))  ret = ret.root(5)
+                if (inChallenge("sp", 22)) ret = ret.root(100)
 
                 return ret
         },
@@ -260,6 +263,7 @@ addLayer("i", {
                         let mult = 1
                         if (hasMilestone("a", 4)) mult *= 1e3
                         if (hasUpgrade("b", 23)) mult *= 5
+                        if (hasUpgrade("s", 55)) mult *= 10
                         if (hasMilestone("a", 2)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
@@ -455,7 +459,7 @@ addLayer("i", {
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
-                                return player.i.points.gte(getIBuyableCost(11))
+                                return player.i.points.gte(getIBuyableCost(11)) && player.i.buyables[11].lt(5e5)
                         },
                         total(){
                                 return getBuyableAmount("i", 11).plus(layers.i.buyables[11].extra())
@@ -468,7 +472,7 @@ addLayer("i", {
                         },
                         buy(){
                                 let cost = getIBuyableCost(11)
-                                if (player.i.points.lt(cost)) return
+                                if (!layers.i.buyables[11].canAfford()) return
                                 player.i.buyables[11] = player.i.buyables[11].plus(1)
                                 // some upgrade should make them not actually remove inc
                                 if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
@@ -492,6 +496,8 @@ addLayer("i", {
 
                                 let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
                                 //-b + sqrt(b*b+4*c)
+
+                                target = target.min(5e5)
 
                                 let diff = target.minus(player.i.buyables[11]).max(0)
                                 if (maximum != undefined) diff = diff.min(maximum)
@@ -535,7 +541,7 @@ addLayer("i", {
                                 return Decimal.pow(base, x)
                         },
                         canAfford(){
-                                return player.i.points.gte(getIBuyableCost(12))
+                                return player.i.points.gte(getIBuyableCost(12)) && player.i.buyables[12].lt(5e5)
                         },
                         total(){
                                 return getBuyableAmount("i", 12).plus(layers.i.buyables[12].extra())
@@ -548,7 +554,7 @@ addLayer("i", {
                         },
                         buy(){
                                 let cost = getIBuyableCost(12)
-                                if (player.i.points.lt(cost)) return
+                                if (!layers.i.buyables[12].canAfford()) return
                                 player.i.buyables[12] = player.i.buyables[12].plus(1)
                                 // some upgrade should make them not actually remove inc
                                 if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
@@ -572,6 +578,8 @@ addLayer("i", {
 
                                 let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
                                 //-b + sqrt(b*b+4*c)
+
+                                target = target.min(5e5)
 
                                 let diff = target.minus(player.i.buyables[12]).max(0)
                                 if (maximum != undefined) diff = diff.min(maximum)
@@ -625,7 +633,7 @@ addLayer("i", {
                                 return ret
                         },
                         canAfford(){
-                                return player.i.points.gte(getIBuyableCost(13))
+                                return player.i.points.gte(getIBuyableCost(13)) && player.i.buyables[13].lt(5e5)
                         },
                         total(){
                                 return getBuyableAmount("i", 13).plus(layers.i.buyables[13].extra())
@@ -639,7 +647,7 @@ addLayer("i", {
                         },
                         buy(){
                                 let cost = getIBuyableCost(13)
-                                if (player.i.points.lt(cost)) return
+                                if (!layers.i.buyables[13].canAfford()) return
                                 player.i.buyables[13] = player.i.buyables[13].plus(1)
                                 // some upgrade should make them not actually remove inc
                                 if (!hasAMUpgrade(13)) player.i.points = player.i.points.minus(cost)
@@ -652,6 +660,8 @@ addLayer("i", {
                                         if (pttarget.lt(1.1)) return
                                         let xtarget = pttarget.log(1.1).log(1.2)
                                         let target = xtarget.minus(1).times(2.5).floor().plus(1)
+
+                                        target = target.min(5e5)
                                         
                                         let diff = target.minus(player.i.buyables[13]).max(0)
                                         if (maximum != undefined) diff = diff.min(maximum)
@@ -674,6 +684,9 @@ addLayer("i", {
                         function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
                         {"font-size": "20px"}],
                 ["display-text", function () {return layers.i.nextUpgradeText()}],
+                ["display-text", function () {
+                        return player.i.best.plus(10).log10().plus(10).log10().gt(9) ? "You cannot buy Incrementy Buyables past 500,000!" : ""
+                }],
                 "blank",
                 "buyables", 
                 "blank", 
@@ -762,6 +775,8 @@ addLayer("am", {
                 if (hasUpgrade("s", 11)) x = x.times(10)
                 if (hasUpgrade("b", 41)) x = x.times(layers.p.buyables[12].effect())
                 x = x.times(layers.sp.effect()[1])
+                x = x.times(player.e.points.max(1).pow(layers.sp.challenges[21].rewardEffect()))
+                if (hasUpgrade("sp", 21)) x = x.times(player.a.points.max(1).pow(player.sp.upgrades.length))
                 return x
         },
         prestigeButtonText(){
@@ -1659,7 +1674,8 @@ addLayer("p", {
                 let amt = layers.p.baseAmount()
                 let log = amt.max(10).log10().div(18.36)
                 let ret = log.sqrt().div(25)
-                let add = hasUpgrade("s", 21) ? 1 : 0
+                let add = new Decimal(hasUpgrade("s", 21) ? 1 : 0)
+                if (hasUpgrade("s", 54)) add = add.max(1000)
                 if (ret.lt(1)) return new Decimal(0).plus(add)
                 return ret.plus(add).times(layers.p.getGainMult())
         },
@@ -1762,7 +1778,7 @@ addLayer("p", {
                         description: "Gluons boost Neutrinos",
                         cost: new Decimal(3e40),
                         effect(){
-                                let ret = player.g.points
+                                let ret = player.g.points.max(1)
                                 if (ret.gt(1e10)) ret = ret.log10().pow(10)
                                 return ret
                         },
@@ -2157,7 +2173,11 @@ addLayer("n", {
                 let amt = layers.n.baseAmount()
                 let base = amt.div(60).sqrt()
                 if (base.gt(1e10)) base = base.log10().pow(10)
-                return base.times(layers.n.getGainMult())
+                let ret = base.times(layers.n.getGainMult())
+
+                if (inChallenge("sp", 12)) ret = ret.root(100)
+
+                return ret
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -2244,6 +2264,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(3)
                                 if (hasUpgrade("e", 25)) {
                                         let diff = layers.n.buyables[11].total().div(100).minus(1).max(0)
@@ -2331,6 +2352,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(1.5)
                                 if (hasUpgrade("b", 22)) ret = ret.plus(layers.b.challenges[11].rewardEffect().root(3))
                                 ret = ret.plus(layers.b.challenges[22].rewardEffect()[0])
@@ -2403,6 +2425,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = player.i.best.plus(10).log10().max(1e4).div(1e4)
                                 if (ret.lt(1)) return new Decimal(1)
                                 if (ret.gt(2)) ret = ret.times(50).log10()
@@ -2479,6 +2502,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 return player.n.best.plus(10).log10().pow(2)
                         },
                         canAfford(){
@@ -2549,6 +2573,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = player.n.best.plus(10).log10().root(2)
                                 if (hasUpgrade("g", 32)) ret = ret.plus(layers.n.buyables[11].total().div(100))
                                 if (hasUpgrade("g", 33)) ret = ret.plus(player.g.upgrades.length/4)
@@ -2620,6 +2645,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(100)
                                 if (hasUpgrade("g", 34)) ret = ret.plus(player.i.buyables[12].div(10))
                                 return ret
@@ -2698,6 +2724,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(25)
                                 if (hasUpgrade("g", 51)) ret = ret.plus(layers.n.buyables[31].total())
                                 return ret
@@ -2767,6 +2794,7 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(100)
                                 if (hasUpgrade("s", 32)) ret = ret.plus(layers.n.buyables[32].total().pow(3))
                                 if (hasUpgrade("g", 42)) ret = ret.pow(2)
@@ -2839,11 +2867,13 @@ addLayer("n", {
                                 return Decimal.pow(base, x)
                         },
                         effectBase(){
+                                if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(10)
                                 if (hasUpgrade("g", 54)) ret = ret.times(layers.n.buyables[33].total())
                                 ret = ret.pow(.1)
                                 if (hasUpgrade("g", 55)) ret = ret.pow(2)
                                 if (hasUpgrade("b", 12)) ret = ret.plus(challengeCompletions("b", 11))
+                                if (hasUpgrade("sp", 14)) ret = ret.pow(upgradeEffect("sp", 14))
                                 return ret
                         },
                         canAfford(){
@@ -3404,6 +3434,7 @@ addLayer("s", {
                 if (hasUpgrade("s", 34)) x = x.times(Decimal.pow(2, layers.n.buyables[33].extra()))
                 x = x.times(layers.sp.effect()[1])
                 if (hasUpgrade("s", 44)) x = x.times(player.i.points.max(1).pow(.0001).pow(.0002))
+                x = x.times(layers.sp.challenges[12].rewardEffect())
                 return x
         },
         prestigeButtonText(){
@@ -3627,7 +3658,7 @@ addLayer("s", {
                 },
                 54: {
                         title: "Deviser", 
-                        description: "Do nothing",
+                        description: "Always have at least 1000 Particles per second",
                         cost: new Decimal(5e123),
                         unlocked(){
                                 return hasUpgrade("s", 53)
@@ -3635,7 +3666,7 @@ addLayer("s", {
                 },
                 55: {
                         title: "Devisor", 
-                        description: "Do nothing",
+                        description: "<b>Rite</b> can buy ten times more",
                         cost: new Decimal(5e129),
                         unlocked(){
                                 return hasUpgrade("s", 54)
@@ -4182,6 +4213,10 @@ addLayer("sp", {
                 total: new Decimal(0),
                 tokens: new Decimal(0),
                 times: 0,
+                chall1points: new Decimal(0),
+                chall2points: new Decimal(0),
+                chall3points: new Decimal(0),
+                chall4points: new Decimal(0),
         }},
         color: "#1CA2E8",
         requires: Decimal.pow(10, 65), 
@@ -4193,7 +4228,7 @@ addLayer("sp", {
                 let amt = player.sp.best
                 if (amt.gt(10)) amt = amt.times(10).sqrt()
                 if (amt.gt(20)) amt = amt.times(5).log10().times(10)
-                if (amt.gt(40)) amt = amt.div(40).pow(.5).times(40)
+                if (amt.gt(40)) amt = amt.div(40).root(3).times(40)
                 if (amt.gt(100)) amt = amt.log10().times(50)
                 let a1 = amt.floor()
 
@@ -4205,7 +4240,7 @@ addLayer("sp", {
                 let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " (next at "
                 let c = eff[0].plus(1)
                 if (c.gt(100)) c = Decimal.pow(10, c.div(50))
-                if (c.gt(40))  c = c.div(40).pow(2).times(40)
+                if (c.gt(40))  c = c.div(40).pow(3).times(40)
                 if (c.gt(20))  c = Decimal.pow(10, c.div(10)).div(5)
                 if (c.gt(10))  c = c.div(10).pow(2).times(10)
                 let b = ") and all previous prestige resources by " + format(eff[1]) + " (based on best Super Prestige Points)."
@@ -4243,6 +4278,8 @@ addLayer("sp", {
                         if (hasUpgrade("s", 54)) x = x.times(2)
                         if (hasUpgrade("s", 55)) x = x.times(2)
                 }
+                x = x.times(layers.sp.challenges[11].rewardEffect())
+                if (hasUpgrade("sp", 11)) x = x.times(upgradeEffect("sp", 11))
                 return x
         },
         prestigeButtonText(){
@@ -4256,11 +4293,13 @@ addLayer("sp", {
                 return start + nextAt
         },
         canReset(){
-                return layers.sp.getResetGain().gt(0) && getBChallengeTotal() >= 40
+                return layers.sp.getResetGain().gt(0) && getBChallengeTotal() >= 40 && !hasUpgrade("sp", 12) 
         },
         update(diff){
                 if (!player.s.best) player.sp.best = new Decimal(0)
                 player.sp.best = player.sp.best.max(player.sp.points)
+
+                if (hasUpgrade("sp", 12)) player.sp.points = player.sp.points.plus(layers.sp.getResetGain().times(diff))
         },
         milestones: {
                 1: {
@@ -4299,6 +4338,252 @@ addLayer("sp", {
                         },
                 },
         },
+        challenges:{
+                rows: 2,
+                cols: 2,
+                getPointGain(){
+                        if (inChallenge("sp", 11)) {
+                                let base = layers.sp.challenges[11].goal(true)
+                                let pts = player.points
+                                let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
+                                return diff.plus(1).pow(3).minus(1).times(100).floor()
+                        }
+                        if (inChallenge("sp", 12)) {
+                                let base = layers.sp.challenges[12].goal(true)
+                                let pts = player.points
+                                let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
+                                return diff.plus(1).pow(3).minus(1).times(100).floor()
+                        }
+                        if (inChallenge("sp", 21)) {
+                                let base = layers.sp.challenges[21].goal(true)
+                                let pts = player.points
+                                let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
+                                return diff.plus(1).pow(3).minus(1).times(100).floor()
+                        }
+                        if (inChallenge("sp", 22)) {
+                                let base = layers.sp.challenges[22].goal(true)
+                                let pts = player.points
+                                let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
+                                return diff.plus(1).pow(3).minus(1).times(100).floor()
+                        }
+                        return new Decimal(0)
+                },
+                getAdditionalGain(){
+                        let id 
+                        let gain 
+                        let tot = layers.sp.challenges.getPointGain()
+                        if (inChallenge("sp", 11)) {
+                                id = 11
+                                gain = tot.minus(player.sp.chall1points).max(0)
+                        }
+                        if (inChallenge("sp", 12)) {
+                                id = 12
+                                gain = tot.minus(player.sp.chall2points).max(0)
+                        }
+                        if (inChallenge("sp", 21)) {
+                                id = 21
+                                gain = tot.minus(player.sp.chall3points).max(0)
+                        }
+                        if (inChallenge("sp", 22)) {
+                                id = 22
+                                gain = tot.minus(player.sp.chall4points).max(0)
+                        }
+                        if (id != undefined) return [gain, id]
+                        return [null, null]
+                },
+                11: {
+                        name: "Quartz", 
+                        challengeDescription: "All Neutrino Buyable bases are set to 1",
+                        rewardDescription: "Challenge Points boost Super Prestige Point gain<br>",
+                        rewardEffect(){
+                                let comps = challengeCompletions("sp", 11)
+                                
+                                let pts = player.sp.chall1points
+
+                                let exp = Decimal.div(5, 11-Math.sqrt(comps))
+
+                                return Decimal.pow(pts.max(1), exp)
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(player.sp.chall1points) + " Challenge Points "
+                                comps += "and " + formatWhole(challengeCompletions("sp", 11)) + " Challenge completions, "
+                                let eff = "you get " + format(layers.sp.challenges[11].rewardEffect()) + "x Super Prestige Points."
+                                return comps + eff
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        goal(initial = false){
+                                let comps = challengeCompletions("sp", 11)
+                                let init = 21
+                                let exp = initial ? init : init + comps
+                                return Decimal.pow(10, Decimal.pow(2, exp))
+                        },
+                        currencyInternalName: "points",
+                        completionLimit: 25,
+                },
+                12: {
+                        name: "Quarts", 
+                        challengeDescription: "Neutrino gain is raised to the .01",
+                        rewardDescription: "Challenge Points boost Shard Gain<br>",
+                        rewardEffect(){
+                                let comps = challengeCompletions("sp", 12)
+
+                                let pts = player.sp.chall2points
+
+                                let exp = pts.sqrt().min(10 + comps * 3)
+
+                                return Decimal.pow(pts.max(1), exp)                                
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(player.sp.chall2points) + " Challenge Points, "
+                                comps += "and " + formatWhole(challengeCompletions("sp", 12)) + " Challenge completions, "
+                                let eff = "you get " + format(layers.sp.challenges[12].rewardEffect()) + "x Shard gain."
+                                return comps + eff
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        goal(initial = false){
+                                let comps = challengeCompletions("sp", 12)
+                                let init = 31
+                                let exp = initial ? init : init + comps
+                                return Decimal.pow(10, Decimal.pow(2, exp))
+                        },
+                        currencyInternalName: "points",
+                        completionLimit: 25,
+                },
+                21: {
+                        name: "Jewel", 
+                        challengeDescription: "Incrementy Stamina Softcap starts at 1",
+                        rewardDescription: "Challenge Points boost Energy to Antimatter Synergy<br>",
+                        rewardEffect(){
+                                let comps = challengeCompletions("sp", 21)
+
+                                if (comps == 0) return new Decimal(0)
+
+                                let pts = player.sp.chall3points
+
+                                let effpts = pts.pow(1 - .8/Math.sqrt(comps))
+
+                                return Decimal.minus(Decimal.div(1, effpts.plus(10).log10()), 1).times(-1)
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(player.sp.chall3points) + " Challenge Points, "
+                                comps += "and " + formatWhole(challengeCompletions("sp", 21)) + " Challenge completions, "
+                                let eff = "Energy^" + format(layers.sp.challenges[21].rewardEffect(), 4) + " boosts Antimatter gain."
+                                return comps + eff
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        goal(initial = false){
+                                let comps = challengeCompletions("sp", 21)
+                                let init = 21
+                                let exp = initial ? init : init + comps
+                                return Decimal.pow(10, Decimal.pow(2, exp))
+                        },
+                        currencyInternalName: "points",
+                        completionLimit: 25,
+                },
+                22: {
+                        name: "Joule", 
+                        challengeDescription: "Incrementy gain is raised to the .01",
+                        rewardDescription: "Challenge Points boost [thing]<br>",
+                        rewardEffect(){
+                                let comps = challengeCompletions("sp", 22)
+
+                                return 1
+                        },
+                        rewardDisplay(){
+                                let comps = "Because you have " + formatWhole(player.sp.chall4points) + " Challenge Points, "
+                                comps += "and " + formatWhole(challengeCompletions("sp", 22)) + " Challenge completions, "
+                                let eff = "you get " + format(layers.sp.challenges[22].rewardEffect()) + " to thing."
+                                return comps + eff
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        goal(initial = false){
+                                let comps = challengeCompletions("sp", 22)
+                                let init = 15
+                                let exp = initial ? init : init + comps
+                                return Decimal.pow(10, Decimal.pow(2, exp))
+                        },
+                        currencyInternalName: "points",
+                        completionLimit: 25,
+                },
+        },
+        upgrades: {
+                rows: 4,
+                cols: 5,
+                11: {
+                        title: "Lute",
+                        description: "Quarts Challenge Points boost Super Prestige Point gain",
+                        cost: new Decimal(366),
+                        currencyDisplayName: "Quartz Challenge Points",
+                        currencyInternalName: "chall1points",
+                        currencyLayer: "sp",
+                        effect(){
+                                let amt = player.sp.chall2points
+                                if (amt.lte(10)) return amt.max(1)
+
+                                let ret = Decimal.pow(amt, Decimal.log10(amt).pow(-.5))
+
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(365)
+                        },
+                }, 
+                12: {
+                        title: "Loot",
+                        description: "Remove the ability to Prestige but gain 100% of Super Prestige Points on prestige per second",
+                        cost: new Decimal(396),
+                        currencyDisplayName: "Quartz Challenge Points",
+                        currencyInternalName: "chall1points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 11)
+                        },
+                }, 
+                13: {
+                        title: "Earn",
+                        description: "Each Super Prestige Upgrade pushes the Incrementy Stamina Softcap Start back by one",
+                        cost: new Decimal(481),
+                        currencyDisplayName: "Quartz Challenge Points",
+                        currencyInternalName: "chall1points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 12)
+                        },
+                },
+                14: {
+                        title: "Urn",
+                        description: "Quarts Challenge Points raises Amoeba Gain base to a power",
+                        cost: new Decimal(805),
+                        effect(){
+                                return player.sp.chall2points.plus(1).pow(.5)
+                        },
+                        currencyDisplayName: "Quartz Challenge Points",
+                        currencyInternalName: "chall1points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 13)
+                        },
+                },
+                21: {
+                        title: "Ate", //eight
+                        description: "Each Super Prestige upgrade makes Amoebas multiply Antimatter",
+                        cost: new Decimal(546),
+                        currencyDisplayName: "Quarts Challenge Points",
+                        currencyInternalName: "chall2points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 14)
+                        },
+                }, //next 643
+        },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -4312,21 +4597,64 @@ addLayer("sp", {
                                         return "You have done a total of " + formatWhole(player.sp.times) + " Super Prestige resets"
                                 }],
                                 ["display-text", function(){
-                                        return "Super Prestige resets all prior layers, even with Shard upgrades"
+                                        if (!hasUpgrade("sp", 12)) return "Super Prestige resets all prior layers, even with Shard upgrades"
+                                        return "You are gaining " + format(layers.sp.getResetGain()) + " Super Prestige Points per second"
                                 }],
-                                "prestige-button",
+                                ["prestige-button", "", function (){ return hasUpgrade("sp", 12) ? {'display': 'none'} : {}}],
                                 "milestones"
                         ],
                         unlocked(){
                                 return true
                         },
                 }, 
+                "Obfuscations": {
+                        content: [
+                                ["display-text", function(){
+                                        return "Each Challenge's Challenge Points are generated based on your Points"
+                                }],
+                                ["display-text", function(){
+                                        if (inChallenge("sp", 11) || inChallenge("sp", 12) || inChallenge("sp", 21) || inChallenge("sp", 22)) {
+                                                //next at is going to be HORRIBLE to calc (just a lot of cases ew)
+                                                let gain = layers.sp.challenges.getAdditionalGain()[0]
+                                                let a = "Leaving the challenge will give " + formatWhole(gain) + " Challenge Points"
+                                                let b = ""
+                                                if (gain.lt(1000)) {
+                                                        let init = layers.sp.challenges.getPointGain()
+                                                        if (inChallenge("sp", 11)) init = init.max(player.sp.chall1points)
+                                                        if (inChallenge("sp", 12)) init = init.max(player.sp.chall2points)
+                                                        if (inChallenge("sp", 21)) init = init.max(player.sp.chall3points)
+                                                        if (inChallenge("sp", 22)) init = init.max(player.sp.chall4points)
+
+
+                                                        let target = init.plus(1).div(100).plus(1).root(3).minus(1)
+                                                        let add = new Decimal(0)
+                                                        if (inChallenge("sp", 11)) add = layers.sp.challenges[11].goal(true).log(10).log(2)
+                                                        if (inChallenge("sp", 12)) add = layers.sp.challenges[12].goal(true).log(10).log(2)
+                                                        if (inChallenge("sp", 21)) add = layers.sp.challenges[21].goal(true).log(10).log(2)
+                                                        if (inChallenge("sp", 22)) add = layers.sp.challenges[22].goal(true).log(10).log(2)
+
+
+                                                        let goal = Decimal.pow(10, Decimal.pow(2, target.plus(add)))
+                                                        
+                                                        b = " (next at " + format(goal) + ")"
+                                                }
+                                                return a + b
+                                        }
+                                        return "Enter a Challenge to gain Challenge Points"
+                                }],
+                                "blank",
+                                "challenges",
+                        ],
+                        unlocked(){
+                                return hasUpgrade("s", 55)
+                        },
+                },
                 "Upgrades": {
                         content: [
                                 "upgrades"
                         ],
                         unlocked(){
-                                return true
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(365)
                         },
                 }
         },

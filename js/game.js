@@ -254,6 +254,13 @@ function canCompleteChallenge(layer, x){
 function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
+	if (layer == "sp") {
+		let pts = layers.sp.challenges.getPointGain()
+		if (x == 11) player.sp.chall1points = player.sp.chall1points.max(pts)
+		if (x == 12) player.sp.chall2points = player.sp.chall2points.max(pts)
+		if (x == 21) player.sp.chall3points = player.sp.chall3points.max(pts)
+		if (x == 22) player.sp.chall4points = player.sp.chall4points.max(pts)
+	}
 	if (!canCompleteChallenge(layer, x)){
 		delete player[layer].activeChallenge
 		return
