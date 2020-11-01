@@ -125,6 +125,7 @@ function getIStaminaSoftcapStart(){
         ret += layers.sp.effect()[0].toNumber()
         if (hasUpgrade("s", 42)) ret += player.s.upgrades.length
         if (hasUpgrade("sp", 13)) ret += player.sp.upgrades.length
+        if (hasUpgrade("sp", 21)) ret += challengeCompletions("sp", 21)
         return ret
 }
 
@@ -2577,6 +2578,7 @@ addLayer("n", {
                                 let ret = player.n.best.plus(10).log10().root(2)
                                 if (hasUpgrade("g", 32)) ret = ret.plus(layers.n.buyables[11].total().div(100))
                                 if (hasUpgrade("g", 33)) ret = ret.plus(player.g.upgrades.length/4)
+                                ret = ret.times(layers.sp.challenges[22].rewardEffect())
                                 return ret
                         },
                         canAfford(){
@@ -3435,6 +3437,7 @@ addLayer("s", {
                 x = x.times(layers.sp.effect()[1])
                 if (hasUpgrade("s", 44)) x = x.times(player.i.points.max(1).pow(.0001).pow(.0002))
                 x = x.times(layers.sp.challenges[12].rewardEffect())
+                if (hasUpgrade("sp", 33)) x = x.times(Decimal.pow(player.sp.points.max(1), challengeCompletions("sp", 21)))
                 return x
         },
         prestigeButtonText(){
@@ -3756,6 +3759,7 @@ addLayer("b", {
         getGainMultPost(){
                 let x = new Decimal(5e5)
                 x = x.times(layers.sp.effect()[1])
+                if (hasUpgrade("sp", 31)) x = x.times(player.sp.points.max(1))
                 return x
         },
         prestigeButtonText(){
@@ -4280,6 +4284,9 @@ addLayer("sp", {
                 }
                 x = x.times(layers.sp.challenges[11].rewardEffect())
                 if (hasUpgrade("sp", 11)) x = x.times(upgradeEffect("sp", 11))
+                if (hasUpgrade("sp", 23)) x = x.times(player.sp.chall3points.max(1))
+                if (hasUpgrade("sp", 32)) x = x.times(Decimal.pow(50, challengeCompletions("sp", 22)))
+                if (hasUpgrade("sp", 34)) x = x.times(player.sp.chall4points.max(1))
                 return x
         },
         prestigeButtonText(){
@@ -4402,7 +4409,7 @@ addLayer("sp", {
 
                                 let exp = Decimal.div(5, 11-Math.sqrt(comps))
 
-                                return Decimal.pow(pts.max(1), exp)
+                                return Decimal.pow(pts.plus(1), exp)
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall1points) + " Challenge Points "
@@ -4433,7 +4440,7 @@ addLayer("sp", {
 
                                 let exp = pts.sqrt().min(10 + comps * 3)
 
-                                return Decimal.pow(pts.max(1), exp)                                
+                                return Decimal.pow(pts.plus(1), exp)                                
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall2points) + " Challenge Points, "
@@ -4489,16 +4496,18 @@ addLayer("sp", {
                 22: {
                         name: "Joule", 
                         challengeDescription: "Incrementy gain is raised to the .01",
-                        rewardDescription: "Challenge Points boost [thing]<br>",
+                        rewardDescription: "Challenge Points boost Particle Boost base<br>",
                         rewardEffect(){
                                 let comps = challengeCompletions("sp", 22)
 
-                                return 1
+                                let pts = player.sp.chall4points
+
+                                return Decimal.pow(pts.plus(1), comps * comps + 4)
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall4points) + " Challenge Points, "
                                 comps += "and " + formatWhole(challengeCompletions("sp", 22)) + " Challenge completions, "
-                                let eff = "you get " + format(layers.sp.challenges[22].rewardEffect()) + " to thing."
+                                let eff = "you get x" + format(layers.sp.challenges[22].rewardEffect()) + " to Particle Boost base."
                                 return comps + eff
                         },
                         unlocked(){
@@ -4506,7 +4515,7 @@ addLayer("sp", {
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 22)
-                                let init = 15
+                                let init = 14
                                 let exp = initial ? init : init + comps
                                 return Decimal.pow(10, Decimal.pow(2, exp))
                         },
@@ -4561,9 +4570,12 @@ addLayer("sp", {
                 14: {
                         title: "Urn",
                         description: "Quarts Challenge Points raises Amoeba Gain base to a power",
-                        cost: new Decimal(805),
+                        cost: new Decimal(731),
                         effect(){
-                                return player.sp.chall2points.plus(1).pow(.5)
+                                let ret = player.sp.chall2points.plus(1).pow(.5)
+
+                                if (hasUpgrade("sp", 24)) ret = ret.times(3)
+                                return ret
                         },
                         currencyDisplayName: "Quartz Challenge Points",
                         currencyInternalName: "chall1points",
@@ -4573,7 +4585,7 @@ addLayer("sp", {
                         },
                 },
                 21: {
-                        title: "Ate", //eight
+                        title: "Ate",
                         description: "Each Super Prestige upgrade makes Amoebas multiply Antimatter",
                         cost: new Decimal(546),
                         currencyDisplayName: "Quarts Challenge Points",
@@ -4582,7 +4594,84 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 14)
                         },
-                }, //next 643
+                },
+                22: {
+                        title: "Eight",
+                        description: "Each Jewel completion pushes the Incrementy Stamina Softcap back by one",
+                        cost: new Decimal(643),
+                        currencyDisplayName: "Quarts Challenge Points",
+                        currencyInternalName: "chall2points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 21)
+                        },
+                },
+                23: {
+                        title: "Shear", 
+                        description: "Jewel Points multiply Super Prestige Point gain",
+                        cost: new Decimal(839),
+                        currencyDisplayName: "Quarts Challenge Points",
+                        currencyInternalName: "chall2points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 22)
+                        },
+                }, 
+                24: {
+                        title: "Sheer", 
+                        description: "Triple Urn",
+                        cost: new Decimal(1097),
+                        currencyDisplayName: "Quarts Challenge Points",
+                        currencyInternalName: "chall2points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 23)
+                        },
+                },
+                31: {
+                        title: "See", 
+                        description: "Super Prestige Points multiply Bosons gain",
+                        cost: new Decimal(1302),
+                        currencyDisplayName: "Jewel Challenge Points",
+                        currencyInternalName: "chall3points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 24)
+                        },
+                },
+                32: {
+                        title: "Sea", 
+                        description: "Each Joule Completion boosts Super Prestige point gain by 50x",
+                        cost: new Decimal(1700),
+                        currencyDisplayName: "Jewel Challenge Points",
+                        currencyInternalName: "chall3points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 31)
+                        },
+                },
+                33: {
+                        title: "Add", 
+                        description: "Each Jewel Completion multiplies Shard gain by Super Prestige Points",
+                        cost: new Decimal(2064),
+                        currencyDisplayName: "Jewel Challenge Points",
+                        currencyInternalName: "chall3points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 32)
+                        },
+                },
+                34: {
+                        title: "Ad", 
+                        description: "Joule Challenge Points multiply Super Prestige point gain",
+                        cost: new Decimal(2295),
+                        currencyDisplayName: "Jewel Challenge Points",
+                        currencyInternalName: "chall3points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 33)
+                        },
+                }, //123 Joule
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [

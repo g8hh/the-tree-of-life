@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 5e6 SP."
+	"Current endgame: 123 Joule Points."
 ]
 
 // Determines when the game "ends"
