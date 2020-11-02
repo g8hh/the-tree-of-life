@@ -1649,7 +1649,7 @@ addLayer("e", {
 
                 
                 let keep = []
-                if (!hasUpgrade("s", 22)) player.e.upgrades = filter(player.e.upgrades, keep)
+                if (!hasUpgrade("s", 21)) player.e.upgrades = filter(player.e.upgrades, keep)
 
                 //resource
                 player.e.points = new Decimal(0)
