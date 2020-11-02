@@ -229,6 +229,7 @@ addLayer("i", {
                 if (hasUpgrade("e", 44))  x = x.times(upgradeEffect("e", 44))
                 x = x.times(getNBuyableEff(13))
                 if (hasUpgrade("g", 24))  x = x.times(upgradeEffect("g", 24))
+                if (hasUpgrade("sp", 41)) x = x.times(player.sp.points.plus(1))
                 return x
         },
         getGainMultPost(){
@@ -778,6 +779,7 @@ addLayer("am", {
                 x = x.times(layers.sp.effect()[1])
                 x = x.times(player.e.points.max(1).pow(layers.sp.challenges[21].rewardEffect()))
                 if (hasUpgrade("sp", 21)) x = x.times(player.a.points.max(1).pow(player.sp.upgrades.length))
+                if (hasUpgrade("sp", 44)) x = x.times(Decimal.pow(player.a.points.max(1), challengeCompletions("sp", 22)))
                 return x
         },
         prestigeButtonText(){
@@ -4228,12 +4230,14 @@ addLayer("sp", {
         baseAmount() {return player.s.points}, 
         branches: ["s"],
         type: "custom", 
-        effect(){
+        effect(forceSet){
                 let amt = player.sp.best
+                if (forceSet != undefined) amt = new Decimal(forceSet)
                 if (amt.gt(10)) amt = amt.times(10).sqrt()
                 if (amt.gt(20)) amt = amt.times(5).log10().times(10)
                 if (amt.gt(40)) amt = amt.div(40).root(3).times(40)
                 if (amt.gt(100)) amt = amt.log10().times(50)
+                if (forceSet != undefined) return amt
                 let a1 = amt.floor()
 
                 let a2 = amt.times(10).max(1).pow(2)
@@ -4371,6 +4375,7 @@ addLayer("sp", {
                                 let base = layers.sp.challenges[22].goal(true)
                                 let pts = player.points
                                 let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
+                                if (diff.gt(1)) diff = diff.log(100).plus(1) 
                                 return diff.plus(1).pow(3).minus(1).times(100).floor()
                         }
                         return new Decimal(0)
@@ -4408,6 +4413,7 @@ addLayer("sp", {
                                 let pts = player.sp.chall1points
 
                                 let exp = Decimal.div(5, 11-Math.sqrt(comps))
+                                if (hasUpgrade("sp", 43)) exp = exp.times(2)
 
                                 return Decimal.pow(pts.plus(1), exp)
                         },
@@ -4440,7 +4446,10 @@ addLayer("sp", {
 
                                 let exp = pts.sqrt().min(10 + comps * 3)
 
-                                return Decimal.pow(pts.plus(1), exp)                                
+                                let ret = Decimal.pow(pts.plus(1), exp)     
+
+                                if (ret.gt(1e100)) ret = ret.log10().pow(50)
+                                return ret                           
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall2points) + " Challenge Points, "
@@ -4472,8 +4481,10 @@ addLayer("sp", {
                                 let pts = player.sp.chall3points
 
                                 let effpts = pts.pow(1 - .8/Math.sqrt(comps))
+                                let ret = Decimal.minus(Decimal.div(1, effpts.plus(10).log10()), 1).times(-1)
 
-                                return Decimal.minus(Decimal.div(1, effpts.plus(10).log10()), 1).times(-1)
+                                if (hasUpgrade("sp", 42)) ret = ret.sqrt()
+                                return ret
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall3points) + " Challenge Points, "
@@ -4502,7 +4513,9 @@ addLayer("sp", {
 
                                 let pts = player.sp.chall4points
 
-                                return Decimal.pow(pts.plus(1), comps * comps + 4)
+                                if (comps > 5) comps = comps / 4 + 3.75
+
+                                return Decimal.pow(pts.plus(1), comps * Math.min(comps, 5) + 4)
                         },
                         rewardDisplay(){
                                 let comps = "Because you have " + formatWhole(player.sp.chall4points) + " Challenge Points, "
@@ -4671,7 +4684,51 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 33)
                         },
-                }, //123 Joule
+                },
+                41: {
+                        title: "idk1", 
+                        description: "Super Prestige Points Boost base Incrementy Gain",
+                        cost: new Decimal(122),
+                        currencyDisplayName: "Joule Challenge Points",
+                        currencyInternalName: "chall4points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 34)
+                        },
+                },
+                42: {
+                        title: "idk1", 
+                        description: "Square root Jewel Exponent (buff!)",
+                        cost: new Decimal(1560),
+                        currencyDisplayName: "Joule Challenge Points",
+                        currencyInternalName: "chall4points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 41)
+                        },
+                },
+                43: {
+                        title: "idk2", 
+                        description: "Square Quartz reward",
+                        cost: new Decimal(1565),
+                        currencyDisplayName: "Joule Challenge Points",
+                        currencyInternalName: "chall4points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 42)
+                        },
+                },
+                44: {
+                        title: "idk2", 
+                        description: "Each Joule Completion makes Amoebas multiply Antimatter gain",
+                        cost: new Decimal(1576),
+                        currencyDisplayName: "Joule Challenge Points",
+                        currencyInternalName: "chall4points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 43)
+                        },
+                }, //next: 15 cost 16919 of quart*Z* (chall1pts) 
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -4703,7 +4760,6 @@ addLayer("sp", {
                                 }],
                                 ["display-text", function(){
                                         if (inChallenge("sp", 11) || inChallenge("sp", 12) || inChallenge("sp", 21) || inChallenge("sp", 22)) {
-                                                //next at is going to be HORRIBLE to calc (just a lot of cases ew)
                                                 let gain = layers.sp.challenges.getAdditionalGain()[0]
                                                 let a = "Leaving the challenge will give " + formatWhole(gain) + " Challenge Points"
                                                 let b = ""
@@ -4716,6 +4772,9 @@ addLayer("sp", {
 
 
                                                         let target = init.plus(1).div(100).plus(1).root(3).minus(1)
+
+                                                        if (inChallenge("sp", 22) && target.gt(1)) target = Decimal.pow(100, target.minus(1)) 
+
                                                         let add = new Decimal(0)
                                                         if (inChallenge("sp", 11)) add = layers.sp.challenges[11].goal(true).log(10).log(2)
                                                         if (inChallenge("sp", 12)) add = layers.sp.challenges[12].goal(true).log(10).log(2)
