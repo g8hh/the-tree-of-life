@@ -635,7 +635,7 @@ addLayer("i", {
                                 return ret
                         },
                         canAfford(){
-                                return player.i.points.gte(getIBuyableCost(13)) && player.i.buyables[13].lt(5e5)
+                                return player.i.points.gte(getIBuyableCost(13)) && player.i.buyables[13].lt(400)
                         },
                         total(){
                                 return getBuyableAmount("i", 13).plus(layers.i.buyables[13].extra())
@@ -663,7 +663,7 @@ addLayer("i", {
                                         let xtarget = pttarget.log(1.1).log(1.2)
                                         let target = xtarget.minus(1).times(2.5).floor().plus(1)
 
-                                        target = target.min(5e5)
+                                        target = target.min(400)
                                         
                                         let diff = target.minus(player.i.buyables[13]).max(0)
                                         if (maximum != undefined) diff = diff.min(maximum)
@@ -687,7 +687,7 @@ addLayer("i", {
                         {"font-size": "20px"}],
                 ["display-text", function () {return layers.i.nextUpgradeText()}],
                 ["display-text", function () {
-                        return player.i.best.plus(10).log10().plus(10).log10().gt(9) ? "You cannot buy Incrementy Buyables past 500,000!" : ""
+                        return player.i.best.plus(10).log10().plus(10).log10().gt(9) ? "You cannot buy Incrementy Buyables past 500,000 (400 for Stamina)!" : ""
                 }],
                 "blank",
                 "buyables", 
@@ -4268,6 +4268,7 @@ addLayer("sp", {
                 let x = new Decimal(.25)
                 if (hasUpgrade("s", 42)) x = x.times(3)
                 if (hasUpgrade("s", 53)) x = x.times(2)
+                if (hasUpgrade("sp", 35)) x = x.times(1.01)
                 return x
         },
         getGainMultPre(){
@@ -4291,6 +4292,13 @@ addLayer("sp", {
                 if (hasUpgrade("sp", 23)) x = x.times(player.sp.chall3points.max(1))
                 if (hasUpgrade("sp", 32)) x = x.times(Decimal.pow(50, challengeCompletions("sp", 22)))
                 if (hasUpgrade("sp", 34)) x = x.times(player.sp.chall4points.max(1))
+                if (hasUpgrade("sp", 15)) {
+                        let a = 1
+                        if (hasUpgrade("sp", 25)) a ++
+                        if (hasUpgrade("sp", 35)) a ++
+                        if (hasUpgrade("sp", 45)) a ++
+                        x = x.times(Decimal.pow(challengeCompletions("sp", 11), a))
+                }
                 return x
         },
         prestigeButtonText(){
@@ -4448,7 +4456,7 @@ addLayer("sp", {
 
                                 let ret = Decimal.pow(pts.plus(1), exp)     
 
-                                if (ret.gt(1e100)) ret = ret.log10().pow(50)
+                                if (!hasUpgrade("sp", 25) && ret.gt(1e100)) ret = ret.log10().pow(50)
                                 return ret                           
                         },
                         rewardDisplay(){
@@ -4728,7 +4736,51 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 43)
                         },
-                }, //next: 15 cost 16919 of quart*Z* (chall1pts) 
+                }, 
+                15: {
+                        title: "idk3",
+                        description: "Each Upgrade in this column multiplies Super Prestige point gain by Quartz completions",
+                        cost: new Decimal(16919),
+                        currencyDisplayName: "Quartz Challenge Points",
+                        currencyInternalName: "chall1points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 44)
+                        },
+                },
+                25: {
+                        title: "idk3",
+                        description: "Remove the 1e100 softcap of Quarts",
+                        cost: new Decimal(32955),
+                        currencyDisplayName: "Quarts Challenge Points",
+                        currencyInternalName: "chall2points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 15)
+                        },
+                },
+                35: {
+                        title: "idk4",
+                        description: "Raise base Super Prestige point gain to the 1.01",
+                        cost: new Decimal(16480),
+                        currencyDisplayName: "Jewel Challenge Points",
+                        currencyInternalName: "chall3points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 25)
+                        },
+                },
+                45: {
+                        title: "idk4",
+                        description: "[some qol thing]",
+                        cost: new Decimal(1624),
+                        currencyDisplayName: "Joule Challenge Points",
+                        currencyInternalName: "chall4points",
+                        currencyLayer: "sp",
+                        unlocked(){
+                                return hasUpgrade("sp", 35)
+                        },
+                },
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
