@@ -17,7 +17,9 @@ function exponentialFormat(num, precision) {
 	}
 	let end = e.toStringWithDecimalPlaces(0)
 	if (!end.includes("e")) end = addCommas(end)
-	return m.toStringWithDecimalPlaces(precision)+"e"+end
+	let start = ""
+	if (e.lt(1e9)) start = m.toStringWithDecimalPlaces(precision)
+	return start + "e" + end
 }
 
 function commaFormat(num, precision) {

@@ -113,7 +113,8 @@ function getEUpgEff(id){
         return upgradeEffect("e", id)
 }
 
-function getIStaminaSoftcapStart(){
+function getIStaminaSoftcapStart(){ 
+        //REMEMBER: IT IS A NUMBER NOT A DECIMAL
         if (inChallenge("sp", 21)) return 1
         let ret = 40
         if (hasChallenge("am", 11)) ret += 5
@@ -126,6 +127,9 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("s", 42)) ret += player.s.upgrades.length
         if (hasUpgrade("sp", 13)) ret += player.sp.upgrades.length
         if (hasUpgrade("sp", 21)) ret += challengeCompletions("sp", 21)
+        ret += layers.pi.effect().toNumber()
+        if (hasMilestone("pi", 1)) ret += 2 * player.pi.milestones.length
+        if (hasUpgrade("pi", 13)) ret += player.pi.upgrades.length
         return ret
 }
 
@@ -266,6 +270,7 @@ addLayer("i", {
                         if (hasMilestone("a", 4)) mult *= 1e3
                         if (hasUpgrade("b", 23)) mult *= 5
                         if (hasUpgrade("s", 55)) mult *= 10
+                        if (hasUpgrade("sp", 45)) mult *= 10
                         if (hasMilestone("a", 2)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
@@ -1715,11 +1720,12 @@ addLayer("p", {
                 if (player.p.time > 1){
                         player.p.time += -1
                         let j = hasUpgrade("s", 41) ? 4 : 1
+                        if (hasMilestone("pi", 2)) j *= 5
                         if (hasUpgrade("s", 25)) {
                                 for (let i = 0; i < j; i ++) {
-                                        layers.p.buyables[11].buy()
-                                        layers.p.buyables[12].buy()
-                                        layers.p.buyables[13].buy()
+                                        if (layers.p.buyables[11].canAfford()) layers.p.buyables[11].buy()
+                                        if (layers.p.buyables[12].canAfford()) layers.p.buyables[12].buy()
+                                        if (layers.p.buyables[13].canAfford()) layers.p.buyables[13].buy()
                                 }
                         }
                 }
@@ -2222,6 +2228,7 @@ addLayer("n", {
                         times *= -1
                         if (hasUpgrade("s", 23)) times *= 10
                         if (hasUpgrade("s", 41)) times *= 10
+                        
                         if (hasUpgrade("s", 14)) {
                                 layers.n.buyables[11].buyMax(times)
                                 layers.n.buyables[12].buyMax(times)
@@ -4299,6 +4306,8 @@ addLayer("sp", {
                         if (hasUpgrade("sp", 45)) a ++
                         x = x.times(Decimal.pow(challengeCompletions("sp", 11), a))
                 }
+                if (hasUpgrade("pi", 12)) x = x.times(upgradeEffect("pi", 12))
+                if (hasMilestone("pi", 3)) x = x.times(Decimal.pow(2, player.pi.upgrades.length ** 2))
                 return x
         },
         prestigeButtonText(){
@@ -4315,7 +4324,6 @@ addLayer("sp", {
                 return layers.sp.getResetGain().gt(0) && getBChallengeTotal() >= 40 && !hasUpgrade("sp", 12) 
         },
         update(diff){
-                if (!player.s.best) player.sp.best = new Decimal(0)
                 player.sp.best = player.sp.best.max(player.sp.points)
 
                 if (hasUpgrade("sp", 12)) player.sp.points = player.sp.points.plus(layers.sp.getResetGain().times(diff))
@@ -4383,7 +4391,7 @@ addLayer("sp", {
                                 let base = layers.sp.challenges[22].goal(true)
                                 let pts = player.points
                                 let diff = player.points.max(10).log(10).max(2).log(2).minus(base.log(10).log(2)).max(0)
-                                if (diff.gt(1)) diff = diff.log(100).plus(1) 
+                                if (diff.gt(1) && !hasUpgrade("pi", 11)) diff = diff.log(100).plus(1) 
                                 return diff.plus(1).pow(3).minus(1).times(100).floor()
                         }
                         return new Decimal(0)
@@ -4694,7 +4702,7 @@ addLayer("sp", {
                         },
                 },
                 41: {
-                        title: "idk1", 
+                        title: "Liar", 
                         description: "Super Prestige Points Boost base Incrementy Gain",
                         cost: new Decimal(122),
                         currencyDisplayName: "Joule Challenge Points",
@@ -4705,7 +4713,7 @@ addLayer("sp", {
                         },
                 },
                 42: {
-                        title: "idk1", 
+                        title: "Lyre", 
                         description: "Square root Jewel Exponent (buff!)",
                         cost: new Decimal(1560),
                         currencyDisplayName: "Joule Challenge Points",
@@ -4716,7 +4724,7 @@ addLayer("sp", {
                         },
                 },
                 43: {
-                        title: "idk2", 
+                        title: "Ode", 
                         description: "Square Quartz reward",
                         cost: new Decimal(1565),
                         currencyDisplayName: "Joule Challenge Points",
@@ -4727,7 +4735,7 @@ addLayer("sp", {
                         },
                 },
                 44: {
-                        title: "idk2", 
+                        title: "Owed", 
                         description: "Each Joule Completion makes Amoebas multiply Antimatter gain",
                         cost: new Decimal(1576),
                         currencyDisplayName: "Joule Challenge Points",
@@ -4738,7 +4746,7 @@ addLayer("sp", {
                         },
                 }, 
                 15: {
-                        title: "idk3",
+                        title: "Bale",
                         description: "Each Upgrade in this column multiplies Super Prestige point gain by Quartz completions",
                         cost: new Decimal(16919),
                         currencyDisplayName: "Quartz Challenge Points",
@@ -4749,7 +4757,7 @@ addLayer("sp", {
                         },
                 },
                 25: {
-                        title: "idk3",
+                        title: "Bail",
                         description: "Remove the 1e100 softcap of Quarts",
                         cost: new Decimal(32955),
                         currencyDisplayName: "Quarts Challenge Points",
@@ -4760,7 +4768,7 @@ addLayer("sp", {
                         },
                 },
                 35: {
-                        title: "idk4",
+                        title: "Barren",
                         description: "Raise base Super Prestige point gain to the 1.01",
                         cost: new Decimal(16480),
                         currencyDisplayName: "Jewel Challenge Points",
@@ -4771,8 +4779,8 @@ addLayer("sp", {
                         },
                 },
                 45: {
-                        title: "idk4",
-                        description: "[some qol thing]",
+                        title: "Baron",
+                        description: "Neutrino Autobuyers can buy ten times more",
                         cost: new Decimal(1624),
                         currencyDisplayName: "Joule Challenge Points",
                         currencyInternalName: "chall4points",
@@ -4780,7 +4788,7 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 35)
                         },
-                },
+                }, //π
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -4825,7 +4833,7 @@ addLayer("sp", {
 
                                                         let target = init.plus(1).div(100).plus(1).root(3).minus(1)
 
-                                                        if (inChallenge("sp", 22) && target.gt(1)) target = Decimal.pow(100, target.minus(1)) 
+                                                        if (inChallenge("sp", 22) && target.gt(1) && !hasUpgrade("pi", 11)) target = Decimal.pow(100, target.minus(1)) 
 
                                                         let add = new Decimal(0)
                                                         if (inChallenge("sp", 11)) add = layers.sp.challenges[11].goal(true).log(10).log(2)
@@ -4860,13 +4868,184 @@ addLayer("sp", {
         },
         doReset(layer){
                 if (false) console.log(layer)
-                if (layers[layer].row <= 3) return
+                if (layers[layer].row <= 3 && layer != "pi") return
 
                 //resource
                 player.sp.points = new Decimal(0)
                 player.sp.best = new Decimal(0)
-                player.sp.times = 0
                 player.sp.total = new Decimal(0)
+
+                if (layer == "pi") return
+                player.sp.times = 0
         },
 })
 
+
+addLayer("pi", {
+        name: "Pions", 
+        symbol: "π", 
+        position: 4,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                bestOnce: new Decimal(0),
+                times: 0,
+        }},
+        color: "#EC8241",
+        requires: Decimal.pow(10, 133).times(5), 
+        resource: "Pions",
+        baseAmount() {return player.sp.points}, 
+        branches: ["sp"],
+        type: "custom", 
+        effect(){
+                return player.pi.bestOnce.times(2).sqrt().floor()
+        },
+        effectDescription(){
+                let eff = layers.pi.effect()
+                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff) + " "
+                let b = "(based on your best Pions in one reset)."
+                return a + b
+        },
+        getResetGain() {
+                let amt = layers.pi.baseAmount()
+                let pre = layers.pi.getGainMultPre()
+                let exp = layers.pi.getGainExp()
+                let pst = layers.pi.getGainMultPost()
+                
+                let ret = amt.div(5e132).max(1).log10().times(pre).pow(exp).times(pst)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(.2339)
+                if (hasUpgrade("pi", 14)) x = x.times(2)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.pi.getResetGain()
+                let start = "Reset to gain " + formatWhole(gain) + " Pions<br>"
+                let pre = layers.pi.getGainMultPre()
+                let exp = layers.pi.getGainExp()
+                let pst = layers.pi.getGainMultPost()
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).root(exp).div(pre)).times(5e132)) + " Super Prestige Points"
+                if (gain.gt(1e6)) nextAt = ""
+                return start + nextAt
+        },
+        canReset(){
+                return layers.pi.getResetGain().gt(0) && true
+        },
+        update(diff){
+                player.pi.best = player.pi.best.max(player.pi.points)
+
+                if (false) player.pi.points = player.pi.points.plus(layers.pi.getResetGain().times(diff))
+        },
+        milestones: {
+                1: {
+                        requirementDescription: "<b>Fore</b><br>Requires: 1 Pions in one reset", 
+                        effectDescription: "Each milestone makes the Incrementy Stamina softcap start 2 later",
+                        done(){
+                                return player.pi.bestOnce.gte(1)
+                        },
+                },
+                2: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
+                        requirementDescription: "<b>Four</b><br>Requires: 2 Pions in one reset", 
+                        effectDescription: "Particle Buyable Autobuyers are 5x faster",
+                        done(){
+                                return player.pi.bestOnce.gte(2)
+                        },
+                },
+                3: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
+                        requirementDescription: "<b>For</b><br>Requires: 6 Pions in one reset", 
+                        effectDescription: "Double Super Prestige Point gain per Pion upgrade squared",
+                        done(){
+                                return player.pi.bestOnce.gte(6)
+                        },
+                },
+        },
+        upgrades:{
+                rows: 4,
+                cols: 4,
+                11: {
+                        title: "Bee",
+                        description: "Remove the Joule Challenge points softcap",
+                        cost: new Decimal(10),
+                        unlocked(){
+                                return hasMilestone("pi", 2)
+                        }
+                },
+                12: {
+                        title: "Be",
+                        description: "Each Pion upgrade multiplies Super Prestige Point gain by Joule challenge points",
+                        cost: new Decimal(10),
+                        effect(){
+                                return Decimal.pow(player.sp.chall1points.plus(1), player.pi.upgrades.length)
+                        },
+                        unlocked(){
+                                return hasUpgrade("pi", 11)
+                        }
+                },
+                13: {
+                        title: "Beat",
+                        description: "Each Pion upgrade pushes the Incrementy Stamina Softcap back by 1",
+                        cost: new Decimal(15),
+                        unlocked(){
+                                return hasUpgrade("pi", 12)
+                        }
+                },
+                14: {
+                        title: "Beet",
+                        description: "Square the Pion gain formula",
+                        cost: new Decimal(15),
+                        unlocked(){
+                                return hasUpgrade("pi", 13)
+                        }
+                },
+        },
+        row: 3, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){return player.sp.best.gt(1e133) || player.pi.best.gt(0)},
+        tabFormat: {
+                "Milestones": {
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                }
+        },
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 3) return
+
+                //resource
+                player.pi.points = new Decimal(0)
+                player.pi.best = new Decimal(0)
+                player.pi.times = 0
+                player.pi.total = new Decimal(0)
+                player.pi.bestOnce = new Decimal(0)
+        },
+})

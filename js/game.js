@@ -135,6 +135,7 @@ function addPoints(layer, gain) {
 	player[layer].points = player[layer].points.add(gain).max(0)
 	if (player[layer].best) player[layer].best = player[layer].best.max(player[layer].points)
 	if (player[layer].total) player[layer].total = player[layer].total.add(gain)
+	if (player[layer].bestOnce) player[layer].bestOnce = player[layer].bestOnce.max(gain)
 }
 
 function generatePoints(layer, diff) {
@@ -175,7 +176,7 @@ function doReset(layer, force=false) {
 		}
 	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
-		if (layer == "sp") player.sp.times ++
+		if (player[layer].times != undefined) player[layer].times ++
 	}
 
 	if (tmp[layer].resetsNothing) return
