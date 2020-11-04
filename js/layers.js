@@ -865,7 +865,7 @@ addLayer("am", {
                         },
                 },
                 23: {
-                        title: "Waive", //wave
+                        title: "Waive",
                         description: "Square antimatter gain and effect",
                         cost: new Decimal(2000),
                         unlocked(){
@@ -874,14 +874,14 @@ addLayer("am", {
                 }, 
                 24: {
                         title: "Wave", 
-                        description: "Incrementy Stamina levels multiple base incrementy gain",
+                        description: "Incrementy Stamina levels multiply base incrementy gain",
                         cost: new Decimal(1e26),
                         unlocked(){
                                 return hasMilestone("a", 4) || hasAMUpgrade(24)
                         },
                 }, 
                 15: {
-                        title: "Sweet",  //suite
+                        title: "Sweet",
                         description: "Antimatter gain is boosted by Quark Challenge completions",
                         cost: new Decimal("1e687"),
                         effect(){
@@ -897,7 +897,7 @@ addLayer("am", {
                         },
                 }, 
                 25: {
-                        title: "Suite",  //suite
+                        title: "Suite",
                         description: "Incrementy Softcap starts 3 later <br>(52 -> 55)",
                         cost: new Decimal("1e870"),
                         unlocked(){
@@ -4599,7 +4599,7 @@ addLayer("sp", {
                 14: {
                         title: "Urn",
                         description: "Quarts Challenge Points raises Amoeba Gain base to a power",
-                        cost: new Decimal(731),
+                        cost: new Decimal(730),
                         effect(){
                                 let ret = player.sp.chall2points.plus(1).pow(.5)
 
@@ -4616,7 +4616,7 @@ addLayer("sp", {
                 21: {
                         title: "Ate",
                         description: "Each Super Prestige upgrade makes Amoebas multiply Antimatter",
-                        cost: new Decimal(546),
+                        cost: new Decimal(458),
                         currencyDisplayName: "Quarts Challenge Points",
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
@@ -4862,7 +4862,7 @@ addLayer("sp", {
                                 "upgrades"
                         ],
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(365)
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360)
                         },
                 }
         },
