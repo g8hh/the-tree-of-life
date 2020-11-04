@@ -144,13 +144,13 @@ function getIncBuyableFormulaText(id){
         if (id == 12){
                 let base = hasIUpg(23) ? 1 : 4
                 let linear = ""
-                if (base != 1) linear = format(base, 2) + "^x*"
+                if (base != 1) linear = format(base, 0) + "^x*"
                 return "1e4*" + linear + "1.25^(x^2)"
         }
         if (id == 13){
                 let linear = ""
                 let b1 = hasIUpg(24) ? 1 : 2
-                if (b1 != 1) linear = format(b1, 2) + "^x*"
+                if (b1 != 1) linear = format(b1, 0) + "^x*"
                 let quad = "1.25^(x^2)*"
                 let start = "1e5*"
                 if (!hasUpgrade("a", 14)) start = "1e5*" + linear + quad
@@ -294,9 +294,9 @@ addLayer("i", {
                 if (canUnlIUpgForText(13)) t = formatNextIUpgText(11, 10)
                 if (canUnlIUpgForText(14)) t = formatNextIUpgText(12, 3)
                 if (canUnlIUpgForText(21)) t = formatNextIUpgText(11, 15)
-                if (canUnlIUpgForText(22)) t = formatNextIUpgText(12, 5)
-                if (canUnlIUpgForText(23)) t = formatNextIUpgText(11, 66)
-                if (canUnlIUpgForText(24)) t = formatNextIUpgText(13, 10)
+                if (canUnlIUpgForText(22)) t = formatNextIUpgText(11, 19)
+                if (canUnlIUpgForText(23)) t = formatNextIUpgText(11, 65)
+                if (canUnlIUpgForText(24)) t = formatNextIUpgText(11, 67)
                 if (canUnlIUpgForText(31)) t = formatNextIUpgText(12, 14)
                 if (canUnlIUpgForText(32)) t = formatNextIUpgText(12, 17)
                 if (canUnlIUpgForText(33)) t = formatNextIUpgText(11, 89)
@@ -355,7 +355,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Speed",
                         cost: new Decimal(15e7),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(5) || hasAMUpgrade(12) || hasIUpg(22)
+                                return getBuyableAmount("i", 11).gte(19) || hasAMUpgrade(12) || hasIUpg(22)
                         },
                 },
                 23: {
@@ -363,7 +363,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Strength",
                         cost: new Decimal(1e19),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(66) || hasAMUpgrade(12) || hasIUpg(23)
+                                return getBuyableAmount("i", 11).gte(65) || hasAMUpgrade(12) || hasIUpg(23)
                         },
                 },
                 24: {
@@ -371,13 +371,13 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Stamina and Cache is based on best Incrementy",
                         cost: new Decimal(1e20),
                         unlocked(){
-                                return getBuyableAmount("i", 13).gte(10) || hasAMUpgrade(12) || hasIUpg(24)
+                                return getBuyableAmount("i", 11).gte(67) || hasAMUpgrade(12) || hasIUpg(24)
                         },
                 },
                 31: {
                         title: "Kernel", 
                         description: "Nerf the superexponential Incrementy Stamina scaling",
-                        cost: new Decimal(2e21),
+                        cost: new Decimal(1e21),
                         unlocked(){
                                 return getBuyableAmount("i", 12).gte(14) || hasAMUpgrade(12) || hasIUpg(31)
                         },
@@ -814,7 +814,7 @@ addLayer("am", {
                 cols: 5,
                 11: {
                         title: "Plane", 
-                        description: "Incrementy multiplies Incrementy gain",
+                        description: "Incrementy boosts Incrementy gain",
                         cost: new Decimal(2),
                         effect(){
                                 let exp = 1
@@ -823,7 +823,7 @@ addLayer("am", {
                 },
                 12: {
                         title: "Plain", 
-                        description: "Triple Incrementy gain, keep the first row of Incrementy Upgrades, and nerf the Incrementy Stamina formula",
+                        description: "Triple Incrementy gain, and keep the first row of Incrementy Upgrades",
                         cost: new Decimal(2),
                         unlocked(){
                                 return hasAMUpgrade(11)
@@ -859,7 +859,7 @@ addLayer("am", {
                 22: {
                         title: "Course",
                         description: "Incrementy Speed levels multiply base incrementy gain",
-                        cost: new Decimal(2000),
+                        cost: new Decimal(1000),
                         unlocked(){
                                 return hasAMUpgrade(21) || hasAMUpgrade(22)
                         },
@@ -867,7 +867,7 @@ addLayer("am", {
                 23: {
                         title: "Waive", //wave
                         description: "Square antimatter gain and effect",
-                        cost: new Decimal(3000),
+                        cost: new Decimal(2000),
                         unlocked(){
                                 return hasAMUpgrade(22) || hasAMUpgrade(23)
                         },
@@ -1064,7 +1064,7 @@ addLayer("a", {
                 11: {
                         title: "Here", 
                         description: "Unlock two Antimatter Challenges",
-                        cost: new Decimal(5e5),
+                        cost: new Decimal(3e5),
                         unlocked(){
                                 return hasMilestone("a", 4) || hasUpgrade("s", 15)
                         },
@@ -1451,7 +1451,7 @@ addLayer("e", {
                 22:{
                         title: "Mined", 
                         description: "Each level of Incrementy Stamina boosts matter gain by 33%",
-                        cost: new Decimal(1e42),
+                        cost: new Decimal(1e41),
                         effect(){
                                 let exp = 1
                                 if (hasUpgrade("e", 34)) exp *= 2
@@ -1614,7 +1614,7 @@ addLayer("e", {
                 35:{
                         title: "Could", 
                         description: "Energy effects Neutrino gain",
-                        cost: new Decimal("1e426"),
+                        cost: new Decimal("1e435"),
                         effect(){
                                 return player.e.points.plus(10).log10().pow(.5)
                         },
@@ -1755,7 +1755,7 @@ addLayer("p", {
                 13:{
                         title: "Flea",
                         description: "Particles boost Neutrino gain",
-                        cost: new Decimal(11e5),
+                        cost: new Decimal(2e6),
                         effect(){
                                 return player.p.points.plus(10).log10()
                         },
@@ -3317,7 +3317,7 @@ addLayer("q", {
                         currencyLayer: "i",
                         goal(){
                                 let exp = layers.q.getChallGoalExp()
-                                return Decimal.pow(10, 7200).pow(exp)
+                                return Decimal.pow(10, 7125).pow(exp)
                         },
                 },
                 12: {
