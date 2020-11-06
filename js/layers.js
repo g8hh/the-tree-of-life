@@ -282,7 +282,7 @@ addLayer("i", {
                         if (hasUpgrade("b", 23)) mult *= 5
                         if (hasUpgrade("s", 55)) mult *= 10
                         if (hasUpgrade("sp", 45)) mult *= 10
-                        if (hasMilestone("a", 2)) {
+                        if (hasMilestone("a", 2) || hasUpgrade("pi", 32)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
                                 layers.i.buyables[13].buyMax(times * mult)
@@ -4567,7 +4567,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return true
+                                return !hasUpgrade("pi", 32)
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 11)
@@ -4601,7 +4601,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return true
+                                return !hasUpgrade("pi", 32)
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 12)
@@ -4637,7 +4637,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return true
+                                return !hasUpgrade("pi", 32)
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 21)
@@ -4668,7 +4668,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return true
+                                return !hasUpgrade("pi", 32)
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 22)
@@ -4982,7 +4982,7 @@ addLayer("sp", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasUpgrade("s", 55)
+                                return hasUpgrade("s", 55) && !hasUpgrade("pi", 32)
                         },
                 },
                 "Upgrades": {
