@@ -176,7 +176,7 @@ function doReset(layer, force=false) {
 		}
 	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
-		if (player[layer].times != undefined) player[layer].times ++
+		if (player[layer].times != undefined) player[layer].times += devSpeedUp ? 5 : 1
 	}
 
 	if (tmp[layer].resetsNothing) return

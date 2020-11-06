@@ -177,6 +177,7 @@ function getBChallengeTotal(){
 }
 
 var incGainFactor = new Decimal(1)
+var devSpeedUp = false
 
 // http://www.singularis.ltd.uk/bifroest/misc/homophones-list.html for list of homophones
 
@@ -201,7 +202,15 @@ addLayer("i", {
                 let pre = layers.i.getGainMultPre()
                 let exp = layers.i.getGainExp()
                 let pst = layers.i.getGainMultPost()
-                let ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
+                let ret = new Decimal(0)
+                if (!hasUpgrade("pi", 32)) {
+                        ret = pts.max(10).log10().times(pre).pow(exp).times(pst).minus(1)
+                } else {
+                        let exp2 = layers.i.getGainExp(true)
+                        ret1 = pts.max(10).log10().pow(exp2)
+                        ret2 = pre.pow(exp)
+                        ret = ret1.times(ret2).times(pst).minus(1)
+                }
                 ret = ret.times(incGainFactor).max(0)
 
                 if (inChallenge("am", 11)) ret = ret.root(10)
@@ -215,9 +224,9 @@ addLayer("i", {
 
                 return ret
         },
-        getGainExp(){
+        getGainExp(unsoftcapped){
                 let x = new Decimal(1)
-                x = x.times(getIBuyableEff(13))
+                x = x.times(getIBuyableEff(13, unsoftcapped))
                 return x
         },
         getGainMultPre(){
@@ -234,6 +243,8 @@ addLayer("i", {
                 x = x.times(getNBuyableEff(13))
                 if (hasUpgrade("g", 24))  x = x.times(upgradeEffect("g", 24))
                 if (hasUpgrade("sp", 41)) x = x.times(player.sp.points.plus(1))
+
+
                 return x
         },
         getGainMultPost(){
@@ -600,9 +611,10 @@ addLayer("i", {
                 13: {
                         title: "Incrementy Stamina",
                         display(){
-                                let eform = "1.05^x"
+                                let eformbase = format(layers.i.buyables[13].effectBase(), 3)
+                                let eform = eformbase + "^x"
                                 let scs = getIStaminaSoftcapStart()
-                                if (layers.i.buyables[13].total().gt(scs)) eform = "1.05^(sqrt(x*" + formatWhole(scs) + "))"
+                                if (layers.i.buyables[13].total().gt(scs)) eform = eformbase + "^(sqrt(x*" + formatWhole(scs) + "))"
 
 
                                 let start = "<b><h2>Amount</h2>: " + getIBuyableFormat(13) + "</b><br>"
@@ -631,11 +643,15 @@ addLayer("i", {
                                 if (!hasUpgrade("a", 14)) ret = ret.times(Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))))
                                 return ret.times(Decimal.pow(base1, Decimal.pow(base2, x)))
                         },
+                        effectBase(){
+                                let add = devSpeedUp ? .001 : 0
+                                return (hasUpgrade("pi", 32) ? 1.07 : 1.05) + add //need to stay less than 1.2**.4
+                        },
                         effect(){
                                 let x = layers.i.buyables[13].total()
                                 let scs = getIStaminaSoftcapStart()
-                                if (x.gt(scs)) x = x.div(scs).pow(.5).times(scs)
-                                let ret = Decimal.pow(1.05, x)
+                                if (!hasUpgrade("pi", 32) && x.gt(scs)) x = x.div(scs).pow(.5).times(scs)
+                                let ret = Decimal.pow(layers.i.buyables[13].effectBase(), x)
                                 if (inChallenge("b", 11)) return x.div(20).plus(1)
                                 return ret
                         },
@@ -684,20 +700,50 @@ addLayer("i", {
                         unlocked(){ return hasIUpg(14) },
                 },
         },
-        tabFormat: ["main-display",
-                ["display-text",
-                        function() {return hasIUpg(24) && !hasAMUpgrade(13) ? "Your best incrementy is " + format(player.i.best) : ""}],
-                ["display-text",
-                        function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
-                        {"font-size": "20px"}],
-                ["display-text", function () {return layers.i.nextUpgradeText()}],
-                ["display-text", function () {
-                        return player.i.best.plus(10).log10().plus(10).log10().gt(9) ? "You cannot buy Incrementy Buyables past 500,000 (400 for Stamina)!" : ""
-                }],
-                "blank",
-                "buyables", 
-                "blank", 
-                "upgrades"],
+        tabFormat: {
+                "Milestones": {
+                        content: ["main-display",
+                        ["display-text",
+                                function() {return hasIUpg(24) && !hasAMUpgrade(13) ? "Your best incrementy is " + format(player.i.best) : ""}],
+                        ["display-text",
+                                function() {return "You are gaining " + format(layers.i.getResetGain()) + " incrementy per second"},
+                                {"font-size": "20px"}],
+                        ["display-text", function () {return layers.i.nextUpgradeText()}],
+                        ["display-text", function () {
+                                return player.i.best.plus(10).log10().plus(10).log10().gt(9) ? "You cannot buy Incrementy Buyables past 500,000 (400 for Stamina)!" : ""
+                        }],
+                        "blank",
+                        "buyables", 
+                        "blank", 
+                        "upgrades"],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Details":{
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        return "The base Incrementy formula is log10(points), and is 0 below 10 points."
+                                }],
+                                ["display-text", function(){
+                                        return "This gets multiplied by things referencing base incrementy gain."
+                                }],
+                                ["display-text", function(){
+                                        return getBuyableAmount("i", 13).gt(0) ? "It is then raised to a power from Incrementy Stamina" : ""
+                                }],
+                                ["display-text", function(){
+                                        return "It is then multiplied by things referencing Incrementy Gain"
+                                }],
+                                ["display-text", function(){
+                                        return hasUpgrade("pi", 32) ? "The buffed formula makes the point to Incrementy synergy uncapped, but Stamina does not boost base Incrementy gain anymore" : ""
+                                }],
+                        ],
+                        unlocked(){
+                                return layers.am.layerShown() || hasUpgrade("pi", 32)
+                        },
+                },
+        },
         doReset(layer){
                 if (false) console.log(layer)
                 if (layers[layer].row <= 0) return
@@ -797,9 +843,16 @@ addLayer("am", {
                 return start + nextAt
         },
         canReset(){
-                return layers.am.getResetGain().gt(0)
+                return layers.am.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasAMUpgrade(21)
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.am.points = new Decimal(0)
+                        player.am.best = new Decimal(0)
+                        player.am.upgrades = []
+                        player.am.challenges = {}
+                        return
+                }
                 if (!player.am.best) player.am.best = new Decimal(0)
                 player.am.best = player.am.best.max(player.am.points)
                 if (hasAMUpgrade(21)) player.am.points = player.am.points.plus(layers.am.getResetGain().times(diff))
@@ -808,7 +861,10 @@ addLayer("am", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         upgrades: {
                 rows: 2,
                 cols: 5,
@@ -1017,9 +1073,16 @@ addLayer("a", {
                 return start + nextAt
         },
         canReset(){
-                return layers.a.getResetGain().gt(0)
+                return layers.a.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasMilestone("a", 3)
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.a.points = new Decimal(0)
+                        player.a.best = new Decimal(0)
+                        player.a.milestones = []
+                        player.a.upgrades = []
+                        return
+                }
                 if (!player.a.best) player.a.best = new Decimal(0)
                 player.a.best = player.a.best.max(player.a.points)
                 if (hasMilestone("a", 3)) player.a.points = player.a.points.plus(layers.a.getResetGain().times(diff))
@@ -1028,34 +1091,37 @@ addLayer("a", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         milestones:{
                 1: {
                         requirementDescription: "<b>Right</b><br>Requires: 2 Amoebas", 
                         effectDescription: "You keep antimatter upgrades upon reset",
                         done(){
-                                return player.a.best.gte(2)
+                                return player.a.best.gte(2) && !hasUpgrade("pi", 32)
                         },
                 },
                 2: {
                         requirementDescription: "<b>Rite</b><br>Requires: 5 Amoebas", 
                         effectDescription: "Once per second buy one of each Incrementy buyable",
                         done(){
-                                return player.a.best.gte(5)
+                                return player.a.best.gte(5) && !hasUpgrade("pi", 32)
                         },
                 },
                 3: {
                         requirementDescription: "<b>Wright</b><br>Requires: 20 Amoebas", 
                         effectDescription: "Remove the ability to prestige, but gain 100% of amoebas on prestige per second",
                         done(){
-                                return player.a.best.gte(20)
+                                return player.a.best.gte(20) && !hasUpgrade("pi", 32)
                         },
                 },
                 4: {
                         requirementDescription: "<b>Write</b><br>Requires: 5,000 Amoebas", 
                         effectDescription: "<b>Rite</b> buys 1000, and unlock Amoeba upgrades and Wave",
                         done(){
-                                return player.a.best.gte(5e3)
+                                return player.a.best.gte(5e3) && !hasUpgrade("pi", 32)
                         },
                 },
         },
@@ -1254,9 +1320,16 @@ addLayer("m", {
                 return start + nextAt
         },
         canReset(){
-                return layers.m.getResetGain().gt(0) && hasChallenge("am", 12)
+                return layers.m.getResetGain().gt(0) && hasChallenge("am", 12) && !hasUpgrade("e", 14) && !hasUpgrade("pi", 32)
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.m.points = new Decimal(0)
+                        player.m.best = new Decimal(0)
+                        player.m.milestones = []
+                        player.m.challenges = {}
+                        return
+                }
                 if (hasUpgrade("e", 14)) player.m.points = player.m.points.plus(layers.m.getResetGain().times(diff))
                 if (!player.m.best) player.m.best = new Decimal(0)
                 player.m.best = player.m.best.max(player.m.points)
@@ -1265,14 +1338,17 @@ addLayer("m", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         milestones:{
                 1: {
                         requirementDescription: "<b>Rain</b><br>Requires: 1 Matter", 
                         //rain, reign, rein
                         effectDescription: "Unlock Energy",
                         done(){
-                                return player.m.points.gte(1)
+                                return player.m.points.gte(1) && !hasUpgrade("pi", 32)
                         },
                 },
                 2: {
@@ -1280,7 +1356,7 @@ addLayer("m", {
                         //rain, reign, rein
                         effectDescription: "Severly buff matter effect",
                         done(){
-                                return player.m.points.gte(1000)
+                                return player.m.points.gte(1000) && !hasUpgrade("pi", 32)
                         },
                 },
                 3: {
@@ -1288,7 +1364,7 @@ addLayer("m", {
                         //rain, reign, rein
                         effectDescription: "Unlock new Energy upgrades",
                         done(){
-                                return player.m.points.gte(5e4)
+                                return player.m.points.gte(5e4) && !hasUpgrade("pi", 32)
                         },
                 },
         },
@@ -1382,6 +1458,12 @@ addLayer("e", {
                 return false
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.e.points = new Decimal(0)
+                        player.e.best = new Decimal(0)
+                        player.e.upgrades = []
+                        return
+                }
                 player.e.points = player.e.points.plus(layers.e.getResetGain().times(diff))
 
                 if (!player.e.best) player.e.best = new Decimal(0)
@@ -1391,7 +1473,10 @@ addLayer("e", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         upgrades:{
                 rows: 5,
                 cols: 5,
@@ -2993,6 +3078,12 @@ addLayer("g", {
                 return false
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.g.points = new Decimal(0)
+                        player.g.best = new Decimal(0)
+                        player.g.upgrades = []
+                        return
+                }
                 let gain = layers.g.getResetGain()
                 player.g.points = player.g.points.plus(gain.times(diff))
 
@@ -3233,7 +3324,10 @@ addLayer("g", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.g.getResetGain()) + " Gluons per second (based on particles)"}],
                 "blank",
@@ -3298,6 +3392,12 @@ addLayer("q", {
                 return false
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.q.points = new Decimal(0)
+                        player.q.best = new Decimal(0)
+                        player.q.upgrades = []
+                        return
+                }
                 let gain = layers.q.getResetGain()
                 player.q.points = player.q.points.plus(gain.times(diff))
 
@@ -3372,7 +3472,10 @@ addLayer("q", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.q.getResetGain()) + " Quarks per second (based on particles)"}],
                 ["display-text", function(){return "Your Quark amount raises Quark challenge goals to the power of " + format(layers.q.getChallGoalExp(), 4)}],
@@ -3416,6 +3519,7 @@ addLayer("s", {
                 if (amt.eq(0) && player.s.best.plus(player.sp.best).gte(1)) amt = new Decimal(1)
                 if (amt.lt(9)) return Decimal.pow(1e4, amt.root(3))
                 let ret = amt.pow(10)
+                //if (ret.gt("ee5000")) ret = Decimal.pow(10, Decimal.pow(10, ret.log10().log10().div(5).plus(4000)))
                 return ret
         },
         effectDescription(){
@@ -3743,6 +3847,7 @@ addLayer("b", {
                 } else if (hasUpgrade("b", 13)) {
                         if (ret.gt(20)) ret = ret.times(5).log10().pow(4).times(1.25)
                 } else if (ret.gt(10)) ret = ret.log10().times(10)
+
                 return ret
         },
         effectDescription(){
@@ -3789,6 +3894,13 @@ addLayer("b", {
                 return false
         },
         update(diff){
+                if (hasUpgrade("pi", 32)) {
+                        player.b.points = new Decimal(0)
+                        player.b.best = new Decimal(0)
+                        player.b.tokens = new Decimal(0)
+                        player.b.upgrades = []
+                        return 
+                }
                 if (!player.s.best) player.b.best = new Decimal(0)
                 player.b.best = player.b.best.max(player.b.points)
                 player.b.points = player.b.points.plus(layers.b.getResetGain().times(diff))
@@ -3809,6 +3921,7 @@ addLayer("b", {
                 ret = ret.times(Decimal.pow(3, challengeCompletions("b", 22)))
 
                 if (hasMilestone("sp", 3)) ret = ret.pow(1.1).times(10)
+                if (devSpeedUp) ret = ret.pow(1.1).times(10)
                 return ret
         },
         challenges:{
@@ -3928,6 +4041,7 @@ addLayer("b", {
                                 if (comps >= 7) base += -92.4e3
                                 if (comps >= 8) base += -125.4e3
                                 if (comps >= 9) base += -59.4e3
+                                if (devSpeedUp) base = Math.floor(base ** .995)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -3968,6 +4082,7 @@ addLayer("b", {
                                 if (comps >= 7) base += -164e3
                                 if (comps >= 8) base += -144e3
                                 if (comps >= 9) base += -211e3
+                                if (devSpeedUp) base = Math.floor(base ** .995)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -4159,7 +4274,10 @@ addLayer("b", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0)},
+        layerShown(){
+                let a = player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0)
+                return a && !hasUpgrade("pi", 32)
+        },
         tabFormat: {
                 "Challenges": {
                         content: [
@@ -4226,7 +4344,6 @@ addLayer("sp", {
 		points: new Decimal(0),
                 best: new Decimal(0),
                 total: new Decimal(0),
-                tokens: new Decimal(0),
                 times: 0,
                 chall1points: new Decimal(0),
                 chall2points: new Decimal(0),
@@ -4246,22 +4363,26 @@ addLayer("sp", {
                 if (amt.gt(20)) amt = amt.times(5).log10().times(10)
                 if (amt.gt(40)) amt = amt.div(40).root(3).times(40)
                 if (amt.gt(100)) amt = amt.log10().times(50)
+                if (amt.gt(5e4)) amt = new Decimal(5e4)
                 if (forceSet != undefined) return amt
                 let a1 = amt.floor()
 
                 let a2 = amt.times(10).max(1).pow(2)
+                if (devSpeedUp) a2 = a2.times(10)
                 return [a1, a2]
         },
         effectDescription(){
                 let eff = layers.sp.effect()
-                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " (next at "
+                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff[0]) + " ("
                 let c = eff[0].plus(1)
                 if (c.gt(100)) c = Decimal.pow(10, c.div(50))
                 if (c.gt(40))  c = c.div(40).pow(3).times(40)
                 if (c.gt(20))  c = Decimal.pow(10, c.div(10)).div(5)
                 if (c.gt(10))  c = c.div(10).pow(2).times(10)
+                let mid = "next at " + formatWhole(c.ceil())
+                if (eff[0].plus(1).gt(5e4)) mid = "hardcapped"
                 let b = ") and all previous prestige resources by " + format(eff[1]) + " (based on best Super Prestige Points)."
-                return a + formatWhole(c.ceil()) + b
+                return a + mid + b
         },
         getResetGain() {
                 let amt = layers.sp.baseAmount()
@@ -4270,6 +4391,8 @@ addLayer("sp", {
                 let pst = layers.sp.getGainMultPost()
                 
                 let ret = amt.div(1e64).max(1).log10().times(pre).pow(exp).times(pst)
+
+                if (ret.gt("ee1000")) ret = Decimal.pow(10, Decimal.pow(10, ret.log10().log10().div(1000).pow(.999).times(1000)))
 
                 return ret.floor()
         },
@@ -4282,6 +4405,7 @@ addLayer("sp", {
         },
         getGainMultPre(){
                 let x = new Decimal(1)
+                if (devSpeedUp) x = x.times(Decimal.pow(1.5, Math.sqrt(player.sp.upgrades.length + 1)))
                 return x
         },
         getGainMultPost(){
@@ -4575,7 +4699,7 @@ addLayer("sp", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(365)
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360)
                         },
                 }, 
                 12: {
@@ -4941,10 +5065,13 @@ addLayer("pi", {
                 
                 let ret = amt.div(5e132).max(1).log10().times(pre).pow(exp).times(pst)
 
+                if (ret.gt(1e100)) ret = ret.log10().pow(50)
+
                 return ret.floor()
         },
         getGainExp(){
                 let x = new Decimal(.2339)
+                if (devSpeedUp) x = new Decimal(.25)
                 if (hasUpgrade("pi", 14)) x = x.times(2)
                 return x
         },
@@ -5003,14 +5130,14 @@ addLayer("pi", {
                         },
                 },
                 4: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
-                        requirementDescription: "<b>idk</b><br>Requires: 24 Pions in one reset", 
+                        requirementDescription: "<b>Mantel</b><br>Requires: 24 Pions in one reset", 
                         effectDescription: "Make pion effect based on pions",
                         done(){
                                 return player.pi.bestOnce.gte(24)
                         },
                 },
                 5: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
-                        requirementDescription: "<b>idk</b><br>Requires: 120 Pions in one reset", 
+                        requirementDescription: "<b>Mantle</b><br>Requires: 120 Pions in one reset", 
                         effectDescription: "You gain 100% of your pions on reset per second, and your best Pions per reset is likewise updated",
                         done(){
                                 return player.pi.bestOnce.gte(120)
@@ -5056,7 +5183,7 @@ addLayer("pi", {
                         }
                 },
                 21: {
-                        title: "idk1",
+                        title: "Feat",
                         description: "Each Pion upgrade multiplies Super Prestige Point gain by Pions",
                         cost: new Decimal(100),
                         unlocked(){
@@ -5064,7 +5191,7 @@ addLayer("pi", {
                         }
                 },
                 22: {
-                        title: "idk1",
+                        title: "Feet",
                         description: "Each Pion upgrade multiplies Shards multiply Amoeba gain and multiply Pion gain by 1.8",
                         cost: new Decimal(120),
                         unlocked(){
@@ -5072,7 +5199,7 @@ addLayer("pi", {
                         }
                 },
                 23: {
-                        title: "idk2",
+                        title: "Levee",
                         description: "Each Pion milestone raises Jewel effect to the .8",
                         cost: new Decimal(200),
                         unlocked(){
@@ -5080,7 +5207,7 @@ addLayer("pi", {
                         }
                 },
                 24: {
-                        title: "idk2",
+                        title: "Levy",
                         description: "The square root of pion upgrades multiplies pion gain",
                         cost: new Decimal(200),
                         unlocked(){
@@ -5088,11 +5215,27 @@ addLayer("pi", {
                         }
                 },
                 31: {
-                        title: "idk3",
+                        title: "Scene",
                         description: "Neutrino autobuyers can buy 2x more",
                         cost: new Decimal(500),
                         unlocked(){
                                 return hasUpgrade("pi", 24)
+                        }
+                },
+                32: {
+                        title: "Seen",
+                        description: "You can no long access or gain AM, A, E, M, Q, B or G but vastly buff the Incrementy gain formula",
+                        cost: new Decimal(1e4),
+                        unlocked(){
+                                return hasUpgrade("pi", 31)
+                        }
+                },
+                33: {
+                        title: "Steak", //stake
+                        description: "do something [this is the last upgrade, will cost 1e155]",
+                        cost: new Decimal(1e255),
+                        unlocked(){
+                                return hasUpgrade("pi", 32)
                         }
                 },
         },
