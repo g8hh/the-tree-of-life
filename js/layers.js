@@ -1004,6 +1004,7 @@ addLayer("a", {
                 if (hasUpgrade("s", 12)) x = x.times(100)
                 x = x.times(player.q.points.max(10).log10().pow(layers.b.challenges[21].rewardEffect()))
                 x = x.times(layers.sp.effect()[1])
+                if (hasUpgrade("pi", 22)) x = x.times(Decimal.pow(player.s.points.plus(1), player.pi.upgrades.length))
                 return x
         },
         prestigeButtonText(){
@@ -2228,6 +2229,7 @@ addLayer("n", {
                         times *= -1
                         if (hasUpgrade("s", 23)) times *= 10
                         if (hasUpgrade("s", 41)) times *= 10
+                        if (hasUpgrade("pi", 31)) times *= 2
                         
                         if (hasUpgrade("s", 14)) {
                                 layers.n.buyables[11].buyMax(times)
@@ -4308,6 +4310,7 @@ addLayer("sp", {
                 }
                 if (hasUpgrade("pi", 12)) x = x.times(upgradeEffect("pi", 12))
                 if (hasMilestone("pi", 3)) x = x.times(Decimal.pow(2, player.pi.upgrades.length ** 2))
+                if (hasUpgrade("pi", 21)) x = x.times(Decimal.pow(player.pi.points.plus(1), player.pi.upgrades.length))
                 return x
         },
         prestigeButtonText(){
@@ -4500,6 +4503,7 @@ addLayer("sp", {
                                 let ret = Decimal.minus(Decimal.div(1, effpts.plus(10).log10()), 1).times(-1)
 
                                 if (hasUpgrade("sp", 42)) ret = ret.sqrt()
+                                if (hasUpgrade("pi", 23)) ret = ret.pow(Decimal.pow(.8, player.pi.milestones.length))
                                 return ret
                         },
                         rewardDisplay(){
@@ -4900,13 +4904,34 @@ addLayer("pi", {
         branches: ["sp"],
         type: "custom", 
         effect(){
-                return player.pi.bestOnce.times(2).sqrt().floor()
+                let amt = player.pi.bestOnce
+                if (hasMilestone("pi", 4)) amt = amt.max(player.pi.points)
+                let ret = amt.times(2).sqrt().floor()
+                
+                if (ret.gt(10)) ret = ret.log10().times(10)
+                if (ret.gt(50)) ret = ret.times(2).log10().times(25)
+
+                return ret.floor()
         },
         effectDescription(){
                 let eff = layers.pi.effect()
-                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff) + " "
-                let b = "(based on your best Pions in one reset)."
-                return a + b
+                let a = "which increases the Incrementy Stamina softcap by " + formatWhole(eff)
+                let b = ""
+                if (!hasMilestone("pi", 4)) b = " (based on your best Pions in one reset)"
+                let c = " (next at " 
+                /*
+                let ret = amt.times(2).sqrt().floor()
+                
+                if (ret.gt(10)) ret = ret.log10().times(10)
+                if (ret.gt(50)) ret = ret.times(2).log10().times(25)
+                */
+                let r = eff.plus(1)
+                if (r.gt(50)) r = Decimal.pow(10, r.div(25)).div(2)
+                if (r.gt(10)) r = Decimal.pow(10, r.div(10))
+                r = r.pow(2).div(2)
+                r = r.ceil()
+
+                return a + b + c + formatWhole(r) + ")."
         },
         getResetGain() {
                 let amt = layers.pi.baseAmount()
@@ -4929,6 +4954,8 @@ addLayer("pi", {
         },
         getGainMultPost(){
                 let x = new Decimal(1)
+                if (hasUpgrade("pi", 22)) x = x.times(1.8)
+                if (hasUpgrade("pi", 24)) x = x.times(Decimal.sqrt(player.pi.upgrades.length).max(1))
                 return x
         },
         prestigeButtonText(){
@@ -4942,12 +4969,16 @@ addLayer("pi", {
                 return start + nextAt
         },
         canReset(){
-                return layers.pi.getResetGain().gt(0) && true
+                return layers.pi.getResetGain().gt(0) && !hasMilestone("pi", 5)
         },
         update(diff){
                 player.pi.best = player.pi.best.max(player.pi.points)
 
-                if (false) player.pi.points = player.pi.points.plus(layers.pi.getResetGain().times(diff))
+                if (hasMilestone("pi", 5)) {
+                        let x = layers.pi.getResetGain()
+                        player.pi.points = player.pi.points.plus(x.times(diff))
+                        player.pi.bestOnce = player.pi.bestOnce.max(x)
+                }
         },
         milestones: {
                 1: {
@@ -4969,6 +5000,20 @@ addLayer("pi", {
                         effectDescription: "Double Super Prestige Point gain per Pion upgrade squared",
                         done(){
                                 return player.pi.bestOnce.gte(6)
+                        },
+                },
+                4: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
+                        requirementDescription: "<b>idk</b><br>Requires: 24 Pions in one reset", 
+                        effectDescription: "Make pion effect based on pions",
+                        done(){
+                                return player.pi.bestOnce.gte(24)
+                        },
+                },
+                5: { //2^^^2 = 2^^(2^^2) = 2^^(2^2) = 2^^4 = 2^2^2^2 = 2^2^4 = 2^16 = 65536
+                        requirementDescription: "<b>idk</b><br>Requires: 120 Pions in one reset", 
+                        effectDescription: "You gain 100% of your pions on reset per second, and your best Pions per reset is likewise updated",
+                        done(){
+                                return player.pi.bestOnce.gte(120)
                         },
                 },
         },
@@ -5010,17 +5055,61 @@ addLayer("pi", {
                                 return hasUpgrade("pi", 13)
                         }
                 },
+                21: {
+                        title: "idk1",
+                        description: "Each Pion upgrade multiplies Super Prestige Point gain by Pions",
+                        cost: new Decimal(100),
+                        unlocked(){
+                                return hasUpgrade("pi", 14)
+                        }
+                },
+                22: {
+                        title: "idk1",
+                        description: "Each Pion upgrade multiplies Shards multiply Amoeba gain and multiply Pion gain by 1.8",
+                        cost: new Decimal(120),
+                        unlocked(){
+                                return hasUpgrade("pi", 21)
+                        }
+                },
+                23: {
+                        title: "idk2",
+                        description: "Each Pion milestone raises Jewel effect to the .8",
+                        cost: new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("pi", 22)
+                        }
+                },
+                24: {
+                        title: "idk2",
+                        description: "The square root of pion upgrades multiplies pion gain",
+                        cost: new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("pi", 23)
+                        }
+                },
+                31: {
+                        title: "idk3",
+                        description: "Neutrino autobuyers can buy 2x more",
+                        cost: new Decimal(500),
+                        unlocked(){
+                                return hasUpgrade("pi", 24)
+                        }
+                },
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.sp.best.gt(1e133) || player.pi.best.gt(0)},
+        layerShown(){return player.sp.best.gt(1e132) || player.pi.best.gt(0)},
         tabFormat: {
                 "Milestones": {
                         content: [
                                 "main-display",
-                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return hasMilestone("pi", 5) ? {'display': 'none'} : {}}],
+                                ["display-text", function(){
+                                        if (!hasMilestone("pi", 5)) return ""
+                                        return "You are gaining " + format(layers.pi.getResetGain()) + " Pions per second"
+                                }],
                                 "milestones",
                         ],
                         unlocked(){
