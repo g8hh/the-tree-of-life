@@ -266,6 +266,7 @@ addLayer("i", {
 
                         x = x.pow(Decimal.pow(1.2, a))
                 }
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -282,7 +283,7 @@ addLayer("i", {
                 x = x.times(getNBuyableEff(13))
                 if (hasUpgrade("g", 24))  x = x.times(upgradeEffect("g", 24))
                 if (hasUpgrade("sp", 41)) x = x.times(player.sp.points.plus(1))
-
+                x = x.times(layers.o.effect())
 
                 return x
         },
@@ -302,7 +303,6 @@ addLayer("i", {
                 x = x.times(layers.s.effect())
                 x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
                 x = x.times(layers.sp.effect()[1])
-                x = x.times(layers.o.effect())
                 return x
         },
         update(diff){
@@ -855,6 +855,7 @@ addLayer("am", {
         getGainExp(){
                 let x = new Decimal(.5)
                 if (hasAMUpgrade(23)) x = x.times(2)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -1090,12 +1091,18 @@ addLayer("a", {
         },
         getResetGain() {
                 let amt = layers.a.baseAmount()
+                let exp = layers.a.getGainExp()
                 if (amt.lt(Decimal.pow(10, 417))) return new Decimal(0)
                 //10^(sqrt(log(inc)-17)/2-10)
-                let exp = amt.log10().minus(17).sqrt().div(2).minus(10)
-                if (exp.lt(0)) return new Decimal(0)
-                let ret = Decimal.pow(10, exp).times(layers.a.getGainMult()).floor()
+                let gainexp = amt.log10().minus(17).pow(exp).div(2).minus(10)
+                if (gainexp.lt(0)) return new Decimal(0)
+                let ret = Decimal.pow(10, gainexp).times(layers.a.getGainMult()).floor()
                 return ret
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -1338,7 +1345,13 @@ addLayer("m", {
         getResetGain() {
                 let amt = layers.m.baseAmount().max(1)
                 let mlt = layers.m.getGainMult()
-                return amt.root(1170).minus(9).times(mlt).max(0).floor()
+                let exp = layers.m.getGainExp()
+                return amt.pow(exp).minus(9).times(mlt).max(0).floor()
+        },
+        getGainExp(){
+                let x = new Decimal(1/1170)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -1431,7 +1444,7 @@ addLayer("m", {
                         unlocked(){
                                 return hasAUpgrade(12) || hasUpgrade("s", 14)
                         },
-                        goal: new Decimal("1e410"),
+                        goal: new Decimal("1e456"),
                         currencyInternalName: "points",
                 },
         },
@@ -1484,14 +1497,20 @@ addLayer("e", {
         type: "custom", 
         getResetGain() {
                 let amt = layers.e.baseAmount()
+                let exp = layers.e.getGainExp()
                 let mlt = layers.e.getGainMult()
-                return amt.times(mlt)
+                return amt.pow(exp).times(mlt)
         },
         getGainMult(){
                 let x = new Decimal(1)
                 if (hasUpgrade("e", 11)) x = x.times(getEUpgEff(11))
                 x = x.times(getNBuyableEff(23))
                 x = x.times(layers.sp.effect()[1])
+                return x
+        },
+        getGainExp(){
+                let x = new Decimal(1)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         prestigeButtonText(){
@@ -1809,12 +1828,19 @@ addLayer("p", {
         type: "custom", 
         getResetGain() {
                 let amt = layers.p.baseAmount()
+                let exp = layers.p.getGainExp()
                 let log = amt.max(10).log10().div(18.36)
-                let ret = log.sqrt().div(25)
+                let ret = log.pow(exp).div(25)
+
                 let add = new Decimal(hasUpgrade("s", 21) ? 1 : 0)
                 if (hasUpgrade("s", 54)) add = add.max(1000)
                 if (ret.lt(1)) return new Decimal(0).plus(add)
                 return ret.plus(add).times(layers.p.getGainMult())
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -2396,7 +2422,8 @@ addLayer("n", {
         getResetGain() {
                 if (!hasUpgrade("p", 11)) return new Decimal(0)
                 let amt = layers.n.baseAmount()
-                let base = amt.div(60).sqrt()
+                let exp = layers.n.getGainExp()
+                let base = amt.div(60).pow(exp)
                 if (base.gt(1e10)) base = base.log10().pow(10)
                 if (hasUpgrade("p", 53)) base = base.pow(Decimal.pow(2, player.p.upgrades.length))
                 let ret = base.times(layers.n.getGainMult())
@@ -2404,6 +2431,11 @@ addLayer("n", {
                 if (inChallenge("sp", 12)) ret = ret.root(100)
 
                 return ret
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -2421,6 +2453,7 @@ addLayer("n", {
                 if (hasUpgrade("s", 12)) x = x.times(Math.max(player.s.upgrades.length, 1))
                 if (hasUpgrade("p", 34)) x = x.times(1000)
                 x = x.times(layers.sp.effect()[1])
+                x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -3192,11 +3225,17 @@ addLayer("g", {
         getResetGain() {
                 if (!hasUpgrade("p", 21)) return new Decimal(0)
                 let amt = layers.g.baseAmount()
-                let base = amt.div(3.5e34).sqrt()
+                let exp = layers.g.getGainExp()
+                let base = amt.div(3.5e34).pow(exp)
                 if (base.lt(1)) return new Decimal(0)
                 base = base.minus(1)
                 if (base.lt(1)) base = base.sqrt()
                 return base.times(layers.g.getGainMult())
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -3499,11 +3538,17 @@ addLayer("q", {
         getResetGain() {
                 if (!hasUpgrade("p", 31)) return new Decimal(0)
                 let amt = layers.q.baseAmount()
-                let base = amt.div(1.5e198).sqrt()
+                let exp = layers.q.getGainExp()
+                let base = amt.div(1.5e198).pow(exp)
                 if (base.lt(1)) return new Decimal(0)
                 base = base.minus(1)
                 if (base.lt(1)) base = base.cbrt()
                 return base.times(layers.q.getGainMult())
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
+                return x
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -3674,6 +3719,7 @@ addLayer("s", {
                 let x = new Decimal(.5)
                 if (hasUpgrade("s", 33)) x = x.times(3)
                 if (hasUpgrade("s", 43)) x = x.times(3)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -4000,6 +4046,7 @@ addLayer("b", {
         getGainExp(){
                 let x = new Decimal(1.5)
                 if (hasUpgrade("b", 14)) x = x.times(Decimal.pow(getBChallengeTotal(), .5).max(1))
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -4535,6 +4582,7 @@ addLayer("sp", {
                 if (hasUpgrade("s", 42)) x = x.times(3)
                 if (hasUpgrade("s", 53)) x = x.times(2)
                 if (hasUpgrade("sp", 35)) x = x.times(1.01)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -5262,6 +5310,7 @@ addLayer("pi", {
                 let x = new Decimal(.2339)
                 if (devSpeedUp) x = new Decimal(.25)
                 if (hasUpgrade("pi", 14)) x = x.times(2)
+                if (hasUpgrade("o", 12)) x = x.times(1.001)
                 return x
         },
         getGainMultPre(){
@@ -5541,7 +5590,7 @@ addLayer("o", {
         },
         effectDescription(){
                 let eff = layers.o.effect()
-                let a = "which increases Incrementy gain by " + format(eff)
+                let a = "which increases Base Incrementy and Neutrino gain by " + format(eff)
 
                 return a + "."
         },
@@ -5573,7 +5622,7 @@ addLayer("o", {
                 let pre = layers.o.getGainMultPre()
                 let exp = layers.o.getGainExp()
                 let pst = layers.o.getGainMultPost()
-                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).plus(4).root(exp).div(pre).times(1000))) + " Super Prestige Points"
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).plus(4).root(exp).div(pre).times(1000))) + " Pions"
                 if (gain.gt(1e6)) nextAt = ""
                 return start + nextAt
         },
@@ -5652,6 +5701,14 @@ addLayer("o", {
                         cost: new Decimal(1),
                         unlocked(){
                                 return true
+                        }
+                },
+                12: {
+                        title: "Douglas",
+                        description: "Multiply all high row prestige resource gain exponents by 1.001",
+                        cost: new Decimal(1),
+                        unlocked(){
+                                return hasUpgrade("o", 11)
                         }
                 },
         },
