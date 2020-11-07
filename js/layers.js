@@ -130,6 +130,8 @@ function getIStaminaSoftcapStart(){
         ret += layers.pi.effect().toNumber()
         if (hasMilestone("pi", 1)) ret += 2 * player.pi.milestones.length
         if (hasUpgrade("pi", 13)) ret += player.pi.upgrades.length
+        if (hasUpgrade("sp", 54)) ret += 69
+        if (hasUpgrade("sp", 54)) ret += 5
         return ret
 }
 
@@ -196,6 +198,7 @@ function getStaminaMaximumAmount(){
                 if (hasUpgrade("p", 54)) a += 4
                 if (hasUpgrade("p", 55)) a += 4
         }
+        if (hasUpgrade("sp", 53)) a += 3 * player.sp.upgrades.length
 
         return a
 }
@@ -253,6 +256,15 @@ addLayer("i", {
                 x = x.times(getIBuyableEff(13, unsoftcapped))
                 if (hasUpgrade("pi", 34)) x = x.pow(Decimal.pow(1.1, player.pi.upgrades.length))
                 if (hasUpgrade("p", 42)) x = x.pow(Decimal.pow(1.0001, player.p.upgrades.length ** 2))
+                if (hasUpgrade("sp", 51)) {
+                        let a = 1
+                        if (hasUpgrade("sp", 52)) a ++
+                        if (hasUpgrade("sp", 53)) a ++
+                        if (hasUpgrade("sp", 54)) a ++
+                        if (hasUpgrade("sp", 55)) a ++
+
+                        x = x.pow(Decimal.pow(1.2, a))
+                }
                 return x
         },
         getGainMultPre(){
@@ -729,7 +741,7 @@ addLayer("i", {
                 },
         },
         tabFormat: {
-                "Milestones": {
+                "Main": {
                         content: ["main-display",
                         ["display-text",
                                 function() {return hasIUpg(24) && !hasAMUpgrade(13) ? "Your best incrementy is " + format(player.i.best) : ""}],
@@ -2429,6 +2441,7 @@ addLayer("n", {
                         if (hasUpgrade("s", 23)) times *= 10
                         if (hasUpgrade("s", 41)) times *= 10
                         if (hasUpgrade("pi", 31)) times *= 2
+                        if (hasUpgrade("sp", 52)) times *= 50
                         
                         if (hasUpgrade("s", 14)) {
                                 layers.n.buyables[11].buyMax(times)
@@ -5041,7 +5054,47 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 35)
                         },
-                }, //next at ee18200
+                },
+                51: {
+                        title: "idk1",
+                        description: "Each Super Prestige upgrade in this row raises Incrementy gain to the 1.2",
+                        cost: new Decimal("ee18200"),
+                        unlocked(){
+                                return hasUpgrade("p", 55)
+                        },
+                },
+                52: {
+                        title: "idk1",
+                        description: "Neutrino Autobuyers buy 50x more",
+                        cost: new Decimal("ee21300"),
+                        unlocked(){
+                                return hasUpgrade("sp", 51)
+                        },
+                },
+                53: {
+                        title: "idk2",
+                        description: "Add 3 to the limit of Incrementy Stamina per Super Prestige upgrade",
+                        cost: new Decimal("ee24900"),
+                        unlocked(){
+                                return hasUpgrade("sp", 52)
+                        },
+                }, 
+                54: {
+                        title: "idk2",
+                        description: "Add 69 to the Incrementy Stamina Softcap Start",
+                        cost: new Decimal("ee32450"),
+                        unlocked(){
+                                return hasUpgrade("sp", 53)
+                        },
+                }, //next at ee38000
+                55: {
+                        title: "Quixotic",
+                        description: "Add 5 to the Incrementy Stamina limit",
+                        cost: new Decimal("ee38000"),
+                        unlocked(){
+                                return hasUpgrade("sp", 54)
+                        },
+                }, //next at ee38000
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -5386,7 +5439,7 @@ addLayer("pi", {
                         unlocked(){
                                 return hasUpgrade("pi", 41)
                         }
-                },
+                }, //e20800 pions next
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
