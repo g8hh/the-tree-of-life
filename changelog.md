@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.2.1 - 11/7/20
+- Possibly fixed issues with things not updating visually.
+
 ## v2.2: Uprooted - 11/7/20
 - You can now embed a layer inside of a subtab or microtab!
 - Added support for hiding or reformatting the tree tab 
@@ -9,6 +12,7 @@
 - Upgrades now only show "currently" if they have an effectDisplay (so not for constant effects).
 - Achievements are part of the default tab format.
 - NaN is now handled more intelligently.
+- Renamed files, and moved less relevant ones to another folder.
 - The "hide completed challenges" setting now only hides challenges at max completions.
 - Thank you to thepaperpilot for fixing errors in docs and improving the infobox appearance!
 - Many other minor fixes.

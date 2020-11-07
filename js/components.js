@@ -424,6 +424,12 @@ function loadVue() {
 			startChallenge,
 			milestoneShown,
 			keepGoing,
+			hasUpgrade,
+			hasMilestone,
+			hasAchievement,
+			hasChallenge,
+			maxedChallenge,
+			canAffordUpgrade,
 			VERSION,
 			LAYERS,
 			hotkeys
