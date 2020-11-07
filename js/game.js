@@ -4,8 +4,8 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.1.3.1",
-	tmtName: "We should have thought of this sooner!"
+	tmtNum: "2.2",
+	tmtName: "Uprooted"
 }
 
 function getResetGain(layer, useType = null) {

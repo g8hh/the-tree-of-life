@@ -1,5 +1,6 @@
 # The Modding Tree changelog:
 
+## v2.2: Uprooted - 11/7/20
 - You can now embed a layer inside of a subtab or microtab!
 - Added support for hiding the tree tab (although some aspects are still lazy and WIP)
 - Added shouldNotify to subtab/microtab buttons. (You can make them highlighted)
