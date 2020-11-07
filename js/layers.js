@@ -180,6 +180,22 @@ function getStaminaMaximumAmount(){
         let a = 400
 
         if (hasUpgrade("pi", 33)) a += Math.max(0, player.pi.upgrades.length - 10) * 10
+        if (hasUpgrade("p", 41)) {
+                a += 2
+                if (hasUpgrade("p", 42)) a += 2
+                if (hasUpgrade("p", 43)) a += 2
+                if (hasUpgrade("p", 44)) a += 2
+                if (hasUpgrade("p", 45)) a += 2
+        }
+        if (hasUpgrade("p", 44)) a += 5
+        if (hasUpgrade("p", 45)) a += 5
+        if (hasUpgrade("p", 51)) {
+                a += 4
+                if (hasUpgrade("p", 52)) a += 4
+                if (hasUpgrade("p", 53)) a += 4
+                if (hasUpgrade("p", 54)) a += 4
+                if (hasUpgrade("p", 55)) a += 4
+        }
 
         return a
 }
@@ -236,6 +252,7 @@ addLayer("i", {
                 let x = new Decimal(1)
                 x = x.times(getIBuyableEff(13, unsoftcapped))
                 if (hasUpgrade("pi", 34)) x = x.pow(Decimal.pow(1.1, player.pi.upgrades.length))
+                if (hasUpgrade("p", 42)) x = x.pow(Decimal.pow(1.0001, player.p.upgrades.length ** 2))
                 return x
         },
         getGainMultPre(){
@@ -649,11 +666,13 @@ addLayer("i", {
                                 let base2 = y.sqrt().div(5).plus(1)
                                 
                                 let ret = new Decimal(1e5)
-                                if (!hasUpgrade("a", 14)) ret = ret.times(Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))))
+                                if (!hasUpgrade("a", 14) && !hasUpgrade("pi", 32)) ret = ret.times(Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))))
                                 return ret.times(Decimal.pow(base1, Decimal.pow(base2, x)))
                         },
                         effectBase(){
                                 let add = devSpeedUp ? .001 : 0
+                                if (hasUpgrade("p", 43)) add += .001
+                                if (hasUpgrade("p", 53)) add += .002
                                 return (hasUpgrade("pi", 32) ? 1.07 : 1.05) + add //need to stay less than 1.2**.4
                         },
                         effect(){
@@ -1831,7 +1850,7 @@ addLayer("p", {
                 }
         },
         upgrades:{
-                rows: 3,
+                rows: 5,
                 cols: 5,
                 11:{
                         title: "Groan",
@@ -1968,6 +1987,86 @@ addLayer("p", {
                         cost: Decimal.pow(10, 502).times(2),
                         unlocked(){
                                 return hasUpgrade("p", 34) || hasUpgrade("s", 21)
+                        }
+                },
+                41: {
+                        title: "Fawn",
+                        description: "Each upgrade in this row allows the purchase of two more Incrementy Stamina levels",
+                        cost: Decimal.pow(10, Decimal.pow(10, 15500)),
+                        unlocked(){
+                                return hasUpgrade("pi", 42)
+                        }
+                },
+                42: {
+                        title: "Faun",
+                        description: "Per Particle upgrades squared raise Incrementy to 1.0001",
+                        cost: Decimal.pow(10, Decimal.pow(10, 15555)),
+                        unlocked(){
+                                return hasUpgrade("p", 41)
+                        }
+                },
+                43: {
+                        title: "Phail",
+                        description: "Add .001 to the Incrementy Stamia base",
+                        cost: Decimal.pow(10, Decimal.pow(10, 16000)),
+                        unlocked(){
+                                return hasUpgrade("p", 42)
+                        }
+                },
+                44: {
+                        title: "File",
+                        description: "Allows the purchase of five more Incrementy Stamina levels",
+                        cost: Decimal.pow(10, Decimal.pow(10, 16300)),
+                        unlocked(){
+                                return hasUpgrade("p", 43)
+                        }
+                },
+                45: {
+                        title: "Phiz",
+                        description: "Allows the purchase of five more Incrementy Stamina levels",
+                        cost: Decimal.pow(10, Decimal.pow(10, 16610)),
+                        unlocked(){
+                                return hasUpgrade("p", 44)
+                        }
+                },
+                51: {
+                        title: "Fizz",
+                        description: "Each upgrade in this row allows the purchase of four more Incrementy Stamina levels",
+                        cost: Decimal.pow(10, Decimal.pow(10, 16880)),
+                        unlocked(){
+                                return hasUpgrade("p", 45)
+                        }
+                },
+                52: {
+                        title: "Boos",
+                        description: "Remove the Pion gain softcap",
+                        cost: Decimal.pow(10, Decimal.pow(10, 17050)),
+                        unlocked(){
+                                return hasUpgrade("p", 51)
+                        }
+                },
+                53: {
+                        title: "Booze",
+                        description: "Add .002 to the Incrementy Stamia base",
+                        cost: Decimal.pow(10, Decimal.pow(10, 17250)),
+                        unlocked(){
+                                return hasUpgrade("p", 52)
+                        }
+                },
+                54: {
+                        title: "Bass",
+                        description: "Each Particle Upgrade squares base Neutrino gain",
+                        cost: Decimal.pow(10, Decimal.pow(10, 17850)),
+                        unlocked(){
+                                return hasUpgrade("p", 53)
+                        }
+                },
+                55: {
+                        title: "Base",
+                        description: "Unlock new Super Prestige Upgrades [will cost 18060]", 
+                        cost: Decimal.pow(10, Decimal.pow(10, 18360)),
+                        unlocked(){
+                                return hasUpgrade("p", 54)
                         }
                 },
         },
@@ -2282,6 +2381,7 @@ addLayer("n", {
                 let amt = layers.n.baseAmount()
                 let base = amt.div(60).sqrt()
                 if (base.gt(1e10)) base = base.log10().pow(10)
+                if (hasUpgrade("p", 53)) base = base.pow(Decimal.pow(2, player.p.upgrades.length))
                 let ret = base.times(layers.n.getGainMult())
 
                 if (inChallenge("sp", 12)) ret = ret.root(100)
@@ -4706,7 +4806,7 @@ addLayer("sp", {
                 },
         },
         upgrades: {
-                rows: 4,
+                rows: 5,
                 cols: 5,
                 11: {
                         title: "Lute",
@@ -4941,7 +5041,7 @@ addLayer("sp", {
                         unlocked(){
                                 return hasUpgrade("sp", 35)
                         },
-                }, //π
+                }, //next at ee18200
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -5090,7 +5190,7 @@ addLayer("pi", {
                 
                 let ret = amt.div(5e132).max(1).log10().times(pre).pow(exp).times(pst)
 
-                if (ret.gt(1e100)) ret = ret.log10().pow(50)
+                if (ret.gt(1e100) && !hasUpgrade("p", 52)) ret = ret.log10().pow(50)
 
                 return ret.floor()
         },
@@ -5249,7 +5349,7 @@ addLayer("pi", {
                 },
                 32: {
                         title: "Seen",
-                        description: "You can no long access or gain AM, A, E, M, Q, B or G and SP challenges but vastly buff the Incrementy gain formula",
+                        description: "You can no longer access or gain AM, A, E, M, Q, B or G or SP challenges but vastly buff the Incrementy gain formula",
                         cost: new Decimal(1e4),
                         unlocked(){
                                 return hasUpgrade("pi", 31)
@@ -5272,7 +5372,7 @@ addLayer("pi", {
                         }
                 },
                 41: {
-                        title: "idk1",
+                        title: "Quire",
                         description: "Remove particle buyables",
                         cost: new Decimal(1e188),
                         unlocked(){
@@ -5280,9 +5380,9 @@ addLayer("pi", {
                         }
                 },
                 42: {
-                        title: "idk1",
-                        description: "Unlock new Particle upgrades [will cost e191]",
-                        cost: new Decimal(1e291),
+                        title: "Choir",
+                        description: "Unlock new Particle upgrades",
+                        cost: new Decimal(1e191),
                         unlocked(){
                                 return hasUpgrade("pi", 41)
                         }

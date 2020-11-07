@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.6",
+	num: "0.93.7",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 1e191 Pions (v.93.6)"
+	"Current endgame: Bass (v.93.7)"
 ]
 
 // Determines when the game "ends"
