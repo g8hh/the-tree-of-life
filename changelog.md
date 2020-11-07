@@ -2,14 +2,15 @@
 
 ## v2.2: Uprooted - 11/7/20
 - You can now embed a layer inside of a subtab or microtab!
-- Added support for hiding the tree tab (although some aspects are still lazy and WIP)
+- Added support for hiding or reformatting the tree tab 
+- Added non-layer button nodes
 - Added shouldNotify to subtab/microtab buttons. (You can make them highlighted)
 - Added commas to large exponents.
 - Upgrades now only show "currently" if they have an effectDisplay (so not for constant effects).
 - Achievements are part of the default tab format.
 - NaN is now handled more intelligently.
 - The "hide completed challenges" setting now only hides challenges at max completions.
-- Thank you to thepaperpilot for fixing errors in docs and the infobox appearance!
+- Thank you to thepaperpilot for fixing errors in docs and improving the infobox appearance!
 - Many other minor fixes.
 
 ### v2.1.4 - 10/25/20
