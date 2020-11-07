@@ -29,6 +29,8 @@ While reading this documentation, the following key will be used when describing
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
 - [Custom Tab Layouts](custom-tab-layouts.md): An optional way to give your tabs a different layout. You can even create entirely new components to use.
+- [Custom game layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree,
+    or even customize the tab's layout like a layer tab.
 - [Updating TMT](updating-tmt.md): Using Github Desktop to update your mod's version of TMT.
 
 ### Common components
@@ -38,7 +40,7 @@ While reading this documentation, the following key will be used when describing
 - [Buyables](buyables.md): Create rebuyable upgrades for your layer (with the option to make them respec-able). Can be used to make Enhancers or Space Buildings.
 - [Clickables](clickables.md): A more generalized variant of buyables, for any kind of thing that is sometimes clickable. Between these and Buyables, you can do just about anything.
 
-### Other components
+### Other components and features
 
 - [Challenges](challenges.md): How to create challenges for a layer.
 - [Bars](bars.md): Display some information as a progress bar, gauge, or similar. They are highly customizable, and can be horizontal and vertical as well.
@@ -46,3 +48,4 @@ While reading this documentation, the following key will be used when describing
                         You can even use them to embed a layer inside another layer!
 - [Achievements](achievements.md): How to create achievements for a layer (or for the whole game).
 - [Infoboxes](infoboxes.md): Boxes containing text that can be shown or hidden.
+- [Trees](trees-and-tree-customization.md): Make your own trees. You can make non-layer button nodes too!

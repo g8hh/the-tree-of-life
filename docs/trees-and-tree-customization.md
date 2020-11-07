@@ -7,9 +7,10 @@ This also introduces the "tree" component, which can be used in your layers as w
 ## layoutInfo
 The most important part is layoutInfo, containing:
 - startTab: The id of the default tab to show on the left at the start.
-- showTree: True if the tree tab should be shown at the start of the game.
+- showTree: True if the tree tab should be shown at the start of the game. (The other tab will fill the whole page)
 - treeLayout: If present, overrides the tree layout and places nodes as you describe instead (explained in the next section).
 
+Additionally, if you want the main layout to not be a tree, you can edit the "tree-tab" layer at the bottom of tree.js to modify it just like a normal layer's tab. You can even switch between left tabs, using showNavTab(layer) to make that layer appear on the left.
 
 ## Trees
 

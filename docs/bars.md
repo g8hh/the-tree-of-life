@@ -23,7 +23,8 @@ Features:
 
 - width, height: The size in pixels of the bar, but as numbers (no "px" at the end).
 
-- progress(): A function that returns the portion of the bar that is filled, from "empty" at 0 to "full" at 1. (Nothing bad happens if the value goes out of these bounds, and it can be a number or `Decimal`)
+- progress(): A function that returns the portion of the bar that is filled, from "empty" at 0 to "full" at 1, updating automatically.
+    (Nothing bad happens if the value goes out of these bounds, and it can be a number or `Decimal`)
 
 - display(): **optional**. A function that returns text to be displayed on top of the bar, can use HTML.
 

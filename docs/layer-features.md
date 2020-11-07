@@ -17,8 +17,8 @@ You can make almost any value dynamic by using a function in its place, includin
             - unlocked: a bool determining if this layer is unlocked or not
             - points: a Decimal, the main currency for the layer
         - Optional:
-            - total: A Decimal, tracks total amount of main prestige currency
-            - best: A Decimal, tracks highest amount of main prestige currency
+            - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
+            - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
             - unlockOrder: used to keep track of relevant layers unlocked before this one.
 
 - color: A color associated with this layer, used in many places. (A string in hex format with a #)

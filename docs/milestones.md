@@ -17,9 +17,9 @@ You can use `hasMilestone(layer, id)` to determine if the player has a given mil
 
 Milestone features:
 
-- requirementDesc: A string describing the requirement for unlocking this milestone. Suggestion: Use a "total". It can also be a function that returns updating text. Can use basic HTML.
+- requirementDescription: A string describing the requirement for unlocking this milestone. Suggestion: Use a "total". It can also be a function that returns updating text. Can use basic HTML.
 
-- effectDesc: A string describing the reward for having the milestone. *You will have to implement the reward elsewhere.* It can also be a function that returns updating text. Can use basic HTML.
+- effectDescription: A string describing the reward for having the milestone. *You will have to implement the reward elsewhere.* It can also be a function that returns updating text. Can use basic HTML.
 
 - done(): A function returning a boolean to determine if the milestone should be awarded.
 

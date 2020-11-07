@@ -1,7 +1,10 @@
 # The Modding Tree changelog:
 
 ### v2.2.1 - 11/7/20
-- Possibly fixed issues with things not updating visually.
+- Improved milestones visually a bit.
+- "best" and "total" are now only displayed if present in startData.
+- Fixed issues with things not updating visually. (Thank you to to Jacorb!)
+- Updated docs on the new tree-related features.
 
 ## v2.2: Uprooted - 11/7/20
 - You can now embed a layer inside of a subtab or microtab!
@@ -16,6 +19,7 @@
 - The "hide completed challenges" setting now only hides challenges at max completions.
 - Thank you to thepaperpilot for fixing errors in docs and improving the infobox appearance!
 - Many other minor fixes.
+
 
 ### v2.1.4 - 10/25/20
 - Added an infobox component. Thank you to thepaperpilot for this contribution!
