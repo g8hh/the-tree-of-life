@@ -199,6 +199,7 @@ function getStaminaMaximumAmount(){
                 if (hasUpgrade("p", 55)) a += 4
         }
         if (hasUpgrade("sp", 53)) a += 3 * player.sp.upgrades.length
+        if (hasUpgrade("pi", 43)) a += 5
 
         return a
 }
@@ -301,6 +302,7 @@ addLayer("i", {
                 x = x.times(layers.s.effect())
                 x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
                 x = x.times(layers.sp.effect()[1])
+                x = x.times(layers.o.effect())
                 return x
         },
         update(diff){
@@ -706,6 +708,7 @@ addLayer("i", {
                                 if (hasUpgrade("s", 11)) ret = ret.plus(1)
                                 if (hasUpgrade("s", 12)) ret = ret.plus(1)
                                 if (hasUpgrade("s", 22)) ret = ret.plus(player.s.upgrades.length)
+                                if (hasUpgrade("o", 11)) ret = ret.plus(1)
                                 return ret
                         },
                         buy(){
@@ -780,7 +783,7 @@ addLayer("i", {
                                 }],
                         ],
                         unlocked(){
-                                return layers.am.layerShown() || hasUpgrade("pi", 32)
+                                return layers.am.layerShown() || hasUpgrade("pi", 32) || player.o.best.gt(0)
                         },
                 },
         },
@@ -902,7 +905,7 @@ addLayer("am", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         upgrades: {
@@ -1132,7 +1135,7 @@ addLayer("a", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         milestones:{
@@ -1379,7 +1382,7 @@ addLayer("m", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         milestones:{
@@ -1514,7 +1517,7 @@ addLayer("e", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         upgrades:{
@@ -2019,7 +2022,7 @@ addLayer("p", {
                 },
                 43: {
                         title: "Phail",
-                        description: "Add .001 to the Incrementy Stamia base",
+                        description: "Add .001 to the Incrementy Stamina base",
                         cost: Decimal.pow(10, Decimal.pow(10, 16000)),
                         unlocked(){
                                 return hasUpgrade("p", 42)
@@ -2059,7 +2062,7 @@ addLayer("p", {
                 },
                 53: {
                         title: "Booze",
-                        description: "Add .002 to the Incrementy Stamia base",
+                        description: "Add .002 to the Incrementy Stamina base",
                         cost: Decimal.pow(10, Decimal.pow(10, 17250)),
                         unlocked(){
                                 return hasUpgrade("p", 52)
@@ -2335,7 +2338,9 @@ addLayer("p", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+        },
         tabFormat: ["main-display",
                 ["display-text", function(){
                         return "You are getting " + format(layers.p.getResetGain()) + " Particles per second (based on Incrementy, requires 1e11475)"
@@ -3144,7 +3149,9 @@ addLayer("n", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return hasUpgrade("p", 11) || player.s.best.gt(0) || player.sp.best.gt(0)},
+        layerShown(){
+                return hasUpgrade("p", 11) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+        },
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.n.getResetGain()) + " Neutrinos per second (based on particles)"}],
                 ["display-text", "Each buyable has an effect and gives a free level to all upgrades directly to the left or above it"],
@@ -3452,7 +3459,7 @@ addLayer("g", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: ["main-display",
@@ -3600,7 +3607,7 @@ addLayer("q", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0)
+                let a = hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: ["main-display",
@@ -3924,7 +3931,9 @@ addLayer("s", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.s.best.gt(0) || hasUpgrade("p", 35) || player.sp.best.gt(0)},
+        layerShown(){
+                return player.s.best.gt(0) || hasUpgrade("p", 35) || player.sp.best.gt(0) || player.o.best.gt(0)
+        },
         tabFormat: ["main-display",
                 ["display-text", function(){return hasUpgrade("s", 31) ? "You are getting " + format(layers.s.getResetGain()) + " Shards per second (based on particles)" : ""}],
                 ["prestige-button", "", function (){ return hasUpgrade("s", 31) ? {'display': 'none'} : {}}],
@@ -3938,9 +3947,7 @@ addLayer("s", {
                 let keep = []
                 let j = Math.min(25, player.sp.times)
                 if (hasMilestone("sp", 1)) {
-                        for (let i = 0; i < j; i ++){
-                                keep.push([11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55][i])
-                        }
+                        keep = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55].slice(0, j)
                 }
                 player.s.upgrades = filter(player.s.upgrades, keep)
 
@@ -4402,7 +4409,7 @@ addLayer("b", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0)
+                let a = player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0) || player.o.best.gt(0)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: {
@@ -4465,7 +4472,7 @@ addLayer("b", {
 addLayer("sp", {
         name: "Superprestige", 
         symbol: "SP", 
-        position: 3,
+        position: 2,
         startData() { return {
                 unlocked: true,
 		points: new Decimal(0),
@@ -5100,7 +5107,9 @@ addLayer("sp", {
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return getBChallengeTotal() >= 40 || player.sp.best.gt(0)},
+        layerShown(){
+                return getBChallengeTotal() >= 40 || player.sp.best.gt(0) || player.o.best.gt(0)
+        },
         tabFormat: {
                 "QoL": {
                         content: [
@@ -5183,6 +5192,8 @@ addLayer("sp", {
 
                 if (layer == "pi") return
                 player.sp.times = 0
+                player.sp.upgrades = []
+                player.sp.milestones = []
         },
 })
 
@@ -5190,7 +5201,7 @@ addLayer("sp", {
 addLayer("pi", {
         name: "Pions", 
         symbol: "π", 
-        position: 4,
+        position: 0,
         startData() { return {
                 unlocked: true,
 		points: new Decimal(0),
@@ -5440,12 +5451,30 @@ addLayer("pi", {
                                 return hasUpgrade("pi", 41)
                         }
                 }, //e20800 pions next
+                43: {
+                        title: "idk",
+                        description: "You can buy 5 more Incrementy Stamina levels",
+                        cost: new Decimal("e20800"),
+                        unlocked(){
+                                return hasUpgrade("sp", 55)
+                        }
+                }, //e20800 pions next
+                44: {
+                        title: "idk",
+                        description: "Unlock Origin",
+                        cost: new Decimal("e23000"),
+                        unlocked(){
+                                return hasUpgrade("pi", 43)
+                        }
+                }, //e20800 pions next
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
-        layerShown(){return player.sp.best.gt(1e132) || player.pi.best.gt(0)},
+        layerShown(){
+                return player.sp.best.gt(1e132) || player.pi.best.gt(0) || player.o.best.gt(0)
+        },
         tabFormat: {
                 "Milestones": {
                         content: [
@@ -5481,5 +5510,203 @@ addLayer("pi", {
                 player.pi.times = 0
                 player.pi.total = new Decimal(0)
                 player.pi.bestOnce = new Decimal(0)
+                
+                player.pi.upgrades = []
+                player.pi.milestones = []
+        },
+})
+
+
+addLayer("o", {
+        name: "Origin", 
+        symbol: "O", 
+        position: 0,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                times: 0,
+        }},
+        color: "#79134A",
+        requires: Decimal.pow(10, 25000), 
+        resource: "Origins",
+        baseAmount() {return player.pi.points}, 
+        branches: ["pi"],
+        type: "custom", 
+        effect(){
+                let amt = player.o.best
+                let ret = amt.times(2).plus(1).pow(2)
+                return ret
+        },
+        effectDescription(){
+                let eff = layers.o.effect()
+                let a = "which increases Incrementy gain by " + format(eff)
+
+                return a + "."
+        },
+        getResetGain() {
+                let amt = layers.o.baseAmount()
+                let pre = layers.o.getGainMultPre()
+                let exp = layers.o.getGainExp()
+                let pst = layers.o.getGainMultPost()
+                
+                let ret = amt.max(10).log10().div(1000).times(pre).pow(exp).minus(4).max(0).times(pst)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(.5)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.o.getResetGain()
+                let start = "Reset to gain " + formatWhole(gain) + " Origins<br>"
+                let pre = layers.o.getGainMultPre()
+                let exp = layers.o.getGainExp()
+                let pst = layers.o.getGainMultPost()
+                let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).plus(4).root(exp).div(pre).times(1000))) + " Super Prestige Points"
+                if (gain.gt(1e6)) nextAt = ""
+                return start + nextAt
+        },
+        canReset(){
+                return layers.o.getResetGain().gt(0) && hasUpgrade("pi", 44) 
+        },
+        update(diff){
+                player.o.best = player.o.best.max(player.o.points)
+
+                if (false) {
+                        let x = layers.o.getResetGain()
+                        player.o.points = player.o.points.plus(x.times(diff))
+                }
+        },
+        buyables: {
+                rows: 3,
+                cols: 3,
+                11: {
+                        title: "Incrementy Boost",
+                        display(){
+                                let additional = ""
+                                let ex = layers.o.buyables[11].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.o.buyables[11]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: ^" + format(layers.o.buyables[11].effect(), 4) + " to Incrementy</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.o.buyables[11].cost()) + " Origins</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.o.buyables[11].effectBase()) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("o", 11).plus(a)
+                                let base1 = 2
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base1, exp2)
+                        },
+                        effectBase(){
+                                let base = new Decimal(1.02)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.o.buyables[11].total()
+                                let base = layers.o.buyables[11].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        canAfford(){
+                                return player.o.points.gte(layers.o.buyables[11].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("o", 11).plus(layers.o.buyables[11].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.o.buyables[11].cost()
+                                if (!layers.o.buyables[11].canAfford()) return
+                                player.o.buyables[11] = player.o.buyables[11].plus(1)
+                                player.o.points = player.o.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true },
+                },
+        },
+        upgrades:{ // https://en.wikipedia.org/wiki/Fields_Medal
+                rows: 4,
+                cols: 4,
+                11: {
+                        title: "Ahlfors",
+                        description: "Gain a free Incrementy Stamina level",
+                        cost: new Decimal(1),
+                        unlocked(){
+                                return true
+                        }
+                },
+        },
+        row: 4, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){
+                return hasUpgrade("pi", 44) || player.o.best.gt(0)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["display-text", function(){
+                                        if (!false) return ""
+                                        return "You are gaining " + format(layers.o.getResetGain()) + " Origins per second"
+                                }],
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Buyables": {
+                        content: [
+                                "main-display",
+                                "buyables",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "QoL": {
+                        content: [
+                                "main-display",
+                                "Milestones",
+                                ["display-text", function(){
+                                        return "not yet lol"
+                                }],
+                        ],
+                        unlocked(){
+                                return player.o.times >= 3
+                        },
+                },
+        },
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 4) return
+
+                //resource
+                player.o.points = new Decimal(0)
+                player.o.best = new Decimal(0)
+                player.o.times = 0
+                player.o.total = new Decimal(0)
         },
 })

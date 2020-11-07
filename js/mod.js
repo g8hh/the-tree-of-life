@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: e20800 Pions (v.93.8)"
+	"Current endgame: 3 O resets (v.93.9)"
 ]
 
 // Determines when the game "ends"
