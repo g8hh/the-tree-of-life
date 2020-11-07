@@ -2075,8 +2075,8 @@ addLayer("p", {
                 },
                 55: {
                         title: "Base",
-                        description: "Unlock new Super Prestige Upgrades [will cost 18060]", 
-                        cost: Decimal.pow(10, Decimal.pow(10, 18360)),
+                        description: "Unlock new Super Prestige Upgrades", 
+                        cost: Decimal.pow(10, Decimal.pow(10, 18060)),
                         unlocked(){
                                 return hasUpgrade("p", 54)
                         }
