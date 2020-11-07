@@ -88,6 +88,7 @@ var systemComponents = {
 			<buyables v-bind:style="tmp[layer].componentStyles.buyables" :layer="layer"></buyables>
 			<upgrades v-bind:style="tmp[layer].componentStyles['upgrades']" :layer="layer"></upgrades>
 			<challenges v-bind:style="tmp[layer].componentStyles['challenges']" :layer="layer"></challenges>
+			<achievements v-bind:style="tmp[layer].componentStyles.achievements" :layer="layer"></achievements>
 			<br><br>
 		</div>
 		<div v-if="tmp[layer].tabFormat">

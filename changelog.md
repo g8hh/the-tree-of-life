@@ -4,9 +4,12 @@
 - Added support for hiding the tree tab (although some aspects are still lazy and WIP)
 - Added shouldNotify to subtab/microtab buttons. (You can make them highlighted)
 - Added commas to large exponents.
+- Upgrades now only show "currently" if they have an effectDisplay (so not for constant effects).
+- Achievements are part of the default tab format.
 - NaN is now handled more intelligently.
 - The "hide completed challenges" setting now only hides challenges at max completions.
 - Thank you to thepaperpilot for fixing errors in docs and the infobox appearance!
+- Many other minor fixes.
 
 ### v2.1.4 - 10/25/20
 - Added an infobox component. Thank you to thepaperpilot for this contribution!
@@ -172,7 +175,6 @@ which will break old things)
 - Fixed a big save issue. If you use a unique mod id, your save will never conflict with other mods.
 - Added a configurable offline time limit in modinfo at the top of index.html. (default 1 hour)
 - Added a few minor features, and updated the docs with new information.
-
 
 
 ### v1.1.1:

@@ -51,6 +51,9 @@ These are the existing components, but you can create more in [v.js](/js/v.js):
 
 - infobox: Display an infobox. The argument is the id of the infobox to display.
 
+- tree: Displays a tree. The argument is an array of arrays containing the names of the nodes in the tree (first by row, then by column)
+    [See here for more information on tree layouts and nodes!](trees-and-tree-customization.md)
+
 - toggle: A toggle button that toggles a bool value. The data is a pair that identifies what bool to toggle, e.g. `[layer, id]`
 
 The rest of the components are sub-components. They can be used just like other components, but are typically part of another component.

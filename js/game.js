@@ -214,7 +214,7 @@ function startChallenge(layer, x) {
 	if (!player[layer].unlocked) return
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
-		delete player[layer].activeChallenge
+		player[layer].activeChallenge = null
 	} else {
 		enter = true
 	}	
@@ -253,7 +253,7 @@ function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
 	if (! canCompleteChallenge(layer, x)){
-		delete player[layer].activeChallenge
+		 player[layer].activeChallenge = null
 		return
 	}
 	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
@@ -261,7 +261,7 @@ function completeChallenge(layer, x) {
 		player[layer].challenges[x] += 1
 		if (layers[layer].challenges[x].onComplete) layers[layer].challenges[x].onComplete()
 	}
-	delete player[layer].activeChallenge
+	player[layer].activeChallenge = null
 	updateChallengeTemp(layer)
 }
 
@@ -345,7 +345,7 @@ var interval = setInterval(function() {
 			player.offTime.remain -= offlineDiff
 			diff += offlineDiff
 		}
-		if (!player.offlineProd || player.offTime.remain <= 0) delete player.offTime
+		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now

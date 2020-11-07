@@ -23,7 +23,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - color: A color associated with this layer, used in many places. (A string in hex format with a #)
 
-- row: The row of the layer, starting at 0. This affects where the node appears on the tree, and which resets affect the layer.
+- row: The row of the layer, starting at 0. This affects where the node appears on the standard tree, and which resets affect the layer.
 
     Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a doReset to them.
 
@@ -108,9 +108,9 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - symbol: **optional**. The text that appears on this layer's node. Default is the layer id with the first letter capitalized.
 
-- position: **optional**. Determines the horizontal position of the layer in its row. By default, it uses the layer id, and layers are sorted in alphabetical order.
+- position: **optional**. Determines the horizontal position of the layer in its row in a standard tree. By default, it uses the layer id, and layers are sorted in alphabetical order.
 
-- branches: **optional**. An array of layer ids. On a tree, a line will appear from this layer to all of the layers in the list. Alternatively, an entry in the array can be a 2-element array consisting of the layer id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors).
+- branches: **optional**. An array of layer/node ids. On a tree, a line will appear from this layer to all of the layers in the list. Alternatively, an entry in the array can be a 2-element array consisting of the layer id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors).
 
 - nodeStyle: **optional**. A CSS object, where the keys are CSS attributes, which styles this layer's node on the tree.
 

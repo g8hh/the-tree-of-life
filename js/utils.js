@@ -484,7 +484,7 @@ function upgradeEffect(layer, id){
 }
 
 function challengeEffect(layer, id){
-	return (tmp[layer].challenges[id].effect)
+	return (tmp[layer].challenges[id].rewardEffect)
 }
 
 function buyableEffect(layer, id){
@@ -586,7 +586,7 @@ function clickClickable(layer, id) {
 // Function to determine if the player is in a challenge
 function inChallenge(layer, id){
 	let challenge = player[layer].activeChallenge
-	if (challenge == null) return
+	if (!challenge) return false
 	id = toNumber(id)
 	if (challenge==id) return true
 
@@ -606,6 +606,16 @@ function showTab(name) {
 	delete player.notify[name]
 	needCanvasUpdate = true
 }
+
+function showNavTab(name) {
+	if (LAYERS.includes(name) && !layerunlocked(name)) return
+
+	var toTreeTab = name == "tree"
+	player.navTab = name
+	player.notify[name] = false
+	needCanvasUpdate = true
+}
+
 
 function goBack() {
 	if (player.navTab !== "none") showTab("none")

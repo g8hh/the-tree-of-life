@@ -508,8 +508,5 @@ addLayer("a", {
                 onComplete() {console.log("Bork bork bork!")}
             },
         },
-        midsection: [
-            "achievements",
-        ]
     }, 
 )
