@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed tree branches being offset.
+
 ### v2.2.1 - 11/7/20
 - Added a small highlight to layers you can meaningfully prestige on.
 - Added passiveGeneration and autoPrestige features to standardize prestige automation. (The old ways still work, but the new ones work better with other things)
