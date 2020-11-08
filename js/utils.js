@@ -629,6 +629,14 @@ function layOver(obj1, obj2) {
 	}
 }
 
+function prestigeNotify(layer) {
+	if (layers[layer].prestigeNotify) return layers[layer].prestigeNotify()
+	else if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false
+	else if (tmp[layer].type == "static") return tmp[layer].canReset
+	else if (tmp[layer].type == "normal") return (tmp[layer].canReset && (tmp[layer].resetGain.gte(player[layer].points.div(10))))
+	else return false
+}
+
 function notifyLayer(name) {
 	if (player.tab == name || !layerunlocked(name)) return
 	player.notify[name] = 1
@@ -641,6 +649,14 @@ function subtabShouldNotify(layer, family, id){
 	if (player.subtabs[layer][family] === id) return false
 	else if (subtab.embedLayer) return tmp[subtab.embedLayer].notify
 	else return subtab.shouldNotify
+}
+
+function subtabResetNotify(layer, family, id){
+	let subtab = {}
+	if (family == "mainTabs") subtab = tmp[layer].tabFormat[id]
+	else subtab = tmp[layer].microtabs[family][id]
+	if (subtab.embedLayer) return tmp[subtab.embedLayer].prestigeNotify
+	else return false
 }
 
 function nodeShown(layer) {
@@ -741,10 +757,6 @@ function prestigeButtonText(layer)
 	else
 		return layers[layer].prestigeButtonText()
 }
-
-
-
-
 
 function isFunction(obj) {
 	return !!(obj && obj.constructor && obj.call && obj.apply);

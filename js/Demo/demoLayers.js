@@ -379,7 +379,7 @@ addLayer("f", {
     resource: "farm points", 
     baseResource: "candies", 
     baseAmount() {return player.points},
-    type: "custom", // A "Custom" type which is effectively static
+    type: "static",
     exponent: 0.5,
     base: 3,
     roundUpCost: true,

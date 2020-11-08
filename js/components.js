@@ -430,6 +430,8 @@ function loadVue() {
 			hasChallenge,
 			maxedChallenge,
 			canAffordUpgrade,
+			subtabShouldNotify,
+			subtabResetNotify,
 			VERSION,
 			LAYERS,
 			hotkeys

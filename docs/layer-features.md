@@ -102,7 +102,13 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - resetDesc: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
 
-- prestigeButtonText(): **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types. 
+- prestigeButtonText(): **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
+
+- passiveGain(): **optional**, returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
+        This is good for automating Normal layers.
+
+- autoPrestige(): **optional**, returns a boolean, if true, the layer will always automatically do a prestige if it can.
+        This is good for automating Static layers.
 
 ## Tree/node features
 
@@ -122,9 +128,9 @@ You can make almost any value dynamic by using a function in its place, includin
                 
     If you want to keep things, determine what to keep based on `resettingLayer`, `milestones`, and such, then call `layerDataReset(layer, keep)`, where `layer` is this layer, and `keep` is an array of the names of things to keep. It can include things like "points", "best", "total" (for this layer's prestige currency), "upgrades",  any unique variables like "generatorPower", etc. If you want to only keep specific upgrades or something like that, save them in a separate variable, then call `layerDataReset`, and then set `player[this.layer].upgrades` to the saved upgrades.
 
-- update(diff): **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick. Suggestion: use `addPoints(layer, gain)` when generating points to automatically update the best and total amounts.
+- update(diff): **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick. 
 
-- automate(): **optional**. This function is called every game tick, after production. Use it to activate any autobuyers or auto-resets or similar on this layer, if appropriate. 
+- automate(): **optional**. This function is called every game tick, after production. Use it to activate automation things other than prestige, if appropriate. 
 
 - resetsNothing: **optional**. Returns true if this layer shouldn't trigger any resets when you prestige.
 
@@ -148,3 +154,6 @@ componentStyles: {
 - getNextAt(canMax=false): **for custom prestige type**. Returns how many of the base currency you need to get to the next point. `canMax` is an optional variable used with Static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (Supporting both is good). You can also call `getNextAt(this.layer, canMax=false, useType = "static")` or similar to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
 
 - canReset(): **for custom prestige type**. Return true only if you have the resources required to do a prestige here.
+
+- prestigeNotify(): **mostly for custom prestige types**, returns true if this layer should be subtly highlighted to indicate you
+        can prestige for a meaningful gain.

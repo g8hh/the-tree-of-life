@@ -1,9 +1,12 @@
 # The Modding Tree changelog:
 
 ### v2.2.1 - 11/7/20
+- Added a small highlight to layers you can meaningfully prestige on.
+- Added passiveGeneration and autoPrestige features to standardize prestige automation. (The old ways still work, but the new ones work better with other things)
 - Improved milestones visually a bit.
 - "best" and "total" are now only displayed if present in startData.
 - Fixed issues with things not updating visually. (Thank you to to Jacorb!)
+- Side layers and button nodes can now be highlighted.
 - Updated docs on the new tree-related features.
 
 ## v2.2: Uprooted - 11/7/20
