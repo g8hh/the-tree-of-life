@@ -188,7 +188,8 @@ function doReset(layer, force=false) {
 		}
 	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
-		if (player[layer].times != undefined) player[layer].times += devSpeedUp ? 5 : 1
+		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
+		if (player[layer].times != undefined) player[layer].times += timesMult
 	}
 
 	if (tmp[layer].resetsNothing) return

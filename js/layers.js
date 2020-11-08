@@ -155,7 +155,7 @@ function getIncBuyableFormulaText(id){
                 if (b1 != 1) linear = format(b1, 0) + "^x*"
                 let quad = "1.25^(x^2)*"
                 let start = "1e5*"
-                if (!hasUpgrade("a", 14)) start = "1e5*" + linear + quad
+                if (!hasUpgrade("a", 14) && !hasUpgrade("pi", 32)) start = "1e5*" + linear + quad
 
                 let y = getBuyableAmount("i", 13).minus(4).max(1)
                 if (hasIUpg(31)) {
@@ -711,6 +711,7 @@ addLayer("i", {
                                 if (hasUpgrade("s", 12)) ret = ret.plus(1)
                                 if (hasUpgrade("s", 22)) ret = ret.plus(player.s.upgrades.length)
                                 if (hasUpgrade("o", 11)) ret = ret.plus(1)
+                                if (hasUpgrade("o", 14)) ret = ret.plus(1)
                                 return ret
                         },
                         buy(){
@@ -723,7 +724,7 @@ addLayer("i", {
                         buyMax(maximum){
                                 let pts = player.i.points
                                 //eventually we can remove all the scalings except b1^b2^x
-                                if (hasUpgrade("a", 14)) {
+                                if (hasUpgrade("a", 14) || hasUpgrade("pi", 32)) {
                                         let pttarget = player.i.points.div(1e5)
                                         if (pttarget.lt(1.1)) return
                                         let xtarget = pttarget.log(1.1).log(1.2)
@@ -4001,6 +4002,7 @@ addLayer("s", {
                 //upgrades
                 let keep = []
                 let j = Math.min(25, player.sp.times)
+                if (hasUpgrade("o", 14)) j = Math.min(25, j + 2 * player.o.times)
                 if (hasMilestone("sp", 1)) {
                         keep = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55].slice(0, j)
                 }
@@ -5733,10 +5735,18 @@ addLayer("o", {
                 },
                 13: {
                         title: "Grothendieck",
-                        description: "Multiply Super Prestige gain and effect by 2",
+                        description: "Multiply Super Prestige gain and effect by 2 and gain 5x more SP resets",
                         cost: new Decimal(1),
                         unlocked(){
                                 return hasUpgrade("o", 12) 
+                        }
+                },
+                14: {
+                        title: "idk",
+                        description: "Each Origin reset allows you to keep two more Shard upgrades and gain a free Incrementy Stamina level",
+                        cost: new Decimal(2),
+                        unlocked(){
+                                return hasUpgrade("o", 13) 
                         }
                 },
         },
