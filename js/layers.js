@@ -267,6 +267,7 @@ addLayer("i", {
                         x = x.pow(Decimal.pow(1.2, a))
                 }
                 if (hasUpgrade("o", 12)) x = x.times(1.001)
+                x = x.times(layers.o.buyables[11].effect())
                 return x
         },
         getGainMultPre(){
@@ -875,6 +876,7 @@ addLayer("am", {
                 x = x.times(player.e.points.max(1).pow(layers.sp.challenges[21].rewardEffect()))
                 if (hasUpgrade("sp", 21)) x = x.times(player.a.points.max(1).pow(player.sp.upgrades.length))
                 if (hasUpgrade("sp", 44)) x = x.times(Decimal.pow(player.a.points.max(1), challengeCompletions("sp", 22)))
+                if (hasMilestone("o", 1)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -4100,6 +4102,7 @@ addLayer("b", {
                 if (hasUpgrade("b", 24)) ret = ret.times(Decimal.pow(2, getBChallengeTotal()))
                 if (hasUpgrade("b", 21)) ret = ret.times(Decimal.max(1, challengeCompletions("b", 11)))
                 ret = ret.times(Decimal.pow(3, challengeCompletions("b", 22)))
+                ret = ret.times(layers.o.effect())
 
                 if (hasMilestone("sp", 3)) ret = ret.pow(1.1).times(10)
                 if (devSpeedUp) ret = ret.pow(1.1).times(10)
@@ -5111,7 +5114,7 @@ addLayer("sp", {
                         },
                 },
                 51: {
-                        title: "idk1",
+                        title: "Schwartz",
                         description: "Each Super Prestige upgrade in this row raises Incrementy gain to the 1.2",
                         cost: new Decimal("ee18200"),
                         unlocked(){
@@ -5119,7 +5122,7 @@ addLayer("sp", {
                         },
                 },
                 52: {
-                        title: "idk1",
+                        title: "Selberg",
                         description: "Neutrino Autobuyers buy 50x more",
                         cost: new Decimal("ee21300"),
                         unlocked(){
@@ -5127,7 +5130,7 @@ addLayer("sp", {
                         },
                 },
                 53: {
-                        title: "idk2",
+                        title: "Kodaira",
                         description: "Add 3 to the limit of Incrementy Stamina per Super Prestige upgrade",
                         cost: new Decimal("ee24900"),
                         unlocked(){
@@ -5135,7 +5138,7 @@ addLayer("sp", {
                         },
                 }, 
                 54: {
-                        title: "idk2",
+                        title: "Serre",
                         description: "Add 69 to the Incrementy Stamina Softcap Start",
                         cost: new Decimal("ee32450"),
                         unlocked(){
@@ -5463,7 +5466,7 @@ addLayer("pi", {
                 32: {
                         title: "Seen",
                         description: "You can no longer access or gain AM, A, E, M, Q, B or G or SP challenges but vastly buff the Incrementy gain formula",
-                        cost: new Decimal(1e4),
+                        cost: new Decimal(4321),
                         unlocked(){
                                 return hasUpgrade("pi", 31)
                         }
@@ -5501,7 +5504,7 @@ addLayer("pi", {
                         }
                 }, //e20800 pions next
                 43: {
-                        title: "idk",
+                        title: "Roth",
                         description: "You can buy 5 more Incrementy Stamina levels",
                         cost: new Decimal("e20800"),
                         unlocked(){
@@ -5509,7 +5512,7 @@ addLayer("pi", {
                         }
                 }, //e20800 pions next
                 44: {
-                        title: "idk",
+                        title: "Thom",
                         description: "Unlock Origin",
                         cost: new Decimal("e23000"),
                         unlocked(){
@@ -5542,6 +5545,10 @@ addLayer("pi", {
                 "Upgrades": {
                         content: [
                                 "main-display",
+                                ["display-text", function(){
+                                        if (!hasMilestone("pi", 5)) return ""
+                                        return "You are gaining " + format(layers.pi.getResetGain()) + " Pions per second"
+                                }],
                                 "upgrades"
                         ],
                         unlocked(){
@@ -5584,13 +5591,13 @@ addLayer("o", {
         branches: ["pi"],
         type: "custom", 
         effect(){
-                let amt = player.o.best
+                let amt = player.o.total
                 let ret = amt.times(2).plus(1).pow(2)
                 return ret
         },
         effectDescription(){
                 let eff = layers.o.effect()
-                let a = "which increases Base Incrementy and Neutrino gain by " + format(eff)
+                let a = "which increases Base Incrementy, Tokens, and Neutrino gain by " + format(eff) + " (based on total Origins)"
 
                 return a + "."
         },
@@ -5705,11 +5712,20 @@ addLayer("o", {
                 },
                 12: {
                         title: "Douglas",
-                        description: "Multiply all high row prestige resource gain exponents by 1.001",
+                        description: "Multiply all higher row prestige resource gain exponents by 1.001",
                         cost: new Decimal(1),
                         unlocked(){
                                 return hasUpgrade("o", 11)
                         }
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription: "<b>idk</b><br>Requires: 2 total Origins", 
+                        effectDescription: "Origin effect boosts antimatter",
+                        done(){
+                                return player.o.total.gte(2)
+                        },
                 },
         },
         row: 4, // Row the layer is in on the tree (0 is the first row)
@@ -5746,13 +5762,10 @@ addLayer("o", {
                 "QoL": {
                         content: [
                                 "main-display",
-                                "Milestones",
-                                ["display-text", function(){
-                                        return "not yet lol"
-                                }],
+                                "milestones",
                         ],
                         unlocked(){
-                                return player.o.times >= 3
+                                return player.o.times >= 2
                         },
                 },
         },
