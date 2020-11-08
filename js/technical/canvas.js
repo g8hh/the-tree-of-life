@@ -17,9 +17,9 @@ function resizeCanvas() {
 	if (!retrieveCanvasData()) return
 	canvas.width = 0;
     canvas.height = 0;
-    canvas.width = document.getElementById("treeTab").scrollWidth;
-    canvas.height = document.getElementById("treeTab").scrollHeight;
-    drawTree();
+	canvas.width  = window.innerWidth;
+	canvas.height = window.innerHeight;
+		drawTree();
 }
 
 var colors = {
@@ -40,7 +40,7 @@ function drawTree() {
 	if (!retrieveCanvasData()) return;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	for (layer in layers){
-		if (tmp[layer].layerShown && tmp[layer].branches){
+		if (tmp[layer].layerShown == true && tmp[layer].branches){
 			for (branch in tmp[layer].branches)
 				{
 					drawTreeBranch(layer, tmp[layer].branches[branch])
