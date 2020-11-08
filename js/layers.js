@@ -284,7 +284,7 @@ addLayer("i", {
                 x = x.times(getNBuyableEff(13))
                 if (hasUpgrade("g", 24))  x = x.times(upgradeEffect("g", 24))
                 if (hasUpgrade("sp", 41)) x = x.times(player.sp.points.plus(1))
-                x = x.times(layers.o.effect())
+                if (hasMilestone("o", 0)) x = x.times(layers.o.effect())
 
                 return x
         },
@@ -323,7 +323,8 @@ addLayer("i", {
                         if (hasUpgrade("b", 23)) mult *= 5
                         if (hasUpgrade("s", 55)) mult *= 10
                         if (hasUpgrade("sp", 45)) mult *= 10
-                        if (hasMilestone("a", 2) || hasUpgrade("pi", 32)) {
+                        if (hasMilestone("o", 0)) mult *= 10
+                        if (hasMilestone("a", 2) || hasUpgrade("pi", 32) || hasMilestone("o", 1)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
                                 layers.i.buyables[13].buyMax(times * mult)
@@ -1113,6 +1114,7 @@ addLayer("a", {
                 x = x.times(player.q.points.max(10).log10().pow(layers.b.challenges[21].rewardEffect()))
                 x = x.times(layers.sp.effect()[1])
                 if (hasUpgrade("pi", 22)) x = x.times(Decimal.pow(player.s.points.plus(1), player.pi.upgrades.length))
+                if (hasMilestone("o", 2)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -1365,6 +1367,7 @@ addLayer("m", {
                 x = x.times(layers.p.buyables[13].effect())
                 if (hasUpgrade("s", 12)) x = x.times(100)
                 x = x.times(layers.sp.effect()[1])
+                if (hasMilestone("o", 3)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -1856,6 +1859,7 @@ addLayer("p", {
                 if (hasUpgrade("s", 13)) x = x.times(100)
                 x = x.times(layers.sp.effect()[1])
                 if (hasUpgrade("s", 43)) x = x.times(player.i.points.max(1).pow(.0001))
+                if (hasMilestone("o", 4)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -1878,7 +1882,8 @@ addLayer("p", {
                         player.p.time += -1
                         let j = hasUpgrade("s", 41) ? 4 : 1
                         if (hasMilestone("pi", 2)) j *= 5
-                        if (hasUpgrade("s", 25) && !hasUpgrade("pi", 41)) {
+                        if (hasMilestone("o", 0)) j *= 10
+                        if ((hasUpgrade("s", 25) || hasMilestone("o", 1)) && !hasUpgrade("pi", 41)) {
                                 for (let i = 0; i < j; i ++) {
                                         if (layers.p.buyables[11].canAfford()) layers.p.buyables[11].buy()
                                         if (layers.p.buyables[12].canAfford()) layers.p.buyables[12].buy()
@@ -2482,8 +2487,9 @@ addLayer("n", {
                         if (hasUpgrade("s", 41)) times *= 10
                         if (hasUpgrade("pi", 31)) times *= 2
                         if (hasUpgrade("sp", 52)) times *= 50
+                        if (hasMilestone("o", 0)) times *= 10
                         
-                        if (hasUpgrade("s", 14)) {
+                        if (hasUpgrade("s", 14) || hasMilestone("o", 1)) {
                                 layers.n.buyables[11].buyMax(times)
                                 layers.n.buyables[12].buyMax(times)
                                 layers.n.buyables[13].buyMax(times)
@@ -3735,6 +3741,7 @@ addLayer("s", {
                 if (hasUpgrade("s", 44)) x = x.times(player.i.points.max(1).pow(.0001).pow(.0002))
                 x = x.times(layers.sp.challenges[12].rewardEffect())
                 if (hasUpgrade("sp", 33)) x = x.times(Decimal.pow(player.sp.points.max(1), challengeCompletions("sp", 21)))
+                if (hasMilestone("o", 2)) x = x.times(player.o.total.max(1))
                 return x
         },
         prestigeButtonText(){
@@ -4506,10 +4513,12 @@ addLayer("b", {
                         let keep = []
                         if (!hasMilestone("sp", 5)) player.b.upgrades = filter(player.b.upgrades, keep)
 
-                        if (!hasMilestone("sp", 4)) player.b.challenges[11] = 0
-                        if (!hasMilestone("sp", 4)) player.b.challenges[12] = 0
-                        if (!hasMilestone("sp", 5)) player.b.challenges[21] = 0
-                        if (!hasMilestone("sp", 5)) player.b.challenges[22] = 0
+                        if (!hasMilestone("o", 4)){
+                                if (!hasMilestone("sp", 4)) player.b.challenges[11] = 0
+                                if (!hasMilestone("sp", 4)) player.b.challenges[12] = 0
+                                if (!hasMilestone("sp", 5)) player.b.challenges[21] = 0
+                                if (!hasMilestone("sp", 5)) player.b.challenges[22] = 0
+                        }       
                 }
 
                 //resource
@@ -4553,6 +4562,7 @@ addLayer("sp", {
 
                 let a2 = amt.times(10).max(1).pow(2)
                 if (devSpeedUp) a2 = a2.times(10)
+                if (hasUpgrade("o", 13)) a2 = a2.times(2)
                 return [a1, a2]
         },
         effectDescription(){
@@ -4620,6 +4630,8 @@ addLayer("sp", {
                 if (hasUpgrade("pi", 12)) x = x.times(upgradeEffect("pi", 12))
                 if (hasMilestone("pi", 3)) x = x.times(Decimal.pow(2, player.pi.upgrades.length ** 2))
                 if (hasUpgrade("pi", 21)) x = x.times(Decimal.pow(player.pi.points.plus(1), player.pi.upgrades.length))
+                if (hasMilestone("o", 3)) x = x.times(Decimal.add(3, player.o.times).ln())
+                if (hasUpgrade("o", 13)) x = x.times(2)
                 return x
         },
         prestigeButtonText(){
@@ -4962,7 +4974,7 @@ addLayer("sp", {
                 23: {
                         title: "Shear", 
                         description: "Jewel Points multiply Super Prestige Point gain",
-                        cost: new Decimal(839),
+                        cost: new Decimal(835),
                         currencyDisplayName: "Quarts Challenge Points",
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
@@ -5225,10 +5237,11 @@ addLayer("sp", {
                 },
                 "Upgrades": {
                         content: [
+                                "main-resouce-display",
                                 "upgrades"
                         ],
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360)
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360) || player.o.best.gt(0)
                         },
                 }
         },
@@ -5472,8 +5485,8 @@ addLayer("pi", {
                         }
                 },
                 33: {
-                        title: "Steak", //stake
-                        description: "Pion upgrades after the first ten push back the Incrementy Stamina Maximum amount",
+                        title: "Steak",
+                        description: "Pion upgrades after the first ten push back the Incrementy Stamina Maximum amount by 10",
                         cost: new Decimal(1e153),
                         unlocked(){
                                 return hasUpgrade("pi", 32)
@@ -5544,7 +5557,7 @@ addLayer("pi", {
                 },
                 "Upgrades": {
                         content: [
-                                "main-display",
+                                "main-resouce-display",
                                 ["display-text", function(){
                                         if (!hasMilestone("pi", 5)) return ""
                                         return "You are gaining " + format(layers.pi.getResetGain()) + " Pions per second"
@@ -5597,7 +5610,7 @@ addLayer("o", {
         },
         effectDescription(){
                 let eff = layers.o.effect()
-                let a = "which increases Base Incrementy, Tokens, and Neutrino gain by " + format(eff) + " (based on total Origins)"
+                let a = "which increases Tokens and Neutrino gain by " + format(eff) + " (based on total Origins)"
 
                 return a + "."
         },
@@ -5718,13 +5731,49 @@ addLayer("o", {
                                 return hasUpgrade("o", 11)
                         }
                 },
+                13: {
+                        title: "Grothendieck",
+                        description: "Multiply Super Prestige gain and effect by 2",
+                        cost: new Decimal(1),
+                        unlocked(){
+                                return hasUpgrade("o", 12) 
+                        }
+                },
         },
         milestones: {
+                0: {
+                        requirementDescription: "<b>Hörmander</b><br>Requires: 1 total Origins", 
+                        effectDescription: "Origin effect boosts Base Incrementy and autobuyers buy 10x more",
+                        done(){
+                                return player.o.total.gte(1)
+                        },
+                },
                 1: {
-                        requirementDescription: "<b>idk</b><br>Requires: 2 total Origins", 
-                        effectDescription: "Origin effect boosts antimatter",
+                        requirementDescription: "<b>Milnor</b><br>Requires: 2 total Origins", 
+                        effectDescription: "Origin effect boosts Antimatter and you always have autobuyers",
                         done(){
                                 return player.o.total.gte(2)
+                        },
+                },
+                2: {
+                        requirementDescription: "<b>Atiyah</b><br>Requires: 3 total Origins", 
+                        effectDescription: "Origin effect boosts Amoebas and total Origins multiply Shard gain",
+                        done(){
+                                return player.o.total.gte(3)
+                        },
+                },
+                3: {
+                        requirementDescription: "<b>Cohen</b><br>Requires: 5 total Origins", 
+                        effectDescription: "Origin effect boosts Matter and best Origins logarithmically boost Super Prestige Point gain",
+                        done(){
+                                return player.o.total.gte(5)
+                        },
+                },
+                4: {
+                        requirementDescription: "<b>Smale</b><br>Requires: 8 total Origins", 
+                        effectDescription: "Origin effect boosts Particles and keep Boson Challenge completions",
+                        done(){
+                                return player.o.total.gte(8)
                         },
                 },
         },
@@ -5739,6 +5788,7 @@ addLayer("o", {
                 "Upgrades": {
                         content: [
                                 "main-display",
+                                "resource-display",
                                 ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
                                         if (!false) return ""
@@ -5765,7 +5815,7 @@ addLayer("o", {
                                 "milestones",
                         ],
                         unlocked(){
-                                return player.o.times >= 2
+                                return true
                         },
                 },
         },
