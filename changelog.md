@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
 - Fixed tree branches being offset.
+- Fix to lastSafeTab.
 
 ### v2.2.1 - 11/7/20
 - Added a small highlight to layers you can meaningfully prestige on.
