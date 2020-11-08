@@ -1,29 +1,5 @@
 # The Modding Tree changelog:
 
-### v2.2.1 - 11/7/20
-- Added a small highlight to layers you can meaningfully prestige on.
-- Added passiveGeneration and autoPrestige features to standardize prestige automation. (The old ways still work, but the new ones work better with other things)
-- Improved milestones visually a bit.
-- "best" and "total" are now only displayed if present in startData.
-- Fixed issues with things not updating visually. (Thank you to to Jacorb!)
-- Side layers and button nodes can now be highlighted.
-- Updated docs on the new tree-related features.
-
-## v2.2: Uprooted - 11/7/20
-- You can now embed a layer inside of a subtab or microtab!
-- Added support for hiding or reformatting the tree tab 
-- Added non-layer button nodes
-- Added shouldNotify to subtab/microtab buttons. (You can make them highlighted)
-- Added commas to large exponents.
-- Upgrades now only show "currently" if they have an effectDisplay (so not for constant effects).
-- Achievements are part of the default tab format.
-- NaN is now handled more intelligently.
-- Renamed files, and moved less relevant ones to another folder.
-- The "hide completed challenges" setting now only hides challenges at max completions.
-- Thank you to thepaperpilot for fixing errors in docs and improving the infobox appearance!
-- Many other minor fixes.
-
-
 ### v2.1.4 - 10/25/20
 - Added an infobox component. Thank you to thepaperpilot for this contribution!
 - Layer type is now optional, and defaults to "none".
@@ -188,6 +164,7 @@ which will break old things)
 - Fixed a big save issue. If you use a unique mod id, your save will never conflict with other mods.
 - Added a configurable offline time limit in modinfo at the top of index.html. (default 1 hour)
 - Added a few minor features, and updated the docs with new information.
+
 
 
 ### v1.1.1:

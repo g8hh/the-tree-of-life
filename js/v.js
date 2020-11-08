@@ -119,9 +119,9 @@ function loadVue() {
 	Vue.component('challenge', {
 		props: ['layer', 'data'],
 		template: `
-		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(player.hideChallenges && hasChallenge(layer, [data]))" v-bind:class="{hChallenge: true, done: hasChallenge(layer, data), canComplete: player[layer].activeChallenge == data&&!hasChallenge(layer, data)&&canCompleteChallenge(layer, data)}">
+		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(player.hideChallenges && hasChallenge(layer, [data]))" v-bind:class="{hChallenge: true, done: finishedChallenges(layer, data), canComplete: player[layer].activeChallenge == data&&!finishedChallenges(layer, data)&&canCompleteChallenge(layer, data)}">
 			<br><h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
-			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{player[layer].activeChallenge==(data)?(canCompleteChallenge(layer, data)?"Finish":"Exit Early"):(hasChallenge(layer, data)?"Completed":"Start")}}</button><br><br>
+			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{player[layer].activeChallenge==(data)?(canCompleteChallenge(layer, data)?"Finish":"Exit Early"):(finishedChallenges(layer, data)?"Completed":"Start")}}</button><br><br>
 			<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
 			Goal: {{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : "points"}}<br>
 			Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span><br>
@@ -210,10 +210,25 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('main-resouce-display', {
+		props: ['layer'],
+		template: `
+		<div><span v-if="player[layer].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{formatWhole(player[layer].points)}}</h2> {{tmp[layer].resource}}<br></span>
+		`
+	})
+
 	// Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
 	Vue.component('resource-display', {
 		props: ['layer'],
 		template: `
+		<div style="margin-top: -13px">
+			<br>
+			<span v-if="player[layer].best != undefined">Your best {{tmp[layer].resource}} is {{formatWhole(player[layer].best)}}<br></span>
+			<span v-if="player[layer].total != undefined">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></span>
+		</div>
+		`
+		/*
+		`
 		<div style="margin-top: -13px">
 			<span v-if="tmp[layer].type=='normal' && tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3)"><br>You have {{formatWhole(tmp[layer].baseAmount)}} {{tmp[layer].baseResource}}</span>
 			<br><br>
@@ -221,6 +236,8 @@ function loadVue() {
 			<span v-if="player[layer].total != undefined">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></span>
 		</div>
 		`
+
+		*/
 	})
 
 	// data = button size, in px

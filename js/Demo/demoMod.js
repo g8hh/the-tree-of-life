@@ -5,15 +5,14 @@ let modInfo = {
 	discordName: "",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	
-	offlineLimit: 1,  // In hours
+    offlineLimit: 1,  // In hours
+    initialStartPoints: new Decimal (10) // Used for hard resets and new players
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.1",
-	name: "Uprooted",
+	num: "2.1.3.1",
+	name: " We should have thought of this sooner!",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
