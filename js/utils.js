@@ -417,10 +417,12 @@ function canAffordUpgrade(layer, id) {
 }
 
 function hasUpgrade(layer, id){
+	if (["am","a","e","m","q","b","g"].includes(layer) && hasUpgrade("pi", 32)) return false
 	return (player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString()))
 }
 
 function hasMilestone(layer, id){
+	if (["am","a","e","m","q","b","g"].includes(layer) && hasUpgrade("pi", 32)) return false
 	return (player[layer].milestones.includes(toNumber(id)) || player[layer].milestones.includes(id.toString()))
 }
 
@@ -429,10 +431,11 @@ function hasAchievement(layer, id){
 }
 
 function hasChallenge(layer, id){
-	return (player[layer].challenges[id])
+	return challengeCompletions(layer, id)
 }
 
 function challengeCompletions(layer, id){
+	if (["am","a","e","m","q","b","g"].includes(layer) && hasUpgrade("pi", 32)) return 0
 	return (player[layer].challenges[id])
 }
 
@@ -473,7 +476,6 @@ function achievementEffect(layer, id){
 }
 
 function canAffordPurchase(layer, thing, cost) {
-
 	if (thing.currencyInternalName){
 		let name = thing.currencyInternalName
 		if (thing.currencyLocation){

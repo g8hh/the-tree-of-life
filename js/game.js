@@ -105,7 +105,7 @@ function rowReset(row, layer) {
 		return
 	}
 	let order = Object.keys(ROW_LAYERS[row])
-	if (row == 3) order = order.reverse()
+	//if (row == 3) order = order.reverse()
 	for (let i = 0; i < order.length; i ++){
 		lr = order[i]
 		if (layers[lr].doReset) {
@@ -169,6 +169,9 @@ function doReset(layer, force=false) {
 			if (!tmp[layer].canReset) return;
 		} 
 
+		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
+		if (player[layer].times != undefined) player[layer].times += timesMult
+
 		if (layers[layer].onPrestige)
 			layers[layer].onPrestige(gain)
 		
@@ -186,10 +189,7 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
-	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
-		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
-		if (player[layer].times != undefined) player[layer].times += timesMult
 	}
 
 	if (tmp[layer].resetsNothing) return
@@ -279,7 +279,7 @@ function completeChallenge(layer, x) {
 		delete player[layer].activeChallenge
 		return
 	}
-	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
+	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit || player[layer].challenges[x] == undefined) {
 		needCanvasUpdate = true
 		player[layer].challenges[x] += 1
 		if (layers[layer].challenges[x].onComplete) layers[layer].challenges[x].onComplete()

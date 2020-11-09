@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.14",
+	num: "0.93.15",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: Balanced until 12 O resets (v.93.14)"
+	"Current endgame: Balanced until 200 total Origins (v.93.15)"
 ]
 
 // Determines when the game "ends"
