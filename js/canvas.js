@@ -66,10 +66,10 @@ function drawTreeBranch(num1, data) { // taken from Antimatter Dimensions & adju
 
 	let start = document.getElementById(num1).getBoundingClientRect();
     let end = document.getElementById(num2).getBoundingClientRect();
-    let x1 = start.left + (start.width / 2) + document.body.scrollLeft;
-    let y1 = start.top + (start.height / 2) + document.body.scrollTop;
-    let x2 = end.left + (end.width / 2) + document.body.scrollLeft;
-    let y2 = end.top + (end.height / 2) + document.body.scrollTop;
+    let x1 = start.left + (start.width / 2) + (document.getElementById("treeTab").scrollLeft || document.body.scrollLeft);
+    let y1 = start.top + (start.height / 2) + (document.getElementById("treeTab").scrollTop || document.body.scrollTop);
+    let x2 = end.left + (end.width / 2) + (document.getElementById("treeTab").scrollLeft || document.body.scrollLeft);
+    let y2 = end.top + (end.height / 2) + (document.getElementById("treeTab").scrollTop || document.body.scrollTop);
     ctx.lineWidth = 15;
     ctx.beginPath();
     ctx.strokeStyle = color_id

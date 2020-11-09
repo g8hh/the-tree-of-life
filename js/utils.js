@@ -112,7 +112,6 @@ function startPlayerBase() {
 		showStory: true,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
-		lastSafeTab: (layoutInfo.showTree ? "none" : layoutInfo.startTab)
 	}
 }
 
