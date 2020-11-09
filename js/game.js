@@ -245,7 +245,7 @@ function startChallenge(layer, x) {
 function canCompleteChallenge(layer, x){
 	if (x != player[layer].activeChallenge) return
 
-	let challenge = tmp[layer].challenges[x]
+	let challenge = tmp[layer].challenges[x] 
 
 	if (challenge.currencyInternalName){
 		let name = challenge.currencyInternalName

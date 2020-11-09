@@ -712,6 +712,7 @@ addLayer("i", {
                                 if (hasUpgrade("s", 22)) ret = ret.plus(player.s.upgrades.length)
                                 if (hasUpgrade("o", 11)) ret = ret.plus(1)
                                 if (hasUpgrade("o", 14)) ret = ret.plus(1)
+                                if (hasUpgrade("o", 15)) ret = ret.plus(player.o.upgrades.length)
                                 return ret
                         },
                         buy(){
@@ -2043,7 +2044,7 @@ addLayer("p", {
                         description: "Each upgrade in this row allows the purchase of two more Incrementy Stamina levels",
                         cost: Decimal.pow(10, Decimal.pow(10, 15500)),
                         unlocked(){
-                                return hasUpgrade("pi", 42)
+                                return hasUpgrade("pi", 42) || hasUpgrade("p", 41)
                         }
                 },
                 42: {
@@ -3743,6 +3744,7 @@ addLayer("s", {
                 x = x.times(layers.sp.challenges[12].rewardEffect())
                 if (hasUpgrade("sp", 33)) x = x.times(Decimal.pow(player.sp.points.max(1), challengeCompletions("sp", 21)))
                 if (hasMilestone("o", 2)) x = x.times(player.o.total.max(1))
+                if (hasMilestone("o", 5)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -4003,7 +4005,7 @@ addLayer("s", {
                 let keep = []
                 let j = Math.min(25, player.sp.times)
                 if (hasUpgrade("o", 14)) j = Math.min(25, j + 2 * player.o.times)
-                if (hasMilestone("sp", 1)) {
+                if (hasMilestone("sp", 1) || hasUpgrade("o", 14)) {
                         keep = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55].slice(0, j)
                 }
                 player.s.upgrades = filter(player.s.upgrades, keep)
@@ -4634,6 +4636,7 @@ addLayer("sp", {
                 if (hasUpgrade("pi", 21)) x = x.times(Decimal.pow(player.pi.points.plus(1), player.pi.upgrades.length))
                 if (hasMilestone("o", 3)) x = x.times(Decimal.add(3, player.o.times).ln())
                 if (hasUpgrade("o", 13)) x = x.times(2)
+                if (hasMilestone("o", 6)) x = x.times(layers.o.effect())
                 return x
         },
         prestigeButtonText(){
@@ -5257,8 +5260,12 @@ addLayer("sp", {
                 player.sp.total = new Decimal(0)
 
                 if (layer == "pi") return
+                let keep = []
+                if (hasMilestone("o", 6)) keep.push(11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45)
+                player.sp.upgrades = filter(player.sp.upgrades, keep)
+                if (hasMilestone("o", 5)) return 
+                
                 player.sp.times = 0
-                player.sp.upgrades = []
                 player.sp.milestones = []
         },
 })
@@ -5352,7 +5359,7 @@ addLayer("pi", {
                 return start + nextAt
         },
         canReset(){
-                return layers.pi.getResetGain().gt(0) && !hasMilestone("pi", 5)
+                return layers.pi.getResetGain().gt(0) && !hasMilestone("pi", 5) && player.sp.upgrades.length >= 20
         },
         update(diff){
                 player.pi.best = player.pi.best.max(player.pi.points)
@@ -5716,7 +5723,7 @@ addLayer("o", {
         },
         upgrades:{ // https://en.wikipedia.org/wiki/Fields_Medal
                 rows: 4,
-                cols: 4,
+                cols: 5,
                 11: {
                         title: "Ahlfors",
                         description: "Gain a free Incrementy Stamina level",
@@ -5747,6 +5754,14 @@ addLayer("o", {
                         cost: new Decimal(2),
                         unlocked(){
                                 return hasUpgrade("o", 13) 
+                        }
+                },
+                15: {
+                        title: "idk",
+                        description: "Get a free Incrementy Stamina level per Origin Upgrade",
+                        cost: new Decimal(2),
+                        unlocked(){
+                                return hasUpgrade("o", 14) 
                         }
                 },
         },
@@ -5784,6 +5799,20 @@ addLayer("o", {
                         effectDescription: "Origin effect boosts Particles and keep Boson Challenge completions",
                         done(){
                                 return player.o.total.gte(8)
+                        },
+                },
+                5: {
+                        requirementDescription: "<b>idk</b><br>Requires: 13 total Origins", 
+                        effectDescription: "Origin effects Shards, keep the first four rows of Super Prestige upgrades, and Super Prestige times",
+                        done(){
+                                return player.o.total.gte(13)
+                        },
+                },
+                6: {
+                        requirementDescription: "<b>idk</b><br>Requires: 21 total Origins", 
+                        effectDescription: "Origin effects Super Prestige Points and keep the first four rows of Super Prestige upgrades",
+                        done(){
+                                return player.o.total.gte(21)
                         },
                 },
         },
