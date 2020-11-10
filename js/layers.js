@@ -4467,6 +4467,7 @@ addLayer("sp", {
 		points: new Decimal(0),
                 best: new Decimal(0),
                 total: new Decimal(0),
+                time: 0,
                 times: 0,
                 chall1points: new Decimal(0),
                 chall2points: new Decimal(0),
@@ -4582,7 +4583,15 @@ addLayer("sp", {
         update(diff){
                 player.sp.best = player.sp.best.max(player.sp.points)
 
-                if (hasUpgrade("sp", 12)) player.sp.points = player.sp.points.plus(layers.sp.getResetGain().times(diff))
+                if (hasUpgrade("sp", 12)) {
+                        player.sp.points = player.sp.points.plus(layers.sp.getResetGain().times(diff))
+                        player.sp.total = player.sp.total.plus(layers.sp.getResetGain().times(diff))
+                        player.sp.time += diff
+                        if (player.sp.time > 1) {
+                                player.sp.time += -1
+                                player.sp.times ++
+                        }
+                }
 
                 if (hasUpgrade("pi", 32)) {
                         player.sp.chall1points = new Decimal(0)
@@ -4844,7 +4853,7 @@ addLayer("sp", {
                 }, 
                 12: {
                         title: "Loot",
-                        description: "Remove the ability to Prestige but gain 100% of Super Prestige Points on prestige per second",
+                        description: "Remove the ability to Prestige but gain 100% of SP Points on prestige and one SP time per second",
                         cost: new Decimal(396),
                         currencyDisplayName: "Quartz Challenge Points",
                         currencyInternalName: "chall1points",
