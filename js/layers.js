@@ -5434,6 +5434,13 @@ addLayer("pi", {
                         cost: new Decimal(4321),
                         unlocked(){
                                 return hasUpgrade("pi", 31)
+                        },
+                        onPurchase(){
+                                player.sp.activeChallenge = undefined
+                                player.am.activeChallenge = undefined
+                                player.m.activeChallenge = undefined
+                                player.b.activeChallenge = undefined
+                                player.q.activeChallenge = undefined
                         }
                 },
                 33: {
