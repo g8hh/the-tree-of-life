@@ -132,6 +132,7 @@ function getIStaminaSoftcapStart(){
         if (hasUpgrade("pi", 13)) ret += player.pi.upgrades.length
         if (hasUpgrade("sp", 54)) ret += 69
         if (hasUpgrade("sp", 54)) ret += 5
+        if (hasUpgrade("o", 33)) ret += layers.o.buyables[11].total().toNumber()
         return ret
 }
 
@@ -383,7 +384,7 @@ addLayer("i", {
                         description: "Unlock the first repeatable upgrade",
                         cost: new Decimal(50),
                         unlocked(){
-                                return hasIUpg(11) || hasAMUpgrade(12) || hasIUpg(12) || hasUnlockedRow(1)
+                                return hasIUpg(11) || hasUnlockedRow(1)
                         },
                 },
                 13: {
@@ -391,7 +392,7 @@ addLayer("i", {
                         description: "Unlock the second repeatable upgrade",
                         cost: new Decimal(1e4),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(10) || hasAMUpgrade(12) || hasIUpg(13) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 11).gte(10) || hasUnlockedRow(1)
                         }
                 },
                 14: {
@@ -399,7 +400,7 @@ addLayer("i", {
                         description: "Unlock the third repeatable upgrade",
                         cost: new Decimal(2e5),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(3) || hasAMUpgrade(12) || hasIUpg(14) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 12).gte(3) || hasUnlockedRow(1)
                         }
                 },
                 21: {
@@ -407,7 +408,7 @@ addLayer("i", {
                         description: "Square Cache",
                         cost: new Decimal(2e5),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(15) || hasAMUpgrade(12) || hasIUpg(21) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 11).gte(15) || hasUnlockedRow(1)
                         },
                 },
                 22: {
@@ -415,7 +416,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Speed",
                         cost: new Decimal(15e7),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(19) || hasAMUpgrade(12) || hasIUpg(22) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 11).gte(19) || hasUnlockedRow(1)
                         },
                 },
                 23: {
@@ -423,7 +424,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Strength",
                         cost: new Decimal(1e19),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(65) || hasAMUpgrade(12) || hasIUpg(23) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 11).gte(65) || hasUnlockedRow(1)
                         },
                 },
                 24: {
@@ -431,7 +432,7 @@ addLayer("i", {
                         description: "Remove the linear cost scaling of Incrementy Stamina and Cache is based on best Incrementy",
                         cost: new Decimal(1e20),
                         unlocked(){
-                                return getBuyableAmount("i", 11).gte(67) || hasAMUpgrade(12) || hasIUpg(24) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 11).gte(67) || hasUnlockedRow(1)
                         },
                 },
                 31: {
@@ -439,7 +440,7 @@ addLayer("i", {
                         description: "Nerf the superexponential Incrementy Stamina scaling",
                         cost: new Decimal(1e21),
                         unlocked(){
-                                return getBuyableAmount("i", 12).gte(14) || hasAMUpgrade(12) || hasIUpg(31) || hasUnlockedRow(1)
+                                return getBuyableAmount("i", 12).gte(14) || hasUnlockedRow(1)
                         },
                 },
                 32: {
@@ -447,7 +448,7 @@ addLayer("i", {
                         description: "Antimatter effect is applied before Stamina",
                         cost: new Decimal(2e29),
                         unlocked(){
-                                return (hasAMUpgrade(13) && getBuyableAmount("i", 12).gte(17)) || hasIUpg(32) || hasUpgrade("pi", 32) || hasUnlockedRow(2)
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 12).gte(17)) || hasUnlockedRow(2)
                         },
                 },
                 33: {
@@ -455,7 +456,7 @@ addLayer("i", {
                         description: "Each Incrementy Strength adds .02 to the Incrementy Strength base (capped at 10)",
                         cost: new Decimal(1e34),
                         unlocked(){
-                                return (hasAMUpgrade(13) && getBuyableAmount("i", 11).gte(89)) || hasIUpg(33) || hasUpgrade("pi", 32) || hasUnlockedRow(2)
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 11).gte(89)) || hasUnlockedRow(2)
                         },
                 },
                 34: {
@@ -463,7 +464,7 @@ addLayer("i", {
                         description: "Each Incrementy Speed adds .01 to the Incrementy Speed base (capped at 10)",
                         cost: new Decimal(1e37),
                         unlocked(){
-                                return (hasAMUpgrade(13) && getBuyableAmount("i", 13).gte(19)) || hasIUpg(34) || hasUpgrade("pi", 32) || hasUnlockedRow(2)
+                                return (hasAMUpgrade(13) && getBuyableAmount("i", 13).gte(19)) || hasUnlockedRow(2)
                         },
                 },
                 15: {
@@ -471,7 +472,7 @@ addLayer("i", {
                         description: "Each upgrade in this column adds .5 to the Neutrino Generation buyable base",
                         cost: new Decimal("1e59600"),
                         unlocked(){
-                                return hasChallenge("q", 11) || hasIUpg(15) || hasUnlockedRow(4)
+                                return hasChallenge("q", 11) || hasIUpg(15) || hasUnlockedRow(3)
                         },
                 },
                 25: {
@@ -479,7 +480,7 @@ addLayer("i", {
                         description: "Double Quark gain",
                         cost: new Decimal("1e61090"),
                         unlocked(){
-                                return hasIUpg(15) || hasUnlockedRow(4)
+                                return hasIUpg(15) || hasUnlockedRow(3)
                         },
                 },
                 35: {
@@ -487,7 +488,7 @@ addLayer("i", {
                         description: "Amoeba Gain buyables give free levels to Incrementy Boost buyables",
                         cost: new Decimal("1e66205"),
                         unlocked(){
-                                return hasIUpg(25) || hasUnlockedRow(4)
+                                return hasIUpg(25) || hasUnlockedRow(3)
                         },
                 },
         },
@@ -573,7 +574,7 @@ addLayer("i", {
                                 //so ew, make sure to do the rest, but ew
                                 
                         },
-                        unlocked(){ return hasIUpg(12) || hasUnlockedRow(3) },
+                        unlocked(){ return hasIUpg(12) || hasUnlockedRow(3)},
                 },
                 12: {
                         title: "Incrementy Strength",
@@ -655,7 +656,7 @@ addLayer("i", {
                                 //so ew, make sure to do the rest, but ew
                                 
                         },
-                        unlocked(){ return hasIUpg(13) || hasUnlockedRow(3) },
+                        unlocked(){ return hasIUpg(13) || hasUnlockedRow(3)},
                 },
                 13: {
                         title: "Incrementy Stamina",
@@ -752,7 +753,7 @@ addLayer("i", {
                                         layers.i.buyables[13].buy()
                                 }
                         },
-                        unlocked(){ return hasIUpg(14) || hasUnlockedRow(3) },
+                        unlocked(){ return hasIUpg(14) || hasUnlockedRow(3)},
                 },
         },
         tabFormat: {
@@ -941,7 +942,7 @@ addLayer("am", {
                         description: "Triple Incrementy gain, and keep the first row of Incrementy Upgrades",
                         cost: new Decimal(2),
                         unlocked(){
-                                return hasAMUpgrade(11)
+                                return hasAMUpgrade(11) || hasUnlockedRow(2)
                         },
                 },
                 13: {
@@ -949,7 +950,7 @@ addLayer("am", {
                         description: "Unlock new I upgrades, keep them on AM reset, you can buy 100 Incrementy Buyables, and they don't cost Incrementy",
                         cost: new Decimal(10),
                         unlocked(){
-                                return hasAMUpgrade(12)
+                                return hasAMUpgrade(12) || hasUnlockedRow(2)
                         },
                 },
                 14: {
@@ -960,7 +961,7 @@ addLayer("am", {
                         currencyInternalName: "points",
                         currencyLayer: "i",
                         unlocked(){
-                                return hasIUpg(34) || hasAMUpgrade(14)
+                                return hasIUpg(34) || hasUnlockedRow(2)
                         },
                 },
                 21: {
@@ -968,7 +969,7 @@ addLayer("am", {
                         description: "Remove the Antimatter prestige, but gain 100% of gain on reset per second",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasAMUpgrade(14) || hasAMUpgrade(21)
+                                return hasAMUpgrade(14) || hasUnlockedRow(2)
                         },
                 },
                 22: {
@@ -976,7 +977,7 @@ addLayer("am", {
                         description: "Incrementy Speed levels multiply base incrementy gain",
                         cost: new Decimal(1000),
                         unlocked(){
-                                return hasAMUpgrade(21) || hasAMUpgrade(22)
+                                return hasAMUpgrade(21) || hasUnlockedRow(2)
                         },
                 },
                 23: {
@@ -984,7 +985,7 @@ addLayer("am", {
                         description: "Square antimatter gain and effect",
                         cost: new Decimal(2000),
                         unlocked(){
-                                return hasAMUpgrade(22) || hasAMUpgrade(23)
+                                return hasAMUpgrade(22) || hasUnlockedRow(2)
                         },
                 }, 
                 24: {
@@ -992,7 +993,7 @@ addLayer("am", {
                         description: "Incrementy Stamina levels multiply base incrementy gain",
                         cost: new Decimal(1e26),
                         unlocked(){
-                                return hasMilestone("a", 4) || hasAMUpgrade(24)
+                                return hasMilestone("a", 4) || hasUnlockedRow(3)
                         },
                 }, 
                 15: {
@@ -1008,7 +1009,7 @@ addLayer("am", {
                                 return Decimal.pow(1+c, 300)
                         },
                         unlocked(){
-                                return hasChallenge("q", 21)
+                                return hasChallenge("q", 21) || hasUnlockedRow(3)
                         },
                 }, 
                 25: {
@@ -1016,7 +1017,7 @@ addLayer("am", {
                         description: "Incrementy Softcap starts 3 later <br>(52 -> 55)",
                         cost: new Decimal("1e870"),
                         unlocked(){
-                                return hasUpgrade("am", 15)
+                                return hasUpgrade("am", 15) || hasUnlockedRow(3)
                         },
                 }, 
         },
@@ -1028,7 +1029,7 @@ addLayer("am", {
                         challengeDescription: "Get ^.1 of your normal Incrementy gain",
                         rewardDescription: "Incrementy Stamina softcap starts 5 later (40 -> 45)",
                         unlocked(){
-                                return hasAUpgrade(11) || hasUpgrade("s", 14)
+                                return hasAUpgrade(11) || hasUpgrade("s", 14) || hasUnlockedRow(3)
                         },
                         goal: new Decimal(1e100),
                         currencyInternalName: "points",
@@ -1038,7 +1039,7 @@ addLayer("am", {
                         challengeDescription: "Get ^.1 of your normal point gain",
                         rewardDescription: "Unlock Matter and the ability to Matter Prestige",
                         unlocked(){
-                                return hasAUpgrade(11) || hasUpgrade("s", 14)
+                                return hasAUpgrade(11) || hasUpgrade("s", 14) || hasUnlockedRow(3)
                         },
                         goal: new Decimal(2.22e222),
                         currencyInternalName: "points",
@@ -1197,7 +1198,7 @@ addLayer("a", {
                         description: "Unlock two Antimatter Challenges",
                         cost: new Decimal(3e5),
                         unlocked(){
-                                return hasMilestone("a", 4) || hasUpgrade("s", 15)
+                                return hasMilestone("a", 4) || hasUnlockedRow(3)
                         },
                 },
                 12: {
@@ -1205,7 +1206,7 @@ addLayer("a", {
                         description: "Unlock two Matter Challenges",
                         cost: new Decimal(5e13),
                         unlocked(){
-                                return hasUpgrade("e", 24) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 24) || hasUnlockedRow(3)
                         },
                 },
                 13: {
@@ -1213,7 +1214,7 @@ addLayer("a", {
                         description: "Unlock new Energy Upgrades",
                         cost: new Decimal(1e17),
                         unlocked(){
-                                return hasChallenge("m", 12) || hasUpgrade("s", 15)
+                                return hasChallenge("m", 12) || hasUnlockedRow(3)
                         },
                 },
                 14: {
@@ -1221,7 +1222,7 @@ addLayer("a", {
                         description: "Remove the quadratic cost scaling of Incrementy Stamina",
                         cost: new Decimal(1e35),
                         unlocked(){
-                                return hasUpgrade("e", 34) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 34) || hasUnlockedRow(3)
                         },
                 }, 
                 21: {
@@ -1235,7 +1236,7 @@ addLayer("a", {
                                 return player.a.points.max(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("a", 14) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 14) || hasUnlockedRow(3)
                         },
                 }, 
                 22: {
@@ -1249,7 +1250,7 @@ addLayer("a", {
                                 return player.am.points.max(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("a", 21) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 21) || hasUnlockedRow(3)
                         },
                 },
                 23: {
@@ -1263,7 +1264,7 @@ addLayer("a", {
                                 return player.m.points.max(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("a", 22) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 22) || hasUnlockedRow(3)
                         },
                 }, 
                 24: {
@@ -1274,7 +1275,7 @@ addLayer("a", {
                         currencyInternalName: "points",
                         currencyLayer: "i",
                         unlocked(){
-                                return hasUpgrade("a", 23) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 23) || hasUnlockedRow(3)
                         },
                 }, 
                 15: {
@@ -1285,7 +1286,7 @@ addLayer("a", {
                                 return player.a.points.plus(10).log10().pow(5)
                         },
                         unlocked(){
-                                return hasUpgrade("p", 32) || hasUpgrade("s", 15)
+                                return hasUpgrade("p", 32) || hasUnlockedRow(3)
                         },
                 },
                 25: {
@@ -1293,7 +1294,7 @@ addLayer("a", {
                         description: "Particle Acceleration base is multiplied by Neutrino Generation total levels",
                         cost: new Decimal(1e167),
                         unlocked(){
-                                return hasUpgrade("a", 15) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 15) || hasUnlockedRow(3)
                         },
                 },
         },
@@ -1445,7 +1446,7 @@ addLayer("m", {
                         challengeDescription: "Amoebas base effects are 1 and square root Incrementy gain",
                         rewardDescription: "Incrementy Stamina softcap starts 5 later (45 -> 50)",
                         unlocked(){
-                                return hasAUpgrade(12) || hasUpgrade("s", 14)
+                                return hasAUpgrade(12) || hasUnlockedRow(3)
                         },
                         goal: new Decimal("1e840"),
                         currencyInternalName: "points",
@@ -1455,7 +1456,7 @@ addLayer("m", {
                         challengeDescription: "Amoebas and Antimatter base effects are 1 and cube root Incrementy gain",
                         rewardDescription: "Energy multiples Incrementy gain",
                         unlocked(){
-                                return hasAUpgrade(12) || hasUpgrade("s", 14)
+                                return hasAUpgrade(12) || hasUnlockedRow(3)
                         },
                         goal: new Decimal("1e456"),
                         currencyInternalName: "points",
@@ -1574,7 +1575,7 @@ addLayer("e", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("e", 11) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 11) || hasUnlockedRow(3)
                         }
                 },
                 13:{
@@ -1589,7 +1590,7 @@ addLayer("e", {
                                 return Decimal.pow(1.01, getBuyableAmount("i", 11)).pow(exp)
                         },
                         unlocked(){
-                                return hasMilestone("m", 3) || hasUpgrade("s", 15)
+                                return hasMilestone("m", 3) || hasUnlockedRow(3)
                         }
                 },
                 14:{
@@ -1597,7 +1598,7 @@ addLayer("e", {
                         description: "Remove the ability to Matter prestige, but get 100% of Matter upon prestige per second",
                         cost: new Decimal(1e12),
                         unlocked(){
-                                return hasUpgrade("e", 13) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 13) || hasUnlockedRow(3)
                         },
                 },
                 21:{
@@ -1605,7 +1606,7 @@ addLayer("e", {
                         description: "Amoebas multiply matter gain",
                         cost: new Decimal(1e16),
                         unlocked(){
-                                return hasUpgrade("e", 14) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 14) || hasUnlockedRow(3)
                         },
                 },
                 22:{
@@ -1618,7 +1619,7 @@ addLayer("e", {
                                 return Decimal.pow(1.33, getBuyableAmount("i", 13)).pow(exp)
                         },
                         unlocked(){
-                                return hasUpgrade("e", 21) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 21) || hasUnlockedRow(3)
                         },
                 },
                 23:{
@@ -1626,7 +1627,7 @@ addLayer("e", {
                         description: "Energy multiplies Incrementy gain",
                         cost: new Decimal(1e71),
                         unlocked(){
-                                return hasUpgrade("e", 22) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 22) || hasUnlockedRow(3)
                         },
                 },
                 24:{
@@ -1634,7 +1635,7 @@ addLayer("e", {
                         description: "Square vial",
                         cost: new Decimal(1e75),
                         unlocked(){
-                                return hasUpgrade("e", 23) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 23) || hasUnlockedRow(3)
                         },
                 },
                 31:{
@@ -1642,7 +1643,7 @@ addLayer("e", {
                         description: "Square vial",
                         cost: new Decimal(1e95),
                         unlocked(){
-                                return hasUpgrade("a", 13) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 13) || hasUnlockedRow(3)
                         },
                 },
                 32:{
@@ -1650,7 +1651,7 @@ addLayer("e", {
                         description: "Square vial",
                         cost: new Decimal(1e110),
                         unlocked(){
-                                return hasUpgrade("e", 31) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 31) || hasUnlockedRow(3)
                         },
                 },
                 33:{
@@ -1658,7 +1659,7 @@ addLayer("e", {
                         description: "Remove the current Antimatter to Incrementy multiplier softcaps",
                         cost: new Decimal(1e140),
                         unlocked(){
-                                return hasUpgrade("e", 32) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 32) || hasUnlockedRow(3)
                         },
                 },
                 34:{
@@ -1666,7 +1667,7 @@ addLayer("e", {
                         description: "Square Mined",
                         cost: new Decimal(1e220),
                         unlocked(){
-                                return hasUpgrade("e", 33) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 33) || hasUnlockedRow(3)
                         },
                 },
                 41:{
@@ -1679,7 +1680,7 @@ addLayer("e", {
                                 return Decimal.pow(l, l / 4) 
                         },
                         unlocked(){
-                                return hasUpgrade("a", 24) || hasUpgrade("s", 15)
+                                return hasUpgrade("a", 24) || hasUnlockedRow(3)
                         },
                 },
                 42:{
@@ -1698,7 +1699,7 @@ addLayer("e", {
                         currencyInternalName: "points",
                         currencyLayer: "i",
                         unlocked(){
-                                return hasUpgrade("e", 41) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 41) || hasUnlockedRow(3)
                         },
                 },
                 43:{
@@ -1706,7 +1707,7 @@ addLayer("e", {
                         description: "Incrementy Stamina softcap starts 1 later (50 -> 51)",
                         cost: new Decimal("1e287"),
                         unlocked(){
-                                return hasUpgrade("e", 42) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 42) || hasUnlockedRow(3)
                         },
                 },
                 44:{
@@ -1717,7 +1718,7 @@ addLayer("e", {
                                 return player.e.points.max(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("e", 43) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 43) || hasUnlockedRow(3)
                         },
                 },
                 51:{
@@ -1728,7 +1729,7 @@ addLayer("e", {
                         currencyInternalName: "points",
                         currencyLayer: "i",
                         unlocked(){
-                                return hasUpgrade("e", 44) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 44) || hasUnlockedRow(3)
                         },
                 },
                 52:{
@@ -1736,7 +1737,7 @@ addLayer("e", {
                         description: "Square Hair",
                         cost: new Decimal("1e328"),
                         unlocked(){
-                                return hasUpgrade("e", 51) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 51) || hasUnlockedRow(3)
                         },
                 },
                 53:{
@@ -1744,7 +1745,7 @@ addLayer("e", {
                         description: "Square Hair",
                         cost: new Decimal("1e355"),
                         unlocked(){
-                                return hasUpgrade("e", 52) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 52) || hasUnlockedRow(3)
                         },
                 },
                 54:{
@@ -1752,7 +1753,7 @@ addLayer("e", {
                         description: "Incrementy Stamina softcap starts 1 later (51 -> 52)",
                         cost: new Decimal("1e385"),
                         unlocked(){
-                                return hasUpgrade("e", 53) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 53) || hasUnlockedRow(3)
                         },
                 },
                 15:{
@@ -1760,7 +1761,7 @@ addLayer("e", {
                         description: "Base Incrementy Gain buyable effect is raised to the tenth power",
                         cost: new Decimal("1e408"),
                         unlocked(){
-                                return getBuyableAmount("n", 31).gte(2) || hasUpgrade("s", 15)
+                                return getBuyableAmount("n", 31).gte(2) || hasUnlockedRow(3)
                         },
                 },
                 25:{
@@ -1768,7 +1769,7 @@ addLayer("e", {
                         description: "Gain a free Energy Boost buyable",
                         cost: new Decimal("1e418"),
                         unlocked(){
-                                return hasUpgrade("e", 15) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 15) || hasUnlockedRow(3)
                         },
                 }, 
                 35:{
@@ -1779,7 +1780,7 @@ addLayer("e", {
                                 return player.e.points.plus(10).log10().pow(.5)
                         },
                         unlocked(){
-                                return hasUpgrade("e", 25) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 25) || hasUnlockedRow(3)
                         },
                 },
                 45:{
@@ -1787,7 +1788,7 @@ addLayer("e", {
                         description: "Each Neutrino Generation level past 100 boosts its base by .01 (capped at 10)",
                         cost: new Decimal("1e439"),
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(24) || hasUpgrade("s", 15)
+                                return getBuyableAmount("n", 12).gte(24) || hasUnlockedRow(3)
                         },
                 },
                 55:{
@@ -1798,7 +1799,7 @@ addLayer("e", {
                                 return player.i.points.plus(10).log10().root(3)
                         },
                         unlocked(){
-                                return hasUpgrade("e", 45) || hasUpgrade("s", 15)
+                                return hasUpgrade("e", 45) || hasUnlockedRow(3)
                         },
                 },
         },
@@ -1852,6 +1853,7 @@ addLayer("p", {
         getGainExp(){
                 let x = new Decimal(.5)
                 if (hasUpgrade("o", 12)) x = x.times(1.001)
+                x = x.times(layers.o.buyables[21].effect())
                 return x
         },
         getGainMult(){
@@ -1923,7 +1925,7 @@ addLayer("p", {
                                 return player.a.points.plus(10).log10().pow(.5)
                         },
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(9) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 12).gte(9) || hasUnlockedRow(3)
                         },
                 },
                 13:{
@@ -1934,7 +1936,7 @@ addLayer("p", {
                                 return player.p.points.plus(10).log10()
                         },
                         unlocked(){
-                                return getBuyableAmount("n", 21).gte(6) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 21).gte(6) || hasUnlockedRow(3)
                         },
                 },
                 14:{
@@ -1945,7 +1947,7 @@ addLayer("p", {
                                 return player.n.points.plus(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("p", 13) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 13) || hasUnlockedRow(3)
                         },
                 },
                 21:{
@@ -1953,7 +1955,7 @@ addLayer("p", {
                         description: "Begin production of Gluons",
                         cost: new Decimal(3.5e34),
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(31) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 12).gte(31) || hasUnlockedRow(3)
                         }
                 },
                 22:{
@@ -1966,7 +1968,7 @@ addLayer("p", {
                                 return ret
                         },
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(33) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 12).gte(33) || hasUnlockedRow(3)
                         }
                 },
                 23:{
@@ -1974,7 +1976,7 @@ addLayer("p", {
                         description: "Each Gluon Upgrade adds .05 to the Neutrino Generation base",
                         cost: new Decimal(2e96),
                         unlocked(){
-                                return getBuyableAmount("n", 11).gte(54) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 11).gte(54) || hasUnlockedRow(3)
                         }
                 },
                 24:{
@@ -1985,7 +1987,7 @@ addLayer("p", {
                                 return player.e.points.max(10).log10()
                         },
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(64) || hasUpgrade("s", 21)
+                                return getBuyableAmount("n", 12).gte(64) || hasUnlockedRow(3)
                         }
                 },
                 31:{
@@ -1993,7 +1995,7 @@ addLayer("p", {
                         description: "Begin production of Quarks",
                         cost: new Decimal(1.5e198),
                         unlocked(){
-                                return hasUpgrade("g", 54) || hasUpgrade("s", 21)
+                                return hasUpgrade("g", 54) || hasUnlockedRow(3)
                         }
                 },
                 32:{
@@ -2001,7 +2003,7 @@ addLayer("p", {
                         description: "Unlock a 5th Column of Amoeba Upgrades",
                         cost: new Decimal("7e311"),
                         unlocked(){
-                                return hasUpgrade("p", 25) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 25) || hasUnlockedRow(3)
                         }
                 },
                 33:{
@@ -2009,7 +2011,7 @@ addLayer("p", {
                         description: "Unlock the third Particle Buyable and P Collision gives free levels to middle column Neutrino buyables",
                         cost: new Decimal("4e352"),
                         unlocked(){
-                                return hasUpgrade("p", 32) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 32) || hasUnlockedRow(3)
                         }
                 },
                 34:{
@@ -2017,7 +2019,7 @@ addLayer("p", {
                         description: "Particle Simulation gives free levels to right column Neutrino buyables and gain 1000x Neutrinos", 
                         cost: new Decimal("2.58e423"),
                         unlocked(){
-                                return hasUpgrade("p", 33) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 33) || hasUnlockedRow(3)
                         }
                 },
                 15:{
@@ -2025,7 +2027,7 @@ addLayer("p", {
                         description: "Unlock the first Particle Buyable", 
                         cost: Decimal.pow(2, 1024),
                         unlocked(){
-                                return hasChallenge("q", 22) || hasUpgrade("s", 21)
+                                return hasChallenge("q", 22) || hasUnlockedRow(3)
                         }
                 },
                 25:{
@@ -2033,7 +2035,7 @@ addLayer("p", {
                         description: "Unlock the second Particle Buyable and P Acceleration gives free levels to left column Neutrino buyables", 
                         cost: Decimal.pow(10, 311),
                         unlocked(){
-                                return hasUpgrade("p", 15) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 15) || hasUnlockedRow(3)
                         }
                 },
                 35:{
@@ -2041,7 +2043,7 @@ addLayer("p", {
                         description: "Unlock Shards", 
                         cost: Decimal.pow(10, 502).times(2),
                         unlocked(){
-                                return hasUpgrade("p", 34) || hasUpgrade("s", 21)
+                                return hasUpgrade("p", 34) || hasUnlockedRow(3)
                         }
                 },
                 41: {
@@ -2049,7 +2051,7 @@ addLayer("p", {
                         description: "Each upgrade in this row allows the purchase of two more Incrementy Stamina levels",
                         cost: Decimal.pow(10, Decimal.pow(10, 15500)),
                         unlocked(){
-                                return hasUpgrade("pi", 42) || hasUpgrade("p", 41)
+                                return hasUpgrade("pi", 42) || hasUpgrade("p", 41) 
                         }
                 },
                 42: {
@@ -2180,34 +2182,8 @@ addLayer("p", {
                         },
                         buyMax(maximum){
                                 return 
-                                /*       
-                                if (player.i.points.lt(10)) return
-                                if (player.i.points.lt(20)) {
-                                        layers.i.buyables[11].buy()
-                                        return
-                                }
-                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
-                                //this wont quite work if we are buying the very first one and only the very first one
-
-                                // let exp2 = x.minus(1).max(0).times(x)
-                                let pttarget = player.i.points.div(10).log(1.01)
-                                let bfactor = Math.log(base1)/Math.log(1.01)
-                                //want to find ax^2+bx = c
-                                let c = pttarget //on other side
-                                let b = bfactor - 1
-                                // let a = 1 this is constant so remove it
-
-                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
-                                //-b + sqrt(b*b+4*c)
-
-                                let diff = target.minus(player.i.buyables[11]).max(0)
-                                if (maximum != undefined) diff = diff.min(maximum)
-                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
-
-                                //so ew, make sure to do the rest, but ew
-                                */
                         },
-                        unlocked(){ return (hasUpgrade("p", 15) || player.sp.best.gt(0)) && !hasUpgrade("pi", 41)},
+                        unlocked(){ return (hasUpgrade("p", 15) || hasUnlockedRow(3)) && !hasUpgrade("pi", 41)},
                 },
                 12: {
                         title: "Particle Collision",
@@ -2262,34 +2238,8 @@ addLayer("p", {
                         },
                         buyMax(maximum){
                                 return 
-                                /*       
-                                if (player.i.points.lt(10)) return
-                                if (player.i.points.lt(20)) {
-                                        layers.i.buyables[11].buy()
-                                        return
-                                }
-                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
-                                //this wont quite work if we are buying the very first one and only the very first one
-
-                                // let exp2 = x.minus(1).max(0).times(x)
-                                let pttarget = player.i.points.div(10).log(1.01)
-                                let bfactor = Math.log(base1)/Math.log(1.01)
-                                //want to find ax^2+bx = c
-                                let c = pttarget //on other side
-                                let b = bfactor - 1
-                                // let a = 1 this is constant so remove it
-
-                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
-                                //-b + sqrt(b*b+4*c)
-
-                                let diff = target.minus(player.i.buyables[11]).max(0)
-                                if (maximum != undefined) diff = diff.min(maximum)
-                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
-
-                                //so ew, make sure to do the rest, but ew
-                                */
                         },
-                        unlocked(){ return (hasUpgrade("p", 25) || player.sp.best.gt(0)) && !hasUpgrade("pi", 41)},
+                        unlocked(){ return (hasUpgrade("p", 25) || hasUnlockedRow(3)) && !hasUpgrade("pi", 41)},
                 },
                 13: {
                         title: "Particle Simulation",
@@ -2344,34 +2294,8 @@ addLayer("p", {
                         },
                         buyMax(maximum){
                                 return 
-                                /*       
-                                if (player.i.points.lt(10)) return
-                                if (player.i.points.lt(20)) {
-                                        layers.i.buyables[11].buy()
-                                        return
-                                }
-                                let base1 = (hasIUpg(22) ? 1 : 2 / 1.01) 
-                                //this wont quite work if we are buying the very first one and only the very first one
-
-                                // let exp2 = x.minus(1).max(0).times(x)
-                                let pttarget = player.i.points.div(10).log(1.01)
-                                let bfactor = Math.log(base1)/Math.log(1.01)
-                                //want to find ax^2+bx = c
-                                let c = pttarget //on other side
-                                let b = bfactor - 1
-                                // let a = 1 this is constant so remove it
-
-                                let target = c.times(4).plus(b * b).sqrt().minus(b).div(2).floor().plus(1)
-                                //-b + sqrt(b*b+4*c)
-
-                                let diff = target.minus(player.i.buyables[11]).max(0)
-                                if (maximum != undefined) diff = diff.min(maximum)
-                                player.i.buyables[11] = player.i.buyables[11].plus(diff)
-
-                                //so ew, make sure to do the rest, but ew
-                                */
                         },
-                        unlocked(){ return (hasUpgrade("p", 33) || player.sp.best.gt(0)) && !hasUpgrade("pi", 41)},
+                        unlocked(){ return (hasUpgrade("p", 33) || hasUnlockedRow(3)) && !hasUpgrade("pi", 41)},
                 },
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
@@ -2379,7 +2303,7 @@ addLayer("p", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return player.i.best.gt(Decimal.pow(10, 11450)) || player.p.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                return player.i.best.gt(Decimal.pow(10, 11450)) || hasUnlockedRow(3)
         },
         tabFormat: ["main-display",
                 ["display-text", function(){
@@ -2671,7 +2595,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[12] = player.n.buyables[12].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(2) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(2) || hasUnlockedRow(3) },
                 },
                 13: {
                         title: "Base Incrementy Gain",
@@ -2748,7 +2672,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[13] = player.n.buyables[13].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(12) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(12) || hasUnlockedRow(3) },
                 },
                 21: {
                         title: "Incrementy Boost",
@@ -2819,7 +2743,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[21] = player.n.buyables[21].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(5) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(5) || hasUnlockedRow(3) },
                 },
                 22: {
                         title: "Particle Boost",
@@ -2892,7 +2816,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[22] = player.n.buyables[22].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(5) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(5) || hasUnlockedRow(3) },
                 },
                 23: {
                         title: "Energy Boost",
@@ -2971,7 +2895,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[23] = player.n.buyables[23].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(12) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(12) || hasUnlockedRow(3) },
                 },
                 31: {
                         title: "Matter Gain",
@@ -3041,7 +2965,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[31] = player.n.buyables[31].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(20) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(20) || hasUnlockedRow(3) },
                 },
                 32: {
                         title: "Antimatter Gain",
@@ -3114,7 +3038,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[32] = player.n.buyables[32].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(20) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(20) || hasUnlockedRow(3) },
                 },
                 33: {
                         title: "Amoeba Gain",
@@ -3190,7 +3114,7 @@ addLayer("n", {
                                 if (maximum != undefined) diff = diff.min(maximum)
                                 player.n.buyables[33] = player.n.buyables[33].plus(diff)
                         },
-                        unlocked(){ return player.n.buyables[11].gte(20) || hasUpgrade("s", 15) },
+                        unlocked(){ return player.n.buyables[11].gte(20) || hasUnlockedRow(3) },
                 },
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -3198,7 +3122,7 @@ addLayer("n", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return hasUpgrade("p", 11) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                return hasUpgrade("p", 11) || hasUnlockedRow(3)
         },
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.n.getResetGain()) + " Neutrinos per second (based on particles)"}],
@@ -3305,7 +3229,7 @@ addLayer("g", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("g", 11) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 11) || hasUnlockedRow(3)
                         },
                 },
                 13: {
@@ -3317,7 +3241,7 @@ addLayer("g", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("g", 12) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 12) || hasUnlockedRow(3)
                         },
                 },
                 14: {
@@ -3325,7 +3249,7 @@ addLayer("g", {
                         description: "Add two free levels to Base Incrementy Gain Neutrino buyable", 
                         cost: new Decimal(1e15),
                         unlocked(){
-                                return hasUpgrade("g", 13) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 13) || hasUnlockedRow(3)
                         },
                 },
                 21: {
@@ -3333,7 +3257,7 @@ addLayer("g", {
                         description: "Add .3 to the Neutrino Generation base", 
                         cost: new Decimal(5e21),
                         unlocked(){
-                                return hasUpgrade("g", 14) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 14) || hasUnlockedRow(3)
                         },
                 },
                 22: {
@@ -3345,7 +3269,7 @@ addLayer("g", {
                                 return Decimal.pow(l, l/2)
                         },
                         unlocked(){
-                                return hasUpgrade("g", 21) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 21) || hasUnlockedRow(3)
                         },
                 },
                 23: {
@@ -3356,7 +3280,7 @@ addLayer("g", {
                                 return player.e.points.plus(10).log10()
                         },
                         unlocked(){
-                                return hasUpgrade("g", 22) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 22) || hasUnlockedRow(3)
                         },
                 },
                 24: {
@@ -3367,7 +3291,7 @@ addLayer("g", {
                                 return player.g.points.plus(10).log10().pow(5)
                         },
                         unlocked(){
-                                return hasUpgrade("g", 23) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 23) || hasUnlockedRow(3)
                         },
                 },
                 31: {
@@ -3375,7 +3299,7 @@ addLayer("g", {
                         description: "Neutrinos multiply Incrementy gain", 
                         cost: new Decimal(1e28),
                         unlocked(){
-                                return hasUpgrade("g", 24) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 24) || hasUnlockedRow(3)
                         },
                 },
                 32: {
@@ -3383,7 +3307,7 @@ addLayer("g", {
                         description: "Each Neutrino Generation Buyable adds .01 to the Particle Boost buyable base", 
                         cost: new Decimal(1e29),
                         unlocked(){
-                                return hasUpgrade("g", 31) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 31) || hasUnlockedRow(3)
                         },
                 },
                 33: {
@@ -3391,7 +3315,7 @@ addLayer("g", {
                         description: "Each Gluon Upgrades adds .25 to the Particle Boost buyable base", 
                         cost: new Decimal(3e30),
                         unlocked(){
-                                return hasUpgrade("g", 32) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 32) || hasUnlockedRow(3)
                         },
                 },
                 34: {
@@ -3399,7 +3323,7 @@ addLayer("g", {
                         description: "Each Incrementy Strength adds .1 to the Energy Boost buyable base", 
                         cost: new Decimal(1e32),
                         unlocked(){
-                                return hasUpgrade("g", 33) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 33) || hasUnlockedRow(3)
                         },
                 },
                 41: {
@@ -3407,7 +3331,7 @@ addLayer("g", {
                         description: "Matter Gain buyables also give free levels to Particle Generation", 
                         cost: new Decimal(1e40),
                         unlocked(){
-                                return hasUpgrade("g", 34) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 34) || hasUnlockedRow(3)
                         },
                 },
                 42: {
@@ -3415,7 +3339,7 @@ addLayer("g", {
                         description: "Square Antimatter generation base", 
                         cost: new Decimal(1e48),
                         unlocked(){
-                                return hasUpgrade("g", 41) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 41) || hasUnlockedRow(3)
                         },
                 },
                 43: {
@@ -3423,7 +3347,7 @@ addLayer("g", {
                         description: "Square Antimatter generation base", 
                         cost: new Decimal(1e51),
                         unlocked(){
-                                return hasUpgrade("g", 42) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 42) || hasUnlockedRow(3)
                         },
                 },
                 44: {
@@ -3431,7 +3355,7 @@ addLayer("g", {
                         description: "Amoeba Gain buyables also give free levels to Particle Boost", 
                         cost: new Decimal(1e52),
                         unlocked(){
-                                return hasUpgrade("g", 43) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 43) || hasUnlockedRow(3)
                         },
                 },
                 51: {
@@ -3439,7 +3363,7 @@ addLayer("g", {
                         description: "Each Matter Gain buyable adds 1 to its base", 
                         cost: new Decimal(5e63),
                         unlocked(){
-                                return hasUpgrade("g", 44) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 44) || hasUnlockedRow(3)
                         },
                 },
                 52: {
@@ -3447,7 +3371,7 @@ addLayer("g", {
                         description: "Antimatter Gain buyables also gives free levels to Incrementry Boost", 
                         cost: new Decimal(2e64),
                         unlocked(){
-                                return hasUpgrade("g", 51) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 51) || hasUnlockedRow(3)
                         },
                 },
                 53: {
@@ -3455,7 +3379,7 @@ addLayer("g", {
                         description: "Antimatter Gain buyables also gives free levels to Base Incrementy Gain", 
                         cost: new Decimal(1e68),
                         unlocked(){
-                                return hasUpgrade("g", 52) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 52) || hasUnlockedRow(3)
                         },
                 },
                 54: {
@@ -3463,7 +3387,7 @@ addLayer("g", {
                         description: "Amoeba Gain buyables boost its effect base and give free levels to Particle Generation", 
                         cost: new Decimal(1e84),
                         unlocked(){
-                                return hasUpgrade("g", 53) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 53) || hasUnlockedRow(3)
                         },
                 },
                 15: {
@@ -3471,7 +3395,7 @@ addLayer("g", {
                         description: "Every third Base Incrementy Gain buyable gives an additional free level to Neutrino Generation", 
                         cost: new Decimal(3e100),
                         unlocked(){
-                                return hasChallenge("q", 12) || hasUpgrade("s", 15)
+                                return hasChallenge("q", 12) || hasUnlockedRow(3)
                         },
                 },
                 25: {
@@ -3479,7 +3403,7 @@ addLayer("g", {
                         description: "The above upgrade gives free additional levels to Neutrino Generation no matter what", 
                         cost: new Decimal(1e113),
                         unlocked(){
-                                return player.n.buyables[11].gte(103) || hasUpgrade("s", 15)
+                                return player.n.buyables[11].gte(103) || hasUnlockedRow(3)
                         },
                 },
                 35: {
@@ -3487,7 +3411,7 @@ addLayer("g", {
                         description: "Each upgrade in this column gives a free Energy Boost buyable", 
                         cost: new Decimal(1e129),
                         unlocked(){
-                                return hasUpgrade("g", 25) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 25) || hasUnlockedRow(3)
                         },
                 },
                 45: {
@@ -3495,7 +3419,7 @@ addLayer("g", {
                         description: "Amoeba Gain buyables give free Neutrino Generation buyables", 
                         cost: new Decimal(1e137),
                         unlocked(){
-                                return hasUpgrade("g", 35) || hasUpgrade("s", 15)
+                                return hasUpgrade("g", 35) || hasUnlockedRow(3)
                         },
                 },
                 55: {
@@ -3503,7 +3427,7 @@ addLayer("g", {
                         description: "Amoeba Gain buyables base is squared", 
                         cost: new Decimal(1e141),
                         unlocked(){
-                                return hasUpgrade("am", 15) || hasUpgrade("s", 15)
+                                return hasUpgrade("am", 15) || hasUnlockedRow(3)
                         },
                 },
         },
@@ -3512,7 +3436,7 @@ addLayer("g", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasUpgrade("p", 21) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = hasUpgrade("p", 21) || hasUnlockedRow(3)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: ["main-display",
@@ -3665,7 +3589,7 @@ addLayer("q", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasUpgrade("p", 31) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = hasUpgrade("p", 31) || hasUnlockedRow(3)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: ["main-display",
@@ -3791,7 +3715,7 @@ addLayer("s", {
                         description: "Add one to the base of Neutrino Generation and Incrementy Speed, make particle gain 100x faster but cap it at 1 second",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("s", 12) && hasUpgrade("s", 11)
+                                return hasUpgrade("s", 12) && hasUpgrade("s", 11) || hasUnlockedRow(4)
                         },
                 },
                 14: {
@@ -3799,7 +3723,7 @@ addLayer("s", {
                         description: "Keep challenges and upgrades from AM, M, and Q, and buy one of each Neutrino Buyables every second", //only upgrades from AM
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("s", 13)
+                                return hasUpgrade("s", 13) || hasUnlockedRow(4)
                         },
                 },
                 15: {
@@ -3807,7 +3731,7 @@ addLayer("s", {
                         description: "Gain a free Amoeba Gain buyable and keep G and A upgrades",
                         cost: new Decimal(2),
                         unlocked(){
-                                return hasUpgrade("s", 14)
+                                return hasUpgrade("s", 14) || hasUnlockedRow(4)
                         },
                 },
                 21: {
@@ -3815,7 +3739,7 @@ addLayer("s", {
                         description: "Keep P and E upgrades and A milestones, add 1 to Particle per second production",
                         cost: new Decimal(4),
                         unlocked(){
-                                return hasUpgrade("s", 15)
+                                return hasUpgrade("s", 15) || hasUnlockedRow(4)
                         },
                 },
                 22: {
@@ -3823,7 +3747,7 @@ addLayer("s", {
                         description: "Each Shard Upgrade gives a free level to each Incrementy buyable",
                         cost: new Decimal(6),
                         unlocked(){
-                                return hasUpgrade("s", 21)
+                                return hasUpgrade("s", 21) || hasUnlockedRow(4)
                         },
                 },
                 23: {
@@ -3831,7 +3755,7 @@ addLayer("s", {
                         description: "Particle Simulation levels raise its base to its amount, Particle Simulation effects Gluons, and Links can buy 10",
                         cost: new Decimal(8),
                         unlocked(){
-                                return hasUpgrade("s", 22)
+                                return hasUpgrade("s", 22) || hasUnlockedRow(4)
                         },
                 },
                 24: {
@@ -3839,7 +3763,7 @@ addLayer("s", {
                         description: "Matter Gain gives levels to Base Incrementy Gain",
                         cost: new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("s", 23)
+                                return hasUpgrade("s", 23) || hasUnlockedRow(4)
                         },
                 },
                 25: {
@@ -3847,7 +3771,7 @@ addLayer("s", {
                         description: "Particle Boost give levels to Neutrino Gain and automatically buy Particle Upgrades once per second",
                         cost: new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("s", 24)
+                                return hasUpgrade("s", 24) || hasUnlockedRow(4)
                         },
                 },
                 31: {
@@ -3855,7 +3779,7 @@ addLayer("s", {
                         description: "Remove the ability to Shard Prestige but gain 100% of Shards on prestige per second",
                         cost: new Decimal(50),
                         unlocked(){
-                                return hasUpgrade("s", 25)
+                                return hasUpgrade("s", 25) || hasUnlockedRow(4)
                         },
                 },
                 32: {
@@ -3863,7 +3787,7 @@ addLayer("s", {
                         description: "Antimatter Gain buyables cubed adds to their original base",
                         cost: new Decimal(1000),
                         unlocked(){
-                                return hasUpgrade("s", 31)
+                                return hasUpgrade("s", 31) || hasUnlockedRow(4)
                         },
                 },
                 33: {
@@ -3874,7 +3798,7 @@ addLayer("s", {
                         currencyInternalName: "points",
                         currencyLayer: "am",
                         unlocked(){
-                                return hasUpgrade("s", 32)
+                                return hasUpgrade("s", 32) || hasUnlockedRow(4)
                         },
                 },
                 34: {
@@ -3882,7 +3806,7 @@ addLayer("s", {
                         description: "Each extra Amoeba Gain buyable doubles Shard gain and Particle Collision gives free levels to Particle Accerelation",
                         cost: new Decimal(3e5),
                         unlocked(){
-                                return hasUpgrade("s", 33)
+                                return hasUpgrade("s", 33) || hasUnlockedRow(4)
                         },
                 },
                 35: {
@@ -3890,7 +3814,7 @@ addLayer("s", {
                         description: "Particle Simulation gives free levels to Particle Collision and begin generation of Bosons",
                         cost: new Decimal(2e7),
                         unlocked(){
-                                return hasUpgrade("s", 34)
+                                return hasUpgrade("s", 34) || hasUnlockedRow(4)
                         },
                 },
                 41: {
@@ -3898,7 +3822,7 @@ addLayer("s", {
                         description: "Links and Wrap buy ten and four times more and double Super Prestige point gain",
                         cost: new Decimal(1e69),
                         unlocked(){
-                                return (hasUpgrade("s", 35) && hasMilestone("sp", 5)) || hasUpgrade("s", 41)
+                                return (hasUpgrade("s", 35) && hasMilestone("sp", 5)) || hasUpgrade("s", 41) || hasUnlockedRow(4)
                         },
                 },
                 42: {
@@ -3909,7 +3833,7 @@ addLayer("s", {
                         currencyInternalName: "points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("s", 41)
+                                return hasUpgrade("s", 41) || hasUnlockedRow(4)
                         },
                 },
                 43: {
@@ -3920,7 +3844,7 @@ addLayer("s", {
                         currencyInternalName: "points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("s", 42)
+                                return hasUpgrade("s", 42) || hasUnlockedRow(4)
                         },
                 },
                 44: {
@@ -3931,7 +3855,7 @@ addLayer("s", {
                         currencyInternalName: "points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("s", 43)
+                                return hasUpgrade("s", 43) || hasUnlockedRow(4)
                         },
                 },
                 45: {
@@ -3939,7 +3863,7 @@ addLayer("s", {
                         description: "The previous upgrade works at 1% of the rate for Super Prestige Points",
                         cost: new Decimal(1e97),
                         unlocked(){
-                                return hasUpgrade("s", 44)
+                                return hasUpgrade("s", 44) || hasUnlockedRow(4)
                         },
                 },
                 51: {
@@ -3950,7 +3874,7 @@ addLayer("s", {
                         },
                         cost: new Decimal(1e99),
                         unlocked(){
-                                return hasUpgrade("s", 45)
+                                return hasUpgrade("s", 45) || hasUnlockedRow(4)
                         },
                 },
                 52: {
@@ -3958,7 +3882,7 @@ addLayer("s", {
                         description: "Each upgrade in this row doubles Super Prestige Point gain",
                         cost: new Decimal(1e103),
                         unlocked(){
-                                return hasUpgrade("s", 51)
+                                return hasUpgrade("s", 51) || hasUnlockedRow(4)
                         },
                 },
                 53: {
@@ -3966,7 +3890,7 @@ addLayer("s", {
                         description: "Square Super Prestige Point gain",
                         cost: new Decimal(5e107),
                         unlocked(){
-                                return hasUpgrade("s", 52)
+                                return hasUpgrade("s", 52) || hasUnlockedRow(4)
                         },
                 },
                 54: {
@@ -3974,7 +3898,7 @@ addLayer("s", {
                         description: "Always have at least 1000 Particles per second",
                         cost: new Decimal(5e123),
                         unlocked(){
-                                return hasUpgrade("s", 53)
+                                return hasUpgrade("s", 53) || hasUnlockedRow(4)
                         },
                 },
                 55: {
@@ -3982,7 +3906,7 @@ addLayer("s", {
                         description: "<b>Rite</b> can buy ten times more",
                         cost: new Decimal(5e129),
                         unlocked(){
-                                return hasUpgrade("s", 54)
+                                return hasUpgrade("s", 54) || hasUnlockedRow(4)
                         },
                 },
 
@@ -4148,7 +4072,7 @@ addLayer("b", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return layers.b.challengesUnlocked() >= 1
+                                return layers.b.challengesUnlocked() >= 1 || hasUnlockedRow(4)
                         },
                         goal(){
                                 let comps = challengeCompletions("b", 11)
@@ -4186,7 +4110,7 @@ addLayer("b", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return layers.b.challengesUnlocked() >= 2
+                                return layers.b.challengesUnlocked() >= 2 || hasUnlockedRow(4)
                         },
                         goal(){
                                 let comps = challengeCompletions("b", 12)
@@ -4224,7 +4148,7 @@ addLayer("b", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return layers.b.challengesUnlocked() >= 3
+                                return layers.b.challengesUnlocked() >= 3 || hasUnlockedRow(4)
                         },
                         goal(){
                                 let comps = challengeCompletions("b", 21)
@@ -4264,7 +4188,7 @@ addLayer("b", {
                                 return comps + eff + eff2
                         },
                         unlocked(){
-                                return layers.b.challengesUnlocked() >= 4
+                                return layers.b.challengesUnlocked() >= 4 || hasUnlockedRow(4)
                         },
                         goal(){
                                 let comps = challengeCompletions("b", 22)
@@ -4298,7 +4222,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return challengeCompletions("b", 11) > 0
+                                return challengeCompletions("b", 11) > 0 || hasUnlockedRow(4)
                         },
                 },
                 12: {
@@ -4309,7 +4233,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 11)
+                                return hasUpgrade("b", 11) || hasUnlockedRow(4)
                         },
                 },
                 13: {
@@ -4320,7 +4244,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 12)
+                                return hasUpgrade("b", 12) || hasUnlockedRow(4)
                         },
                 },
                 14: {
@@ -4331,7 +4255,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 13)
+                                return hasUpgrade("b", 13) || hasUnlockedRow(4)
                         },
                 },
                 21: {
@@ -4342,7 +4266,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 14) && getBChallengeTotal() >= 7
+                                return (hasUpgrade("b", 14) && getBChallengeTotal() >= 7) || hasUnlockedRow(4)
                         },
                 },
                 22: {
@@ -4353,7 +4277,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 21)
+                                return hasUpgrade("b", 21) || hasUnlockedRow(4)
                         },
                 },
                 23: {
@@ -4364,7 +4288,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 22)
+                                return hasUpgrade("b", 22) || hasUnlockedRow(4)
                         },
                 },
                 24: {
@@ -4375,7 +4299,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 23)
+                                return hasUpgrade("b", 23) || hasUnlockedRow(4)
                         },
                 },
                 31: {
@@ -4386,7 +4310,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 24)
+                                return hasUpgrade("b", 24) || hasUnlockedRow(4)
                         },
                 },
                 32: {
@@ -4397,7 +4321,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 31)
+                                return hasUpgrade("b", 31) || hasUnlockedRow(4)
                         },
                 },
                 33: {
@@ -4408,7 +4332,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 32)
+                                return hasUpgrade("b", 32) || hasUnlockedRow(4)
                         },
                 },
                 34: {
@@ -4419,7 +4343,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 33)
+                                return hasUpgrade("b", 33) || hasUnlockedRow(4)
                         },
                 }, 
                 41: {
@@ -4430,7 +4354,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 34)
+                                return hasUpgrade("b", 34) || hasUnlockedRow(4)
                         },
                 }, 
                 42: {
@@ -4441,7 +4365,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 41)
+                                return hasUpgrade("b", 41) || hasUnlockedRow(4)
                         },
                 }, 
                 43: {
@@ -4452,7 +4376,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 42)
+                                return hasUpgrade("b", 42) || hasUnlockedRow(4)
                         },
                 },
                 44: {
@@ -4463,7 +4387,7 @@ addLayer("b", {
                         currencyInternalName: "tokens",
                         currencyLayer: "b",
                         unlocked(){
-                                return hasUpgrade("b", 43)
+                                return hasUpgrade("b", 43) || hasUnlockedRow(4)
                         },
                 }, 
         },
@@ -4472,7 +4396,7 @@ addLayer("b", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = player.b.best.gt(0) || hasUpgrade("s", 35) || player.sp.best.gt(0) || hasUnlockedRow(4)
                 return a && !hasUpgrade("pi", 32)
         },
         tabFormat: {
@@ -4602,6 +4526,7 @@ addLayer("sp", {
                 if (hasUpgrade("s", 53)) x = x.times(2)
                 if (hasUpgrade("sp", 35)) x = x.times(1.01)
                 if (hasUpgrade("o", 12)) x = x.times(1.001)
+                x = x.times(layers.o.buyables[22].effect())
                 return x
         },
         getGainMultPre(){
@@ -4914,7 +4839,7 @@ addLayer("sp", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360) || hasUnlockedRow(4)
                         },
                 }, 
                 12: {
@@ -4925,7 +4850,7 @@ addLayer("sp", {
                         currencyInternalName: "chall1points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 11) || hasUnlockedRow(4)
                         },
                 }, 
                 13: {
@@ -4936,7 +4861,7 @@ addLayer("sp", {
                         currencyInternalName: "chall1points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 12) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 12) || hasUnlockedRow(4)
                         },
                 },
                 14: {
@@ -4953,7 +4878,7 @@ addLayer("sp", {
                         currencyInternalName: "chall1points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 13) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 13) || hasUnlockedRow(4)
                         },
                 },
                 21: {
@@ -4964,7 +4889,7 @@ addLayer("sp", {
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 14) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 14) || hasUnlockedRow(4)
                         },
                 },
                 22: {
@@ -4975,7 +4900,7 @@ addLayer("sp", {
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 21) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 21) || hasUnlockedRow(4)
                         },
                 },
                 23: {
@@ -4986,7 +4911,7 @@ addLayer("sp", {
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 22) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 22) || hasUnlockedRow(4)
                         },
                 }, 
                 24: {
@@ -4997,7 +4922,7 @@ addLayer("sp", {
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 23) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 23) || hasUnlockedRow(4)
                         },
                 },
                 31: {
@@ -5008,7 +4933,7 @@ addLayer("sp", {
                         currencyInternalName: "chall3points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 24) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 24) || hasUnlockedRow(4)
                         },
                 },
                 32: {
@@ -5019,7 +4944,7 @@ addLayer("sp", {
                         currencyInternalName: "chall3points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 31) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 31) || hasUnlockedRow(4)
                         },
                 },
                 33: {
@@ -5030,7 +4955,7 @@ addLayer("sp", {
                         currencyInternalName: "chall3points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 32) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 32) || hasUnlockedRow(4)
                         },
                 },
                 34: {
@@ -5041,7 +4966,7 @@ addLayer("sp", {
                         currencyInternalName: "chall3points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 33) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 33) || hasUnlockedRow(4)
                         },
                 },
                 41: {
@@ -5052,7 +4977,7 @@ addLayer("sp", {
                         currencyInternalName: "chall4points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 34) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 34) || hasUnlockedRow(4)
                         },
                 },
                 42: {
@@ -5063,7 +4988,7 @@ addLayer("sp", {
                         currencyInternalName: "chall4points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 41) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 41) || hasUnlockedRow(4)
                         },
                 },
                 43: {
@@ -5074,7 +4999,7 @@ addLayer("sp", {
                         currencyInternalName: "chall4points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 42) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 42) || hasUnlockedRow(4)
                         },
                 },
                 44: {
@@ -5085,7 +5010,7 @@ addLayer("sp", {
                         currencyInternalName: "chall4points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 43) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 43) || hasUnlockedRow(4)
                         },
                 }, 
                 15: {
@@ -5096,7 +5021,7 @@ addLayer("sp", {
                         currencyInternalName: "chall1points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 44) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 44) || hasUnlockedRow(4)
                         },
                 },
                 25: {
@@ -5107,7 +5032,7 @@ addLayer("sp", {
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 15) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 15) || hasUnlockedRow(4)
                         },
                 },
                 35: {
@@ -5118,7 +5043,7 @@ addLayer("sp", {
                         currencyInternalName: "chall3points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 25) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 25) || hasUnlockedRow(4)
                         },
                 },
                 45: {
@@ -5129,7 +5054,7 @@ addLayer("sp", {
                         currencyInternalName: "chall4points",
                         currencyLayer: "sp",
                         unlocked(){
-                                return hasUpgrade("sp", 35) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 35) || hasUnlockedRow(4)
                         },
                 },
                 51: {
@@ -5137,7 +5062,7 @@ addLayer("sp", {
                         description: "Each Super Prestige upgrade in this row raises Incrementy gain to the 1.2",
                         cost: new Decimal("ee18200"),
                         unlocked(){
-                                return hasUpgrade("p", 55) || player.o.best.gt(0)
+                                return hasUpgrade("p", 55) || hasUnlockedRow(4)
                         },
                 },
                 52: {
@@ -5145,7 +5070,7 @@ addLayer("sp", {
                         description: "Neutrino Autobuyers buy 50x more",
                         cost: new Decimal("ee21300"),
                         unlocked(){
-                                return hasUpgrade("sp", 51) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 51) || hasUnlockedRow(4)
                         },
                 },
                 53: {
@@ -5153,7 +5078,7 @@ addLayer("sp", {
                         description: "Add 3 to the limit of Incrementy Stamina per Super Prestige upgrade",
                         cost: new Decimal("ee24900"),
                         unlocked(){
-                                return hasUpgrade("sp", 52) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 52) || hasUnlockedRow(4)
                         },
                 }, 
                 54: {
@@ -5161,7 +5086,7 @@ addLayer("sp", {
                         description: "Add 69 to the Incrementy Stamina Softcap Start",
                         cost: new Decimal("ee32450"),
                         unlocked(){
-                                return hasUpgrade("sp", 53) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 53) || hasUnlockedRow(4)
                         },
                 },
                 55: {
@@ -5169,7 +5094,7 @@ addLayer("sp", {
                         description: "Add 5 to the Incrementy Stamina limit",
                         cost: new Decimal("ee38000"),
                         unlocked(){
-                                return hasUpgrade("sp", 54) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 54) || hasUnlockedRow(4)
                         },
                 },
         },
@@ -5178,7 +5103,7 @@ addLayer("sp", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return getBChallengeTotal() >= 40 || player.sp.best.gt(0) || player.o.best.gt(0)
+                return getBChallengeTotal() >= 40 || player.sp.best.gt(0) || hasUnlockedRow(4)
         },
         tabFormat: {
                 "QoL": {
@@ -5243,7 +5168,7 @@ addLayer("sp", {
                                 "challenges",
                         ],
                         unlocked(){
-                                return hasUpgrade("s", 55) && !hasUpgrade("pi", 32)
+                                return hasUpgrade("s", 55) && !hasUpgrade("pi", 32) && player.sp.times >= 25
                         },
                 },
                 "Upgrades": {
@@ -5252,7 +5177,7 @@ addLayer("sp", {
                                 "upgrades"
                         ],
                         unlocked(){
-                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360) || player.o.best.gt(0)
+                                return hasUpgrade("sp", 11) || player.sp.chall1points.gte(360) || hasUnlockedRow(4)
                         },
                 }
         },
@@ -5655,6 +5580,9 @@ addLayer("o", {
                 let x = new Decimal(1)
                 if (hasUpgrade("o", 21)) x = x.times(1.5)
                 if (hasUpgrade("o", 23)) x = x.times(2)
+                if (hasUpgrade("o", 24)) x = x.times(2)
+                x = x.times(layers.o.buyables[23].effect())
+                if (hasUpgrade("o", 34)) x = x.times(3)
                 return x
         },
         prestigeButtonText(){
@@ -5673,9 +5601,10 @@ addLayer("o", {
         update(diff){
                 player.o.best = player.o.best.max(player.o.points)
 
-                if (false) {
+                if (hasUpgrade("o", 35)) {
                         let x = layers.o.getResetGain()
                         player.o.points = player.o.points.plus(x.times(diff))
+                        player.o.total  = player.o.total.plus(x.times(diff))
                 }
         },
         buyables: {
@@ -5704,6 +5633,7 @@ addLayer("o", {
                         },
                         effectBase(){
                                 let base = new Decimal(1.02)
+                                if (hasUpgrade("o", 31)) base = base.plus(layers.o.buyables[11].total().times(.001))
                                 return base
                         },
                         effect(){
@@ -5720,6 +5650,9 @@ addLayer("o", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("o", 24)) ret = ret.plus(layers.o.buyables[12].total())
+                                ret = ret.plus(layers.o.buyables[21].total())
+                                if (hasUpgrade("o", 32)) ret = ret.plus(layers.o.buyables[13].total())
+                                if (hasUpgrade("o", 34)) ret = ret.plus(player.o.upgrades.length)
                                 return ret
                         },
                         buy(){
@@ -5756,6 +5689,7 @@ addLayer("o", {
                         },
                         effectBase(){
                                 let base = new Decimal(1.02)
+                                if (hasUpgrade("o", 32)) base = base.plus(layers.o.buyables[12].total().times(.002))
                                 return base
                         },
                         effect(){
@@ -5771,6 +5705,8 @@ addLayer("o", {
                         },
                         extra(){
                                 let ret = new Decimal(0)
+                                if (hasUpgrade("o", 25)) ret = ret.plus(layers.o.buyables[13].total())
+                                ret = ret.plus(layers.o.buyables[22].total())
                                 return ret
                         },
                         buy(){
@@ -5801,10 +5737,14 @@ addLayer("o", {
                         },
                         cost(a){
                                 let x = getBuyableAmount("o", 13).plus(a)
-                                let base2 = 1.5
                                 let base1 = 4
+                                let base2 = 1.5
                                 let exp2 = x.times(x)
                                 return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).ceil()
+                        },
+                        effectBase(){
+                                let base = new Decimal(1.02)
+                                return base
                         },
                         effect(){
                                 let x = layers.o.buyables[13].total()
@@ -5818,6 +5758,7 @@ addLayer("o", {
                         },
                         extra(){
                                 let ret = new Decimal(0)
+                                ret = ret.plus(layers.o.buyables[23].total())
                                 return ret
                         },
                         buy(){
@@ -5830,6 +5771,165 @@ addLayer("o", {
                                 return
                         },
                         unlocked(){ return hasUpgrade("o", 23) },
+                },
+                21: {
+                        title: "Particle Boost",
+                        display(){
+                                let additional = ""
+                                let ex = layers.o.buyables[21].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.o.buyables[21]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: ^" + format(layers.o.buyables[21].effect(), 4) + " Particle Gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.o.buyables[21].cost()) + " Origins</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.o.buyables[21].effectBase(), 3) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("o", 21).plus(a)
+                                let base0 = 100
+                                let base1 = 8
+                                let base2 = 1.5
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0).ceil()
+                        },
+                        effectBase(){
+                                let base = new Decimal(1.25)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.o.buyables[21].total()
+                                let base = layers.o.buyables[21].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        canAfford(){
+                                return player.o.points.gte(layers.o.buyables[21].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("o", 21).plus(layers.o.buyables[21].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.o.buyables[21].cost()
+                                if (!layers.o.buyables[21].canAfford()) return
+                                player.o.buyables[21] = player.o.buyables[21].plus(1)
+                                player.o.points = player.o.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return hasUpgrade("o", 31) },
+                },
+                22: {
+                        title: "Super Prestige Boost",
+                        display(){
+                                let additional = ""
+                                let ex = layers.o.buyables[22].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.o.buyables[22]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: ^" + format(layers.o.buyables[22].effect(), 4) + " Super Prestige Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.o.buyables[22].cost()) + " Origins</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.o.buyables[22].effectBase(), 3) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("o", 22).plus(a)
+                                let base0 = 400
+                                let base1 = 4
+                                let base2 = 2
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        effectBase(){
+                                let base = new Decimal(1.5)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.o.buyables[22].total()
+                                let base = layers.o.buyables[22].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        canAfford(){
+                                return player.o.points.gte(layers.o.buyables[22].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("o", 22).plus(layers.o.buyables[22].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.o.buyables[22].cost()
+                                if (!layers.o.buyables[22].canAfford()) return
+                                player.o.buyables[22] = player.o.buyables[22].plus(1)
+                                player.o.points = player.o.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return hasUpgrade("o", 31) },
+                },
+                23: {
+                        title: "Origin Boost",
+                        display(){
+                                let additional = ""
+                                let ex = layers.o.buyables[23].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.o.buyables[23]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: *" + format(layers.o.buyables[23].effect()) + " Origin gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.o.buyables[23].cost()) + " Origins</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.o.buyables[23].effectBase(), 3) + "^x</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("o", 23).plus(a)
+                                let base0 = 1000
+                                let base1 = 8
+                                let base2 = 2.5
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        effectBase(){
+                                let base = new Decimal(2)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.o.buyables[23].total()
+                                let base = layers.o.buyables[23].effectBase()
+                                return Decimal.pow(base, x)
+                        },
+                        canAfford(){
+                                return player.o.points.gte(layers.o.buyables[23].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("o", 23).plus(layers.o.buyables[23].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.o.buyables[23].cost()
+                                if (!layers.o.buyables[23].canAfford()) return
+                                player.o.buyables[23] = player.o.buyables[23].plus(1)
+                                player.o.points = player.o.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return hasUpgrade("o", 31) },
                 },
         },
         upgrades:{ // https://en.wikipedia.org/wiki/Fields_Medal
@@ -5901,12 +6001,60 @@ addLayer("o", {
                 },
                 24: {
                         title: "Fefferman",
-                        description: "Pion Boost gives free Incrementy Boost levels",
+                        description: "Pion Boost gives free Incrementy Boost levels and double Origin gain",
                         cost: new Decimal(25),
                         unlocked(){
                                 return hasUpgrade("o", 23) && getBuyableAmount("o", 13).gte(2)
                         }
                 },
+                25: {
+                        title: "Margulis",
+                        description: "Stamina Boost gives free Pion Boost levels",
+                        cost: new Decimal(50),
+                        unlocked(){
+                                return hasUpgrade("o", 24) && getBuyableAmount("o", 13).gte(3) && getBuyableAmount("o", 12).gte(3)
+                        }
+                },
+                31: {
+                        title: "Quillen",
+                        description: "Unlock three Origin buyables and each Incrementy Boost buyable adds .001 to its base",
+                        cost: new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("o", 25)
+                        }
+                },
+                32: {
+                        title: "Connes",
+                        description: "Stamina Boost buyables give levels to Incrementy Boost and each Pion Boost buyable adds .002 to its base",
+                        cost: new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("o", 31)
+                        }
+                },
+                33: {
+                        title: "Yau",
+                        description: "Each Incrementy Boost buyable increases the Incrementy Stamina softcap start by one",
+                        cost: new Decimal(250),
+                        unlocked(){
+                                return hasUpgrade("o", 32)
+                        }
+                },
+                34: {
+                        title: "idk5",
+                        description: "Each Origin upgrade gives a free Incrementy Boost buyable and triple Origin gain",
+                        cost: new Decimal(500),
+                        unlocked(){
+                                return hasUpgrade("o", 33) && getBuyableAmount("o", 22).gte(1)
+                        }
+                },
+                35: {
+                        title: "idk6",
+                        description: "Remove the ability to Prestige but gain 100% of Origins on prestige per second",
+                        cost: new Decimal(2500),
+                        unlocked(){
+                                return hasUpgrade("o", 34) && getBuyableAmount("o", 21).gte(2)
+                        }
+                }, //next 4e5 Origins
         },
         milestones: {
                 0: {
@@ -5970,10 +6118,10 @@ addLayer("o", {
                 "Upgrades": {
                         content: [
                                 "main-display",
-                                "resource-display",
-                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["resource-display", "", function (){ return hasUpgrade("o", 35) ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return hasUpgrade("o", 35) ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
-                                        if (!false) return ""
+                                        if (!hasUpgrade("o", 35)) return ""
                                         return "You are gaining " + format(layers.o.getResetGain()) + " Origins per second"
                                 }],
                                 "upgrades"
@@ -5985,6 +6133,10 @@ addLayer("o", {
                 "Buyables": {
                         content: [
                                 "main-display",
+                                ["display-text", function(){
+                                        if (!hasUpgrade("o", 31)) return ""
+                                        return "Each Origin Buyable gives free levels to all above buyables"
+                                }],
                                 "buyables",
                         ],
                         unlocked(){
