@@ -3928,7 +3928,7 @@ addLayer("s", {
                         description: "<b>Rite</b> can buy ten times more and unlock Obfuscations",
                         cost: new Decimal(5e129),
                         unlocked(){
-                                return hasUpgrade("s", 54) || hasUnlockedRow(4)
+                                return (hasUpgrade("s", 54) || hasUnlockedRow(4)) && player.sp.times >= 25
                         },
                 },
 
@@ -7221,7 +7221,7 @@ addLayer("f", {
                 let amt = player.f.molecules.methane
 
                 let a = amt.plus(10).log10()
-                let ret = Decimal.pow(a, a).times(amt)
+                let ret = Decimal.pow(a, a).times(amt.plus(1))
 
                 return ret
         },
