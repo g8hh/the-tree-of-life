@@ -210,6 +210,18 @@ function getStaminaMaximumAmount(){
         return Math.round(a)
 }
 
+function getIncABMult(){
+        let mult = 1
+        if (hasMilestone("a", 4)) mult *= 1e3
+        if (hasUpgrade("b", 23)) mult *= 5
+        if (hasUpgrade("s", 55)) mult *= 10
+        if (hasUpgrade("sp", 45)) mult *= 10
+        if (hasMilestone("o", 0)) mult *= 10
+        if (hasUpgrade("o", 22)) mult *= 25
+        if (hasUpgrade("o", 52)) mult *= 100
+        return mult
+}
+
 function hasUnlockedRow(r){
         if (r == 4) return player.o.best.gt(0)
         if (r == 3) return player.o.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0)
@@ -331,14 +343,7 @@ addLayer("i", {
                         let times = -Math.floor(player.i.time)
                         player.i.time += times
                         times *= -1
-                        let mult = 1
-                        if (hasMilestone("a", 4)) mult *= 1e3
-                        if (hasUpgrade("b", 23)) mult *= 5
-                        if (hasUpgrade("s", 55)) mult *= 10
-                        if (hasUpgrade("sp", 45)) mult *= 10
-                        if (hasMilestone("o", 0)) mult *= 10
-                        if (hasUpgrade("o", 22)) mult *= 25
-                        if (hasUpgrade("o", 52)) mult *= 100
+                        let mult = getIncABMult()
                         if (hasMilestone("a", 2) || hasUpgrade("pi", 32) || hasMilestone("o", 1)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
@@ -6149,6 +6154,7 @@ addLayer("o", {
                         },
                         extra(){
                                 let ret = new Decimal(0)
+                                if (hasUpgrade("o", 55)) ret = ret.plus(player.f.upgrades.length)
                                 return ret
                         },
                         buy(){
@@ -6355,9 +6361,17 @@ addLayer("o", {
                         description: "Per Origin Boost Buyables cubed you can buy one more Incrementy Stamina level and unlock Fragments",
                         cost: new Decimal(2e145),
                         unlocked(){
-                                return hasUpgrade("o", 52)
+                                return hasUpgrade("o", 53)
                         }
                 }, //1.5e59 unlock Up (Up Down, Left Right)
+                55: {
+                        title: "idk",
+                        description: "Each Fragment upgrade gives a free Base Origin Boost",
+                        cost: new Decimal("1e1550"),
+                        unlocked(){
+                                return hasUpgrade("o", 54)
+                        }
+                },
         },
         milestones: {
                 0: {
@@ -6484,7 +6498,7 @@ addLayer("f", {
                 n: new Decimal(0),
                 o: new Decimal(0),
                 p: new Decimal(0),
-                ca: new Decimal(0),
+                s: new Decimal(0),
                 currentTime: 0,
                 molecules: {
                         water: new Decimal(0),
@@ -6493,6 +6507,8 @@ addLayer("f", {
                         atp: new Decimal(0),
                         methane: new Decimal(0),
                         nadph: new Decimal(0),
+                        co2: new Decimal(0),
+                        rubp: new Decimal(0),
                 },
         }},
         color: "#41FFEC",
@@ -6535,9 +6551,10 @@ addLayer("f", {
         },
         getGainMultPost(){
                 let x = new Decimal(100)
-                if (hasUpgrade("f", 15)) x = x.times(Decimal.pow(2, player.f.upgrades.length))
+                if (hasUpgrade("f", 15)) x = x.times(upgradeEffect("f", 15))
                 x = x.times(layers.f.glucoseEffect())
                 if (hasUpgrade("f", 21)) x = x.times(player.f.molecules.ammonia.plus(1))
+                x = x.times(Decimal.pow(layers.f.co2Effect(), layers.o.buyables[33].total()))
                 return x
         },
         prestigeButtonText(){
@@ -6573,7 +6590,7 @@ addLayer("f", {
                         player.f.n  = player.f.n.plus( layers.f.buyables[13].effect().times(diff))
                         player.f.o  = player.f.o.plus( layers.f.buyables[21].effect().times(diff))
                         player.f.p  = player.f.p.plus( layers.f.buyables[22].effect().times(diff))
-                        player.f.ca = player.f.ca.plus(layers.f.buyables[23].effect().times(diff))
+                        player.f.s  = player.f.s.plus( layers.f.buyables[23].effect().times(diff))
                 }
         },
         upgrades:{
@@ -6615,6 +6632,9 @@ addLayer("f", {
                         title: "Lafforgue",
                         description: "Double fragment gain per upgrade",
                         cost: new Decimal(1e4),
+                        effect(){
+                                return Decimal.pow(2, player.f.upgrades.length).pow(layers.f.rubpEffect())
+                        },
                         unlocked(){
                                 return hasUpgrade("f", 14)
                         }
@@ -6942,7 +6962,7 @@ addLayer("f", {
                         unlocked(){ return true},
                 },
                 23: {
-                        title: "<h3 style='color: #F0A000'>Calcium</h3> <h3>Gatherer</h3>",
+                        title: "<h3 style='color: #F0A000'>Sulfur</h3> <h3>Gatherer</h3>",
                         display(){
                                 let additional = ""
                                 let ex = layers.f.buyables[23].extra()
@@ -6958,7 +6978,7 @@ addLayer("f", {
                         },
                         cost(a){
                                 let x = getBuyableAmount("f", 23).plus(a)
-                                let base0 = 1000e100
+                                let base0 = 1e25
                                 let base1 = 1.35
                                 let base2 = 1.006
                                 let exp2 = x.times(x)
@@ -7025,7 +7045,15 @@ addLayer("f", {
                                 target = player.f.h.div(29).min(player.f.n.div(7)).min(player.f.p.div(3)).min(player.f.c.div(21)).min(player.f.o.div(17))
                                 if (mode == "buy") return target.minus(1).div(10).plus(1).floor()
                         } // C21H29N7O17P3
-                        return target
+                        if (id == 22) {
+                                target = player.f.o.div(2).min(player.f.c.div(1))
+                                if (mode == "buy") return target.minus(1).div(10).plus(1).floor()
+                        }
+                        if (id == 23) {
+                                target = player.f.h.div(12).min(player.f.p.div(2)).min(player.f.c.div(5)).min(player.f.o.div(11))
+                                if (mode == "buy") return target.minus(1).div(10).plus(1).floor()
+                        } // C5H12O11P2
+                        return new Decimal(0)
                 },
                 11: {
                         title: "<h3 style='color: #303000'>Water</h3><br><h3 style='color: #A00000'>H</h3><sub>2</sub><h3 style='color: #00A000'>O</h3>",
@@ -7154,7 +7182,7 @@ addLayer("f", {
                 },
                 21: {
                         title: "<h3 style='color: #746F1C'>NADPH</h3><br><h3 style='color: #00A0A0'>C</h3><sub>21</sub><h3 style='color: #A00000'>H</h3><sub>29</sub><h3 style='color: #0000A0'>N</h3><sub>7</sub><h3 style='color: #00A000'>O</h3><sub>17</sub><h3 style='color: #A000A0'>P</h3><sub>3</sub>",
-                        display(){ // C21H29N7O17P3
+                        display(){
                                 let target = layers.f.clickables.getMaximumPossible(21)
 
                                 let a = "Purchase 10% of the max possible (" + formatWhole(target) + ")"
@@ -7176,6 +7204,63 @@ addLayer("f", {
                                 player.f.c = player.f.c.sub(target.times(21))
                                 player.f.n = player.f.n.sub(target.times(8))
                                 player.f.p = player.f.p.sub(target.times(3))
+                        },
+                },
+                22: {
+                        title() {
+                                let inner = shiftDown ? "See Owe Too" : "Sea Oh Two"
+                                return "<h3 style='color: #336000;font-size:100%'>" + inner + "</h3><br><h3 style='color: #00A0A0'>C</h3><h3 style='color: #00A000'>O</h3><sub>2</sub>"
+                        },
+                        display(){
+                                let target = layers.f.clickables.getMaximumPossible(22)
+
+                                let a = "Purchase 10% of the max possible (" + formatWhole(target) + ")"
+                                let b = "You have " + formatWhole(player.f.molecules.co2) + "<br>Carbon Dioxide"
+                                return a + "<br><br>" + b
+                        },
+                        unlocked(){
+                                return getBuyableAmount("f", 21).gte(75)
+                        },
+                        canClick(){
+                                return layers.f.clickables.getMaximumPossible(22).gt(0)
+                        },
+                        onClick(){
+                                let target = layers.f.clickables.getMaximumPossible(22)
+
+                                player.f.molecules.co2 = player.f.molecules.co2.plus(target)
+                                player.f.h = player.f.h.sub(target.times(0))
+                                player.f.o = player.f.o.sub(target.times(2))
+                                player.f.c = player.f.c.sub(target.times(1))
+                                player.f.n = player.f.n.sub(target.times(0))
+                                player.f.p = player.f.p.sub(target.times(0))
+                        },
+                },
+                23: {
+                        title() { // https://en.wikipedia.org/wiki/Ribulose_1,5-bisphosphate
+                                return "<h3 style='color: #CC33FF'>RuBP</h3><br><h3 style='color: #00A0A0'>C</h3><sub>5</sub><h3 style='color: #A00000'>H</h3><sub>12</sub><h3 style='color: #00A000'>O</h3><sub>11</sub><h3 style='color: #A000A0'>P</h3><sub>2</sub>"
+                        }, // C5H12O11P2
+                        display(){
+                                let target = layers.f.clickables.getMaximumPossible(22)
+
+                                let a = "Purchase 10% of the max possible (" + formatWhole(target) + ")"
+                                let b = "You have " + formatWhole(player.f.molecules.rubp) + "<br>RuBP"
+                                return a + "<br><br>" + b
+                        },
+                        unlocked(){
+                                return getBuyableAmount("f", 21).gte(75)
+                        },
+                        canClick(){
+                                return layers.f.clickables.getMaximumPossible(23).gt(0)
+                        },
+                        onClick(){
+                                let target = layers.f.clickables.getMaximumPossible(23)
+
+                                player.f.molecules.rubp = player.f.molecules.rubp.plus(target)
+                                player.f.h = player.f.h.sub(target.times(12))
+                                player.f.o = player.f.o.sub(target.times(11))
+                                player.f.c = player.f.c.sub(target.times(5))
+                                player.f.n = player.f.n.sub(target.times(0))
+                                player.f.p = player.f.p.sub(target.times(2))
                         },
                 },
 
@@ -7215,6 +7300,8 @@ addLayer("f", {
 
                 let ret = amt.times(10).plus(10).log10().pow(2)
 
+                ret = ret.pow(layers.f.rubpEffect())
+                
                 return ret
         },
         methaneEffect(){
@@ -7231,6 +7318,20 @@ addLayer("f", {
                 let ret = amt.plus(1).log10().div(2)
 
                 return ret
+        },
+        co2Effect(){
+                let amt = player.f.molecules.co2
+
+                let ret = amt.plus(1).log10().div(50)
+
+                return ret.plus(1)
+        },
+        rubpEffect(){
+                let amt = player.f.molecules.rubp
+
+                let ret = amt.div(1000).plus(1).log10().div(10)
+
+                return ret.plus(1)
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -7273,7 +7374,7 @@ addLayer("f", {
                                         let c = `You have <h2 style='color: #41FFEC'>` + format(player.f.c, 4) + "</h2> <h3 style='color: #00A0A0'>Carbon</h3><br>"
                                         let d = `You have <h2 style='color: #41FFEC'>` + format(player.f.n, 4) + "</h2> <h3 style='color: #0000A0'>Nitrogen</h3><br>"
                                         let e = `You have <h2 style='color: #41FFEC'>` + format(player.f.p, 4) + "</h2> <h3 style='color: #A000A0'>Phosphorus</h3><br>"
-                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #F0A000'>Calcium</h3><br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #F0A000'>Sulfur</h3><br>"
                                         return a + b + c + d + e + f
                                 }],
                                 "clickables"
@@ -7285,7 +7386,7 @@ addLayer("f", {
                 "Resources": {
                         content: [
                                 ["display-text", function(){
-                                        return 
+                                        return "Hold Shift to hide Elements and see full names of the Molecules"
                                 }],
                                 ["display-text", function(){
                                         if (shiftDown) return "Release Shift to see element amounts"
@@ -7295,20 +7396,32 @@ addLayer("f", {
                                         let c = `You have <h2 style='color: #41FFEC'>` + format(player.f.c, 4) + "</h2> <h3 style='color: #00A0A0'>Carbon</h3><br>"
                                         let d = `You have <h2 style='color: #41FFEC'>` + format(player.f.n, 4) + "</h2> <h3 style='color: #0000A0'>Nitrogen</h3><br>"
                                         let e = `You have <h2 style='color: #41FFEC'>` + format(player.f.p, 4) + "</h2> <h3 style='color: #A000A0'>Phosphorus</h3><br>"
-                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #F0A000'>Calcium</h3><br>"
-                                        return init + a + b + c + d + e + f + "Hold Shift to hide Elements<br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #F0A000'>Sulfur</h3><br>"
+                                        return init + a + b + c + d + e + f + "<br>"
                                 }],
                                 ["display-text", function(){
                                         return "<br><h1>Molecules</h1>" 
                                 }],
                                 ["display-text", function(){
-                                        let a = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.water, 4)   + "</h2> <h3 style='color: #303000'>Water</h3> which gives +" + format(layers.f.waterEffect()) + " to Base Origin Boost Base<br>"
-                                        let b = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.glucose, 4) + "</h2> <h3 style='color: #703000'>Glucose</h3> which gives *" + format(layers.f.glucoseEffect()) + " Fragment gain<br>"
-                                        let c = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.ammonia, 4) + "</h2> <h3 style='color: #703070'>Ammonia</h3> which pushes the Stamina softcap back by " + formatWhole(layers.f.ammoniaEffect()) + "<br>"
-                                        let d = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.atp, 4) + "</h2> <h3 style='color: #6F0066'>ATP</h3> which multiplies worker effeciency by " + format(layers.f.atpEffect()) + "<br>"
-                                        let e = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.methane, 4) + "</h2> <h3 style='color: #6F0000'>Methane</h3> which multiplies Origin gain by " + format(layers.f.methaneEffect()) + "<br>"
-                                        let f = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.nadph,4) + "</h2> <h3 style='color: #746F1C'>NADPH</h3> which effects to the Pion Boost base by +" + format(layers.f.nadphEffect()) + "<br>"
-                                        return a + b + c + d + e + f
+                                        let names1 = ["Water", "Glucose", "Ammonia", 
+                                                        "ATP", "Methane", "NADPH", 
+                                                        "Carbon Dioxide", "RuBP"]
+                                        let names2 = ["Water", "Glucose", "Ammonia", 
+                                                        "Adenosine Triphosphate", "Methane", "Nicotinamide Adenine Dinucleotide Phosphate",
+                                                        "Carbon Dioxide", "Ribulose 1,5-Bisphosphate"]
+                                        let names = shiftDown ? names2 : names1
+                                        let a = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.water, 4)   + "</h2> <h3 style='color: #303000'>" + names[0] + "</h3> which gives +" + format(layers.f.waterEffect()) + " to Base Origin Boost Base<br>"
+                                        let b = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.glucose, 4) + "</h2> <h3 style='color: #703000'>" + names[1] + "</h3> which gives *" + format(layers.f.glucoseEffect()) + " Fragment gain<br>"
+                                        let c = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.ammonia, 4) + "</h2> <h3 style='color: #703070'>" + names[2] + "</h3> which pushes the Stamina softcap back by " + formatWhole(layers.f.ammoniaEffect()) + "<br>"
+                                        let d = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.atp, 4) + "</h2> <h3 style='color: #6F0066'>" + names[3] + "</h3> which multiplies worker effeciency by " + format(layers.f.atpEffect()) + "<br>"
+                                        let e = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.methane, 4) + "</h2> <h3 style='color: #6F0000'>" + names[4] + "</h3> which multiplies Origin gain by " + format(layers.f.methaneEffect()) + "<br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.nadph,4) + "</h2> <h3 style='color: #746F1C'>" + names[5] + "</h3> which effects to the Pion Boost base by +" + format(layers.f.nadphEffect()) + "<br>"
+                                        let g = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.co2,4) + "</h2> <h3 style='color: #336000'>" + names[6] + "</h3> which makes each Base Origin Boost multiply Fragment gain by " + format(layers.f.co2Effect(), 4) + " (total " + format(Decimal.pow(layers.f.co2Effect(), layers.o.buyables[33].total())) + ")<br>"
+                                        let h = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.rubp,4) + "</h2> <h3 style='color: #CC33FF'>" + names[7] + "</h3> which raises the " + names[3] + " and Lafforgue effects ^" + format(layers.f.rubpEffect(), 4) + "<br>"
+                                        
+                                        
+                                        //co2: 336000
+                                        return a + b + c + d + e + f + g + h
                                 }],
                         ],
                         unlocked(){
