@@ -131,10 +131,10 @@ function loadVue() {
 	})
 
 	Vue.component('upgrades', {
-		props: ['layer'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].upgrades" class="upgTable">
-			<div v-for="row in tmp[layer].upgrades.rows" class="upgRow">
+			<div v-for="row in Math.min(tmp[layer].upgrades.rows, ((data + 1) || Infinity)-1)" class="upgRow">
 				<div v-for="col in tmp[layer].upgrades.cols"><div v-if="tmp[layer].upgrades[row*10+col]!== undefined && tmp[layer].upgrades[row*10+col].unlocked" class="upgAlign">
 					<upgrade :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.upgrade"></upgrade>
 				</div></div>

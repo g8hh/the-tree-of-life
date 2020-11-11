@@ -205,7 +205,9 @@ function getStaminaMaximumAmount(){
         if (hasUpgrade("sp", 53)) a += 3 * player.sp.upgrades.length
         if (hasUpgrade("pi", 43)) a += 5
 
-        return a
+        if (hasUpgrade("o", 54)) a += layers.o.buyables[23].total().pow(3).toNumber()
+
+        return Math.round(a)
 }
 
 function hasUnlockedRow(r){
@@ -335,6 +337,8 @@ addLayer("i", {
                         if (hasUpgrade("s", 55)) mult *= 10
                         if (hasUpgrade("sp", 45)) mult *= 10
                         if (hasMilestone("o", 0)) mult *= 10
+                        if (hasUpgrade("o", 22)) mult *= 25
+                        if (hasUpgrade("o", 52)) mult *= 100
                         if (hasMilestone("a", 2) || hasUpgrade("pi", 32) || hasMilestone("o", 1)) {
                                 layers.i.buyables[11].buyMax(times * mult)
                                 layers.i.buyables[12].buyMax(times * mult)
@@ -682,10 +686,12 @@ addLayer("i", {
                         cost(a){
                                 let x = getBuyableAmount("i", 13).plus(a)
                                 let xcopy = getBuyableAmount("i", 13).plus(a)
+                                if (x.gt(5e5)) x = x.div(5e5).pow(5).times(5e5)
+
                                 let b1 = hasIUpg(24) ? 1 : 2
                                 
                                 let y = x.minus(4).max(1)
-                                if (hasIUpg(31)) {
+                                if (hasIUpg(31) || hasUpgrade("pi", 32)) {
                                         y = new Decimal(1)
                                         if (x.gt(5/3)) x = x.div(2.5).plus(1)
                                 }
@@ -694,6 +700,7 @@ addLayer("i", {
                                 
                                 let ret = new Decimal(1e5)
                                 if (!hasUpgrade("a", 14) && !hasUpgrade("pi", 32)) ret = ret.times(Decimal.pow(b1, xcopy).times(Decimal.pow(1.25, xcopy.times(xcopy))))
+                                
                                 return ret.times(Decimal.pow(base1, Decimal.pow(base2, x)))
                         },
                         effectBase(){
@@ -707,6 +714,7 @@ addLayer("i", {
                                 let scs = getIStaminaSoftcapStart()
                                 if (!hasUpgrade("pi", 32) && x.gt(scs)) x = x.div(scs).pow(.5).times(scs)
                                 let ret = Decimal.pow(layers.i.buyables[13].effectBase(), x)
+                                
                                 if (inChallenge("b", 11)) return x.div(20).plus(1)
                                 return ret
                         },
@@ -741,13 +749,17 @@ addLayer("i", {
                                         let pttarget = player.i.points.div(1e5)
                                         if (pttarget.lt(1.1)) return
                                         let xtarget = pttarget.log(1.1).log(1.2)
-                                        let target = xtarget.minus(1).times(2.5).floor().plus(1)
+                                        let target = xtarget.minus(1).times(2.5).plus(1)
 
+                                        if (target.gt(5e5)) target = target.div(5e5).root(5).times(5e5)
                                         target = target.min(getStaminaMaximumAmount())
+                                        target = target.floor()
                                         
                                         let diff = target.minus(player.i.buyables[13]).max(0)
                                         if (maximum != undefined) diff = diff.min(maximum)
                                         player.i.buyables[13] = player.i.buyables[13].plus(diff)
+
+                                        if (diff.eq(0)) layers.i.buyables[13].buy()
                                         return 
                                 }
                                 let max = 30
@@ -3913,7 +3925,7 @@ addLayer("s", {
                 },
                 55: {
                         title: "Devisor", 
-                        description: "<b>Rite</b> can buy ten times more",
+                        description: "<b>Rite</b> can buy ten times more and unlock Obfuscations",
                         cost: new Decimal(5e129),
                         unlocked(){
                                 return hasUpgrade("s", 54) || hasUnlockedRow(4)
@@ -4726,7 +4738,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return !hasUpgrade("pi", 32)
+                                return !hasUpgrade("pi", 32) && player.sp.times >= 25
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 11)
@@ -4760,7 +4772,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return !hasUpgrade("pi", 32)
+                                return !hasUpgrade("pi", 32) && player.sp.times >= 25
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 12)
@@ -4796,7 +4808,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return !hasUpgrade("pi", 32)
+                                return !hasUpgrade("pi", 32) && player.sp.times >= 25
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 21)
@@ -4827,7 +4839,7 @@ addLayer("sp", {
                                 return comps + eff
                         },
                         unlocked(){
-                                return !hasUpgrade("pi", 32)
+                                return !hasUpgrade("pi", 32) && player.sp.times >= 25
                         },
                         goal(initial = false){
                                 let comps = challengeCompletions("sp", 22)
@@ -5138,6 +5150,10 @@ addLayer("sp", {
                                 ["display-text", function(){
                                         if (!hasUpgrade("sp", 12)) return "Super Prestige resets all prior layers, even with Shard upgrades"
                                         return "You are gaining " + format(layers.sp.getResetGain()) + " Super Prestige Points per second"
+                                }],
+                                ["display-text", function(){
+                                        if (player.sp.times < 25 && hasMilestone("sp", 5)) return "Get 25 Super Prestige resets to continue progressing"
+                                        return ""
                                 }],
                                 ["prestige-button", "", function (){ return hasUpgrade("sp", 12) ? {'display': 'none'} : {}}],
                                 "milestones"
@@ -5610,6 +5626,8 @@ addLayer("o", {
                 if (hasUpgrade("o", 24)) x = x.times(2)
                 x = x.times(layers.o.buyables[23].effect())
                 if (hasUpgrade("o", 34)) x = x.times(3)
+                x = x.times(layers.f.effect())
+                if (hasUpgrade("f", 12)) x = x.times(Decimal.pow(player.f.points.plus(1), player.f.upgrades.length))
                 return x
         },
         prestigeButtonText(){
@@ -5719,6 +5737,7 @@ addLayer("o", {
                         effectBase(){
                                 let base = new Decimal(1.02)
                                 if (hasUpgrade("o", 32)) base = base.plus(layers.o.buyables[12].total().times(.002))
+                                if (hasUpgrade("f", 13)) base = base.plus(layers.o.buyables[33].total().times(player.f.upgrades.length).div(100))
                                 return base
                         },
                         effect(){
@@ -6014,6 +6033,7 @@ addLayer("o", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("o", 45)) ret = ret.plus(layers.o.buyables[32].total())
+                                if (hasUpgrade("f", 11)) ret = ret.plus(layers.o.buyables[33].total())
                                 return ret
                         },
                         buy(){
@@ -6068,6 +6088,7 @@ addLayer("o", {
                         extra(){
                                 let ret = new Decimal(0)
                                 if (hasUpgrade("o", 52)) ret = ret.plus(2)
+                                if (hasUpgrade("o", 53)) ret = ret.plus(layers.o.buyables[33].total())
                                 return ret
                         },
                         buy(){
@@ -6106,6 +6127,9 @@ addLayer("o", {
                         },
                         effectBase(){
                                 let base = new Decimal(5)
+                                let a = player.i.points.max(10).log10().max(10).log10().max(10).log10()
+                                if (a.gt(5)) base = a
+                                base = base.plus(layers.f.waterEffect())
                                 return base
                         },
                         effect(){
@@ -6188,7 +6212,7 @@ addLayer("o", {
                 },
                 22: {
                         title: "Mumford",
-                        description: "Unlock another buyable",
+                        description: "Unlock another buyable and Incrementy autobuyers can buy 25x faster",
                         cost: new Decimal(5),
                         unlocked(){
                                 return hasUpgrade("o", 21) && getBuyableAmount("o", 11).gte(3)
@@ -6284,7 +6308,7 @@ addLayer("o", {
                 },
                 44: {
                         title: "Jones",
-                        description: "Neutrino Boost levels give three free levels to Super Prestige Boost and on to Origin Boost",
+                        description: "Neutrino Boost levels give three free levels to Super Prestige Boost and one to Origin Boost",
                         cost: new Decimal(2e7),
                         unlocked(){
                                 return hasUpgrade("o", 43)
@@ -6308,10 +6332,26 @@ addLayer("o", {
                 },
                 52: {
                         title: "Lions",
-                        description: "Gain two free levels of Shard Boost",
+                        description: "Gain two free levels of Shard Boost and Neutrino Autobuyers can buy 100x more",
                         cost: new Decimal(1e24),
                         unlocked(){
                                 return hasUpgrade("o", 51)
+                        }
+                },
+                53: {
+                        title: "Yoccoz",
+                        description: "Base Origin buyables give free levels to Shard Boost",
+                        cost: new Decimal(1.5e59),
+                        unlocked(){
+                                return hasUpgrade("o", 52)
+                        }
+                },
+                54: {
+                        title: "Zelmanov",
+                        description: "Per Origin Boost Buyables cubed you can buy one more Incrementy Stamina level and unlock Fragments",
+                        cost: new Decimal(2e145),
+                        unlocked(){
+                                return hasUpgrade("o", 52)
                         }
                 }, //1.5e59 unlock Up (Up Down, Left Right)
         },
@@ -6394,6 +6434,7 @@ addLayer("o", {
                                 "main-display",
                                 ["display-text", function(){
                                         if (!hasUpgrade("o", 31)) return ""
+                                        if (shiftDown && hasUpgrade("o", 35)) return "You are gaining " + format(layers.o.getResetGain()) + " Origins per second"
                                         return "Each Origin Buyable gives free levels to all above buyables"
                                 }],
                                 "buyables",
@@ -6421,5 +6462,645 @@ addLayer("o", {
                 player.o.best = new Decimal(0)
                 player.o.times = 0
                 player.o.total = new Decimal(0)
+        },
+})
+
+
+addLayer("f", {
+        name: "Fragment", 
+        symbol: "F", 
+        position: -1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                h: new Decimal(0),
+                c: new Decimal(0),
+                n: new Decimal(0),
+                o: new Decimal(0),
+                p: new Decimal(0),
+                ca: new Decimal(0),
+                currentTime: 0,
+                molecules: {
+                        water: new Decimal(0),
+                        glucose: new Decimal(0),
+                },
+        }},
+        color: "#41FFEC",
+        requires: Decimal.pow(10, 147), 
+        resource: "Fragments",
+        baseAmount() {return player.o.points}, 
+        branches: ["o"],
+        type: "custom", 
+        effect(){
+                let amt = player.f.points
+                let ret = amt.plus(10).log10().plus(9).log10()
+                return ret
+        },
+        effectDescription(){
+                let eff = layers.f.effect()
+                let a = "which increases Origin gain by " + format(eff)
+
+                return a + "."
+        },
+        getResetGain() {
+                let amt = layers.f.baseAmount()
+                let pre = layers.f.getGainMultPre()
+                let exp = layers.f.getGainExp()
+                let pst = layers.f.getGainMultPost()
+                
+                let ret = amt.max(10).log10().div(14.7).log10().times(pre).max(1).pow(exp).sub(1).times(pst)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(10)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(100)
+                if (hasUpgrade("f", 15)) x = x.times(Decimal.pow(2, player.f.upgrades.length))
+                x = x.times(layers.f.glucoseEffect())
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.f.getResetGain()
+                let start = "Reset to gain " + formatWhole(gain) + " Fragments<br>"
+                let pre = layers.f.getGainMultPre()
+                let exp = layers.f.getGainExp()
+                let pst = layers.f.getGainMultPost()
+                let nextAt = "Next at " + format(Decimal.pow(10, Decimal.pow(10, gain.plus(1).div(pst).plus(1).root(exp).div(pre)).times(14.7))) + " Origins"
+                if (gain.gt(1e6)) nextAt = ""
+                return start + nextAt
+        },
+        canReset(){
+                return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 60
+        },
+        update(diff){
+                player.f.best = player.f.best.max(player.f.points)
+                player.f.currentTime += diff
+
+                if (false) {
+                        let x = layers.f.getResetGain()
+                        player.f.points = player.f.points.plus(x.times(diff))
+                        player.f.total  = player.f.total.plus(x.times(diff))
+                }
+                if (true){
+                        player.f.h  = player.f.h.plus( layers.f.buyables[11].effect().times(diff))
+                        player.f.c  = player.f.c.plus( layers.f.buyables[12].effect().times(diff))
+                        player.f.n  = player.f.n.plus( layers.f.buyables[13].effect().times(diff))
+                        player.f.o  = player.f.o.plus( layers.f.buyables[21].effect().times(diff))
+                        player.f.p  = player.f.p.plus( layers.f.buyables[22].effect().times(diff))
+                        player.f.ca = player.f.ca.plus(layers.f.buyables[23].effect().times(diff))
+                }
+        },
+        upgrades:{
+                rows: 5,
+                cols: 5,
+                11: {
+                        title: "Borcherds",
+                        description: "Base Origin Boost gives free levels to Neutrino Boost",
+                        cost: new Decimal(30),
+                        unlocked(){
+                                return true
+                        }
+                },
+                12: {
+                        title: "Gowers",
+                        description: "Each Fragment upgrade makes fragments multiply origin gain",
+                        cost: new Decimal(2500),
+                        unlocked(){
+                                return hasUpgrade("f", 11)
+                        }
+                },
+                13: {
+                        title: "Kontsevich",
+                        description: "Per Fragment upgrade per Base Origin Boost add .01 to the Pion Boost base",
+                        cost: new Decimal(4000),
+                        unlocked(){
+                                return hasUpgrade("f", 12)
+                        }
+                },
+                14: {
+                        title: "McMullen",
+                        description: "Unlock workers",
+                        cost: new Decimal(2e4),
+                        unlocked(){
+                                return hasUpgrade("f", 13)
+                        }
+                },
+                //currencyLocation
+                15: {
+                        title: "idk",
+                        description: "Double fragment gain per upgrade",
+                        cost: new Decimal(1e4),
+                        unlocked(){
+                                return hasUpgrade("f", 14)
+                        }
+                },
+        },
+        buyables: {
+                rows: 3,
+                cols: 3,
+                11: {
+                        title: "<h3 style='color: #A00000'>Hydrogen</h3> <h3>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[11].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[11]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[11].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[11].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[11].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 11).plus(a)
+                                let base0 = 5e3
+                                let base1 = 1.1
+                                let base2 = 1.001
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0).ceil()
+                        },
+                        perProduction(){
+                                let base = new Decimal(1)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[11].total()
+                                let per = layers.f.buyables[11].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[11].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 11).plus(layers.f.buyables[11].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[11].cost()
+                                if (!layers.f.buyables[11].canAfford()) return
+                                player.f.buyables[11] = player.f.buyables[11].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+                12: {
+                        title: "<h3 style='color: #00A0A0'>Carbon</h3> <h3>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[12].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[12]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[12].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[12].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[12].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 12).plus(a)
+                                let base0 = 1e5
+                                let base1 = 1.2
+                                let base2 = 1.002
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        perProduction(){
+                                let base = new Decimal(.2)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[12].total()
+                                let per = layers.f.buyables[12].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[12].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 12).plus(layers.f.buyables[12].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[12].cost()
+                                if (!layers.f.buyables[12].canAfford()) return
+                                player.f.buyables[12] = player.f.buyables[12].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+                13: {
+                        title: "<h3 style='color: #0000A0'>Nitrogen</h3> <h3>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[13].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[13]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[13].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[13].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[13].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 23).plus(a)
+                                let base0 = 1000e10
+                                let base1 = 1.3
+                                let base2 = 1.003
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        perProduction(){
+                                let base = new Decimal(.2)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[13].total()
+                                let per = layers.f.buyables[13].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[13].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 13).plus(layers.f.buyables[13].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[13].cost()
+                                if (!layers.f.buyables[13].canAfford()) return
+                                player.f.buyables[13] = player.f.buyables[13].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+                21: {
+                        title: "<h3 style='color: #00A000'>Oxygen</h3> <h3>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[21].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[21]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[21].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[21].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[21].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 21).plus(a)
+                                let base0 = 1e4
+                                let base1 = 1.15
+                                let base2 = 1.004
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0).ceil()
+                        },
+                        perProduction(){
+                                let base = new Decimal(.5)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[21].total()
+                                let per = layers.f.buyables[21].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[21].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 21).plus(layers.f.buyables[21].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[21].cost()
+                                if (!layers.f.buyables[21].canAfford()) return
+                                player.f.buyables[21] = player.f.buyables[21].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+                22: {
+                        title: "<h3 style='font-size:100%;color: #A000A0'>Phosphorus</h3> <h3 style='font-size:100%'>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[22].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[22]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[22].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[22].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[22].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 22).plus(a)
+                                let base0 = 400e100
+                                let base1 = 1.25
+                                let base2 = 1.005
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        perProduction(){
+                                let base = new Decimal(.05)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[22].total()
+                                let per = layers.f.buyables[22].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[22].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 22).plus(layers.f.buyables[22].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[22].cost()
+                                if (!layers.f.buyables[22].canAfford()) return
+                                player.f.buyables[22] = player.f.buyables[22].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+                23: {
+                        title: "<h3 style='color: #A0A000'>Calcium</h3> <h3>Gatherer</h3>",
+                        display(){
+                                let additional = ""
+                                let ex = layers.f.buyables[23].extra()
+                                if (ex.gt(0)) additional = "+" + formatWhole(ex)
+
+                                let start = "<b><h2>Amount</h2>: " + formatWhole(player.f.buyables[23]) + additional + "</b><br>"
+                                let eff = "<b><h2>Effect</h2>: " + format(layers.f.buyables[23].effect(), 4) + "/s</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(layers.f.buyables[23].cost()) + " Fragments</b><br>"
+                                //let cformula = "<b><h2>Cost formula</h2>:<br>" + getIncBuyableFormulaText(11) + "</b><br>"
+                                let eformula = "<b><h2>Effect formula</h2>:<br>" + format(layers.f.buyables[23].perProduction(), 3) + "/s per worker</b><br>"
+                                let end = shiftDown ? eformula : "Shift to see details"
+                                return "<br>" + start + eff + cost + end
+                        },
+                        cost(a){
+                                let x = getBuyableAmount("f", 23).plus(a)
+                                let base0 = 1000e100
+                                let base1 = 1.35
+                                let base2 = 1.006
+                                let exp2 = x.times(x)
+                                return Decimal.pow(base2, exp2).times(Decimal.pow(base1, x)).times(base0)
+                        },
+                        perProduction(){
+                                let base = new Decimal(.1)
+                                return base
+                        },
+                        effect(){
+                                let x = layers.f.buyables[23].total()
+                                let per = layers.f.buyables[23].perProduction()
+                                return Decimal.times(per, x)
+                        },
+                        canAfford(){
+                                return player.f.points.gte(layers.f.buyables[23].cost())
+                        },
+                        total(){
+                                return getBuyableAmount("f", 23).plus(layers.f.buyables[23].extra())
+                        },
+                        extra(){
+                                let ret = new Decimal(0)
+                                return ret
+                        },
+                        buy(){
+                                let cost = layers.f.buyables[23].cost()
+                                if (!layers.f.buyables[23].canAfford()) return
+                                player.f.buyables[23] = player.f.buyables[23].plus(1)
+                                player.f.points = player.f.points.minus(cost)
+                        },
+                        buyMax(maximum){       
+                                return
+                        },
+                        unlocked(){ return true},
+                },
+        },
+        clickables:{
+                rows: 4,
+                cols: 4,
+                getMaximumPossible(id, mode = "buy"){
+                        let target
+                        if (id == 11) {
+                                target = player.f.h.div(2).min(player.f.o)
+                                if (mode == "buy") return target.minus(1).div(10).plus(1).floor()
+                        }
+                        if (id == 12) {
+                                target = player.f.h.div(12).min(player.f.o.div(6)).min(player.f.c.div(6))
+                                if (mode == "buy") return target.minus(1).div(10).plus(1).floor()
+                        }
+                },
+                11: {
+                        title: "<h3 style='color: #303000'>Water</h3><br><h3 style='color: #A00000'>H</h3><sub>2</sub><h3 style='color: #00A000'>O</h3>",
+                        effect: "idk yet",
+                        display(){
+                                let target = layers.f.clickables.getMaximumPossible(11)
+                                //player.f.h.div(2).min(player.f.o).minus(1).div(10).plus(1).floor()
+
+                                let a = "Purchase 10% of the water you can (" + formatWhole(target) + ")"
+                                let b = "You have " + formatWhole(player.f.molecules.water) + " water"
+                                return a + "<br><br>" + b
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return layers.f.clickables.getMaximumPossible(11).gt(0)
+                        },
+                        onClick(){
+                                let target = layers.f.clickables.getMaximumPossible(11)
+
+                                player.f.molecules.water = player.f.molecules.water.plus(target)
+                                player.f.h = player.f.h.sub(target.times(2))
+                                player.f.o = player.f.o.sub(target.times(1))
+                        },
+                },
+                12: {
+                        title: "<h3 style='color: #703000'>Glucose</h3><br><h3 style='color: #00A0A0'>C</h3><sub>6</sub><h3 style='color: #A00000'>H</h3><sub>12</sub><h3 style='color: #00A000'>O</h3><sub>6</sub>",
+                        effect: "THIS DOES NOT WORK PROPERLY",
+                        display(){
+                                let target = layers.f.clickables.getMaximumPossible(12)
+
+                                let a = "Purchase 10% of the Glucose you can (" + formatWhole(target) + ")"
+                                let b = "You have " + formatWhole(player.f.molecules.glucose) + " Glucose"
+                                return a + "<br><br>" + b
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return layers.f.clickables.getMaximumPossible(12).gt(0)
+                        },
+                        onClick(){
+                                let target = layers.f.clickables.getMaximumPossible(12)
+
+                                player.f.molecules.glucose = player.f.molecules.glucose.plus(target)
+                                player.f.h = player.f.h.sub(target.times(12))
+                                player.f.o = player.f.o.sub(target.times( 6))
+                                player.f.c = player.f.c.sub(target.times( 6))
+                        },
+                },
+                //
+        },
+        waterEffect(){
+                let amt = player.f.molecules.water
+
+                let ret = amt.sqrt()
+                if (ret.gt(1e10)) ret = ret.log10().pow(10)
+                
+                return ret
+        },
+        glucoseEffect(){
+                let amt = player.f.molecules.glucose
+
+                let ret = amt.times(5).plus(10).log10().pow(2)
+
+                return ret
+        },
+        row: 2, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){
+                return hasUpgrade("o", 54) || player.f.best.gt(0)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["resource-display", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["display-text", function(){
+                                        if (!false) return "There is a sixty second cooldown for Prestiging (" + format(Math.max(0, 60 - player.f.currentTime)) + ")"
+                                        return "You are gaining " + format(layers.f.getResetGain()) + " Fragments per second"
+                                }],
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Workers": {
+                        content: [
+                                "main-display",
+                                "buyables"
+                        ],
+                        unlocked(){
+                                return hasUpgrade("f", 14)
+                        },
+                },
+                "Life": {
+                        content: [
+                                ["display-text", function(){
+                                        if (!shiftDown) return "Hold Shift to see element amounts"
+                                        let a = `You have <h2 style='color: #41FFEC'>` + format(player.f.h, 4) + "</h2> <h3 style='color: #A00000'>Hydrogen</h3><br>"
+                                        let b = `You have <h2 style='color: #41FFEC'>` + format(player.f.o, 4) + "</h2> <h3 style='color: #00A000'>Oxygen</h3><br>"
+                                        let c = `You have <h2 style='color: #41FFEC'>` + format(player.f.c, 4) + "</h2> <h3 style='color: #00A0A0'>Carbon</h3><br>"
+                                        let d = `You have <h2 style='color: #41FFEC'>` + format(player.f.n, 4) + "</h2> <h3 style='color: #0000A0'>Nitrogen</h3><br>"
+                                        let e = `You have <h2 style='color: #41FFEC'>` + format(player.f.p, 4) + "</h2> <h3 style='color: #A000A0'>Phosphorus</h3><br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #A0A000'>Calcium</h3><br>"
+                                        return a + b + c + d + e + f
+                                }],
+                                "clickables"
+                        ],
+                        unlocked(){
+                                return hasUpgrade("f", 14)
+                        },
+                },
+                "Resources": {
+                        content: [
+                                ["display-text", function(){
+                                        return "<h1>Elements</h1>" 
+                                }],
+                                ["display-text", function(){
+                                        let a = `You have <h2 style='color: #41FFEC'>` + format(player.f.h, 4) + "</h2> <h3 style='color: #A00000'>Hydrogen</h3><br>"
+                                        let b = `You have <h2 style='color: #41FFEC'>` + format(player.f.o, 4) + "</h2> <h3 style='color: #00A000'>Oxygen</h3><br>"
+                                        let c = `You have <h2 style='color: #41FFEC'>` + format(player.f.c, 4) + "</h2> <h3 style='color: #00A0A0'>Carbon</h3><br>"
+                                        let d = `You have <h2 style='color: #41FFEC'>` + format(player.f.n, 4) + "</h2> <h3 style='color: #0000A0'>Nitrogen</h3><br>"
+                                        let e = `You have <h2 style='color: #41FFEC'>` + format(player.f.p, 4) + "</h2> <h3 style='color: #A000A0'>Phosphorus</h3><br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #A0A000'>Calcium</h3><br>"
+                                        return a + b + c + d + e + f
+                                }],
+                                ["display-text", function(){
+                                        return "<br><h1>Molecules</h1>" 
+                                }],
+                                ["display-text", function(){
+                                        let a = `You have <h2 style='color: #41FFEC'>` + format(player.f.molecules.water, 4)   + "</h2> <h3 style='color: #303000'>Water</h3> which gives +" + format(layers.f.waterEffect()) + " to Base Origin Boost Base<br>"
+                                        let b = `You have <h2 style='color: #41FFEC'>` + format(player.f.molecules.glucose, 4) + "</h2> <h3 style='color: #703000'>Glucose</h3> which gives *" + format(layers.f.glucoseEffect()) + " Fragment gain<br>"
+                                        let c = `You have <h2 style='color: #41FFEC'>` + format(player.f.c, 4) + "</h2> <h3 style='color: #00A0A0'>Carbon</h3><br>"
+                                        let d = `You have <h2 style='color: #41FFEC'>` + format(player.f.n, 4) + "</h2> <h3 style='color: #0000A0'>Nitrogen</h3><br>"
+                                        let e = `You have <h2 style='color: #41FFEC'>` + format(player.f.p, 4) + "</h2> <h3 style='color: #A000A0'>Phosphorus</h3><br>"
+                                        let f = `You have <h2 style='color: #41FFEC'>` + format(player.f.ca,4) + "</h2> <h3 style='color: #A0A000'>Calcium</h3><br>"
+                                        return a + b
+                                }],
+                                // 
+                                //
+                                // {{tmp["f"].resource}}<span v-if="tmp["f"].effectDescription">, {{tmp["f"].effectDescription}}</span><br><br></span>`
+                                
+                        ],
+                        unlocked(){
+                                return hasUpgrade("f", 14)
+                        },
+                },
+        },
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layer == "f") player.f.currentTime = 0
+                if (layers[layer].row <= 2) return 
+                
+                //resource
+                player.f.points = new Decimal(0)
+                player.f.best = new Decimal(0)
+                player.f.total = new Decimal(0)
         },
 })
