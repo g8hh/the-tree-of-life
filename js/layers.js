@@ -6562,6 +6562,7 @@ addLayer("f", {
                 p: new Decimal(0),
                 s: new Decimal(0),
                 currentTime: 0,
+                abTime: 0,
                 molecules: {
                         water: new Decimal(0),
                         glucose: new Decimal(0),
@@ -6638,6 +6639,22 @@ addLayer("f", {
         update(diff){
                 player.f.best = player.f.best.max(player.f.points)
                 player.f.currentTime += diff
+                player.f.abTime += diff
+
+                if (hasUpgrade("f", 34) && !hasUpgrade("f", 41)) {
+                        if (player.f.abTime > 1) {
+                                layers.f.clickables[31].onClick()
+                                player.f.abTime += -1
+                                if (player.f.abTime > 1000) player.f.abTime = 1000 //cap 1k seconds
+                        }
+                } else {
+                        player.f.abTime = 0
+                }
+
+                if (hasUpgrade("f", 41)){
+                        let t = layers.f.clickables.getMaximumPossible(31).times(diff).times(.01).max(0)
+                        player.f.molecules.f6p = player.f.molecules.f6p.plus(t)
+                }
 
                 if (hasUpgrade("f", 24)) {
                         let x = layers.f.getResetGain().times(.01)
@@ -6768,6 +6785,31 @@ addLayer("f", {
                                 return hasUpgrade("f", 32)
                         }
                 },
+                34: {
+                        title: "Avila",
+                        description: "Buy F6P once per second",
+                        cost: new Decimal("4.2pt10"),
+                        unlocked(){
+                                return hasUpgrade("f", 33) && (player.o.points.slog().gt(5) || hasUpgrade("f", 34))
+                        }
+                },
+                35: {
+                        title: "Bhargava",
+                        description: "Fragments multiply gatherer production",
+                        cost: new Decimal("4.3pt10"),
+                        unlocked(){
+                                return hasUpgrade("f", 34)
+                        }
+                },
+                41: {
+                        title: "idk",
+                        description: "Gain 1% of your F6P upon click per second but disable Avila",
+                        cost: new Decimal("150pt10"),
+                        unlocked(){
+                                return hasUpgrade("f", 35)
+                        }
+                },
+                //new Decimal("150pt10")
         },
         buyables: {
                 rows: 3,
@@ -6776,6 +6818,7 @@ addLayer("f", {
                         let ret = new Decimal(1)
                         ret = ret.times(layers.f.atpEffect())
                         if (hasUpgrade("f", 32)) ret = ret.times(Decimal.pow(player.f.upgrades.length, 2).max(1))
+                        if (hasUpgrade("f", 35)) ret = ret.times(player.f.points.plus(1))
                         return ret
                 },
                 11: {
@@ -7700,3 +7743,12 @@ addLayer("f", {
                 player.f.total = new Decimal(0)
         },
 })
+
+/*
+next upgrade should tetrate all production ^^1.001 and 
+give 10x incrementy gain
+
+*/
+
+
+

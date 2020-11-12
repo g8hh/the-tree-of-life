@@ -55,9 +55,10 @@ function format(decimal, precision=2) {
 	}
 	if (decimal.sign<0) return "-"+format(decimal.neg(), precision)
 	if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
-	if (decimal.gte("eeee1000")) {
+	if (decimal.gte("eeee10")) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
+		if (slog.gte(100)) return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(2) + "F" + commaFormat(slog.floor(), 0)
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(4) + "F" + commaFormat(slog.floor(), 0)
 	} else if (decimal.gte("ee20")) return "e" + format(decimal.log10(), precision)
 	else if (decimal.gte("ee10")) return "e" + format(decimal.log10(), 4)
