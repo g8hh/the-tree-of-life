@@ -374,7 +374,7 @@ var interval = setInterval(function() {
 		}
 		if (!player.offlineProd || player.offTime.remain <= 0) delete player.offTime
 	}
-	if (player.devSpeed) diff *= player.devSpeed
+	if (player.devSpeed != undefined) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate) resizeCanvas();
 	updateTemp();
