@@ -7598,7 +7598,7 @@ addLayer("f", {
                                         let d = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.atp, 4)       + "</h2> <h3 style='color: #6F0066'>" + names[3] + "</h3> which multiplies worker effeciency by " + format(layers.f.atpEffect()) + "<br>"
                                         let e = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.methane, 4)   + "</h2> <h3 style='color: #6F0000'>" + names[4] + "</h3> which multiplies Origin gain by " + format(layers.f.methaneEffect()) + "<br>"
                                         
-                                        if (!layers.f.clickables.rowunlocked(2)) return a + b + c + d + e + f
+                                        if (!layers.f.clickables.rowunlocked(2)) return a + b + c + d + e
 
                                         let f = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.nadph, 4)     + "</h2> <h3 style='color: #746F1C'>" + names[5] + "</h3> which effects to the Pion Boost base by +" + format(layers.f.nadphEffect()) + "<br>"
                                         let g = `You have <h2 style='color: #41FFEC'>` + formatWhole(player.f.molecules.co2, 4)       + "</h2> <h3 style='color: #336000'>" + names[6] + "</h3> which makes each Base Origin Boost multiply Fragment gain by " + format(layers.f.co2Effect(), 4) + " (total " + format(Decimal.pow(layers.f.co2Effect(), layers.o.buyables[33].total())) + ")<br>"
