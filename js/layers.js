@@ -222,6 +222,15 @@ function getIncABMult(){
         return mult
 }
 
+function doMilestoneC1Buff(x){
+        let buffexp = Decimal.pow(1.01, player.c.times)
+        if (x.lte(10)) return x
+        
+        let ret = Decimal.pow(10, x.log10().pow(buffexp))
+
+        return ret
+}
+
 function hasUnlockedRow(r){
         if (r == 4) return player.c.best.gt(0) || player.o.best.gt(0)
         if (r == 3) return hasUnlockedRow(4)   || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0)
@@ -266,7 +275,7 @@ addLayer("i", {
                 }
                 ret = ret.times(incGainFactor).max(0)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 if (inChallenge("am", 11)) ret = ret.root(10)
                 if (inChallenge("m", 11))  ret = ret.root(2)
@@ -891,9 +900,9 @@ addLayer("am", {
                 let pre = layers.am.getGainMultPre()
                 let exp = layers.am.getGainExp()
                 let pst = layers.am.getGainMultPost()
-                let ret = amt.sub(99).max(0).times(pre).pow(exp).times(pst).floor()
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
-                return ret
+                let ret = amt.sub(99).max(0).times(pre).pow(exp).times(pst)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+                return ret.floor()
         },
         getGainExp(){
                 let x = new Decimal(.5)
@@ -928,7 +937,7 @@ addLayer("am", {
                 let exp = layers.am.getGainExp()
                 let pst = layers.am.getGainMultPost()
                 let nextAt = ""
-                if (!hasMilestone("c", 1)) nextAt = "Next at " + formatWhole(gain.plus(1).div(pst).root(exp).div(pre).ceil().plus(99)) + " levels"
+                nextAt = "Next at " + formatWhole(gain.plus(1).div(pst).root(exp).div(pre).ceil().plus(99)) + " levels"
                 return start + nextAt
         },
         canReset(){
@@ -1141,7 +1150,7 @@ addLayer("a", {
                 if (gainexp.lt(0)) return new Decimal(0)
                 let ret = Decimal.pow(10, gainexp).times(layers.a.getGainMult()).floor()
                 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
                 return ret
         },
         getGainExp(){
@@ -1392,7 +1401,7 @@ addLayer("m", {
                 let exp = layers.m.getGainExp()
                 let ret = amt.pow(exp).minus(9).times(mlt).max(0).floor()
                 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
                 return ret
         },
         getGainExp(){
@@ -1546,7 +1555,7 @@ addLayer("e", {
                 let exp = layers.e.getGainExp()
                 let mlt = layers.e.getGainMult()
                 let ret = amt.pow(exp).times(mlt)
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
                 return ret
         },
         getGainMult(){
@@ -1879,7 +1888,7 @@ addLayer("p", {
                 let log = amt.max(10).log10().div(18.36)
                 let ret = log.pow(exp).div(25)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 let add = new Decimal(hasUpgrade("s", 21) ? 1 : 0)
                 if (hasUpgrade("s", 54)) add = add.max(1000)
@@ -2440,7 +2449,7 @@ addLayer("n", {
                 base = base.pow(layers.n.getPostExp())
                 let ret = base.times(layers.n.getGainMult())
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 if (inChallenge("sp", 12)) ret = ret.root(100)
 
@@ -3253,7 +3262,8 @@ addLayer("g", {
                 if (base.lt(1)) base = base.sqrt()
 
                 let ret = base.times(layers.g.getGainMult())
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+
                 return ret
         },
         getGainExp(){
@@ -3568,7 +3578,8 @@ addLayer("q", {
                 if (base.lt(1)) base = base.cbrt()
 
                 let ret = base.times(layers.q.getGainMult())
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+
                 return ret
         },
         getGainExp(){
@@ -3738,7 +3749,8 @@ addLayer("s", {
                 let exp = layers.s.getGainExp()
                 let pst = layers.s.getGainMultPost()
                 let ret = amt.div("1e500").max(1).log10().div(2).times(pre).pow(exp).times(pst)
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+
                 return ret.floor()
         },
         getGainExp(){
@@ -4071,7 +4083,8 @@ addLayer("b", {
                 let exp = layers.b.getGainExp()
                 let pst = layers.b.getGainMultPost()
                 let ret = amt.div("1e692").max(1).log10().div(2).times(pre).pow(exp).times(pst)
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+
                 return ret
         },
         getGainExp(){
@@ -4608,7 +4621,7 @@ addLayer("sp", {
                 
                 let ret = amt.div(1e64).max(1).log10().times(pre).pow(exp).times(pst)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 if (ret.gt("ee1000")) ret = Decimal.pow(10, Decimal.pow(10, ret.log10().log10().div(1000).pow(.999).times(1000)))
 
@@ -4671,7 +4684,7 @@ addLayer("sp", {
                 return start + nextAt
         },
         canReset(){
-                return layers.sp.getResetGain().gt(0) && (getBChallengeTotal() >= 40 || player.sp.best.gt(0) || player.o.best.gt(0)) && !hasUpgrade("sp", 12) 
+                return layers.sp.getResetGain().gt(0) && (getBChallengeTotal() >= 40 || player.sp.best.gt(0) || hasUnlockedRow(4)) && !hasUpgrade("sp", 12) 
         },
         update(diff){
                 player.sp.best = player.sp.best.max(player.sp.points)
@@ -5368,7 +5381,7 @@ addLayer("pi", {
 
                 if (ret.gt(1e100) && !hasUpgrade("p", 52)) ret = ret.log10().pow(50)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 return ret.floor()
         },
@@ -5682,7 +5695,7 @@ addLayer("o", {
                 
                 let ret = amt.max(10).log10().div(2.5).times(pre).pow(exp).minus(99).max(0).times(pst)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 return ret.floor()
         },
@@ -6645,7 +6658,7 @@ addLayer("f", {
                 
                 let ret = amt.max(10).log10().div(14.7).log10().times(pre).max(1).pow(exp).sub(1).max(0).times(pst)
 
-                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
                 return ret.floor().max(0)
         },
@@ -7921,10 +7934,17 @@ addLayer("c", {
         milestones: {
                 1: {
                         requirementDescription: "<b>idk</b><br>Requires: 1 Capsule", 
-                        effectDescription: "Tetrate all prior prestige resource production ^^1.001",
+                        effectDescription: "Each Capsule reset raises all previous layer production exponents ^1.01",
                         done(){
                                 return player.c.best.gte(1)
                         }, // hasMilestone("c", 1)
+                },
+                2: {
+                        requirementDescription: "<b>idk2</b><br>Requires: 2 Capsules", 
+                        effectDescription: "Unlock Capsule upgrades [NOT YET] and gain 5x more SP resets per reset",
+                        done(){
+                                return player.c.best.gte(2)
+                        }, // hasMilestone("c", 2)
                 },
         },
         row: 4, // Row the layer is in on the tree (0 is the first row)
