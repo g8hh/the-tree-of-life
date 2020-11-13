@@ -223,10 +223,10 @@ function getIncABMult(){
 }
 
 function hasUnlockedRow(r){
-        if (r == 4) return player.o.best.gt(0)
-        if (r == 3) return player.o.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0)
-        if (r == 2) return player.o.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0) || player.a.best.gt(0)
-        if (r == 1) return player.o.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0) || player.a.best.gt(0) || player.am.best.gt(0)
+        if (r == 4) return player.c.best.gt(0) || player.o.best.gt(0)
+        if (r == 3) return hasUnlockedRow(4)   || player.s.best.gt(0) || player.sp.best.gt(0) || player.pi.best.gt(0)
+        if (r == 2) return hasUnlockedRow(3)   || player.a.best.gt(0)
+        if (r == 1) return hasUnlockedRow(2)   || player.am.best.gt(0)
 }
 
 var incGainFactor = new Decimal(1)
@@ -265,6 +265,8 @@ addLayer("i", {
                         ret = ret1.times(ret2).times(pst).minus(1)
                 }
                 ret = ret.times(incGainFactor).max(0)
+
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
                 if (inChallenge("am", 11)) ret = ret.root(10)
                 if (inChallenge("m", 11))  ret = ret.root(2)
@@ -329,6 +331,8 @@ addLayer("i", {
                 x = x.times(layers.s.effect())
                 x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
                 x = x.times(layers.sp.effect()[1])
+                x = x.times(layers.c.effect())
+                
                 return x
         },
         update(diff){
@@ -888,6 +892,7 @@ addLayer("am", {
                 let exp = layers.am.getGainExp()
                 let pst = layers.am.getGainMultPost()
                 let ret = amt.sub(99).max(0).times(pre).pow(exp).times(pst).floor()
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
                 return ret
         },
         getGainExp(){
@@ -922,7 +927,8 @@ addLayer("am", {
                 let pre = layers.am.getGainMultPre()
                 let exp = layers.am.getGainExp()
                 let pst = layers.am.getGainMultPost()
-                let nextAt = "Next at " + formatWhole(gain.plus(1).div(pst).root(exp).div(pre).ceil().plus(99)) + " levels"
+                let nextAt = ""
+                if (!hasMilestone("c", 1)) nextAt = "Next at " + formatWhole(gain.plus(1).div(pst).root(exp).div(pre).ceil().plus(99)) + " levels"
                 return start + nextAt
         },
         canReset(){
@@ -1134,6 +1140,8 @@ addLayer("a", {
                 let gainexp = amt.log10().minus(17).pow(exp).div(2).minus(10)
                 if (gainexp.lt(0)) return new Decimal(0)
                 let ret = Decimal.pow(10, gainexp).times(layers.a.getGainMult()).floor()
+                
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
                 return ret
         },
         getGainExp(){
@@ -1382,7 +1390,10 @@ addLayer("m", {
                 let amt = layers.m.baseAmount().max(1)
                 let mlt = layers.m.getGainMult()
                 let exp = layers.m.getGainExp()
-                return amt.pow(exp).minus(9).times(mlt).max(0).floor()
+                let ret = amt.pow(exp).minus(9).times(mlt).max(0).floor()
+                
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(1/1170)
@@ -1534,7 +1545,9 @@ addLayer("e", {
                 let amt = layers.e.baseAmount()
                 let exp = layers.e.getGainExp()
                 let mlt = layers.e.getGainMult()
-                return amt.pow(exp).times(mlt)
+                let ret = amt.pow(exp).times(mlt)
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                return ret
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -1865,6 +1878,8 @@ addLayer("p", {
                 let exp = layers.p.getGainExp()
                 let log = amt.max(10).log10().div(18.36)
                 let ret = log.pow(exp).div(25)
+
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
                 let add = new Decimal(hasUpgrade("s", 21) ? 1 : 0)
                 if (hasUpgrade("s", 54)) add = add.max(1000)
@@ -2424,6 +2439,8 @@ addLayer("n", {
                 if (base.gt(1e10)) base = base.log10().pow(10)
                 base = base.pow(layers.n.getPostExp())
                 let ret = base.times(layers.n.getGainMult())
+
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
                 if (inChallenge("sp", 12)) ret = ret.root(100)
 
@@ -3234,7 +3251,10 @@ addLayer("g", {
                 if (base.lt(1)) return new Decimal(0)
                 base = base.minus(1)
                 if (base.lt(1)) base = base.sqrt()
-                return base.times(layers.g.getGainMult())
+
+                let ret = base.times(layers.g.getGainMult())
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(.5)
@@ -3546,7 +3566,10 @@ addLayer("q", {
                 if (base.lt(1)) return new Decimal(0)
                 base = base.minus(1)
                 if (base.lt(1)) base = base.cbrt()
-                return base.times(layers.q.getGainMult())
+
+                let ret = base.times(layers.q.getGainMult())
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(.5)
@@ -3715,6 +3738,7 @@ addLayer("s", {
                 let exp = layers.s.getGainExp()
                 let pst = layers.s.getGainMultPost()
                 let ret = amt.div("1e500").max(1).log10().div(2).times(pre).pow(exp).times(pst)
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
                 return ret.floor()
         },
         getGainExp(){
@@ -4047,6 +4071,7 @@ addLayer("b", {
                 let exp = layers.b.getGainExp()
                 let pst = layers.b.getGainMultPost()
                 let ret = amt.div("1e692").max(1).log10().div(2).times(pre).pow(exp).times(pst)
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
                 return ret
         },
         getGainExp(){
@@ -4582,6 +4607,8 @@ addLayer("sp", {
                 let pst = layers.sp.getGainMultPost()
                 
                 let ret = amt.div(1e64).max(1).log10().times(pre).pow(exp).times(pst)
+
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
                 if (ret.gt("ee1000")) ret = Decimal.pow(10, Decimal.pow(10, ret.log10().log10().div(1000).pow(.999).times(1000)))
 
@@ -5341,6 +5368,8 @@ addLayer("pi", {
 
                 if (ret.gt(1e100) && !hasUpgrade("p", 52)) ret = ret.log10().pow(50)
 
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+
                 return ret.floor()
         },
         getGainExp(){
@@ -5468,7 +5497,7 @@ addLayer("pi", {
                 },
                 22: {
                         title: "Feet",
-                        description: "Each Pion upgrade multiplies Shards multiply Amoeba gain and multiply Pion gain by 1.8",
+                        description: "Each Pion upgrade makes Shards multiply Amoeba gain and multiply Pion gain by 1.8",
                         cost: new Decimal(120),
                         unlocked(){
                                 return hasUpgrade("pi", 21)
@@ -5652,6 +5681,8 @@ addLayer("o", {
                 let pst = layers.o.getGainMultPost()
                 
                 let ret = amt.max(10).log10().div(2.5).times(pre).pow(exp).minus(99).max(0).times(pst)
+
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
                 return ret.floor()
         },
@@ -6535,13 +6566,22 @@ addLayer("o", {
         },
         doReset(layer){
                 if (false) console.log(layer)
-                if (layers[layer].row <= 4) return
+                if (layers[layer].row <= 4 && layer != "c") return
 
                 //resource
                 player.o.points = new Decimal(0)
                 player.o.best = new Decimal(0)
                 player.o.times = 0
                 player.o.total = new Decimal(0)
+                
+                player.o.upgrades = filter(player.o.upgrades, keep)
+                let keep = []
+                player.o.milestones = []
+
+                let resetBuyables = [11,12,13,21,22,23,31,32,33]
+                for (let j = 0; j < resetBuyables.length; j++) {
+                        player.n.buyables[resetBuyables[j]] = new Decimal(0)
+                }
         },
 })
 
@@ -6555,6 +6595,7 @@ addLayer("f", {
 		points: new Decimal(0),
                 best: new Decimal(0),
                 total: new Decimal(0),
+                testBest: new Decimal(0),
                 h: new Decimal(0),
                 c: new Decimal(0),
                 n: new Decimal(0),
@@ -6605,6 +6646,8 @@ addLayer("f", {
                 
                 let ret = amt.max(10).log10().div(14.7).log10().times(pre).max(1).pow(exp).sub(1).times(pst)
 
+                if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
+
                 return ret.floor()
         },
         getGainExp(){
@@ -6637,10 +6680,9 @@ addLayer("f", {
                 return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 60
         },
         update(diff){
-                player.f.best = player.f.best.max(player.f.points)
                 player.f.currentTime += diff
                 player.f.abTime += diff
-
+                
                 if (hasUpgrade("f", 34) && !hasUpgrade("f", 41)) {
                         if (player.f.abTime > 1) {
                                 layers.f.clickables[31].onClick()
@@ -6655,17 +6697,29 @@ addLayer("f", {
                         let t = layers.f.clickables.getMaximumPossible(31).times(diff).times(.01).max(0)
                         player.f.molecules.f6p = player.f.molecules.f6p.plus(t)
                 }
-
+                let y = layers.f.getResetGain()
+                console.log(y.layer)
                 if (hasUpgrade("f", 24)) {
-                        let x = layers.f.getResetGain().times(.01)
+                        let x = y.times(.01)
+                        console.log("a")
+                        console.log(x.layer)
+                        console.log(x.times(diff).layer)
+                        console.log("x")
+                        console.log(player.f.points.layer)
                         player.f.points = player.f.points.plus(x.times(diff))
+                        console.log("c")
+                        console.log(player.f.points.layer)
                         player.f.total  = player.f.total.plus(x.times(diff))
+                        player.f.best = player.f.best.max(player.f.points)
+                        console.log(player.f.best.layer)
                 }
                 if (hasUpgrade("f", 25)) {
-                        let x = layers.f.getResetGain().times(.99)
+                        let x = y.times(.99)
                         player.f.points = player.f.points.plus(x.times(diff))
                         player.f.total  = player.f.total.plus(x.times(diff))
+                        player.f.best = player.f.best.max(player.f.points)
                 }
+                
                 if (true){
                         player.f.h  = player.f.h.plus( layers.f.buyables[11].effect().times(diff))
                         player.f.c  = player.f.c.plus( layers.f.buyables[12].effect().times(diff))
@@ -6674,6 +6728,12 @@ addLayer("f", {
                         player.f.p  = player.f.p.plus( layers.f.buyables[22].effect().times(diff))
                         player.f.s  = player.f.s.plus( layers.f.buyables[23].effect().times(diff))
                 }
+                player.f.best = player.f.best.max(player.f.points)
+                player.f.testBest = player.f.testBest.max(player.f.points)
+                console.log(player.f.testBest.layer)
+                console.log(player.f.best.layer)
+                console.log(player.f.best.toString())
+                console.log("d")
         },
         upgrades:{
                 rows: 5,
@@ -6802,11 +6862,19 @@ addLayer("f", {
                         }
                 },
                 41: {
-                        title: "idk",
+                        title: "idk1",
                         description: "Gain 1% of your F6P upon click per second but disable Avila",
                         cost: new Decimal("150pt10"),
                         unlocked(){
                                 return hasUpgrade("f", 35)
+                        }
+                },
+                42: {
+                        title: "idk2",
+                        description: "Unlock Capsule and the ability to Capsule reset",
+                        cost: new Decimal("1999pt10"),
+                        unlocked(){
+                                return hasUpgrade("f", 41)
                         }
                 },
                 //new Decimal("150pt10")
@@ -7737,10 +7805,13 @@ addLayer("f", {
                 if (layer == "f") player.f.currentTime = 0
                 if (layers[layer].row <= 2) return 
                 
+
+                console.log("h")
                 //resource
                 player.f.points = new Decimal(0)
                 player.f.best = new Decimal(0)
                 player.f.total = new Decimal(0)
+                console.log("f")
         },
 })
 
@@ -7750,5 +7821,152 @@ give 10x incrementy gain
 
 */
 
+addLayer("c", {
+        name: "Capsules", 
+        symbol: "C", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                times: 0,
+        }},
+        color: "#990000",
+        requires: Decimal.pow(10, 25000), 
+        resource: "Capsules",
+        baseAmount() {return player.f.best}, 
+        branches: ["f"],
+        type: "custom", 
+        effect(){
+                let amt = player.c.best
+                if (amt.eq(0)) return new Decimal(1)
+                
+                let ret = amt.tetrate(3).plus(1)
+                return ret
+        },
+        effectDescription(){
+                let eff = layers.c.effect()
+                let a = "which increases Incrementy gain by " + format(eff) + " (based on best Capsules)"
 
+                return a + "."
+        },
+        getResetGain() {
+                let amt = layers.c.baseAmount()
+                let pre = layers.c.getGainMultPre()
+                let exp = layers.c.getGainExp()
+                let pst = layers.c.getGainMultPost()
+                
+                let ret = amt.max(10).slog().log(2).times(pre).pow(exp).div(11).times(pst)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPre(){
+                let x = new Decimal(1)
+                return x
+        },
+        getGainMultPost(){
+                let x = new Decimal(1)
+                return x
+        },
+        prestigeButtonText(){
+                let gain = layers.c.getResetGain()
+                let start = "Reset to gain " + formatWhole(gain) + " Capsules<br>"
+                let pre = layers.c.getGainMultPre()
+                let exp = layers.c.getGainExp()
+                let pst = layers.c.getGainMultPost()
+
+                let x1 = gain.plus(1).div(pst).times(11).root(exp).div(pre)
+                let x2 = Decimal.tetrate(10, Decimal.pow(2, x1))
+
+                let nextAt = "Next at " + format(x2) + " Fragments"
+                if (gain.gt(1e6)) nextAt = ""
+                
+                return start + nextAt
+        },
+        canReset(){
+                return layers.c.getResetGain().gt(0) && hasUpgrade("f", 42) 
+        },
+        update(diff){
+                player.c.best = player.c.best.max(player.c.points)
+
+                if (false) {
+                        let x = layers.c.getResetGain()
+                        player.c.points = player.c.points.plus(x.times(diff))
+                        player.c.total  = player.c.total.plus(x.times(diff))
+                }
+        },
+        upgrades:{ // https://en.wikipedia.org/wiki/Fields_Medal
+                rows: 5,
+                cols: 5,
+                11: {
+                        title: "idk",
+                        description: "idk",
+                        cost: new Decimal(69),
+                        unlocked(){
+                                return false
+                        }
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription: "<b>idk</b><br>Requires: 1 Capsule", 
+                        effectDescription: "Tetrate all prior prestige resource production ^^1.001",
+                        done(){
+                                return player.c.best.gte(1)
+                        }, // hasMilestone("c", 1)
+                },
+        },
+        row: 4, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+            //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        ],
+        layerShown(){
+                return hasUpgrade("f", 42) || player.c.best.gt(0)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["resource-display", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["display-text", function(){
+                                        if (false) return ""
+                                        return "Doing a Capsule reset resets Origins and everything above"
+                                }],
+                                ["display-text", function(){
+                                        if (!false) return ""
+                                        return "You are gaining " + format(layers.c.getResetGain()) + " Capsules per second"
+                                }],
+                                "upgrades"
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "QoL": {
+                        content: [
+                                "main-display",
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        doReset(layer){
+                if (false) console.log(layer)
+                if (layers[layer].row <= 4) return
+
+                //resource
+                player.c.points = new Decimal(0)
+                player.c.best = new Decimal(0)
+                player.c.times = 0
+                player.c.total = new Decimal(0)
+        },
+})
 
