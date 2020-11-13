@@ -340,7 +340,6 @@ addLayer("i", {
                 x = x.times(layers.s.effect())
                 x = x.times(player.a.points.plus(1).pow(layers.b.effect()))
                 x = x.times(layers.sp.effect()[1])
-                x = x.times(layers.c.effect())
                 
                 return x
         },
@@ -4598,6 +4597,7 @@ addLayer("sp", {
                 let a2 = amt.times(10).max(1).pow(2)
                 if (devSpeedUp) a2 = a2.times(10)
                 if (hasUpgrade("o", 13)) a2 = a2.times(2)
+                a2 = a2.times(layers.c.effect())
                 return [a1, a2]
         },
         effectDescription(){
@@ -7322,7 +7322,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return layers.f.buyables[13].total().gt(0)
+                                return layers.f.buyables[13].total().gt(0) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(13).gt(0)
@@ -7347,7 +7347,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return layers.f.buyables[22].total().gt(0)
+                                return layers.f.buyables[22].total().gt(0) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(14).gt(0)
@@ -7373,7 +7373,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return hasUpgrade("f", 22)
+                                return hasUpgrade("f", 22) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(15).gt(0)
@@ -7399,7 +7399,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 22).gte(28)
+                                return getBuyableAmount("f", 22).gte(28) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(21).gt(0)
@@ -7428,7 +7428,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 21).gte(75)
+                                return getBuyableAmount("f", 21).gte(75) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(22).gt(0)
@@ -7456,7 +7456,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 21).gte(75)
+                                return getBuyableAmount("f", 21).gte(75) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(23).gt(0)
@@ -7484,7 +7484,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 11).gte(179)
+                                return getBuyableAmount("f", 11).gte(179) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(24).gt(0)
@@ -7512,7 +7512,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 23).gte(1)
+                                return getBuyableAmount("f", 23).gte(1) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(25).gt(0)
@@ -7541,7 +7541,7 @@ addLayer("f", {
                                 return a + "<br><br>" + b
                         },
                         unlocked(){
-                                return getBuyableAmount("f", 11).gte(243)
+                                return getBuyableAmount("f", 11).gte(243) || player.c.best.gt(0)
                         },
                         canClick(){
                                 return layers.f.clickables.getMaximumPossible(31).gt(0)
@@ -7859,12 +7859,12 @@ addLayer("c", {
                 let amt = player.c.best
                 if (amt.eq(0)) return new Decimal(1)
                 
-                let ret = amt.sqrt().plus(1).tetrate(3)
+                let ret = amt.sqrt().plus(1).tetrate(3).div(3)
                 return ret
         },
         effectDescription(){
                 let eff = layers.c.effect()
-                let a = "which increases Incrementy gain by " + format(eff) + " (based on best Capsules)"
+                let a = "which increases Super Prestige effect by " + format(eff) + " (based on best Capsules)"
 
                 return a + "."
         },
