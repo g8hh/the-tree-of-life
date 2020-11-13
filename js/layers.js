@@ -4143,9 +4143,11 @@ addLayer("b", {
                 if (hasUpgrade("b", 21)) ret = ret.times(Decimal.max(1, challengeCompletions("b", 11)))
                 ret = ret.times(Decimal.pow(3, challengeCompletions("b", 22)))
                 ret = ret.times(layers.o.effect())
+                if (hasMilestone("c", 2)) ret = ret.times(layers.c.effect())
 
                 if (hasMilestone("sp", 3)) ret = ret.pow(1.1).times(10)
                 if (devSpeedUp) ret = ret.pow(1.1).times(10)
+                ret = doMilestoneC1Buff(ret)
                 return ret
         },
         challenges:{
@@ -4532,7 +4534,7 @@ addLayer("b", {
                                 "upgrades"
                         ],
                         unlocked(){
-                                return challengeCompletions("b", 11) > 0 // for now
+                                return challengeCompletions("b", 11) > 0 || player.sp.best.gt(0) || player.o.best.gt(0) || hasUnlockedRow(4)
                         },
                 }
         },
@@ -4671,6 +4673,7 @@ addLayer("sp", {
                 if (hasMilestone("o", 3)) x = x.times(Decimal.add(3, player.o.times).ln())
                 if (hasUpgrade("o", 13)) x = x.times(2)
                 if (hasMilestone("o", 6)) x = x.times(layers.o.effect())
+                x = x.times(layers.c.effect())
                 return x
         },
         prestigeButtonText(){
@@ -5317,8 +5320,12 @@ addLayer("sp", {
                 player.sp.upgrades = filter(player.sp.upgrades, keep)
                 if (hasMilestone("o", 5)) return 
                 
-                player.sp.times = 0
-                player.sp.milestones = []
+                if (hasMilestone("c", 3)) {
+                        player.sp.times = Math.min(player.sp.times, player.c.times)
+                }
+                else player.sp.times = 0
+                
+                if (!hasMilestone("c", 4)) player.sp.milestones = []
         },
 })
 
@@ -5414,7 +5421,7 @@ addLayer("pi", {
                 return start + nextAt
         },
         canReset(){
-                return layers.pi.getResetGain().gt(0) && !hasMilestone("pi", 5) && player.sp.upgrades.length >= 20
+                return layers.pi.getResetGain().gt(0) && !hasMilestone("pi", 5) && (player.sp.upgrades.length >= 20 || player.c.best.gt(0))
         },
         update(diff){
                 player.pi.best = player.pi.best.max(player.pi.points)
@@ -5470,7 +5477,7 @@ addLayer("pi", {
                         description: "Remove the Joule Challenge points softcap",
                         cost: new Decimal(10),
                         unlocked(){
-                                return hasMilestone("pi", 2) || hasUpgrade("pi", 11)
+                                return hasMilestone("pi", 2) || hasUpgrade("pi", 11) || player.c.best.gt(0)
                         }
                 },
                 12: {
@@ -5481,7 +5488,7 @@ addLayer("pi", {
                                 return Decimal.pow(player.sp.chall1points.plus(1), player.pi.upgrades.length)
                         },
                         unlocked(){
-                                return hasUpgrade("pi", 11)
+                                return hasUpgrade("pi", 11) || player.c.best.gt(0)
                         }
                 },
                 13: {
@@ -5489,7 +5496,7 @@ addLayer("pi", {
                         description: "Each Pion upgrade pushes the Incrementy Stamina Softcap back by 1",
                         cost: new Decimal(15),
                         unlocked(){
-                                return hasUpgrade("pi", 12)
+                                return hasUpgrade("pi", 12) || player.c.best.gt(0)
                         }
                 },
                 14: {
@@ -5497,7 +5504,7 @@ addLayer("pi", {
                         description: "Square the Pion gain formula",
                         cost: new Decimal(15),
                         unlocked(){
-                                return hasUpgrade("pi", 13)
+                                return hasUpgrade("pi", 13) || player.c.best.gt(0)
                         }
                 },
                 21: {
@@ -5505,7 +5512,7 @@ addLayer("pi", {
                         description: "Each Pion upgrade multiplies Super Prestige Point gain by Pions",
                         cost: new Decimal(100),
                         unlocked(){
-                                return hasUpgrade("pi", 14)
+                                return hasUpgrade("pi", 14) || player.c.best.gt(0)
                         }
                 },
                 22: {
@@ -5513,7 +5520,7 @@ addLayer("pi", {
                         description: "Each Pion upgrade makes Shards multiply Amoeba gain and multiply Pion gain by 1.8",
                         cost: new Decimal(120),
                         unlocked(){
-                                return hasUpgrade("pi", 21)
+                                return hasUpgrade("pi", 21) || player.c.best.gt(0)
                         }
                 },
                 23: {
@@ -5521,7 +5528,7 @@ addLayer("pi", {
                         description: "Each Pion milestone raises Jewel effect to the .8",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("pi", 22)
+                                return hasUpgrade("pi", 22) || player.c.best.gt(0)
                         }
                 },
                 24: {
@@ -5529,7 +5536,7 @@ addLayer("pi", {
                         description: "The square root of pion upgrades multiplies pion gain",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("pi", 23)
+                                return hasUpgrade("pi", 23) || player.c.best.gt(0)
                         }
                 },
                 31: {
@@ -5537,7 +5544,7 @@ addLayer("pi", {
                         description: "Neutrino autobuyers can buy 2x more",
                         cost: new Decimal(500),
                         unlocked(){
-                                return hasUpgrade("pi", 24)
+                                return hasUpgrade("pi", 24) || player.c.best.gt(0)
                         }
                 },
                 32: {
@@ -5545,7 +5552,7 @@ addLayer("pi", {
                         description: "You can no longer access or gain AM, A, E, M, Q, B or G or SP challenges but vastly buff the Incrementy gain formula",
                         cost: new Decimal(4321),
                         unlocked(){
-                                return hasUpgrade("pi", 31)
+                                return hasUpgrade("pi", 31) || player.c.best.gt(0)
                         },
                         onPurchase(){
                                 player.sp.activeChallenge = undefined
@@ -5560,7 +5567,7 @@ addLayer("pi", {
                         description: "Pion upgrades after the first ten push back the Incrementy Stamina Maximum amount by 10",
                         cost: new Decimal(1e153),
                         unlocked(){
-                                return hasUpgrade("pi", 32)
+                                return hasUpgrade("pi", 32) || player.c.best.gt(0)
                         }
                 },
                 34: {
@@ -5568,7 +5575,7 @@ addLayer("pi", {
                         description: "Each Pion Upgrade raises Incrementy Gain to the 1.1",
                         cost: new Decimal(1e157),
                         unlocked(){
-                                return hasUpgrade("pi", 33)
+                                return hasUpgrade("pi", 33) || player.c.best.gt(0)
                         }
                 },
                 41: {
@@ -5576,7 +5583,7 @@ addLayer("pi", {
                         description: "Remove particle buyables",
                         cost: new Decimal(1e188),
                         unlocked(){
-                                return hasUpgrade("pi", 34)
+                                return hasUpgrade("pi", 34) || player.c.best.gt(0)
                         }
                 },
                 42: {
@@ -5584,7 +5591,7 @@ addLayer("pi", {
                         description: "Unlock new Particle upgrades",
                         cost: new Decimal(1e191),
                         unlocked(){
-                                return hasUpgrade("pi", 41)
+                                return hasUpgrade("pi", 41) || player.c.best.gt(0)
                         }
                 },
                 43: {
@@ -5592,7 +5599,7 @@ addLayer("pi", {
                         description: "You can buy 5 more Incrementy Stamina levels",
                         cost: new Decimal("e20800"),
                         unlocked(){
-                                return hasUpgrade("sp", 55) || hasUpgrade("pi", 43)
+                                return hasUpgrade("sp", 55) || hasUpgrade("pi", 43) || player.c.best.gt(0)
                         }
                 },
                 44: {
@@ -5600,7 +5607,7 @@ addLayer("pi", {
                         description: "Unlock Origin",
                         cost: new Decimal("e23000"),
                         unlocked(){
-                                return hasUpgrade("pi", 43)
+                                return hasUpgrade("pi", 43) || player.c.best.gt(0)
                         }
                 }, //e20800 pions next
         },
@@ -6291,7 +6298,7 @@ addLayer("o", {
                         description: "Multiply all higher row prestige resource gain exponents by 1.001",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("o", 11)
+                                return hasUpgrade("o", 11) || player.c.best.gt(0)
                         }
                 },
                 13: {
@@ -6299,7 +6306,7 @@ addLayer("o", {
                         description: "Multiply Super Prestige gain and effect by 2 and gain 5x more SP resets",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("o", 12) 
+                                return hasUpgrade("o", 12) || player.c.best.gt(0)
                         }
                 },
                 14: {
@@ -6307,7 +6314,7 @@ addLayer("o", {
                         description: "Each Origin reset allows you to keep two more Shard upgrades and gain a free Incrementy Stamina level",
                         cost: new Decimal(2),
                         unlocked(){
-                                return hasUpgrade("o", 13) 
+                                return hasUpgrade("o", 13) || player.c.best.gt(0)
                         }
                 },
                 15: {
@@ -6315,7 +6322,7 @@ addLayer("o", {
                         description: "Get a free Incrementy Stamina level per Origin Upgrade",
                         cost: new Decimal(2),
                         unlocked(){
-                                return hasUpgrade("o", 14) 
+                                return hasUpgrade("o", 14) || player.c.best.gt(0)
                         }
                 },
                 21: {
@@ -6323,7 +6330,7 @@ addLayer("o", {
                         description: "Keep π upgrades, π milestones, I upgrades, and multiply Origin gain by 1.5",
                         cost: new Decimal(5),
                         unlocked(){
-                                return hasUpgrade("o", 15) 
+                                return hasUpgrade("o", 15) || player.c.best.gt(0)
                         }
                 },
                 22: {
@@ -6331,7 +6338,7 @@ addLayer("o", {
                         description: "Unlock another buyable and Incrementy autobuyers can buy 25x faster",
                         cost: new Decimal(5),
                         unlocked(){
-                                return hasUpgrade("o", 21) && getBuyableAmount("o", 11).gte(3)
+                                return (hasUpgrade("o", 21) && getBuyableAmount("o", 11).gte(3))  || player.c.best.gt(0)
                         }
                 },
                 23: {
@@ -6339,7 +6346,7 @@ addLayer("o", {
                         description: "Unlock another buyable and double Origin gain",
                         cost: new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("o", 22) && getBuyableAmount("o", 12).gte(2)
+                                return (hasUpgrade("o", 22) && getBuyableAmount("o", 12).gte(2)) || player.c.best.gt(0)
                         }
                 },
                 24: {
@@ -6347,7 +6354,7 @@ addLayer("o", {
                         description: "Pion Boost gives free Incrementy Boost levels and double Origin gain",
                         cost: new Decimal(25),
                         unlocked(){
-                                return hasUpgrade("o", 23) && getBuyableAmount("o", 13).gte(2)
+                                return (hasUpgrade("o", 23) && getBuyableAmount("o", 13).gte(2)) || player.c.best.gt(0)
                         }
                 },
                 25: {
@@ -6355,7 +6362,7 @@ addLayer("o", {
                         description: "Stamina Boost gives free Pion Boost levels",
                         cost: new Decimal(50),
                         unlocked(){
-                                return hasUpgrade("o", 24) && getBuyableAmount("o", 13).gte(3) && getBuyableAmount("o", 12).gte(3)
+                                return (hasUpgrade("o", 24) && getBuyableAmount("o", 13).gte(3) && getBuyableAmount("o", 12).gte(3)) || player.c.best.gt(0)
                         }
                 },
                 31: {
@@ -6363,7 +6370,7 @@ addLayer("o", {
                         description: "Unlock three Origin buyables and each Incrementy Boost buyable adds .001 to its base",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("o", 25)
+                                return hasUpgrade("o", 25) || player.c.best.gt(0)
                         }
                 },
                 32: {
@@ -6371,7 +6378,7 @@ addLayer("o", {
                         description: "Stamina Boost buyables give levels to Incrementy Boost and each Pion Boost buyable adds .002 to its base",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("o", 31)
+                                return hasUpgrade("o", 31) || player.c.best.gt(0)
                         }
                 },
                 33: {
@@ -6379,7 +6386,7 @@ addLayer("o", {
                         description: "Each Incrementy Boost buyable increases the Incrementy Stamina softcap start by one",
                         cost: new Decimal(250),
                         unlocked(){
-                                return hasUpgrade("o", 32)
+                                return hasUpgrade("o", 32) || player.c.best.gt(0)
                         }
                 },
                 34: {
@@ -6387,7 +6394,7 @@ addLayer("o", {
                         description: "Each Origin upgrade gives a free Incrementy Boost buyable and triple Origin gain",
                         cost: new Decimal(500),
                         unlocked(){
-                                return hasUpgrade("o", 33) && getBuyableAmount("o", 22).gte(1)
+                                return (hasUpgrade("o", 33) && getBuyableAmount("o", 22).gte(1)) || player.c.best.gt(0)
                         }
                 },
                 35: {
@@ -6395,7 +6402,7 @@ addLayer("o", {
                         description: "Remove the ability to Prestige but gain 100% of Origins on prestige per second",
                         cost: new Decimal(2500),
                         unlocked(){
-                                return hasUpgrade("o", 34) && getBuyableAmount("o", 21).gte(2)
+                                return (hasUpgrade("o", 34) && getBuyableAmount("o", 21).gte(2)) || player.c.best.gt(0)
                         }
                 },
                 41: {
@@ -6403,7 +6410,7 @@ addLayer("o", {
                         description: "Origin Boost gives free levels to Super Prestige Boost and gain two free Origin Boosts",
                         cost: new Decimal(4e5),
                         unlocked(){
-                                return hasUpgrade("o", 35)
+                                return hasUpgrade("o", 35) || player.c.best.gt(0)
                         }
                 },
                 42: {
@@ -6411,7 +6418,7 @@ addLayer("o", {
                         description: "Super Prestige Boost gives free levels to Particle Boost and push the Incrementy Stamina softcap start back by 42",
                         cost: new Decimal(5e6),
                         unlocked(){
-                                return hasUpgrade("o", 41)
+                                return hasUpgrade("o", 41) || player.c.best.gt(0)
                         }
                 },
                 43: {
@@ -6419,7 +6426,7 @@ addLayer("o", {
                         description: "Unlock a third row of Origin Buyables and each Incrementy Boost buyable adds .01 to Origin Boost base",
                         cost: new Decimal(6e6),
                         unlocked(){
-                                return hasUpgrade("o", 42)
+                                return hasUpgrade("o", 42) || player.c.best.gt(0)
                         }
                 },
                 44: {
@@ -6427,7 +6434,7 @@ addLayer("o", {
                         description: "Neutrino Boost levels give three free levels to Super Prestige Boost and one to Origin Boost",
                         cost: new Decimal(2e7),
                         unlocked(){
-                                return hasUpgrade("o", 43)
+                                return hasUpgrade("o", 43) || player.c.best.gt(0)
                         }
                 },
                 45: {
@@ -6435,7 +6442,7 @@ addLayer("o", {
                         description: "Shard Boost gives free levels to Neutrino Boost and add .1 to the Incrementy Boost base",
                         cost: new Decimal(1e11),
                         unlocked(){
-                                return hasUpgrade("o", 44)
+                                return hasUpgrade("o", 44) || player.c.best.gt(0)
                         }
                 },
                 51: {
@@ -6443,7 +6450,7 @@ addLayer("o", {
                         description: "Origin Boost gives free levels to Particle Boost and add .1 to the base",
                         cost: new Decimal(5e19),
                         unlocked(){
-                                return hasUpgrade("o", 45)
+                                return hasUpgrade("o", 45) || player.c.best.gt(0)
                         }
                 },
                 52: {
@@ -6451,7 +6458,7 @@ addLayer("o", {
                         description: "Gain two free levels of Shard Boost and Neutrino Autobuyers can buy 100x more",
                         cost: new Decimal(1e24),
                         unlocked(){
-                                return hasUpgrade("o", 51)
+                                return hasUpgrade("o", 51) || player.c.best.gt(0)
                         }
                 },
                 53: {
@@ -6459,7 +6466,7 @@ addLayer("o", {
                         description: "Base Origin buyables give free levels to Shard Boost",
                         cost: new Decimal(1.5e59),
                         unlocked(){
-                                return hasUpgrade("o", 52)
+                                return hasUpgrade("o", 52) || player.c.best.gt(0)
                         }
                 },
                 54: {
@@ -6467,7 +6474,7 @@ addLayer("o", {
                         description: "Per Origin Boost Buyables cubed you can buy one more Incrementy Stamina level and unlock Fragments",
                         cost: new Decimal(2e145),
                         unlocked(){
-                                return hasUpgrade("o", 53)
+                                return hasUpgrade("o", 53) || player.c.best.gt(0)
                         }
                 },
                 55: {
@@ -6475,7 +6482,7 @@ addLayer("o", {
                         description: "Each Fragment upgrade gives a free Base Origin Boost",
                         cost: new Decimal("1e1550"),
                         unlocked(){
-                                return hasUpgrade("o", 54)
+                                return hasUpgrade("o", 54) || player.c.best.gt(0)
                         }
                 },
         },
@@ -6676,6 +6683,7 @@ addLayer("f", {
                 x = x.times(layers.f.glucoseEffect())
                 if (hasUpgrade("f", 21)) x = x.times(player.f.molecules.ammonia.plus(1))
                 x = x.times(Decimal.pow(layers.f.co2Effect(), layers.o.buyables[33].total()))
+                if (hasMilestone("c", 3)) x = x.times(layers.c.effect())
                 return x
         },
         prestigeButtonText(){
@@ -6689,7 +6697,7 @@ addLayer("f", {
                 return start + nextAt
         },
         canReset(){
-                return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 60
+                return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 5 && (player.f.currentTime >= 60 || hasMilestone("c", 2))
         },
         update(diff){
                 player.f.currentTime += diff
@@ -6740,7 +6748,7 @@ addLayer("f", {
                         description: "Each Fragment upgrade makes fragments multiply origin gain",
                         cost: new Decimal(2500),
                         unlocked(){
-                                return hasUpgrade("f", 11)
+                                return hasUpgrade("f", 11) || player.c.best.gt(0)
                         }
                 },
                 13: {
@@ -6748,7 +6756,7 @@ addLayer("f", {
                         description: "Per Fragment upgrade per Base Origin Boost add .01 to the Pion Boost base",
                         cost: new Decimal(4000),
                         unlocked(){
-                                return hasUpgrade("f", 12)
+                                return hasUpgrade("f", 12) || player.c.best.gt(0)
                         }
                 },
                 14: {
@@ -6756,7 +6764,7 @@ addLayer("f", {
                         description: "Unlock workers",
                         cost: new Decimal(2e4),
                         unlocked(){
-                                return hasUpgrade("f", 13)
+                                return hasUpgrade("f", 13) || player.c.best.gt(0)
                         }
                 },
                 15: {
@@ -6767,7 +6775,7 @@ addLayer("f", {
                                 return Decimal.pow(2, player.f.upgrades.length).pow(layers.f.rubpEffect())
                         },
                         unlocked(){
-                                return hasUpgrade("f", 14)
+                                return hasUpgrade("f", 14) || player.c.best.gt(0)
                         }
                 },
                 21: {
@@ -6775,7 +6783,7 @@ addLayer("f", {
                         description: "Ammonia multiples Fragment gain",
                         cost: new Decimal(1e7),
                         unlocked(){
-                                return hasUpgrade("f", 15)
+                                return hasUpgrade("f", 15) || player.c.best.gt(0)
                         }
                 },
                 22: {
@@ -6783,7 +6791,7 @@ addLayer("f", {
                         description: "Raise fragement effect to the square of the Fragment upgrade amount and first row Workers do not cost Fragments",
                         cost: new Decimal(2.5e11),
                         unlocked(){
-                                return hasUpgrade("f", 21)
+                                return hasUpgrade("f", 21) || player.c.best.gt(0)
                         }
                 },
                 23: {
@@ -6791,7 +6799,7 @@ addLayer("f", {
                         description: "Phosphorus Gatherers give free levels to Super Prestige Boost",
                         cost: new Decimal(1e13),
                         unlocked(){
-                                return hasUpgrade("f", 22)
+                                return hasUpgrade("f", 22) || player.c.best.gt(0)
                         }
                 },
                 24: {
@@ -6799,7 +6807,7 @@ addLayer("f", {
                         description: "Second row Workers do not cost Fragments and gain 1% of Fragments upon prestige each second",
                         cost: new Decimal(3e13),
                         unlocked(){
-                                return hasUpgrade("f", 23)
+                                return hasUpgrade("f", 23) || player.c.best.gt(0)
                         }
                 },
                 25: {
@@ -6807,7 +6815,7 @@ addLayer("f", {
                         description: "Remove the ability to Prestige but gain 99% of Fragments upon prestige each second",
                         cost: new Decimal(7.5e14),
                         unlocked(){
-                                return hasUpgrade("f", 24)
+                                return hasUpgrade("f", 24) || player.c.best.gt(0)
                         }
                 },
                 31: {
@@ -6815,15 +6823,15 @@ addLayer("f", {
                         description: "Nitrogen Gatherers give free levels to Stamina Boost",
                         cost: new Decimal(7.5e16),
                         unlocked(){
-                                return hasUpgrade("f", 25)
+                                return hasUpgrade("f", 25) || player.c.best.gt(0)
                         }
                 },
                 32: {
                         title: "Châu",
                         description: "Multiply worker effeciency by Fragment upgrades sqaured",
-                        cost: new Decimal(1e21),
+                        cost: new Decimal(1e20),
                         unlocked(){
-                                return hasUpgrade("f", 31)
+                                return hasUpgrade("f", 31) || player.c.best.gt(0)
                         }
                 },
                 33: {
@@ -6831,7 +6839,7 @@ addLayer("f", {
                         description: "Buy one Origin buyable per second and square Carbon Dioxide and NADPH base",
                         cost: new Decimal(1e29),
                         unlocked(){
-                                return hasUpgrade("f", 32)
+                                return hasUpgrade("f", 32) || player.c.best.gt(0)
                         }
                 },
                 34: {
@@ -6839,7 +6847,7 @@ addLayer("f", {
                         description: "Buy F6P once per second",
                         cost: new Decimal("4.2pt10"),
                         unlocked(){
-                                return hasUpgrade("f", 33) && (player.o.points.slog().gt(5) || hasUpgrade("f", 34))
+                                return (hasUpgrade("f", 33) && player.o.points.gt(new Decimal("5pt10")) || hasUpgrade("f", 34)) || player.c.best.gt(0)
                         }
                 },
                 35: {
@@ -6847,23 +6855,23 @@ addLayer("f", {
                         description: "Fragments multiply gatherer production",
                         cost: new Decimal("4.3pt10"),
                         unlocked(){
-                                return hasUpgrade("f", 34)
+                                return hasUpgrade("f", 34) || player.c.best.gt(0)
                         }
                 },
                 41: {
-                        title: "idk1",
+                        title: "Hairer",
                         description: "Gain 1% of your F6P upon click per second but disable Avila",
                         cost: new Decimal("150pt10"),
                         unlocked(){
-                                return hasUpgrade("f", 35)
+                                return hasUpgrade("f", 35) || player.c.best.gt(0)
                         }
                 },
                 42: {
-                        title: "idk2",
+                        title: "Mirzakhani",
                         description: "Unlock Capsule and the ability to Capsule reset",
                         cost: new Decimal("1999pt10"),
                         unlocked(){
-                                return hasUpgrade("f", 41)
+                                return hasUpgrade("f", 41) || player.c.best.gt(0)
                         }
                 },
                 //new Decimal("150pt10")
@@ -6874,8 +6882,9 @@ addLayer("f", {
                 allMult(){
                         let ret = new Decimal(1)
                         ret = ret.times(layers.f.atpEffect())
-                        if (hasUpgrade("f", 32)) ret = ret.times(Decimal.pow(player.f.upgrades.length, 2).max(1))
-                        if (hasUpgrade("f", 35)) ret = ret.times(player.f.points.plus(1))
+                        if (hasUpgrade("f", 32))  ret = ret.times(Decimal.pow(player.f.upgrades.length, 2).max(1))
+                        if (hasUpgrade("f", 35))  ret = ret.times(player.f.points.plus(1))
+                        if (hasMilestone("c", 3)) ret = ret.times(layers.c.effect())
                         return ret
                 },
                 11: {
@@ -7696,7 +7705,10 @@ addLayer("f", {
                                 ["resource-display", "", function (){ return hasUpgrade("f", 25) ? {'display': 'none'} : {}}],
                                 ["prestige-button", "", function (){ return hasUpgrade("f", 25) ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
-                                        if (!hasUpgrade("f", 25)) return "There is a sixty second cooldown for Prestiging (" + format(Math.max(0, 60 - player.f.currentTime)) + ")"
+                                        if (!hasUpgrade("f", 25)) {
+                                                if (hasMilestone("c", 2)) return "There is a five second cooldown for Prestiging (" + format(Math.max(0, 5 - player.f.currentTime)) + ")"
+                                                return "There is a sixty second cooldown for Prestiging (" + format(Math.max(0, 60 - player.f.currentTime)) + ")"
+                                        }
                                         return "You are gaining " + format(layers.f.getResetGain()) + " Fragments per second"
                                 }],
                                 "upgrades"
@@ -7799,9 +7811,9 @@ addLayer("f", {
                 player.f.points = new Decimal(0)
                 player.f.best = new Decimal(0)
                 player.f.total = new Decimal(0)
-                console.log("a")
 
                 let keep = []
+                if (hasMilestone("c", 4)) keep.push(33)
                 player.f.upgrades = filter(player.f.upgrades, keep)
                 player.f.milestones = []
 
@@ -7864,7 +7876,7 @@ addLayer("c", {
         },
         effectDescription(){
                 let eff = layers.c.effect()
-                let a = "which increases Super Prestige effect by " + format(eff) + " (based on best Capsules)"
+                let a = "which increases Super Prestige effect and gain by " + format(eff) + " (based on best Capsules)"
 
                 return a + "."
         },
@@ -7876,12 +7888,13 @@ addLayer("c", {
 
                 if (amt.layer < 2048) return new Decimal(0)
                 
-                let ret = new Decimal(amt.layer).log(2).times(pre).pow(exp).div(11).times(pst)
+                let ret = new Decimal(amt.layer).log(2).div(11).times(pre).pow(exp).times(pst)
 
                 return ret.floor()
         },
         getGainExp(){
                 let x = new Decimal(1)
+                if (hasMilestone("c", 4)) x = x.times(player.c.milestones.length)
                 return x
         },
         getGainMultPre(){
@@ -7899,7 +7912,7 @@ addLayer("c", {
                 let exp = layers.c.getGainExp()
                 let pst = layers.c.getGainMultPost()
 
-                let x1 = gain.plus(1).div(pst).times(11).root(exp).div(pre)
+                let x1 = gain.plus(1).div(pst).root(exp).div(pre).times(11)
                 let x2 = Decimal.tetrate(10, Decimal.pow(2, x1))
 
                 let nextAt = "Next at " + format(x2) + " Fragments"
@@ -7923,8 +7936,8 @@ addLayer("c", {
                 rows: 5,
                 cols: 5,
                 11: {
-                        title: "idk",
-                        description: "idk",
+                        title: "Birkar",
+                        description: "i dunnno yet",
                         cost: new Decimal(69),
                         unlocked(){
                                 return false
@@ -7933,18 +7946,32 @@ addLayer("c", {
         },
         milestones: {
                 1: {
-                        requirementDescription: "<b>idk</b><br>Requires: 1 Capsule", 
-                        effectDescription: "Each Capsule reset raises all previous layer production exponents ^1.01",
+                        requirementDescription: "<b>Figalli</b><br>Requires: 1 Capsule", 
+                        effectDescription: "Each Capsule reset raises all previous layer production and token gain exponents ^1.01 and gain 3x more SP resets per reset",
                         done(){
                                 return player.c.best.gte(1)
                         }, // hasMilestone("c", 1)
                 },
                 2: {
-                        requirementDescription: "<b>idk2</b><br>Requires: 2 Capsules", 
-                        effectDescription: "Unlock Capsule upgrades [NOT YET] and gain 5x more SP resets per reset",
+                        requirementDescription: "<b>Scholze</b><br>Requires: 2 Capsules", 
+                        effectDescription: "Make the fragment cooldown 5 seconds, gain 5x more SP resets per reset, and Capsule effect effects tokens",
                         done(){
                                 return player.c.best.gte(2)
                         }, // hasMilestone("c", 2)
+                },
+                3: {
+                        requirementDescription: "<b>Venkatesh</b><br>Requires: 3 Capsules", 
+                        effectDescription: "Start with one SP reset per Capsule reset and Capsule effect effects Fragments and gatherers",
+                        done(){
+                                return player.c.best.gte(3)
+                        }, // hasMilestone("c", 3)
+                },
+                4: {
+                        requirementDescription: "<b>Idk</b><br>Requires: 4 Capsules", 
+                        effectDescription: "Keep SP milestones and raise capsule gain to the number of Milestones and keep Smirnov",
+                        done(){
+                                return player.c.best.gte(4)
+                        }, // hasMilestone("c", 4)
                 },
         },
         row: 4, // Row the layer is in on the tree (0 is the first row)

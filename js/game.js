@@ -170,6 +170,7 @@ function doReset(layer, force=false) {
 		} 
 
 		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
+		if (hasMilestone("c", 1) && layer == "sp") timesMult *= 3
 		if (hasMilestone("c", 2) && layer == "sp") timesMult *= 5
 		if (player[layer].times != undefined) player[layer].times += timesMult
 
@@ -282,6 +283,17 @@ function completeChallenge(layer, x) {
 		needCanvasUpdate = true
 		player[layer].challenges[x] += 1
 		if (layers[layer].challenges[x].onComplete) layers[layer].challenges[x].onComplete()
+	}
+	while (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
+		if (layer == "b" && x == 12) break
+		
+		if (canCompleteChallenge(layer, x)) player[layer].challenges[x] += 1
+		else break
+		
+		tmp[layer].challenges[x].goal = layers[layer].challenges[x].goal
+		if (typeof tmp[layer].challenges[x].goal == "function"){
+			tmp[layer].challenges[x].goal = tmp[layer].challenges[x].goal()
+		}
 	}
 	delete player[layer].activeChallenge
 	updateChallengeTemp(layer)

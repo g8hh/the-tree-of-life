@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.23",
+	num: "0.93.25",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,7 +36,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: F2000 Fragments (v.93.23)"
+	"Current endgame: 4 Capsules (v.93.25)"
 ]
 
 // Determines when the game "ends"
