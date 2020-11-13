@@ -949,7 +949,7 @@ addLayer("am", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = getIBuyablesTotalRow(1).gte(98) || player.am.best.gt(0) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = getIBuyablesTotalRow(1).gte(98) || hasUnlockedRow(2)
                 return a && !hasUpgrade("pi", 32)
         },
         upgrades: {
@@ -1186,7 +1186,7 @@ addLayer("a", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = player.i.best.gt(Decimal.pow(10, 400)) || player.a.best.gt(0) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = player.i.best.gt(Decimal.pow(10, 400)) || hasUnlockedRow(3)
                 return a && !hasUpgrade("pi", 32)
         },
         milestones:{
@@ -1441,7 +1441,7 @@ addLayer("m", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasChallenge("am", 12) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = hasChallenge("am", 12) || hasUnlockedRow(3)
                 return a && !hasUpgrade("pi", 32)
         },
         milestones:{
@@ -1583,7 +1583,7 @@ addLayer("e", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = hasMilestone("m", 1) || player.s.best.gt(0) || player.sp.best.gt(0) || player.o.best.gt(0)
+                let a = hasMilestone("m", 1) || hasUnlockedRow(3)
                 return a && !hasUpgrade("pi", 32)
         },
         upgrades:{
@@ -3993,10 +3993,10 @@ addLayer("s", {
                 },
                 55: {
                         title: "Devisor", 
-                        description: "<b>Rite</b> can buy ten times more and unlock Obfuscations",
+                        description: "<b>Rite</b> can buy ten times more and unlock Obfuscations if you have Super Prestige Reset 25 times",
                         cost: new Decimal(5e129),
                         unlocked(){
-                                return (hasUpgrade("s", 54) || hasUnlockedRow(4)) && player.sp.times >= 25
+                                return hasUpgrade("s", 54) || hasUnlockedRow(4)
                         },
                 },
 
@@ -4007,7 +4007,7 @@ addLayer("s", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return player.s.best.gt(0) || hasUpgrade("p", 35) || player.sp.best.gt(0) || player.o.best.gt(0)
+                return player.s.best.gt(0) || hasUpgrade("p", 35) || player.sp.best.gt(0) || hasUnlockedRow(4)
         },
         tabFormat: ["main-display",
                 ["display-text", function(){return hasUpgrade("s", 31) ? "You are getting " + format(layers.s.getResetGain()) + " Shards per second (based on particles)" : ""}],
@@ -4472,7 +4472,7 @@ addLayer("b", {
                 },
                 44: {
                         title: "Thrown",
-                        description: "Multiplicatively increase the P Acceleraiton base by 5% per Banned completion per P Simulation level",
+                        description: "Multiplicatively increase the P Acceleration base by 5% per Banned completion per P Simulation level",
                         cost: new Decimal(5e27),
                         currencyDisplayName: "Tokens",
                         currencyInternalName: "tokens",
@@ -5596,7 +5596,7 @@ addLayer("pi", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return player.sp.best.gt(1e132) || player.pi.best.gt(0) || player.o.best.gt(0)
+                return player.sp.best.gt(1e132) || player.pi.best.gt(0) || hasUnlockedRow(4)
         },
         tabFormat: {
                 "Milestones": {
@@ -6522,7 +6522,7 @@ addLayer("o", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return hasUpgrade("pi", 44) || player.o.best.gt(0)
+                return hasUpgrade("pi", 44) || hasUnlockedRow(4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -6574,13 +6574,13 @@ addLayer("o", {
                 player.o.times = 0
                 player.o.total = new Decimal(0)
                 
-                player.o.upgrades = filter(player.o.upgrades, keep)
                 let keep = []
+                player.o.upgrades = filter(player.o.upgrades, keep)
                 player.o.milestones = []
 
                 let resetBuyables = [11,12,13,21,22,23,31,32,33]
                 for (let j = 0; j < resetBuyables.length; j++) {
-                        player.n.buyables[resetBuyables[j]] = new Decimal(0)
+                        player.o.buyables[resetBuyables[j]] = new Decimal(0)
                 }
         },
 })
@@ -6595,7 +6595,6 @@ addLayer("f", {
 		points: new Decimal(0),
                 best: new Decimal(0),
                 total: new Decimal(0),
-                testBest: new Decimal(0),
                 h: new Decimal(0),
                 c: new Decimal(0),
                 n: new Decimal(0),
@@ -6644,11 +6643,11 @@ addLayer("f", {
                 let exp = layers.f.getGainExp()
                 let pst = layers.f.getGainMultPost()
                 
-                let ret = amt.max(10).log10().div(14.7).log10().times(pre).max(1).pow(exp).sub(1).times(pst)
+                let ret = amt.max(10).log10().div(14.7).log10().times(pre).max(1).pow(exp).sub(1).max(0).times(pst)
 
                 if (hasMilestone("c", 1))  ret = ret.tetrate(1.001)
 
-                return ret.floor()
+                return ret.floor().max(0)
         },
         getGainExp(){
                 let x = new Decimal(10)
@@ -6698,28 +6697,10 @@ addLayer("f", {
                         player.f.molecules.f6p = player.f.molecules.f6p.plus(t)
                 }
                 let y = layers.f.getResetGain()
-                console.log(y.layer)
-                if (hasUpgrade("f", 24)) {
-                        let x = y.times(.01)
-                        console.log("a")
-                        console.log(x.layer)
-                        console.log(x.times(diff).layer)
-                        console.log("x")
-                        console.log(player.f.points.layer)
-                        player.f.points = player.f.points.plus(x.times(diff))
-                        console.log("c")
-                        console.log(player.f.points.layer)
-                        player.f.total  = player.f.total.plus(x.times(diff))
-                        player.f.best = player.f.best.max(player.f.points)
-                        console.log(player.f.best.layer)
-                }
-                if (hasUpgrade("f", 25)) {
-                        let x = y.times(.99)
-                        player.f.points = player.f.points.plus(x.times(diff))
-                        player.f.total  = player.f.total.plus(x.times(diff))
-                        player.f.best = player.f.best.max(player.f.points)
-                }
                 
+                if (hasUpgrade("f", 24)) generatePoints("f", Decimal.times(diff, .01))
+                if (hasUpgrade("f", 25)) generatePoints("f", Decimal.times(diff, .99))
+                                
                 if (true){
                         player.f.h  = player.f.h.plus( layers.f.buyables[11].effect().times(diff))
                         player.f.c  = player.f.c.plus( layers.f.buyables[12].effect().times(diff))
@@ -6729,11 +6710,6 @@ addLayer("f", {
                         player.f.s  = player.f.s.plus( layers.f.buyables[23].effect().times(diff))
                 }
                 player.f.best = player.f.best.max(player.f.points)
-                player.f.testBest = player.f.testBest.max(player.f.points)
-                console.log(player.f.testBest.layer)
-                console.log(player.f.best.layer)
-                console.log(player.f.best.toString())
-                console.log("d")
         },
         upgrades:{
                 rows: 5,
@@ -7698,7 +7674,7 @@ addLayer("f", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return hasUpgrade("o", 54) || player.f.best.gt(0)
+                return hasUpgrade("o", 54) || player.f.best.gt(0) || player.c.best.gt(0)
         },
         tabFormat: {
                 "Upgrades": {
@@ -7806,12 +7782,40 @@ addLayer("f", {
                 if (layers[layer].row <= 2) return 
                 
 
-                console.log("h")
                 //resource
                 player.f.points = new Decimal(0)
                 player.f.best = new Decimal(0)
                 player.f.total = new Decimal(0)
-                console.log("f")
+                console.log("a")
+
+                let keep = []
+                player.f.upgrades = filter(player.f.upgrades, keep)
+                player.f.milestones = []
+
+                let resetBuyables = [11,12,13,21,22,23]
+                for (let j = 0; j < resetBuyables.length; j++) {
+                        player.f.buyables[resetBuyables[j]] = new Decimal(0)
+                }
+
+                player.f.h = new Decimal(0)
+                player.f.c = new Decimal(0)
+                player.f.n = new Decimal(0)
+                player.f.o = new Decimal(0)
+                player.f.p = new Decimal(0)
+                player.f.s = new Decimal(0)
+                player.f.molecules = {
+                        water: new Decimal(0),
+                        glucose: new Decimal(0),
+                        ammonia: new Decimal(0),
+                        atp: new Decimal(0),
+                        methane: new Decimal(0),
+                        nadph: new Decimal(0),
+                        co2: new Decimal(0),
+                        rubp: new Decimal(0),
+                        g6p: new Decimal(0),
+                        acetylcoa: new Decimal(0),
+                        f6p: new Decimal(0),
+                }
         },
 })
 
@@ -7842,7 +7846,7 @@ addLayer("c", {
                 let amt = player.c.best
                 if (amt.eq(0)) return new Decimal(1)
                 
-                let ret = amt.tetrate(3).plus(1)
+                let ret = amt.sqrt().plus(1).tetrate(3)
                 return ret
         },
         effectDescription(){
@@ -7856,8 +7860,10 @@ addLayer("c", {
                 let pre = layers.c.getGainMultPre()
                 let exp = layers.c.getGainExp()
                 let pst = layers.c.getGainMultPost()
+
+                if (amt.layer < 2048) return new Decimal(0)
                 
-                let ret = amt.max(10).slog().log(2).times(pre).pow(exp).div(11).times(pst)
+                let ret = new Decimal(amt.layer).log(2).times(pre).pow(exp).div(11).times(pst)
 
                 return ret.floor()
         },

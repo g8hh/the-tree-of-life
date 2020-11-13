@@ -79,7 +79,6 @@ function updateTemp() {
 }
 
 function updateTempData(layerData, tmpData) {
-	
 	for (item in layerData){
 		if (Array.isArray(layerData[item])) {
 			updateTempData(layerData[item], tmpData[item])

@@ -105,7 +105,7 @@ function rowReset(row, layer) {
 		return
 	}
 	let order = Object.keys(ROW_LAYERS[row])
-	//if (row == 3) order = order.reverse()
+	if (row == 3) order = order.reverse()
 	for (let i = 0; i < order.length; i ++){
 		lr = order[i]
 		if (layers[lr].doReset) {
@@ -191,9 +191,7 @@ function doReset(layer, force=false) {
 		}
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
 	}
-
 	if (tmp[layer].resetsNothing) return
-
 
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
@@ -357,11 +355,13 @@ function hardReset() {
 }
 
 var ticking = false
+var devstop = false
 
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
 	if (ticking) return;
 	if (gameEnded&&!player.keepGoing) return;
+	if (devstop) return
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
