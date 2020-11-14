@@ -7963,7 +7963,7 @@ addLayer("c", {
                 let x = new Decimal(1)
                 if (hasUpgrade("c", 24)) x = x.times(2)
                 if (hasUpgrade("c", 25)) x = x.times(player.c.upgrades.length)
-                if (hasUpgrade("c", 31)) x = x.times(2.3)
+                if (hasUpgrade("c", 31)) x = x.times(2.2)
                 return x
         },
         getGainMultPost(){
@@ -8103,7 +8103,7 @@ addLayer("c", {
                 },
                 31: {
                         title: "Endgame?",
-                        description: "Unlock the ability to end the game and multiply base Capsule gain by 2.3",
+                        description: "Unlock the ability to end the game and multiply base Capsule gain by 2.2",
                         cost: new Decimal(5e241),
                         unlocked(){
                                 return hasUpgrade("c", 25)
