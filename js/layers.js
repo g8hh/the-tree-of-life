@@ -220,6 +220,7 @@ function getIncABMult(){
         if (hasUpgrade("o", 22)) mult *= 25
         if (hasUpgrade("o", 52)) mult *= 100
         if (hasUpgrade("c", 12)) mult *= 20
+        if (hasUpgrade("c", 15)) mult *= 20 
         return mult
 }
 
@@ -407,7 +408,7 @@ addLayer("i", {
                 12: {
                         title: "Cash",
                         description: "Unlock the first repeatable upgrade",
-                        cost: new Decimal(50),
+                        cost: new Decimal(30),
                         unlocked(){
                                 return hasIUpg(11) || hasUnlockedRow(1)
                         },
@@ -878,6 +879,7 @@ addLayer("am", {
         effect(){
                 if (inChallenge("m", 12)) return new Decimal(1)
                 let a = player.am.points
+                if (a.eq(0) && player.am.best.gt(0)) a = new Decimal(1)
 
                 let ret = a.plus(1).pow(Math.log(3)/Math.log(2))
                 if (!hasUpgrade("e", 33)) {
@@ -958,7 +960,7 @@ addLayer("am", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = getIBuyablesTotalRow(1).gte(98) || hasUnlockedRow(2)
+                let a = getIBuyablesTotalRow(1).gte(98) || hasUnlockedRow(1)
                 return a && !hasUpgrade("pi", 32)
         },
         upgrades: {
@@ -5936,6 +5938,7 @@ addLayer("o", {
                                 ret = ret.plus(layers.o.buyables[23].total())
                                 ret = ret.plus(layers.o.buyables[33].total())
                                 if (hasUpgrade("f", 31)) ret = ret.plus(layers.f.buyables[13].total())
+                                if (devSpeedUp && layers.o.buyables[13].unlocked()) ret = ret.plus(1)
                                 return ret
                         },
                         buy(){
@@ -6109,6 +6112,7 @@ addLayer("o", {
                                 if (hasUpgrade("o", 41)) ret = ret.plus(2)
                                 ret = ret.plus(layers.o.buyables[33].total())
                                 if (hasUpgrade("o", 43)) ret = ret.plus(layers.o.buyables[31].total())
+                                if (devSpeedUp && layers.o.buyables[23].unlocked()) ret = ret.plus(1)
                                 return ret
                         },
                         buy(){
@@ -6698,6 +6702,7 @@ addLayer("f", {
         },
         getGainMultPre(){
                 let x = new Decimal(1)
+                if (devSpeedUp) x = x.times(1.1)
                 return x
         },
         getGainMultPost(){
@@ -7941,20 +7946,30 @@ addLayer("c", {
                 
                 let ret = new Decimal(amt.layer).log(2).div(11).times(pre).pow(exp).times(pst)
 
+                if (hasUpgrade("c", 23)) {
+                        if (ret.gt(10)) ret = Decimal.pow(10, ret.log10().pow(1.01))
+                }
+
                 return ret.floor()
         },
         getGainExp(){
                 let x = new Decimal(1)
                 if (hasMilestone("c", 4)) x = x.times(player.c.milestones.length)
                 if (hasUpgrade("c", 12)) x = x.times(player.c.upgrades.length)
+                if (devSpeedUp) x = x.times(1.01)
                 return x
         },
         getGainMultPre(){
                 let x = new Decimal(1)
+                if (hasUpgrade("c", 24)) x = x.times(2)
+                if (hasUpgrade("c", 25)) x = x.times(player.c.upgrades.length)
+                if (hasUpgrade("c", 31)) x = x.times(2.3)
                 return x
         },
         getGainMultPost(){
                 let x = new Decimal(1)
+                if (hasUpgrade("c", 21)) x = x.times(upgradeEffect("c", 21))
+                if (hasUpgrade("c", 22)) x = x.times(Decimal.pow(2, player.c.upgrades.length))
                 return x
         },
         prestigeButtonText(){
@@ -8021,7 +8036,7 @@ addLayer("c", {
                 },
                 13: {
                         title: "Fraenkel",
-                        description: "Incrementy Autobuyers by 20x more",
+                        description: "Incrementy Autobuyers buy 20x more",
                         cost: new Decimal(25e3),
                         unlocked(){
                                 return hasUpgrade("c", 12)
@@ -8034,7 +8049,66 @@ addLayer("c", {
                         unlocked(){
                                 return hasUpgrade("c", 13)
                         }
-                }, //next is 1e29
+                },
+                15: {
+                        title: "Hausdorff",
+                        description: "Incrementy Autobuyers buy 20x more",
+                        cost: new Decimal(1e29),
+                        unlocked(){
+                                return hasUpgrade("c", 14)
+                        }
+                },
+                21: {
+                        title: "Noether",
+                        description: "Capsules boost Capsule gain",
+                        cost: new Decimal(1e40),
+                        effect(){
+                                return player.c.points.plus(10).log10()
+                        },
+                        unlocked(){
+                                return hasUpgrade("c", 15)
+                        }
+                },
+                22: {
+                        title: "Peano",
+                        description: "Each Capsule upgrade doubles Capsule gain",
+                        cost: new Decimal(1e55),
+                        unlocked(){
+                                return hasUpgrade("c", 21)
+                        }
+                },
+                23: {
+                        title: "Hilbert",
+                        description: "Figalli effects Capsules as if you had one reset",
+                        cost: new Decimal(5e71),
+                        unlocked(){
+                                return hasUpgrade("c", 22)
+                        }
+                }, 
+                24: {
+                        title: "Fermat",
+                        description: "Double base Capsule gain",
+                        cost: new Decimal(1e91),
+                        unlocked(){
+                                return hasUpgrade("c", 23)
+                        }
+                },
+                25: {
+                        title: "Ramanujan",
+                        description: "Capsule upgrades multiply base Capsule gain",
+                        cost: new Decimal(1e133),
+                        unlocked(){
+                                return hasUpgrade("c", 24)
+                        }
+                },
+                31: {
+                        title: "Endgame?",
+                        description: "Unlock the ability to end the game and multiply base Capsule gain by 2.3",
+                        cost: new Decimal(5e241),
+                        unlocked(){
+                                return hasUpgrade("c", 25)
+                        }
+                },
         },
         milestones: {
                 1: {

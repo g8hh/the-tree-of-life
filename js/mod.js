@@ -3,7 +3,7 @@ let modInfo = {
 	id: "incrementy",
 	author: "pg132",
 	pointsName: "points",
-	discordName: "",
+	discordName: "pg132#7975",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
     	offlineLimit: 10/3600,   
@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.27",
-	name: "Peter Piper picked a peck of pickled peppers",
+	num: ".93.28",
+	name: "The Abelian Tributary",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -36,12 +36,13 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 1e29 Capsules (v.93.27)"
+	"Current endgame: Endgame!",
+	"Please report bugs before v1, live around 3pm EST Nov 16 (v.93.28)"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.layer > Math.pow(2, 1023.99999)
+	return player.points.layer > 1.7e308
 }
 
 

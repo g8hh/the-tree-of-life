@@ -172,6 +172,9 @@ function doReset(layer, force=false) {
 		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
 		if (hasMilestone("c", 1) && layer == "sp") timesMult *= 3
 		if (hasMilestone("c", 2) && layer == "sp") timesMult *= 5
+		if (devSpeedUp) timesMult *= 2
+
+		timesMult = Math.floor(timesMult)
 		if (player[layer].times != undefined) player[layer].times += timesMult
 
 		if (layers[layer].onPrestige)

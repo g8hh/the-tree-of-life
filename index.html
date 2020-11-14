@@ -24,19 +24,29 @@
 		<div v-if="player.tab=='gameEnded'" class="fullWidth">
 			<br>
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
-			<h3>Congratulations! You have reached the end and beaten this game, but for now...</h3><br>
-			<h3>Please check the Discord to see if there are new content updates!</h3><br><br>
+			<h3>Congratulations! You have reached the end and beaten this game!</h3><br>
+			<h3>This is the end of content and the limit of break_eternity.js!</h3><br><br>
 			<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div>
 			<div v-if="player.timePlayedReset">Make sure that you record the time in your stream or else your speedrun won't count!</div>
 			<br>
-			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
+			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;
 			<br><br><br>
 			<span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
 			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 			<br><br>
-			If you would like to speedrun this, press Play Again and record your attempt, then submit on the Discord Server in the channel #speedrun-submissions.
-			<br><br><br>
+			If you would like to speedrun this, press Play Again.
+			<br>
+			This is my (pg132's) first fully completed mod, I may have another coming. Consider playing the other game I currently dev, AD NG+++: 
+			<br>
+			<br>
+			<a class="link" href="http://discord.gg/h9mDese" target="_blank" v-bind:style="{'font-size': '16px'}">NG+++ Discord</a>
+			<br>
+			<br>
+			Discord: pg132#7579 but please do not spam my dms :)
+			<br>
+			<br>
+			<br>
 			<h1>Oh, you are still reading this?</h1>
 			<br>
 		</div>
