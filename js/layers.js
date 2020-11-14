@@ -3894,7 +3894,9 @@ addLayer("s", {
                 33: {
                         title: "Lapse", //35 is Help?
                         description: "Cube Shard gain and Particle Simulation gives free levels to Particle Accerelation",
-                        cost: new Decimal("1e2374"),
+                        cost() {
+                                return hasMilestone("c", 5) ? new Decimal(0) : new Decimal("1e2374")
+                        },
                         currencyDisplayName: "Antimatter",
                         currencyInternalName: "points",
                         currencyLayer: "am",
@@ -4534,7 +4536,7 @@ addLayer("b", {
                                 "upgrades"
                         ],
                         unlocked(){
-                                return challengeCompletions("b", 11) > 0 || player.sp.best.gt(0) || player.o.best.gt(0) || hasUnlockedRow(4)
+                                return challengeCompletions("b", 11) > 0 || player.pi.best.gt(0) || hasUnlockedRow(4)
                         },
                 }
         },
@@ -5314,7 +5316,7 @@ addLayer("sp", {
 
                 if (layer == "pi") return
                 let keep = []
-                if (hasMilestone("o", 5)) keep.push(11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45)
+                if (hasMilestone("o", 5) || hasMilestone("c", 5)) keep.push(11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45)
                 if (hasMilestone("o", 6)) keep.push(51,52,53,54,55)
                 
                 player.sp.upgrades = filter(player.sp.upgrades, keep)
@@ -5560,6 +5562,10 @@ addLayer("pi", {
                                 player.m.activeChallenge = undefined
                                 player.b.activeChallenge = undefined
                                 player.q.activeChallenge = undefined
+                                let l = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45]
+                                for (i = 0; i < 20; i++){
+                                        if (!player.sp.upgrades.includes(l[i])) player.sp.upgrades.push(l[i])
+                                }
                         }
                 },
                 33: {
@@ -5659,7 +5665,9 @@ addLayer("pi", {
                 player.pi.bestOnce = new Decimal(0)
                 
                 if (hasUpgrade("o", 21)) return
-                player.pi.upgrades = []
+                let keep = []
+                if (hasMilestone("c", 5)) keep.push(11,12,13,14,21,22,23,24)
+                player.pi.upgrades = filter(player.pi.upgrades, keep)
                 player.pi.milestones = []
         },
 })
@@ -6595,6 +6603,10 @@ addLayer("o", {
                 player.o.total = new Decimal(0)
                 
                 let keep = []
+                j = Math.min(25, player.c.times)
+                if (hasMilestone("c", 6)) {
+                        keep = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55].slice(0, j)
+                }
                 player.o.upgrades = filter(player.o.upgrades, keep)
                 player.o.milestones = []
 
@@ -6847,7 +6859,7 @@ addLayer("f", {
                         description: "Buy F6P once per second",
                         cost: new Decimal("4.2pt10"),
                         unlocked(){
-                                return (hasUpgrade("f", 33) && player.o.points.gt(new Decimal("5pt10")) || hasUpgrade("f", 34)) || player.c.best.gt(0)
+                                return (hasUpgrade("f", 33) && player.i.points.gt(new Decimal("5pt10")) || hasUpgrade("f", 34)) || player.c.best.gt(0)
                         }
                 },
                 35: {
@@ -7723,7 +7735,7 @@ addLayer("f", {
                                 "buyables"
                         ],
                         unlocked(){
-                                return hasUpgrade("f", 14)
+                                return hasUpgrade("f", 14) || player.c.best.gt(0)
                         },
                 },
                 "Molecules": {
@@ -7741,7 +7753,7 @@ addLayer("f", {
                                 "clickables"
                         ],
                         unlocked(){
-                                return hasUpgrade("f", 14)
+                                return hasUpgrade("f", 14) || player.c.best.gt(0)
                         },
                 },
                 "Resources": {
@@ -7797,7 +7809,7 @@ addLayer("f", {
                                 }],
                         ],
                         unlocked(){
-                                return hasUpgrade("f", 14)
+                                return hasUpgrade("f", 14) || player.c.best.gt(0)
                         },
                 },
         },
@@ -7819,6 +7831,7 @@ addLayer("f", {
 
                 let resetBuyables = [11,12,13,21,22,23]
                 for (let j = 0; j < resetBuyables.length; j++) {
+                        if (hasMilestone("c", 7)) break
                         player.f.buyables[resetBuyables[j]] = new Decimal(0)
                 }
 
@@ -7828,18 +7841,20 @@ addLayer("f", {
                 player.f.o = new Decimal(0)
                 player.f.p = new Decimal(0)
                 player.f.s = new Decimal(0)
+                
+                let init = hasMilestone("c", 7) ? 1 : 0
                 player.f.molecules = {
-                        water: new Decimal(0),
-                        glucose: new Decimal(0),
-                        ammonia: new Decimal(0),
-                        atp: new Decimal(0),
-                        methane: new Decimal(0),
-                        nadph: new Decimal(0),
-                        co2: new Decimal(0),
-                        rubp: new Decimal(0),
-                        g6p: new Decimal(0),
-                        acetylcoa: new Decimal(0),
-                        f6p: new Decimal(0),
+                        water: new Decimal(init),
+                        glucose: new Decimal(init),
+                        ammonia: new Decimal(init),
+                        atp: new Decimal(init),
+                        methane: new Decimal(init),
+                        nadph: new Decimal(init),
+                        co2: new Decimal(init),
+                        rubp: new Decimal(init),
+                        g6p: new Decimal(init),
+                        acetylcoa: new Decimal(init),
+                        f6p: new Decimal(init),
                 }
         },
 })
@@ -7967,12 +7982,33 @@ addLayer("c", {
                         }, // hasMilestone("c", 3)
                 },
                 4: {
-                        requirementDescription: "<b>Idk</b><br>Requires: 4 Capsules", 
-                        effectDescription: "Keep SP milestones and raise capsule gain to the number of Milestones and keep Smirnov",
+                        requirementDescription: "<b>Wiles</b><br>Requires: 4 Capsules", 
+                        effectDescription: "Keep SP milestones and Smirnov and raise capsule gain to the number of Milestones",
                         done(){
                                 return player.c.best.gte(4)
                         }, // hasMilestone("c", 4)
                 },
+                5: {
+                        requirementDescription: "<b>idk</b><br>Requires: 6 Capsules", 
+                        effectDescription: "Keep the first four rows of Super Prestige upgrades and the first two rows of Pion upgrades",
+                        done(){
+                                return player.c.best.gte(6)
+                        }, // hasMilestone("c", 5)
+                },
+                6: {
+                        requirementDescription: "<b>idk</b><br>Requires: 9 Capsules", 
+                        effectDescription: "Keep one Origin upgrade per Capsule reset",
+                        done(){
+                                return player.c.best.gte(9)
+                        }, // hasMilestone("c", 6)
+                },
+                7: {
+                        requirementDescription: "<b>idk</b><br>Requires: 13 Capsules", 
+                        effectDescription: "Keep workers and start with one of each molecule",
+                        done(){
+                                return player.c.best.gte(13)
+                        }, // hasMilestone("c", 7)
+                }, //next is 13+6 = 19
         },
         row: 4, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [

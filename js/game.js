@@ -286,14 +286,14 @@ function completeChallenge(layer, x) {
 	}
 	while (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
 		if (layer == "b" && x == 12) break
-		
-		if (canCompleteChallenge(layer, x)) player[layer].challenges[x] += 1
-		else break
-		
+
 		tmp[layer].challenges[x].goal = layers[layer].challenges[x].goal
 		if (typeof tmp[layer].challenges[x].goal == "function"){
 			tmp[layer].challenges[x].goal = tmp[layer].challenges[x].goal()
 		}
+		
+		if (canCompleteChallenge(layer, x)) player[layer].challenges[x] += 1
+		else break
 	}
 	delete player[layer].activeChallenge
 	updateChallengeTemp(layer)
