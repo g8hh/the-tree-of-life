@@ -219,6 +219,7 @@ function getIncABMult(){
         if (hasMilestone("o", 0)) mult *= 10
         if (hasUpgrade("o", 22)) mult *= 25
         if (hasUpgrade("o", 52)) mult *= 100
+        if (hasUpgrade("c", 12)) mult *= 20
         return mult
 }
 
@@ -5317,7 +5318,7 @@ addLayer("sp", {
                 if (layer == "pi") return
                 let keep = []
                 if (hasMilestone("o", 5) || hasMilestone("c", 5)) keep.push(11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45)
-                if (hasMilestone("o", 6)) keep.push(51,52,53,54,55)
+                if (hasMilestone("o", 6) || hasUpgrade("c", 12)) keep.push(51,52,53,54,55)
                 
                 player.sp.upgrades = filter(player.sp.upgrades, keep)
                 if (hasMilestone("o", 5)) return 
@@ -6679,7 +6680,17 @@ addLayer("f", {
 
                 if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
 
-                return ret.floor().max(0)
+                ret = ret.floor().max(0)
+
+                if (hasUpgrade("c", 11)) {
+                        if (ret.layer < 1e10) {
+                                ret = Decimal.tetrate(ret, player.c.points.plus(1))
+                                return ret
+                        }
+                        ret.layer += player.c.points.toNumber()
+                }
+
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(10)
@@ -6715,9 +6726,21 @@ addLayer("f", {
                 player.f.currentTime += diff
                 player.f.abTime += diff
                 
-                if (hasUpgrade("f", 34) && !hasUpgrade("f", 41)) {
+                if (hasUpgrade("f", 34)) {
                         if (player.f.abTime > 1) {
-                                layers.f.clickables[31].onClick()
+                                if (!hasUpgrade("f", 41)) layers.f.clickables[31].onClick()
+                                if (hasMilestone("c", 6)){
+                                        layers.f.clickables[11].onClick()
+                                        layers.f.clickables[12].onClick()
+                                        layers.f.clickables[13].onClick()
+                                        layers.f.clickables[14].onClick()
+                                        layers.f.clickables[15].onClick()
+                                        layers.f.clickables[21].onClick()
+                                        layers.f.clickables[22].onClick()
+                                        layers.f.clickables[23].onClick()
+                                        layers.f.clickables[24].onClick()
+                                        layers.f.clickables[25].onClick()
+                                }
                                 player.f.abTime += -1
                                 if (player.f.abTime > 1000) player.f.abTime = 1000 //cap 1k seconds
                         }
@@ -7305,6 +7328,8 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(11)
 
                                 player.f.molecules.water = player.f.molecules.water.plus(target)
+                                
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(2))
                                 player.f.o = player.f.o.sub(target.times(1))
                         },
@@ -7328,6 +7353,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(12)
 
                                 player.f.molecules.glucose = player.f.molecules.glucose.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(12))
                                 player.f.o = player.f.o.sub(target.times( 6))
                                 player.f.c = player.f.c.sub(target.times( 6))
@@ -7352,6 +7378,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(13)
 
                                 player.f.molecules.ammonia = player.f.molecules.ammonia.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(3))
                                 player.f.o = player.f.o.sub(target.times(0))
                                 player.f.c = player.f.c.sub(target.times(0))
@@ -7377,6 +7404,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(14)
 
                                 player.f.molecules.atp = player.f.molecules.atp.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(16))
                                 player.f.o = player.f.o.sub(target.times(13))
                                 player.f.c = player.f.c.sub(target.times(10))
@@ -7403,6 +7431,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(15)
 
                                 player.f.molecules.methane = player.f.molecules.methane.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(4))
                                 player.f.o = player.f.o.sub(target.times(0))
                                 player.f.c = player.f.c.sub(target.times(1))
@@ -7429,6 +7458,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(21)
 
                                 player.f.molecules.nadph = player.f.molecules.nadph.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(20))
                                 player.f.o = player.f.o.sub(target.times(17))
                                 player.f.c = player.f.c.sub(target.times(21))
@@ -7458,6 +7488,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(22)
 
                                 player.f.molecules.co2 = player.f.molecules.co2.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(0))
                                 player.f.o = player.f.o.sub(target.times(2))
                                 player.f.c = player.f.c.sub(target.times(1))
@@ -7486,6 +7517,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(23)
 
                                 player.f.molecules.rubp = player.f.molecules.rubp.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(12))
                                 player.f.o = player.f.o.sub(target.times(11))
                                 player.f.c = player.f.c.sub(target.times(5))
@@ -7514,6 +7546,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(24)
 
                                 player.f.molecules.g6p = player.f.molecules.g6p.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(13))
                                 player.f.o = player.f.o.sub(target.times(9))
                                 player.f.c = player.f.c.sub(target.times(6))
@@ -7542,6 +7575,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(25)
 
                                 player.f.molecules.acetylcoa = player.f.molecules.acetylcoa.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(38))
                                 player.f.o = player.f.o.sub(target.times(17))
                                 player.f.c = player.f.c.sub(target.times(23))
@@ -7571,6 +7605,7 @@ addLayer("f", {
                                 let target = layers.f.clickables.getMaximumPossible(31)
 
                                 player.f.molecules.f6p = player.f.molecules.f6p.plus(target)
+                                if (target.gt(new Decimal("10pt3"))) return
                                 player.f.h = player.f.h.sub(target.times(13))
                                 player.f.o = player.f.o.sub(target.times(9))
                                 player.f.c = player.f.c.sub(target.times(6))
@@ -7826,7 +7861,7 @@ addLayer("f", {
 
                 let keep = []
                 if (hasMilestone("c", 4)) keep.push(33)
-                player.f.upgrades = filter(player.f.upgrades, keep)
+                if (!hasUpgrade("c", 11)) player.f.upgrades = filter(player.f.upgrades, keep)
                 player.f.milestones = []
 
                 let resetBuyables = [11,12,13,21,22,23]
@@ -7875,6 +7910,7 @@ addLayer("c", {
                 best: new Decimal(0),
                 total: new Decimal(0),
                 times: 0,
+                time: 0,
         }},
         color: "#990000",
         requires: Decimal.pow(10, 25000), 
@@ -7910,6 +7946,7 @@ addLayer("c", {
         getGainExp(){
                 let x = new Decimal(1)
                 if (hasMilestone("c", 4)) x = x.times(player.c.milestones.length)
+                if (hasUpgrade("c", 12)) x = x.times(player.c.upgrades.length)
                 return x
         },
         getGainMultPre(){
@@ -7930,8 +7967,19 @@ addLayer("c", {
                 let x1 = gain.plus(1).div(pst).root(exp).div(pre).times(11)
                 let x2 = Decimal.tetrate(10, Decimal.pow(2, x1))
 
+                if (gain.gt(1e6)) return start
+
                 let nextAt = "Next at " + format(x2) + " Fragments"
-                if (gain.gt(1e6)) nextAt = ""
+
+                if (gain.lt(2)) return start + nextAt
+
+                let ps = gain.div(player.c.time || 1)
+
+                if (ps.lt(1/60)) {
+                        nextAt += " (" + format(ps.times(60)) + "/m)"
+                } else {
+                        nextAt += " (" + format(ps) + "/s)"
+                }
                 
                 return start + nextAt
         },
@@ -7940,8 +7988,9 @@ addLayer("c", {
         },
         update(diff){
                 player.c.best = player.c.best.max(player.c.points)
+                player.c.time += diff
 
-                if (false) {
+                if (hasUpgrade("c", 14)) {
                         let x = layers.c.getResetGain()
                         player.c.points = player.c.points.plus(x.times(diff))
                         player.c.total  = player.c.total.plus(x.times(diff))
@@ -7952,12 +8001,40 @@ addLayer("c", {
                 cols: 5,
                 11: {
                         title: "Birkar",
-                        description: "i dunnno yet",
-                        cost: new Decimal(69),
+                        description() {
+                                if (shiftDown) a = "Fragment gain x -> x^^Capsules"
+                                else a = "Buff fragment gain based on Capsules"
+                                return a + " and keep Fragment upgrades"
+                        },
+                        cost: new Decimal(15),
                         unlocked(){
-                                return false
+                                return hasMilestone("c", 7)
                         }
                 },
+                12: {
+                        title: "Zermelo",
+                        description: "Keep the last row of Super Prestige upgrades and raise Capsule gain to the number of Capsule upgrades",
+                        cost: new Decimal(10),
+                        unlocked(){
+                                return hasUpgrade("c", 11)
+                        }
+                },
+                13: {
+                        title: "Fraenkel",
+                        description: "Incrementy Autobuyers by 20x more",
+                        cost: new Decimal(25e3),
+                        unlocked(){
+                                return hasUpgrade("c", 12)
+                        }
+                },
+                14: {
+                        title: "Skolem",
+                        description: "Remove the ability to Prestige but gain 100% of Capsules upon prestige each second",
+                        cost: new Decimal(5e15),
+                        unlocked(){
+                                return hasUpgrade("c", 13)
+                        }
+                }, //next is 1e29
         },
         milestones: {
                 1: {
@@ -7989,21 +8066,21 @@ addLayer("c", {
                         }, // hasMilestone("c", 4)
                 },
                 5: {
-                        requirementDescription: "<b>idk</b><br>Requires: 6 Capsules", 
+                        requirementDescription: "<b>Gödel</b><br>Requires: 6 Capsules", 
                         effectDescription: "Keep the first four rows of Super Prestige upgrades and the first two rows of Pion upgrades",
                         done(){
                                 return player.c.best.gte(6)
                         }, // hasMilestone("c", 5)
                 },
                 6: {
-                        requirementDescription: "<b>idk</b><br>Requires: 9 Capsules", 
-                        effectDescription: "Keep one Origin upgrade per Capsule reset",
+                        requirementDescription: "<b>Hartogs</b><br>Requires: 9 Capsules", 
+                        effectDescription: "Keep one Origin upgrade per Capsule reset and Avilia buys the first ten molecules too",
                         done(){
                                 return player.c.best.gte(9)
                         }, // hasMilestone("c", 6)
                 },
                 7: {
-                        requirementDescription: "<b>idk</b><br>Requires: 13 Capsules", 
+                        requirementDescription: "<b>von Neumann</b><br>Requires: 13 Capsules", 
                         effectDescription: "Keep workers and start with one of each molecule",
                         done(){
                                 return player.c.best.gte(13)
@@ -8021,14 +8098,17 @@ addLayer("c", {
                 "Upgrades": {
                         content: [
                                 "main-display",
-                                ["resource-display", "", function (){ return false ? {'display': 'none'} : {}}],
-                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["resource-display", "", function (){ return hasUpgrade("c", 14) ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return hasUpgrade("c", 14) ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
-                                        if (false) return ""
+                                        if (hasUpgrade("c", 14)) return ""
                                         return "Doing a Capsule reset resets Origins and everything above"
                                 }],
                                 ["display-text", function(){
-                                        if (!false) return ""
+                                        if (!hasUpgrade("c", 14)) {
+                                                if (player.c.times < 25) return "You have done " + formatWhole(player.c.times) + " Capsule resets"
+                                                return ""
+                                        }
                                         return "You are gaining " + format(layers.c.getResetGain()) + " Capsules per second"
                                 }],
                                 "upgrades"
@@ -8049,6 +8129,7 @@ addLayer("c", {
         },
         doReset(layer){
                 if (false) console.log(layer)
+                if (layer == "c") player.c.time = 0
                 if (layers[layer].row <= 4) return
 
                 //resource

@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.93.26",
+	num: "0.93.27",
 	name: "Peter Piper picked a peck of pickled peppers",
 }
 
@@ -36,12 +36,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: 25 Capsule resets (v.93.26)"
+	"Current endgame: 1e29 Capsules (v.93.27)"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.slog().gte(Decimal.pow(2, 1024))
+	return player.points.layer > Math.pow(2, 1023.99999)
 }
 
 
