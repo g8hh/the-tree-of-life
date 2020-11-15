@@ -496,7 +496,7 @@ addLayer("i", {
                 15: {
                         title: "Currently,",
                         description: "Each upgrade in this column adds .5 to the Neutrino Generation buyable base",
-                        cost: new Decimal("1e59600"),
+                        cost: new Decimal("1e59625"),
                         unlocked(){
                                 return hasChallenge("q", 11) || hasIUpg(15) || hasUnlockedRow(3)
                         },
@@ -1197,7 +1197,7 @@ addLayer("a", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                let a = player.i.best.gt(Decimal.pow(10, 400)) || hasUnlockedRow(3)
+                let a = player.i.best.gt(Decimal.pow(10, 400)) || hasUnlockedRow(2) 
                 return a && !hasUpgrade("pi", 32)
         },
         milestones:{
@@ -1321,7 +1321,7 @@ addLayer("a", {
                 15: {
                         title: "Flair", //Flare
                         description: "Amoebas boost Neutrino gain",
-                        cost: new Decimal(3e162),
+                        cost: new Decimal(2e162),
                         effect(){
                                 return player.a.points.plus(10).log10().pow(5)
                         },
@@ -1501,7 +1501,7 @@ addLayer("m", {
                         unlocked(){
                                 return hasAUpgrade(12) || hasUnlockedRow(3)
                         },
-                        goal: new Decimal("1e456"),
+                        goal: new Decimal("1e500"),
                         currencyInternalName: "points",
                 },
         },
@@ -1820,7 +1820,7 @@ addLayer("e", {
                 35:{
                         title: "Could", 
                         description: "Energy effects Neutrino gain",
-                        cost: new Decimal("1e435"),
+                        cost: new Decimal("1e429"),
                         effect(){
                                 return player.e.points.plus(10).log10().pow(.5)
                         },
@@ -1833,7 +1833,7 @@ addLayer("e", {
                         description: "Each Neutrino Generation level past 100 boosts its base by .01 (capped at 10)",
                         cost: new Decimal("1e439"),
                         unlocked(){
-                                return getBuyableAmount("n", 12).gte(24) || hasUnlockedRow(3)
+                                return (getBuyableAmount("n", 12).gte(24) && hasUpgrade("e", 35)) || hasUnlockedRow(3)
                         },
                 },
                 55:{
@@ -1890,12 +1890,14 @@ addLayer("p", {
                 let log = amt.max(10).log10().div(18.36)
                 let ret = log.pow(exp).div(25)
 
-                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
-
                 let add = new Decimal(hasUpgrade("s", 21) ? 1 : 0)
                 if (hasUpgrade("s", 54)) add = add.max(1000)
                 if (ret.lt(1)) return new Decimal(0).plus(add)
-                return ret.plus(add).times(layers.p.getGainMult())
+                ret = ret.plus(add).times(layers.p.getGainMult())
+
+                if (hasMilestone("c", 1))  ret = doMilestoneC1Buff(ret)
+
+                return ret
         },
         getGainExp(){
                 let x = new Decimal(.5)
@@ -2022,7 +2024,7 @@ addLayer("p", {
                         description: "Each Gluon Upgrade adds .05 to the Neutrino Generation base",
                         cost: new Decimal(2e96),
                         unlocked(){
-                                return getBuyableAmount("n", 11).gte(54) || hasUnlockedRow(3)
+                                return getBuyableAmount("n", 11).gte(54) || hasUpgrade("g", 34) || hasUnlockedRow(3)
                         }
                 },
                 24:{
@@ -2055,7 +2057,7 @@ addLayer("p", {
                 33:{
                         title: "Brews",
                         description: "Unlock the third Particle Buyable and P Collision gives free levels to middle column Neutrino buyables",
-                        cost: new Decimal("4e352"),
+                        cost: new Decimal("4.2e352"),
                         unlocked(){
                                 return hasUpgrade("p", 32) || hasUnlockedRow(3)
                         }
@@ -2388,7 +2390,7 @@ addLayer("p", {
             //{key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
         ],
         layerShown(){
-                return player.i.best.gt(Decimal.pow(10, 11450)) || hasUnlockedRow(3)
+                return player.i.best.gt(Decimal.pow(10, 11450)) || hasUnlockedRow(3) || player.p.best.gt(0)
         },
         tabFormat: ["main-display",
                 ["display-text", function(){
@@ -2481,6 +2483,7 @@ addLayer("n", {
                 x = x.times(layers.p.buyables[12].effect())
                 if (hasUpgrade("a", 15)) x = x.times(upgradeEffect("a", 15))
                 x = x.times(layers.p.buyables[13].effect())
+                if (hasUpgrade("s", 11)) x = x.times(2)
                 if (hasUpgrade("s", 12)) x = x.times(Math.max(player.s.upgrades.length, 1))
                 if (hasUpgrade("p", 34)) x = x.times(1000)
                 x = x.times(layers.sp.effect()[1])
@@ -2560,7 +2563,7 @@ addLayer("n", {
                         effectBase(){
                                 if (inChallenge("sp", 11)) return new Decimal(1)
                                 let ret = new Decimal(3)
-                                if (hasUpgrade("e", 25)) {
+                                if (hasUpgrade("e", 45)) {
                                         let diff = layers.n.buyables[11].total().div(100).minus(1).max(0)
                                         diff = diff.min(10)
                                         ret = ret.plus(diff)
@@ -3360,7 +3363,7 @@ addLayer("g", {
                 22: {
                         title: "Mane",
                         description: "Boost Particle gain based on Gluon upgrades", 
-                        cost: new Decimal(5e24),
+                        cost: new Decimal(1e24),
                         effect(){
                                 let l = player.g.upgrades.length
                                 return Decimal.pow(l, l/2)
@@ -3522,7 +3525,7 @@ addLayer("g", {
                 55: {
                         title: "These?", //how do we name these?
                         description: "Amoeba Gain buyables base is squared", 
-                        cost: new Decimal(1e141),
+                        cost: new Decimal(5e140),
                         unlocked(){
                                 return hasUpgrade("am", 15) || hasUnlockedRow(3)
                         },
@@ -3695,7 +3698,7 @@ addLayer("q", {
         },
         tabFormat: ["main-display",
                 ["display-text", function(){return "You are getting " + format(layers.q.getResetGain()) + " Quarks per second (based on particles)"}],
-                ["display-text", function(){return "Your Quark amount raises Quark challenge goals to the power of " + format(layers.q.getChallGoalExp(), 4)}],
+                ["display-text", function(){return "Your Quark amount raises Quark challenge goals to the power of " + format(layers.q.getChallGoalExp(), 6)}],
                 "blank",
                 "blank", 
                 "challenges"],
@@ -3800,7 +3803,7 @@ addLayer("s", {
                 cols: 5,
                 11: {
                         title: "Lead",
-                        description: "Gain a free Incrementy Stamina level and gain 10x Antimatter",
+                        description: "Gain a free Incrementy Stamina level, 10x Antimatter, and 2x Neutrinos",
                         cost: new Decimal(1),
                         unlocked(){
                                 return true
@@ -3819,7 +3822,7 @@ addLayer("s", {
                         description: "Add one to the base of Neutrino Generation and Incrementy Speed, make particle gain 100x faster but cap it at 1 second",
                         cost: new Decimal(1),
                         unlocked(){
-                                return hasUpgrade("s", 12) && hasUpgrade("s", 11) || hasUnlockedRow(4)
+                                return (hasUpgrade("s", 12) && hasUpgrade("s", 11)) || hasUnlockedRow(4)
                         },
                 },
                 14: {
@@ -3918,7 +3921,7 @@ addLayer("s", {
                 35: {
                         title: "Help?", 
                         description: "Particle Simulation gives free levels to Particle Collision and begin generation of Bosons",
-                        cost: new Decimal(2e7),
+                        cost: new Decimal(2e8),
                         unlocked(){
                                 return hasUpgrade("s", 34) || hasUnlockedRow(4)
                         },
