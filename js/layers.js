@@ -5243,7 +5243,7 @@ addLayer("sp", {
                                         return "You have gotten a total of " + formatWhole(player.sp.total) + " Super Prestige Points"
                                 }],
                                 ["display-text", function(){
-                                        if (!hasUpgrade("sp", 12)) return "Super Prestige resets all prior layers, even with Shard upgrades"
+                                        if (!hasUpgrade("sp", 12)) return "Super Prestige resets Shard and all prior layers"
                                         return "You are gaining " + format(layers.sp.getResetGain()) + " Super Prestige Points per second"
                                 }],
                                 ["display-text", function(){

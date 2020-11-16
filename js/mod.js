@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: ".93.28",
-	name: "The Abelian Tributary",
+	num: "1.0 The Abelian Tributary",
+	name: "",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -36,8 +36,6 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Current endgame: Endgame!",
-	"Please report bugs before v1, live around 3pm EST Nov 16 (v.93.28)"
 ]
 
 // Determines when the game "ends"
