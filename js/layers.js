@@ -329,6 +329,14 @@ addLayer("i", {
         getGainMultPost(){
                 let x = new Decimal(1)
                 x = x.times(getIBuyableEff(11))
+                if (hasIUpg(12)){
+                        let a = 1
+                        a += hasIUpg(11) ? 1 : 0
+                        a += hasIUpg(13) ? 1 : 0
+                        a += hasIUpg(14) ? 1 : 0
+                        a += hasIUpg(15) ? 1 : 0
+                        x = x.times(Decimal.pow(1.1, a))
+                }
                 x = x.times(getIBuyableEff(12))
                 if (!hasIUpg(32)) x = x.times(layers.am.effect())
                 if (hasAMUpgrade(11)) x = x.times(getAMUpgEff(11))
@@ -407,7 +415,7 @@ addLayer("i", {
                 },
                 12: {
                         title: "Cash",
-                        description: "Unlock the first repeatable upgrade",
+                        description: "Unlock the first repeatable upgrade and each upgrade in this row multiples Incrementy gain by 1.1",
                         cost: new Decimal(30),
                         unlocked(){
                                 return hasIUpg(11) || hasUnlockedRow(1)
