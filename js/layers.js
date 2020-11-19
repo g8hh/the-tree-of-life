@@ -4993,7 +4993,7 @@ addLayer("sp", {
                 14: {
                         title: "Urn",
                         description: "Quarts Challenge Points raises Amoeba Gain base to a power",
-                        cost: new Decimal(730),
+                        cost: new Decimal(710),
                         effect(){
                                 let ret = player.sp.chall2points.plus(1).pow(.5)
 
@@ -5010,7 +5010,7 @@ addLayer("sp", {
                 21: {
                         title: "Ate",
                         description: "Each Super Prestige upgrade makes Amoebas multiply Antimatter",
-                        cost: new Decimal(458),
+                        cost: new Decimal(400),
                         currencyDisplayName: "Quarts Challenge Points",
                         currencyInternalName: "chall2points",
                         currencyLayer: "sp",
@@ -6526,7 +6526,11 @@ addLayer("o", {
                 },
                 3: {
                         requirementDescription: "<b>Cohen</b><br>Requires: 5 total Origins", 
-                        effectDescription: "Origin effect boosts Matter and best Origins logarithmically boost Super Prestige Point gain",
+                        effectDescription(){
+                                let a = "Origin effect boosts Matter and best Origins logarithmically boost Super Prestige Point gain, currently: "
+                                let b = format(Decimal.add(3, player.o.times).ln())
+                                return a + b
+                        },
                         done(){
                                 return player.o.total.gte(5)
                         },
