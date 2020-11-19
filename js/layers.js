@@ -1955,6 +1955,7 @@ addLayer("p", {
                                 if (layers.p.buyables[12].canAfford()) layers.p.buyables[12].buyMax(j)
                                 if (layers.p.buyables[13].canAfford()) layers.p.buyables[13].buyMax(j)
                         }
+                        if (player.p.time > 100) player.p.time = 100
                 }
                 if (hasUpgrade("pi", 41)) {
                         player.p.buyables[11] = new Decimal(0)
@@ -2535,6 +2536,7 @@ addLayer("n", {
                                 layers.n.buyables[32].buyMax(times)
                                 layers.n.buyables[33].buyMax(times)
                         }
+                        if (player.n.time > 100) player.n.time = 100
                 }
         },
         buyables:{
@@ -4205,6 +4207,8 @@ addLayer("b", {
                                 if (comps == 7) base += 1114
                                 if (comps == 8) base += -76106
                                 if (comps >= 9) base = 954e3
+
+                                if (hasMilestone("o", 0)) base *= Math.pow(.98, player.o.milestones.length)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -4245,6 +4249,8 @@ addLayer("b", {
                                 if (comps >= 7) base = 1.827e6
                                 if (comps >= 8) base = 1.862e6
                                 if (comps >= 9) base = 1.896e6
+
+                                if (hasMilestone("o", 0)) base *= Math.pow(.98, player.o.milestones.length)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -4284,6 +4290,8 @@ addLayer("b", {
                                 if (comps >= 8) base += -125.4e3
                                 if (comps >= 9) base += -59.4e3
                                 if (devSpeedUp) base = Math.floor(base ** .995)
+
+                                if (hasMilestone("o", 0)) base *= Math.pow(.98, player.o.milestones.length)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -4325,6 +4333,8 @@ addLayer("b", {
                                 if (comps >= 8) base += -144e3
                                 if (comps >= 9) base += -211e3
                                 if (devSpeedUp) base = Math.floor(base ** .995)
+
+                                if (hasMilestone("o", 0)) base *= Math.pow(.98, player.o.milestones.length)
                                 return Decimal.pow(10, base)
                         },
                         currencyInternalName: "points",
@@ -6513,7 +6523,7 @@ addLayer("o", {
         milestones: {
                 0: {
                         requirementDescription: "<b>Hörmander</b><br>Requires: 1 total Origins", 
-                        effectDescription: "Origin effect boosts Base Incrementy and autobuyers buy 10x more",
+                        effectDescription: "Origin effect boosts Base Incrementy, autobuyers buy 10x more, and each Origin milestone raises Boson Challenge goals ^.98",
                         done(){
                                 return player.o.total.gte(1)
                         },
@@ -6628,7 +6638,10 @@ addLayer("o", {
                         keep = [11,12,13,14,15,21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55].slice(0, j)
                 }
                 player.o.upgrades = filter(player.o.upgrades, keep)
-                player.o.milestones = []
+
+                let keep2 = []
+                if (hasMilestone("c", 1)) keep2.push(0)
+                player.o.milestones = filter(player.o.milestones, keep2)
 
                 let resetBuyables = [11,12,13,21,22,23,31,32,33]
                 for (let j = 0; j < resetBuyables.length; j++) {
@@ -8128,7 +8141,7 @@ addLayer("c", {
         milestones: {
                 1: {
                         requirementDescription: "<b>Figalli</b><br>Requires: 1 Capsule", 
-                        effectDescription: "Each Capsule reset raises all previous layer production and token gain exponents ^1.01 and gain 3x more SP resets per reset",
+                        effectDescription: "Each Capsule reset raises all previous layer production and token gain exponents ^1.01, gain 3x more SP resets per reset, and keep Hörmander",
                         done(){
                                 return player.c.best.gte(1)
                         }, // hasMilestone("c", 1)
