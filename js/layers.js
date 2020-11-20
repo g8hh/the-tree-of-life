@@ -371,6 +371,7 @@ addLayer("i", {
                                 layers.i.buyables[12].buyMax(times * mult)
                                 layers.i.buyables[13].buyMax(times * mult)
                         }
+                        if (player.i.time > 10) player.i.time = 10
                 }
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -951,7 +952,7 @@ addLayer("am", {
                 return start + nextAt
         },
         canReset(){
-                return layers.am.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasAMUpgrade(21)
+                return layers.am.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasAMUpgrade(21) && layers.am.baseAmount().gte(layers.am.requires)
         },
         update(diff){
                 if (hasUpgrade("pi", 32)) {
@@ -1188,7 +1189,7 @@ addLayer("a", {
                 return start + nextAt
         },
         canReset(){
-                return layers.a.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasMilestone("a", 3)
+                return layers.a.getResetGain().gt(0) && !hasUpgrade("pi", 32) && !hasMilestone("a", 3) && layers.a.baseAmount().gte(layers.a.requires)
         },
         update(diff){
                 if (hasUpgrade("pi", 32)) {
@@ -1385,7 +1386,7 @@ addLayer("m", {
                 best: new Decimal(0),
         }},
         color: "#3B1053",
-        requires: Decimal.pow(10, 1170), // Can be a function that takes requirement increases into account
+        requires: Decimal.pow(10, 1116), // Can be a function that takes requirement increases into account
         resource: "Matter", // Name of prestige currency
         baseAmount() {return player.i.points}, 
         branches: ["i"],
@@ -1443,7 +1444,7 @@ addLayer("m", {
                 return start + nextAt
         },
         canReset(){
-                return layers.m.getResetGain().gt(0) && hasChallenge("am", 12) && !hasUpgrade("e", 14) && !hasUpgrade("pi", 32)
+                return layers.m.getResetGain().gt(0) && hasChallenge("am", 12) && !hasUpgrade("e", 14) && !hasUpgrade("pi", 32) && layers.m.baseAmount().gte(layers.m.requires)
         },
         update(diff){
                 if (hasUpgrade("pi", 32)) {
@@ -1955,7 +1956,7 @@ addLayer("p", {
                                 if (layers.p.buyables[12].canAfford()) layers.p.buyables[12].buyMax(j)
                                 if (layers.p.buyables[13].canAfford()) layers.p.buyables[13].buyMax(j)
                         }
-                        if (player.p.time > 100) player.p.time = 100
+                        if (player.p.time > 10) player.p.time = 10
                 }
                 if (hasUpgrade("pi", 41)) {
                         player.p.buyables[11] = new Decimal(0)
@@ -2536,7 +2537,7 @@ addLayer("n", {
                                 layers.n.buyables[32].buyMax(times)
                                 layers.n.buyables[33].buyMax(times)
                         }
-                        if (player.n.time > 100) player.n.time = 100
+                        if (player.n.time > 10) player.n.time = 10
                 }
         },
         buyables:{
@@ -4553,7 +4554,7 @@ addLayer("b", {
                                         return a
                                 }],
                                 ["display-text", function(){
-                                        let a = "You are gaining " + formatWhole(layers.b.tokenGain()) + " tokens per second"
+                                        let a = "You are gaining " + format(layers.b.tokenGain()) + " tokens per second"
                                         return a
                                 }],
                                 "blank",
@@ -4726,6 +4727,8 @@ addLayer("sp", {
                                 player.sp.time += -1
                                 player.sp.times ++
                         }
+
+                        if (player.sp.time > 10) player.sp.time = 10
                 }
 
                 if (hasUpgrade("pi", 32)) {
@@ -5629,7 +5632,7 @@ addLayer("pi", {
                         description: "You can buy 5 more Incrementy Stamina levels",
                         cost: new Decimal("e20800"),
                         unlocked(){
-                                return hasUpgrade("sp", 55) || hasUpgrade("pi", 43) || player.c.best.gt(0)
+                                return hasUpgrade("sp", 55) || hasUpgrade("pi", 43) || (hasUpgrade("pi", 32) && player.o.best.gt(0)) || player.c.best.gt(0)
                         }
                 },
                 44: {
@@ -5637,7 +5640,7 @@ addLayer("pi", {
                         description: "Unlock Origin",
                         cost: new Decimal("e23000"),
                         unlocked(){
-                                return hasUpgrade("pi", 43) || player.c.best.gt(0)
+                                return hasUpgrade("pi", 43) || player.c.best.gt(0) || (hasUpgrade("pi", 32) && player.o.best.gt(0))
                         }
                 }, //e20800 pions next
         },
@@ -5654,7 +5657,7 @@ addLayer("pi", {
                                 "main-display",
                                 ["prestige-button", "", function (){ return hasMilestone("pi", 5) ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
-                                        if (!hasMilestone("pi", 5)) return ""
+                                        if (!hasMilestone("pi", 5)) return "You have " + format(layers.sp.getResetGain()) + " Super Prestige Points"
                                         return "You are gaining " + format(layers.pi.getResetGain()) + " Pions per second"
                                 }],
                                 "milestones",
@@ -5707,6 +5710,7 @@ addLayer("o", {
                 best: new Decimal(0),
                 total: new Decimal(0),
                 times: 0,
+                time: 0,
                 abtime: 0,
         }},
         color: "#79134A",
@@ -5767,6 +5771,12 @@ addLayer("o", {
                 let pst = layers.o.getGainMultPost()
                 let nextAt = "Next at " + format(Decimal.pow(10, gain.plus(1).div(pst).plus(99).root(exp).div(pre).times(2.5))) + " Pions"
                 if (gain.gt(1e6)) nextAt = ""
+
+                if (gain.gte(1)) {
+                        let ps = gain.div(player.o.time || 1)
+                        if (ps.lt(1000/60)) nextAt += "<br>" + format(ps.times(60)) + "/m"
+                        else nextAt += "<br>" + format(ps) + "/s"
+                }
                 return start + nextAt
         },
         canReset(){
@@ -5790,9 +5800,12 @@ addLayer("o", {
                                 layers.o.buyables[33].buy()
                                 player.o.abtime += -1
                         }
+                        if (player.o.abtime > 10) player.o.abtime = 10
                 } else {
                         player.o.abtime = 0
                 }
+
+                player.o.time += diff
 
                 if (hasUpgrade("o", 35)) {
                         let x = layers.o.getResetGain()
@@ -6396,7 +6409,7 @@ addLayer("o", {
                         description: "Stamina Boost gives free Pion Boost levels",
                         cost: new Decimal(50),
                         unlocked(){
-                                return (hasUpgrade("o", 24) && getBuyableAmount("o", 13).gte(3) && getBuyableAmount("o", 12).gte(3)) || player.c.best.gt(0)
+                                return (hasUpgrade("o", 24) && getBuyableAmount("o", 13).gte(3) || getBuyableAmount("o", 12).gte(3)) || player.c.best.gt(0)
                         }
                 },
                 31: {
@@ -6404,7 +6417,7 @@ addLayer("o", {
                         description: "Unlock three Origin buyables and each Incrementy Boost buyable adds .001 to its base",
                         cost: new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("o", 25) || player.c.best.gt(0)
+                                return (hasUpgrade("o", 25) && getBuyableAmount("o", 13).gte(3) && getBuyableAmount("o", 12).gte(3)) || player.c.best.gt(0)
                         }
                 },
                 32: {
@@ -6589,7 +6602,7 @@ addLayer("o", {
                                 ["resource-display", "", function (){ return hasUpgrade("o", 35) ? {'display': 'none'} : {}}],
                                 ["prestige-button", "", function (){ return hasUpgrade("o", 35) ? {'display': 'none'} : {}}],
                                 ["display-text", function(){
-                                        if (!hasUpgrade("o", 35)) return ""
+                                        if (!hasUpgrade("o", 35)) return "You have " + format(layers.pi.getResetGain()) + " Pions"
                                         return "You are gaining " + format(layers.o.getResetGain()) + " Origins per second"
                                 }],
                                 "upgrades"
@@ -6624,6 +6637,8 @@ addLayer("o", {
         },
         doReset(layer){
                 if (false) console.log(layer)
+                if (layers[layer].row <= 3) return
+                player.o.time = 0
                 if (layers[layer].row <= 4 && layer != "c") return
 
                 //resource
@@ -6685,7 +6700,7 @@ addLayer("f", {
         color: "#41FFEC",
         requires: Decimal.pow(10, 147), 
         resource: "Fragments",
-        baseAmount() {return player.o.points}, 
+        baseAmount() {return player.o.best}, 
         branches: ["o"],
         type: "custom", 
         effect(){
@@ -6748,12 +6763,12 @@ addLayer("f", {
                 let pre = layers.f.getGainMultPre()
                 let exp = layers.f.getGainExp()
                 let pst = layers.f.getGainMultPost()
-                let nextAt = "Next at " + format(Decimal.pow(10, Decimal.pow(10, gain.plus(1).div(pst).plus(1).root(exp).div(pre)).times(14.7))) + " Origins"
+                let nextAt = "Next at " + format(Decimal.pow(10, Decimal.pow(10, gain.plus(1).div(pst).plus(1).root(exp).div(pre)).times(14.7))) + " Best Origins"
                 if (gain.gt(1e6)) nextAt = ""
                 return start + nextAt
         },
         canReset(){
-                return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 5 && (player.f.currentTime >= 60 || hasMilestone("c", 2))
+                return layers.f.getResetGain().gt(0) && hasUpgrade("pi", 44) && player.f.currentTime >= 5 && (player.f.currentTime >= 30 || hasMilestone("c", 2))
         },
         update(diff){
                 player.f.currentTime += diff
@@ -6806,7 +6821,7 @@ addLayer("f", {
                 11: {
                         title: "Borcherds",
                         description: "Base Origin Boost gives free levels to Neutrino Boost",
-                        cost: new Decimal(30),
+                        cost: new Decimal(10),
                         unlocked(){
                                 return true
                         }
@@ -6913,9 +6928,9 @@ addLayer("f", {
                 34: {
                         title: "Avila",
                         description: "Buy F6P once per second",
-                        cost: new Decimal("4.2pt10"),
+                        cost: new Decimal("4.1pt10"),
                         unlocked(){
-                                return (hasUpgrade("f", 33) && player.i.points.gt(new Decimal("5pt10")) || hasUpgrade("f", 34)) || player.c.best.gt(0)
+                                return (hasUpgrade("f", 33) && player.i.points.gt(new Decimal("4pt10")) || hasUpgrade("f", 34)) || player.c.best.gt(0)
                         }
                 },
                 35: {
@@ -7787,7 +7802,7 @@ addLayer("f", {
                                 ["display-text", function(){
                                         if (!hasUpgrade("f", 25)) {
                                                 if (hasMilestone("c", 2)) return "There is a five second cooldown for Prestiging (" + format(Math.max(0, 5 - player.f.currentTime)) + ")"
-                                                return "There is a sixty second cooldown for Prestiging (" + format(Math.max(0, 60 - player.f.currentTime)) + ")"
+                                                return "There is a thirty second cooldown for Prestiging (" + format(Math.max(0, 30 - player.f.currentTime)) + ")"
                                         }
                                         return "You are gaining " + format(layers.f.getResetGain()) + " Fragments per second"
                                 }],
@@ -8027,7 +8042,7 @@ addLayer("c", {
                 return start + nextAt
         },
         canReset(){
-                return layers.c.getResetGain().gt(0) && hasUpgrade("f", 42) 
+                return layers.c.getResetGain().gt(0) && hasUpgrade("f", 42) && layers.c.baseAmount().gte(layers.c.requires)
         },
         update(diff){
                 player.c.best = player.c.best.max(player.c.points)
@@ -8141,7 +8156,7 @@ addLayer("c", {
         milestones: {
                 1: {
                         requirementDescription: "<b>Figalli</b><br>Requires: 1 Capsule", 
-                        effectDescription: "Each Capsule reset raises all previous layer production and token gain exponents ^1.01, gain 3x more SP resets per reset, and keep Hörmander",
+                        effectDescription: "Each Capsule reset raises all previous layer production and token gain exponents ^1.01 and gain 3x more SP resets per reset",
                         done(){
                                 return player.c.best.gte(1)
                         }, // hasMilestone("c", 1)

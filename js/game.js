@@ -373,6 +373,13 @@ function hardReset() {
 var ticking = false
 var devstop = false
 
+function aboveZero(){
+	list = ["i", "am", "a", "m", "e", "p", "n", "g", "q", "s", "b", "sp", "pi", "c", "o"]
+	for (let i = 0; i < list.length; i ++){
+		player[list[i]].points = player[list[i]].points.max(0)
+	}
+}
+
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
 	if (ticking) return;
@@ -393,6 +400,7 @@ var interval = setInterval(function() {
 	if (player.devSpeed != undefined) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate) resizeCanvas();
+	aboveZero()
 	updateTemp();
 	gameLoop(diff)
 	ticking = false
