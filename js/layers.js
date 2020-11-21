@@ -2096,7 +2096,7 @@ addLayer("p", {
                         }
                 },
                 43: {
-                        title: "Phail",
+                        title: "Phial",
                         description: "Add .001 to the Incrementy Stamina base",
                         cost: Decimal.pow(10, Decimal.pow(10, 16000)),
                         unlocked(){
