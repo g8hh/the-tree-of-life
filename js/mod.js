@@ -36,6 +36,74 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+	function (){
+		if (shiftDown) return "Shift is down"
+		if (inChallenge("q", 11)) {
+			return "You are in Quark challenge Son"
+		} 
+		if (inChallenge("q", 12)) {
+			return "You are in Quark challenge Sun"
+		}
+		if (inChallenge("q", 21)) {
+			return "You are in Quark challenge Pole"
+		}
+		if (inChallenge("q", 22)) {
+			return "You are in Quark challenge Poll"
+		}
+		if (inChallenge("m", 11)) {
+			return "You are in Matter challenge Creak"
+		}
+		if (inChallenge("m", 12)) {
+			return "You are in Matter challenge Creek"
+		}
+		if (inChallenge("am", 11)) {
+			return "You are in Antimatter challenge Know?"
+		}
+		if (inChallenge("am", 12)) {
+			return "You are in Antimatter challenge No!"
+		}
+		if (inChallenge("b", 11)) {
+			return "You are in Boson challenge Been"
+		}
+		if (inChallenge("b", 12)) {
+			return "You are in Boson challenge Bin"
+		}
+		if (inChallenge("b", 21)) {
+			return "You are in Boson challenge Band"
+		}
+		if (inChallenge("b", 22)) {
+			return "You are in Boson challenge Banned"
+		}
+		if (inChallenge("sp", 11)) {
+			return "You are in Super Prestige challenge Quartz"
+		}
+		if (inChallenge("sp", 12)) {
+			return "You are in Super Prestige challenge Quarts"
+		}
+		if (inChallenge("sp", 21)) {
+			return "You are in Super Prestige challenge Jewel"
+		}
+		if (inChallenge("sp", 22)) {
+			return "You are in Super Prestige challenge Joule"
+		}
+		if (player.c.best.gt(0))  return "You have 0 layers left to unlock"
+		if (player.f.best.gt(0))  return "You have 1 layers left to unlock"
+		if (player.o.best.gt(0))  return "You have 2 layers left to unlock"
+		if (player.pi.best.gt(0)) return "You have 3 layers left to unlock"
+		if (player.sp.best.gt(0)) return "You have 4 layers left to unlock"
+		if (player.b.best.gt(0))  return "You have 5 layers left to unlock"
+		if (player.s.best.gt(0))  return "You have 6 layers left to unlock"
+		if (player.q.best.gt(0))  return "You have 7 layers left to unlock"
+		if (player.g.best.gt(0))  return "You have 8 layers left to unlock"
+		if (player.n.best.gt(0))  return "You have 9 layers left to unlock"
+		if (player.p.best.gt(0))  return "You have 10 layers left to unlock"
+		if (player.p.best.gt(0))  return "You have 11 layers left to unlock"
+		if (player.e.best.gt(0))  return "You have 12 layers left to unlock"
+		if (player.m.best.gt(0))  return "You have 13 layers left to unlock"
+		if (player.a.best.gt(0))  return "You have 14 layers left to unlock"
+		if (player.am.best.gt(0)) return "You have 15 layers left to unlock"
+		return "Welcome to Incrementreeverse!"
+	},
 ]
 
 // Determines when the game "ends"
