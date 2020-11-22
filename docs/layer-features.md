@@ -104,7 +104,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - prestigeButtonText(): **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 
-- passiveGain(): **optional**, returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
+- passiveGeneration(): **optional**, returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
         This is good for automating Normal layers.
 
 - autoPrestige(): **optional**, returns a boolean, if true, the layer will always automatically do a prestige if it can.
