@@ -73,12 +73,5 @@
 			<layer-tab :layer="player.navTab == 'none' ? player.tab : player.navTab" ></layer-tab>
 
 		</div>
-		<div v-if="player.navTab !== 'none' && !(gameEnded && !player.keepGoing)" v-bind:class="{ fullWidth: player.navTab == 'none', col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">
-			<div v-for="layer in LAYERS" >
-				<div v-if="player.tab==layer" > 
-					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'"></layer-tab>
-				</div>
-			</div>
-		</div>
 	</div>
 </body>
