@@ -37,7 +37,7 @@ addNode("h", {
     layerShown: true,
     tooltip: "Restore your points to 10",
     tooltipLocked: "Restore your points to 10",
-
+    row: "side",
     canClick() {return player.points.lt(10)},
     onClick() {player.points = new Decimal(10)}
 }, 

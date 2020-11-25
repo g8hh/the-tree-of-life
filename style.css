@@ -97,16 +97,7 @@ h1, h2, h3, b, input {
 .smallNode {
 	height: 60px;
 	width: 60px;
-	border: var(--hqProperty1);
-	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 50%;
-	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 30px;
-	font-family: "Lucida Console", "Courier New", monospace;
-	color: rgba(0, 0, 0, 0.5);
-	text-shadow: var(--hqProperty3);
-	padding: 0;
-
 }
 
 

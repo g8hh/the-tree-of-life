@@ -372,9 +372,8 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `<div>
 		<span v-for="row in data"><table>
-			<td v-for="node in row">
-				<layer-node v-if="tmp[node].isLayer" :layer='node' :abb='tmp[node].symbol'></layer-node>
-				<button-node v-else :layer='node' :abb='tmp[node].symbol'></layer-node>
+			<td v-for="node in row" style = "{width: 0px}">
+				<tree-node  :layer='node' :abb='tmp[node].symbol'></tree-node>
 			</td>
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>
@@ -399,8 +398,7 @@ function loadVue() {
 	// SYSTEM COMPONENTS
 
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
-	Vue.component('button-node', systemComponents['button-node'])
-	Vue.component('layer-node', systemComponents['layer-node'])
+	Vue.component('tree-node', systemComponents['tree-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

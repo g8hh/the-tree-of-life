@@ -10,64 +10,45 @@ var systemComponents = {
 		`
 	},
 
-	'button-node': {
+	'tree-node': {
 		props: ['layer', 'abb', 'size'],
 		template: `
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
-				layers[layer].onClick()
+				if(tmp[layer].isLayer) {showTab(layer)}
+				else {layers[layer].onClick()}
 			}"
-			v-bind:tooltip="
-				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
-				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
-			"
-			v-bind:class="{
-				treeButton: size != 'small',
-				smallNode: size == 'small',
-				[layer]: true,
-				ghost: tmp[layer].layerShown == 'ghost',
-				hidden: !tmp[layer].layerShown,
-				locked: !tmp[layer].canClick,
-				notify: tmp[layer].notify,
-				can: tmp[layer].canClick,
-			}"
-			v-bind:style="[tmp[layer].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].nodeStyle]">
-			{{abb}}
-		</button>
-		`
-	},
 
-	'layer-node': {
-		props: ['layer', 'abb', 'size'],
-		template: `
-		<button v-if="nodeShown(layer)"
-			v-bind:id="layer"
-			v-on:click="function() {
-				showTab(layer)
-			}"
-			v-bind:tooltip="
+			v-bind:tooltip=" (tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
+			)
+			: (
+				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
+				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
+			)
 			"
 			v-bind:class="{
-				treeNode: size != 'small',
+				treeNode: tmp[layer].isLayer,
+				treeButton: !tmp[layer].isLayer,
 				smallNode: size == 'small',
 				[layer]: true,
 				ghost: tmp[layer].layerShown == 'ghost',
 				hidden: !tmp[layer].layerShown,
-				locked: !player[layer].unlocked && !tmp[layer].baseAmount.gte(tmp[layer].requires),
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
 				notify: tmp[layer].notify,
 				resetNotify: tmp[layer].prestigeNotify,
-				can: player[layer].unlocked,
+				can: (player[layer].unlocked && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
 			}"
-			v-bind:style="[layerunlocked(layer) ? {
+			v-bind:style="[(tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick) ? {
 				'background-color': tmp[layer].color,
 			} : {}, tmp[layer].nodeStyle]">
 			{{abb}}
 		</button>
 		`
 	},
+
 	
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing'],

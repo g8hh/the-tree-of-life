@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.2.3 -
+- Button nodes now work as side "layers".
+
 ### v2.2.2 - 11/22/20
 - Fixed right half of the screen being unclickable in some circumstances.
 - Fixed tree branches being offset.
