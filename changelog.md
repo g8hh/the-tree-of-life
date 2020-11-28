@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-### v2.2.3 - 
+### v2.2.3 - 11/28/20
 - Layers will be highlighted if you can finish a challenge.
 - The "can complete challenge" color now overrides the "already completed" color.
 - Button nodes now work as side "layers".
