@@ -20,7 +20,7 @@ var systemComponents = {
 				else {layers[layer].onClick()}
 			}"
 
-			v-bind:tooltip=" (tmp[layer].isLayer) ? (
+			v-bind:tooltip="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
 			)
@@ -39,7 +39,7 @@ var systemComponents = {
 				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
 				notify: tmp[layer].notify,
 				resetNotify: tmp[layer].prestigeNotify,
-				can: (player[layer].unlocked && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
 			}"
 			v-bind:style="[(tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick) ? {
 				'background-color': tmp[layer].color,

@@ -23,7 +23,7 @@ tabFormat: [
 
 It is a list of components, which can be either just a name, or an array with arguments. If it's an array, the first item is the name of the component, the second is the data passed into it, and the third (optional) applies a CSS style to it with a "CSS object", where the keys are CSS attributes.
 
-These are the existing components, but you can create more in [v.js](/js/v.js):
+These are the existing components, but you can create more in [components.js](/js/components.js):
 
 - display-text: Displays some text (can use basic HTML). The argument is the text to display. It can also be a function that returns updating text.
 

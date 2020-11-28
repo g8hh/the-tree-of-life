@@ -121,6 +121,7 @@ You can make almost any value dynamic by using a function in its place, includin
 - nodeStyle: **optional**. A CSS object, where the keys are CSS attributes, which styles this layer's node on the tree.
 
 - tooltip() / tooltipLocked(): **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
+    If the value is "", the tooltip will be disabled.
 
 ## Other features
 

@@ -31,7 +31,7 @@ Individual achievement can have these features:
 
 - done(): A function returning a boolean to determine if the achievement should be awarded.
 
-- tooltip: Default tooltip for the achievement, appears when it is hovered over. Should convey the goal and any reward for completing the achievement. It can also be a function that returns updating text. Can use basic HTML.
+- tooltip: Default tooltip for the achievement, appears when it is hovered over. Should convey the goal and any reward for completing the achievement. It can also be a function that returns updating text. Can use basic HTML. Setting this to "" disables the tooltip.
 
 - effect(): **optional**. A function that calculates and returns the current values of any bonuses from the achievement. Can return a value or an object containing multiple values.
 

@@ -492,6 +492,7 @@ addLayer("a", {
             11: {
                 name: "Get me!",
                 done() {return true}, // This one is a freebie
+                tooltip: "",
                 goalTooltip: "How did this happen?", // Shows when achievement is not completed
                 doneTooltip: "You did it!", // Showed when the achievement is completed
             },
