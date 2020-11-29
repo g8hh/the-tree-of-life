@@ -99,7 +99,7 @@ function rowReset(row, layer) {
 			layers[lr].doReset(layer)
 		}
 		else
-			if(tmp[layer].row > tmp[lr].row && row !== "side") layerDataReset(lr)
+			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
 	}
 }
 
@@ -144,6 +144,7 @@ function generatePoints(layer, diff) {
 var prevOnReset
 
 function doReset(layer, force=false) {
+	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
 	if (!force) {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
@@ -282,10 +283,11 @@ function gameLoop(diff) {
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 
-	let limit = maxTickLength()
-	if(diff > limit)
-		diff = limit
-
+	if (maxTickLength) {
+		let limit = maxTickLength()
+		if(diff > limit)
+			diff = limit
+	}
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 

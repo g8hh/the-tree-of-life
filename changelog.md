@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Added fixOldSaves.
+
 ### v2.2.3 - 11/28/20
 - Layers will be highlighted if you can finish a challenge.
 - The "can complete challenge" color now overrides the "already completed" color.
