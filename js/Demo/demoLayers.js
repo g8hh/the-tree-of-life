@@ -119,11 +119,6 @@ addLayer("c", {
                 effectDisplay() { return format(this.effect())+"x" }, // Add formatting to the effect
             },
             13: {
-                description: "Unlock a <b>secret subtab</b> and make this layer act if you unlocked it first.",
-                cost: new Decimal(69),
-                currencyDisplayName: "candies", // Use if using a nonstandard currency
-                currencyInternalName: "points", // Use if using a nonstandard currency
-                currencyLocation: "", // The object in player data that the currency is contained in
                 unlocked() { return (hasUpgrade(this.layer, 12))},
                 onPurchase() { // This function triggers when the upgrade is purchased
                     player[this.layer].unlockOrder = 0
@@ -138,6 +133,9 @@ addLayer("c", {
                         }
                     } // Otherwise use the default
                 },
+                canAfford(){return player.points.lte(7)},
+                pay(){player.points = player.points.add(7)},
+                fullDisplay: "Only buyable with less than 7 points, and gives you 7 more. Unlocks a secret subtab."
             },
             22: {
                 title: "This upgrade doesn't exist",

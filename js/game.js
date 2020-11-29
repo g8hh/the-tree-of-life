@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.2.4",
+	tmtNum: "2.2.5",
 	tmtName: "Uprooted"
 }
 
@@ -111,7 +111,7 @@ function layerDataReset(layer, keep = []) {
 			storedData[keep[thing]] = player[layer][keep[thing]]
 	}
 
-	layOver(player[layer], layers[layer].startData());
+	layOver(player[layer], getStartLayerData(layer))
 	player[layer].upgrades = []
 	player[layer].milestones = []
 	player[layer].challenges = getStartChallenges(layer)
@@ -230,8 +230,8 @@ function startChallenge(layer, x) {
 function canCompleteChallenge(layer, x)
 {
 	if (x != player[layer].activeChallenge) return
-
 	let challenge = tmp[layer].challenges[x]
+	if (challenge.canComplete !== undefined) return challenge.canComplete
 
 	if (challenge.currencyInternalName){
 		let name = challenge.currencyInternalName

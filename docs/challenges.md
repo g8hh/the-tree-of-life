@@ -37,6 +37,8 @@ Individual Challenges can have these features:
 
 - rewardDisplay(): **optional**. A function that returns a display of the current effects of the reward with formatting. Default behavior is to just display the a number appropriately formatted.
 
+- fullDisplay(): **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the challenge. Can use basic HTML.
+
 - goal: A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
 
 - unlocked(): **optional**. A function returning a bool to determine if the challenge is visible or not. Default is unlocked.
@@ -62,3 +64,7 @@ By default, challenges use basic Points for the goal. You can change that using 
 - currencyLayer: **optional**. the internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
 
 - currencyLocation: **optional**. if your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+
+You can also set a fully custom win condition that overrides other goal-related features (use fullDisplay along with this)
+
+- canComplete(): **OVERRIDE**, returns true if you can complete the challenge

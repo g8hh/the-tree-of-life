@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+- Added fullDisplay feature to upgrades and challenges, overrides other displays and lets you set the full text.
+- best, total, and unlocked are always automatically added to layerData (but best and total will only display if you add them yourself).
+- Fixed getStartClickables.
+
 ### v2.2.4 - 11/28/20
 - Added softcap and softcapPower features (for Normal layers)
 - Offline time limit and default max tick length were fixed (previously the limits were 1000x too large)

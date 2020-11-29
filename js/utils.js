@@ -115,17 +115,8 @@ function getStartPlayer() {
 
 	playerdata.infoboxes = {}
 	for (layer in layers){
-		playerdata[layer] = {}
-		if (layers[layer].startData) 
-			playerdata[layer] = layers[layer].startData()
-		else playerdata[layer].unlocked = true
-		playerdata[layer].buyables = getStartBuyables(layer)
-		if(playerdata[layer].clickables == undefined) playerdata[layer].clickables = getStartClickables(layer)
-		playerdata[layer].spentOnBuyables = new Decimal(0)
-		playerdata[layer].upgrades = []
-		playerdata[layer].milestones = []
-		playerdata[layer].achievements = []
-		playerdata[layer].challenges = getStartChallenges(layer)
+		playerdata[layer] = getStartLayerData(layer)
+
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
 			playerdata.subtabs[layer] = {}
 			playerdata.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0]
@@ -140,8 +131,28 @@ function getStartPlayer() {
 			for (item in layers[layer].infoboxes)
 				playerdata.infoboxes[layer][item] = false
 		}
+	
 	}
 	return playerdata
+}
+
+function getStartLayerData(layer){
+	layerdata = {}
+	if (layers[layer].startData) 
+		layerdata = layers[layer].startData()
+
+	if (layerdata.unlocked === undefined) layerdata.unlocked = true
+	if (layerdata.total === undefined) layerdata.total = new Decimal(0)
+	if (layerdata.best === undefined) layerdata.best = new Decimal(0)
+
+	layerdata.buyables = getStartBuyables(layer)
+	if(layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer)
+	layerdata.spentOnBuyables = new Decimal(0)
+	layerdata.upgrades = []
+	layerdata.milestones = []
+	layerdata.achievements = []
+	layerdata.challenges = getStartChallenges(layer)
+	return layerdata
 }
 
 
@@ -159,7 +170,6 @@ function getStartClickables(layer){
 	let data = {}
 	if (layers[layer].clickables) {
 		if (isPlainObject(layers[layer].clickables[id]))
-		if (isPlainObject(id))
 			data[id] = ""
 	}
 	return data
@@ -439,6 +449,7 @@ function respecBuyables(layer) {
 
 function canAffordUpgrade(layer, id) {
 	let upg = tmp[layer].upgrades[id]
+	if (tmp[layer].upgrades[id].canAfford !== undefined) return tmp[layer].upgrades[id].canAfford
 	let cost = tmp[layer].upgrades[id].cost
 	return canAffordPurchase(layer, upg, cost) 
 }
@@ -528,31 +539,38 @@ function buyUpgrade(layer, id) {
 }
 
 function buyUpg(layer, id) {
+	let upg = tmp[layer].upgrades[id]
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(id)) return
-	let upg = tmp[layer].upgrades[id]
-	let cost = tmp[layer].upgrades[id].cost
+	if (upg.canAfford === false) return
+	let pay = layers[layer].upgrades[id].pay
+	if (pay !== undefined)
+		pay()
+	else 
+		{
+		let cost = tmp[layer].upgrades[id].cost
 
-	if (upg.currencyInternalName){
-		let name = upg.currencyInternalName
-		if (upg.currencyLocation){
-			if (upg.currencyLocation[name].lt(cost)) return
-			upg.currencyLocation[name] = upg.currencyLocation[name].sub(cost)
-		}
-		else if (upg.currencyLayer){
-			let lr = upg.currencyLayer
-			if (player[lr][name].lt(cost)) return
-			player[lr][name] = player[lr][name].sub(cost)
+		if (upg.currencyInternalName){
+			let name = upg.currencyInternalName
+			if (upg.currencyLocation){
+				if (upg.currencyLocation[name].lt(cost)) return
+				upg.currencyLocation[name] = upg.currencyLocation[name].sub(cost)
+			}
+			else if (upg.currencyLayer){
+				let lr = upg.currencyLayer
+				if (player[lr][name].lt(cost)) return
+				player[lr][name] = player[lr][name].sub(cost)
+			}
+			else {
+				if (player[name].lt(cost)) return
+				player[name] = player[name].sub(cost)
+			}
 		}
 		else {
-			if (player[name].lt(cost)) return
-			player[name] = player[name].sub(cost)
+			if (player[layer].points.lt(cost)) return
+			player[layer].points = player[layer].points.sub(cost)	
 		}
-	}
-	else {
-		if (player[layer].points.lt(cost)) return
-		player[layer].points = player[layer].points.sub(cost)	
 	}
 	player[layer].upgrades.push(id);
 	if (upg.onPurchase != undefined)
