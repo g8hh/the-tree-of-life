@@ -149,7 +149,7 @@ function getStartBuyables(layer){
 	let data = {}
 	if (layers[layer].buyables) {
 		for (id in layers[layer].buyables)
-			if (!isNaN(id))
+			if (isPlainObject(layers[layer].buyables[id]))
 				data[id] = new Decimal(0)
 	}
 	return data
@@ -158,9 +158,9 @@ function getStartBuyables(layer){
 function getStartClickables(layer){
 	let data = {}
 	if (layers[layer].clickables) {
-		for (id in layers[layer].clickables)
-			if (!isNaN(id))
-				data[id] = ""
+		if (isPlainObject(layers[layer].clickables[id]))
+		if (isPlainObject(id))
+			data[id] = ""
 	}
 	return data
 }
@@ -169,8 +169,8 @@ function getStartChallenges(layer){
 	let data = {}
 	if (layers[layer].challenges) {
 		for (id in layers[layer].challenges)
-			if (!isNaN(id))
-				data[id] = 0
+		if (isPlainObject(layers[layer].challenges[id]))
+		data[id] = 0
 	}
 	return data
 }
@@ -698,7 +698,7 @@ function updateMilestones(layer){
 
 function updateAchievements(layer){
 	for (id in layers[layer].achievements){
-		if (!isNaN(id) && !(player[layer].achievements.includes(id)) && layers[layer].achievements[id].done()) {
+		if (isPlainObject(layers[layer].achievements[id]) && !(player[layer].achievements.includes(id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
 		}
@@ -765,5 +765,9 @@ function prestigeButtonText(layer)
 function isFunction(obj) {
 	return !!(obj && obj.constructor && obj.call && obj.apply);
   };
-  
+
+function isPlainObject(obj) {
+	return (!!obj) && (obj.constructor === Object)
+}
+
 document.title = modInfo.name

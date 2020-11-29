@@ -94,9 +94,14 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - roundUpCost: **optional**. a bool, which is true if the resource cost needs to be rounded up. (use if the base resource is a "static" currency.)
 
-- canBuyMax(): **sometimes required**. required for static layers, function used to determine if buying max is permitted.
-
 - gainMult(), gainExp(): **optional**. Functions that calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in any bonuses here.
+
+- softcap, softcapPower: **optional**. For normal layers, gain beyond [softcap] points is put to the [softcapPower]th power
+    Default for softcap is e1e7, and for power is 0.5.
+
+## Other prestige-related features
+
+- canBuyMax(): **sometimes required**. required for static layers, function used to determine if buying max is permitted.
 
 - onPrestige(gain): **optional**. A function that triggers when this layer prestiges, just before you gain the currency.  Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
