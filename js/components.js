@@ -122,10 +122,13 @@ function loadVue() {
 		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(player.hideChallenges && maxedChallenge(layer, [data]))" v-bind:class="{hChallenge: true, done: hasChallenge(layer, data), canComplete: player[layer].activeChallenge == data && canCompleteChallenge(layer, data)}">
 			<br><h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
 			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{player[layer].activeChallenge==(data)?(canCompleteChallenge(layer, data)?"Finish":"Exit Early"):(hasChallenge(layer, data)?"Completed":"Start")}}</button><br><br>
-			<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
-			Goal: {{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : "points"}}<br>
-			Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span><br>
-			<span v-if="tmp[layer].challenges[data].rewardEffect!==undefined">Currently: <span v-html="(tmp[layer].challenges[data].rewardDisplay) ? (tmp[layer].challenges[data].rewardDisplay) : format(tmp[layer].challenges[data].rewardEffect)"></span></span>
+			<span v-if="tmp[layer].challenges[data].fullDisplay" v-html="tmp[layer].challenges[data].fullDisplay"></span>
+			<span v-else>
+				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
+				Goal: {{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : "points"}}<br>
+				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span><br>
+				<span v-if="tmp[layer].challenges[data].rewardEffect!==undefined">Currently: <span v-html="(tmp[layer].challenges[data].rewardDisplay) ? (tmp[layer].challenges[data].rewardDisplay) : format(tmp[layer].challenges[data].rewardEffect)"></span></span>
+			</span>
 		</div>
 		`
 	})
