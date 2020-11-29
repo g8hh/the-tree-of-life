@@ -1,6 +1,10 @@
 # The Modding Tree changelog:
 
-- Added fullDisplay feature to upgrades and challenges, overrides other displays and lets you set the full text.
+###
+- Another attempt to fix challenges not visually updating.
+
+### v2.2.5 11/29/20
+- Added features for overriding the displays and costs/goals of upgrades and challenges to make them fully custom.
 - best, total, and unlocked are always automatically added to layerData (but best and total will only display if you add them yourself).
 - Fixed getStartClickables.
 
