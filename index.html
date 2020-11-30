@@ -60,7 +60,7 @@
 			</div>
 			<overlay-head v-if="!(gameEnded && !player.keepGoing)"></overlay-head>
 			<div class="sideLayers" >
-				<div v-for="node in OTHER_LAYERS['side']"><tree--node :layer='node' :abb='tmp[node].symbol' :size="'small'"></tree-node></div>
+				<div v-for="node in OTHER_LAYERS['side']"><tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'"></tree-node></div>
 			</div>
 		</div>
 

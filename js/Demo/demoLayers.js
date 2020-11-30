@@ -83,7 +83,8 @@ addLayer("c", {
                 name: "Fun",
                 completionLimit: 3,
 			    challengeDescription() {return "Makes the game 0% harder<br>"+challengeCompletions(this.layer, this.id) + "/" + this.completionLimit + " completions"},
-			    unlocked() { return player[this.layer].best.gt(0) },
+                unlocked() { return player[this.layer].best.gt(0) },
+                goalDescription: 'Have 20 lollipops I guess',
                 goal: new Decimal("20"),
                 currencyDisplayName: "lollipops", // Use if using a nonstandard currency
                 currencyInternalName: "points", // Use if using a nonstandard currency

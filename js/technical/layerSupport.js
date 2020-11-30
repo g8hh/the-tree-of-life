@@ -181,7 +181,7 @@ function addLayer(layerName, layerData){ // Call this to add layers from a diffe
     layers[layerName].isLayer = true
 }
 
-function addNode(layerName, layerData){ // Does the same thing
+function addNode(layerName, layerData){ // Does the same thing, but for non-layer nodes
     layers[layerName] = layerData
     layers[layerName].isLayer = false
 }

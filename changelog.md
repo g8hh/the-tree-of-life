@@ -1,7 +1,10 @@
 # The Modding Tree changelog:
 
-###
+### v2.2.6 11/30/20
+- Added goalDescription for challenges and made the new "canComplete" system the standard.
 - Another attempt to fix challenges not visually updating.
+- Fixed side layers not appearing.
+- Fixed getStartClickables again.
 
 ### v2.2.5 11/29/20
 - Added features for overriding the displays and costs/goals of upgrades and challenges to make them fully custom.

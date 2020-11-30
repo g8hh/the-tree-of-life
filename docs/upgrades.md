@@ -61,6 +61,6 @@ By default, upgrades use the main prestige currency for the layer. You can inclu
 
 If you want to do something more complicated like upgrades that cost two currencies, you can override the purchase system with these (and you need to use fullDisplay as well)
 
--canAfford(): **OVERRIDE**, a function determining if you are able to buy the upgrade
+- canAfford(): **OVERRIDE**, a function determining if you are able to buy the upgrade
 
--pay(): **OVERRIDE**, a function that reduces your currencies when you buy the upgrade
+- pay(): **OVERRIDE**, a function that reduces your currencies when you buy the upgrade

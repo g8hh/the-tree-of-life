@@ -1,6 +1,6 @@
 # Challenges
 
-Useful functions for dealing with Challenges and implementing their effects:
+Challenges can have fully customizable win conditions. Useful functions for dealing with Challenges and implementing their effects:
 
 - inChallenge(layer, id): determine if the player is in a given challenge (or another challenge on the same layer that counts as this one).
 - hasChallenge(layer, id): determine if the player has completed the challenge.
@@ -31,6 +31,11 @@ Individual Challenges can have these features:
 
 - challengeDescription: A description of what makes the challenge a challenge. *You will need to implement these elsewhere.* It can also be a function that returns updating text. Can use basic HTML.
 
+- goalDescription: A description of the win condition for the challenge. It can also be a function that returns updating text.
+    Can use basic HTML. (Optional if using the old goal system)
+
+- canComplete(): A function that returns true if you meet the win condition for the challenge. (Optional if using the old goal system)
+
 - rewardDescription: A description of the reward's effect. *You will also have to implement the effect where it is applied.* It can also be a function that returns updating text. Can use basic HTML.
 
 - rewardEffect(): **optional**. A function that calculates and returns the current values of any bonuses from the reward. Can return a value or an object containing multiple values. Can use basic HTML.
@@ -38,8 +43,6 @@ Individual Challenges can have these features:
 - rewardDisplay(): **optional**. A function that returns a display of the current effects of the reward with formatting. Default behavior is to just display the a number appropriately formatted.
 
 - fullDisplay(): **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the challenge. Can use basic HTML.
-
-- goal: A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
 
 - unlocked(): **optional**. A function returning a bool to determine if the challenge is visible or not. Default is unlocked.
 
@@ -55,16 +58,17 @@ Individual Challenges can have these features:
 
 - id: **assigned automagically**. It's the "key" which the challenge was stored under, for convenient access. The challenge in the example's id is 11.
 
-By default, challenges use basic Points for the goal. You can change that using these features:
 
-- currencyDisplayName: **optional**. the name to display for the currency for the goal
 
-- currencyInternalName: **optional**. the internal name for that currency
+The old goal system uses these features:
 
-- currencyLayer: **optional**. the internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
+- goal: **deprecated**, A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
 
-- currencyLocation: **optional**. if your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+- currencyDisplayName: **deprecated**. the name to display for the currency for the goal
 
-You can also set a fully custom win condition that overrides other goal-related features (use fullDisplay along with this)
+- currencyInternalName: **deprecated**. the internal name for that currency
 
-- canComplete(): **OVERRIDE**, returns true if you can complete the challenge
+- currencyLayer: **deprecated**. the internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
+
+- currencyLocation(): **deprecated**. if your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+
