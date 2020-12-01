@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+- Made hard resetting more effective.
+- Removed Herobrine from getStartClickables.
+
 ### v2.2.6 11/30/20
 - Added goalDescription for challenges and made the new "canComplete" system the standard.
 - Another attempt to fix challenges not visually updating.
