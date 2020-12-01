@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.2.6",
+	tmtNum: "2.2.7",
 	tmtName: "Uprooted"
 }
 
@@ -312,6 +312,7 @@ function gameLoop(diff) {
 			let layer = TREE_LAYERS[x][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
+			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
 
@@ -320,6 +321,7 @@ function gameLoop(diff) {
 			let layer = OTHER_LAYERS[row][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
+			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
 
@@ -328,6 +330,13 @@ function gameLoop(diff) {
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
+}
+
+function autobuyUpgrades(layer){
+	if (!tmp[layer].upgrades) return
+	for (id in tmp[layer].upgrades)
+		if (layers[layer].canAfford === undefined || layers[layer].canAfford() === true)
+			buyUpg(layer, id) 
 }
 
 function hardReset() {

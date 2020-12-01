@@ -1,5 +1,10 @@
 # The Modding Tree changelog:
 
+### v2.2.7 11/30/20
+- Added autoUpgrade feature.
+- resource-display now shows resource gain per second if passiveGain is active.
+- Fixed formatting issues on some large numbers.
+- Better support for using classed objects in player and in layers/tmp.
 - Made hard resetting more effective.
 - Removed Herobrine from getStartClickables.
 

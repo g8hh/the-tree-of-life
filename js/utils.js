@@ -1,6 +1,6 @@
 // ************ Number formatting ************
 
-function exponentialFormat(num, precision) {
+function exponentialFormat(num, precision, mantissa = true) {
 	let e = num.log10().floor()
 	let m = num.div(Decimal.pow(10, e))
 	if(m.toStringWithDecimalPlaces(precision) == 10) {
@@ -8,13 +8,15 @@ function exponentialFormat(num, precision) {
 		e = e.add(1)
 	}
 	e = (e.gte(10000) ? commaFormat(e, 0) : e.toStringWithDecimalPlaces(0))
-	return m.toStringWithDecimalPlaces(precision)+"e"+e
-}
+	if (mantissa)
+		return m.toStringWithDecimalPlaces(precision)+"e"+e
+		else return "e"+e
+	}
 
 function commaFormat(num, precision) {
 	if (num === null || num === undefined) return "NaN"
 	if (num.mag < 0.001) return (0).toFixed(precision)
-	return num.toStringWithDecimalPlaces(precision).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+	return num.toStringWithDecimalPlaces(precision).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
 }
 
 
@@ -34,7 +36,7 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision=2) {
+function format(decimal, precision=2,) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign)||isNaN(decimal.layer)||isNaN(decimal.mag)) {
 		player.hasNaN = true;
@@ -46,7 +48,9 @@ function format(decimal, precision=2) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
-	} else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
+	}
+	else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
+	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return regularFormat(decimal, precision)
@@ -224,8 +228,8 @@ function fixData(defaultData, newData) {
 			else
 				newData[item] = new Decimal(newData[item])
 		}
-		else if ((!!defaultData[item]) && (defaultData[item].constructor === Object)) {
-			if (newData[item] === undefined || (defaultData[item].constructor !== Object))
+		else if ((!!defaultData[item]) && (typeof defaultData[item] === "object")) {
+			if (newData[item] === undefined || (typeof defaultData[item] !== "object"))
 				newData[item] = defaultData[item]
 			else
 				fixData(defaultData[item], newData[item])

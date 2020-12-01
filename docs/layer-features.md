@@ -136,7 +136,9 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - update(diff): **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick. 
 
-- automate(): **optional**. This function is called every game tick, after production. Use it to activate automation things other than prestige, if appropriate. 
+- autoUpgrade: **optional**, a boolean value, if true, the game will attempt to buy this layer's upgrades every tick. Defaults to false.
+
+- automate(): **optional**. This function is called every game tick, after production. Use it to activate automation things that aren't otherwise supported. 
 
 - resetsNothing: **optional**. Returns true if this layer shouldn't trigger any resets when you prestige.
 
