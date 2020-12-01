@@ -169,7 +169,7 @@ function getStartBuyables(layer){
 function getStartClickables(layer){
 	let data = {}
 	if (layers[layer].clickables) {
-		for (id in layers[layer].buyables)
+		for (id in layers[layer].clickables)
 			if (isPlainObject(layers[layer].clickables[id]))
 				data[id] = ""
 	}
