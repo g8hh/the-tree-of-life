@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.2.7",
+	tmtNum: "2.2.7.1",
 	tmtName: "Uprooted"
 }
 
@@ -272,6 +272,12 @@ VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSI
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
 
+function autobuyUpgrades(layer){
+	if (!tmp[layer].upgrades) return
+	for (id in tmp[layer].upgrades)
+		if (isPlainObject(tmp[layers].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true))
+			buyUpg(layer, id) 
+}
 
 function gameLoop(diff) {
 	if (isEndgame() || gameEnded) gameEnded = 1
@@ -330,13 +336,6 @@ function gameLoop(diff) {
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
-}
-
-function autobuyUpgrades(layer){
-	if (!tmp[layer].upgrades) return
-	for (id in tmp[layer].upgrades)
-		if (layers[layer].canAfford === undefined || layers[layer].canAfford() === true)
-			buyUpg(layer, id) 
 }
 
 function hardReset() {
