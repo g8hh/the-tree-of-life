@@ -15,7 +15,6 @@ addLayer("c", {
             beep: false,
         }},
         color: "#4BDC13",
-        autoUpgrade: true,
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
         resource: "lollipops", // Name of prestige currency
         baseResource: "candies", // Name of resource prestige is based on

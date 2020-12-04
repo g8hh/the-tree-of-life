@@ -27,6 +27,8 @@ You can make almost any value dynamic by using a function in its place, includin
 
     Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a doReset to them.
 
+- displayRow: **OVERRIDE** Changes where the layer node appears without changing where it is in the reset order.
+
 - resource: Name of the main currency you gain by resetting on this layer.
 
 - effect(): **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency. Can return a value or an object containing multiple values. *You will also have to implement the effect where it is applied.*

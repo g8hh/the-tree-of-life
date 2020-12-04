@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.2.7.1",
+	tmtNum: "2.2.8",
 	tmtName: "Uprooted"
 }
 
@@ -58,6 +58,12 @@ function getNextAt(layer, canMax=false, useType = null) {
 	} else {
 		return new Decimal(0)
 	}}
+
+function softcap(value, cap, power = 0.5) {
+	if (value.lte(cap)) return value
+	else
+		return value.pow(power).times(cap.pow(decimalOne.sub(power)))
+}
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){

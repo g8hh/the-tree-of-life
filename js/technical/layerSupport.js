@@ -143,19 +143,23 @@ function updateLayers(){
         if(layers[layer].base === undefined || layers[layer].base <= 1) layers[layer].base = 2
         if(layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7")
         if(layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal("0.5")
+        if(layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row
 
         let row = layers[layer].row
+
+        let displayRow = layers[layer].displayRow
+
         if(!ROW_LAYERS[row]) ROW_LAYERS[row] = {}
-        if(!TREE_LAYERS[row] && !isNaN(row)) TREE_LAYERS[row] = []
-        if(!OTHER_LAYERS[row] && isNaN(row)) OTHER_LAYERS[row] = []
+        if(!TREE_LAYERS[displayRow] && !isNaN(displayRow)) TREE_LAYERS[displayRow] = []
+        if(!OTHER_LAYERS[displayRow] && isNaN(displayRow)) OTHER_LAYERS[displayRow] = []
 
         ROW_LAYERS[row][layer]=layer;
         let position = (layers[layer].position !== undefined ? layers[layer].position : layer)
         
-        if (!isNaN(row)) TREE_LAYERS[row].push({layer: layer, position: position})
-        else OTHER_LAYERS[row].push({layer: layer, position: position})
+        if (!isNaN(displayRow)) TREE_LAYERS[displayRow].push({layer: layer, position: position})
+        else OTHER_LAYERS[displayRow].push({layer: layer, position: position})
 
-        if (maxRow < layers[layer].row) maxRow = layers[layer].row
+        if (maxRow < layers[layer].displayRow) maxRow = layers[layer].displayRow
         
     }
     for (row in OTHER_LAYERS) {

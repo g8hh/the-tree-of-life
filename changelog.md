@@ -1,5 +1,12 @@
 # The Modding Tree changelog:
 
+### v2.2.8 12/03/20
+- Double-clicking a layer node brings you to the main subtab for that layer.
+- Attempted to fix challenges visually updating a different way.
+- Added a softcap function for use in formulas.
+- Added displayRow feature, which lets layers be shown somewhere separate from where they are in the reset order (e.g. side layers)
+- Fixed autoupgrade issue.
+
 ### v2.2.7 11/30/20
 - Added autoUpgrade feature.
 - resource-display now shows resource gain per second if passiveGain is active.

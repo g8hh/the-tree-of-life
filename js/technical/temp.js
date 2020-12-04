@@ -1,4 +1,5 @@
 var tmp = {}
+var temp = tmp // Proxy for tmp
 var NaNalert = false;
 
 // Tmp will not call these
@@ -32,6 +33,7 @@ function setupTemp() {
 		tmp[layer].prestigeButtonText = {}
 		setupBarStyles(layer)
 	}
+	temp = tmp
 }
 
 function setupTempData(layerData, tmpData) {
@@ -75,6 +77,8 @@ function updateTemp() {
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
 		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
+		updateChallengeDisplay(layer)
+
 	}
 
 	tmp.pointGen = getPointGen()
@@ -119,6 +123,20 @@ function updateTempData(layerData, tmpData) {
 function updateChallengeTemp(layer)
 {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges)
+	updateChallengeDisplay(layer)
+}
+
+function updateChallengeDisplay(layer) {
+	for (id in player[layer].challenges) {
+		let style = "locked"
+		console.log(layer + " " + id)
+		if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) style = "canComplete"
+		else if (hasChallenge(layer, id)) style = "done"
+		tmp[layer].challenges[id].defaultStyle = style
+
+		tmp[layer].challenges[id].buttonText = (player[layer].activeChallenge==(id)?(canCompleteChallenge(layer, id)?"Finish":"Exit Early"):(hasChallenge(layer, id)?"Completed":"Start"))
+	}
+
 }
 
 function updateBuyableTemp(layer)

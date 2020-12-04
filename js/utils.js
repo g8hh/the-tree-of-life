@@ -627,7 +627,10 @@ function inChallenge(layer, id){
 var onTreeTab = true
 function showTab(name) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
-
+	if (player.tab === name && player.subtabs[name] && player.subtabs[name].mainTabs) {
+		console.log("momo")
+		player.subtabs[name].mainTabs = Object.keys(layers[name].tabFormat)[0]
+	}
 	var toTreeTab = name == "none"
 	player.tab = name
 	if (player.navTab == "none" && (tmp[name].row !== "side") && (tmp[name].row !== "otherside")) player.lastSafeTab = name
