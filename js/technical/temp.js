@@ -129,7 +129,6 @@ function updateChallengeTemp(layer)
 function updateChallengeDisplay(layer) {
 	for (id in player[layer].challenges) {
 		let style = "locked"
-		console.log(layer + " " + id)
 		if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) style = "canComplete"
 		else if (hasChallenge(layer, id)) style = "done"
 		tmp[layer].challenges[id].defaultStyle = style

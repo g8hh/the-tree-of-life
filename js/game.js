@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.2.8",
+	tmtNum: "2.2.9",
 	tmtName: "Uprooted"
 }
 

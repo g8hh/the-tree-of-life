@@ -1,5 +1,11 @@
 # The Modding Tree changelog:
 
+- The changelog tab is back, and can be set in mod.js.
+- The victory screen text is configurable.
+- Added an argument to use specific rows in an "upgrades" component.
+- Added the ability to easily make a tab that is a collection of layers in subtabs.
+- Improved spacing for embedding layers with subtabs into subtabs.
+
 ### v2.2.8 12/03/20
 - Double-clicking a layer node brings you to the main subtab for that layer.
 - Attempted to fix challenges visually updating a different way.

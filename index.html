@@ -28,10 +28,9 @@
 		<div v-if="(gameEnded && !player.keepGoing)" class="fullWidth">
 			<br>
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
-			<h3>Congratulations! You have reached the end and beaten this game, but for now...</h3><br>
+			<h3 v-html="modInfo.winText"></h3><br>
 			<h3>Please check the Discord to see if there are new content updates!</h3><br><br>
 			<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div>
-			<div v-if="player.timePlayedReset">Make sure that you record the time in your stream or else your speedrun won't count!</div>
 			<br>
 			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
 			<br><br><br>
@@ -39,14 +38,10 @@
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
 			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 			<br><br>
-			If you would like to speedrun this, press Play Again and record your attempt, then submit on the Discord Server in the channel #speedrun-submissions.
-			<br><br><br>
-			<h1>Oh, you are still reading this?</h1>
-			<br>
 		</div>		
 		
 		<div id="treeOverlay" v-if="!(gameEnded && !player.keepGoing)" class="treeOverlay" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: (player.tab == 'none' || player.navTab == 'none'), col: (player.tab !== 'none' && player.navTab !== 'none'), left: (player.tab !== 'none' && player.navTab !== 'none')}">
-			<div id="version" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
+			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
 			<button v-if= "player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside')" class="other-back overlayThing" onclick="goBack()">←</button>
 			<img id="optionWheel"  class="overlayThing" v-if="player.tab!='options-tab'" src="options_wheel.png" onclick="showTab('options-tab')"></img>
 			<div id="info" v-if="player.tab!='info-tab'"  class="overlayThing" onclick="showTab('info-tab')"><br>i</div>

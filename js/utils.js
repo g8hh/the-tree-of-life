@@ -256,6 +256,7 @@ function load() {
 	changeTheme();
 	changeTreeQuality();
 	updateLayers()
+	setupModInfo()
 
 	setupTemp();
 	updateTemp();
@@ -263,6 +264,11 @@ function load() {
 	loadVue();
 }
 
+function setupModInfo() {
+	modInfo.changelog = changelog
+	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`
+
+}
 
 function fixNaNs() {
 	NaNcheck(player)

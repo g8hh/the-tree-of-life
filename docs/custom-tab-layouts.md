@@ -41,7 +41,9 @@ These are the existing components, but you can create more in [components.js](/j
 
 - prestige-button: The argument is a string that the prestige button should say before the amount of currency you will gain. It can also be a function that returns updating text.
 
-- upgrades, milestones, challenges, achievements: Display the upgrades, milestones, and challenges for a layer, as appropriate.
+- upgrades: The layer's upgrades. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
+
+- milestones, challenges, achievements: Display the upgrades, milestones, and challenges for a layer, as appropriate.
 
 - buyables, clickables: Display all of the buyables/clickables for this layer, as appropriate. The argument is optional and is the size of the boxes in pixels.
 

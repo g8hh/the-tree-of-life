@@ -395,7 +395,6 @@ addLayer("f", {
     tooltipLocked() { // Optional, tooltip displays when the layer is locked
         return ("This weird farmer dinosaur will only see you if you have at least " + this.requires() + " candies. You only have " + formatWhole(player.points))
     },
-
     midsection: [
         "blank", ['display-image', 'https://images.beano.com/store/24ab3094eb95e5373bca1ccd6f330d4406db8d1f517fc4170b32e146f80d?auto=compress%2Cformat&dpr=1&w=390'],
         ["display-text", "Bork bork!"]

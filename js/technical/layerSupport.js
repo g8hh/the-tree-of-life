@@ -144,6 +144,7 @@ function updateLayers(){
         if(layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7")
         if(layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal("0.5")
         if(layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row
+        if(layers[layer].name === undefined) layers[layer].name = layer
 
         let row = layers[layer].row
 
@@ -180,16 +181,36 @@ function updateLayers(){
     updateHotkeys()
 }
 
-function addLayer(layerName, layerData){ // Call this to add layers from a different file!
+
+function addLayer(layerName, layerData, tabLayers = null){ // Call this to add layers from a different file!
     layers[layerName] = layerData
     layers[layerName].isLayer = true
+    if (tabLayers !== null)
+    {
+        let format = {}
+        for (id in tabLayers) {
+            layer = tabLayers[id]
+            format[(layers[layer].name ? layers[layer].name : layer)] = {
+                embedLayer: layer,
+                buttonStyle() {
+                    if (!tmp[this.embedLayer].nodeStyle) return {'border-color': tmp[this.embedLayer].color}
+                    else {
+                        style = tmp[this.embedLayer].nodeStyle
+                        if (style['border-color'] === undefined) style['border-color'] = tmp[this.embedLayer].color
+                        return style
+                    } 
+                },
+                unlocked() {return tmp[this.embedLayer].layerShown},
+            }       
+        }
+        layers[layerName].tabFormat = format
+    }
 }
 
 function addNode(layerName, layerData){ // Does the same thing, but for non-layer nodes
     layers[layerName] = layerData
     layers[layerName].isLayer = false
 }
-
 
 // If data is a function, return the result of calling it. Otherwise, return the data.
 function readData(data, args=null){
@@ -221,5 +242,10 @@ addLayer("info-tab", {
 
 addLayer("options-tab", {
     tabFormat: ["options-tab"],
+    row: "otherside"
+})
+
+addLayer("changelog-tab", {
+    tabFormat() {return ([["raw-html", modInfo.changelog]])},
     row: "otherside"
 })
