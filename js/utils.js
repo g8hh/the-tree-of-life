@@ -633,8 +633,7 @@ function inChallenge(layer, id){
 var onTreeTab = true
 function showTab(name) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
-	if (player.tab === name && player.subtabs[name] && player.subtabs[name].mainTabs) {
-		console.log("momo")
+	if (player.tab === name && isPlainObject(tmp[name].tabFormat)) {
 		player.subtabs[name].mainTabs = Object.keys(layers[name].tabFormat)[0]
 	}
 	var toTreeTab = name == "none"
@@ -813,7 +812,7 @@ var activePopups = [];
 var popupID = 0;
 
 // Function to show popups
-function addPopup(type="none",text="This is a test popup.",title="",timer=3) {
+function addPopup(type="none",text="This is a test popup.",title="",timer=3, color="") {
 	switch(type) {
 		case "achievement":
 			popupTitle = "Achievement Unlocked!";
