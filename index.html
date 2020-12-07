@@ -68,6 +68,18 @@
 			<layer-tab :layer="player.navTab == 'none' ? player.tab : player.navTab" ></layer-tab>
 
 		</div>
+
+		<!-- Popups -->
+		<div class="popup-container">
+			<transition-group name="fade">
+				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type" v-bind:key="popup.id">
+					<h3>{{popup.title}}</h3><br>
+					<h2 v-html="popup.message"></h2>
+				</div>
+			</transition-group>
+		</div>
+
+
 		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(gameEnded && !player.keepGoing)" v-bind:class="{ fullWidth: player.navTab == 'none', col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">
 			<div v-for="layer in LAYERS" >
 				<div v-if="player.tab==layer" > 

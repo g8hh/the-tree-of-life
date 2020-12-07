@@ -441,7 +441,8 @@ function loadVue() {
 			subtabResetNotify,
 			VERSION,
 			LAYERS,
-			hotkeys
+			hotkeys,
+			activePopups,
 		},
 	})
 }

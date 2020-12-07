@@ -377,6 +377,7 @@ var interval = setInterval(function() {
 	updateTemp();
 	gameLoop(diff)
 	fixNaNs()
+	adjustPopupTime(diff) 
 	ticking = false
 }, 50)
 
