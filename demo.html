@@ -73,7 +73,7 @@
 		<!-- Popups -->
 		<div class="popup-container">
 			<transition-group name="fade">
-				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type" v-bind:key="popup.id">
+				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type" v-bind:key="popup.id" v-bind:style="popup.color ? {'background-color': popup.color} : {}">
 					<h3>{{popup.title}}</h3><br>
 					<h2 v-html="popup.message"></h2>
 				</div>

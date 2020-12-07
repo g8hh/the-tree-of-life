@@ -365,6 +365,7 @@ addLayer("c", {
             return (player.c.buyables[11] == 1)
         },
         resetDescription: "Melt your points into ",
+        milestonePopups: true
 })
 
 
@@ -488,6 +489,7 @@ addLayer("a", {
         tooltip() { // Optional, tooltip displays when the layer is locked
             return ("Achievements")
         },
+        achievementPopups: true,
         achievements: {
             rows: 2,
             cols: 3,

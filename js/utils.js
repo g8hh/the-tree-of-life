@@ -725,8 +725,10 @@ function toNumber(x) {
 
 function updateMilestones(layer){
 	for (id in layers[layer].milestones){
-		if (!(player[layer].milestones.includes(id)) && layers[layer].milestones[id].done())
+		if (!(player[layer].milestones.includes(id)) && layers[layer].milestones[id].done()){
 			player[layer].milestones.push(id)
+			if (tmp[layer].milestonePopups) popup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
+		}
 	}
 }
 
@@ -735,7 +737,7 @@ function updateAchievements(layer){
 		if (isPlainObject(layers[layer].achievements[id]) && !(player[layer].achievements.includes(id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
-			popup("achievement", layers[layer].achievements[id].name, "Achievement Gotten!");
+			if (tmp[layer].achievementPopups) popup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
 		}
 	}
 }
@@ -814,7 +816,7 @@ var activePopups = [];
 var popupID = 0;
 
 // Function to show popups
-function addPopup(type="none",text="This is a test popup.",title="",timer=3, color="") {
+function popup(type="none",text="This is a test popup.",title="",timer=3, color="") {
 	switch(type) {
 		case "achievement":
 			popupTitle = "Achievement Unlocked!";
@@ -833,7 +835,7 @@ function addPopup(type="none",text="This is a test popup.",title="",timer=3, col
 	popupMessage = text;
 	popupTimer = timer; 
 
-	activePopups.push({"time":popupTimer,"type":popupType,"title":popupTitle,"message":(popupMessage+"\n"),"id":popupID})
+	activePopups.push({"time":popupTimer,"type":popupType,"title":popupTitle,"message":(popupMessage+"\n"),"id":popupID, "color":color})
 	popupID++;
 }
 

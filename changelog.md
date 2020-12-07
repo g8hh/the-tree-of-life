@@ -1,8 +1,9 @@
 # The Modding Tree changelog:
 
 - Added achievement/milestone popups (thank you to Jacorb for this contribution!)
+    (They have to be enabled with layer features)
 - The changelog tab is back, and can be set in mod.js.
-- Layer nodes and respec buttons are unselected after clicking them so you don't accidentally press them again with "enter".
+- Layer nodes and respec buttons no longer stay focused after clicking them so you don't accidentally press them again with "enter".
 - The victory screen text is configurable.
 - Added an argument to use specific rows in an "upgrades" component.
 - Added the ability to easily make a tab that is a collection of layers in subtabs.
