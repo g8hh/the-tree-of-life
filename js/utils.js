@@ -456,6 +456,7 @@ function respecBuyables(layer) {
 	if (!confirm("Are you sure you want to respec? This will force you to do a \"" + (tmp[layer].name ? tmp[layer].name : layer) + "\" reset as well!")) return
 	layers[layer].buyables.respec()
 	updateBuyableTemp(layer)
+	document.activeElement.blur()
 }
 
 function canAffordUpgrade(layer, id) {
@@ -641,6 +642,7 @@ function showTab(name) {
 	if (player.navTab == "none" && (tmp[name].row !== "side") && (tmp[name].row !== "otherside")) player.lastSafeTab = name
 	delete player.notify[name]
 	needCanvasUpdate = true
+	document.activeElement.blur()
 }
 
 function showNavTab(name) {
