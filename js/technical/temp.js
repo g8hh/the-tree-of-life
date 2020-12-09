@@ -155,7 +155,7 @@ function constructAchievementStyles(layer){
 		if (isPlainObject(ach)) {
 			let style = []
 			if (ach.image){ 
-				style.push({'background-image': ach.image})
+				style.push({'background-image': 'url("' + ach.image + '")'})
 			} 
 			if (!ach.unlocked) style.push({'visibility': 'hidden'})
 			style.push(ach.style)

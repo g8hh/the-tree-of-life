@@ -369,7 +369,7 @@ function loadVue() {
 			"
 			
 			v-bind:style="tmp[layer].achievements[data].computedStyle">
-			<span v-if= "tmp[layer].achievements[data].name"><br><h3 v-html="tmp[layer].achievements[data].name"></h3><br></span>
+			<span v-if= "tmp[layer].achievements[data].name"><br><h3 v-bind:style="tmp[layer].achievements[data].textStyle" v-html="tmp[layer].achievements[data].name"></h3><br></span>
 		</div>
 		`
 	})

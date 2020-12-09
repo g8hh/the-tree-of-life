@@ -39,7 +39,11 @@ Individual achievement can have these features:
 
 - onComplete() - **optional**. this function will be called when the achievement is completed.
 
+- image: **optional**, puts the image from the given URL (relative or absolute) in the achievement
+
 - style: **optional**. Applies CSS to this achievement, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+
+- textStyle: **optional**. Applies CSS to the text, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 

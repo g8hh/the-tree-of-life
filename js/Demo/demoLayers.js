@@ -493,6 +493,7 @@ addLayer("a", {
             rows: 2,
             cols: 3,
             11: {
+                image: "discord.png",
                 name: "Get me!",
                 done() {return true}, // This one is a freebie
                 goalTooltip: "How did this happen?", // Shows when achievement is not completed
@@ -503,6 +504,7 @@ addLayer("a", {
                 done() {return false},
                 goalTooltip: "Mwahahaha!", // Shows when achievement is not completed
                 doneTooltip: "HOW????", // Showed when the achievement is completed
+                textStyle: {'color': '#04e050'},
             },
             13: {
                 name: "EIEIO",
