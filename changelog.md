@@ -1,22 +1,25 @@
 # The Modding Tree changelog:
 
+## v2.3: Cooler and Newer - 12/
 - Added achievement/milestone popups (thank you to Jacorb for this contribution!)
     (They have to be enabled with layer features)
 - The changelog tab is back, and can be set in mod.js.
 - Layer nodes and respec buttons no longer stay focused after clicking them so you don't accidentally press them again with "enter".
 - The victory screen text is configurable.
 - Added an argument to use specific rows in an "upgrades" component.
+- Fixed the comma appearing in the main display when there was no effectDescription
 - Added the ability to easily make a tab that is a collection of layers in subtabs.
 - Improved spacing for embedding layers with subtabs into subtabs.
 
-### v2.2.8 12/03/20
+
+### v2.2.8 - 12/03/20
 - Double-clicking a layer node brings you to the main subtab for that layer.
 - Attempted to fix challenges visually updating a different way.
 - Added a softcap function for use in formulas.
 - Added displayRow feature, which lets layers be shown somewhere separate from where they are in the reset order (e.g. side layers)
 - Fixed autoupgrade issue.
 
-### v2.2.7 11/30/20
+### v2.2.7 - 11/30/20
 - Added autoUpgrade feature.
 - resource-display now shows resource gain per second if passiveGain is active.
 - Fixed formatting issues on some large numbers.
@@ -24,13 +27,13 @@
 - Made hard resetting more effective.
 - Removed Herobrine from getStartClickables.
 
-### v2.2.6 11/30/20
+### v2.2.6 - 11/30/20
 - Added goalDescription for challenges and made the new "canComplete" system the standard.
 - Another attempt to fix challenges not visually updating.
 - Fixed side layers not appearing.
 - Fixed getStartClickables again.
 
-### v2.2.5 11/29/20
+### v2.2.5 - 11/29/20
 - Added features for overriding the displays and costs/goals of upgrades and challenges to make them fully custom.
 - best, total, and unlocked are always automatically added to layerData (but best and total will only display if you add them yourself).
 - Fixed getStartClickables.

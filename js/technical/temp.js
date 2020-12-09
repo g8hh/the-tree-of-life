@@ -77,6 +77,7 @@ function updateTemp() {
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
 		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
+		constructAchievementStyles(layer)
 		updateChallengeDisplay(layer)
 
 	}
@@ -148,6 +149,20 @@ function updateClickableTemp(layer)
 	updateTempData(layers[layer].clickables, tmp[layer].clickables)
 }
 
+function constructAchievementStyles(layer){
+	for (id in tmp[layer].achievements) {
+		ach = tmp[layer].achievements[id]
+		if (isPlainObject(ach)) {
+			let style = []
+			if (ach.image){ 
+				style.push({'background-image': ach.image})
+			} 
+			if (!ach.unlocked) style.push({'visibility': 'hidden'})
+			style.push(ach.style)
+			Vue.set(ach, 'computedStyle', style)
+		}
+	}
+}
 
 var DIR_MARGINS = ["margin-bottom", "margin-top", "margin-right", "margin-left"]
 

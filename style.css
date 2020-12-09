@@ -545,7 +545,7 @@ ul {
 
 [tooltip] {
 	position: relative;
-	z-index: 999999 !important
+	z-index: 99999999 !important
 }
 
 [tooltip]:before,
@@ -598,7 +598,6 @@ ul {
 [tooltip]:hover:before,
 [tooltip]:hover:after {
 	visibility: visible;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
 	opacity: 1;
 	white-space: pre-wrap;

@@ -365,7 +365,6 @@ addLayer("c", {
             return (player.c.buyables[11] == 1)
         },
         resetDescription: "Melt your points into ",
-        milestonePopups: true
 })
 
 
@@ -496,7 +495,6 @@ addLayer("a", {
             11: {
                 name: "Get me!",
                 done() {return true}, // This one is a freebie
-                tooltip: "",
                 goalTooltip: "How did this happen?", // Shows when achievement is not completed
                 doneTooltip: "You did it!", // Showed when the achievement is completed
             },
