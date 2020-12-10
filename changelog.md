@@ -2,7 +2,6 @@
 
 ## v2.3: Cooler and Newer Edition - 12/10/20
 - Added achievement/milestone popups (thank you to Jacorb for this contribution!)
-    (They have to be enabled with layer features)
 - The changelog tab is back, and can be set in mod.js.
 - Layer nodes and respec buttons will not be clicked by pressing "enter".
 - Possible fix for flickering tooltips and strange transitions.

@@ -53,4 +53,4 @@ Individual achievement can have these features:
 
 - doneTooltip: **optional, deprecated**. Appears when the achievement is hovered over and completed, overrides the basic tooltip. This can display what the player achieved (the goal), and the rewards, if any. It can also be a function that returns updating text. Can use basic HTML.
 
-Enable achievement popups by adding `achievementsPopups: true` to the layer.
+Disable achievement popups by adding `achievementsPopups: false` to the layer.

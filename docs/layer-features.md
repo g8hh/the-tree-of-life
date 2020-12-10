@@ -75,7 +75,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - infoboxes: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
 
-- achievementPopups, milestonePopups: **optional**, If true, you get a popup message when you get the achievement/milestone.
+- achievementPopups, milestonePopups: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
 
 ## Prestige formula features
 
