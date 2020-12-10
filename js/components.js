@@ -40,13 +40,16 @@ function loadVue() {
 	// data = an array of Components to be displayed in a row
 	Vue.component('row', {
 		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
 		template: `
-		<div class="upgTable instant" >
+		<div class="upgTable instant">
 			<div class="upgRow">
-				<div v-for="item in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]"></div>
+				<div v-for="(item, index) in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -56,13 +59,16 @@ function loadVue() {
 	// data = an array of Components to be displayed in a column
 	Vue.component('column', {
 		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
 		template: `
 		<div class="upgTable instant">
 			<div class="upgCol">
-				<div v-for="item in data">
-					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]"></div>
-					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]"></div>
-					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]"></div>
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -377,10 +383,13 @@ function loadVue() {
 	// Data is an array with the structure of the tree
 	Vue.component('tree', {
 		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
 		template: `<div>
-		<span v-for="row in data"><table>
-			<td v-for="node in row" style = "{width: 0px}">
-				<tree-node  :layer='node' :abb='tmp[node].symbol'></tree-node>
+		<span v-for="(row, r) in data"><table>
+			<td v-for="(node, id) in row" style = "{width: 0px}">
+				<tree-node  :layer='node' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</td>
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>

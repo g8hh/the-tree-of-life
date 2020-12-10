@@ -55,8 +55,8 @@ var systemComponents = {
 		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]">
 		<div v-if="back"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack()">←</button></div>
 		<div v-if="!tmp[layer].tabFormat">
-			<div v-if="spacing" v-bind:style="{'height': spacing}"></div>
-			<info-box v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]"></info-box>
+			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
+			<info-box v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></info-box>
 			<main-display v-bind:style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
 			<div v-if="tmp[layer].type !== 'none'">
 				<prestige-button v-bind:style="tmp[layer].componentStyles['prestige-button']" :layer="layer"></prestige-button>
@@ -64,7 +64,7 @@ var systemComponents = {
 			<resource-display v-bind:style="tmp[layer].componentStyles['resource-display']" :layer="layer"></resource-display>
 			<milestones v-bind:style="tmp[layer].componentStyles.milestones" :layer="layer"></milestones>
 			<div v-if="Array.isArray(tmp[layer].midsection)">
-				<column :layer="layer" :data="tmp[layer].midsection"></column>
+				<column :layer="layer" :data="tmp[layer].midsection" :key="this.$vnode.key + '-mid'"></column>
 			</div>
 			<clickables v-bind:style="tmp[layer].componentStyles['clickables']" :layer="layer"></clickables>
 			<buyables v-bind:style="tmp[layer].componentStyles.buyables" :layer="layer"></buyables>
@@ -75,14 +75,14 @@ var systemComponents = {
 		</div>
 		<div v-if="tmp[layer].tabFormat">
 			<div v-if="Array.isArray(tmp[layer].tabFormat)"><div v-if="spacing" v-bind:style="{'height': spacing}"></div>
-				<column :layer="layer" :data="tmp[layer].tabFormat"></column>
+				<column :layer="layer" :data="tmp[layer].tabFormat" :key="this.$vnode.key + '-col'"></column>
 			</div>
 			<div v-else>
 				<div class="upgTable" v-bind:style="{'padding-top': (embedded ? '0' : '25px'), 'margin-top': (embedded ? '-10px' : '0'), 'margin-bottom': '24px'}">
 					<tab-buttons v-bind:style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" :name="'mainTabs'"></tab-buttons>
 				</div>
-				<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
-				<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
+				<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true" :key="this.$vnode.key + '-' + layer"></layer-tab>
+				<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content" :key="this.$vnode.key + '-col'"></column>
 			</div>
 		</div></div>
 			`
