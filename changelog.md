@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+## v2.3.2 - 12/13/20
+- Fixed achievement/milestone popups.
+
 ## v2.3.1 - 12/12/20
 - Another attempt to fix flickering tooltips.
 - The "this" keyword should work everywhere except tabFormat arrays (although I may have missed some things).
