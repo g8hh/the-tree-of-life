@@ -94,7 +94,7 @@ function canReset(layer)
 	if(tmp[layer].type == "none")
 		return false
 	else
-		return run(layers[layer].canReset, tmp[layer])
+		return run(layers[layer].canReset, layers[layer])
 }
 
 function rowReset(row, layer) {
@@ -102,7 +102,7 @@ function rowReset(row, layer) {
 		if(layers[lr].doReset) {
 
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
-			run(layers[lr].doReset, tmp[lr], layer)
+			run(layers[lr].doReset, layers[lr], layer)
 		}
 		else
 			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
@@ -164,7 +164,7 @@ function doReset(layer, force=false) {
 		} 
 
 		if (layers[layer].onPrestige)
-			run(layers[layer].onPrestige, tmp[layer], gain)
+			run(layers[layer].onPrestige, layers[layer], gain)
 		
 		addPoints(layer, gain)
 		updateMilestones(layer)
@@ -268,7 +268,7 @@ function completeChallenge(layer, x) {
 	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
 		needCanvasUpdate = true
 		player[layer].challenges[x] += 1
-		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, tmp[layer].challenges[x])
+		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, layers[layer].challenges[x])
 	}
 	player[layer].activeChallenge = null
 	updateChallengeTemp(layer)

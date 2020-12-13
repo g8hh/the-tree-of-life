@@ -18,7 +18,7 @@ var systemComponents = {
 			v-bind:id="layer"
 			v-on:click="function() {
 				if(tmp[layer].isLayer) {showTab(layer)}
-				else {run(layers[layer].onClick, tmp[layer])}
+				else {run(layers[layer].onClick, layers[layer])}
 			}"
 
 			v-bind:tooltip="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
