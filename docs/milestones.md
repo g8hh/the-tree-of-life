@@ -5,8 +5,8 @@ Milestones are awarded to the player when they meet a certain goal, and give som
 ```js
 milestones: {
     0: {
-        requirementDesc: "123 waffles",
-        effectDesc: "blah",
+        requirementDescription: "123 waffles",
+        effectDescription: "blah",
         done() { return player.w.points.gte(123) }
     }
     etc

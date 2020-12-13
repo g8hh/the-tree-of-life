@@ -17,7 +17,7 @@ var systemComponents = {
 			v-bind:id="layer"
 			v-on:click="function() {
 				if(tmp[layer].isLayer) {showTab(layer)}
-				else {layers[layer].onClick()}
+				else {run(layers[layer].onClick, tmp[layer])}
 			}"
 
 			v-bind:tooltip="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
@@ -44,7 +44,7 @@ var systemComponents = {
 			v-bind:style="[(tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick) ? {
 				'background-color': tmp[layer].color,
 			} : {}, tmp[layer].nodeStyle]">
-			{{abb}}
+			{{(abb !== '' ? abb : '&nbsp;')}}
 		</button>
 		`
 	},

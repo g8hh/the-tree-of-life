@@ -4,8 +4,8 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.3",
-	tmtName: "Cooler and Newer"
+	tmtNum: "2.3.1",
+	tmtName: "Cooler and Newer Edition"
 }
 
 function getResetGain(layer, useType = null) {
@@ -86,7 +86,7 @@ function shouldNotify(layer){
 }
 
 function canReset(layer)
-{
+{	
 	if(tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
 	else if(tmp[layer].type== "static")
@@ -94,7 +94,7 @@ function canReset(layer)
 	if(tmp[layer].type == "none")
 		return false
 	else
-		return layers[layer].canReset()
+		return run(layers[layer].canReset, tmp[layer])
 }
 
 function rowReset(row, layer) {
@@ -102,7 +102,7 @@ function rowReset(row, layer) {
 		if(layers[lr].doReset) {
 
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
-			layers[lr].doReset(layer)
+			run(layers[lr].doReset, tmp[lr], layer)
 		}
 		else
 			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
@@ -164,7 +164,7 @@ function doReset(layer, force=false) {
 		} 
 
 		if (layers[layer].onPrestige)
-			layers[layer].onPrestige(gain)
+			run(layers[layer].onPrestige, tmp[layer], gain)
 		
 		addPoints(layer, gain)
 		updateMilestones(layer)
@@ -246,7 +246,7 @@ function canCompleteChallenge(layer, x)
 		}
 		else if (challenge.currencyLayer){
 			let lr = challenge.currencyLayer
-			return !(player[lr][name].lt(readData(challenge.goal))) 
+			return !(player[lr][name].lt(challenge.goal)) 
 		}
 		else {
 			return !(player[name].lt(challenge.goal))
@@ -268,7 +268,7 @@ function completeChallenge(layer, x) {
 	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
 		needCanvasUpdate = true
 		player[layer].challenges[x] += 1
-		if (layers[layer].challenges[x].onComplete) layers[layer].challenges[x].onComplete()
+		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, tmp[layer].challenges[x])
 	}
 	player[layer].activeChallenge = null
 	updateChallengeTemp(layer)

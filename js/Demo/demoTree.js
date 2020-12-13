@@ -25,7 +25,8 @@ addNode("g", {
     canClick() {return player.points.gte(10)},
     tooltip: "Thanos your points",
     tooltipLocked: "Thanos your points",
-    onClick() {player.points = player.points.div(2)}
+    onClick() {player.points = player.points.div(2)
+    console.log(this.layer)}
 
 }, 
 )

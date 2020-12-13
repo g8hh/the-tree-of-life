@@ -454,7 +454,7 @@ function respecBuyables(layer) {
 	if (!layers[layer].buyables) return
 	if (!layers[layer].buyables.respec) return
 	if (!confirm("Are you sure you want to respec? This will force you to do a \"" + (tmp[layer].name ? tmp[layer].name : layer) + "\" reset as well!")) return
-	layers[layer].buyables.respec()
+	run(layers[layer].buyables.respec, tmp[layer].buyables)
 	updateBuyableTemp(layer)
 	document.activeElement.blur()
 }
@@ -559,7 +559,7 @@ function buyUpg(layer, id) {
 	if (upg.canAfford === false) return
 	let pay = layers[layer].upgrades[id].pay
 	if (pay !== undefined)
-		pay()
+		run(pay, upg)
 	else 
 		{
 		let cost = tmp[layer].upgrades[id].cost
@@ -587,7 +587,7 @@ function buyUpg(layer, id) {
 	}
 	player[layer].upgrades.push(id);
 	if (upg.onPurchase != undefined)
-		upg.onPurchase()
+		run(upg.onPurchase, upg)
 }
 
 function buyMaxBuyable(layer, id) {
@@ -596,7 +596,7 @@ function buyMaxBuyable(layer, id) {
 	if (!tmp[layer].buyables[id].canAfford) return
 	if (!layers[layer].buyables[id].buyMax) return
 
-	layers[layer].buyables[id].buyMax()
+	run(layers[layer].buyables[id].buyMax, tmp[layer].buyables[id])
 	updateBuyableTemp(layer)
 }
 
@@ -605,7 +605,7 @@ function buyBuyable(layer, id) {
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canAfford) return
 
-	layers[layer].buyables[id].buy()
+	run(layers[layer].buyables[id].buy, tmp[layer].buyables[id])
 	updateBuyableTemp(layer)
 }
 
@@ -614,7 +614,7 @@ function clickClickable(layer, id) {
 	if (!tmp[layer].clickables[id].unlocked) return
 	if (!tmp[layer].clickables[id].canClick) return
 
-	layers[layer].clickables[id].onClick()
+	run(layers[layer].clickables[id].onClick, tmp[layer].clickables[id])
 	updateClickableTemp(layer)
 }
 
@@ -848,4 +848,13 @@ function adjustPopupTime(diff) {
 			activePopups.splice(popup,1); // Remove popup when time hits 0
 		}
 	}
+}
+
+function run(func, target, args=null){
+	if (!!(func && func.constructor && func.call && func.apply)){
+		let bound = func.bind(target) 
+		return bound(args)
+	}
+	else
+		return func;
 }

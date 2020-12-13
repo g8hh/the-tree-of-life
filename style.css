@@ -551,8 +551,6 @@ ul {
 [tooltip]:before,
 [tooltip]:after {
 	visibility: hidden;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
 	opacity: 0;
 	pointer-events: none;
 	white-space: pre-wrap;
@@ -598,7 +596,6 @@ ul {
 [tooltip]:hover:before,
 [tooltip]:hover:after {
 	visibility: visible;
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
 	opacity: 1;
 	white-space: pre-wrap;
 }
