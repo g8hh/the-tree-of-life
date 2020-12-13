@@ -214,7 +214,7 @@ function addNode(layerName, layerData){ // Does the same thing, but for non-laye
 
 // If data is a function, return the result of calling it. Otherwise, return the data.
 function readData(data, args=null){
-	if (!!(data && data.constructor && data.call && data.apply))
+	if ((!!data && data.constructor && data.call && data.apply))
 		return data(args);
 	else
 		return data;

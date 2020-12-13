@@ -164,8 +164,6 @@ function constructAchievementStyles(layer){
 	}
 }
 
-var DIR_MARGINS = ["margin-bottom", "margin-top", "margin-right", "margin-left"]
-
 function constructBarStyles(layer){
 	if (layers[layer].bars === undefined)
 		return
@@ -207,7 +205,6 @@ function setupBarStyles(layer){
 	for (id in layers[layer].bars){
 		let bar = tmp[layer].bars[id]
 		bar.dims = {}
-		let dir = bar.direction
 		bar.fillDims = {}
 	}
 }
