@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.3.3",
+	tmtNum: "2.3.3.1",
 	tmtName: "Cooler and Newer Edition"
 }
 
