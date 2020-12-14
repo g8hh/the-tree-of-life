@@ -59,7 +59,7 @@ function format(decimal, precision=2,) {
 function formatWhole(decimal) {
 	decimal = new Decimal(decimal)
 	if (decimal.gte(1e9)) return format(decimal, 2)
-	if (decimal.lte(0.95) && !decimal.eq(0)) return format(decimal, 2)
+	if (decimal.lte(0.98) && !decimal.eq(0)) return format(decimal, 2)
 	return format(decimal, 0)
 }
 
@@ -698,7 +698,7 @@ function subtabResetNotify(layer, family, id){
 }
 
 function nodeShown(layer) {
-	if (tmp[layer].layerShown) return true
+	if (layerShown(layer)) return true
 	switch(layer) {
 		case "idk":
 			return player.idk.unlocked
@@ -788,7 +788,9 @@ function focused(x) {
 
 function prestigeButtonText(layer)
 {
-	if(tmp[layer].type == "normal")
+	if (layers[layer].prestigeButtonTest !== undefined)
+		return layers[layer].prestigeButtonText()
+	else if(tmp[layer].type == "normal")
 		return `${ player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") : ""}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource} ${tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? `<br><br>Next at ${ (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${ tmp[layer].baseResource }` : ""}`
 	else if(tmp[layer].type== "static")
 		return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"Next:":"Req:") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
@@ -796,7 +798,7 @@ function prestigeButtonText(layer)
 	else if(tmp[layer].type == "none")
 		return ""
 	else
-		return layers[layer].prestigeButtonText()
+		return "You need prestige button text"
 }
 
 function isFunction(obj) {

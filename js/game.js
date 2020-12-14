@@ -4,13 +4,17 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.3.2",
+	tmtNum: "2.3.3",
 	tmtName: "Cooler and Newer Edition"
 }
 
 function getResetGain(layer, useType = null) {
 	let type = useType
-	if (!useType) type = tmp[layer].type
+	if (!useType){ 
+		type = tmp[layer].type
+		if (layers[layer].getResetGain !== undefined)
+			return layers[layer].getResetGain()
+	} 
 	if(tmp[layer].type == "none")
 		return new Decimal (0)
 	if (tmp[layer].gainExp.eq(0)) return new Decimal(0)
@@ -32,7 +36,12 @@ function getResetGain(layer, useType = null) {
 
 function getNextAt(layer, canMax=false, useType = null) {
 	let type = useType
-	if (!useType) type = tmp[layer].type
+	if (!useType) {
+		type = tmp[layer].type
+		if (layers[layer].getNextAt !== undefined)
+			return layers[layer].getNextAt(canMax)
+
+		}
 	if(tmp[layer].type == "none")
 		return new Decimal (Infinity)
 
@@ -87,14 +96,14 @@ function shouldNotify(layer){
 
 function canReset(layer)
 {	
-	if(tmp[layer].type == "normal")
+	if (layers[layer].canReset!== undefined)
+		return run(layers[layer].canReset, layers[layer])
+	else if(tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
 	else if(tmp[layer].type== "static")
 		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-	if(tmp[layer].type == "none")
+	else 
 		return false
-	else
-		return run(layers[layer].canReset, layers[layer])
 }
 
 function rowReset(row, layer) {

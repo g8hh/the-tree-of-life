@@ -484,7 +484,6 @@ addLayer("a", {
         color: "yellow",
         resource: "achievement power", 
         row: "side",
-        layerShown() {return true}, 
         tooltip() { // Optional, tooltip displays when the layer is locked
             return ("Achievements")
         },

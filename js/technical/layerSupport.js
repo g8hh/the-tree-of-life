@@ -5,7 +5,7 @@ const decimalOne = new Decimal(1)
 const decimalNaN = new Decimal(NaN)
 
 function layerShown(layer){
-    return layers[layer].layerShown();
+    return tmp[layer].layerShown;
 }
 
 var LAYERS = Object.keys(layers);
@@ -166,6 +166,7 @@ function setupLayer(layer){
     if(layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal("0.5")
     if(layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row
     if(layers[layer].name === undefined) layers[layer].name = layer
+    if(layers[layer].layerShown === undefined) layers[layer].layerShown = true
 
     let row = layers[layer].row
 

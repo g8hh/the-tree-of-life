@@ -1,5 +1,10 @@
 # The Modding Tree changelog:
 
+## v2.3.3 - 12/13/20
+- Fixed the first node in a row always taking up space.
+- layerShown is now optional.
+- All prestige types can now use features for custom prestige types.
+
 ## v2.3.2 - 12/13/20
 - Fixed achievement/milestone popups.
 

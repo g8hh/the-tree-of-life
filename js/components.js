@@ -388,10 +388,10 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `<div>
-		<span v-for="(row, r) in data"><table>
-			<td v-for="(node, id) in row" style = "{width: 0px}">
-				<tree-node  :layer='node' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
-			</td>
+		<span class="nodeRow" v-for="(row, r) in data"><table>
+			<span v-for="(node, id) in row" style = "{width: 0px}">
+				<tree-node :layer='node' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
+			</span>
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>
 

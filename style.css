@@ -56,6 +56,15 @@ td {
 	vertical-align: 0
 }
 
+.nodeRow {
+	display: flex !important;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
 h1, h2, h3, b, input {
 	display: inline;
 	font-family: "Lucida Console", "Courier New", monospace
