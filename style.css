@@ -56,15 +56,6 @@ td {
 	vertical-align: 0
 }
 
-.nodeRow {
-	display: flex !important;
-	flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-	max-width: 100%;
-	margin: 0 auto;
-}
-
 h1, h2, h3, b, input {
 	display: inline;
 	font-family: "Lucida Console", "Courier New", monospace
@@ -84,6 +75,7 @@ h1, h2, h3, b, input {
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
+	margin: 0 10px 0 10px;
 }
 
 
@@ -99,7 +91,7 @@ h1, h2, h3, b, input {
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
-
+	margin: 0 10px 0 10px;
 }
 
 
@@ -559,9 +551,12 @@ ul {
 [tooltip]:before,
 [tooltip]:after {
 	visibility: hidden;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
 	opacity: 0;
 	pointer-events: none;
 	white-space: pre-wrap;
+	-webkit-transform:translate3d(0,0,0);
 }
 
 [tooltip]:before {
@@ -603,9 +598,12 @@ ul {
 
 [tooltip]:hover:before,
 [tooltip]:hover:after {
+	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
 	visibility: visible;
 	opacity: 1;
 	white-space: pre-wrap;
+	-webkit-transform:translate3d(0,0,0);
+
 }
 
 #loadingSection {

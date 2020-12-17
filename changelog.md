@@ -1,8 +1,10 @@
 # The Modding Tree changelog:
 
-## v2.3.4 - 12/
+## v2.3.4 - 12/16/20
 - Added an image feature, which puts an image on a node.
 - Resource display now always shows the amount of the currency the layer's gain is based on.
+- Added spacing between tree nodes.
+- Another attempt to fix tooltip flickering.
 
 ## v2.3.3 - 12/13/20
 - Fixed the first node in a row always taking up space.

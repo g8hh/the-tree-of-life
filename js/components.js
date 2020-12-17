@@ -388,7 +388,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `<div>
-		<span class="nodeRow" v-for="(row, r) in data"><table>
+		<span class="upgRow" v-for="(row, r) in data"><table>
 			<span v-for="(node, id) in row" style = "{width: 0px}">
 				<tree-node :layer='node' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
