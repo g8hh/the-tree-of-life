@@ -31,6 +31,7 @@ function setupTemp() {
 		tmp[layer].notify = {}
 		tmp[layer].prestigeNotify = {}
 		tmp[layer].prestigeButtonText = {}
+		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
 	}
 	temp = tmp
@@ -78,6 +79,7 @@ function updateTemp() {
 		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
 		constructAchievementStyles(layer)
+		constructNodeStyle(layer)
 		updateChallengeDisplay(layer)
 
 	}
@@ -148,6 +150,19 @@ function updateClickableTemp(layer)
 {
 	updateTempData(layers[layer].clickables, tmp[layer].clickables)
 }
+
+function constructNodeStyle(layer){
+	let style = []
+	if ((tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick))
+		style.push({'background-color': tmp[layer].color})
+	if (tmp[layer].image !== undefined)
+		style.push({'background-image': 'url("' + tmp[layer].image + '")'})
+	style.push(tmp[layer].nodeStyle)
+	Vue.set(tmp[layer], 'computedNodeStyle', style)
+}
+
+
+
 
 function constructAchievementStyles(layer){
 	for (id in tmp[layer].achievements) {
