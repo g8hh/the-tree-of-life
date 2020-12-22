@@ -20,6 +20,7 @@ You can make almost any value dynamic by using a function in its place, includin
             - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
             - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
             - unlockOrder: used to keep track of relevant layers unlocked before this one.
+            - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
 
 - color: A color associated with this layer, used in many places. (A string in hex format with a #)
 
@@ -44,7 +45,7 @@ You can make almost any value dynamic by using a function in its place, includin
     hotkeys: [
         {
             key: "p", // What the hotkey button is. Use uppercase if it's combined with shift, or "ctrl+x" for holding down ctrl.
-            desc: "p: reset your points for prestige points", // The description of the hotkey that is displayed in the game's How To Play tab
+            description: "p: reset your points for prestige points", // The description of the hotkey that is displayed in the game's How To Play tab
             onPress() { if (player.p.unlocked) doReset("p") }
         }
     ]
@@ -110,7 +111,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - onPrestige(gain): **optional**. A function that triggers when this layer prestiges, just before you gain the currency.  Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
-- resetDesc: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
+- resetDescription: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
 
 - prestigeButtonText(): **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 

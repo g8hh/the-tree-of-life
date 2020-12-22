@@ -148,6 +148,7 @@ function getStartLayerData(layer){
 	if (layerdata.unlocked === undefined) layerdata.unlocked = true
 	if (layerdata.total === undefined) layerdata.total = new Decimal(0)
 	if (layerdata.best === undefined) layerdata.best = new Decimal(0)
+	if (layerdata.resetTime === undefined) layerdata.resetTime = 0
 
 	layerdata.buyables = getStartBuyables(layer)
 	if(layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer)
@@ -684,8 +685,8 @@ function subtabShouldNotify(layer, family, id){
 	let subtab = {}
 	if (family == "mainTabs") subtab = tmp[layer].tabFormat[id]
 	else subtab = tmp[layer].microtabs[family][id]
-	if (player.subtabs[layer][family] === id) return false
-	else if (subtab.embedLayer) return tmp[subtab.embedLayer].notify
+
+	if (subtab.embedLayer) return tmp[subtab.embedLayer].notify
 	else return subtab.shouldNotify
 }
 
@@ -709,7 +710,7 @@ function nodeShown(layer) {
 
 function layerunlocked(layer) {
 	if (tmp[layer] && tmp[layer].type == "none") return (player[layer].unlocked)
-	return LAYERS.includes(layer) && (player[layer].unlocked || (tmp[layer].baseAmount.gte(tmp[layer].requires) && tmp[layer].layerShown))
+	return LAYERS.includes(layer) && (player[layer].unlocked || (tmp[layer].canReset && tmp[layer].layerShown))
 }
 
 function keepGoing() {
@@ -725,7 +726,7 @@ function toNumber(x) {
 
 function updateMilestones(layer){
 	for (id in layers[layer].milestones){
-		if (!(player[layer].milestones.includes(id)) && layers[layer].milestones[id].done()){
+		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()){
 			player[layer].milestones.push(id)
 			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
 		}
@@ -734,7 +735,7 @@ function updateMilestones(layer){
 
 function updateAchievements(layer){
 	for (id in layers[layer].achievements){
-		if (isPlainObject(layers[layer].achievements[id]) && !(player[layer].achievements.includes(id)) && layers[layer].achievements[id].done()) {
+		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
 			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
