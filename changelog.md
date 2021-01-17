@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+## v2.3.6 - 
+- Fixed keeping Decimal values on reset.
+
 ## v2.3.5 - 12/21/20
 - Added resetTime, which tracks the time since a layer prestiged or was reset.
 - A layer node will be highlighted red if one of its subtabs is highlighted red.
@@ -8,7 +11,7 @@
 - Other minor fixes.
 
 ## v2.3.4 - 12/16/20
-- Added an node image feature.
+- Added a node image feature.
 - Resource display now always shows the amount of the currency the layer's gain is based on.
 - Added spacing between tree nodes.
 - Another attempt to fix tooltip flickering.

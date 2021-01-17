@@ -200,7 +200,7 @@ addLayer("c", {
             },
         },
         doReset(resettingLayer){ // Triggers when this layer is being reset, along with the layer doing the resetting. Not triggered by lower layers resetting, but is by layers on the same row.
-            if(layers[resettingLayer].row > this.row) layerDataReset(this.layer) // This is actually the default behavior
+            if(layers[resettingLayer].row > this.row) layerDataReset(this.layer, ["points"]) // This is actually the default behavior
         },
         layerShown() {return true}, // Condition for when layer appears on the tree
         automate() {
