@@ -1,6 +1,9 @@
 # The Modding Tree changelog:
 
 ## v2.3.6 - 
+- Performance improvements.
+- Added support for bulk challenge completions.
+- "Best" is updated automatically.
 - Fixed keeping Decimal values on reset.
 
 ## v2.3.5 - 12/21/20

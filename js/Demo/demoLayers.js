@@ -17,7 +17,7 @@ addLayer("c", {
         color: "#4BDC13",
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
         resource: "lollipops", // Name of prestige currency
-        baseResource: "candies", // Name of resource prestige is based on
+        baseResource: "points", // Name of resource prestige is based on
         baseAmount() {return player.points}, // Get the current amount of baseResource
         type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         exponent: 0.5, // Prestige currency exponent
@@ -83,11 +83,10 @@ addLayer("c", {
                 completionLimit: 3,
 			    challengeDescription() {return "Makes the game 0% harder<br>"+challengeCompletions(this.layer, this.id) + "/" + this.completionLimit + " completions"},
                 unlocked() { return player[this.layer].best.gt(0) },
-                goalDescription: 'Have 20 lollipops I guess',
-                goal: new Decimal("20"),
-                currencyDisplayName: "lollipops", // Use if using a nonstandard currency
-                currencyInternalName: "points", // Use if using a nonstandard currency
-                currencyLayer: this.layer, // Leave empty if not in a layer
+                goalDescription: 'Have 20 points I guess',
+                canComplete() {
+                    return player.points.gte(20)
+                },
                 rewardEffect() {
                     let ret = player[this.layer].points.add(1).tetrate(0.02)
                     return ret;
@@ -108,7 +107,7 @@ addLayer("c", {
                 unlocked() { return player[this.layer].unlocked }, // The upgrade is only visible when this is true
             },
             12: {
-                description: "Candy generation is faster based on your unspent Lollipops.",
+                description: "Point generation is faster based on your unspent Lollipops.",
                 cost: new Decimal(1),
                 unlocked() { return (hasUpgrade(this.layer, 11))},
                 effect() { // Calculate bonuses from the upgrade. Can return a single value or an object with multiple values
@@ -380,7 +379,7 @@ addLayer("f", {
     color: "#FE0102",
     requires() {return new Decimal(10)}, 
     resource: "farm points", 
-    baseResource: "candies", 
+    baseResource: "points", 
     baseAmount() {return player.points},
     type: "static",
     exponent: 0.5,
@@ -393,7 +392,7 @@ addLayer("f", {
     branches: ["c"], // When this layer appears, a branch will appear from this layer to any layers here. Each entry can be a pair consisting of a layer id and a color.
 
     tooltipLocked() { // Optional, tooltip displays when the layer is locked
-        return ("This weird farmer dinosaur will only see you if you have at least " + this.requires() + " candies. You only have " + formatWhole(player.points))
+        return ("This weird farmer dinosaur will only see you if you have at least " + this.requires() + " points. You only have " + formatWhole(player.points))
     },
     midsection: [
         "blank", ['display-image', 'https://images.beano.com/store/24ab3094eb95e5373bca1ccd6f330d4406db8d1f517fc4170b32e146f80d?auto=compress%2Cformat&dpr=1&w=390'],
@@ -401,8 +400,8 @@ addLayer("f", {
     ],
     // The following are only currently used for "custom" Prestige type:
     prestigeButtonText() { //Is secretly HTML
-        if (!this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you a Farm Point in exchange for all of your candies and lollipops! (At least " + formatWhole(tmp[this.layer].nextAt) + " candies)"
-        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your candies and lollipops! (You'll get another one at " + formatWhole(tmp[layer].nextAtDisp) + " candies)"
+        if (!this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you a Farm Point in exchange for all of your points and lollipops! (At least " + formatWhole(tmp[this.layer].nextAt) + " points)"
+        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your points and lollipops! (You'll get another one at " + formatWhole(tmp[layer].nextAtDisp) + " points)"
     },
     getResetGain() {
         return getResetGain(this.layer, useType = "static")
