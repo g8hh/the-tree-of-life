@@ -101,11 +101,9 @@ function shouldNotify(layer){
 				return true
 		}
 	}
-	if (tmp[layer].shouldNotify){
-		return tmp[layer].shouldNotify
-	}
-	else 
-		return false
+	 
+	return tmp[layer].shouldNotify
+	
 }
 
 function canReset(layer)
