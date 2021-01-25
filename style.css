@@ -613,17 +613,18 @@ ul {
 }
 
 .treeOverlay {
-	z-index: 200000;
 	pointer-events:none;
 	overflow:hidden;
 }
 
 .overlayThing {
+	z-index: 10000;
 	pointer-events:auto;
 	background-color: var(--background);
 }
 
 .sideLayers {
+	z-index: 10000;
 	pointer-events:auto;
 	position: absolute;
 	right: 55px;

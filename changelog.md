@@ -6,6 +6,7 @@
 - Added support for bulk challenge completions.
 - "Best" is updated automatically.
 - Fixed keeping Decimal values on reset.
+- Code reorganization and style improvements by fudo.
 
 ## v2.3.5 - 12/21/20
 - Added resetTime, which tracks the time since a layer prestiged or was reset.
