@@ -21,7 +21,8 @@ function setupTemp() {
 	tmp = {}
 	tmp.pointGen = {}
 	tmp.displayThings = []
-
+	tmp.scrolled = 0
+	
 	setupTempData(layers, tmp)
 	for (layer in layers){
 		tmp[layer].resetGain = {}

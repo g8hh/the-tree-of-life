@@ -2,6 +2,7 @@
 
 ## v2.3.6 - 
 - Performance improvements.
+- Fixed tooltips overlapping with the top display.
 - Added support for bulk challenge completions.
 - "Best" is updated automatically.
 - Fixed keeping Decimal values on reset.

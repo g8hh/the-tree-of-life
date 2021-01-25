@@ -1,6 +1,7 @@
 var player;
 var needCanvasUpdate = true;
 var gameEnded = false;
+var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
@@ -407,6 +408,7 @@ var interval = setInterval(function() {
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}
+	tmp.scrolled = document.getElementById('treeTab').scrollTop < 30
 	updateTemp();
 	gameLoop(diff)
 	fixNaNs()

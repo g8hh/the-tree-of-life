@@ -357,6 +357,7 @@ addLayer("c", {
         tooltip() { // Optional, tooltip displays when the layer is unlocked
             let tooltip = formatWhole(player[this.layer].points) + " " + this.resource
             if (player[this.layer].buyables[11].gt(0)) tooltip += "\n" + formatWhole(player[this.layer].buyables[11]) + " Exhancers"
+            tooltip += "\nmomomo\m oo\nommom\nyeyeyeye"
             return tooltip
         },
         shouldNotify() { // Optional, layer will be highlighted on the tree if true.
@@ -513,3 +514,8 @@ addLayer("a", {
         },
     }, 
 )
+
+addLayer('qq', {row: 2})
+addLayer('rr', {row: 3})
+addLayer('ss', {row: 4})
+addLayer('tt', {row: 5})
