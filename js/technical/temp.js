@@ -21,7 +21,8 @@ function setupTemp() {
 	tmp = {}
 	tmp.pointGen = {}
 	tmp.displayThings = []
-
+	tmp.scrolled = 0
+	
 	setupTempData(layers, tmp)
 	for (layer in layers){
 		tmp[layer].resetGain = {}
@@ -103,7 +104,7 @@ function updateTempData(layerData, tmpData) {
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
 			updateTempData(layerData[item], tmpData[item])
 		}
-		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
+		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
 			let value = layerData[item]()
 			if (value !== value || value === decimalNaN){
 				if (NaNalert === true || confirm ("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")){

@@ -34,7 +34,8 @@ Individual Challenges can have these features:
 - goalDescription: A description of the win condition for the challenge. It can also be a function that returns updating text.
     Can use basic HTML. (Optional if using the old goal system)
 
-- canComplete(): A function that returns true if you meet the win condition for the challenge. (Optional if using the old goal system)
+- canComplete(): A function that returns true if you meet the win condition for the challenge. Returning a number will allow bulk completing the challenge.
+    (Optional if using the old goal system)
 
 - rewardDescription: A description of the reward's effect. *You will also have to implement the effect where it is applied.* It can also be a function that returns updating text. Can use basic HTML.
 
