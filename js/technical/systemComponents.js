@@ -96,9 +96,6 @@ var systemComponents = {
 		<span v-if="player.offTime !== undefined"  class="overlayThing">
 			<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
 		</span>
-		<span v-if="false && !player.keepGoing"  class="overlayThing">
-			<br>Reach {{formatWhole(ENDGAME)}} to beat the game!<br>
-		</span>
 		<br>
 		<span v-if="player.points.lt('1e1000')"  class="overlayThing">You have </span>
 		<h2  class="overlayThing" id="points">{{format(player.points)}}</h2>

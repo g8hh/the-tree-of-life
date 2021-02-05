@@ -1,8 +1,9 @@
 # The Modding Tree changelog:
 
-## v2.3.6 - 
+## v2.π: Incrementally Updated
 - Performance improvements.
 - Fixed tooltips overlapping with the top display.
+- Clicking a popup dismisses it immediately.
 - Added support for bulk challenge completions.
 - "Best" is updated automatically.
 - Fixed keeping Decimal values on reset.

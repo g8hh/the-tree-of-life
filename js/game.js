@@ -5,8 +5,8 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.3.5",
-	tmtName: "Cooler and Newer Edition"
+	tmtNum: "2.π",
+	tmtName: "Incrementally Updated"
 }
 
 function getResetGain(layer, useType = null) {
@@ -412,7 +412,7 @@ var interval = setInterval(function() {
 	updateTemp();
 	gameLoop(diff)
 	fixNaNs()
-	adjustPopupTime(diff) 
+	adjustPopupTime(0.05) 
 	ticking = false
 }, 50)
 
