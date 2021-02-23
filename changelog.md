@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed styling challenges.
+
 ## v2.π: Incrementally Updated - 2/5/21
 - Performance improvements.
 - Fixed tooltips overlapping with the top display.

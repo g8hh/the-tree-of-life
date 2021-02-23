@@ -5,6 +5,7 @@ Challenges can have fully customizable win conditions. Useful functions for deal
 - inChallenge(layer, id): determine if the player is in a given challenge (or another challenge on the same layer that counts as this one).
 - hasChallenge(layer, id): determine if the player has completed the challenge.
 - challengeCompletions(layer, id): determine how many times the player completed the challenge.
+- maxedChallenge(layer, id): determines if the player has reached the maximum completions.
 - challengeEffect(layer, id): Returns the current effects of the challenge, if any.
 
 Challenges are stored in the following format:
