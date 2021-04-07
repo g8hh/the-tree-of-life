@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
 - Fixed styling challenges.
+- No longer attempts to display a base currency when there is none.
 
 ## v2.π: Incrementally Updated - 2/5/21
 - Performance improvements.
