@@ -1,6 +1,6 @@
 // ************ Save stuff ************
 function save() {
-	localStorage.setItem(modInfo.id, btoa(JSON.stringify(player)));
+	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 }
 function startPlayerBase() {
 	return {

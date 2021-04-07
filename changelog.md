@@ -1,5 +1,5 @@
 # The Modding Tree changelog:
-
+- Fixed formatting for some larger numbers.
 - Fixed styling challenges.
 - No longer attempts to display a base currency when there is none.
 
