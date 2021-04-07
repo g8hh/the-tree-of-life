@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.π",
+	tmtNum: "2.π.1",
 	tmtName: "Incrementally Updated"
 }
 

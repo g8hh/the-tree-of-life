@@ -11,7 +11,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.π",
+	num: "2.π.1",
 	name: "Incrementally Updated",
 }
 
