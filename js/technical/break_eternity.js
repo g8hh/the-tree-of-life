@@ -1791,7 +1791,8 @@
     Decimal.prototype.ln = function () {
       if (this.sign <= 0)
       {
-        return Decimal.dNaN;
+        //return Decimal.dNaN; THIS IS THE OLD THING
+        return Decimal.fromComponents(-1, 0, Infinity) //MIGHT CAUSE BIG ISSUES
       }
       else if (this.layer === 0)
       {

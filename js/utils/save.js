@@ -1,7 +1,13 @@
 // ************ Save stuff ************
+
+var logSave = false
 function save() {
+	let t = new Date().getTime()
+	if (logSave) console.log("saved at " + t)
+	if (!(player === null)) player.lastSave = t
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 }
+
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
@@ -24,6 +30,7 @@ function startPlayerBase() {
 		lastSafeTab: (layoutInfo.showTree ? "none" : layoutInfo.startTab)
 	};
 }
+
 function getStartPlayer() {
 	playerdata = startPlayerBase();
 
@@ -57,6 +64,7 @@ function getStartPlayer() {
 	}
 	return playerdata;
 }
+
 function getStartLayerData(layer) {
 	layerdata = {};
 	if (layers[layer].startData)
@@ -81,6 +89,7 @@ function getStartLayerData(layer) {
 	layerdata.challenges = getStartChallenges(layer);
 	return layerdata;
 }
+
 function getStartBuyables(layer) {
 	let data = {};
 	if (layers[layer].buyables) {
@@ -90,6 +99,7 @@ function getStartBuyables(layer) {
 	}
 	return data;
 }
+
 function getStartClickables(layer) {
 	let data = {};
 	if (layers[layer].clickables) {
@@ -99,6 +109,7 @@ function getStartClickables(layer) {
 	}
 	return data;
 }
+
 function getStartChallenges(layer) {
 	let data = {};
 	if (layers[layer].challenges) {
@@ -108,6 +119,7 @@ function getStartChallenges(layer) {
 	}
 	return data;
 }
+
 function fixSave() {
 	defaultData = getStartPlayer();
 	fixData(defaultData, player);
@@ -130,6 +142,7 @@ function fixSave() {
 		}
 	}
 }
+
 function fixData(defaultData, newData) {
 	for (item in defaultData) {
 		if (defaultData[item] == null) {
@@ -163,6 +176,7 @@ function fixData(defaultData, newData) {
 		}
 	}
 }
+
 function load() {
 	let get = localStorage.getItem(modInfo.id);
 	if (get === null || get === undefined)
@@ -188,14 +202,17 @@ function load() {
 	updateTemp();
 	loadVue();
 }
+
 function setupModInfo() {
 	modInfo.changelog = changelog;
 	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`;
 
 }
+
 function fixNaNs() {
 	NaNcheck(player);
 }
+
 function NaNcheck(data) {
 	for (item in data) {
 		if (data[item] == null) {
@@ -249,6 +266,7 @@ function importSave(imported = undefined, forced = false) {
 		return;
 	}
 }
+
 function versionCheck() {
 	let setVersion = true;
 
@@ -268,6 +286,7 @@ function versionCheck() {
 		player.beta = VERSION.beta;
 	}
 }
+
 var saveInterval = setInterval(function () {
 	if (player === undefined)
 		return;
@@ -276,3 +295,6 @@ var saveInterval = setInterval(function () {
 	if (player.autosave)
 		save();
 }, 5000);
+
+
+

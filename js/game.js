@@ -107,8 +107,7 @@ function shouldNotify(layer){
 	
 }
 
-function canReset(layer)
-{	
+function canReset(layer){	
 	if (layers[layer].canReset!== undefined)
 		return run(layers[layer].canReset, layers[layer])
 	else if(tmp[layer].type == "normal")
