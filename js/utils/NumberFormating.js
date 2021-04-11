@@ -58,7 +58,7 @@ function format(decimal, precision = 2) {
 function formatWhole(decimal) {
         decimal = new Decimal(decimal)
         if (decimal.gte(1e9)) return format(decimal, 2)
-        if (decimal.lte(0.98) && !decimal.eq(0)) return format(decimal, 2)
+        if (decimal.lte(10) && decimal.neq(decimal.floor())) return format(decimal, 2)
         return format(decimal, 0)
 }
 

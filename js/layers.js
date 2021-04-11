@@ -1,5 +1,5 @@
 function getPointGen() {
-	let gain = new Decimal(0)
+	let gain = new Decimal(.1)
 	return gain
 }
 
@@ -29,43 +29,35 @@ addLayer("h", {
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getResetGain() {
-                return new Decimal(0) //this matters
+                let base = player.points.ln().min(4)
+                let mult = tmp.h.getGainMult
+
+                return base.times(mult)
         },
         getNextAt(){
                 return new Decimal(0) //this doesnt matter
         },
-        getLoseRate() {
-                return new Decimal(.001)
+        getLossRate() {
+                return new Decimal(.01)
         },
-        getBaseDiv(){
-                let x = new Decimal(1)
-                return x
-        },
-        getGainExp(){
-                let x = new Decimal(2)
-
-                return x
-        },
-        getGainMultPre(){
-                let x = new Decimal(1)
-                return x
-        },
-        getGainMultPost(){
+        getGainMult(){
                 let x = new Decimal(1)
 
                 return x
         },
         update(diff){
-                player.h.best = player.h.best.max(player.h.points)
+                let data = player.h
+                data.best = data.best.max(data.points)
                 
                 // do hydrogen gain
+                data.points = getLogisticAmount(data.points, tmp.h.getResetGain, tmp.h.getLossRate, diff)
 
                 if (false) {
                         //do autobuyer stuff
                 } else {
-                        player.h.abtime = 0
+                        data.abtime = 0
                 }
-                player.h.time += diff
+                data.time += diff
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
@@ -132,21 +124,23 @@ addLayer("h", {
                                         function() {
                                                 if (player.tab != "h") return ""
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                                return shiftDown ? "Your best Hydrogen is " + format(player.h.best) : ""
+                                                if (shiftDown) return "Your best Hydrogen is " + format(player.h.best)
+                                                return "You are gaining " + format(tmp.h.getResetGain) + " Hydrogen per second"
                                         }
                                 ],
                                 ["display-text",
                                         function() {
                                                 if (player.tab != "h") return ""
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                                return "You are gaining " + format(tmp.h.getResetGain) + " Hydrogen per second"
+                                                if (shiftDown) return "Formula: min(4,ln(points))*[multipliers]"
+                                                return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
                                         },
                                 ],
                                 ["display-text",
                                         function() {
                                                 if (player.tab != "h") return ""
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                                return "You are losing " + format(tmp.h.getLoseRate.times(100)) + "% of your Hydrogen per second"
+                                                return 
                                         },
                                 ],
 

@@ -5,18 +5,28 @@ let modInfo = {
 	pointsName: "Life Points",
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (0), // Used for hard resets and new players
+	initialStartPoints: new Decimal (1), // Used for hard resets and new players
 	
 	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.003",
+	num: "0.003.1",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br><h2 style='color: #00CC00'>Notes</h2><br>
+		- Versions will be vA.B.C<br>
+		- A will be big releases <br>
+		- B will be each content patch<br>
+		- C will be small patches without content<br><br><br>
+
+	TO DO:<br>
+	- Add achievements (same as chain, no photos unless someone else)<br>
+	- Add upgrades (first = 10?)<br>
+
 	<br><h3 style='color: #CC0000'>v0.003</h3><br>
 		- Added the old hotkey set up.<br>
 		- Added spacing.<br>
@@ -47,6 +57,7 @@ function canGenPoints(){
 function addedPlayerData() { return {
 	toggleKeys: false,
 	undulating: false,
+	lastSave: new Date().getTime(),
 }}
 
 // Display extra things at the top of the page
