@@ -1,6 +1,3 @@
-var testTree = [["f", "c"],
-["g", "spook", "h"]]
-
 addLayer("c", {
         layer: "c", // This is assigned automatically, both to the layer and all upgrades, etc. Shown here so you know about it
         name: "Candies", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -199,7 +196,11 @@ addLayer("c", {
             },
         },
         doReset(resettingLayer){ // Triggers when this layer is being reset, along with the layer doing the resetting. Not triggered by lower layers resetting, but is by layers on the same row.
+<<<<<<< HEAD
             if(layers[resettingLayer].row > this.row) layerDataReset(this.layer, ["points"]) // This is actually the default behavior
+=======
+            if(layers[resettingLayer].row > this.row) layerDataReset(this.layer, ["upgrades", "challenges"]) // This is actually the default behavior
+>>>>>>> evolution
         },
         layerShown() {return true}, // Condition for when layer appears on the tree
         automate() {
@@ -243,7 +244,7 @@ addLayer("c", {
                 width: 300,
                 height: 30,
                 progress() {
-                    return (player.points.add(1).log(10).div(10)).toNumber()
+                    return (player.points.log(10).div(10)).toNumber()
                 },
                 display() {
                     return format(player.points) + " / 1e10 points"
@@ -290,7 +291,6 @@ addLayer("c", {
         tabFormat: {
             "main tab": {
                 buttonStyle() {return  {'color': 'orange'}},
-                shouldNotify: true,
                 content:
                     ["main-display",
                     "prestige-button", "resource-display",
@@ -331,7 +331,7 @@ addLayer("c", {
                         ["blank", ['0', '50px']], ["bar", "flatBoi"]
                         ]],
                     ]],
-                    "blank", ["display-text", "It's jail because \"bars\"! So funny! Ha ha!"],["tree", testTree], 
+                    "blank", ["display-text", "It's jail because \"bars\"! So funny! Ha ha!"],
                 ],
             },
             illuminati: {
@@ -366,8 +366,6 @@ addLayer("c", {
         resetDescription: "Melt your points into ",
 })
 
-
-
 // This layer is mostly minimal but it uses a custom prestige type and a clickable
 addLayer("f", {
     startData() { return {
@@ -381,7 +379,7 @@ addLayer("f", {
     resource: "farm points", 
     baseResource: "points", 
     baseAmount() {return player.points},
-    type: "static",
+    type: "custom", // A "Custom" type which is effectively static
     exponent: 0.5,
     base: 3,
     roundUpCost: true,
@@ -398,6 +396,7 @@ addLayer("f", {
         "blank", ['display-image', 'https://images.beano.com/store/24ab3094eb95e5373bca1ccd6f330d4406db8d1f517fc4170b32e146f80d?auto=compress%2Cformat&dpr=1&w=390'],
         ["display-text", "Bork bork!"]
     ],
+
     // The following are only currently used for "custom" Prestige type:
     prestigeButtonText() { //Is secretly HTML
         if (!this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you a Farm Point in exchange for all of your points and lollipops! (At least " + formatWhole(tmp[this.layer].nextAt) + " points)"
@@ -511,5 +510,22 @@ addLayer("a", {
                 onComplete() {console.log("Bork bork bork!")}
             },
         },
+        midsection: [
+            "achievements",
+        ]
     }, 
 )
+
+
+// A "ghost" layer which offsets f in the tree
+addLayer("spook", {
+    startData() { return {
+        unlocked: true,
+        points: new Decimal(0),
+    }},
+    type: "none",
+    row: 1,
+    layerShown: "ghost",
+}, 
+)
+

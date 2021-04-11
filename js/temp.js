@@ -1,7 +1,10 @@
 var tmp = {}
+<<<<<<< HEAD:js/technical/temp.js
 var temp = tmp // Proxy for tmp
 var funcs = {}
 var NaNalert = false;
+=======
+>>>>>>> evolution:js/temp.js
 
 // Tmp will not call these
 var activeFunctions = [
@@ -30,9 +33,8 @@ function setupTemp() {
 		tmp[layer].resetGain = {}
 		tmp[layer].nextAt = {}
 		tmp[layer].nextAtDisp = {}
-		tmp[layer].canReset = {}
 		tmp[layer].notify = {}
-		tmp[layer].prestigeNotify = {}
+		tmp[layer].canReset = {}
 		tmp[layer].prestigeButtonText = {}
 		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
@@ -80,9 +82,8 @@ function updateTemp() {
 		tmp[layer].resetGain = getResetGain(layer)
 		tmp[layer].nextAt = getNextAt(layer)
 		tmp[layer].nextAtDisp = getNextAt(layer, true)
-		tmp[layer].canReset = canReset(layer)
 		tmp[layer].notify = shouldNotify(layer)
-		tmp[layer].prestigeNotify = prestigeNotify(layer)
+		tmp[layer].canReset = canReset(layer)
 		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
 		constructAchievementStyles(layer)
@@ -101,15 +102,21 @@ function updateTemp() {
 
 }
 
+<<<<<<< HEAD:js/technical/temp.js
 function updateTempData(layerData, tmpData, funcsData) {
 	
 	for (item in funcsData){
+=======
+function updateTempData(layerData, tmpData) {
+	for (item in layerData){
+>>>>>>> evolution:js/temp.js
 		if (Array.isArray(layerData[item])) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item])
 		}
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
 			updateTempData(layerData[item], tmpData[item], funcsData[item])
 		}
+<<<<<<< HEAD:js/technical/temp.js
 		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
 			let value = layerData[item]()
 			if (value !== value || value === decimalNaN){
@@ -126,6 +133,10 @@ function updateTempData(layerData, tmpData, funcsData) {
 
 
 			Vue.set(tmpData, item, value)
+=======
+		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
+			Vue.set(tmpData, item, layerData[item]())
+>>>>>>> evolution:js/temp.js
 		}
 	}	
 }
