@@ -12,11 +12,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.002",
+	num: "0.003",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br><h3 style='color: #CC0000'>v0.003</h3><br>
+		- Added the old hotkey set up.<br>
+		- Added spacing.<br>
+		- Sorta added Hydrogen.<br>
 	<br><h3 style='color: #CC0000'>v0.002</h3><br>
 		- Added force shift/control and undulation control.<br>
 		- Added time since last save display.<br>
@@ -37,12 +41,6 @@ function getStartPoints(){
 // Determines if it should show points/sec
 function canGenPoints(){
 	return true
-}
-
-// Calculate points/sec!
-function getPointGen() {
-	let gain = new Decimal(0)
-	return gain
 }
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
@@ -98,7 +96,7 @@ window.addEventListener('keydown', function(event) {
 }, false);
 
 window.addEventListener('keyup', function(event) {
-	if (player.toggleKeys) return 
+	if (player != undefined && player.toggleKeys) return 
 	if (event.keyCode == 16) shiftDown = false;
 	if (event.keyCode == 17) controlDown = false;
 }, false);

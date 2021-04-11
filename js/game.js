@@ -16,19 +16,18 @@ function getResetGain(layer, useType = null) {
 		if (layers[layer].getResetGain !== undefined)
 			return layers[layer].getResetGain()
 	} 
-	if(tmp[layer].type == "none")
-		return new Decimal (0)
+	if (tmp[layer].type == "none") return new Decimal (0)
 	if (tmp[layer].gainExp.eq(0)) return new Decimal(0)
-	if (type=="static") {
+	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return new Decimal(1)
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1))
 		return gain.floor().sub(player[layer].points).add(1).max(1);
-	} else if (type=="normal"){
+	} else if (type == "normal"){
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return new Decimal(0)
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp)
 		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
 		return gain.floor().max(0);
-	} else if (type=="custom"){
+	} else if (type == "custom"){
 		return layers[layer].getResetGain()
 	} else {
 		return new Decimal(0)
@@ -39,40 +38,36 @@ function getNextAt(layer, canMax=false, useType = null) {
 	let type = useType
 	if (!useType) {
 		type = tmp[layer].type
-		if (layers[layer].getNextAt !== undefined)
+		if (layers[layer].getNextAt !== undefined) return layers[layer].getNextAt(canMax)
+		if (tmp[layer].type == "none") return new Decimal (Infinity)
+
+		if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity)
+		if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity)
+
+		if (type=="static") {
+			if (!tmp[layer].canBuyMax) canMax = false
+			let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0)
+			let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult)
+			let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires)
+			if (tmp[layer].roundUpCost) cost = cost.ceil()
+			return cost;
+		} else if (type=="normal"){
+			let next = tmp[layer].resetGain.add(1)
+			if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower))
+			next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
+			if (tmp[layer].roundUpCost) next = next.ceil()
+			return next;
+		} else if (type == "custom"){
 			return layers[layer].getNextAt(canMax)
-
+		} else {
+			return new Decimal(0)
 		}
-	if(tmp[layer].type == "none")
-		return new Decimal (Infinity)
-
-	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity)
-	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity)
-
-	if (type=="static") 
-	{
-		if (!tmp[layer].canBuyMax) canMax = false
-		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0)
-		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult)
-		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires)
-		if (tmp[layer].roundUpCost) cost = cost.ceil()
-		return cost;
-	} else if (type=="normal"){
-		let next = tmp[layer].resetGain.add(1)
-		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower))
-		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
-		if (tmp[layer].roundUpCost) next = next.ceil()
-		return next;
-	} else if (type=="custom"){
-		return layers[layer].getNextAt(canMax)
-	} else {
-		return new Decimal(0)
-	}}
+	}
+}
 
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value
-	else
-		return value.pow(power).times(cap.pow(decimalOne.sub(power)))
+	return value.pow(power).times(cap.pow(decimalOne.sub(power)))
 }
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
@@ -104,24 +99,21 @@ function shouldNotify(layer){
 	}
 	 
 	return tmp[layer].shouldNotify
-	
 }
 
 function canReset(layer){	
 	if (layers[layer].canReset!== undefined)
 		return run(layers[layer].canReset, layers[layer])
-	else if(tmp[layer].type == "normal")
+	else if (tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
-	else if(tmp[layer].type== "static")
+	else if (tmp[layer].type== "static")
 		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-	else 
-		return false
+	else return false
 }
 
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
 		if(layers[lr].doReset) {
-
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
 		}
@@ -260,8 +252,7 @@ function startChallenge(layer, x) {
 	updateChallengeTemp(layer)
 }
 
-function canCompleteChallenge(layer, x)
-{
+function canCompleteChallenge(layer, x){
 	if (x != player[layer].activeChallenge) return
 	let challenge = tmp[layer].challenges[x]
 	if (challenge.canComplete !== undefined) return challenge.canComplete
@@ -279,10 +270,7 @@ function canCompleteChallenge(layer, x)
 			return !(player[name].lt(challenge.goal))
 		}
 	}
-	else {
-		return !(player.points.lt(challenge.goal))
-	}
-
+	return !(player.points.lt(challenge.goal))
 }
 
 function completeChallenge(layer, x) {

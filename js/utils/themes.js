@@ -2,9 +2,11 @@
 const themes = {
 	1: "aqua"
 };
+
 const theme_names = {
 	aqua: "Aqua"
 };
+
 function changeTheme() {
 	let aqua = player.theme == "aqua";
 	colors_theme = colors[player.theme || "default"];
@@ -14,9 +16,11 @@ function changeTheme() {
 	document.body.style.setProperty('--points', aqua ? "#dfefff" : "#ffffff");
 	document.body.style.setProperty("--locked", aqua ? "#c4a7b3" : "#bf8f8f");
 }
+
 function getThemeName() {
 	return player.theme ? theme_names[player.theme] : "Default";
 }
+
 function switchTheme() {
 	if (player.theme === undefined)
 		player.theme = themes[1];
