@@ -4,26 +4,15 @@ let modInfo = {
 	pointsName: "points",
 	discordName: "",
 	discordLink: "",
-<<<<<<< HEAD
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
 	
 	offlineLimit: 1,  // In hours
-=======
-	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
-    offlineLimit: 1,  // In hours
-    initialStartPoints: new Decimal (10) // Used for hard resets and new players
->>>>>>> evolution
 }
 
 // Set your version in num and name
 let VERSION = {
-<<<<<<< HEAD
 	num: "2.π.1",
 	name: "Incrementally Updated",
-=======
-	num: "2.1.3.1",
-	name: " We should have thought of this sooner!",
->>>>>>> evolution
 }
 
 let changelog = `<h1>Changelog:</h1><br>

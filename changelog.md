@@ -1,6 +1,5 @@
 # The Modding Tree changelog:
 
-<<<<<<< HEAD
 # v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.
 - Upgrades will expand if there is too much text to display. 
@@ -126,8 +125,6 @@
 - Many other minor fixes.
 
 
-=======
->>>>>>> evolution
 ### v2.1.4 - 10/25/20
 - Added an infobox component. Thank you to thepaperpilot for this contribution!
 - Layer type is now optional, and defaults to "none".
@@ -292,7 +289,6 @@ which will break old things)
 - Fixed a big save issue. If you use a unique mod id, your save will never conflict with other mods.
 - Added a configurable offline time limit in modinfo at the top of index.html. (default 1 hour)
 - Added a few minor features, and updated the docs with new information.
-
 
 
 ### v1.1.1:

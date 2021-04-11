@@ -1,22 +1,12 @@
 var player;
 var needCanvasUpdate = true;
-var NaNalert = false;
 var gameEnded = false;
 var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-<<<<<<< HEAD
 	tmtNum: "2.π.1",
 	tmtName: "Incrementally Updated"
-=======
-	tmtNum: "2.1.3.1",
-	tmtName: "We should have thought of this sooner!"
-}
-
-function finishedChallenges(layer, data){
-	return challengeCompletions(layer, data) == (layers[layer].challenges[data].completionLimit || 1)
->>>>>>> evolution
 }
 
 function getResetGain(layer, useType = null) {
@@ -73,7 +63,7 @@ function getNextAt(layer, canMax=false, useType = null) {
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
 		if (tmp[layer].roundUpCost) next = next.ceil()
 		return next;
-	} else if (type=="custom" && layers[layer].getNextAt != undefined){
+	} else if (type=="custom"){
 		return layers[layer].getNextAt(canMax)
 	} else {
 		return new Decimal(0)
@@ -87,6 +77,7 @@ function softcap(value, cap, power = 0.5) {
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){
+	if (player.tab == layer || player.navTab == layer) return false
 	for (id in tmp[layer].upgrades){
 		if (!isNaN(id)){
 			if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked){
@@ -105,16 +96,11 @@ function shouldNotify(layer){
 		}
 	}
 
-<<<<<<< HEAD
 	for (family in tmp[layer].microtabs) {
 		for (subtab in tmp[layer].microtabs[family]){
 			if (subtabShouldNotify(layer, family, subtab))
 				return true
 		}
-=======
-	if (layers[layer].shouldNotify){
-		return layers[layer].shouldNotify()
->>>>>>> evolution
 	}
 	 
 	return tmp[layer].shouldNotify
@@ -122,54 +108,26 @@ function shouldNotify(layer){
 }
 
 function canReset(layer)
-<<<<<<< HEAD
 {	
 	if (layers[layer].canReset!== undefined)
 		return run(layers[layer].canReset, layers[layer])
 	else if(tmp[layer].type == "normal")
-=======
-{
-	if (tmp[layer].type == "normal")
->>>>>>> evolution
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
-	else if (tmp[layer].type== "static")
+	else if(tmp[layer].type== "static")
 		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-<<<<<<< HEAD
 	else 
 		return false
-=======
-	if (tmp[layer].type == "none")
-		return false
-	else if (layers[layer].canReset != undefined)
-		return layers[layer].canReset()
-	else return tmp[layer].baseAmount.gte(tmp[layer].requires)
->>>>>>> evolution
 }
 
 function rowReset(row, layer) {
-	if (row == "side") {
-		for (lr in ROW_LAYERS["side"]){
-			if (layers[lr].doReset) {
-				player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
-				layers[lr].doReset(layer)
-			}
-		}
-		return
-	}
-	let order = Object.keys(ROW_LAYERS[row])
-	if (row == 3) order = order.reverse()
-	for (let i = 0; i < order.length; i ++){
-		lr = order[i]
-		if (layers[lr].doReset) {
+	for (lr in ROW_LAYERS[row]){
+		if(layers[lr].doReset) {
+
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
 		}
-<<<<<<< HEAD
 		else
 			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
-=======
-		else if(tmp[layer].row > tmp[lr].row && row !== "side") layerDataReset(lr)
->>>>>>> evolution
 	}
 }
 
@@ -184,11 +142,7 @@ function layerDataReset(layer, keep = []) {
 	Vue.set(player[layer], "clickables", getStartClickables(layer))
 	Vue.set(player[layer], "challenges", getStartChallenges(layer))
 
-<<<<<<< HEAD
 	layOver(player[layer], getStartLayerData(layer))
-=======
-	player[layer] = layers[layer].startData();
->>>>>>> evolution
 	player[layer].upgrades = []
 	player[layer].milestones = []
 	player[layer].achievements = []
@@ -203,7 +157,8 @@ function layerDataReset(layer, keep = []) {
 }
 
 function resetBuyables(layer){
-	if (layers[layer].buyables) player[layer].buyables = getStartBuyables(layer)
+	if (layers[layer].buyables) 
+		player[layer].buyables = getStartBuyables(layer)
 	player[layer].spentOnBuyables = new Decimal(0)
 }
 
@@ -212,7 +167,6 @@ function addPoints(layer, gain) {
 	player[layer].points = player[layer].points.add(gain).max(0)
 	if (player[layer].best) player[layer].best = player[layer].best.max(player[layer].points)
 	if (player[layer].total) player[layer].total = player[layer].total.add(gain)
-	if (player[layer].bestOnce) player[layer].bestOnce = player[layer].bestOnce.max(gain)
 }
 
 function generatePoints(layer, diff) {
@@ -235,14 +189,6 @@ function doReset(layer, force=false) {
 			if (!tmp[layer].canReset) return;
 		} 
 
-		let timesMult = hasUpgrade("o", 13) && layer == "sp" ? 5 : 1
-		if (hasMilestone("c", 1) && layer == "sp") timesMult *= 3
-		if (hasMilestone("c", 2) && layer == "sp") timesMult *= 5
-		if (devSpeedUp) timesMult *= 2
-
-		timesMult = Math.floor(timesMult)
-		if (player[layer].times != undefined) player[layer].times += timesMult
-
 		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
 		
@@ -260,9 +206,12 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
+	
 		tmp[layer].baseAmount = new Decimal(0) // quick fix
 	}
+
 	if (tmp[layer].resetsNothing) return
+
 
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
@@ -302,26 +251,21 @@ function startChallenge(layer, x) {
 	if (!player[layer].unlocked) return
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
-		delete player[layer].activeChallenge
+		player[layer].activeChallenge = null
 	} else {
 		enter = true
 	}	
 	doReset(layer, true)
-	if (layer == "b") doReset("am", true)
-	if (enter) player[layer].activeChallenge = x
+	if(enter) player[layer].activeChallenge = x
 
 	updateChallengeTemp(layer)
 }
 
-function canCompleteChallenge(layer, x){
+function canCompleteChallenge(layer, x)
+{
 	if (x != player[layer].activeChallenge) return
-<<<<<<< HEAD
 	let challenge = tmp[layer].challenges[x]
 	if (challenge.canComplete !== undefined) return challenge.canComplete
-=======
-
-	let challenge = tmp[layer].challenges[x] 
->>>>>>> evolution
 
 	if (challenge.currencyInternalName){
 		let name = challenge.currencyInternalName
@@ -337,56 +281,33 @@ function canCompleteChallenge(layer, x){
 		}
 	}
 	else {
-		return !(player[layer].points.lt(challenge.goal))
+		return !(player.points.lt(challenge.goal))
 	}
+
 }
 
 function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
-<<<<<<< HEAD
 	
 	let completions = canCompleteChallenge(layer, x)
 	if (!completions){
 		 player[layer].activeChallenge = null
-=======
-	if (layer == "sp") {
-		let pts = layers.sp.challenges.getPointGain()
-		if (x == 11) player.sp.chall1points = player.sp.chall1points.max(pts)
-		if (x == 12) player.sp.chall2points = player.sp.chall2points.max(pts)
-		if (x == 21) player.sp.chall3points = player.sp.chall3points.max(pts)
-		if (x == 22) player.sp.chall4points = player.sp.chall4points.max(pts)
-	}
-	if (!canCompleteChallenge(layer, x)){
-		delete player[layer].activeChallenge
->>>>>>> evolution
 		return
 	}
-	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit || player[layer].challenges[x] == undefined) {
+	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
 		needCanvasUpdate = true
 		player[layer].challenges[x] += completions
 		player[layer].challenges[x] = Math.min(player[layer].challenges[x], tmp[layer].challenges[x].completionLimit)
 		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, layers[layer].challenges[x])
 	}
-	while (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
-		if (layer == "b" && x == 12) break
-
-		tmp[layer].challenges[x].goal = layers[layer].challenges[x].goal
-		if (typeof tmp[layer].challenges[x].goal == "function"){
-			tmp[layer].challenges[x].goal = tmp[layer].challenges[x].goal()
-		}
-		
-		if (canCompleteChallenge(layer, x)) player[layer].challenges[x] += 1
-		else break
-	}
-	delete player[layer].activeChallenge
+	player[layer].activeChallenge = null
 	updateChallengeTemp(layer)
 }
 
 VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.pre ? " Beta " + VERSION.beta : "")
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
-<<<<<<< HEAD
 
 function autobuyUpgrades(layer){
 	if (!tmp[layer].upgrades) return
@@ -395,8 +316,6 @@ function autobuyUpgrades(layer){
 			buyUpg(layer, id) 
 }
 
-=======
->>>>>>> evolution
 function gameLoop(diff) {
 	if (isEndgame() || gameEnded) gameEnded = 1
 
@@ -407,49 +326,36 @@ function gameLoop(diff) {
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 
-<<<<<<< HEAD
 	if (maxTickLength) {
 		let limit = maxTickLength()
 		if(diff > limit)
 			diff = limit
 	}
-=======
-	let limit = maxTickLength()
-	if (diff > limit) diff = limit
-
->>>>>>> evolution
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
 	for (x = 0; x <= maxRow; x++){
 		for (item in TREE_LAYERS[x]) {
-<<<<<<< HEAD
 			let layer = TREE_LAYERS[x][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-=======
-			let layer = TREE_LAYERS[x][item].layer
->>>>>>> evolution
 			if (layers[layer].update) layers[layer].update(diff);
 		}
 	}
 
 	for (row in OTHER_LAYERS){
 		for (item in OTHER_LAYERS[row]) {
-<<<<<<< HEAD
 			let layer = OTHER_LAYERS[row][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-=======
-			let layer = OTHER_LAYERS[row][item].layer
->>>>>>> evolution
 			if (layers[layer].update) layers[layer].update(diff);
 		}
 	}	
 
 	for (x = maxRow; x >= 0; x--){
 		for (item in TREE_LAYERS[x]) {
-			let layer = TREE_LAYERS[x][item].layer
+			let layer = TREE_LAYERS[x][item]
+			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
 			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
@@ -457,7 +363,8 @@ function gameLoop(diff) {
 
 	for (row in OTHER_LAYERS){
 		for (item in OTHER_LAYERS[row]) {
-			let layer = OTHER_LAYERS[row][item].layer
+			let layer = OTHER_LAYERS[row][item]
+			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
 			player[layer].best = player[layer].best.max(player[layer].points)
 			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
@@ -469,13 +376,6 @@ function gameLoop(diff) {
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
-	if (player.hasNaN&&!NaNalert) {
-		clearInterval(interval);
-		player.autosave = false;
-		NaNalert = true;
-
-		alert("We have detected a corruption in your save. Please visit one of the discords in the info panel for help.")
-	}
 }
 
 function hardReset() {
@@ -486,20 +386,11 @@ function hardReset() {
 }
 
 var ticking = false
-var devstop = false
-
-function aboveZero(){
-	list = ["i", "am", "a", "m", "e", "p", "n", "g", "q", "s", "b", "sp", "pi", "c", "o"]
-	for (let i = 0; i < list.length; i ++){
-		player[list[i]].points = player[list[i]].points.max(0)
-	}
-}
 
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
 	if (ticking) return;
 	if (gameEnded&&!player.keepGoing) return;
-	if (devstop) return
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
@@ -510,11 +401,10 @@ var interval = setInterval(function() {
 			player.offTime.remain -= offlineDiff
 			diff += offlineDiff
 		}
-		if (!player.offlineProd || player.offTime.remain <= 0) delete player.offTime
+		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
-	if (player.devSpeed != undefined) diff *= player.devSpeed
+	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now
-<<<<<<< HEAD
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}
@@ -523,11 +413,7 @@ var interval = setInterval(function() {
 	gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(0.05) 
-=======
-	if (needCanvasUpdate) resizeCanvas();
-	aboveZero()
-	updateTemp();
-	gameLoop(diff)
->>>>>>> evolution
 	ticking = false
 }, 50)
+
+setInterval(function() {needCanvasUpdate = true}, 500)
