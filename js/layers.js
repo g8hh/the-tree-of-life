@@ -195,3 +195,177 @@ addLayer("h", {
                 }
         },
 })
+
+addLayer("ach", {
+        name: "Goals",
+        symbol: "⭑", 
+        position: 1,
+        startData() { return {
+                unlocked: true,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                abtime: 0,
+                time: 0,
+                times: 0,
+                autotimes: 0,
+                hiddenRows: 0,
+                clickedYeet: 0,
+        }},
+        color: "#FFC746",
+        branches: [],
+        requires: new Decimal(0),
+        resource: "Goals",
+        baseResource: "points",
+        baseAmount() {return new Decimal(0)},
+        type: "custom",
+        getResetGain() {
+                return new Decimal(0)
+        },
+        getNextAt(){
+                return new Decimal(0)
+        },
+        update(diff){
+                let data = player.ach
+                data.points = new Decimal(data.achievements.length).max(data.points)
+                data.best = data.best.max(data.points)
+        },
+        row: "side",
+        hotkeys: [],
+        layerShown(){return true},
+        prestigeButtonText(){
+                return ""
+        },
+        canReset(){
+                return false
+        },
+        achievements: getFirstNAchData(Object.keys(PROGRESSION_MILESTONES).length),
+        clickables: {
+                rows: 1,
+                cols: 3,
+                11: {
+                        title(){
+                                if (player.tab != "ach") return ""
+                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
+                                return "<h3 style='color: #0033FF'>Hide the top row</h3>"
+                        },
+                        display(){
+                                return shiftDown ? "Hides top layers until an unfinished layer" : ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                if (shiftDown) return true
+                                return player.ach.hiddenRows < Object.keys(PROGRESSION_MILESTONES).length/7
+                        },
+                        onClick(){
+                                if (!this.canClick()) return 
+                                if (!shiftDown) {
+                                        player.ach.hiddenRows ++
+                                        return
+                                }
+                                player.ach.hiddenRows = 0
+                                let b = 0
+                                while (hasCompletedFirstNRows(player.ach.hiddenRows + 1)) {
+                                        b ++ 
+                                        player.ach.hiddenRows ++
+                                        if (b > 1000) {
+                                                console.log ('uh oh')
+                                                return 
+                                        }
+                                }
+                        },
+                },
+                12: {
+                        title(){
+                                if (player.tab != "ach") return ""
+                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
+                                return "<h3 style='color: #0033FF'>Show a row</h3>"
+                        },
+                        display(){
+                                return shiftDown ? "Show all rows" : ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return player.ach.hiddenRows > 0
+                        },
+                        onClick(){
+                                if (!this.canClick()) return 
+                                if (shiftDown) player.ach.hiddenRows = 0
+                                else player.ach.hiddenRows --
+                        },
+                },
+                13: {
+                        title(){
+                                if (player.tab != "ach") return ""
+                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
+                                return "<h3 style='color: #0033FF'>Click</h3>"
+                        },
+                        display(){
+                                return formatWhole(player.ach.clickedYeet) + (player.ach.clickedYeet == 69 ? " nice" : "")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.ach.clickedYeet ++ 
+                        },
+                },
+        },
+        tabFormat: {
+                "Achievements": {
+                        content: [
+                                "main-display-goals",
+                                "clickables",
+                                "achievements",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: [
+                                "main-display-goals",
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return false
+                        },
+                },
+        },
+        doReset(layer){
+                return 
+                /*
+                if (layers[layer].row != "side") return 
+                if (layer == "ach") return
+                if (hasMilestone("i", 1)) return 
+
+                let data = player.ach
+
+                let remove = [
+                        "11", "12", "13", "14", "15", "16", "17", 
+                        "21", "22", "23", "24", "25", "26", "27", 
+                        "31", "32", "33", "34", "35", "36", "37", 
+                        "41", "42", "43", "44", "45", "46", "47", 
+                        "51", "52", "53", "54", "55", "56", "57", 
+                        "61", "62", "63", "64", "65", "66", "67", 
+                        "71", "72", "73", "74", "75", "76", "77", 
+                        "81", "82", "83", "84"]
+
+                data.achievements = filterout(data.achievements, remove)
+                data.best = new Decimal(0)
+                data.points = new Decimal(0)
+
+                let keep = []
+                data.milestones = filter(data.milestones, keep)
+                updateAchievements("ach")
+                updateMilestones("ach")
+                */
+        },
+})

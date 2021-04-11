@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.003.1",
+	num: "0.004",
 	name: "Beginnings",
 }
 
@@ -24,9 +24,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content<br><br><br>
 
 	TO DO:<br>
-	- Add achievements (same as chain, no photos unless someone else)<br>
 	- Add upgrades (first = 10?)<br>
 
+	<br><h3 style='color: #CC0000'>v0.004</h3><br>
+		- Added achievements.<br>
 	<br><h3 style='color: #CC0000'>v0.003</h3><br>
 		- Added the old hotkey set up.<br>
 		- Added spacing.<br>
