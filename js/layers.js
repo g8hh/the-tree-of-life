@@ -1,6 +1,13 @@
 function getPointGen() {
 	let gain = new Decimal(.1)
         if (hasUpgrade("h", 11)) gain = gain.times(tmp.h.upgrades[11].effect)
+        if (hasUpgrade("h", 22)) gain = gain.times(tmp.h.upgrades[22].effect)
+        if (hasUpgrade("h", 34)) gain = gain.times(tmp.h.upgrades[13].effect)
+
+
+
+        if (hasUpgrade("h", 25)) gain = gain.pow(tmp.h.upgrades[25].effect)
+
 	return gain
 }
 
@@ -23,7 +30,11 @@ addLayer("h", {
                 deuterium: {
                         points: new Decimal(0),
                         best: new Decimal(0),
-                }
+                },
+                atomic_hydrogen: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                },
         }},
         color: "#646400",
         branches: [],
@@ -45,13 +56,15 @@ addLayer("h", {
                 let ret = new Decimal(.01)
                 if (hasUpgrade("h", 21)) ret = ret.plus(.0002)
                 if (hasUpgrade("h", 31)) ret = ret.plus(.001)
+                if (hasUpgrade("h", 35)) ret = ret.sub( .0012)
 
-                return ret
+                return ret.max(.00001)
         },
         getGainMult(){
                 let x = new Decimal(1)
 
                 if (hasUpgrade("h", 13)) x = x.times(tmp.h.upgrades[13].effect)
+                if (hasUpgrade("h", 22)) x = x.times(tmp.h.upgrades[22].effect)
 
                 return x
         },
@@ -64,15 +77,21 @@ addLayer("h", {
         update(diff){
                 let data = player.h
                 let deut = data.deuterium
+                let atmc = data.atomic_hydrogen
                 if (data.best.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
                 deut.best = deut.best.max(deut.points)
+                atmc.best = atmc.best.max(atmc.points)
                 
                 // do hydrogen gain
                 data.points = getLogisticAmount(data.points, tmp.h.getResetGain, tmp.h.getLossRate, diff)
                 if (hasUpgrade("h", 21)) deut.points = getLogisticAmount(deut.points, 
                                                                          tmp.h.deuterium.getResetGain, 
                                                                          tmp.h.deuterium.getLossRate, 
+                                                                         diff)
+                if (hasUpgrade("h", 31)) atmc.points = getLogisticAmount(atmc.points, 
+                                                                         tmp.h.atomic_hydrogen.getResetGain, 
+                                                                         tmp.h.atomic_hydrogen.getLossRate, 
                                                                          diff)
 
                 if (false) {
@@ -153,6 +172,24 @@ addLayer("h", {
                 getGainMult(){
                         let x = new Decimal(1)
 
+                        if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
+
+                        return x
+                },
+        },
+        atomic_hydrogen: {
+                getResetGain() {
+                        let base = player.h.points.times(.001)
+                        let mult = tmp.h.atomic_hydrogen.getGainMult
+
+                        return base.times(mult)
+                },
+                getLossRate() {
+                        return new Decimal(.01)
+                },
+                getGainMult(){
+                        let x = new Decimal(1)
+
                         return x
                 },
         },
@@ -160,17 +197,24 @@ addLayer("h", {
                 rows: 1000,
                 cols: 5,
                 11: {
-                        title: "Hydrogen I",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(0) + "'>Hydrogen I"
+                        },
                         description(){
                                 if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
                                 a = "ln([best Hydrogen])"
                                 if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
+                                if (hasUpgrade("h", 32)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 11)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(20), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost: new Decimal(20),
                         effect(){
-                                let ret = player.h.best.max(1).ln().max(1)
+                                let init = player.h.best.max(1)
+                                let ret 
+
+                                if (hasUpgrade("h", 32)) ret = init.log2().max(1)
+                                else                     ret = init.ln().max(1)
 
                                 if (hasUpgrade("h", 14)) ret = ret.pow(tmp.h.upgrades[14].effect)
 
@@ -186,7 +230,9 @@ addLayer("h", {
                         }, //hasUpgrade("h", 11)
                 },
                 12: {
-                        title: "Hydrogen II",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(1) + "'>Hydrogen II"
+                        },
                         description(){
                                 if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula"
                                 a = "[Hydrogen upgrades]"
@@ -209,16 +255,21 @@ addLayer("h", {
                         }, //hasUpgrade("h", 12)
                 },
                 13: {
-                        title: "Hydrogen III",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(2) + "'>Hydrogen III"
+                        },
                         description(){
                                 if (!shiftDown) return "1+Achievements multiplies Hydrogen gain"
                                 a = "1+[Achievements]"
+                                if (hasUpgrade("h", 32)) a = "(" + a + ")^" + format(tmp.h.upgrades[32].effect)
                                 if (hasUpgrade("h", 13)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(100), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost: new Decimal(100),
                         effect(){
                                 let ret = new Decimal(player.ach.achievements.length).plus(1)
+
+                                if (hasUpgrade("h", 32)) ret = ret.pow(tmp.h.upgrades[32].effect)
 
                                 return ret
                         },
@@ -232,7 +283,9 @@ addLayer("h", {
                         }, //hasUpgrade("h", 13)
                 },
                 14: {
-                        title: "Hydrogen IV",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(3) + "'>Hydrogen IV"
+                        },
                         description(){
                                 if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]"
                                 a = "ln([Hydrogen upgrades]"
@@ -255,12 +308,14 @@ addLayer("h", {
                         }, //hasUpgrade("h", 14)
                 },
                 15: {
-                        title: "Hydrogen V",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(4) + "'>Hydrogen V"
+                        },
                         description(){
-                                if (!shiftDown) return "Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of the other"
+                                if (!shiftDown) return "Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other"
                                 a = ""
                                 if (hasUpgrade("h", 15)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(500), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(1000), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost: new Decimal(1000),
                         /*
@@ -280,14 +335,16 @@ addLayer("h", {
                         }, //hasUpgrade("h", 15)
                 },
                 21: {
-                        title: "Deuterium I",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(5) + "'>Deuterium I"
+                        },
                         description(){
                                 if (!shiftDown) return "Search through your Hydrogen to find the special .02% -- Deuterium"
                                 a = ""
                                 if (hasUpgrade("h", 21)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(1), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(1e5) : new Decimal(1),
+                        cost:() => hasUpgrade("h", 31) ? new Decimal(5e5) : new Decimal(1),
                         /*
                         effect(){
                                 let ret = new Decimal(player.h.upgrades.length).max(1).ln().max(1)
@@ -301,33 +358,225 @@ addLayer("h", {
                         },
                         */
                         unlocked(){
-                                return hasUpgrade("h", 15)
+                                return hasUpgrade("h", 15) && (!hasUpgrade("h", 31) || hasUpgrade("h", 35) || hasUpgrade("h", 25))
                         }, //hasUpgrade("h", 21)
                 },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(6) + "'>Deuterium II"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln(ln(10+[best Deuterium])) multiplies Life Point and Hydrogen gain"
+                                a = "ln(ln(10+[best Deuterium]))"
+                                if (hasUpgrade("h", 24)) a = "(ln(ln(10+[best Deuterium])))^[this row upgrades]"
+                                if (hasUpgrade("h", 22)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[22].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 31) ? new Decimal(10e3) : new Decimal(10),
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        effect(){
+                                let ret = player.h.deuterium.best.plus(10).ln().ln()
+
+                                if (hasUpgrade("h", 24)) ret = ret.pow(tmp.h.upgrades[24].effect)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
+                                return format(tmp.h.upgrades[22].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 21)
+                        }, //hasUpgrade("h", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(7) + "'>Deuterium III"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln([best Deuterium]) multiplies Deuterium gain"
+                                a = "ln(best Deuterium])"
+                                if (hasUpgrade("h", 23)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[23].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 31) ? new Decimal(40e3) : new Decimal(40),
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        effect(){
+                                let ret = player.h.deuterium.best.ln()
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
+                                return format(tmp.h.upgrades[23].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 22)
+                        }, //hasUpgrade("h", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(8) + "'>Deuterium IV"
+                        },
+                        description(){
+                                if (!shiftDown) return "Raise Deuterium II to the number of upgrades in this row"
+                                a = ""
+                                if (hasUpgrade("h", 24)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 31) ? new Decimal(300e3) : new Decimal(300),
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        effect(){
+                                let a = 1
+                                if (hasUpgrade("h", 21)) a ++
+                                if (hasUpgrade("h", 22)) a ++
+                                if (hasUpgrade("h", 23)) a ++
+                                if (hasUpgrade("h", 25)) a ++
+                                return a
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
+                                return format(tmp.h.upgrades[24].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 23)
+                        }, //hasUpgrade("h", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(9) + "'>Deuterium V"
+                        },
+                        description(){
+                                if (!shiftDown) return "Each upgrade raises Life Point gain ^1.01"
+                                a = "1.01^[upgrades]"
+                                if (hasUpgrade("h", 25)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 31) ? new Decimal(4000e3) : new Decimal(4000),
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        effect(){
+                                let a = Decimal.pow(1.01, player.h.upgrades.length)
+                                return a
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
+                                return format(tmp.h.upgrades[25].effect, 4)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 24)
+                        }, //hasUpgrade("h", 25)
+                },
                 31: {
-                        title: "Atomic Hydrogen I",
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(10) + "'>Atomic Hydrogen I"
+                        },
                         description(){
                                 if (!shiftDown) return "Wait for your Hydrogen to cool and bond at a brisk .1% rate"
                                 a = ""
                                 if (hasUpgrade("h", 31)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(1), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(1e5) : new Decimal(1),
-                        /*
+                        cost:() => hasUpgrade("h", 21) ? new Decimal(3e5) : new Decimal(1),
+                        unlocked(){
+                                return hasUpgrade("h", 15) && (!hasUpgrade("h", 21) || hasUpgrade("h", 25) || hasUpgrade("h", 35))
+                        }, //hasUpgrade("h", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(11) + "'>Atomic Hydrogen II"
+                        },
+                        description(){
+                                if (!shiftDown) return "Upgrades in this row ^ .8 raise Hydrogen III effect"
+                                a = "[this row upgrades] ^ .8"
+                                if (hasUpgrade("h", 32)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[32].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 21) ? new Decimal(40e3) : new Decimal(40),
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
                         effect(){
-                                let ret = new Decimal(player.h.upgrades.length).max(1).ln().max(1)
-
-                                return ret
+                                let a = 1
+                                if (hasUpgrade("h", 31)) a ++
+                                if (hasUpgrade("h", 33)) a ++
+                                if (hasUpgrade("h", 34)) a ++
+                                if (hasUpgrade("h", 35)) a ++
+                                return Decimal.pow(a, .8)
                         },
                         effectDisplay(){
                                 if (player.tab != "h") return ""
                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                return format(tmp.h.upgrades[14].effect)
+                                return format(tmp.h.upgrades[32].effect)
                         },
-                        */
                         unlocked(){
-                                return hasUpgrade("h", 15)
-                        }, //hasUpgrade("h", 31)
+                                return hasUpgrade("h", 31) 
+                        }, //hasUpgrade("h", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(12) + "'>Atomic Hydrogen III"
+                        },
+                        description(){
+                                if (!shiftDown) return "Make the ln in Hydrogen I a log2"
+                                a = ""
+                                if (hasUpgrade("h", 33)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 21) ? new Decimal(150e3) : new Decimal(150),
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 32) 
+                        }, //hasUpgrade("h", 33)
+                },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(13) + "'>Atomic Hydrogen IV"
+                        },
+                        description(){
+                                if (!shiftDown) return "Hydrogen III effects Life Points"
+                                a = ""
+                                if (hasUpgrade("h", 34)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 21) ? new Decimal(1500e3) : new Decimal(1500),
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 33) 
+                        }, //hasUpgrade("h", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(14) + "'>Atomic Hydrogen IV"
+                        },
+                        description(){
+                                if (!shiftDown) return "You lose .12% less Hydrogen per second"
+                                a = ""
+                                if (hasUpgrade("h", 35)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                        },
+                        cost:() => hasUpgrade("h", 21) ? new Decimal(7000e3) : new Decimal(7000),
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 34) 
+                        }, //hasUpgrade("h", 35)
                 },
         },
         tabFormat: {
@@ -347,13 +596,6 @@ addLayer("h", {
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                                 if (shiftDown) return "Formula: min(" + formatWhole(tmp.h.getDefaultMaximum) + ",ln(points))*[multipliers]"
                                                 return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
-                                        },
-                                ],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                                return 
                                         },
                                 ],
 
@@ -385,19 +627,42 @@ addLayer("h", {
                                                 return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
                                         },
                                 ],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
-                                                return 
-                                        },
-                                ],
 
                                 "blank", 
                                 ["upgrades", [2]]
                                 ],
                         unlocked(){
                                 return hasUpgrade("h", 21)
+                        },
+                },
+                "Atomic Hydrogen": {
+                        content: [["secondary-display", "atomic_hydrogen"],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "h") return ""
+                                                if (player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
+                                                if (shiftDown) {
+                                                        p1 = player.h.atomic_hydrogen
+                                                        t1 = tmp.h.atomic_hydrogen
+                                                        return "Your best Atomic Hydrogen is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Atomic Hydrogen per second"
+                                                }
+                                                return "You are gaining " + format(tmp.h.atomic_hydrogen.getResetGain) + " Atomic Hydrogen per second"
+                                        }
+                                ],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "h") return ""
+                                                if (player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
+                                                if (shiftDown) return "Formula: .001 * Hydrogen * [multipliers]"
+                                                return "You are losing " + format(tmp.h.atomic_hydrogen.getLossRate.times(100)) + "% of your Atomic Hydrogen per second"
+                                        },
+                                ],
+
+                                "blank", 
+                                ["upgrades", [3]]
+                                ],
+                        unlocked(){
+                                return hasUpgrade("h", 31)
                         },
                 },
                 /*

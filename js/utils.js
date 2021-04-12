@@ -33,6 +33,52 @@ function uppercaseWord(s){
 	return a.slice(0,1).toUpperCase() + a.slice(1,)
 }
 
+function improveName(s){
+	x = s.split("_")
+	l = x.length
+	ret = ""
+	for (i = 0; i < l; i++){
+		if (i > 0) ret += " "
+		ret += uppercaseWord(x[i])
+	}
+	return ret
+}
+
+function convertToB16(n){
+        let codes = {
+                0: "0",
+                1: "1",
+                2: "2",
+                3: "3",
+                4: "4",
+                5: "5",
+                6: "6",
+                7: "7",
+                8: "8",
+                9: "9",
+                10: "A",
+                11: "B",
+                12: "C",
+                13: "D",
+                14: "E",
+                15: "F",
+        }
+        let x = n % 16
+        return codes[(n-x)/16] + codes[x]
+}
+
+function getUndulatingColor(delta = 0, period = Math.sqrt(60)){
+	if (!player.undulating) return "000000"
+        let t = new Date().getTime()
+        let a = Math.sin(t / 1e3 / period + 0 + delta) 
+        let b = Math.sin(t / 1e3 / period + 2 + delta)
+        let c = Math.sin(t / 1e3 / period + 4 + delta)
+        a = convertToB16(Math.floor(a*128) + 128)
+        b = convertToB16(Math.floor(b*128) + 128)
+        c = convertToB16(Math.floor(c*128) + 128)
+        return String(a) + String(b) + String(c)
+}
+
 // ************ Big Feature related ************
 
 function respecBuyables(layer) {

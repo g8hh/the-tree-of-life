@@ -129,21 +129,37 @@ function hasCompletedFirstNRows(n){
 }
 
 PROGRESSION_MILESTONES = {
-        1:() => player.h.points.root(1).gte(20),
-        2:() => player.h.points.root(2).gte(20),
-        3:() => player.h.points.root(3).gte(20),
-        4:() => player.h.deuterium.points.gte(Decimal.pow(100, 0)),
-        5:() => player.h.deuterium.points.gte(Decimal.pow(100, 1)),
-        6:() => false,//player.h.atomic.points.div(5).gte(Decimal.pow(100, 0))
-        7:() => false,//player.h.atomic.points.div(5).gte(Decimal.pow(100, 1))
+        1:   () => player.h.points.root(1).gte(20),
+        2:   () => player.h.points.root(2).gte(20),
+        3:   () => player.h.points.root(3).gte(20),
+        4:   () => player.h.deuterium.points.gte(Decimal.pow(100, 0)),
+        5:   () => player.h.deuterium.points.gte(Decimal.pow(100, 1)),
+        6:   () => player.h.atomic_hydrogen.points.div(5).gte(Decimal.pow(100, 0)),
+        7:   () => player.h.atomic_hydrogen.points.div(5).gte(Decimal.pow(100, 1)),
+        8:   () => player.h.deuterium.points.gte(Decimal.pow(100, 2)),
+        9:   () => player.h.deuterium.points.gte(Decimal.pow(100, 3)),
+        10:  () => player.h.atomic_hydrogen.points.div(5).gte(Decimal.pow(100, 2)),
+        11:  () => player.h.atomic_hydrogen.points.div(5).gte(Decimal.pow(100, 3)),
+        12:  () => player.h.points.root(7).gte(10),
+        13:  () => player.h.points.root(11).gte(10),
+        14:  () => player.h.points.root(15).gte(10),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
-        1: "Twenty Hydrogen",
-        2: "Four Hundred Hydrogen",
-        3: "Eight Thousand Hydrogen",
-        4: "One Dueterium",
-        5: "One Hundred Dueterium",
+        1:   "Twenty Hydrogen",
+        2:   "Four Hundred Hydrogen",
+        3:   "Eight Thousand Hydrogen",
+        4:   "One Dueterium",
+        5:   "One Hundred Dueterium",
+        6:   "Five Atomic Hydrogen",
+        7:   "Five Hundred Atomic Hydrogen",
+        8:   "Ten Thousand Dueterium",
+        9:   "One Million Dueterium",
+        10:  "Fifty Thousand Atomic Hydrogen",
+        11:  "Five Million Atomic Hydrogen",
+        12:  "Ten Million Hydrogen",
+        13:  "One Hundred Billion Hydrogen",
+        14:  "10^15 Hydrogen",
 }
 
 

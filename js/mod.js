@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.006",
+	num: "0.007",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 10 Dueterium<br><br>
+		- 3e9 Hydrogen<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.007</h3><br>
+		- Added color undulating.<br>
+		- Added Atomic Hydrogen content, displays, and a new tab.<br>
+		- Added seven achievements.<br>
+		- Added nine Hydrogen upgrades.<br>
+		- Added Optima as the default font.<br>
 	<br><h3 style='color: #CC0000'>v0.006</h3><br>
 		- Added time until purchase displays.<br>
 		- Added Deuterium content, displays, and a new tab.<br>
