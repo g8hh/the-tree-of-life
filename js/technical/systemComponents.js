@@ -128,8 +128,9 @@ var systemComponents = {
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
         <a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
         <a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
-		<br><br>
-        Time Played: {{ formatTime(player.timePlayed) }}<br><br>
+	<br>
+        Time Played: {{ formatTime(player.timePlayed) }}<br>
+	<h1 style='color: #FF0066'>Shift to see details!</h1><br>
 	<table>
 		<tr>
 			<td><button class="opt" onclick="toggleShift()">Force toggle shift</button></td>
@@ -139,8 +140,10 @@ var systemComponents = {
 			<td><button class="opt" onclick="save()">Save</button></td>
 		</tr>
 	</table>
-        <h3>Hotkeys</h3><br>
-        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span></div>
+	<br><br>
+        <h2 style='color: #00FF99'>Hotkeys</h2><br>
+        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">{{key.description}}<br></span></div>
+	
     `
     },
 
