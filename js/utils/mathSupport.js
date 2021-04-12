@@ -12,6 +12,7 @@ so c = -ln(A-B[CURRENT])/B
 */
 function getLogisticTimeConstant(current, gain, loss){
         if (current.eq(gain.div(loss))) return Infinity
+        if (current.gt(gain.div(loss))) return current.times(loss).sub(gain).ln().div(-1).div(loss)
         return current.times(loss).sub(gain).times(-1).ln().div(-1).div(loss)
 }
 
@@ -31,15 +32,27 @@ function logisticTimeUntil(goal, current, gain, loss){
 
 function getLogisticAmount(current, gain, loss, diff){
         if (current.eq(gain.div(loss))) return current
-        c = getLogisticTimeConstant(current, gain, loss)
-        
-        val1 = c.plus(diff) // t+c
-        val2 = val1.times(-1).times(loss) // -B(t+c)
-        val3 = Decimal.exp(val2) // this should be A-Bx
-        val4 = gain.sub(val3) // should be A-(A-Bx) = Bx
-        val5 = val4.div(loss) // should be x
+        if (current.lt(gain.div(loss))) {
+                c = getLogisticTimeConstant(current, gain, loss)
+                
+                val1 = c.plus(diff) // t+c
+                val2 = val1.times(-1).times(loss) // -B(t+c)
+                val3 = Decimal.exp(val2) // this should be A-Bx
+                val4 = gain.sub(val3) // should be A-(A-Bx) = Bx
+                val5 = val4.div(loss) // should be x
 
-        return val5
+                return val5
+        } else {
+                c = getLogisticTimeConstant(current, gain, loss)
+                
+                val1 = c.plus(diff) // t+c
+                val2 = val1.times(-1).times(loss) // -B(t+c)
+                val3 = Decimal.exp(val2) // this should be Bx-A
+                val4 = gain.plus(val3) // should be (Bx-A)+A
+                val5 = val4.div(loss) // should be x
+
+                return val5
+        }
 }
 
 

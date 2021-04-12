@@ -12,20 +12,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.004",
+	num: "0.005",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
+		- 6 Hydrogen upgrades<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	TO DO:<br>
-	- Add upgrades (first = 10?)<br>
-
+	<br><h3 style='color: #CC0000'>v0.005</h3><br>
+		- Added seven Hydrogen upgrades.<br>
+		- Added code for when you have too much of an element and it needs to decay.<br>
+		- Added a display for actual Hydrogen/s.<br>
+		- Added two achievements.<br>
 	<br><h3 style='color: #CC0000'>v0.004</h3><br>
 		- Added achievements.<br>
 	<br><h3 style='color: #CC0000'>v0.003</h3><br>
