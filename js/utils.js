@@ -26,7 +26,12 @@ function getNextRightTab(layer){
 	return l[id + 1]
 }
 
+// ***************************
 
+function uppercaseWord(s){
+	a = s.toLowerCase()
+	return a.slice(0,1).toUpperCase() + a.slice(1,)
+}
 
 // ************ Big Feature related ************
 

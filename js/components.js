@@ -222,6 +222,15 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('secondary-display', {
+		props: ['layer', 'data'],
+		template: `
+		<div><span v-if="player[layer][data].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{formatWhole(player[layer][data].points)}}</h2> {{uppercaseWord(data)}}<br><br></div>
+		`
+	})
+
+	uppercaseWord
+
 	// Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
 	Vue.component('resource-display', {
 		props: ['layer'],

@@ -132,14 +132,25 @@ PROGRESSION_MILESTONES = {
         1:() => player.h.points.root(1).gte(20),
         2:() => player.h.points.root(2).gte(20),
         3:() => player.h.points.root(3).gte(20),
-        4:() => false,
-        5:() => false,
-        6:() => false,
-        7:() => false,
+        4:() => player.h.deuterium.points.gte(Decimal.pow(100, 0)),
+        5:() => player.h.deuterium.points.gte(Decimal.pow(100, 1)),
+        6:() => false,//player.h.atomic.points.div(5).gte(Decimal.pow(100, 0))
+        7:() => false,//player.h.atomic.points.div(5).gte(Decimal.pow(100, 1))
 }
 
 PROGRESSION_MILESTONES_TEXT = {
         1: "Twenty Hydrogen",
         2: "Four Hundred Hydrogen",
         3: "Eight Thousand Hydrogen",
+        4: "One Dueterium",
+        5: "One Hundred Dueterium",
 }
+
+
+
+
+
+
+
+
+

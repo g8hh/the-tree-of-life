@@ -26,7 +26,7 @@ function logisticTimeUntil(goal, current, gain, loss){
         val4 = val3.times(-1).div(loss) //LHS
 
         c = getLogisticTimeConstant(current, gain, loss)
-        return val4.sub(c)        
+        return formatTime(val4.sub(c))  
 }
 
 
