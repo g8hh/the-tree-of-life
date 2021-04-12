@@ -12,25 +12,30 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.007.1",
+	num: "0.008",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 3e9 Hydrogen<br><br>
+		- 19 Hydrogen upgrades<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.008</h3><br>
+		- Added hard mode.<br>
+		- Added a display for whether you played hard mode from the start ({HARD} means you have).<br>
+		- Added an achievement rows completed display.<br>
+		- Added five Hydrogen upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.007</h3><br>
 		- Added color undulating.<br>
 		- Added Atomic Hydrogen content, displays, and a new tab.<br>
 		- Added seven achievements.<br>
 		- Added nine Hydrogen upgrades.<br>
-		- Added Optima as the default font.<br>
+		- Made Optima the default font.<br>
 	<br><h3 style='color: #CC0000'>v0.006</h3><br>
 		- Added time until purchase displays.<br>
 		- Added Deuterium content, displays, and a new tab.<br>
@@ -73,6 +78,8 @@ function addedPlayerData() { return {
 	toggleKeys: false,
 	undulating: false,
 	lastSave: new Date().getTime(),
+	hardMode: false,
+	hardFromBeginning: false,
 }}
 
 // Display extra things at the top of the page
@@ -85,6 +92,8 @@ var displayThings = [
 		if (shiftDown) end += "(S)"
 		if (controlDown) end += "(C)"
 		if (player.undulating) end += "(U)"
+		if (player.hardFromBeginning) end += "{HARD}"
+		else if (player.hardMode) end += "{Hard}"
 		return "Last save was: " + formatTime((t2-t1)/1000) + " ago " + end
 	}
 ]
@@ -140,6 +149,10 @@ function toggleUndulating(){
 	console.log("currently nothing undulates lol")
 }
 
+function enterHardMode(){
+	player.hardMode = true
+	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
 
 
 

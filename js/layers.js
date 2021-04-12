@@ -173,6 +173,7 @@ addLayer("h", {
                         let x = new Decimal(1)
 
                         if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
+                        if (hasUpgrade("h", 41)) x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
 
                         return x
                 },
@@ -190,6 +191,8 @@ addLayer("h", {
                 getGainMult(){
                         let x = new Decimal(1)
 
+                        if (hasUpgrade("h", 42)) x = x.times(Decimal.pow(player.h.deuterium.points.plus(3).ln(), tmp.h.upgrades[42].effect))
+
                         return x
                 },
         },
@@ -206,9 +209,9 @@ addLayer("h", {
                                 if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
                                 if (hasUpgrade("h", 32)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 11)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(20), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[11].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost: new Decimal(20),
+                        cost:() => player.hardMode ? new Decimal(125) : new Decimal(20),
                         effect(){
                                 let init = player.h.best.max(1)
                                 let ret 
@@ -236,12 +239,15 @@ addLayer("h", {
                         description(){
                                 if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula"
                                 a = "[Hydrogen upgrades]"
+                                if (hasUpgrade("h", 43)) a += "*2"
                                 if (hasUpgrade("h", 12)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(50), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[12].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost: new Decimal(50),
+                        cost:() => player.hardMode ? new Decimal(300) : new Decimal(50),
                         effect(){
                                 let ret = new Decimal(player.h.upgrades.length)
+
+                                if (hasUpgrade("h", 43)) ret = ret.times(2)
 
                                 return ret
                         },
@@ -263,9 +269,9 @@ addLayer("h", {
                                 a = "1+[Achievements]"
                                 if (hasUpgrade("h", 32)) a = "(" + a + ")^" + format(tmp.h.upgrades[32].effect)
                                 if (hasUpgrade("h", 13)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(100), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[13].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost: new Decimal(100),
+                        cost:() => player.hardMode ? new Decimal(450) : new Decimal(100),
                         effect(){
                                 let ret = new Decimal(player.ach.achievements.length).plus(1)
 
@@ -289,12 +295,15 @@ addLayer("h", {
                         description(){
                                 if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]"
                                 a = "ln([Hydrogen upgrades]"
+                                if (hasUpgrade("h", 43)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 14)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(500), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[14].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost: new Decimal(500),
+                        cost:() => player.hardMode ? new Decimal(1700) : new Decimal(500),
                         effect(){
-                                let ret = new Decimal(player.h.upgrades.length).max(1).ln().max(1)
+                                let a1 = new Decimal(player.h.upgrades.length).max(1)
+                                if (hasUpgrade("h", 43)) ret = a1.log2().max(1)
+                                else ret = a1.ln().max(1)
 
                                 return ret
                         },
@@ -315,9 +324,9 @@ addLayer("h", {
                                 if (!shiftDown) return "Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other"
                                 a = ""
                                 if (hasUpgrade("h", 15)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(new Decimal(1000), player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost: new Decimal(1000),
+                        cost:() => player.hardMode ? new Decimal(1750) : new Decimal(1000),
                         /*
                         effect(){
                                 let ret = new Decimal(player.h.upgrades.length).max(1).ln().max(1)
@@ -344,19 +353,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 21)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(5e5) : new Decimal(1),
-                        /*
-                        effect(){
-                                let ret = new Decimal(player.h.upgrades.length).max(1).ln().max(1)
-
-                                return ret
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e5) : new Decimal(1)
+                                return hasUpgrade("h", 31) ? new Decimal(15e5) : new Decimal(1)
                         },
-                        effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
-                                return format(tmp.h.upgrades[14].effect)
-                        },
-                        */
                         unlocked(){
                                 return hasUpgrade("h", 15) && (!hasUpgrade("h", 31) || hasUpgrade("h", 35) || hasUpgrade("h", 25))
                         }, //hasUpgrade("h", 21)
@@ -372,7 +372,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 22)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[22].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(10e3) : new Decimal(10),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(10e3) : new Decimal(10)
+                                return hasUpgrade("h", 31) ? new Decimal(123456) : new Decimal(30)
+                        },
                         currencyLocation:() => player.h.deuterium,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
@@ -402,7 +405,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 23)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[23].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(40e3) : new Decimal(40),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(40e3) : new Decimal(40)
+                                return hasUpgrade("h", 31) ? new Decimal(444444) : new Decimal(80)
+                        },
                         currencyLocation:() => player.h.deuterium,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
@@ -430,7 +436,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 24)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(300e3) : new Decimal(300),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(300e3) : new Decimal(300)
+                                return hasUpgrade("h", 31) ? new Decimal(12e6) : new Decimal(1000)
+                        },
                         currencyLocation:() => player.h.deuterium,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
@@ -461,7 +470,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 25)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 31) ? new Decimal(4000e3) : new Decimal(4000),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(4000e3) : new Decimal(4000)
+                                return hasUpgrade("h", 31) ? new Decimal(5e8) : new Decimal(5e4)
+                        },
                         currencyLocation:() => player.h.deuterium,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
@@ -488,7 +500,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 31)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(3e5) : new Decimal(1),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(3e5) : new Decimal(1)
+                                return hasUpgrade("h", 21) ? new Decimal(950e3) : new Decimal(1)
+                        },
                         unlocked(){
                                 return hasUpgrade("h", 15) && (!hasUpgrade("h", 21) || hasUpgrade("h", 25) || hasUpgrade("h", 35))
                         }, //hasUpgrade("h", 31)
@@ -503,7 +518,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 32)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[32].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(40e3) : new Decimal(40),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(40e3) : new Decimal(40)
+                                return hasUpgrade("h", 21) ? new Decimal(120e3) : new Decimal(250)
+                        },
                         currencyLocation:() => player.h.atomic_hydrogen,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Atomic Hydrogen",
@@ -517,7 +535,7 @@ addLayer("h", {
                         },
                         effectDisplay(){
                                 if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
                                 return format(tmp.h.upgrades[32].effect)
                         },
                         unlocked(){
@@ -534,7 +552,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 33)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(150e3) : new Decimal(150),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(150e3) : new Decimal(150)
+                                return hasUpgrade("h", 21) ? new Decimal(120e4) : new Decimal(1600)
+                        },
                         currencyLocation:() => player.h.atomic_hydrogen,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Atomic Hydrogen",
@@ -552,7 +573,10 @@ addLayer("h", {
                                 if (hasUpgrade("h", 34)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(1500e3) : new Decimal(1500),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(1500e3) : new Decimal(1500)
+                                return hasUpgrade("h", 21) ? new Decimal(120e5) : new Decimal(6e3)
+                        },
                         currencyLocation:() => player.h.atomic_hydrogen,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Atomic Hydrogen",
@@ -570,13 +594,131 @@ addLayer("h", {
                                 if (hasUpgrade("h", 35)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
-                        cost:() => hasUpgrade("h", 21) ? new Decimal(7000e3) : new Decimal(7000),
+                        cost(){
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(7000e3) : new Decimal(7000)
+                                return hasUpgrade("h", 21) ? new Decimal(85e6) : new Decimal(25e3)
+                        },
                         currencyLocation:() => player.h.atomic_hydrogen,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 34) 
                         }, //hasUpgrade("h", 35)
+                },
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(15) + "'>Hydrogen VI"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln(3+[Atomic Hydrogen])^<bdi style='color:#CC0033'>A</bdi> multiplies Deuterium gain"
+                                eff = format(tmp.h.upgrades[41].effect)
+                                a = "ln(3+[Atomic Hydrogen])^" + eff
+                                if (hasUpgrade("h", 41)) {
+                                        a += "<br>" + format(player.h.atomic_hydrogen.points.plus(3).ln()) + "^" + eff
+                                        return a
+                                }
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[41].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? new Decimal(5.5e9) : new Decimal(3e9)
+                        },
+                        effect(){
+                                let a = 1
+                                
+                                return a
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                return "<bdi style='color:#CC0033'>A</bdi>=" + format(tmp.h.upgrades[41].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 35) && hasUpgrade("h", 25) 
+                        }, //hasUpgrade("h", 41)
+                },
+                42: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(16) + "'>Hydrogen VII"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln(3+[Deuterium])^<bdi style='color:#CC0033'>B</bdi> multiplies Atomic Hydrogen gain"
+                                eff = format(tmp.h.upgrades[42].effect)
+                                a = "ln(3+[Deuterium])^" + eff
+                                if (hasUpgrade("h", 42)) {
+                                        a += "<br>" + format(player.h.deuterium.points.plus(3).ln()) + "^" + eff
+                                        return a
+                                }
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[42].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? new Decimal(7e9) : new Decimal(4e9)
+                        },
+                        effect(){
+                                let b = 2
+                                
+                                return b
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                return "<bdi style='color:#CC0033'>B</bdi>=" + format(tmp.h.upgrades[42].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 41)
+                        }, //hasUpgrade("h", 42)
+                },
+                43: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(17) + "'>Hydrogen VIII"
+                        },
+                        description(){
+                                if (!shiftDown) return "Double Hydrogen II and make the ln in Hydrogen IV a log2"
+                                a = ""
+                                if (hasUpgrade("h", 43)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[43].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? new Decimal(8e9) : new Decimal(5e9)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 42)
+                        }, //hasUpgrade("h", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(18) + "'>Hydrogen IX"
+                        },
+                        description(){
+                                if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>A</bdi>, but square Hydrogen X cost"
+                                a = ""
+                                if (hasUpgrade("h", 44)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[44].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
+                                return a.pow(hasUpgrade("h", 45) ? 2 : 1)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 43)
+                        }, //hasUpgrade("h", 44)
+                },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(19) + "'>Hydrogen X"
+                        },
+                        description(){
+                                if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>B</bdi>, but square Hydrogen IX cost"
+                                a = ""
+                                if (hasUpgrade("h", 45)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[45].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
+                                return a.pow(hasUpgrade("h", 44) ? 2 : 1)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 43)
+                        }, //hasUpgrade("h", 45)
                 },
         },
         tabFormat: {
@@ -600,7 +742,7 @@ addLayer("h", {
                                 ],
 
                                 "blank", 
-                                ["upgrades", [1,2,3]]],
+                                ["upgrades", [1,2,3,4]]],
                         unlocked(){
                                 return true
                         },
@@ -731,6 +873,7 @@ addLayer("ach", {
                 autotimes: 0,
                 hiddenRows: 0,
                 clickedYeet: 0,
+                completedRows: 0,
         }},
         color: "#FFC746",
         branches: [],
@@ -749,6 +892,9 @@ addLayer("ach", {
                 let data = player.ach
                 data.points = new Decimal(data.achievements.length).max(data.points)
                 data.best = data.best.max(data.points)
+                if (hasCompletedFirstNRows(player.ach.completedRows + 1)){
+                        player.ach.completedRows ++
+                }
         },
         row: "side",
         hotkeys: [],
@@ -843,6 +989,9 @@ addLayer("ach", {
                         content: [
                                 "main-display-goals",
                                 "clickables",
+                                ["display-text",function(){
+                                        return "You have completed the first " + formatWhole(player.ach.completedRows) + " rows"
+                                }],
                                 "achievements",
                         ],
                         unlocked(){

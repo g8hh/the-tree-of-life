@@ -136,6 +136,7 @@ var systemComponents = {
 			<td><button class="opt" onclick="toggleShift()">Force toggle shift</button></td>
 			<td><button class="opt" onclick="toggleControl()">Force toggle control</button></td>
 			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
+			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
 			<!-- <td><button class="opt" onclick="fixSaveNaN()">Attempt to fix save</button></td> this comments out pog-->
 			<td><button class="opt" onclick="save()">Save</button></td>
 		</tr>
