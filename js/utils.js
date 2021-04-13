@@ -34,6 +34,21 @@ function getBuyableBase(layer, id){
 	return tmp[layer].buyables[id].base
 }
 
+function nerfBminigameBuyableAmounts(x){
+	if (x.lt(1000)) return x
+	if (hasUpgrade("h", 52)) return x
+	return x.times(x.ln()).div(Math.log(1000))
+}
+
+function combineStrings(l){
+	a = ""
+	for (i = 0; i < l.length; i++){
+		if (i != 0) a += ", "
+		a += l[i]
+	}
+	return a
+}
+
 // ***************************
 
 function uppercaseWord(s){

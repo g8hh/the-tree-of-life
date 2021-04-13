@@ -150,6 +150,13 @@ PROGRESSION_MILESTONES = {
         19:  () => player.h.points.root(77).gte(10),
         20:  () => player.h.points.root(101).gte(10),
         21:  () => player.h.points.root(135).gte(10),
+        22:  () => player.h.points.root(176).gte(10),
+        23:  () => player.h.points.root(231).gte(10),
+        24:  () => player.h.points.root(297).gte(10),
+        25:  () => player.h.points.root(385).gte(10),
+        26:  () => player.h.points.root(490).gte(10),
+        27:  () => player.h.points.root(627).gte(10),
+        28:  () => player.h.points.root(792).gte(10),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -174,6 +181,13 @@ PROGRESSION_MILESTONES_TEXT = {
         19:  "10^77 Hydrogen",
         20:  "10^101 Hydrogen",
         21:  "10^135 Hydrogen",
+        22:  "10^176 Hydrogen",
+        23:  "10^231 Hydrogen",
+        24:  "10^297 Hydrogen",
+        25:  "10^385 Hydrogen",
+        26:  "10^490 Hydrogen",
+        27:  "10^627 Hydrogen",
+        28:  "10^792 Hydrogen",
 }
 
 

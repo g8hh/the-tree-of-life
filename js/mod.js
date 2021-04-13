@@ -12,23 +12,29 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.009.1",
+	num: "0.010",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 1e355 B points, though many more is possible<br><br>
+		- 1e308 Life Points, which will unlock two (2!) new layers<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.010</h3><br>
+		- Added a row of achievements.<br>
+		- Added 5 Hydrogen upgrades.<br>
+		- Added 3 buyables for the B minigame.<br>
+		- Added 8 buyables for the A minigame.<br>
+		- Improved number display.<br>
+		- Added arrow hotkeys.<br>
 	<br><h3 style='color: #CC0000'>v0.009</h3><br>
 		- Added a row of achievements.<br>
-		- Added a 5 buyables for the B minigame.<br>
-		- Added an achievement rows completed display.<br>
+		- Added 5 buyables for the B minigame.<br>
 	<br><h3 style='color: #CC0000'>v0.008</h3><br>
 		- Added hard mode.<br>
 		- Added a display for whether you played hard mode from the start ({HARD} means you have).<br>
@@ -84,6 +90,7 @@ function addedPlayerData() { return {
 	lastSave: new Date().getTime(),
 	hardMode: false,
 	hardFromBeginning: false,
+	arrowHotkeys: false,
 }}
 
 // Display extra things at the top of the page
@@ -92,10 +99,12 @@ var displayThings = [
 		// player.lastSave
 		t1 = player.lastSave
 		t2 = new Date().getTime()
-		end = ""
-		if (shiftDown) end += "(S)"
-		if (controlDown) end += "(C)"
-		if (player.undulating) end += "(U)"
+		list1 = ""
+		if (shiftDown) list1 = list1.concat("S")
+		if (controlDown) list1 = list1.concat("C")
+		if (player.undulating) list1 = list1.concat("U")
+		if (!player.arrowHotkeys) list1 = list1.concat("A")
+		let end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning) {
 			end += player.hardMode ? "{HARD}" : "{dev easy}"
 		}
@@ -160,6 +169,9 @@ function enterHardMode(){
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
 
+function toggleArrowHotkeys(){
+	player.arrowHotkeys = !player.arrowHotkeys
+}
 
 
 

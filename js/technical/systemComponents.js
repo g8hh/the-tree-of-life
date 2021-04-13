@@ -137,6 +137,7 @@ var systemComponents = {
 			<td><button class="opt" onclick="toggleControl()">Force toggle control</button></td>
 			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
 			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
+			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys</button></td>
 			<!-- <td><button class="opt" onclick="fixSaveNaN()">Attempt to fix save</button></td> this comments out pog-->
 			<td><button class="opt" onclick="save()">Save</button></td>
 		</tr>
@@ -144,6 +145,7 @@ var systemComponents = {
 	<br><br>
         <h2 style='color: #00FF99'>Hotkeys</h2><br>
         <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">{{key.description}}<br></span></div>
+	<br><br>
 	
     `
     },
