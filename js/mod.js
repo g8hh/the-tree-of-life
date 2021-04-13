@@ -12,19 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.008.1",
+	num: "0.009",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 3 Million B points<br><br>
+		- 1e355 B points, though many more is possible<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.009</h3><br>
+		- Added a row of achievements.<br>
+		- Added a 5 buyables for the B minigame.<br>
+		- Added an achievement rows completed display.<br>
 	<br><h3 style='color: #CC0000'>v0.008</h3><br>
 		- Added hard mode.<br>
 		- Added a display for whether you played hard mode from the start ({HARD} means you have).<br>
@@ -92,7 +96,9 @@ var displayThings = [
 		if (shiftDown) end += "(S)"
 		if (controlDown) end += "(C)"
 		if (player.undulating) end += "(U)"
-		if (player.hardFromBeginning) end += "{HARD}"
+		if (player.hardFromBeginning) {
+			end += player.hardMode ? "{HARD}" : "{dev easy}"
+		}
 		else if (player.hardMode) end += "{Hard}"
 		return "Last save was: " + formatTime((t2-t1)/1000) + " ago " + end
 	}
