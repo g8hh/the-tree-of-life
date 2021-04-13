@@ -207,7 +207,7 @@ addLayer("h", {
                                 if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
                                 a = "ln([best Hydrogen])"
                                 if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
-                                if (hasUpgrade("h", 32)) a = a.replace("ln", "log2")
+                                if (hasUpgrade("h", 33)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 11)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[11].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -216,7 +216,7 @@ addLayer("h", {
                                 let init = player.h.best.max(1)
                                 let ret 
 
-                                if (hasUpgrade("h", 32)) ret = init.log2().max(1)
+                                if (hasUpgrade("h", 33)) ret = init.log2().max(1)
                                 else                     ret = init.ln().max(1)
 
                                 if (hasUpgrade("h", 14)) ret = ret.pow(tmp.h.upgrades[14].effect)
@@ -586,7 +586,7 @@ addLayer("h", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(14) + "'>Atomic Hydrogen IV"
+                                return "<bdi style='color: #" + getUndulatingColor(14) + "'>Atomic Hydrogen V"
                         },
                         description(){
                                 if (!shiftDown) return "You lose .12% less Hydrogen per second"
@@ -854,10 +854,6 @@ addLayer("h", {
 })
 
 
-
-
-
-
 addLayer("ach", {
         name: "Goals",
         symbol: "⭑", 
@@ -1038,6 +1034,236 @@ addLayer("ach", {
                 */
         },
 })
+
+addLayer("mini", {
+        name: "Minigames",
+        symbol: "♡", 
+        position: 2,
+        startData() { return {
+                unlocked: true,
+                abtime: 0,
+                time: 0,
+                autotimes: 0,
+                a_points: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                        /*
+                        repeatables: {
+                                11: new Decimal(0),
+                                12: new Decimal(0),
+                                13: new Decimal(0),
+                                21: new Decimal(0),
+                                22: new Decimal(0),
+                                23: new Decimal(0),
+                        },
+                        */
+                        grid: {}
+                },
+                b_points: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                        /*
+                        repeatables: {
+                                11: new Decimal(0),
+                                12: new Decimal(0),
+                                13: new Decimal(0),
+                                21: new Decimal(0),
+                                22: new Decimal(0),
+                                23: new Decimal(0),
+                        },
+                        */
+                },
+        }},
+        color: "#FFC746",
+        branches: [],
+        requires: new Decimal(0),
+        resource: "Goals",
+        baseResource: "points",
+        baseAmount() {return new Decimal(0)},
+        type: "custom",
+        getResetGain() {
+                return new Decimal(0)
+        },
+        getNextAt(){
+                return new Decimal(0)
+        },
+        update(diff){
+                let data = player.mini
+                let bpts = data.b_points
+                if (player.subtabs.mini.mainTabs == "B" && tmp.mini.tabFormat.B.unlocked) {
+                        bpts.points = bpts.points.plus(tmp.mini.b_points.getResetGain.times(diff))
+                }
+        },
+        row: "side",
+        hotkeys: [],
+        layerShown(){return hasUpgrade("h", 45) || hasUpgrade("h", 44)},
+        prestigeButtonText(){
+                return ""
+        },
+        canReset(){
+                return false
+        },
+        clickables: {
+                rows: 1,
+                cols: 3,
+        },
+        b_points: {
+                getResetGain(){
+                        let ret = new Decimal(1)
+
+                        ret = ret.times(tmp.mini.buyables[31].effect)
+
+                        return ret
+                },
+        },
+        buyables: {
+                rows: 5,
+                cols: 3,
+                11: {
+
+                },
+                21: {
+
+                },
+                31: {
+                        title: "B11", 
+                        cost:() => new Decimal(10).times(Decimal.pow(20, Decimal.pow(getBuyableAmount("mini", 31), 1.1))),
+                        canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[31].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[31] = player.mini.buyables[31].plus(1)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        base(){
+                                return player.points.plus(10).log10()
+                        },
+                        effect(){
+                                return tmp.mini.buyables[31].base.pow(player.mini.buyables[31])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "B") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[31]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
+                                let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+
+                                let exformula = "" //getBuyableExtraText(layer, id)
+
+                                /*
+                                let scs = false
+                                if (softcap_data[layer+"_buy"+id] != undefined && softcap_data[layer+"_buy"+id][1] != undefined){
+                                        scs = softcap_data[layer+"_buy"+id][1].active
+                                        if (scs == undefined) scs = true
+                                        if (typeof scs == "function") scs = scs()
+                                        scs = scs && Decimal.lte(softcap_data[layer+"_buy"+id][1].start, savedEff)
+                                }
+
+                                let scsText = scs ? " (softcapped)" : ""
+
+                                let allEff = ef1 + eformula + scsText + ef2
+                                */
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(10)*(20^x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + exformula + allCost
+                                return "<br>" + end
+                        },
+                        /*
+                        display: display, 
+                        effect: effect,
+                        canAfford: canAfford,
+                        total: total,
+                        extra: extra,
+                        buy: buy,
+                        buyMax: buyMax,
+                        unlocked: unlockedTF, 
+                        */
+                },
+                41: {
+
+                },
+                51: {
+                },
+        },
+        tabFormat: {
+                "A": {
+                        content: [
+                                ["secondary-display", "a_points"],
+                                ["buyables", [1,2]],
+                        ],
+                        unlocked(){
+                                return hasUpgrade("h", 44)
+                        },
+                },
+                "B": {
+                        content: [
+                                ["secondary-display", "b_points"],
+                                ["display-text", "You need to be on this tab to keep this minigame ticking!"],
+                                ["display-text", function(){
+                                        a = "You are currently getting " + format(tmp.mini.b_points.getResetGain)
+                                        b = " B Points per second"
+                                        return a + b
+                                }],
+                                ["buyables", [3,4,5]],
+                        ],
+                        unlocked(){
+                                return hasUpgrade("h", 45)
+                        },
+                },
+        },
+        doReset(layer){
+                return 
+                /*
+                if (layers[layer].row != "side") return 
+                if (layer == "ach") return
+                if (hasMilestone("i", 1)) return 
+
+                let data = player.ach
+
+                let remove = [
+                        "11", "12", "13", "14", "15", "16", "17", 
+                        "21", "22", "23", "24", "25", "26", "27", 
+                        "31", "32", "33", "34", "35", "36", "37", 
+                        "41", "42", "43", "44", "45", "46", "47", 
+                        "51", "52", "53", "54", "55", "56", "57", 
+                        "61", "62", "63", "64", "65", "66", "67", 
+                        "71", "72", "73", "74", "75", "76", "77", 
+                        "81", "82", "83", "84"]
+
+                data.achievements = filterout(data.achievements, remove)
+                data.best = new Decimal(0)
+                data.points = new Decimal(0)
+
+                let keep = []
+                data.milestones = filter(data.milestones, keep)
+                updateAchievements("ach")
+                updateMilestones("ach")
+                */
+        },
+})
+
+
 
 
 

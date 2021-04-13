@@ -26,6 +26,14 @@ function getNextRightTab(layer){
 	return l[id + 1]
 }
 
+function getBuyableCost(layer, id){
+	return tmp[layer].buyables[id].cost
+}
+
+function getBuyableBase(layer, id){
+	return tmp[layer].buyables[id].base
+}
+
 // ***************************
 
 function uppercaseWord(s){
