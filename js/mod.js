@@ -12,19 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.010",
+	num: "0.011",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 1e308 Life Points, which will unlock two (2!) new layers<br><br>
+		- If you take C (only choice currently), then e666 LP is when O will unlock<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.011</h3><br>
+		- Added a row of achievements.<br>
+		- Added Carbon.<br>
+		- Added 4 Carbon upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.010</h3><br>
 		- Added a row of achievements.<br>
 		- Added 5 Hydrogen upgrades.<br>
