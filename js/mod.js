@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.011",
+	num: "0.012",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.012</h3><br>
+		- Added a row of achievements.<br>
+		- Added Oxygen.<br>
+		- Added a Oxygen upgrade.<br>
+		- Reduced A point gain in hard mode by 100x.<br>
 	<br><h3 style='color: #CC0000'>v0.011</h3><br>
 		- Added a row of achievements.<br>
 		- Added Carbon.<br>

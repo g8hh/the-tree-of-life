@@ -686,6 +686,7 @@ addLayer("h", {
 
                                 b = b.plus(tmp.mini.buyables[33].effect)
                                 b = b.plus(tmp.mini.buyables[43].effect)
+                                b = b.plus(tmp.mini.buyables[53].effect)
                                 
                                 return b
                         },
@@ -729,6 +730,10 @@ addLayer("h", {
                                 a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
                                 return a.pow(hasUpgrade("h", 45) ? 2 : 1)
                         },
+                        onPurchase(){
+                                player.tab = "mini"
+                                player.subtabs.mini.mainTabs = "A"
+                        },
                         unlocked(){
                                 return hasUpgrade("h", 43)
                         }, //hasUpgrade("h", 44)
@@ -746,6 +751,10 @@ addLayer("h", {
                         cost(){
                                 a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
                                 return a.pow(hasUpgrade("h", 44) ? 2 : 1)
+                        },
+                        onPurchase(){
+                                player.tab = "mini"
+                                player.subtabs.mini.mainTabs = "B"
                         },
                         unlocked(){
                                 return hasUpgrade("h", 43)
@@ -1003,7 +1012,7 @@ addLayer("c", {
         }},
         color: "#3C9009",
         branches: [],
-        requires: new Decimal(0), // Can be a function that takes requirement increases into account
+        requires:() => hasUpgrade("o", 11) ? Decimal.pow(2, 2560) : Decimal.pow(2, 1024), // Can be a function that takes requirement increases into account
         resource: "Carbon", // Name of prestige currency
         baseResource: "Life Points", // Name of resource prestige is based on
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
@@ -1014,7 +1023,11 @@ addLayer("c", {
 
                 let mult = tmp.c.getGainMult
 
-                return base.times(mult)
+                let ret = base.times(mult)
+
+                if (hasUpgrade("c", 15)) ret = ret.pow(tmp.h.upgrades[25].effect)
+
+                return ret
         },
         getBaseGain(){
                 let pts = player.points
@@ -1037,6 +1050,7 @@ addLayer("c", {
                 let x = new Decimal(1)
 
                 if (hasUpgrade("c", 14)) x = x.times(tmp.c.upgrades[14].effect)
+                if (hasUpgrade("c", 15)) x = x.times(tmp.h.upgrades[25].effect)
 
                 return x
         },
@@ -1044,7 +1058,7 @@ addLayer("c", {
                 let data = player.c
                 
                 if (data.best.gt(0)) data.unlocked = true
-                else data.unlocked = /*!player.o.best.gt(0) && */ player.points.max(2).log(2).gte(1024)
+                else data.unlocked = (!player.o.best.gt(0) || player.points.max(2).log(2).gte(2560)) &&  player.points.max(2).log(2).gte(1024)
                 data.best = data.best.max(data.points)
                 
                 // do hydrogen gain
@@ -1109,7 +1123,7 @@ addLayer("c", {
                                 a = "(log2(Life Points)/256-3)*multipliers"
                                 return a
                         },
-                        cost:() => Decimal.pow(2, false /* || hasUpgrade("o", 11)*/ ? 4096 : 1024), //may change
+                        cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2560 : 1024), //may change
                         /*
                         effect(){
                                 let init = player.h.best.max(1)
@@ -1202,6 +1216,21 @@ addLayer("c", {
                                 return hasUpgrade("c", 13)
                         }, //hasUpgrade("c", 14)
                 },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(29) + "'>Carbon V"
+                        },
+                        description(){
+                                if (!shiftDown) return "Deuterium V multiplies and then exponentiates Carbon gain"
+                                a = ""
+                                if (hasUpgrade("h", 15)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[15].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                        },
+                        cost:() => player.hardMode ? new Decimal(3000) : new Decimal(1000),
+                        unlocked(){
+                                return hasUpgrade("c", 14)
+                        }, //hasUpgrade("c", 15)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -1261,6 +1290,8 @@ addLayer("c", {
                 },*/
         },
         doReset(layer){
+                return 
+                /*
                 let data = player.h
                 if (layer == "h") {
                         data.time = 0
@@ -1295,7 +1326,224 @@ addLayer("c", {
                 for (let j = 0; j < resetBuyables.length; j++) {
                         data.buyables[resetBuyables[j]] = new Decimal(0)
                 }
+                */
         },
+})
+
+addLayer("o", {
+        name: "Oxygen", // This is optional, only used in a few places, If absent it just uses the layer id.
+        symbol: "O", // This appears on the layer's node. Default is the id with the first letter capitalized
+        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        startData() { return {
+                unlocked: false,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                abtime: 0,
+                time: 0,
+                times: 0,
+                autotimes: 0,
+                atomic_oxygen: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                },
+                ozone: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                },
+        }},
+        color: "#58E3F1",
+        branches: [],
+        requires:() => hasUpgrade("c", 11) ? Decimal.pow(2, 2560) : Decimal.pow(2, 1024), // Can be a function that takes requirement increases into account
+        resource: "Oxygen", // Name of prestige currency
+        baseResource: "Life Points", // Name of resource prestige is based on
+        baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
+        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        getResetGain() {
+                if (!hasUpgrade("o", 11)) return new Decimal(0)
+                let base = tmp.o.getBaseGain
+
+                let mult = tmp.o.getGainMult
+
+                let ret = base.times(mult)
+
+                return ret
+        },
+        getBaseGain(){
+                let pts = player.points
+                if (player.points.lt(2)) return new Decimal(0)
+                let base = player.points.max(4).log(2).log(2).sub(9).max(0).pow(2)
+
+                if (base.lt(1)) base = new Decimal(0)
+
+                return base
+        },
+        getNextAt(){
+                return new Decimal(0) //this doesnt matter
+        },
+        getLossRate() {
+                let ret = new Decimal(.01)
+
+                return ret.max(.00001)
+        },
+        getGainMult(){
+                let x = new Decimal(1)
+
+                return x
+        },
+        update(diff){
+                let data = player.o
+                
+                if (data.best.gt(0)) data.unlocked = true
+                else data.unlocked = (!player.c.best.gt(0) || player.points.max(2).log(2).gte(2560)) && player.points.max(2).log(2).gte(1024)
+                data.best = data.best.max(data.points)
+                
+                // do oxygen gain
+                data.points = getLogisticAmount(data.points, tmp.o.getResetGain, tmp.o.getLossRate, diff)
+                /*if (hasUpgrade("h", 21)) deut.points = getLogisticAmount(deut.points, 
+                                                                         tmp.h.deuterium.getResetGain, 
+                                                                         tmp.h.deuterium.getLossRate, 
+                                                                         diff)*/
+                
+
+                if (false) {
+                        //do autobuyer stuff
+                } else {
+                        data.abtime = 0
+                }
+                data.time += diff
+        },
+        row: 1, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+                {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
+                                showTab("o")
+                        }
+                },
+        ],
+        layerShown(){return player.points.gte(Decimal.pow(2, 1024)) || player.o.unlocked},
+        prestigeButtonText(){
+                return "hello"
+        },
+        canReset(){
+                return false
+        },
+        /*
+        deuterium: {
+                getResetGain() {
+                        let base = player.h.points.times(.0002)
+                        let mult = tmp.h.deuterium.getGainMult
+
+                        return base.times(mult)
+                },
+                getLossRate() {
+                        return new Decimal(.01)
+                },
+                getGainMult(){
+                        let x = new Decimal(1)
+
+                        if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
+                        if (hasUpgrade("h", 41)) x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
+                        x = x.times(tmp.mini.buyables[13].effect)
+
+                        return x
+                },
+        },*/
+        upgrades: {
+                rows: 1000,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(25) + "'>Oxygen I"
+                        },
+                        description(){
+                                if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
+                                a = "(log2(log2(Life Points))-9)^2*multipliers"
+                                return a
+                        },
+                        cost:() => Decimal.pow(2, hasUpgrade("c", 11) ? 2560 : 1024),
+                        /*
+                        effect(){
+                                let init = player.h.best.max(1)
+                                let ret 
+
+                                if (hasUpgrade("h", 33)) ret = init.log2().max(1)
+                                else                     ret = init.ln().max(1)
+
+                                if (hasUpgrade("h", 14)) ret = ret.pow(tmp.h.upgrades[14].effect)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "c") return ""
+                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
+                                return format(tmp.c.upgrades[11].effect)
+                        },
+                        */
+                        currencyLocation:() => player,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Life Points",
+                        unlocked(){
+                                return true
+                        }, //hasUpgrade("o", 11)
+                },
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: ["main-display",
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "o") return ""
+                                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                                if (shiftDown) return "Your best Oxygen is " + format(player.o.best) + " and you are netting " + format(tmp.o.getResetGain.sub(tmp.o.getLossRate.times(player.o.points))) + " Oxygen per second"
+                                                return "You are gaining " + format(tmp.o.getResetGain) + " Oxygen per second"
+                                        }
+                                ],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "o") return ""
+                                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                                return "You are losing " + format(tmp.o.getLossRate.times(100)) + "% of your Oxygen per second"
+                                        },
+                                ],
+
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7]]],
+                        unlocked(){
+                                return true
+                        },
+                },
+                /*
+                "Deuterium": {
+                        content: [["secondary-display", "deuterium"],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "h") return ""
+                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
+                                                if (shiftDown) {
+                                                        p1 = player.h.deuterium
+                                                        t1 = tmp.h.deuterium
+                                                        return "Your best Deuterium is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
+                                                }
+                                                return "You are gaining " + format(tmp.h.deuterium.getResetGain) + " Deuterium per second"
+                                        }
+                                ],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "h") return ""
+                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
+                                                if (shiftDown) return "Formula: .0002 * Hydrogen * [multipliers]"
+                                                return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
+                                        },
+                                ],
+
+                                "blank", 
+                                ["upgrades", [2]]
+                                ],
+                        unlocked(){
+                                return hasUpgrade("h", 21)
+                        },
+                },*/
+        },
+        doReset(layer){},
 })
 
 
@@ -1531,10 +1779,11 @@ addLayer("mini", {
                                 data.autotime += -1
                                 let lim = 1
                                 if (hasUpgrade("h", 52)) lim *= 10
-                                list1 = [31, 32, 33, 41, 42, 43, 51, 52]
+                                list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
                                 if (hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
                                 for (i = 0; i < list1.length; i++){
                                         let id = list1[i]
+                                        if (!tmp.mini.buyables[id].unlocked) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
                                                 a ++ 
@@ -1566,6 +1815,8 @@ addLayer("mini", {
         a_points: {
                 getGainMult(){
                         let ret = new Decimal(1)
+
+                        if (player.hardMode) ret = ret.div(100)
 
                         ret = ret.times(tmp.mini.buyables[12].effect)
                         ret = ret.times(tmp.mini.buyables[62].effect)
@@ -2400,6 +2651,56 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e18400)*(1e4^x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                53: {
+                        title: "B33", 
+                        cost:() => new Decimal("1e21000").times(Decimal.pow(1e3, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2))),
+                        canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[53].cost) && getBuyableAmount("mini", 53).lt(5000),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[53] = player.mini.buyables[53].plus(1)
+                                player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[53].cost)
+                        },
+                        unlocked(){
+                                return player.mini.buyables[52].gte(410)
+                        },
+                        base(){
+                                return player.mini.buyables[53].div(30).plus(1)
+                        },
+                        effect(){
+                                return tmp.mini.buyables[53].base.times(player.mini.buyables[53])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "B") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[53]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 53)) + " B Points</b><br>"
+                                let eformula = "(1+x/30)*x<br>" + format(getBuyableBase("mini", 53)) + "*x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e21000)*(1e3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
