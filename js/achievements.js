@@ -63,40 +63,10 @@ function getAchStuffFromNumber(n){
                 return "Get " + PROGRESSION_MILESTONES_TEXT[n]
         }
         let unlocked 
-        if (n <= 53) {
+        if (n <= 153) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return true
-                }
-        } else if (n <= 98) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasMilestone("goalsii", 7) || player.g.best.gt(0) || hasUnlockedPast("g")
-                }
-        } else if (n <= 119) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasUnlockedPast("g")
-                }
-        } else if (n <= 154) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasUnlockedPast("i")
-                }
-        } else if (n <= 266) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasUnlockedPast("j")
-                }
-        } else if (n <= 280) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasUnlockedPast("k")
-                }
-        } else if (n <= 336) {
-                unlocked = function(){
-                        if (player.ach.hiddenRows >= n/7) return false
-                        return hasUnlockedPast("l")
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -171,6 +141,20 @@ PROGRESSION_MILESTONES = {
         40:  () => player.o.points.root(5).gte(10),
         41:  () => player.o.points.root(6).gte(10),
         42:  () => player.o.points.root(7).gte(10),
+        43:  () => player.c.points.root(9).gte(10),
+        44:  () => player.c.points.root(12).gte(10),
+        45:  () => player.c.points.root(15).gte(10),
+        46:  () => player.c.points.root(18).gte(10),
+        47:  () => player.c.points.root(21).gte(10),
+        48:  () => player.c.points.root(24).gte(10),
+        49:  () => player.c.points.root(27).gte(10),
+        50:  () => player.o.points.root(9).gte(10),
+        51:  () => player.o.points.root(12).gte(10),
+        52:  () => player.o.points.root(15).gte(10),
+        53:  () => player.o.points.root(18).gte(10),
+        54:  () => player.o.points.root(21).gte(10),
+        55:  () => player.o.points.root(24).gte(10),
+        56:  () => player.o.points.root(27).gte(10),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -216,6 +200,20 @@ PROGRESSION_MILESTONES_TEXT = {
         40:  "10^5 Oxygen",
         41:  "10^6 Oxygen",
         42:  "10^7 Oxygen",
+        43:  "10^9 Carbon",
+        44:  "10^12 Carbon",
+        45:  "10^15 Carbon",
+        46:  "10^18 Carbon",
+        47:  "10^21 Carbon",
+        48:  "10^24 Carbon",
+        49:  "10^27 Carbon",
+        50:  "10^9 Oxygen",
+        51:  "10^12 Oxygen",
+        52:  "10^15 Oxygen",
+        53:  "10^18 Oxygen",
+        54:  "10^21 Oxygen",
+        55:  "10^24 Oxygen",
+        56:  "10^27 Oxygen",
 }
 
 

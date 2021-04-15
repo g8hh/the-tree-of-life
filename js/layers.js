@@ -4,10 +4,13 @@ function getPointGen() {
         if (hasUpgrade("h", 22)) gain = gain.times(tmp.h.upgrades[22].effect)
         if (hasUpgrade("h", 34)) gain = gain.times(tmp.h.upgrades[13].effect)
         gain = gain.times(tmp.mini.buyables[61].effect)
+        if (hasUpgrade("o", 15)) gain = gain.times(tmp.o.upgrades[15].effect)
+        if (hasUpgrade("h", 61)) gain = gain.times(tmp.h.upgrades[61].effect)
 
 
 
         if (hasUpgrade("h", 25)) gain = gain.pow(tmp.h.upgrades[25].effect)
+        if (hasUpgrade("o", 13)) gain = gain.pow(tmp.o.upgrades[13].effect)
 
 	return gain
 }
@@ -765,7 +768,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(20) + "'>Hydrogen XI"
                         },
                         description(){
-                                if (!shiftDown) return "Both minigames always tick and autobuy a B buyable once per second"
+                                if (!shiftDown) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
                                 a = ""
                                 if (hasUpgrade("h", 51)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[51].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
@@ -805,7 +808,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[53].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                return player.hardMode ? new Decimal("1e360") : new Decimal("1e350")
+                                return player.hardMode ? new Decimal("1e360") : new Decimal("1e321")
                         },
                         unlocked(){
                                 return hasUpgrade("h", 52) 
@@ -844,6 +847,52 @@ addLayer("h", {
                         unlocked(){
                                 return hasUpgrade("h", 54) 
                         }, //hasUpgrade("h", 55)
+                },
+                61: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(35) + "'>Hydrogen XVI"
+                        },
+                        description(){
+                                if (!shiftDown) return "Per upgrade multiply Life Points by Carbon"
+                                a = "Carbon^[upgrades]"
+                                if (hasUpgrade("h", 61)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[61].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? Decimal.pow(2, 2100) : Decimal.pow(2, 2048)
+                        },
+                        effect(){
+                                let b = player.c.points.max(1)
+
+                                let ret = b.pow(player.h.upgrades.length)
+                                
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                return format(tmp.h.upgrades[61].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 15) && hasUpgrade("c", 15) 
+                        }, //hasUpgrade("h", 61)
+                },
+                62: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(36) + "'>Hydrogen XVII"
+                        },
+                        description(){
+                                if (!shiftDown) return "Oxygen IV effects Carbon gain"
+                                a = ""
+                                if (hasUpgrade("h", 62)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[62].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? Decimal.pow(2, 2250) : Decimal.pow(2, 2200)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 61)
+                        }, //hasUpgrade("h", 62)
                 },
         },
         tabFormat: {
@@ -1012,7 +1061,7 @@ addLayer("c", {
         }},
         color: "#3C9009",
         branches: [],
-        requires:() => hasUpgrade("o", 11) ? Decimal.pow(2, 2560) : Decimal.pow(2, 1024), // Can be a function that takes requirement increases into account
+        requires:() => hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024), // Can be a function that takes requirement increases into account
         resource: "Carbon", // Name of prestige currency
         baseResource: "Life Points", // Name of resource prestige is based on
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
@@ -1051,6 +1100,7 @@ addLayer("c", {
 
                 if (hasUpgrade("c", 14)) x = x.times(tmp.c.upgrades[14].effect)
                 if (hasUpgrade("c", 15)) x = x.times(tmp.h.upgrades[25].effect)
+                if (hasUpgrade("h", 62)) x = x.times(tmp.o.upgrades[14].effect)
 
                 return x
         },
@@ -1058,7 +1108,7 @@ addLayer("c", {
                 let data = player.c
                 
                 if (data.best.gt(0)) data.unlocked = true
-                else data.unlocked = (!player.o.best.gt(0) || player.points.max(2).log(2).gte(2560)) &&  player.points.max(2).log(2).gte(1024)
+                else data.unlocked = (!player.o.best.gt(0) || player.points.max(2).log(2).gte(2460)) &&  player.points.max(2).log(2).gte(1024)
                 data.best = data.best.max(data.points)
                 
                 // do hydrogen gain
@@ -1123,7 +1173,7 @@ addLayer("c", {
                                 a = "(log2(Life Points)/256-3)*multipliers"
                                 return a
                         },
-                        cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2560 : 1024), //may change
+                        cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2460 : 1024), //may change
                         /*
                         effect(){
                                 let init = player.h.best.max(1)
@@ -1156,10 +1206,13 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "Add to the A point exponent .126-.126/<br>(1+cbrt([Carbon])/50)"
                                 a = ".126-.126/<br>(1+cbrt([Carbon])/50)"
-                                if (hasUpgrade("h", 12)) return a
+                                if (hasUpgrade("c", 12)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[12].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
-                        cost:() => player.hardMode ? new Decimal(130) : new Decimal(30), //may change
+                        cost() {
+                                if (hasUpgrade("o", 11)) return player.hardMode ? new Decimal(600) : new Decimal(150)
+                                return player.hardMode ? new Decimal(130) : new Decimal(30)
+                        },
                         effect(){
                                 let init = player.c.points.cbrt().div(50).plus(1)
 
@@ -1183,10 +1236,13 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "Add a ln(e+sqrt(x)/10) term to B32"
                                 a = "ln(e+sqrt(x)/10)"
-                                if (hasUpgrade("h", 13)) return a
+                                if (hasUpgrade("c", 13)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[13].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
-                        cost:() => player.hardMode ? new Decimal(190) : new Decimal(40), //may change
+                        cost() {
+                                if (hasUpgrade("o", 11)) return player.hardMode ? new Decimal(700) : new Decimal(300)
+                                return player.hardMode ? new Decimal(190) : new Decimal(40)
+                        },
                         unlocked(){
                                 return hasUpgrade("c", 12)
                         }, //hasUpgrade("c", 13)
@@ -1198,10 +1254,13 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "ln(Deuterium)/1000 multiplies Carbon and Indigo's ln becomes log2"
                                 a = "max(1, ln(Deuterium)/1000)"
-                                if (hasUpgrade("h", 14)) return a
+                                if (hasUpgrade("c", 14)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[14].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
-                        cost:() => player.hardMode ? new Decimal(270) : new Decimal(100), //may change
+                        cost() {
+                                if (hasUpgrade("o", 11)) return player.hardMode ? new Decimal(950) : new Decimal(500)
+                                return player.hardMode ? new Decimal(270) : new Decimal(100)
+                        },
                         effect(){
                                 let init = player.h.deuterium.points.plus(3).ln().div(1000).max(1)
 
@@ -1223,10 +1282,13 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "Deuterium V multiplies and then exponentiates Carbon gain"
                                 a = ""
-                                if (hasUpgrade("h", 15)) return a
+                                if (hasUpgrade("c", 15)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[15].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
-                        cost:() => player.hardMode ? new Decimal(3000) : new Decimal(1000),
+                        cost() {
+                                if (hasUpgrade("o", 11)) return player.hardMode ? new Decimal(6000) : new Decimal(3000)
+                                return player.hardMode ? new Decimal(3000) : new Decimal(1000)
+                        },
                         unlocked(){
                                 return hasUpgrade("c", 14)
                         }, //hasUpgrade("c", 15)
@@ -1388,6 +1450,9 @@ addLayer("o", {
         getGainMult(){
                 let x = new Decimal(1)
 
+                if (hasUpgrade("o", 12)) x = x.times(tmp.o.upgrades[12].effect)
+                if (hasUpgrade("o", 14)) x = x.times(tmp.o.upgrades[14].effect)
+
                 return x
         },
         update(diff){
@@ -1452,7 +1517,7 @@ addLayer("o", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(25) + "'>Oxygen I"
+                                return "<bdi style='color: #" + getUndulatingColor(30) + "'>Oxygen I"
                         },
                         description(){
                                 if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
@@ -1460,24 +1525,6 @@ addLayer("o", {
                                 return a
                         },
                         cost:() => Decimal.pow(2, hasUpgrade("c", 11) ? 2560 : 1024),
-                        /*
-                        effect(){
-                                let init = player.h.best.max(1)
-                                let ret 
-
-                                if (hasUpgrade("h", 33)) ret = init.log2().max(1)
-                                else                     ret = init.ln().max(1)
-
-                                if (hasUpgrade("h", 14)) ret = ret.pow(tmp.h.upgrades[14].effect)
-
-                                return ret
-                        },
-                        effectDisplay(){
-                                if (player.tab != "c") return ""
-                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
-                                return format(tmp.c.upgrades[11].effect)
-                        },
-                        */
                         currencyLocation:() => player,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Life Points",
@@ -1485,6 +1532,113 @@ addLayer("o", {
                                 return true
                         }, //hasUpgrade("o", 11)
                 },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Oxygen II"
+                        },
+                        description(){
+                                if (!shiftDown) return "log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7 to Oxygen gain"
+                                a = "log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7"
+                                if (hasUpgrade("o", 12)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[12].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(30),
+                        effect(){
+                                let a = player.h.atomic_hydrogen.points.max(10).log10()
+                                let b = player.h.deuterium.points.max(10).log10()
+
+                                let ret = a.times(b).div(10**7).max(1)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[12].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 11)
+                        }, //hasUpgrade("o", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Oxygen III"
+                        },
+                        description(){
+                                if (!shiftDown) return "Each upgrade raises B Point and Life Point gain ^1.02"
+                                a = "1.02^upgrades"
+                                if (hasUpgrade("o", 13)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[13].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(200),
+                        effect(){
+                                let ret = Decimal.pow(1.02, player.o.upgrades.length)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[13].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 12)
+                        }, //hasUpgrade("o", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(33) + "'>Oxygen IV"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln(Oxygen) multiplies Oxygen gain"
+                                a = "ln(Oxygen)"
+                                if (hasUpgrade("o", 15)) a = "(ln(Oxygen))^2"
+                                if (hasUpgrade("o", 14)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[14].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(2000),
+                        effect(){
+                                let ret = player.o.points.max(1).ln().max(1)
+
+                                if (hasUpgrade("o", 15)) ret = ret.pow(2)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[14].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 13)
+                        }, //hasUpgrade("o", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(33) + "'>Oxygen V"
+                        },
+                        description(){
+                                if (!shiftDown) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
+                                a = "Oxygen^[upgrades]"
+                                if (hasUpgrade("o", 15)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[15].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(5e4),
+                        effect(){
+                                let ret = player.o.points.max(1).pow(player.o.upgrades.length)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[15].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 14)
+                        }, //hasUpgrade("o", 15)
+                },
+
         },
         tabFormat: {
                 "Upgrades": {
@@ -1817,6 +1971,7 @@ addLayer("mini", {
                         let ret = new Decimal(1)
 
                         if (player.hardMode) ret = ret.div(100)
+                        if (hasUpgrade("h", 51)) ret = ret.times(1e5)
 
                         ret = ret.times(tmp.mini.buyables[12].effect)
                         ret = ret.times(tmp.mini.buyables[62].effect)
@@ -1835,6 +1990,8 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[32].effect)
                         ret = ret.times(tmp.mini.buyables[41].effect)
                         ret = ret.times(tmp.mini.buyables[42].effect)
+
+                        if (hasUpgrade("o", 13)) ret = ret.pow(tmp.o.upgrades[13].effect)
 
                         return ret
                 },
@@ -1994,7 +2151,7 @@ addLayer("mini", {
                 },
                 21: {
                         title: "<bdi style='color:#FFFFFF'>White</bdi>",
-                        cost: () => new Decimal("1e400").times(Decimal.pow(1e30, Decimal.pow(getBuyableAmount("mini", 21), 1.2))),
+                        cost: () => new Decimal("1e300").times(Decimal.pow(1e30, Decimal.pow(getBuyableAmount("mini", 21), 1.1))),
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[21].cost) && getBuyableAmount("mini", 21).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -2034,7 +2191,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e400)*(1e30^x<sup>1.2</sup>)" 
+                                let cost2 = "(1e300)*(1e30^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -2556,7 +2713,7 @@ addLayer("mini", {
                 },
                 51: {
                         title: "B31", 
-                        cost:() => new Decimal("1e5650").times(Decimal.pow(1e8, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 51)), 1.3))),
+                        cost:() => new Decimal("1e5600").times(Decimal.pow(1e8, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 51)), 1.3))),
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[51].cost) && getBuyableAmount("mini", 51).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -2564,7 +2721,7 @@ addLayer("mini", {
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[51].cost)
                         },
                         unlocked(){
-                                return player.mini.buyables[31].gte(2020) //worst year?
+                                return player.mini.buyables[31].gte(2000) //worst year?
                         },
                         base(){
                                 return player.mini.b_points.points.plus(10).ln().ln().max(1)
@@ -2595,7 +2752,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e5650)*(1e8^x<sup>1.3</sup>)" 
+                                let cost2 = "(1e5600)*(1e8^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -2714,7 +2871,10 @@ addLayer("mini", {
                 "A": {
                         content: [
                                 ["secondary-display", "a_points"],
-                                ["display-text", "You need to be on this tab to keep this minigame ticking!"],
+                                ["display-text", function(){
+                                        if (hasUpgrade("h", 51)) return ""
+                                        return "You need to be on this tab to keep this minigame ticking!"
+                                }],
                                 ["display-text", "Each color produces the next color clockwise!"],
                                 ["display-text", function(){
                                         if (!shiftDown) return ""
