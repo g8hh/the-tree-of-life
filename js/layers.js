@@ -3216,6 +3216,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1000)
+                                if (hasMilestone("tokens", 1)) ret = ret.pow(tmp.tokens.milestones[1].effect)
                                 return ret
                         },
                         effect(){
@@ -4203,9 +4204,12 @@ addLayer("tokens", {
                         unlocked(){
                                 return true
                         },
+                        effect(){
+                                return player.tokens.total.max(1)
+                        },
                         effectDescription(){
                                 let a = "Reward: Raise Radio Wave effect to the total number of tokens.<br>"
-                                let b = "Currently: " + formatWhole(player.tokens.total)
+                                let b = "Currently: " + format(tmp.tokens.milestones[1].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: [total tokens]"
                                         return a + formula
