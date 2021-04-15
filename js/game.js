@@ -179,13 +179,13 @@ function doReset(layer, force=false) {
 		if (tmp[layer].type=="custom") {
 			if (!tmp[layer].canReset) return;
 		} 
-
-		if (layers[layer].onPrestige)
-			run(layers[layer].onPrestige, layers[layer], gain)
 		
 		addPoints(layer, gain)
 		updateMilestones(layer)
 		updateAchievements(layer)
+
+		if (layers[layer].onPrestige)
+			run(layers[layer].onPrestige, layers[layer], gain)
 
 		if (!player[layer].unlocked) {
 			player[layer].unlocked = true;
