@@ -12,19 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.014",
+	num: "0.015",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- One token :)<br><br>
+		- Two tokens :)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.015</h3><br>
+		- Added a row of achievements.<br>
+		- Added 9 more buyables for tokens.<br>
+		- Next patch will add milestones.<br>
 	<br><h3 style='color: #CC0000'>v0.014</h3><br>
 		- Added tokens.<br>
 		- Added three Hydrogen upgrades.<br>

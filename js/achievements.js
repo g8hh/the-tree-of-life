@@ -63,10 +63,15 @@ function getAchStuffFromNumber(n){
                 return "Get " + PROGRESSION_MILESTONES_TEXT[n]
         }
         let unlocked 
-        if (n <= 153) {
+        if (n <= 56) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return true
+                }
+        } else if (n <= 1111) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.tokens.total.gt(0)
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -155,6 +160,13 @@ PROGRESSION_MILESTONES = {
         54:  () => player.o.points.root(21).gte(10),
         55:  () => player.o.points.root(24).gte(10),
         56:  () => player.o.points.root(27).gte(10),
+        57:  () => player.tokens.total.gt(0),
+        58:  () => player.tokens.total.gt(1),
+        59:  () => player.tokens.total.gt(2),
+        60:  () => player.tokens.total.gt(3),
+        61:  () => player.tokens.total.gt(4),
+        62:  () => player.tokens.total.gt(5),
+        63:  () => player.tokens.total.gt(6),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -214,6 +226,13 @@ PROGRESSION_MILESTONES_TEXT = {
         54:  "10^21 Oxygen",
         55:  "10^24 Oxygen",
         56:  "10^27 Oxygen",
+        57:  "a token",
+        58:  "2 tokens",
+        59:  "3 tokens",
+        60:  "4 tokens",
+        61:  "5 tokens",
+        62:  "6 tokens",
+        63:  "7 tokens",
 }
 
 
