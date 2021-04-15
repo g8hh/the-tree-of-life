@@ -7,6 +7,8 @@ function getPointGen() {
         if (hasUpgrade("o", 15)) gain = gain.times(tmp.o.upgrades[15].effect)
         if (hasUpgrade("h", 61)) gain = gain.times(tmp.h.upgrades[61].effect)
 
+        gain = gain.times(tmp.tokens.buyables[11].effect)
+
 
 
         if (hasUpgrade("h", 25)) gain = gain.pow(tmp.h.upgrades[25].effect)
@@ -17,6 +19,10 @@ function getPointGen() {
 
 function filter(list, keep){
         return list.filter(x => keep.includes(x))
+}
+
+function filterOut(list, out){
+        return list.filter(x => !out.includes(x))
 }
 
 addLayer("h", {
@@ -71,6 +77,7 @@ addLayer("h", {
                 if (hasUpgrade("h", 22)) x = x.times(tmp.h.upgrades[22].effect)
                 x = x.times(tmp.mini.buyables[42].effect)
                 x = x.times(tmp.mini.buyables[63].effect)
+                x = x.times(tmp.tokens.buyables[12].effect)
 
                 return x
         },
@@ -202,6 +209,7 @@ addLayer("h", {
                         if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
                         if (hasUpgrade("h", 41)) x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
                         x = x.times(tmp.mini.buyables[13].effect)
+                        x = x.times(tmp.tokens.buyables[21].effect)
 
                         return x
                 },
@@ -221,6 +229,7 @@ addLayer("h", {
 
                         if (hasUpgrade("h", 42)) x = x.times(Decimal.pow(player.h.deuterium.points.plus(3).ln(), tmp.h.upgrades[42].effect))
                         x = x.times(tmp.mini.buyables[11].effect)
+                        x = x.times(tmp.tokens.buyables[13].effect)
 
                         return x
                 },
@@ -894,6 +903,70 @@ addLayer("h", {
                                 return hasUpgrade("h", 61)
                         }, //hasUpgrade("h", 62)
                 },
+                63: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(37) + "'>Hydrogen XVIII"
+                        },
+                        description(){
+                                if (!shiftDown) return "sqrt(log10(Life Points)) multiplies Carbon and Oxygen gain"
+                                a = "sqrt(log10(Life Points))"
+                                if (hasUpgrade("h", 63)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[63].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? Decimal.pow(2, 3250) : Decimal.pow(2, 3072)
+                        },
+                        effect(){
+                                let ret = player.points.max(10).log10().sqrt()
+                                
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                return format(tmp.h.upgrades[63].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 62)
+                        }, //hasUpgrade("h", 63)
+                },
+                64: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(38) + "'>Hydrogen XIX"
+                        },
+                        description(){
+                                if (!shiftDown) return "Square the ln(x) term in White and add a log10(x) term to Green"
+                                a = ""
+                                if (hasUpgrade("h", 64)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[64].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? Decimal.pow(10, 1034) : Decimal.pow(10, 1024)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 63)
+                        }, //hasUpgrade("h", 64)
+                },
+                65: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(39) + "'>Hydrogen XX"
+                        },
+                        description(){
+                                if (!shiftDown) return "Unlock tokens"
+                                a = ""
+                                if (hasUpgrade("h", 65)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[65].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost(){
+                                return player.hardMode ? Decimal.pow(10, 1310) : Decimal.pow(10, 1304)
+                        },
+                        onPurchase(){
+                                player.tab = "tokens"
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 64)
+                        }, //hasUpgrade("h", 65)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -1101,6 +1174,8 @@ addLayer("c", {
                 if (hasUpgrade("c", 14)) x = x.times(tmp.c.upgrades[14].effect)
                 if (hasUpgrade("c", 15)) x = x.times(tmp.h.upgrades[25].effect)
                 if (hasUpgrade("h", 62)) x = x.times(tmp.o.upgrades[14].effect)
+                if (hasUpgrade("h", 63)) x = x.times(tmp.h.upgrades[63].effect)
+                x = x.times(tmp.tokens.buyables[22].effect)
 
                 return x
         },
@@ -1452,6 +1527,8 @@ addLayer("o", {
 
                 if (hasUpgrade("o", 12)) x = x.times(tmp.o.upgrades[12].effect)
                 if (hasUpgrade("o", 14)) x = x.times(tmp.o.upgrades[14].effect)
+                if (hasUpgrade("h", 63)) x = x.times(tmp.h.upgrades[63].effect)
+                x = x.times(tmp.tokens.buyables[23].effect)
 
                 return x
         },
@@ -1912,14 +1989,12 @@ addLayer("mini", {
                         let exp = hasUpgrade("h", 54) ? .52 : .5
                         if (hasUpgrade("h", 55)) exp += .004
                         if (hasUpgrade("c", 12)) exp += tmp.c.upgrades[12].effect.toNumber()
-                        let a = new Decimal(1)
                         for (i = 0; i < 8; i++){
                                 addto = order[i+1]
                                 addfrom = order[i]
-                                a = a.times(extras[addto].plus(1))
                                 extras[addto] = extras[addto].plus(extras[addfrom].pow(exp).div(20).times(Decimal.pow(2, lvls[addfrom])).times(diff))
                         }
-                        apts.points = apts.points.plus(a.sub(1).times(tmp.mini.a_points.getGainMult).times(diff))
+                        apts.points = apts.points.plus(tmp.mini.a_points.getResetGain.times(diff))
 
                         // extras[11] = extras[11].plus(extras[21].root(2).div(10).times(Decimal.pow(2, lvls[21])))
                 }
@@ -1976,6 +2051,23 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[12].effect)
                         ret = ret.times(tmp.mini.buyables[62].effect)
                         ret = ret.times(tmp.mini.buyables[51].effect)
+                        ret = ret.times(tmp.tokens.buyables[31].effect)
+
+                        return ret
+                },
+                getResetGain(){
+                        let apts = player.mini.a_points
+                        let extras = apts.extras
+                        let lvls = player.mini.buyables
+                        let order = [11,12,13  ,23,63,62  ,61,21]
+                        let exp = hasUpgrade("h", 54) ? .52 : .5
+                        if (hasUpgrade("h", 55)) exp += .004
+                        if (hasUpgrade("c", 12)) exp += tmp.c.upgrades[12].effect.toNumber()
+                        let a = new Decimal(1)
+                        for (i = 0; i < 8; i++){
+                                a = a.times(extras[order[i]].plus(1))
+                        }
+                        let ret = a.sub(1).times(tmp.mini.a_points.getGainMult)
 
                         return ret
                 },
@@ -1990,6 +2082,7 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[32].effect)
                         ret = ret.times(tmp.mini.buyables[41].effect)
                         ret = ret.times(tmp.mini.buyables[42].effect)
+                        ret = ret.times(tmp.tokens.buyables[32].effect)
 
                         if (hasUpgrade("o", 13)) ret = ret.pow(tmp.o.upgrades[13].effect)
 
@@ -2160,7 +2253,11 @@ addLayer("mini", {
                         },
                         base(){
                                 let ret = new Decimal(2)
-                                if (hasUpgrade("h", 53)) ret = ret.times(player.mini.buyables[21].max(1).ln().max(1))
+                                if (hasUpgrade("h", 53)) {
+                                        let a = 1
+                                        if (hasUpgrade("h", 64)) a ++
+                                        ret = ret.times(player.mini.buyables[21].max(1).ln().max(1).pow(a))
+                                }
                                 return ret
                         },
                         effect(){
@@ -2178,6 +2275,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 21)) + " A Points</b><br>"
                                 let eformula = "2*x" //+ getBuyableEffectString(layer, id)
                                 if (hasUpgrade("h", 53)) eformula = "2*x*ln(x)"
+                                if (hasUpgrade("h", 64)) eformula = "2*x*(ln(x))^2"
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -2211,6 +2309,7 @@ addLayer("mini", {
                         },
                         base(){
                                 let ret = new Decimal(1)
+                                if (hasUpgrade("h", 64)) ret = ret.times(player.mini.buyables[23].max(1).log10().max(1))
                                 return ret
                         },
                         effect(){
@@ -2227,6 +2326,7 @@ addLayer("mini", {
                                 let eff2 = format(tmp.mini.buyables[23].effect) + " to Red, Orange, and Yellow base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 23)) + " A Points</b><br>"
                                 let eformula = "x" //+ getBuyableEffectString(layer, id)
+                                if (hasUpgrade("h", 64)) eformula = "log10(x)*x<br>" + format(getBuyableBase("mini", 23)) + "*x"
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -2402,13 +2502,7 @@ addLayer("mini", {
                 },
                 22: {
                         display(){
-                                let order = [11,12,13  ,23,63,62  ,61,21]
-                                let a = new Decimal(1)
-                                for (i = 0; i < 8; i++){
-                                        a = a.times(player.mini.a_points.extras[order[i]].plus(1))
-                                }
-                                
-                                return "A Point production is the product of <br><b>(1+[amounts])</b><br> over all colors minus 1<br>Currently: " + format(a.sub(1).times(tmp.mini.a_points.getGainMult)) + "/sec"
+                                return "A Point production is the product of <br><b>(1+[amounts])</b><br> over all colors minus 1<br>Currently: " + format(tmp.mini.a_points.getResetGain) + "/sec"
                         }
                 },
                 31: {
@@ -2940,6 +3034,618 @@ addLayer("mini", {
                 bpts.points = new Decimal(0)
                 bpts.best = new Decimal(0)
         },
+})
+
+
+addLayer("tokens", {
+        name: "Tokens",
+        symbol: "⥈", 
+        position: 3,
+        startData() { return {
+                unlocked: true,
+                abtime: 0,
+                time: 0,
+                autotime: 0,
+                points: new Decimal(0),
+                total: new Decimal(0),
+        }},
+        color: "#7DC71C",
+        branches: [],
+        requires: new Decimal(0),
+        resource: "Tokens",
+        baseResource: "points",
+        baseAmount() {return player.points.floor()},
+        type: "custom",
+        getResetGain() {
+                if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return new Decimal(1)
+                return new Decimal(0)
+        },
+        getNextAt(){
+                let log_costs = [6420, ]
+                let len = log_costs.length
+                if (player.tokens.total.gte(len)) return new Decimal(Infinity)
+                return Decimal.pow(10, log_costs[player.tokens.total.toNumber()])
+        },
+        update(diff){},
+        row: "side",
+        hotkeys: [{key: "shift+#", description: "Shift+3: Go to tokens", 
+                        onPress(){
+                                player.tab = "tokens"
+                        }
+                },],
+        layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0)},
+        prestigeButtonText(){
+                return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt)
+        },
+        canReset(){
+                return tmp.tokens.getResetGain.gt(0)
+        },
+        onPrestige(gain){
+                /*
+                Things to Reset 
+                1. A point stuff
+                2. B pt stuff
+                3. C
+                4. O
+                5. H
+                */
+
+                // 1: A point stuff
+                let data1 = player.mini
+                if (!false) {
+                        data1.a_points = {
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                                extras: {
+                                        11: new Decimal(1),
+                                        12: new Decimal(0),
+                                        13: new Decimal(0),
+                                        21: new Decimal(0),
+                                        23: new Decimal(0),
+                                        61: new Decimal(0),
+                                        62: new Decimal(0),
+                                        63: new Decimal(0),
+                                }
+                        }
+                        let list1 = ["11", "12", "13", "21", 
+                                     "22", "23", "61", 
+                                     "62", "63"]
+                        for (i = 0; i < list1.length; i++){
+                                data1.buyables[list1[i]] = new Decimal(0)
+                        }
+                }
+                // 2: B point stuff
+                if (!false) {
+                        data1.b_points = {
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                        }
+                        let list2 = ["31", "32", 
+                                     "33", "41", "42", "43", 
+                                     "51", "52", "53"]
+                        for (i = 0; i < list1.length; i++){
+                                data1.buyables[list2[i]] = new Decimal(0)
+                        }
+                }
+
+                
+
+                // 3: C
+                if (!false) {
+                        player.c.upgrades = filterOut(player.c.upgrades, [11, 12, 13, 14, 15])
+                        player.c.points = new Decimal(0)
+                        player.c.best = new Decimal(0)
+                }
+
+                // 4: O
+                if (!false) {
+                        player.o.upgrades = filterOut(player.o.upgrades, [11, 12, 13, 14, 15])
+                        player.o.points = new Decimal(0)
+                        player.o.best = new Decimal(0)
+                }
+
+                // 5: H
+                if (!false) {
+                        let remove = [11, 12, 13, 14, 15, 
+                                      31, 32, 33, 34, 35, 
+                                      21, 22, 23, 24, 25, 
+                                      41, 42, 43, 44, 45, 
+                                      51, 52, 53, 54, 55, 
+                                      61, 62, 63, 64, 65]
+
+                        player.h.upgrades = filterOut(player.h.upgrades, remove)
+                        player.h.points = new Decimal(0)
+                        player.h.best = new Decimal(0)
+                        player.h.atomic_hydrogen.points = new Decimal(0)
+                        player.h.atomic_hydrogen.best = new Decimal(0)
+                        player.h.deuterium.points = new Decimal(0)
+                        player.h.deuterium.best = new Decimal(0)
+                }
+
+        },
+        buyables: {
+                rows: 15,
+                cols: 3,
+                11: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Radio Waves</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 11)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[11] = player.tokens.buyables[11].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[11].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[11] = player.tokens.buyables[11].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[11].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[11].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(1000)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[11].base.pow(player.tokens.buyables[11])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[11]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[11].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                12: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Microwaves</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 12)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[12] = player.tokens.buyables[12].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[12].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[12] = player.tokens.buyables[12].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[12].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[12].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(100)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[12].base.pow(player.tokens.buyables[12])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[12]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[12].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                13: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Infrared</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 13)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[13].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[13] = player.tokens.buyables[13].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[13].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[13] = player.tokens.buyables[13].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[13].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[13].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(20)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[13].base.pow(player.tokens.buyables[13])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[13].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                21: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Visable</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 21)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[21] = player.tokens.buyables[21].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[21].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[21] = player.tokens.buyables[21].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[21].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[21].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(20)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[21].base.pow(player.tokens.buyables[21])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[21]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 21)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[21].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                22: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Near-ultraviolet</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 22)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[22].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[22] = player.tokens.buyables[22].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[22].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[22] = player.tokens.buyables[22].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[22].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[22].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(10)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[22].base.pow(player.tokens.buyables[22])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[22]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 22)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[22].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                23: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Ultraviolet</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 23)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[23].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[23] = player.tokens.buyables[23].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[23].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[23] = player.tokens.buyables[23].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[23].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[23].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(10)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[23].base.pow(player.tokens.buyables[23])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[23]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[23].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                31: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>X-Rays</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 31)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[31].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[31] = player.tokens.buyables[31].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[31].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[31] = player.tokens.buyables[31].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[31].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[31].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(1e4)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[31].base.pow(player.tokens.buyables[31])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[31]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[31].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                32: { // radio, micro, infrared, near-infra(?), visable, near uv(?), uv, xray, gamma
+                        title: "<bdi style='color:#FF0000'>Gamma Rays</bdi>",
+                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 32)),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[32].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.buyables[32] = player.tokens.buyables[32].plus(1)
+                                player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[32].cost)
+                        },
+                        sellOne(){
+                                player.tokens.buyables[32] = player.tokens.buyables[32].sub(1)
+                                player.tokens.points = player.tokens.points.plus(tmp.tokens.buyables[32].cost.div(2))
+                        },
+                        canSellOne(){
+                                return player.tokens.buyables[32].gt(0)
+                        },
+                        base(){
+                                let ret = new Decimal(1e4)
+                                return ret
+                        },
+                        effect(){
+                                return tmp.tokens.buyables[32].base.pow(player.tokens.buyables[32])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[32]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
+                                let eformula = format(tmp.tokens.buyables[32].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+        },
+        tabFormat: {
+                "Prestige": {
+                        content: [["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}]],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Flat": {
+                        content: [
+                                "main-display",
+                                /*["display-text", function(){
+                                        return "You can at any time remove (and reapply) tokens through shift!"
+                                }],*/
+                                ["display-text", function(){
+                                        return "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>Note that selling things that boost decaying resources can cause you to lose resources."
+                                }],
+                                ["buyables", [1,2,3]],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Scaling": {
+                        content: [
+                                "main-display",
+                                /*["display-text", function(){
+                                        return "You can at any time remove (and reapply) tokens through shift!"
+                                }],*/
+                                ["display-text", function(){
+                                        return "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>Note that selling things that boost decaying resources can cause you to lose resources."
+                                }],
+                                ["buyables", [4,5,6]],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        doReset(layer){},
 })
 
 
