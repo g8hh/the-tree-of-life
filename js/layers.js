@@ -2000,7 +2000,7 @@ addLayer("mini", {
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "A" && tmp.mini.tabFormat.A.unlocked) {
                         //update A minigame
                         let extras = apts.extras
-                        if (extras[11].lt(1)) extra[11] = new Decimal(1)
+                        if (extras[11].lt(1)) extras[11] = new Decimal(1)
                         let lvls = player.mini.buyables
                         let order = [11,12,13  ,23,63,62  ,61,21,11]
                         let exp = tmp.mini.a_points.getColorGainExp
@@ -4188,16 +4188,29 @@ addLayer("tokens", {
         },
         milestones: {
                 1: {
-                        title: "abc",
-                        requirementDescription: "asda",
+                        title: "H",
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[1].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
                         done(){
-                                return false
+                                return player.tokens.total.gte(tmp.tokens.milestones[1].requirement)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "adas"
+                                let a = "Reward: Raise Radio Wave effect to the total number of tokens.<br>"
+                                let b = "Currently: " + formatWhole(player.tokens.total)
+                                if (shiftDown) {
+                                        let formula = "Formula: [total tokens]"
+                                        return a + formula
+                                }
+                                return a + b
                         },
                 }, 
         },
@@ -4205,8 +4218,7 @@ addLayer("tokens", {
                 "Milestones": {
                         content: [
                                 ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                ["milestones"],// work on this later i guess
-                                ["display-text", "test"],
+                                ["milestones", [1]],// work on this later i guess
                         ],
                         unlocked(){
                                 return true
