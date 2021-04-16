@@ -39,6 +39,7 @@ function format(decimal, precision = 2) {
         if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
                 player.hasNaN = true;
                 console.log(decimal)
+                Decimal(0)
                 return "NaN"
         }
         if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)

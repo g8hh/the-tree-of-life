@@ -12,19 +12,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.016",
+	num: "0.017",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- Two tokens :)<br><br>
+		- More tokens :)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.017</h3><br>
+		- Added a row of achievements.<br>
+		- Fixed a bug where bulk purchasing allowed for over 5000 buyables.<br>
+		- Added an Oxygen upgrade.<br>
+		- Added 9 token milestones.<br>
 	<br><h3 style='color: #CC0000'>v0.016</h3><br>
 		- Added a button for selling token buyables to fix bugs.<br>
 		- Added 3 token milestones.<br>
@@ -130,7 +135,8 @@ var displayThings = [
 		if (controlDown) list1 = list1.concat("C")
 		if (player.undulating) list1 = list1.concat("U")
 		if (!player.arrowHotkeys) list1 = list1.concat("A")
-		let end = "(" + combineStrings(list1) + ")"
+		let end = ""
+		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning) {
 			end += player.hardMode ? "{HARD}" : "{dev easy}"
 		}

@@ -167,6 +167,13 @@ PROGRESSION_MILESTONES = {
         61:  () => player.tokens.total.gt(4),
         62:  () => player.tokens.total.gt(5),
         63:  () => player.tokens.total.gt(6),
+        64:  () => player.tokens.total.gt(7),
+        65:  () => player.tokens.total.gt(8),
+        66:  () => player.tokens.total.gt(9),
+        67:  () => player.tokens.total.gt(10),
+        68:  () => player.tokens.total.gt(11),
+        69:  () => player.tokens.total.gt(12),
+        70:  () => player.tokens.total.gt(13),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -233,6 +240,13 @@ PROGRESSION_MILESTONES_TEXT = {
         61:  "5 tokens",
         62:  "6 tokens",
         63:  "7 tokens",
+        64:  "8 tokens",
+        65:  "9 tokens",
+        66:  "10 tokens",
+        67:  "11 tokens",
+        68:  "12 tokens",
+        69:  "13 tokens",
+        70:  "14 tokens",
 }
 
 
