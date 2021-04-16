@@ -757,9 +757,10 @@ addLayer("h", {
                                 return a.pow(hasUpgrade("h", 45) ? 2 : 1)
                         },
                         onPurchase(){
+                                if (player.tokens.total.lt(7)) player.subtabs.mini.mainTabs = "A"
                                 if (player.tokens.total.gt(0)) return 
                                 player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "A"
+                                
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 43)
@@ -780,9 +781,9 @@ addLayer("h", {
                                 return a.pow(hasUpgrade("h", 44) ? 2 : 1)
                         },
                         onPurchase(){
+                                if (player.tokens.total.lt(7)) player.subtabs.mini.mainTabs = "B"
                                 if (player.tokens.total.gt(0)) return 
                                 player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "B"
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 43)
