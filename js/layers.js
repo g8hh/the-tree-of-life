@@ -1167,12 +1167,16 @@ addLayer("c", {
                 if (hasUpgrade("c", 15)) ret = ret.pow(tmp.h.upgrades[25].effect)
                 ret = ret.pow(tmp.tokens.buyables[52].effect)
 
+                if (hasUpgrade("tokens", 51)) ret = ret.times(player.o.points.max(1).pow(.1))
+
                 return ret
         },
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(2)) return new Decimal(0)
                 let base = player.points.log(2).div(256).sub(3).max(0)
+                
+                if (hasUpgrade("tokens", 22)) base = base.pow(2)
 
                 if (base.lt(1)) base = new Decimal(0)
 
@@ -1195,6 +1199,7 @@ addLayer("c", {
                 if (hasUpgrade("h", 63)) x = x.times(tmp.h.upgrades[63].effect)
                 x = x.times(tmp.tokens.buyables[22].effect)
                 if (hasMilestone("tokens", 3)) x = x.times(player.ach.achievements.length)
+                if (hasUpgrade("c", 21)) x = x.times(tmp.c.upgrades[21].effect)
 
                 return x
         },
@@ -1265,6 +1270,7 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "Begin Production of Carbon, but vastly increase the cost of Oxygen I"
                                 a = "(log2(Life Points)/256-3)*multipliers"
+                                if (hasUpgrade("tokens", 22)) a = a.replace("3)", "3)^2")
                                 return a
                         },
                         cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2460 : 1024), //may change
@@ -1386,6 +1392,77 @@ addLayer("c", {
                         unlocked(){
                                 return hasUpgrade("c", 14)
                         }, //hasUpgrade("c", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(29) + "'>Carbon VI"
+                        },
+                        description(){
+                                if (!shiftDown) return "<bdi style='color:#CC0033'>A</bdi> multiplies Carbon gain and X-Rays base and unlock coins"
+                                a = "<bdi style='color:#CC0033'>A</bdi>"
+                                if (hasUpgrade("c", 21)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[21].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                        },
+                        effect(){
+                                let ret = tmp.h.upgrades[41].effect.max(1)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "c") return ""
+                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
+                                return format(tmp.c.upgrades[21].effect)
+                        },
+                        cost() {
+                                return player.hardMode ? new Decimal(6e20) : new Decimal(3e20)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 21)
+                        }, //hasUpgrade("c", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(601) + "'>Carbon VII"
+                        },
+                        description(){
+                                if (!shiftDown) return "cbrt(seconds played) multiplies Ultraviolet base and .01 to Polynomial base"
+                                a = "cbrt(seconds played)/10"
+                                if (hasUpgrade("c", 22)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[22].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                        },
+                        effect(){
+                                let ret = new Decimal(player.timePlayed).max(1).root(3)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "c") return ""
+                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
+                                return format(tmp.c.upgrades[22].effect)
+                        },
+                        cost() {
+                                return player.hardMode ? new Decimal(1e37) : new Decimal(3e36)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 22)
+                        }, //hasUpgrade("c", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(603) + "'>Carbon VIII"
+                        },
+                        description(){
+                                if (!shiftDown) return "Change token buyable cost scaling from exponential to linear"
+                                a = ""
+                                if (hasUpgrade("c", 23)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                        },
+                        cost() {
+                                return player.hardMode ? new Decimal(3e73) : new Decimal(1e73)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 23)
+                        }, //hasUpgrade("c", 23)
                 },
         },
         tabFormat: {
@@ -1524,12 +1601,17 @@ addLayer("o", {
 
                 ret = ret.pow(tmp.tokens.buyables[53].effect)
 
+                if (hasUpgrade("tokens", 52)) ret = ret.times(player.c.points.max(1).pow(.1))
+
                 return ret
         },
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(2)) return new Decimal(0)
                 let base = player.points.max(4).log(2).log(2).sub(9).max(0).pow(2)
+
+                if (hasUpgrade("tokens", 21)) base = base.pow(3)
+                if (hasMilestone("tokens", 17)) base = base.pow(3)
 
                 if (base.lt(1)) base = new Decimal(0)
 
@@ -1590,27 +1672,6 @@ addLayer("o", {
         canReset(){
                 return false
         },
-        /*
-        deuterium: {
-                getResetGain() {
-                        let base = player.h.points.times(.0002)
-                        let mult = tmp.h.deuterium.getGainMult
-
-                        return base.times(mult)
-                },
-                getLossRate() {
-                        return new Decimal(.01)
-                },
-                getGainMult(){
-                        let x = new Decimal(1)
-
-                        if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41)) x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
-                        x = x.times(tmp.mini.buyables[13].effect)
-
-                        return x
-                },
-        },*/
         upgrades: {
                 rows: 1000,
                 cols: 5,
@@ -1621,6 +1682,8 @@ addLayer("o", {
                         description(){
                                 if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
                                 a = "(log2(log2(Life Points))-9)^2*multipliers"
+                                if (hasUpgrade("tokens", 21)) a = a.replace("^2", "^6")
+                                if (hasMilestone("tokens", 17)) a = a.replace("^6", "^18")
                                 return a
                         },
                         cost:() => Decimal.pow(2, hasUpgrade("c", 11) ? 2560 : 1024),
@@ -1700,6 +1763,7 @@ addLayer("o", {
                                 let ret = player.o.points.max(1).ln().max(1)
 
                                 if (hasUpgrade("o", 15)) ret = ret.pow(2)
+                                if (hasMilestone("tokens", 13)) ret = ret.pow(2)
 
                                 return ret
                         },
@@ -1720,14 +1784,19 @@ addLayer("o", {
                                 if (!shiftDown) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
                                 a = "Oxygen^[upgrades]"
                                 if (hasMilestone("tokens", 10)) a = "Oxygen^[upgrades]<sup>2</sup>"
+                                if (hasUpgrade("tokens", 11)) a = a.replace("[upgrades]","([upgrades]+3)")
                                 if (hasUpgrade("o", 15)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[15].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
                         cost:() => new Decimal(5e4),
                         effect(){
-                                let ret = player.o.points.max(1).pow(player.o.upgrades.length)
+                                let base = player.o.points.max(1)
+                                
+                                let exp = new Decimal(player.o.upgrades.length)
+                                if (hasUpgrade("tokens", 11)) exp = exp.plus(3)
+                                if (hasMilestone("tokens", 10)) exp = exp.pow(2)
 
-                                if (hasMilestone("tokens", 10)) ret = ret.pow(player.o.upgrades.length)
+                                let ret = base.pow(exp)
 
                                 return ret
                         },
@@ -1746,6 +1815,7 @@ addLayer("o", {
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen multiplies Hydrogen gain and Hydrogen multiplies B Point gain"
+                                let a = ""
                                 if (hasUpgrade("o", 21)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[21].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -1753,6 +1823,46 @@ addLayer("o", {
                         unlocked(){
                                 return hasMilestone("tokens", 12)
                         }, //hasUpgrade("o", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Oxygen VII"
+                        },
+                        description(){
+                                if (!shiftDown) return "Multiply Gamma Ray base by log10(Life Points) and double coin gain"
+                                let a = ""
+                                if (hasUpgrade("o", 22)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[22].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(2e30),
+                        unlocked(){
+                                return hasUpgrade("c", 21)
+                        }, //hasUpgrade("o", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(52) + "'>Oxygen VIII"
+                        },
+                        description(){
+                                if (!shiftDown) return "<bdi style='font-size: 80%'>Multiply Near-ultraviolet base by log10(Life Points) and Infrared and Visable effects are raised to [tokens]^3"
+                                let a = "log10(Life Points)"
+                                if (hasUpgrade("o", 23)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[23].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(5e48),
+                        effect(){
+                                let ret = player.points.max(1).log10().max(1)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[23].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("c", 22)
+                        }, //hasUpgrade("o", 23)
                 },
 
         },
@@ -2040,6 +2150,12 @@ addLayer("mini", {
                                 data.autotime += -1
                                 list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
                                 if (hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
+
+                                let max = new Decimal(1)
+                                if (hasMilestone("tokens", 3)) max = max.times(10)
+                                if (hasMilestone("tokens", 13)) max = max.times(5)
+
+
                                 for (i = 0; i < list1.length; i++){
                                         let id = list1[i]
                                         if (!tmp.mini.buyables[id].unlocked) continue
@@ -2047,12 +2163,8 @@ addLayer("mini", {
                                                 layers.mini.buyables[id].buy()
                                                 let maxaff = tmp.mini.buyables[id].maxAfford
                                                 let curr = player.mini.buyables[id]
-                                                let max = new Decimal(0)
-                                                if (hasMilestone("tokens", 3)) {
-                                                        //WARNING
-                                                        max = new Decimal(9)
-                                                }
-                                                let buy = max.min(maxaff.sub(curr)).max(0) // how many we can buy
+
+                                                let buy = max.sub(1).min(maxaff.sub(curr)).max(0) // how many we can buy
                                                 player.mini.buyables[id] = player.mini.buyables[id].plus(buy)
                                                 //maxAfford
                                                 if (!hasUpgrade("h", 52)) break
@@ -3276,6 +3388,10 @@ addLayer("tokens", {
                         61: new Decimal(0),
                         62: new Decimal(0),
                         63: new Decimal(0),
+                },
+                coins: {
+                        points: new Decimal(0),
+                        best: new Decimal(0)
                 }
         }},
         color: "#7DC71C",
@@ -3292,7 +3408,9 @@ addLayer("tokens", {
         getNextAt(){
                 let log_costs = [ 6420,  7587,  7630,  8184,  8314, 
                                   9270,   1e4, 10730, 11160, 12590,
-                                 14470, 15200, 15480,
+                                 14470, 15200, 15480, 17500, 24000,
+                                 30810, 33300, 33500, 42600, 45420,
+                                 45900, 50750,
                                  1e6-1]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -3302,10 +3420,50 @@ addLayer("tokens", {
         update(diff){
                 let a = ["11", "12", "13", "21", "22", "23", "31", "32", "33", "41", "42", "43", "51", "52", "53", "61", "62", "63"]
                 bb = player.tokens.best_buyables
+                let maxever = new Decimal(0)
                 for (i = 0; i < a.length; i++){
                         id = a[i]
                         bb[id] = bb[id].max(player.tokens.buyables[id])
+                        maxever = maxever.max(bb[id])
                 }
+                if (hasMilestone("tokens", 13)) {
+                        for (i = 0; i < a.length; i++){
+                                id = a[i]
+                                bb[id] = bb[id].max(maxever)
+                        }
+                }
+
+                if (hasUpgrade("c", 21)) {
+                        //tick coins
+                        //first tick gain
+                        /*
+                        dc/dt = N/1+c
+                        dc(1+c) = Ndt
+                        cc/2+c = Nt+A
+                        A = cc/2+c
+                        c = -1+sqrt(1+4/2*(Nt+A))
+                        = -1+sqrt(1+2(Nt+A))
+                        */
+                        let datac = player.tokens.coins
+                        let c = datac.points
+                        let a = c.div(2).plus(1).times(c)
+                        let nt = tmp.tokens.coins.getGainMult.times(diff)
+                        datac.points = a.plus(nt).times(2).plus(1).sqrt().sub(1)
+                        datac.best = datac.best.max(datac.points)
+                }
+        },
+        coins: {
+                getGainMult(){
+                        let ret = new Decimal(1)
+
+                        if (hasUpgrade("o", 22)) ret = ret.times(2)
+                        if (hasMilestone("tokens", 14)) ret = ret.times(player.tokens.total.max(1))
+                        if (hasMilestone("tokens", 16)) ret = ret.times(tmp.tokens.milestones[16].effect)
+
+                        if (player.hardMode) ret = ret.div(3)
+
+                        return ret
+                },
         },
         row: "side",
         hotkeys: [{key: "shift+#", description: "Shift+3: Go to tokens", 
@@ -3418,7 +3576,10 @@ addLayer("tokens", {
                 cols: 3,
                 11: {
                         title: "<bdi style='color:#FF0000'>Radio Waves</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 11)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 11)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 11))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3461,6 +3622,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3471,7 +3633,10 @@ addLayer("tokens", {
                 },
                 12: {
                         title: "<bdi style='color:#FF0000'>Microwaves</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 12)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 12)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 12))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3514,6 +3679,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3524,7 +3690,10 @@ addLayer("tokens", {
                 },
                 13: { 
                         title: "<bdi style='color:#FF0000'>Infrared</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 13)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 13)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 13))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[13].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3533,6 +3702,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(20)
+                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.pow(3))
                                 return ret
                         },
                         effect(){
@@ -3565,6 +3735,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3575,7 +3746,10 @@ addLayer("tokens", {
                 },
                 21: { 
                         title: "<bdi style='color:#FF0000'>Visable</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 21)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 21)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 21))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3584,6 +3758,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(20)
+                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.pow(3))
                                 return ret
                         },
                         effect(){
@@ -3616,6 +3791,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3626,7 +3802,10 @@ addLayer("tokens", {
                 },
                 22: {
                         title: "<bdi style='color:#FF0000'>Near-ultraviolet</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 22)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 22)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 22))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[22].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3635,6 +3814,8 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(10)
+                                if (hasUpgrade("o", 23)) ret = ret.times(tmp.o.upgrades[23].effect)
+                                if (hasMilestone("tokens", 15)) ret = ret.times(Decimal.pow(1.2, player.tokens.milestones.length))
                                 return ret
                         },
                         effect(){
@@ -3667,6 +3848,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3677,7 +3859,10 @@ addLayer("tokens", {
                 },
                 23: {
                         title: "<bdi style='color:#FF0000'>Ultraviolet</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 23)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 23)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 23))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[23].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3686,6 +3871,8 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(10)
+                                if (hasUpgrade("tokens", 32)) ret = ret.times(player.tokens.total.max(1))
+                                if (hasUpgrade("c", 22)) ret = ret.times(tmp.c.upgrades[22].effect)
                                 if (hasMilestone("tokens", 11)) ret = ret.pow(2)
                                 return ret
                         },
@@ -3719,6 +3906,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3729,7 +3917,10 @@ addLayer("tokens", {
                 },
                 31: {
                         title: "<bdi style='color:#FF0000'>X-Rays</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 31)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 31)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 31))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[31].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3738,7 +3929,9 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1e8)
+                                if (hasUpgrade("c", 21)) ret = ret.times(tmp.c.upgrades[21].effect)
                                 if (hasMilestone("tokens", 4)) ret = ret.pow(3)
+                                if (hasUpgrade("tokens", 41)) ret = ret.pow(2)
                                 return ret
                         },
                         effect(){
@@ -3771,6 +3964,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3781,7 +3975,10 @@ addLayer("tokens", {
                 },
                 32: {
                         title: "<bdi style='color:#FF0000'>Gamma Rays</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 32)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 32)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 32))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[32].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3790,6 +3987,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1e12)
+                                if (hasUpgrade("o", 22)) ret = ret.times(player.points.plus(10).log10())
                                 if (hasMilestone("tokens", 6)) ret = ret.pow(tmp.tokens.milestones[6].effect)
                                 return ret
                         },
@@ -3823,6 +4021,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3833,7 +4032,10 @@ addLayer("tokens", {
                 },
                 33: { 
                         title: "<bdi style='color:#FF0000'>UHF Gamma Rays</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 33)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 33)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 33))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[33].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3878,6 +4080,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3888,7 +4091,10 @@ addLayer("tokens", {
                 },
                 41: {
                         title: "<bdi style='color:#FFFF00'>Constant</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 41)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 41)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 41))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[41].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3929,6 +4135,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3939,7 +4146,10 @@ addLayer("tokens", {
                 },
                 42: {
                         title: "<bdi style='color:#FFFF00'>Logarithmic</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 42)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 42)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 42))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[42].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3948,6 +4158,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1.01)
+                                if (hasUpgrade("tokens", 31)) ret = ret.plus(.01)
                                 return ret
                         },
                         effect(){
@@ -3980,6 +4191,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3990,7 +4202,10 @@ addLayer("tokens", {
                 },
                 43: {
                         title: "<bdi style='color:#FFFF00'>Linear</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 43)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 43)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 43))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[43].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -3999,6 +4214,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1.01)
+                                if (hasUpgrade("tokens", 34)) ret = ret.plus(.01)
                                 return ret
                         },
                         effect(){
@@ -4031,6 +4247,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4041,7 +4258,10 @@ addLayer("tokens", {
                 },
                 51: {
                         title: "<bdi style='color:#FFFF00'>Quadratic</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 51)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 51)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 51))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[51].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4050,6 +4270,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1.01)
+                                if (hasUpgrade("tokens", 33)) ret = ret.plus(.01)
                                 return ret
                         },
                         effect(){
@@ -4082,6 +4303,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4092,7 +4314,10 @@ addLayer("tokens", {
                 },
                 52: {
                         title: "<bdi style='color:#FFFF00'>Cubic</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 52)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 52)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 52))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[52].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4133,6 +4358,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4143,7 +4369,10 @@ addLayer("tokens", {
                 },
                 53: {
                         title: "<bdi style='color:#FFFF00'>Polynomial</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 53)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 53)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 53))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[53].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4152,6 +4381,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1.01)
+                                if (hasUpgrade("c", 22)) ret = ret.plus(.01)
                                 return ret
                         },
                         effect(){
@@ -4184,6 +4414,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4194,7 +4425,10 @@ addLayer("tokens", {
                 },
                 61: {
                         title: "<bdi style='color:#FFFF00'>Semi-exponential</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 61)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 61)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 61))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[61].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4236,6 +4470,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4246,7 +4481,10 @@ addLayer("tokens", {
                 },
                 62: {
                         title: "<bdi style='color:#FFFF00'>Exponential</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 62)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 62)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 62))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[62].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4288,6 +4526,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4298,7 +4537,10 @@ addLayer("tokens", {
                 },
                 63: {
                         title: "<bdi style='color:#FFFF00'>Double-exponential</bdi>",
-                        cost: () => Decimal.pow(2, getBuyableAmount("tokens", 63)),
+                        cost() {
+                                if (hasUpgrade("c", 23)) return getBuyableAmount("tokens", 63)
+                                return Decimal.pow(2, getBuyableAmount("tokens", 63))
+                        },
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[63].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4336,6 +4578,7 @@ addLayer("tokens", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2<sup>x</sup>" 
+                                if (hasUpgrade("c", 23)) cost2 = "x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4383,6 +4626,27 @@ addLayer("tokens", {
                                 if (!["Scaling", "Flat"].includes(player.subtabs.tokens.mainTabs)) return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 return "Sell all buyables<br>(Both pages)"
+                        },
+                },
+                81: {
+                        title: "<bdi style='color:#FFFFFF'>Sell-all</bdi>",
+                        canAfford:() => true,
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.tokens.upgrades = []
+                        },
+                        style(){
+                                return {
+                                        height: "100px",
+                                        width: "100px",
+                                }
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (!["Coins"].includes(player.subtabs.tokens.mainTabs)) return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                return "Sell all coin upgrades<br>(Does not give coins back)"
                         },
                 },
         },
@@ -4675,6 +4939,481 @@ addLayer("tokens", {
                                 return a 
                         },
                 },  // hasMilestone("tokens", 12)
+                13: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[13].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(14)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[13].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Square Oxygen IV, best token buyables are synchronized, and you can bulk 5x more A and B buyables.<br>"
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 13)
+                14: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[14].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(16)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[14].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Tokens multiply coin gain.<br>"
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 14)
+                15: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[15].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(18)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[15].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Each milestone multiplies Near-ultraviolet base by 1.2.<br>"
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 15)
+                16: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[16].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(20)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[16].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                let a = player.tokens.total.max(1)
+                                let b = a.ln().max(1).pow(a.sub(17).max(0))
+                                return b.min(1000)
+                        },
+                        effectDescription(){
+                                let a = "Reward: ln(tokens)^[tokens-17] multiplies coin gain (capped at 1000).<br>"                     
+                                let b = "Currently: *" + format(tmp.tokens.milestones[16].effect)
+                                if (shiftDown) {
+                                        let formula = "Formula: ln(tokens)^[tokens-17]"
+                                        return a + formula
+                                }
+                                return a + b
+                        },
+                },  // hasMilestone("tokens", 16)
+                17: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[17].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(22)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[17].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Cube base Oxygen gain"
+                                return a + b
+                        },
+                },  // hasMilestone("tokens", 17)
+        },
+        upgrades: {
+                rows: 1000,
+                cols: 5,
+                //use canAfford
+                11: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 11</bdi>"
+                                return "<bdi style='color: #FF0000'>Start here!</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) return ""
+                                return "Add three effective upgrades for Oxygen V"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[11].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(3),
+                        /*
+                        effect(){
+                                let init = player.h.best.max(1)
+                                let ret 
+
+                                if (hasUpgrade("h", 33)) ret = init.log2().max(1)
+                                else                     ret = init.ln().max(1)
+
+                                if (hasUpgrade("h", 14)) ret = ret.pow(tmp.h.upgrades[14].effect)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                return format(tmp.h.upgrades[11].effect)
+                        },
+                        */
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return true
+                        }, //hasUpgrade("tokens", 11)
+                },
+                21: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 21</bdi>"
+                                return "<bdi style='color: #FF0000'>You get one</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 22</bdi>"
+                                        let b = "<br>Current requirement:<br>!21"
+                                        if (tmp.tokens.upgrades[42].unlocked) b += "||42"
+
+                                        return a + b
+                                }
+                                return "Cube base Oxygen<br>gain"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[21].cost)) return false
+                                return !hasUpgrade("tokens", 22) || hasUpgrade("tokens", 42)
+                        },
+                        cost:() => new Decimal(5),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 11)
+                        }, //hasUpgrade("tokens", 21)
+                },
+                22: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 22</bdi>"
+                                return "<bdi style='color: #FF0000'>on this row.</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 21</bdi>"
+                                        let b = "<br>Current requirement:<br>!22"
+                                        if (tmp.tokens.upgrades[42].unlocked) b += "||42"
+
+                                        return a + b
+                                }
+                                return "Square base Carbon<br>gain"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[22].cost)) return false
+                                return !hasUpgrade("tokens", 21) || hasUpgrade("tokens", 42)
+                        },
+                        cost:() => new Decimal(5),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 11)
+                        }, //hasUpgrade("tokens", 22)
+                },
+                31: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 31</bdi>"
+                                return "<bdi style='color: #FF0000'>An old silent pond /</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 32</bdi>"
+                                        let b = "<br>Current requirement:<br>!32"
+                                        if (tmp.tokens.upgrades[61].unlocked) b += "||61"
+
+                                        return a + b
+                                }
+                                return "Add .01 to Logarithimic base"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[31].cost)) return false
+                                return !hasUpgrade("tokens", 32) || hasUpgrade("tokens", 61)
+                        },
+                        cost:() => new Decimal(30),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
+                        }, //hasUpgrade("tokens", 31)
+                },
+                32: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 32</bdi>"
+                                return "<bdi style='color: #FF0000'>A frog jumps into</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 31</bdi>"
+                                        let b = "<br>Current requirement:<br>!31"
+                                        if (tmp.tokens.upgrades[61].unlocked) b += "||61"
+
+                                        return a + b
+                                }
+                                return "Tokens multiply Ultraviolet base"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[32].cost)) return false
+                                return !hasUpgrade("tokens", 31) || hasUpgrade("tokens", 61)
+                        },
+                        cost:() => new Decimal(30),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
+                        }, //hasUpgrade("tokens", 32)
+                },
+                33: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 33</bdi>"
+                                return "<bdi style='color: #FF0000'>the pond— /</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 34</bdi>"
+                                        let b = "<br>Current requirement:<br>!34"
+                                        if (tmp.tokens.upgrades[61].unlocked) b += "||61"
+
+                                        return a + b
+                                }
+                                return "Add .01 to Quadratic base"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[33].cost)) return false
+                                return !hasUpgrade("tokens", 34) || hasUpgrade("tokens", 61)
+                        },
+                        cost:() => new Decimal(30),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
+                        }, //hasUpgrade("tokens", 33)
+                },
+                34: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 34</bdi>"
+                                return "<bdi style='color: #FF0000'>Splash! Silence</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 33</bdi>"
+                                        let b = "<br>Current requirement:<br>!33"
+                                        if (tmp.tokens.upgrades[61].unlocked) b += "||61"
+
+                                        return a + b
+                                }
+                                return "Add .01 to Linear<br>base"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[34].cost)) return false
+                                return !hasUpgrade("tokens", 33) || hasUpgrade("tokens", 61)
+                        },
+                        cost:() => new Decimal(30),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
+                        }, //hasUpgrade("tokens", 34)
+                },
+                41: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 41</bdi>"
+                                return "<bdi style='color: #FF0000'>again.</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "Square X-Rays<br>base"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[41].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(100),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 31) || hasUpgrade("tokens", 32) || hasUpgrade("tokens", 33) || hasUpgrade("tokens", 34)
+                        }, //hasUpgrade("tokens", 41)
+                },
+                42: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 42</bdi>"
+                                return "<bdi style='color: #FF0000'>by Matsuo Bashō</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "Re-unlock upgrade 21 and 22"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[42].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(100),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 31) || hasUpgrade("tokens", 32) || hasUpgrade("tokens", 33) || hasUpgrade("tokens", 34)
+                        }, //hasUpgrade("tokens", 42)
+                },
+                51: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 51</bdi>"
+                                return "<bdi style='color: #FF0000'>Tau</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 52</bdi>"
+                                        let b = "<br>Current requirement:<br>!52"
+                                        if (tmp.tokens.upgrades[62].unlocked) b += "||62"
+
+                                        return a + b
+                                }
+                                return "Oxygen^ .1 multiplies Carbon gain"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[51].cost)) return false
+                                return !hasUpgrade("tokens", 52) || hasUpgrade("tokens", 62)
+                        },
+                        cost:() => new Decimal(150),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 41) && hasUpgrade("tokens", 42)
+                        }, //hasUpgrade("tokens", 51)
+                },
+                52: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 52</bdi>"
+                                return "<bdi style='color: #FF0000'>Rhenium</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks Upgrade 51</bdi>"
+                                        let b = "<br>Current requirement:<br>!51"
+                                        if (tmp.tokens.upgrades[62].unlocked) b += "||62"
+
+                                        return a + b
+                                }
+                                return "Carbon^ .1 multiplies Oxygen gain"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[51].cost)) return false
+                                return !hasUpgrade("tokens", 51) || hasUpgrade("tokens", 62)
+                        },
+                        cost:() => new Decimal(150),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return hasUpgrade("tokens", 41) && hasUpgrade("tokens", 42)
+                        }, //hasUpgrade("tokens", 52)
+                },
+                61: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 61</bdi>"
+                                return "<bdi style='color: #FF0000'>Electron</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "Re-unlocks the third row of upgrades"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[61].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(200),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return (hasUpgrade("tokens", 51) || hasUpgrade("tokens", 52)) && player.tokens.total.gte(20)
+                        }, //hasUpgrade("tokens", 61)
+                },
+                62: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 62</bdi>"
+                                return "<bdi style='color: #FF0000'>Oxygen</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "Re-unlocks the fifth row of upgrades"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[62].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(250),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return (hasUpgrade("tokens", 51) || hasUpgrade("tokens", 52)) && player.tokens.total.gte(20)
+                        }, //hasUpgrade("tokens", 62)
+                },
+                //https://www.chemspeller.com/index.html?tree
         },
         tabFormat: {
                 "Milestones": {
@@ -4718,6 +5457,24 @@ addLayer("tokens", {
                         ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Coins": {
+                        content: [
+                                ["secondary-display", "coins"],
+                                ["display-text", function(){
+                                        let a = "You passively gain coins. Hold shift to see upgrade numbers and when upgrades get locked.<br>At any time you can remove all upgrades, but you do NOT get coins back."
+                                        if (!shiftDown) return a 
+                                        let b = "Formula: " + format(tmp.tokens.coins.getGainMult) + "/(1+coins)"
+                                        let c = "<br>You are currently gaining " + format(tmp.tokens.coins.getGainMult.div(player.tokens.coins.points.plus(1))) + " coins per second."
+                                        return b + c
+                                }],
+                                ["upgrades", [1,2,3,4,5,6]],
+                                ["display-text", "<br><br><br>"],
+                                ["buyables", [8]],
+                        ],
+                        unlocked(){
+                                return hasUpgrade("c", 21)
                         },
                 },
         },

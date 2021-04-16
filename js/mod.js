@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.017.1",
+	num: "0.018",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.018</h3><br>
+		- Added a row of achievements.<br>
+		- Added three Carbon upgrades.<br>
+		- Added two Oxygen upgrades.<br>
+		- Added 5 token milestones.<br>
+		- Added coins.<br>
+		- Added 13 coin upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.017</h3><br>
 		- Added a row of achievements.<br>
 		- Fixed a bug where bulk purchasing allowed for over 5000 buyables.<br>
