@@ -36,6 +36,20 @@ function sumValsExp(exp){
         return [b - 1, a.toNumber()]
 }
 
+/*
+function tryStuff(target, left){
+    let valid = [1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210]
+    if (left <= 1) return valid.includes(target)
+    for (let i = 0; i < valid.length; i++){
+        let amt = valid[i]
+        if (amt == target) return true
+        if (amt > target) return false
+        let a = tryStuff(target-amt, left-1)
+        if (a) return true
+    }
+}
+*/
+
 addLayer("h", {
         name: "Hydrogen", // This is optional, only used in a few places, If absent it just uses the layer id.
         symbol: "H", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -77,11 +91,13 @@ addLayer("h", {
         getNextAt(){
                 return new Decimal(0) //this doesnt matter
         },
-        getLossRate() {
+        getLossRate() { //hydrogen loss
                 let ret = new Decimal(.01)
                 if (hasUpgrade("h", 21)) ret = ret.plus(.0002)
                 if (hasUpgrade("h", 31)) ret = ret.plus(.001)
                 if (hasUpgrade("h", 35)) ret = ret.sub( .0012)
+
+
 
                 return ret.max(.00001)
         },
@@ -220,7 +236,7 @@ addLayer("h", {
 
                         return ret
                 },
-                getLossRate() {
+                getLossRate() { //deuterium loss
                         return new Decimal(.01)
                 },
                 getGainMult(){
@@ -245,7 +261,7 @@ addLayer("h", {
 
                         return ret
                 },
-                getLossRate() {
+                getLossRate() { //atomic hydrogen loss atomic loss
                         return new Decimal(.01)
                 },
                 getGainMult(){
@@ -891,6 +907,7 @@ addLayer("h", {
                         description(){
                                 if (!shiftDown) return "Per upgrade multiply Life Points by Carbon"
                                 a = "Carbon^[upgrades]"
+                                if (hasMilestone("tokens", 19)) a = a.replace("[upgrades]", "(1.5*[upgrades])")
                                 if (hasUpgrade("h", 61)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[61].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -901,6 +918,7 @@ addLayer("h", {
                                 let b = player.c.points.max(1)
 
                                 let ret = b.pow(player.h.upgrades.length)
+                                if (hasMilestone("tokens", 19)) ret = ret.pow(1.5)
                                 
                                 return ret
                         },
@@ -1013,23 +1031,65 @@ addLayer("h", {
                         currencyLocation:() => player.h.deuterium,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
-                        /*
+                        unlocked(){
+                                return player.tokens.total.gte(23)
+                        }, //hasUpgrade("h", 71)
+                },
+                72: { // come back to here pls
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(111) + "'>Deuterium VI"
+                        },
+                        canAfford(){
+                                if (player.h.deuterium.points.lt(tmp.h.upgrades[71].cost)) return false
+                                return hasUpgrade("tokens", 71)
+                        },
+                        description(){
+                                if (!shiftDown) return "ln(Carbon) multiplies Near-ultraviolet base"
+                                a = "ln(Carbon + 10)"
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 2444e3)
+                        },
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let ret = player.h.deuterium.best.plus(10).ln().ln()
-
-                                if (hasUpgrade("h", 24)) ret = ret.pow(tmp.h.upgrades[24].effect)
+                                let ret = player.c.points.plus(10).ln()
 
                                 return ret
                         },
                         effectDisplay(){
                                 if (player.tab != "h") return ""
                                 if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
-                                return format(tmp.h.upgrades[71].effect)
+                                return format(tmp.h.upgrades[72].effect)
                         },
-                        */
                         unlocked(){
-                                return player.tokens.total.gte(23)
-                        }, //hasUpgrade("h", 71)
+                                return player.tokens.total.gte(26)
+                        }, //hasUpgrade("h", 72)
+                },
+                81: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(115) + "'>Atomic Hydrogen VI"
+                        },
+                        canAfford(){
+                                if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[81].cost)) return false
+                                return hasUpgrade("tokens", 72)
+                        },
+                        description(){
+                                if (!shiftDown) return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 6100e3)
+                        },
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 71)
+                        }, //hasUpgrade("h", 81)
                 },
         },
         tabFormat: {
@@ -1232,8 +1292,10 @@ addLayer("c", {
         getNextAt(){
                 return new Decimal(0) //this doesnt matter
         },
-        getLossRate() {
+        getLossRate() { //carbon loss
                 let ret = new Decimal(.01)
+
+                if (hasUpgrade("h", 81)) ret = ret.times(50)
 
                 return ret.max(.00001)
         },
@@ -1286,27 +1348,6 @@ addLayer("c", {
         canReset(){
                 return false
         },
-        /*
-        deuterium: {
-                getResetGain() {
-                        let base = player.h.points.times(.0002)
-                        let mult = tmp.h.deuterium.getGainMult
-
-                        return base.times(mult)
-                },
-                getLossRate() {
-                        return new Decimal(.01)
-                },
-                getGainMult(){
-                        let x = new Decimal(1)
-
-                        if (hasUpgrade("h", 23)) x = x.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41)) x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
-                        x = x.times(tmp.mini.buyables[13].effect)
-
-                        return x
-                },
-        },*/
         upgrades: {
                 rows: 1000,
                 cols: 5,
@@ -1474,11 +1515,14 @@ addLayer("c", {
                         description(){
                                 if (!shiftDown) return "cbrt(seconds played) multiplies Ultraviolet base and add .01 to Polynomial base"
                                 a = "cbrt(seconds played)"
+                                if (hasUpgrade("c", 24)) a += "+1000"
                                 if (hasUpgrade("c", 22)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[22].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         effect(){
                                 let ret = new Decimal(player.timePlayed).max(1).root(3)
+
+                                if (hasUpgrade("c", 24)) ret = ret.plus(1000)
 
                                 return ret
                         },
@@ -1510,6 +1554,23 @@ addLayer("c", {
                         unlocked(){
                                 return hasUpgrade("o", 23)
                         }, //hasUpgrade("c", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(604) + "'>Carbon IX"
+                        },
+                        description(){
+                                if (!shiftDown) return "Add 1000 to Carbon VII and halve the Double-exponential divider"
+                                a = ""
+                                if (hasUpgrade("c", 24)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                        },
+                        cost() {
+                                return player.hardMode ? new Decimal(8.1e155) : new Decimal(5e155)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 24)
+                        }, //hasUpgrade("c", 24)
                 },
         },
         tabFormat: {
@@ -1667,8 +1728,10 @@ addLayer("o", {
         getNextAt(){
                 return new Decimal(0) //this doesnt matter
         },
-        getLossRate() {
+        getLossRate() { //oxygen loss
                 let ret = new Decimal(.01)
+
+                if (hasUpgrade("h", 81)) ret = ret.times(50)
 
                 return ret.max(.00001)
         }, //oxygen gain
@@ -1805,6 +1868,8 @@ addLayer("o", {
                                 if (!shiftDown) return "ln(Oxygen) multiplies Oxygen gain"
                                 a = "ln(Oxygen)"
                                 if (hasUpgrade("o", 15)) a = "(ln(Oxygen))^2"
+                                if (hasMilestone("tokens", 13)) a = a.replace("^2", "^4")
+                                if (hasUpgrade("h", 81)) a = a.replace("^4", "^8")
                                 if (hasUpgrade("o", 14)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[14].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -1814,6 +1879,7 @@ addLayer("o", {
 
                                 if (hasUpgrade("o", 15)) ret = ret.pow(2)
                                 if (hasMilestone("tokens", 13)) ret = ret.pow(2)
+                                if (hasUpgrade("h", 81)) ret = ret.pow(2)
 
                                 return ret
                         },
@@ -1914,7 +1980,31 @@ addLayer("o", {
                                 return hasUpgrade("c", 22)
                         }, //hasUpgrade("o", 23)
                 },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(53) + "'>Oxygen IX"
+                        },
+                        description(){
+                                if (!shiftDown) return "Multiply Radio Wave base by log10(Life Points) and square it"
+                                let a = "log10(Life Points)"
+                                if (hasUpgrade("o", 24)) return a
+                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[24].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(5e156),
+                        effect(){
+                                let ret = player.points.max(1).log10().max(1)
 
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "o") return ""
+                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                return format(tmp.o.upgrades[24].effect)
+                        },
+                        unlocked(){
+                                return hasUpgrade("h", 81)
+                        }, //hasUpgrade("o", 24)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -3460,7 +3550,8 @@ addLayer("tokens", {
                                   9270,   1e4, 10730, 11160, 12590,
                                  14470, 15200, 15480, 17500, 24000,
                                  30810, 33300, 33500, 42600, 45420,
-                                 45900, 50750, 60000,
+                                 45900, 50750, 60000, 80750, 88222,
+                                 93000, 99790,
                                  1e6-1, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -3648,7 +3739,10 @@ addLayer("tokens", {
                         base(){
                                 let ret = new Decimal(1000)
                                 if (hasMilestone("tokens", 7)) ret = ret.times(tmp.tokens.milestones[7].effect)
+                                if (hasUpgrade("o", 24)) ret = ret.times(player.points.max(1).ln().max(1))
+                                
                                 if (hasMilestone("tokens", 1)) ret = ret.pow(tmp.tokens.milestones[1].effect)
+                                if (hasUpgrade("o", 24)) ret = ret.pow(2)
                                 return ret
                         },
                         effect(){
@@ -3873,8 +3967,12 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(10)
+
                                 if (hasUpgrade("o", 23)) ret = ret.times(tmp.o.upgrades[23].effect)
                                 if (hasMilestone("tokens", 15)) ret = ret.times(Decimal.pow(1.2, player.tokens.milestones.length))
+                                if (hasUpgrade("h", 72)) ret = ret.times(tmp.h.upgrades[72].effect)
+
+
                                 return ret
                         },
                         effect(){
@@ -4608,10 +4706,12 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[63].cost)
                         },
                         effect(){
+                                let div = 20
+                                if (hasUpgrade("c", 24)) div /= 2
                                 if (hasMilestone("tokens", 12)) {
-                                        return player.tokens.best_buyables[63].div(20).plus(1).pow(-1).sub(1).times(-.2)
+                                        return player.tokens.best_buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                                 }
-                                return player.tokens.buyables[63].div(20).plus(1).pow(-1).sub(1).times(-.2)
+                                return player.tokens.buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                                 //tmp.tokens.buyables[63].base.pow(player.tokens.buyables[63])
                         },
                         display(){
@@ -4624,6 +4724,7 @@ addLayer("tokens", {
                                 let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 63)) + " Tokens</b><br>"
                                 let eformula = ".2-.2/(1+x/20)" //+ getBuyableEffectString(layer, id)
+                                if (hasUpgrade("c", 24)) eformula = eformula.replace("20", "10")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -5131,6 +5232,26 @@ addLayer("tokens", {
                                 return a
                         },
                 },  // hasMilestone("tokens", 18)
+                19: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[19].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(27)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[19].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Raise Hydrogen XVI to the 1.5"
+                                return a
+                        },
+                },  // hasMilestone("tokens", 19)
         },
         upgrades: {
                 rows: 1000,
