@@ -12,19 +12,26 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.020.1",
+	num: "0.021",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- More tokens :)<br><br>
+		- 34 tokens :)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.021</h3><br>
+		- This is your first hint! 15<x<21<br>
+		- Added two rows of achievements.<br>
+		- Added a token milestone.<br>
+		- Added a Carbon upgrade.<br>
+		- Added an Oxygen upgrade.<br>
+		- Added two Atomic Hydrogen upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.020</h3><br>
 		- Added an Atomic Hydrogen upgrade.<br>
 		- Added an Oxygen upgrade.<br>
@@ -121,7 +128,9 @@ let winText = `Congratulations! You have reached the end and beaten this game, b
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
-var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
+var doNotCallTheseFunctionsEveryTick = ["blowUpEverything",
+					"costFormula",
+					"costFormulaID"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

@@ -188,6 +188,20 @@ PROGRESSION_MILESTONES = {
         82:  () => player.tokens.total.gt(25),
         83:  () => player.tokens.total.gt(26),
         84:  () => player.tokens.total.gt(27),
+        85:  () => player.tokens.total.gt(28),
+        86:  () => player.tokens.total.gt(29),
+        87:  () => player.tokens.total.gt(30),
+        88:  () => player.tokens.total.gt(31),
+        89:  () => player.tokens.total.gt(32),
+        90:  () => player.tokens.total.gt(33),
+        91:  () => player.tokens.total.gt(34),
+        92:  () => player.tokens.total.gt(35),
+        93:  () => player.tokens.total.gt(36),
+        94:  () => player.tokens.total.gt(37),
+        95:  () => player.tokens.total.gt(38),
+        96:  () => player.tokens.total.gt(39),
+        97:  () => player.tokens.total.gt(40),
+        98:  () => player.tokens.total.gt(41),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -275,6 +289,20 @@ PROGRESSION_MILESTONES_TEXT = {
         82:  "26 tokens",
         83:  "27 tokens",
         84:  "28 tokens",
+        85:  "29 tokens",
+        86:  "30 tokens",
+        87:  "31 tokens",
+        88:  "32 tokens",
+        89:  "33 tokens",
+        90:  "34 tokens",
+        91:  "35 tokens",
+        92:  "36 tokens",
+        93:  "37 tokens",
+        94:  "38 tokens",
+        95:  "39 tokens",
+        96:  "40 tokens",
+        97:  "41 tokens",
+        98:  "42 tokens",
 }
 
 
