@@ -5564,6 +5564,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 18) || hasUpgrade("tokens", 41) && hasUpgrade("tokens", 42)
                         }, //hasUpgrade("tokens", 52)
                 },
+                                                                                                                                                                                                                                                                                                
                 61: {
                         title(){
                                 if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 61</bdi>"
@@ -5713,7 +5714,14 @@ addLayer("tokens", {
                                         return "You can at any time remove (and reapply) tokens through shift!"
                                 }],*/
                                 ["display-text", function(){
-                                        return "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>Note that selling things that boost decaying resources can cause you to lose resources."
+                                        let a = "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>"
+                                        let b = ""
+                                        if (player.tokens.total.lt(10)) {
+                                                b = "Note that selling things that boost decaying resources can cause you to lose resources."
+                                        } else if (player.tokens.total.gte(14)) {
+                                                b = "The synchrnozied amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels"
+                                        }
+                                        return a + b
                                 }],
                                 ["buyables", [1,2,3]],
                                 ["display-text", "<br><br><br>"],
@@ -5730,7 +5738,14 @@ addLayer("tokens", {
                                         return "You can at any time remove (and reapply) tokens through shift!"
                                 }],*/
                                 ["display-text", function(){
-                                        return "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>Note that selling things that boost decaying resources can cause you to lose resources."
+                                        let a = "Each upgrade boosts something different! You can sell upgrades at any time with no cost.<br>"
+                                        let b = ""
+                                        if (player.tokens.total.lt(10)) {
+                                                b = "Note that selling things that boost decaying resources can cause you to lose resources."
+                                        } else if (player.tokens.total.gte(14)) {
+                                                b = "The synchrnozied amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels"
+                                        }
+                                        return a + b
                                 }],
                                 ["buyables", [4,5,6]],
                                 ["display-text", "<br><br><br>"],
