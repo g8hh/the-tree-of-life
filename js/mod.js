@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.018",
+	num: "0.019",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.018</h3><br>
+		- Added a Deuterium upgrade.<br>
+		- Made Oxygen VIII 10x cheaper.<br>
+		- Added a token milestone.<br>
+		- Added 3 coin upgrades.<br>
+		- Fixed some grammar.<br>
 	<br><h3 style='color: #CC0000'>v0.018</h3><br>
 		- Added a row of achievements.<br>
 		- Added three Carbon upgrades.<br>
