@@ -8,7 +8,7 @@ function getNumberName(n){ //currently only works up to 100
         if (n < 100) return getNumberNameLT100(n)
         if (n < 1000) {
                 if (n % 100 == 0) return getNumberNameLT100(n / 100) + " Hundred"
-                let hun = getNumberName(Math.floor(n / 100)) + " Hundred and "
+                let hun = getNumberNameLT100(Math.floor(n / 100)) + " Hundred and "
                 return hun + getNumberNameLT100(n % 100)
         }
 }
@@ -202,6 +202,20 @@ PROGRESSION_MILESTONES = {
         96:  () => player.tokens.total.gt(39),
         97:  () => player.tokens.total.gt(40),
         98:  () => player.tokens.total.gt(41),
+        99:  () => player.tokens.total.gt(42),
+        100: () => player.tokens.total.gt(43),
+        101: () => player.tokens.total.gt(44),
+        102: () => player.tokens.total.gt(45),
+        103: () => player.tokens.total.gt(46),
+        104: () => player.tokens.total.gt(47),
+        105: () => player.tokens.total.gt(48),
+        106: () => player.tokens.total.gt(49),
+        107: () => player.tokens.total.gt(50),
+        108: () => player.tokens.total.gt(51),
+        109: () => player.tokens.total.gt(52),
+        110: () => player.tokens.total.gt(53),
+        111: () => player.tokens.total.gt(54),
+        112: () => player.tokens.total.gt(55),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -303,6 +317,20 @@ PROGRESSION_MILESTONES_TEXT = {
         96:  "40 tokens",
         97:  "41 tokens",
         98:  "42 tokens",
+        99:  "43 tokens",
+        100: "44 tokens",
+        101: "45 tokens",
+        102: "46 tokens",
+        103: "47 tokens",
+        104: "48 tokens",
+        105: "49 tokens",
+        106: "50 tokens",
+        107: "51 tokens",
+        108: "52 tokens",
+        109: "53 tokens",
+        110: "54 tokens",
+        111: "55 tokens",
+        112: "56 tokens",
 }
 
 

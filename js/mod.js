@@ -12,19 +12,26 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.021",
+	num: "0.022",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 34 tokens :)<br><br>
+		- The meaning of Life, the Universe, and everything.<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.022</h3><br>
+		- This is your second hint! Jacorb found it, and I changed some stuff.<br>
+		- Added two rows of achievements.<br>
+		- Added two token milestones.<br>
+		- Added two Atomic Hydrogen upgrades.<br>
+		- Added three Deuterium upgrade.<br>
+		- Added a display for total tokens.<br>
 	<br><h3 style='color: #CC0000'>v0.021</h3><br>
 		- This is your first hint! 15 < x < 21<br>
 		- Added two rows of achievements.<br>

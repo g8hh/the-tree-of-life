@@ -1021,8 +1021,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Gain 10x coins and ln(coins) multiplies Oxygen per upgrade"
-                                a = "ln(coins)"
+                                if (!shiftDown) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
+                                a = "max(5, log10(coins))"
                                 return a
                         },
                         cost(){
@@ -1037,10 +1037,10 @@ addLayer("h", {
                 },
                 72: { // come back to here pls
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(111) + "'>Deuterium VI"
+                                return "<bdi style='color: #" + getUndulatingColor(111) + "'>Deuterium VII"
                         },
                         canAfford(){
-                                if (player.h.deuterium.points.lt(tmp.h.upgrades[71].cost)) return false
+                                if (player.h.deuterium.points.lt(tmp.h.upgrades[72].cost)) return false
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
@@ -1067,6 +1067,76 @@ addLayer("h", {
                         unlocked(){
                                 return player.tokens.total.gte(26)
                         }, //hasUpgrade("h", 72)
+                },
+                73: { // come back to here pls
+                        title(){
+                                let end = shiftDown ? "Jacorb!" : "Deuterium VIII"
+                                return "<bdi style='color: #" + getUndulatingColor(112) + "'>" + end
+                        },
+                        canAfford(){
+                                if (player.h.deuterium.points.lt(tmp.h.upgrades[73].cost)) return false
+                                return hasUpgrade("tokens", 71)
+                        },
+                        description(){
+                                if (!shiftDown) return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 4518e3)
+                        },
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        unlocked(){
+                                return player.tokens.total.gte(34)
+                        }, //hasUpgrade("h", 73)
+                },
+                74: { // come back to here pls
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(112) + "'>Deuterium IX"
+                        },
+                        canAfford(){
+                                if (player.h.deuterium.points.lt(tmp.h.upgrades[74].cost)) return false
+                                return hasUpgrade("tokens", 71)
+                        },
+                        description(){
+                                if (!shiftDown) return "Square Oxygen I and remove the -9"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 7111e3)
+                        },
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        unlocked(){
+                                return player.tokens.total.gte(37)
+                        }, //hasUpgrade("h", 74)
+                },
+                75: { // come back to here pls
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(113) + "'>Deuterium X"
+                        },
+                        canAfford(){
+                                if (player.h.deuterium.points.lt(tmp.h.upgrades[75].cost)) return false
+                                return hasUpgrade("tokens", 71)
+                        },
+                        description(){
+                                if (!shiftDown) return "Change token buyable costs from ceiling to rounding"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 7686e3)
+                        },
+                        currencyLocation:() => player.h.deuterium,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Deuterium",
+                        unlocked(){
+                                return player.tokens.total.gte(39)
+                        }, //hasUpgrade("h", 75)
                 },
                 81: {
                         title(){
@@ -1136,6 +1206,52 @@ addLayer("h", {
                         unlocked(){
                                 return hasUpgrade("h", 82)
                         }, //hasUpgrade("h", 83)
+                },
+                84: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(118) + "'>Atomic Hydrogen IX"
+                        },
+                        canAfford(){
+                                if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[84].cost)) return false
+                                return hasUpgrade("tokens", 72)
+                        },
+                        description(){
+                                if (!shiftDown) return "Change token buyable exponent to .8"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 7913e3)
+                        },
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 83)
+                        }, //hasUpgrade("h", 84)
+                },
+                85: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(119) + "'>Atomic Hydrogen X"
+                        },
+                        canAfford(){
+                                if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[85].cost)) return false
+                                return hasUpgrade("tokens", 72)
+                        },
+                        description(){
+                                if (!shiftDown) return "Change token buyable exponent to .7"
+                                a = ""
+                                return a
+                        },
+                        cost(){
+                                return Decimal.pow(10, 8362e3)
+                        },
+                        currencyLocation:() => player.h.atomic_hydrogen,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Atomic Hydrogen",
+                        unlocked(){
+                                return hasUpgrade("h", 84)
+                        }, //hasUpgrade("h", 85)
                 },
         },
         tabFormat: {
@@ -1779,10 +1895,17 @@ addLayer("o", {
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(2)) return new Decimal(0)
-                let base = player.points.max(4).log(2).log(2).sub(9).max(0).pow(2)
+                let init = player.points.max(4).log(2).log(2)
+                let base 
+                if (hasUpgrade("h", 74)){
+                        base = init.max(0).pow(2)
+                } else {
+                        base = init.sub(9).max(0).pow(2)
+                }
 
                 if (hasUpgrade("tokens", 21)) base = base.pow(3)
                 if (hasMilestone("tokens", 17)) base = base.pow(3)
+                if (hasUpgrade("h", 74)) base = base.pow(2)
 
                 if (base.lt(1)) base = new Decimal(0)
 
@@ -1807,8 +1930,9 @@ addLayer("o", {
                 x = x.times(tmp.tokens.buyables[23].effect)
                 if (hasMilestone("tokens", 3)) x = x.times(player.ach.achievements.length)
                 if (hasUpgrade("h", 71)) {
-                        x = x.times(Decimal.pow(player.tokens.coins.points.max(10).log10(), player.h.upgrades.length))
+                        x = x.times(Decimal.pow(player.tokens.coins.points.max(10).log10().min(5), player.h.upgrades.length))
                 }
+                if (hasUpgrade("tokens", 81)) x = x.times(81)
 
                 return x
         },
@@ -1857,9 +1981,10 @@ addLayer("o", {
                         },
                         description(){
                                 if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
-                                a = "(log2(log2(Life Points))-9)^2*multipliers"
+                                a = "(log2(log2(Life Points))-9)^2<br>*multipliers"
                                 if (hasUpgrade("tokens", 21)) a = a.replace("^2", "^6")
                                 if (hasMilestone("tokens", 17)) a = a.replace("^6", "^18")
+                                if (hasUpgrade("h", 74)) a = "(log2(log2(Life Points)))^36<br>*multipliers"
                                 return a
                         },
                         cost:() => Decimal.pow(2, hasUpgrade("c", 11) ? 2560 : 1024),
@@ -3640,7 +3765,9 @@ addLayer("tokens", {
                                   30810,  33300,  33500,  42600,  45420,
                                   45800,  50750,  60000,  80750,  88222,
                                   93000,  99790,  114e3, 133540, 134125,
-                                 137240, 137820, 141200,
+                                 137240, 137820, 141200, 176900, 178250,
+                                 205700, 227400, 260200, 297450, 298600,
+                                 335080,
                                  1e6-1, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -3698,6 +3825,7 @@ addLayer("tokens", {
                         if (hasMilestone("tokens", 14)) ret = ret.times(player.tokens.total.max(1))
                         if (hasMilestone("tokens", 16)) ret = ret.times(tmp.tokens.milestones[16].effect)
                         if (hasUpgrade("h", 71)) ret = ret.times(10)
+                        if (hasUpgrade("tokens", 81)) ret = ret.times(81)
 
                         if (player.hardMode) ret = ret.div(3)
 
@@ -3817,13 +3945,21 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
-                        if (hasUpgrade("h", 83)) return x.pow(.9).ceil()
-                        if (hasUpgrade("c", 23)) return x
+                        if (hasUpgrade("tokens", 82)) return x.pow(.65).round()
+                        if (hasUpgrade("h", 75))      return x.pow(.7).round()
+                        if (hasUpgrade("h", 85))      return x.pow(.7).ceil()
+                        if (hasUpgrade("h", 84))      return x.pow(.8).ceil()
+                        if (hasUpgrade("h", 83))      return x.pow(.9).ceil()
+                        if (hasUpgrade("c", 23))      return x
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
-                        if (hasUpgrade("h", 83)) return "ceil(x<sup>.9</sup>)"
-                        if (hasUpgrade("c", 23)) return "x"
+                        if (hasUpgrade("tokens", 82)) return "round(x<sup>.65</sup>)"
+                        if (hasUpgrade("h", 75))      return "round(x<sup>.7</sup>)"
+                        if (hasUpgrade("h", 85))      return "ceil(x<sup>.7</sup>)"
+                        if (hasUpgrade("h", 84))      return "ceil(x<sup>.8</sup>)"
+                        if (hasUpgrade("h", 83))      return "ceil(x<sup>.9</sup>)"
+                        if (hasUpgrade("c", 23))      return "x"
                         return "2<sup>x</sup>"
                 },
                 11: {
@@ -4331,6 +4467,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(1.02)
+                                if (hasUpgrade("h", 73)) ret = ret.plus(.01)
                                 return ret
                         },
                         effect(){
@@ -4645,6 +4782,7 @@ addLayer("tokens", {
                         base(){
                                 let ret = new Decimal(1.01)
                                 if (hasMilestone("tokens", 5)) ret = ret.plus(.01)
+                                if (hasMilestone("tokens", 21)) ret = ret.plus(.03)
                                 return ret
                         },
                         effect(){
@@ -4697,6 +4835,7 @@ addLayer("tokens", {
                         base(){
                                 let ret = new Decimal(1.01)
                                 if (hasMilestone("tokens", 5)) ret = ret.plus(.01)
+                                if (hasMilestone("tokens", 22)) ret = ret.plus(.03)
                                 return ret
                         },
                         effect(){
@@ -5315,6 +5454,46 @@ addLayer("tokens", {
                                 return a
                         },
                 },  // hasMilestone("tokens", 20)
+                21: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[21].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(35)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[21].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Add .03 to Semi-exponential base"
+                                return a
+                        },
+                },  // hasMilestone("tokens", 21)
+                22: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[22].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(39)
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[22].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Add .03 to Exponential base"
+                                return a
+                        },
+                },  // hasMilestone("tokens", 22)
         },
         upgrades: {
                 rows: 1000,
@@ -5683,12 +5862,17 @@ addLayer("tokens", {
                 71: {
                         title(){
                                 if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 71</bdi>"
-                                return "<bdi style='color: #FF0000'>Flournie</bdi>"
+                                return "<bdi style='color: #FF0000'>Fluorine</bdi>"
                         },
                         description(){
                                 if (shiftDown) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 72 and 73</bdi>"
                                         let b = "<br>Current requirement:<br>!72 && !73"
+
+                                        if (hasUpgrade("h", 73)) {
+                                                a = ""
+                                                b = "<br>Current requirement:<br>"
+                                        }
 
                                         return a + b
                                 }
@@ -5696,7 +5880,7 @@ addLayer("tokens", {
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[71].cost)) return false
-                                return (!hasUpgrade("tokens", 72) && !hasUpgrade("tokens", 73))
+                                return hasUpgrade("h", 73) || (!hasUpgrade("tokens", 72) && !hasUpgrade("tokens", 73))
                         },
                         cost:() => new Decimal(3000),
                         currencyLocation:() => player.tokens.coins,
@@ -5716,13 +5900,18 @@ addLayer("tokens", {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 71 and 73</bdi>"
                                         let b = "<br>Current requirement:<br>!71 && !73"
 
+                                        if (hasUpgrade("h", 73)) {
+                                                a = ""
+                                                b = "<br>Current requirement:<br>"
+                                        }
+
                                         return a + b
                                 }
                                 return "Allow for the purchase of the second row of Atomic Hydrogen upgrades"
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[72].cost)) return false
-                                return (!hasUpgrade("tokens", 71) && !hasUpgrade("tokens", 73))
+                                return hasUpgrade("h", 73) || (!hasUpgrade("tokens", 71) && !hasUpgrade("tokens", 73))
                         },
                         cost:() => new Decimal(3000),
                         currencyLocation:() => player.tokens.coins,
@@ -5742,13 +5931,18 @@ addLayer("tokens", {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 71 and 72</bdi>"
                                         let b = "<br>Current requirement:<br>!71 && !72"
 
+                                        if (hasUpgrade("h", 73)) {
+                                                a = ""
+                                                b = "<br>Current requirement:<br>"
+                                        }
+
                                         return a + b
                                 }
                                 return "You have one fewer token for token prestige requirements"
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[73].cost)) return false
-                                return (!hasUpgrade("tokens", 71) && !hasUpgrade("tokens", 72))
+                                return hasUpgrade("h", 73) || (!hasUpgrade("tokens", 71) && !hasUpgrade("tokens", 72))
                         },
                         cost:() => new Decimal(4000),
                         currencyLocation:() => player.tokens.coins,
@@ -5757,6 +5951,58 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasMilestone("tokens", 18) || (hasUpgrade("tokens", 61) || hasUpgrade("tokens", 62)) && player.tokens.total.gte(22)
                         }, //hasUpgrade("tokens", 73)
+                },
+                81: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 81</bdi>"
+                                return "<bdi style='color: #FF0000'>The Easter</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks upgrades 82</bdi>"
+                                        let b = "<br>Current requirement:<br>!82"
+
+                                        return a + b
+                                }
+                                return "Gain 81x coins and Oxygen"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[81].cost)) return false
+                                return false || (!hasUpgrade("tokens", 82))
+                        },
+                        cost:() => new Decimal(2e4),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
+                        }, //hasUpgrade("tokens", 81)
+                },
+                82: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 81</bdi>"
+                                return "<bdi style='color: #FF0000'>Egg is here.</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'>Locks upgrades 81</bdi>"
+                                        let b = "<br>Current requirement:<br>!81"
+
+                                        return a + b
+                                }
+                                return "Token buyable exponent is .65"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[82].cost)) return false
+                                return false || (!hasUpgrade("tokens", 81))
+                        },
+                        cost:() => new Decimal(2e4),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
+                        }, //hasUpgrade("tokens", 82)
                 },
                 //https://www.chemspeller.com/index.html?tree
         },
@@ -5782,7 +6028,8 @@ addLayer("tokens", {
                                         if (player.tokens.total.lt(10)) {
                                                 b = "Note that selling things that boost decaying resources can cause you to lose resources."
                                         } else if (player.tokens.total.gte(14)) {
-                                                b = "The synchrnozied amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels"
+                                                b = "The synchronized amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels."
+                                                b += " You have " + formatWhole(player.tokens.total) + " total tokens."
                                         }
                                         return a + b
                                 }],
@@ -5806,7 +6053,8 @@ addLayer("tokens", {
                                         if (player.tokens.total.lt(10)) {
                                                 b = "Note that selling things that boost decaying resources can cause you to lose resources."
                                         } else if (player.tokens.total.gte(14)) {
-                                                b = "The synchrnozied amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels"
+                                                b = "The synchronized amount is currently " + formatWhole(player.tokens.best_buyables[11]) + " levels."
+                                                b += " You have " + formatWhole(player.tokens.total) + " total tokens."
                                         }
                                         return a + b
                                 }],
