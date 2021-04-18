@@ -26,7 +26,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v0.021</h3><br>
-		- This is your first hint! 15<x<21<br>
+		- This is your first hint! 15 < x < 21<br>
 		- Added two rows of achievements.<br>
 		- Added a token milestone.<br>
 		- Added a Carbon upgrade.<br>
