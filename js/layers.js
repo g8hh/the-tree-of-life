@@ -694,7 +694,7 @@ addLayer("h", {
                                 if (hasUpgrade("h", 41)) {
                                         a += "<br>" + format(player.h.atomic_hydrogen.points.plus(3).ln()) + "^" + eff
                                         return a
-                                }
+                                } // red a 
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[41].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
@@ -727,7 +727,7 @@ addLayer("h", {
                                 if (hasUpgrade("h", 42)) {
                                         a += "<br>" + format(player.h.deuterium.points.plus(3).ln()) + "^" + eff
                                         return a
-                                }
+                                } //red b
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[42].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
@@ -3679,6 +3679,28 @@ addLayer("mini", {
                                 return hasUpgrade("h", 45)
                         },
                 },
+                "Spelling": {
+                        content: [
+                                ["display-text", function(){
+                                        let corr = numCorrectLetters(player.targetWord)
+                                        let wordUpper = player.targetWord.toLocaleUpperCase()
+                                        let start = "<bdi style='font-size: 300%'>"
+                                        let end = "</bdi>"
+                                        let goodPart = "<bdi style='color:#FF0000'>" + wordUpper.slice(0,corr) + "</bdi>"
+                                        let badPart  = "<bdi style='color:#993333'>" + wordUpper.slice(corr) + "</bdi>"
+                                        return start+goodPart+badPart+end
+                                }],
+                                ["display-text", function(){
+                                        let a = "You have spelled " + formatWhole(player.wordsSpelled)
+                                        let b = " words correctly!"
+                                        let c = "<br><br>"
+                                        return c + c + c + c + c + c + a + b
+                                }],
+                        ],
+                        unlocked(){
+                                true
+                        }
+                },
         },
         doReset(layer){
                 if (layer == "h") return 
@@ -3767,7 +3789,7 @@ addLayer("tokens", {
                                   93000,  99790,  114e3, 133540, 134125,
                                  137240, 137820, 141200, 176900, 178250,
                                  205700, 227400, 260200, 297450, 298600,
-                                 335080,
+                                 335080, 336336,
                                  1e6-1, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -5494,6 +5516,36 @@ addLayer("tokens", {
                                 return a
                         },
                 },  // hasMilestone("tokens", 22)
+                23: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[23].requirement)
+                                let b = " total tokens (will be 43 eventually)"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(143) 
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[23].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                let c = new Decimal(3) // red c red d
+                                // i want df/dt = X and you can upgrade X with stuff and there is prestige
+                                // for d simialr concept but there is a wacka mole game that gives buffs
+
+
+                                return c
+                        },
+                        effectDescription(){
+                                let a = "Reward: log10(Carbon)^<bdi style='color:#CC0033'>C</bdi> multiplies Oxygen"
+                                return a
+                        },
+                },  // hasMilestone("tokens", 23)
+
+                //
         },
         upgrades: {
                 rows: 1000,

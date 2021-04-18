@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.022",
+	num: "0.023",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.023</h3><br>
+		- Added a spelling minigame.<br>
 	<br><h3 style='color: #CC0000'>v0.022</h3><br>
 		- This is your second hint! Jacorb found it, and I changed some stuff.<br>
 		- Added two rows of achievements.<br>
@@ -156,6 +158,9 @@ function addedPlayerData() { return {
 	hardMode: false,
 	hardFromBeginning: false,
 	arrowHotkeys: false,
+	lastLettersPressed: [],
+	targetWord: "johnson",
+	wordsSpelled: 0,
 }}
 
 // Display extra things at the top of the page
@@ -200,15 +205,81 @@ function fixOldSave(oldVersion){
 
 var controlDown = false
 var shiftDown = false
+var logKeyCode = false
+
+function hasSpelledWord(word){
+	let l = word.length
+	if (l > 25) {
+		console.log("nopers")
+		return false
+	}
+	for (i = 0; i < l; i++){
+		let id = 25 - l + i
+		let is = player.lastLettersPressed[id]
+		let shouldbe = word[i]
+		if (is != shouldbe) return false
+	}
+	return true
+} 
+/* 
+take 10k common words and convert into list that can be copy pasted somewhere
+then put somewhere and make function to generate random word
+then display it, figure out how much has been spelled and show that in one color
+unspelled in different 
+upon spelling of the word give reward poggers
+
+*/
+
+function getLetterFromNum(x){
+	return {
+		32: " ",
+		65: "a",
+		66: "b",
+		67: "c",
+		68: "d",
+		69: "e",
+		70: "f",
+		71: "g",
+		72: "h",
+		73: "i",
+		74: "j",
+		75: "k",
+		76: "l",
+		77: "m",
+		78: "n",
+		79: "o",
+		80: "p",
+		81: "q",
+		82: "r",
+		83: "s",
+		84: "t",
+		85: "u",
+		86: "v",
+		87: "w",
+		88: "x",
+		89: "y",
+		90: "z",
+	}[x]
+}
 
 window.addEventListener('keydown', function(event) {
+	code = event.keyCode
 	if (player.toggleKeys) {
-		if (event.keyCode == 16) shiftDown = !shiftDown;
-		if (event.keyCode == 17) controlDown = !controlDown;
+		if (code == 16) shiftDown = !shiftDown;
+		if (code == 17) controlDown = !controlDown;
 	} else {
-		if (event.keyCode == 16) shiftDown = true;
-		if (event.keyCode == 17) controlDown = true;
+		if (code == 16) shiftDown = true;
+		if (code == 17) controlDown = true;
 	}
+	if (logKeyCode) console.log(code)
+	if ((code >= 65 && code <= 90) || code == 32) {
+		player.lastLettersPressed.push(getLetterFromNum(code))
+		let l = player.lastLettersPressed.length
+		if (l > 25) {
+			player.lastLettersPressed = player.lastLettersPressed.slice(l-25,)
+		}
+	}
+	//65 to 90 are a to z
 }, false);
 
 window.addEventListener('keyup', function(event) {

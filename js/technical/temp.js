@@ -98,6 +98,7 @@ function updateTemp() {
 		if (isFunction(text)) text = text()
 		tmp.displayThings.push(text) 
 	}
+	if (checkWordData()) player.wordsSpelled ++
 
 }
 
