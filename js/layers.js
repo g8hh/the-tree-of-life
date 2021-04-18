@@ -1675,14 +1675,14 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor(601) + "'>Carbon VII"
                         },
                         description(){
-                                if (!shiftDown) return "cbrt(seconds played) multiplies Ultraviolet base and add .01 to Polynomial base"
-                                a = "cbrt(seconds played)"
+                                if (!shiftDown) return "cbrt(max(10h, seconds played)) multiplies Ultraviolet base and add .01 to Polynomial base"
+                                a = "cbrt(max(36000, seconds played))"
                                 if (hasUpgrade("c", 24)) a += "+1000"
                                 if (hasUpgrade("c", 22)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[22].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         effect(){
-                                let ret = new Decimal(player.timePlayed).max(1).root(3)
+                                let ret = new Decimal(player.timePlayed).max(36000).root(3)
 
                                 if (hasUpgrade("c", 24)) ret = ret.plus(1000)
 
