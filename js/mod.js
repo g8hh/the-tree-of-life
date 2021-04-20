@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.023.2",
+	num: "0.024",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.024</h3><br>
+		- Added a token milestone.<br>
+		- Added content for C minigame which includes...<br>
+		... A virtual slot machine with up to 15 slots!<br>
+		... Up to 11 options for you to roll!<br>
+		... Upgrades to improve the game (one of them will be auto roll, don't worry 😊)<br>
 	<br><h3 style='color: #CC0000'>v0.023</h3><br>
 		- Added a spelling minigame.<br>
 	<br><h3 style='color: #CC0000'>v0.022</h3><br>

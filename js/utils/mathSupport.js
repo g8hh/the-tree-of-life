@@ -55,18 +55,101 @@ function getLogisticAmount(current, gain, loss, diff){
         }
 }
 
+function getAllowedCharacters(){
+        let a = ["♠","♣","♥","♦","🍎","📪","🌲"]
+        if (false) a.push("💰")
+        if (false) a.push("🛑")
+        if (false) a.push("🌹")
+        if (false) a.push("🔀")
+
+        return a
+}
+
+function getRandomSlotValue(number){
+        let poss = getAllowedCharacters()
+        let len = poss.length
+        let a = []
+        for (i = 0; i < number; i++){
+                x = Math.ceil(Math.random() * len)
+                a.push(x)
+        }
+        return a
+}
+
 function getUnicodeCharacter(value){
-        let a = "♠♣♥♦🍎📪🌲💰🛑🌹🔀"
-        return a.slice(value, value+1)
-        //1-4 ♠♣♥♦
-        //5-8 🍎📪🌲💰
+        if (value >= 5) {
+                value += value - 4
+        }
+        if (value <= 4) {
+                return "♠♣♥♦".slice(value-1, value)
+        }
+        if (value == 5) return "🛑"
+        if (value == 6) return "📪"
+        if (value == 7) return "🌲"
+        if (value == 8) return "💰"
+        if (value == 9) return "🍎"
+        if (value ==10) return "🌹"
+        if (value ==11) return "🔀"
+        console.log("broke")
+        return "abc"
+}
+
+function getCharacterValue(charID){
+        return {
+                1: 2,
+                2: 2,
+                3: 2,
+                4: 2,
+                5: 1,
+                6: 4,
+                7: 4,
+                8: 100,
+                9: 3,
+                10:10,
+                11:8,
+        }[charID]
 }
 
 function getRewardAmount(spins){
         // if they are all the same give a boost based on the value
         let len = spins.length
         
+        let c2 = function(x){
+                return x*(x+1)/2
+        }
+        let rollNums = {
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: 0,
+                6: 0,
+                7: 0,
+                8: 0,
+                9: 0,
+                10:0,
+                11:0,
+        }
+
+        for (i = 0; i < spins.length; i++) {
+                rollNums[spins[i]] += 1
+        }
+
+        let val = new Decimal(1)
+        for (i = 1; i <= 11; i++){
+                let base = getCharacterValue(i)
+                let exp = c2(rollNums[i])
+                val = val.times(Decimal.pow(base, exp))
+        }
+        let a = Math.min(rollNums[1], rollNums[2], rollNums[3], rollNums[4])
+        val = val.times(Decimal.pow(30, a))
+        return val
 }
+
+
+
+
+
 
 
 
