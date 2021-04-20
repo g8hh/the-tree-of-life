@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- The red layer highlight will not appear before a layer is unlocked.
+
 # v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.
 - Upgrades will expand if there is too much text to display. 
