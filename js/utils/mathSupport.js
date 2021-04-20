@@ -55,7 +55,18 @@ function getLogisticAmount(current, gain, loss, diff){
         }
 }
 
+function getUnicodeCharacter(value){
+        let a = "♠♣♥♦🍎📪🌲💰🛑🌹🔀"
+        return a.slice(value, value+1)
+        //1-4 ♠♣♥♦
+        //5-8 🍎📪🌲💰
+}
 
+function getRewardAmount(spins){
+        // if they are all the same give a boost based on the value
+        let len = spins.length
+        
+}
 
 
 
