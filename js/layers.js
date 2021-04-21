@@ -2428,8 +2428,9 @@ addLayer("mini", {
                         if (data.autotime > 10) data.autotime = 10
                         if (data.autotime > 1) {
                                 data.autotime += -1
-                                list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
+                                let list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
                                 if (hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
+                                
 
                                 let max = new Decimal(1)
                                 if (hasMilestone("tokens", 3)) max = max.times(10)
@@ -2450,6 +2451,18 @@ addLayer("mini", {
                                                 if (!hasUpgrade("h", 52)) break
                                                 
                                                 
+                                        }
+                                }
+
+                                let list2 = []
+                                if (hasUpgrade("mini", 22)) list2 = [71, 72, 73, 81, 82, 83].concat(list1)
+
+                                for (i = 0; i < list2.length; i++){
+                                        let id = list2[i]
+                                        if (!tmp.mini.buyables[id].unlocked) continue
+                                        if (tmp.mini.buyables[id].canAfford) {
+                                                layers.mini.buyables[id].buy()
+                                                if (!false) break
                                         }
                                 }
                         }
@@ -2573,6 +2586,8 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 14)) ret = ret.times(player.points.max(10).log10())
                         if (hasUpgrade("mini", 15)) ret = ret.times(player.mini.b_points.points.max(10).log10())
                         ret = ret.times(tmp.mini.buyables[82].effect)
+                        ret = ret.times(tmp.mini.buyables[83].effect)
+                        if (hasUpgrade("mini", 22)) ret = ret.times(player.h.points.max(10).log10())
 
                         return ret
                 },
@@ -3762,7 +3777,11 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 73).gt(28)
                         },
                         base(){
-                                return new Decimal(.1)
+                                let ret = new Decimal(.1)
+                                if (hasUpgrade("mini", 21)) ret = ret.plus(.1)
+                                if (hasUpgrade("mini", 24)) ret = ret.plus(.05)
+                                
+                                return ret
                         },
                         effect(){
                                 return tmp.mini.buyables[81].base.times(player.mini.buyables[81])
@@ -3849,6 +3868,69 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e180)*(1e4^x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                83: {
+                        title: "C Point gain 4",
+                        cost:() => new Decimal(1e225).times(Decimal.pow(1e10, Decimal.pow(getBuyableAmount("mini", 83), 1.3))),
+                        canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[83].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[83] = player.mini.buyables[83].plus(1)
+                                player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[83].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal(1e225)
+                                let base = 1e10
+                                let exp = 1.3
+                                let pts = player.mini.c_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 73).gt(64)
+                        },
+                        base(){
+                                let ret = player.o.points.max(10).log10()
+
+                                if (hasUpgrade("mini", 23)) ret = ret.times(Math.log(10))
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[83].base.pow(player.mini.buyables[83])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 83)) + " C Points</b><br>"
+                                let eformula = "(log10(Oxygen))<sup>x</sup><br>" + format(getBuyableBase("mini", 83)) + "^x" //+ getBuyableEffectString(layer, id)
+                                if (hasUpgrade("mini", 23)) eformula = eformula.replace("log10", "ln")
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e225)*(1e10^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4177,7 +4259,6 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Cabbage</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "Only effects the first seven"
                                 return "Add one to all emoji bases per upgrade"
                         },
                         cost:() => new Decimal(1e25),
@@ -4197,6 +4278,9 @@ addLayer("mini", {
 
                                 if (hasUpgrade("mini", 14)) ret = 9
                                 if (hasUpgrade("mini", 15)) ret = 8
+                                if (hasUpgrade("mini", 21)) ret = 7
+                                if (hasUpgrade("mini", 22)) ret = 6
+                                if (hasUpgrade("mini", 23)) ret = 5
 
                                 return ret
                         },
@@ -4278,6 +4362,74 @@ addLayer("mini", {
                         unlocked(){
                                 return hasUpgrade("mini", 14)
                         }, // hasUpgrade("mini", 15)
+                },
+                21: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Cream</bdi>"
+                        },
+                        description(){
+                                let a = "Add .1 to <bdi style='color:#CC0033'>C</bdi> increase 1 base and reduce Corn interval to 7"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 555),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return getBuyableAmount("mini", 81).gte(43)
+                        }, // hasUpgrade("mini", 21)
+                },
+                22: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Coffee</bdi>"
+                        },
+                        description(){
+                                let a = "Autobuy C buyables, log10(Hydrogen) multiplies C point gain, and reduce Corn interval to 6"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 777),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 21)
+                        }, // hasUpgrade("mini", 22)
+                },
+                23: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Crab</bdi>"
+                        },
+                        description(){
+                                let a = "Change the log10 to ln in C Point gain 4 and reduce Corn interval to 5"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 900),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 22)
+                        }, // hasUpgrade("mini", 23)
+                },
+                24: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Chicken</bdi>"
+                        },
+                        description(){
+                                let a = "Unlock a new symbol and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 1111),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 23)
+                        }, // hasUpgrade("mini", 24)
                 },
         },
         tabFormat: {
@@ -4470,7 +4622,8 @@ addLayer("tokens", {
                                   93000,  99790,  114e3, 133540, 134125,
                                  137240, 137820, 141200, 176900, 178250,
                                  205700, 227400, 260200, 297450, 298600,
-                                 335080, 336336, 357900, 398888,
+                                 335080, 336336, 357900, 398888, 405900,
+                                 432950, 445250, 462700,
                                  1e6-1, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length

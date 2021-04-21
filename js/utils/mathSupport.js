@@ -57,7 +57,7 @@ function getLogisticAmount(current, gain, loss, diff){
 
 function getAllowedCharacters(){
         let a = ["♠","♣","♥","♦","🍎","📪","🌲"]
-        if (false) a.push("💰")
+        if (hasUpgrade("mini", 24)) a.push("💰")
         if (false) a.push("🛑")
         if (false) a.push("🌹")
         if (false) a.push("🔀")
@@ -67,7 +67,7 @@ function getAllowedCharacters(){
 
 function getAllowedCharacterValues(){
         let a = [1,2,3,4,5,6,7]
-        if (false) a.push(8)
+        if (hasUpgrade("mini", 24)) a.push(8)
         if (false) a.push(9)
         if (false) a.push(10)
         if (false) a.push(11)
@@ -111,10 +111,10 @@ function getCharacterValue(charID){
                 5: 1,
                 6: 4,
                 7: 4,
-                8: 100,
-                9: 3,
-                10:10,
-                11:8,
+                8: 300,
+                9: 50,
+                10:60,
+                11:70,
         }[charID]
         ret = new Decimal(ret)
 
