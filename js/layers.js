@@ -4599,7 +4599,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1275),
+                        cost:() => Decimal.pow(10, 1375),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
