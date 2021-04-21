@@ -65,21 +65,29 @@ function getAllowedCharacters(){
         return a
 }
 
+function getAllowedCharacterValues(){
+        let a = [1,2,3,4,5,6,7]
+        if (false) a.push(8)
+        if (false) a.push(9)
+        if (false) a.push(10)
+        if (false) a.push(11)
+        
+        return a
+}
+
 function getRandomSlotValue(number){
         let poss = getAllowedCharacters()
         let len = poss.length
         let a = []
+        let allowedVals = getAllowedCharacterValues()
         for (i = 0; i < number; i++){
-                x = Math.ceil(Math.random() * len)
-                a.push(x)
+                x = Math.floor(Math.random() * len)
+                a.push(allowedVals[x])
         }
         return a
 }
 
 function getUnicodeCharacter(value){
-        if (value >= 5) {
-                value += value - 4
-        }
         if (value <= 4) {
                 return "♠♣♥♦".slice(value-1, value)
         }
@@ -95,7 +103,7 @@ function getUnicodeCharacter(value){
 }
 
 function getCharacterValue(charID){
-        return {
+        let ret = {
                 1: 2,
                 2: 2,
                 3: 2,
@@ -108,6 +116,12 @@ function getCharacterValue(charID){
                 10:10,
                 11:8,
         }[charID]
+        ret = new Decimal(ret)
+
+        if (hasUpgrade("mini", 11)) ret = ret.plus(player.mini.upgrades.length)
+
+        return ret
+
 }
 
 function getRewardAmount(spins){
@@ -142,7 +156,7 @@ function getRewardAmount(spins){
                 val = val.times(Decimal.pow(base, exp))
         }
         let a = Math.min(rollNums[1], rollNums[2], rollNums[3], rollNums[4])
-        val = val.times(Decimal.pow(30, a))
+        val = val.times(Decimal.pow(30, a ** 2))
         return val
 }
 
