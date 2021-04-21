@@ -2455,7 +2455,7 @@ addLayer("mini", {
                                 }
 
                                 let list2 = []
-                                if (hasUpgrade("mini", 22)) list2 = [71, 72, 73, 81, 82, 83].concat(list1)
+                                if (hasUpgrade("mini", 22)) list2 = [71, 72, 73, 81, 82, 83, 91, 92].concat(list1)
 
                                 for (i = 0; i < list2.length; i++){
                                         let id = list2[i]
@@ -2587,7 +2587,10 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 15)) ret = ret.times(player.mini.b_points.points.max(10).log10())
                         ret = ret.times(tmp.mini.buyables[82].effect)
                         ret = ret.times(tmp.mini.buyables[83].effect)
+                        ret = ret.times(tmp.mini.buyables[92].effect)
                         if (hasUpgrade("mini", 22)) ret = ret.times(player.h.points.max(10).log10())
+                        if (hasUpgrade("mini", 32)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
+                        if (hasUpgrade("mini", 34)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
 
                         return ret
                 },
@@ -3603,7 +3606,12 @@ addLayer("mini", {
                         title: "Unlock a slot", 
                         cost(){
                                 let base = new Decimal(100)
-                                let exp = getBuyableAmount("mini", 71).plus(1).pow(getBuyableAmount("mini", 71).div(2).plus(3))
+
+                                let init = getBuyableAmount("mini", 71)
+                                if (!hasUpgrade("mini", 25)) init = init.plus(1)
+
+                                let exp = init.pow(getBuyableAmount("mini", 71).div(2).plus(3))
+                                
                                 return base.pow(exp)
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[71].cost) && getBuyableAmount("mini", 71).lt(11),
@@ -3629,9 +3637,10 @@ addLayer("mini", {
                                         let start = amt + cost
                                         return "<br>" + start + end
                                 }
-
+                                let comp1 = "(x+1)"
+                                if (hasUpgrade("mini", 25)) comp1 = "x"
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(100)^((x+1)<sup>x/2+3</sup>)" 
+                                let cost2 = "(100)^(" + comp1 + "<sup>x/2+3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3900,6 +3909,7 @@ addLayer("mini", {
                                 let ret = player.o.points.max(10).log10()
 
                                 if (hasUpgrade("mini", 23)) ret = ret.times(Math.log(10))
+                                if (hasMilestone("tokens", 24)) ret = ret.div(Math.log(2))
 
                                 return ret
                         },
@@ -3917,6 +3927,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 83)) + " C Points</b><br>"
                                 let eformula = "(log10(Oxygen))<sup>x</sup><br>" + format(getBuyableBase("mini", 83)) + "^x" //+ getBuyableEffectString(layer, id)
                                 if (hasUpgrade("mini", 23)) eformula = eformula.replace("log10", "ln")
+                                if (hasMilestone("tokens", 24)) eformula = eformula.replace("ln", "log2")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -3931,6 +3942,129 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e225)*(1e10^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                91: {
+                        title: "<bdi style='color:#CC0033'>C</bdi> increase 2",
+                        cost:() => new Decimal("1e1300").times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 91), 1.3))),
+                        canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[91].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[91] = player.mini.buyables[91].plus(1)
+                                player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[91].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e1300")
+                                let base = 1e30
+                                let exp = 1.2
+                                let pts = player.mini.c_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 73).gt(300)
+                        },
+                        base(){
+                                let amt = player.mini.buyables[91]
+                                let ret = amt.div(100).plus(1.2).ln()
+
+
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[91].base.times(player.mini.buyables[91])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 91)) + " C Points</b><br>"
+                                let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 91)) + "*x" //+ getBuyableEffectString(layer, id)
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e1300)*(1e8^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                92: {
+                        title: "C Point gain 5",
+                        cost:() => new Decimal("1e1900").times(Decimal.pow(1e50, Decimal.pow(getBuyableAmount("mini", 92), 1.3))),
+                        canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[92].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[92] = player.mini.buyables[92].plus(1)
+                                player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[92].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e1900")
+                                let base = 1e50
+                                let exp = 1.3
+                                let pts = player.mini.c_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 83).gt(50)
+                        },
+                        base(){
+                                let ret = player.points.max(10).log10()
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[92].base.pow(player.mini.buyables[92])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[92].effect) + " to C Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 92)) + " C Points</b><br>"
+                                let eformula = "(log10(Life Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 92)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e1900)*(1e50^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -4225,11 +4359,17 @@ addLayer("mini", {
                                 if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>GAMBLE!</h3>"
                         },
+                        timeRequired(){
+                                let ret = 5
+                                if (hasUpgrade("mini", 34)) ret = 3
+                                return ret
+                        },
                         display(){
                                 let last = player.mini.c_points.lastRollTime
                                 let now = new Date().getTime()
                                 let rem = (now - last)/1000
-                                let a = "Time until next spin: " + formatTime(Math.max(0,5-rem)) + "<br>"
+                                let req = tmp.mini.clickables[41].timeRequired
+                                let a = "Time until next spin: " + formatTime(Math.max(0, req-rem)) + "<br>"
                                 let b = ""
                                 return a + b
                         },
@@ -4237,7 +4377,8 @@ addLayer("mini", {
                                 return true
                         },
                         canClick(){
-                                return new Date().getTime() - player.mini.c_points.lastRollTime >= 5000
+                                let req = tmp.mini.clickables[41].timeRequired
+                                return new Date().getTime() - player.mini.c_points.lastRollTime >= 1000 * req
                         },
                         onClick(){
                                 let data = player.mini.c_points
@@ -4281,6 +4422,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 21)) ret = 7
                                 if (hasUpgrade("mini", 22)) ret = 6
                                 if (hasUpgrade("mini", 23)) ret = 5
+                                if (hasMilestone("tokens", 25)) ret = 3
 
                                 return ret
                         },
@@ -4431,6 +4573,91 @@ addLayer("mini", {
                                 return hasUpgrade("mini", 23)
                         }, // hasUpgrade("mini", 24)
                 },
+                25: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Cherry</bdi>"
+                        },
+                        description(){
+                                let a = "Remove 🛑 and remove the +1 from Unlock a slot exponent base"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 1275),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 24)
+                        }, // hasUpgrade("mini", 25)
+                },
+                31: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Coconut</bdi>"
+                        },
+                        description(){
+                                let a = "Square suits base, triple 💰 base, and you can buy and keep row 7 and 8 upgrades"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 1275),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 25)
+                        }, // hasUpgrade("mini", 31)
+                },
+                32: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Cod</bdi>"
+                        },
+                        description(){
+                                let a = "C Points ^.01 multiplies C point gain, but square root the character effect on C point gain"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 1775),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 31)
+                        }, // hasUpgrade("mini", 32)
+                },
+                33: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Chocolate</bdi>"
+                        },
+                        description(){
+                                let a = "Remove 📪 and reduce token buyable exponent to .6"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 1825),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 32)
+                        }, // hasUpgrade("mini", 33)
+                },
+                34: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Cupcake</bdi>"
+                        },
+                        description(){
+                                let a = "Remove 🌲, apply Cod again, and you can gamble every 3 seconds"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 2750),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 33)
+                        }, // hasUpgrade("mini", 34)
+                },
         },
         tabFormat: {
                 "A": {
@@ -4492,7 +4719,9 @@ addLayer("mini", {
                                 ["upgrades", [1]],
                                 ["buyables", [8]],
                                 ["upgrades", [2]],
-                                ["buyables", [9,10]],
+                                ["buyables", [9]],
+                                ["upgrades", [3]],
+                                ["buyables", [10]],
                                 ["display-text", function(){
                                         if (!shiftDown) return ""
                                         let poss = getAllowedCharacterValues()
@@ -4501,7 +4730,7 @@ addLayer("mini", {
                                         for (i = 0; i < len; i++){
                                                 let id = poss[i]
                                                 ret += getUnicodeCharacter(id)
-                                                ret += " gives " + getCharacterValue(id)
+                                                ret += " gives " + format(getCharacterValue(id))
                                                 ret += " times the points.<br>"
                                         }
                                         let a = "this will be the values and the options for text disp things"
@@ -4623,7 +4852,8 @@ addLayer("tokens", {
                                  137240, 137820, 141200, 176900, 178250,
                                  205700, 227400, 260200, 297450, 298600,
                                  335080, 336336, 357900, 398888, 405900,
-                                 432950, 445250, 462700,
+                                 432950, 445250, 462700, 467500, 542000,
+                                 692000, 774000, 793000,
                                  1e6-1, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -4801,6 +5031,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (hasUpgrade("mini", 33))   return x.pow(.6).round()
                         if (hasUpgrade("tokens", 82)) return x.pow(.65).round()
                         if (hasUpgrade("h", 75))      return x.pow(.7).round()
                         if (hasUpgrade("h", 85))      return x.pow(.7).ceil()
@@ -4810,6 +5041,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (hasUpgrade("mini", 33))   return "round(x<sup>.6</sup>)"
                         if (hasUpgrade("tokens", 82)) return "round(x<sup>.65</sup>)"
                         if (hasUpgrade("h", 75))      return "round(x<sup>.7</sup>)"
                         if (hasUpgrade("h", 85))      return "ceil(x<sup>.7</sup>)"
@@ -5834,6 +6066,7 @@ addLayer("tokens", {
                                 if (!this.canAfford()) return 
                                 let keep = []
                                 if (hasMilestone("tokens", 18)) keep = keep.concat([42, 61, 62])
+                                if (hasUpgrade("mini", 31)) keep = keep.concat([71, 72, 73, 81, 82])
                                 if (hasMilestone("tokens", 20)) keep = keep.concat([11, 21, 22, 31, 32, 33, 34, 41, 51, 52])
                                 player.tokens.upgrades = filter(player.tokens.upgrades, keep)
                         },
@@ -6371,6 +6604,7 @@ addLayer("tokens", {
                                 // i want df/dt = X and you can upgrade X with stuff and there is prestige
                                 // for d simialr concept but there is a wacka mole game that gives buffs
                                 c = c.plus(tmp.mini.buyables[81].effect)
+                                c = c.plus(tmp.mini.buyables[91].effect)
                                 
 
                                 return c
@@ -6387,8 +6621,49 @@ addLayer("tokens", {
                                 return a + b
                         },
                 },  // hasMilestone("tokens", 23)
+                24: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[24].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(51) 
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[24].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Unlock another possible character and C Point gain 4's ln becomes log2" 
+                                
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 24)
+                25: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[25].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(53) 
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[25].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Reduce Corn interval to 3" 
+                                
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 25)
 
-                //
         },
         upgrades: {
                 rows: 1000,
@@ -6837,6 +7112,10 @@ addLayer("tokens", {
                                 if (shiftDown) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 82</bdi>"
                                         let b = "<br>Current requirement:<br>!82"
+                                        if (hasUpgrade("mini", 31)) {
+                                                a = "<bdi style='color: #863813'></bdi>"
+                                                b = "<br>Current requirement:<br>"
+                                        }
 
                                         return a + b
                                 }
@@ -6844,7 +7123,7 @@ addLayer("tokens", {
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[81].cost)) return false
-                                return false || (!hasUpgrade("tokens", 82))
+                                return hasUpgrade("mini", 31) || (!hasUpgrade("tokens", 82))
                         },
                         cost:() => new Decimal(2e4),
                         currencyLocation:() => player.tokens.coins,
@@ -6856,13 +7135,17 @@ addLayer("tokens", {
                 },
                 82: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 81</bdi>"
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 82</bdi>"
                                 return "<bdi style='color: #FF0000'>Egg is here.</bdi>"
                         },
                         description(){
                                 if (shiftDown) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 81</bdi>"
                                         let b = "<br>Current requirement:<br>!81"
+                                        if (hasUpgrade("mini", 31)) {
+                                                a = "<bdi style='color: #863813'></bdi>"
+                                                b = "<br>Current requirement:<br>"
+                                        }
 
                                         return a + b
                                 }
@@ -6870,7 +7153,7 @@ addLayer("tokens", {
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[82].cost)) return false
-                                return false || (!hasUpgrade("tokens", 81))
+                                return hasUpgrade("mini", 31) || (!hasUpgrade("tokens", 81))
                         },
                         cost:() => new Decimal(2e4),
                         currencyLocation:() => player.tokens.coins,

@@ -55,31 +55,25 @@ function getLogisticAmount(current, gain, loss, diff){
         }
 }
 
-function getAllowedCharacters(){
-        let a = ["♠","♣","♥","♦","🍎","📪","🌲"]
-        if (hasUpgrade("mini", 24)) a.push("💰")
-        if (false) a.push("🛑")
-        if (false) a.push("🌹")
-        if (false) a.push("🔀")
-
-        return a
-}
-
 function getAllowedCharacterValues(){
         let a = [1,2,3,4,5,6,7]
         if (hasUpgrade("mini", 24)) a.push(8)
-        if (false) a.push(9)
+        if (hasMilestone("tokens", 24)) a.push(9)
         if (false) a.push(10)
         if (false) a.push(11)
+
+        if (hasUpgrade("mini", 25)) a = filterOut(a, [5])
+        if (hasUpgrade("mini", 33)) a = filterOut(a, [6])
+        if (hasUpgrade("mini", 34)) a = filterOut(a, [7])
         
         return a
 }
 
 function getRandomSlotValue(number){
-        let poss = getAllowedCharacters()
-        let len = poss.length
-        let a = []
         let allowedVals = getAllowedCharacterValues()
+        let len = allowedVals.length
+        let a = []
+        
         for (i = 0; i < number; i++){
                 x = Math.floor(Math.random() * len)
                 a.push(allowedVals[x])
@@ -112,13 +106,18 @@ function getCharacterValue(charID){
                 6: 4,
                 7: 4,
                 8: 300,
-                9: 50,
-                10:60,
-                11:70,
+                9: 150,
+                10:200,
+                11:250,
         }[charID]
         ret = new Decimal(ret)
 
         if (hasUpgrade("mini", 11)) ret = ret.plus(player.mini.upgrades.length)
+
+        if (hasUpgrade("mini", 31)) {
+                if (charID <= 4) ret = ret.pow(2)
+                if (charID == 8) ret = ret.times(3)
+        }
 
         return ret
 
@@ -157,6 +156,10 @@ function getRewardAmount(spins){
         }
         let a = Math.min(rollNums[1], rollNums[2], rollNums[3], rollNums[4])
         val = val.times(Decimal.pow(30, a ** 2))
+
+        if (hasUpgrade("mini", 32)) val = val.sqrt()
+        if (hasUpgrade("mini", 34)) val = val.sqrt()
+
         return val
 }
 
