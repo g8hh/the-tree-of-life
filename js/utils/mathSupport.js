@@ -81,7 +81,8 @@ function getRandomSlotValue(number){
         return a
 }
 
-function getUnicodeCharacter(value){
+function getUnicodeCharacter(value, force = false){
+        if (!player.mini.c_points.displayCharacters && !force) return ""
         if (value <= 4) {
                 return "♠♣♥♦".slice(value-1, value)
         }
@@ -107,8 +108,8 @@ function getCharacterValue(charID){
                 7: 4,
                 8: 300,
                 9: 150,
-                10:200,
-                11:250,
+                10:1e3,
+                11:1e4,
         }[charID]
         ret = new Decimal(ret)
 
@@ -159,6 +160,7 @@ function getRewardAmount(spins){
 
         if (hasUpgrade("mini", 32)) val = val.sqrt()
         if (hasUpgrade("mini", 34)) val = val.sqrt()
+        if (hasUpgrade("tokens", 92)) val = val.sqrt()
 
         return val
 }

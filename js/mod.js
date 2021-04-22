@@ -12,19 +12,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.027.1",
+	num: "0.028",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- At least e3700, but you can get more.<br><br>
+		- ~e13237 <br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.028</h3><br>
+		- Added a buyable for C minigame.<br>
+		- Added a upgrade for C minigame.<br>
+		- Added a token milestone and two token upgrades.<br>
+		- Added two rows of achievements.<br>
 	<br><h3 style='color: #CC0000'>v0.027</h3><br>
 		- Added two buyables for C minigame.<br>
 		- Added five upgrades for C minigame.<br>

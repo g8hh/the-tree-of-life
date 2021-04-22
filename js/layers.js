@@ -2379,6 +2379,7 @@ addLayer("mini", {
                         best: new Decimal(0),
                         lastRoll: [],
                         lastRollTime: new Date().getTime(),
+                        displayCharacters: true,
                 },
         }},
         color: "#7D5D58",
@@ -2455,7 +2456,7 @@ addLayer("mini", {
                                 }
 
                                 let list2 = []
-                                if (hasUpgrade("mini", 22)) list2 = [71, 72, 73, 81, 82, 83, 91, 92].concat(list1)
+                                if (hasUpgrade("mini", 22)) list2 = [71, 72, 73, 81, 82, 83, 91, 92, 93].concat(list1)
 
                                 for (i = 0; i < list2.length; i++){
                                         let id = list2[i]
@@ -2588,9 +2589,12 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[82].effect)
                         ret = ret.times(tmp.mini.buyables[83].effect)
                         ret = ret.times(tmp.mini.buyables[92].effect)
+                        ret = ret.times(tmp.mini.buyables[93].effect)
                         if (hasUpgrade("mini", 22)) ret = ret.times(player.h.points.max(10).log10())
                         if (hasUpgrade("mini", 32)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
                         if (hasUpgrade("mini", 34)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
+                        if (hasUpgrade("tokens", 92)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
+                        if (hasUpgrade("mini", 35)) ret = ret.times(Decimal.pow(50, player.mini.upgrades.length))
 
                         return ret
                 },
@@ -3606,6 +3610,7 @@ addLayer("mini", {
                         title: "Unlock a slot", 
                         cost(){
                                 let base = new Decimal(100)
+                                if (hasUpgrade("mini", 35)) base = new Decimal(50)
 
                                 let init = getBuyableAmount("mini", 71)
                                 if (!hasUpgrade("mini", 25)) init = init.plus(1)
@@ -3640,7 +3645,9 @@ addLayer("mini", {
                                 let comp1 = "(x+1)"
                                 if (hasUpgrade("mini", 25)) comp1 = "x"
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(100)^(" + comp1 + "<sup>x/2+3</sup>)" 
+                                let base = "100"
+                                if (hasUpgrade("mini", 35)) base = "50"
+                                let cost2 = "(" + base + ")^(" + comp1 + "<sup>x/2+3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3670,7 +3677,9 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 71).gt(0)
                         },
                         base(){
-                                return player.mini.c_points.points.max(10).log10()
+                                let ret = player.mini.c_points.points.max(10).log10()
+                                if (hasUpgrade("tokens", 91)) ret = ret.times(Math.log(10))
+                                return ret
                         },
                         effect(){
                                 return tmp.mini.buyables[72].base.pow(player.mini.buyables[72])
@@ -3684,7 +3693,9 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[72].effect) + " to C Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 72)) + " C Points</b><br>"
-                                let eformula = "log10(C Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 72)) + "^x" //+ getBuyableEffectString(layer, id)
+                                let init = "log10(C Points)<sup>x</sup>"
+                                if (hasUpgrade("tokens", 91)) init = "ln(C Points)<sup>x</sup>"
+                                let eformula = init + "<br>" + format(getBuyableBase("mini", 72)) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -4073,6 +4084,66 @@ addLayer("mini", {
                                 return "<br>" + end
                         },
                 },
+                93: {
+                        title: "C Point gain 6",
+                        cost:() => new Decimal("1e6350").times(Decimal.pow(1e6, Decimal.pow(getBuyableAmount("mini", 93), 1.1))),
+                        canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[93].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[93] = player.mini.buyables[93].plus(1)
+                                player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[93].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e6350")
+                                let base = 1e6
+                                let exp = 1.1
+                                let pts = player.mini.c_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 92).gt(30)
+                        },
+                        base(){
+                                let ret = player.mini.a_points.points.max(10).log10().log10().max(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[93].base.pow(player.mini.buyables[93])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[93].effect) + " to C Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 93)) + " C Points</b><br>"
+                                let eformula = "(log10(log10(A Points)))<sup>x</sup><br>" + format(getBuyableBase("mini", 93)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e6350)*(1e6^x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
         },
         clickables: {
                 rows: 4,
@@ -4353,6 +4424,141 @@ addLayer("mini", {
                         },
                         onClick(){},
                 },
+                31: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "<h3 style='color: #607216'>SLOT 11</h3>"
+                        },
+                        display(){
+                                lr = player.mini.c_points.lastRoll
+                                let val = 11
+                                if (tmp.mini.clickables.unlockedSlots >= val) {
+                                        if (lr.length >= val) {
+                                                let start = "<h2 style='font-size: 500%'>"
+                                                let end = "</h2>"
+                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                        }
+                                        return "Have not rolled this slot yet" //get the character
+                                }
+                                return "Not unlocked yet"
+                        },
+                        unlocked(){
+                                return tmp.mini.clickables.unlockedSlots >= 10
+                        },
+                        canClick(){
+                                return false
+                        },
+                        onClick(){},
+                },
+                32: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "<h3 style='color: #607216'>SLOT 12</h3>"
+                        },
+                        display(){
+                                lr = player.mini.c_points.lastRoll
+                                let val = 12
+                                if (tmp.mini.clickables.unlockedSlots >= val) {
+                                        if (lr.length >= val) {
+                                                let start = "<h2 style='font-size: 500%'>"
+                                                let end = "</h2>"
+                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                        }
+                                        return "Have not rolled this slot yet" //get the character
+                                }
+                                return "Not unlocked yet"
+                        },
+                        unlocked(){
+                                return tmp.mini.clickables.unlockedSlots >= 10
+                        },
+                        canClick(){
+                                return false
+                        },
+                        onClick(){},
+                },
+                33: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "<h3 style='color: #607216'>SLOT 13</h3>"
+                        },
+                        display(){
+                                lr = player.mini.c_points.lastRoll
+                                let val = 13
+                                if (tmp.mini.clickables.unlockedSlots >= val) {
+                                        if (lr.length >= val) {
+                                                let start = "<h2 style='font-size: 500%'>"
+                                                let end = "</h2>"
+                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                        }
+                                        return "Have not rolled this slot yet" //get the character
+                                }
+                                return "Not unlocked yet"
+                        },
+                        unlocked(){
+                                return tmp.mini.clickables.unlockedSlots >= 10
+                        },
+                        canClick(){
+                                return false
+                        },
+                        onClick(){},
+                },
+                34: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "<h3 style='color: #607216'>SLOT 14</h3>"
+                        },
+                        display(){
+                                lr = player.mini.c_points.lastRoll
+                                let val = 14
+                                if (tmp.mini.clickables.unlockedSlots >= val) {
+                                        if (lr.length >= val) {
+                                                let start = "<h2 style='font-size: 500%'>"
+                                                let end = "</h2>"
+                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                        }
+                                        return "Have not rolled this slot yet" //get the character
+                                }
+                                return "Not unlocked yet"
+                        },
+                        unlocked(){
+                                return tmp.mini.clickables.unlockedSlots >= 10
+                        },
+                        canClick(){
+                                return false
+                        },
+                        onClick(){},
+                },
+                35: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "<h3 style='color: #607216'>SLOT 15</h3>"
+                        },
+                        display(){
+                                lr = player.mini.c_points.lastRoll
+                                let val = 15
+                                if (tmp.mini.clickables.unlockedSlots >= val) {
+                                        if (lr.length >= val) {
+                                                let start = "<h2 style='font-size: 500%'>"
+                                                let end = "</h2>"
+                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                        }
+                                        return "Have not rolled this slot yet" //get the character
+                                }
+                                return "Not unlocked yet"
+                        },
+                        unlocked(){
+                                return tmp.mini.clickables.unlockedSlots >= 10
+                        },
+                        canClick(){
+                                return false
+                        },
+                        onClick(){},
+                },
                 41: {
                         title(){
                                 if (player.tab != "mini") return ""
@@ -4362,6 +4568,8 @@ addLayer("mini", {
                         timeRequired(){
                                 let ret = 5
                                 if (hasUpgrade("mini", 34)) ret = 3
+                                if (hasMilestone("tokens", 26)) ret = 1
+                                if (hasUpgrade("tokens", 92)) ret = .25
                                 return ret
                         },
                         display(){
@@ -4391,6 +4599,23 @@ addLayer("mini", {
 
                         },
                 },      
+                42: {
+                        title(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                return "Toggle character display"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                let data = player.mini.c_points
+                                data.displayCharacters = !data.displayCharacters
+                        },
+                },  
         },
         upgrades: {
                 rows: 1000,
@@ -4423,6 +4648,8 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 22)) ret = 6
                                 if (hasUpgrade("mini", 23)) ret = 5
                                 if (hasMilestone("tokens", 25)) ret = 3
+                                if (hasMilestone("tokens", 26)) ret = 1
+                                if (hasUpgrade("tokens", 92)) ret = .25
 
                                 return ret
                         },
@@ -4658,6 +4885,23 @@ addLayer("mini", {
                                 return hasUpgrade("mini", 33)
                         }, // hasUpgrade("mini", 34)
                 },
+                35: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Crepe</bdi>"
+                        },
+                        description(){
+                                let a = "Reduce the unlock a slot base to 50 and each upgrade multiplies C point gain by 50"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 11825),
+                        currencyLocation:() => player.mini.c_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "C Points",
+                        unlocked(){
+                                return hasUpgrade("mini", 34)
+                        }, // hasUpgrade("mini", 35)
+                },
         },
         tabFormat: {
                 "A": {
@@ -4729,7 +4973,7 @@ addLayer("mini", {
                                         let ret = ""
                                         for (i = 0; i < len; i++){
                                                 let id = poss[i]
-                                                ret += getUnicodeCharacter(id)
+                                                ret += getUnicodeCharacter(id, true)
                                                 ret += " gives " + format(getCharacterValue(id))
                                                 ret += " times the points.<br>"
                                         }
@@ -4853,8 +5097,10 @@ addLayer("tokens", {
                                  205700, 227400, 260200, 297450, 298600,
                                  335080, 336336, 357900, 398888, 405900,
                                  432950, 445250, 462700, 467500, 542000,
-                                 692000, 774000, 793000,
-                                 1e6-1, 1e100]
+                                 692000, 774000, 793000, 1085e3, 1380e3,
+                                 1804e3, 1870e3, 1996e3, 2044e3,
+                                 
+                                 /*1e6-1,*/ 1e100, 1e100, 1e100]
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
 
@@ -6068,6 +6314,7 @@ addLayer("tokens", {
                                 if (hasMilestone("tokens", 18)) keep = keep.concat([42, 61, 62])
                                 if (hasUpgrade("mini", 31)) keep = keep.concat([71, 72, 73, 81, 82])
                                 if (hasMilestone("tokens", 20)) keep = keep.concat([11, 21, 22, 31, 32, 33, 34, 41, 51, 52])
+                                if (hasUpgrade("tokens", 91)) keep = keep.concat([91])
                                 player.tokens.upgrades = filter(player.tokens.upgrades, keep)
                         },
                         style(){
@@ -6663,6 +6910,27 @@ addLayer("tokens", {
                                 return a 
                         },
                 },  // hasMilestone("tokens", 25)
+                26: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[26].requirement)
+                                let b = " total tokens"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(55) 
+                        },
+                        done(){
+                                return player.tokens.total.gte(tmp.tokens.milestones[26].requirement)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Reduce Corn interval to 1 and you can gamble after 1 second" 
+                                
+                                return a 
+                        },
+                },  // hasMilestone("tokens", 26)
 
         },
         upgrades: {
@@ -7163,7 +7431,58 @@ addLayer("tokens", {
                                 return (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
                         }, //hasUpgrade("tokens", 82)
                 },
-                //https://www.chemspeller.com/index.html?tree
+                91: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 91</bdi>"
+                                return "<bdi style='color: #FF0000'>Once Upon</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "C Point Gain 1's log10 is buffed to ln (this upgrade is never repealed)"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[91].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(1e5),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return player.tokens.total.gte(54)
+                        }, //hasUpgrade("tokens", 91)
+                },
+                92: {
+                        title(){
+                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 92</bdi>"
+                                return "<bdi style='color: #FF0000'>A Time</bdi>"
+                        },
+                        description(){
+                                if (shiftDown) {
+                                        let a = "<bdi style='color: #863813'></bdi>"
+                                        let b = "<br>Current requirement:<br>"
+
+                                        return a + b
+                                }
+                                return "You can (automatically) gamble four times a second and apply Cod again"
+                        },
+                        canAfford(){
+                                if (player.tokens.coins.points.lt(tmp.tokens.upgrades[92].cost)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(2e5),
+                        currencyLocation:() => player.tokens.coins,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Coins",
+                        unlocked(){
+                                return player.tokens.total.gte(56)
+                        }, // hasUpgrade("tokens", 92)
+                },
         },
         tabFormat: {
                 "Milestones": {
