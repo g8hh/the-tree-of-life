@@ -230,6 +230,20 @@ PROGRESSION_MILESTONES = {
         124: () => player.tokens.total.gt(67),
         125: () => player.tokens.total.gt(68),
         126: () => player.tokens.total.gt(69),
+        127: () => player.tokens.total.gt(70),
+        128: () => player.tokens.total.gt(71),
+        129: () => player.tokens.total.gt(72),
+        130: () => player.tokens.total.gt(73),
+        131: () => player.tokens.total.gt(74),
+        132: () => player.tokens.total.gt(75),
+        133: () => player.tokens.total.gt(76),
+        134: () => player.tokens.total.gt(77),
+        135: () => player.tokens.total.gt(78),
+        136: () => player.tokens.total.gt(79),
+        137: () => player.tokens.total.gt(80),
+        138: () => player.tokens.total.gt(81),
+        139: () => player.tokens.total.gt(82),
+        140: () => player.tokens.total.gt(83),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -359,6 +373,20 @@ PROGRESSION_MILESTONES_TEXT = {
         124: "68 tokens",
         125: "69 tokens",
         126: "70 tokens",
+        127: "71 tokens",
+        128: "72 tokens",
+        129: "73 tokens",
+        130: "74 tokens",
+        131: "75 tokens",
+        132: "76 tokens",
+        133: "77 tokens",
+        134: "78 tokens",
+        135: "79 tokens",
+        136: "80 tokens",
+        137: "81 tokens",
+        138: "82 tokens",
+        139: "83 tokens",
+        140: "84 tokens",
 }
 
 
