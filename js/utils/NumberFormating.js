@@ -50,8 +50,8 @@ function format(decimal, precision = 2) {
                 else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
         }
         else if (decimal.gte("ee10")) return "e" + format(decimal.log10())
-        else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
-        else if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0)
+        else if (decimal.gte("ee7")) return exponentialFormat(decimal, 0, false)
+        else if (decimal.gte("ee5")) return exponentialFormat(decimal, 0)
         else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
         else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
         else return regularFormat(decimal, precision)

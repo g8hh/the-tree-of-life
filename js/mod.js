@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.029.1",
+	num: "0.030",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,14 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.030</h3><br> 3 upgs redid formatting nitrogen
+		- Added three upgrades for C minigame.<br>
+		- Increased digits display for sufficiently small numbers.<br>
+		- Added a hardcap for C Point gain 2, but it's not for a while, so I might remove it.<br>
+		- Added nitrogen including...<br>
+		... a prestige button/displays for it<br>
+		... a prestiging function which resets all prior progress except achievements<br>
+		... one upgrade currently (there will be options to start)<br>
 	<br><h3 style='color: #CC0000'>v0.029</h3><br>
 		- Added six buyables for C minigame.<br>
 		- Added two upgrades for C minigame.<br>
