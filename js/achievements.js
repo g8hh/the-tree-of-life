@@ -71,7 +71,7 @@ function getAchStuffFromNumber(n){
         } else if (n <= 1111) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
-                        return player.tokens.total.gt(0)
+                        return player.tokens.total.gt(0) || tmp.n.layerShown
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){

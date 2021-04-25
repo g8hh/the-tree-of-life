@@ -12,20 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.030",
+	num: "0.031",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- ~e13237 <br><br>
+		- 1 nitrogen 64 tokens, further is obviously possible<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.030</h3><br> 3 upgs redid formatting nitrogen
+	<br><h3 style='color: #CC0000'>v0.031</h3><br>
+		- Made achievements not disappear after nitrogen resetting.<br>
+		- Added a nitrogen milestone<br>.
+		- Gave nitrogen an effect.<br>
+		- Made Iron twice as cheap.<br>
+		- Added four nitrogen upgrades that can be bought in any order.<br>
+		- Added T and S hotkeys.<br>
+	<br><h3 style='color: #CC0000'>v0.030</h3><br>
 		- Added three upgrades for C minigame.<br>
 		- Increased digits display for sufficiently small numbers.<br>
 		- Added a hardcap for C Point gain 2, but it's not for a while, so I might remove it.<br>

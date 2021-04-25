@@ -8,12 +8,14 @@ function getPointGen() {
         if (hasUpgrade("h", 61)) gain = gain.times(tmp.h.upgrades[61].effect)
 
         gain = gain.times(tmp.tokens.buyables[11].effect)
+        gain = gain.times(tmp.n.effect)
 
 
 
         if (hasUpgrade("h", 25)) gain = gain.pow(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13)) gain = gain.pow(tmp.o.upgrades[13].effect)
         gain = gain.pow(tmp.tokens.buyables[41].effect)
+        if (hasUpgrade("n", 11)) gain = gain.pow(1.001)
 
 	return gain
 }
@@ -85,6 +87,7 @@ addLayer("h", {
                 let ret = base.times(mult)
 
                 ret = ret.pow(tmp.tokens.buyables[42].effect)
+                if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
 
                 return ret
         },
@@ -110,6 +113,7 @@ addLayer("h", {
                 x = x.times(tmp.mini.buyables[63].effect)
                 x = x.times(tmp.tokens.buyables[12].effect)
                 if (hasUpgrade("o", 21)) x = x.times(player.o.points.max(1))
+                x = x.times(tmp.n.effect)
 
                 return x
         },
@@ -1405,6 +1409,7 @@ addLayer("c", {
 
                 if (hasUpgrade("c", 15)) ret = ret.pow(tmp.h.upgrades[25].effect)
                 ret = ret.pow(tmp.tokens.buyables[52].effect)
+                if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
 
                 if (hasUpgrade("tokens", 51)) ret = ret.times(player.o.points.max(1).pow(.1))
 
@@ -1442,6 +1447,7 @@ addLayer("c", {
                 if (hasMilestone("tokens", 3)) x = x.times(player.ach.achievements.length)
                 if (hasUpgrade("c", 21)) x = x.times(tmp.c.upgrades[21].effect)
                 x = x.times(tmp.mini.buyables[101].effect)
+                x = x.times(tmp.n.effect)
 
                 return x
         },
@@ -1474,7 +1480,7 @@ addLayer("c", {
                         }
                 },
         ],
-        layerShown(){return hasUpgrade("h", 55)},
+        layerShown(){return hasUpgrade("h", 55) || tmp.n.layerShown},
         prestigeButtonText(){
                 return "hello"
         },
@@ -1802,6 +1808,7 @@ addLayer("o", {
                 let ret = base.times(mult)
 
                 ret = ret.pow(tmp.tokens.buyables[53].effect)
+                if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
 
                 if (hasUpgrade("tokens", 52)) ret = ret.times(player.c.points.max(1).pow(.1))
 
@@ -1853,6 +1860,7 @@ addLayer("o", {
                         let base = player.c.points.max(10).log10()
                         x = x.times(base.pow(c))
                 }
+                x = x.times(tmp.n.effect)
 
                 return x
         },
@@ -1885,7 +1893,7 @@ addLayer("o", {
                         }
                 },
         ],
-        layerShown(){return hasUpgrade("h", 55)},
+        layerShown(){return hasUpgrade("h", 55) || tmp.n.layerShown},
         prestigeButtonText(){
                 return "hello"
         },
@@ -2207,6 +2215,7 @@ addLayer("n", {
                 unlocked: false,
 		points: new Decimal(0),
                 best: new Decimal(0),
+                total: new Decimal(0),
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -2256,6 +2265,28 @@ addLayer("n", {
 
                 return x
         },
+        effect(){
+                let amt = player.n.total
+
+                let base = amt.sqrt().times(2).plus(1)
+
+                let exp = amt.plus(7).log2()
+
+                let ret = base.pow(exp)
+
+                return ret
+        },
+        effectDescription(){
+                if (shiftDown) {
+                        let a = "effect formula: (sqrt(x)*2+1)^log2(x+7)"
+                        return a
+                }
+                let eff = tmp.n.effect
+                let effstr = format(eff)
+                let start = " multiplying Point, Hydrogen, Oxygen, Carbon, C Point, and color production gain by "
+                let end = "."
+                return start + effstr + end
+        },
         update(diff){
                 let data = player.n
                 
@@ -2293,11 +2324,11 @@ addLayer("n", {
                 }
                 let amt = "You can reset for <br>" + formatWhole(tmp.n.getResetGain) + " Nitrogen"
                 let nxt = ""
-                if (gain.lt(1000)) nxt = "<br>You need " + format(nextAt) + "<br>Life Points for the next [cant reset for now]"
+                if (gain.lt(1000)) nxt = "<br>You need " + format(nextAt) + "<br>Life Points for the next"
                 return amt + nxt
         },
         canReset(){
-                return tmp.n.getResetGain.gt(0) && false
+                return tmp.n.getResetGain.gt(0)
         },
         upgrades: {
                 rows: 1000,
@@ -2316,8 +2347,90 @@ addLayer("n", {
                         cost:() => new Decimal(1),
                         unlocked(){
                                 return true
-                        }, //hasUpgrade("n", 11)
+                        }, // hasUpgrade("n", 11)
                 },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Nitrogen II"
+                        },
+                        description(){
+                                let a = "A Point gain is raised ^ 1.02"
+                                return a
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("n", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Nitrogen III"
+                        },
+                        description(){
+                                let a = "B Point gain is raised ^ 1.02"
+                                return a
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("n", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Nitrogen IV"
+                        },
+                        description(){
+                                let a = "Add .001 to Cubic base"
+                                return a
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("n", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Nitrogen V"
+                        },
+                        description(){
+                                let a = "Add .001 to Polynomial base"
+                                return a
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("n", 15)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[1].requirement)
+                                let b = " Nitrogen reset"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(1)
+                        },
+                        done(){
+                                return tmp.n.milestones[1].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Token resets keep Hydrogen upgrades and the A and B buyable autobuyer bulks 5x.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[1].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 1)
         },
         tabFormat: {
                 "Upgrades": {
@@ -2338,6 +2451,17 @@ addLayer("n", {
                                 return true
                         },
                 },
+                "Milestones": {
+                        content: ["main-display",
+                                ["milestones", [1]],
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        onPrestige(){
+                player.n.times ++
         },
         doReset(layer){
                 /*
@@ -2402,6 +2526,9 @@ addLayer("n", {
                         data1.c_points = {
                                 points: new Decimal(0),
                                 best: new Decimal(0),
+                                lastRoll: [],
+                                lastRollTime: data1.c_points.lastRollTime,
+                                displayCharacters: data1.c_points.displayCharacters,
                         } // 3
                         let list3 = ["71", "72", "73", "81", "82", 
                                      "83", "91", "92", "93", "101", 
@@ -2426,10 +2553,12 @@ addLayer("n", {
                                      "61", "62", "63"]
                         for (i = 0; i < list4.length; i++){
                                 data2.buyables[list4[i]] = new Decimal(0)
+                                data2.best_buyables[list4[i]] = new Decimal(0)
                         } //4a
                         data2.coins.points = new Decimal(0)
                         data2.coins.best = new Decimal(0)
                         data2.upgrades = [] //dont keep any atm
+                        data2.milestones = []
                 }
 
                 // 5: C
@@ -2711,6 +2840,7 @@ addLayer("mini", {
                                 let max = new Decimal(1)
                                 if (hasMilestone("tokens", 3)) max = max.times(10)
                                 if (hasMilestone("tokens", 13)) max = max.times(5)
+                                if (hasMilestone("n", 1)) max = max.times(5)
 
 
                                 for (i = 0; i < list1.length; i++){
@@ -2748,7 +2878,8 @@ addLayer("mini", {
                                         if (getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
-                                                if (!hasUpgrade("tokens", 95) || bulk.eq(0)) break
+                                                if (!hasUpgrade("tokens", 95)) break
+                                                if (bulk.eq(0)) continue
                                                 if (id == 71) continue // cant be bulked
                                                 let maxAfford = tmp.mini.buyables[id].maxAfford
                                                 let curr = getBuyableAmount("mini", id)
@@ -2790,7 +2921,7 @@ addLayer("mini", {
                         }
                 },
                 ],
-        layerShown(){return hasUpgrade("h", 45) || hasUpgrade("h", 44)},
+        layerShown(){return hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown},
         prestigeButtonText(){
                 return ""
         },
@@ -2824,6 +2955,8 @@ addLayer("mini", {
                         let ret = a.sub(1).times(tmp.mini.a_points.getGainMult)
 
                         ret = ret.pow(tmp.tokens.buyables[61].effect)
+                        if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
+                        if (hasUpgrade("n", 12)) ret = ret.pow(1.02)
 
                         if (hasMilestone("tokens", 9)) ret = ret.times(player.mini.b_points.points.plus(1).pow(.1))
 
@@ -2842,6 +2975,7 @@ addLayer("mini", {
                         let ret = new Decimal(1)
 
                         ret = ret.times(tmp.tokens.buyables[33].effect)
+                        ret = ret.times(tmp.n.effect)
 
                         return ret
                 },
@@ -2862,6 +2996,8 @@ addLayer("mini", {
 
                         if (hasUpgrade("o", 13)) ret = ret.pow(tmp.o.upgrades[13].effect)
                         ret = ret.pow(tmp.tokens.buyables[62].effect)
+                        if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
+                        if (hasUpgrade("n", 13)) ret = ret.pow(1.02)
 
                         if (hasMilestone("tokens", 8)) ret = ret.times(player.mini.a_points.points.plus(1).pow(.1))
 
@@ -2883,6 +3019,7 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[103].effect)
                         ret = ret.times(tmp.mini.buyables[112].effect)
                         ret = ret.times(tmp.mini.buyables[113].effect)
+                        ret = ret.times(tmp.n.effect)
                         if (hasUpgrade("mini", 13))   ret = ret.times(tmp.tokens.buyables[23].effect.max(10).log10())
                         if (hasUpgrade("mini", 14))   ret = ret.times(player.points.max(10).log10())
                         if (hasUpgrade("mini", 15))   ret = ret.times(player.mini.b_points.points.max(10).log10())
@@ -2891,6 +3028,8 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 34))   ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
                         if (hasUpgrade("tokens", 92)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
                         if (hasUpgrade("mini", 35))   ret = ret.times(Decimal.pow(50, player.mini.upgrades.length))
+
+                        if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
 
                         return ret
                 },
@@ -5315,7 +5454,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 73).gt(5)
+                                return getBuyableAmount("mini", 73).gt(5) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 11)
                 },
                 12: {
@@ -5358,7 +5497,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 11)
+                                return hasUpgrade("mini", 11) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 12)
                 },
                 13: {
@@ -5380,7 +5519,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 12)
+                                return hasUpgrade("mini", 12) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 13)
                 },
                 14: {
@@ -5397,7 +5536,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 13)
+                                return hasUpgrade("mini", 13) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 14)
                 },
                 15: {
@@ -5414,7 +5553,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 14)
+                                return hasUpgrade("mini", 14) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 15)
                 },
                 21: {
@@ -5431,7 +5570,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 81).gte(43)
+                                return getBuyableAmount("mini", 81).gte(43) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 21)
                 },
                 22: {
@@ -5448,7 +5587,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 21)
+                                return hasUpgrade("mini", 21) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 22)
                 },
                 23: {
@@ -5465,7 +5604,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 22)
+                                return hasUpgrade("mini", 22) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 23)
                 },
                 24: {
@@ -5482,7 +5621,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 23)
+                                return hasUpgrade("mini", 23) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 24)
                 },
                 25: {
@@ -5499,7 +5638,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 24)
+                                return hasUpgrade("mini", 24) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 25)
                 },
                 31: {
@@ -5516,7 +5655,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 25)
+                                return hasUpgrade("mini", 25) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 31)
                 },
                 32: {
@@ -5533,7 +5672,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 31)
+                                return hasUpgrade("mini", 31) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 32)
                 },
                 33: {
@@ -5550,7 +5689,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 32)
+                                return hasUpgrade("mini", 32) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 33)
                 },
                 34: {
@@ -5567,7 +5706,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 33)
+                                return hasUpgrade("mini", 33) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 34)
                 },
                 35: {
@@ -5584,7 +5723,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 34)
+                                return hasUpgrade("mini", 34) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 35)
                 },
                 41: {
@@ -5601,7 +5740,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return hasUpgrade("mini", 35)
+                                return hasUpgrade("mini", 35) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 41)
                 },
                 42: {
@@ -5618,7 +5757,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return player.tokens.total.gte(74)
+                                return player.tokens.total.gte(74) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 42)
                 },
                 43: {
@@ -5635,7 +5774,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return player.tokens.total.gte(76)
+                                return player.tokens.total.gte(76) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 43)
                 },
                 44: {
@@ -5652,7 +5791,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return player.tokens.total.gte(77)
+                                return player.tokens.total.gte(77) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 44)
                 },
                 45: {
@@ -5669,7 +5808,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
                         unlocked(){
-                                return player.tokens.total.gte(78)
+                                return player.tokens.total.gte(78) || tmp.n.layerShown
                         }, // hasUpgrade("mini", 45)
                 },
         },
@@ -5923,7 +6062,7 @@ addLayer("tokens", {
                 let getid = player.tokens.total.toNumber()
 
                 if (hasUpgrade("tokens", 73)) getid += -1
-                if (getid < 1) return Decimal.pow(10, 5000)
+                if (getid < 0) return Decimal.pow(10, 5000)
 
                 getid = Math.floor(getid)
 
@@ -5980,6 +6119,8 @@ addLayer("tokens", {
 
                         if (player.hardMode) ret = ret.div(3)
 
+                        if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
+
                         return ret
                 },
         },
@@ -5988,8 +6129,28 @@ addLayer("tokens", {
                         onPress(){
                                 player.tab = "tokens"
                         }
-                },],
-        layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0)},
+                },
+                {key: "t", description: "T: Reset for tokens", 
+                        onPress(){
+                                if (canReset("tokens")) doReset("tokens")
+                        }
+                },
+                {key: "s", description: "S: Sell token buyables (only if on said tab)", 
+                        onPress(){
+                                if (player.tab == "tokens") {
+                                        if (["Flat", "Scaling"].includes(player.subtabs.tokens.mainTabs)) {
+                                                layers.tokens.buyables[71].buy()
+                                        }
+                                }
+                                if (player.tab == "tokens") {
+                                        if (["Coins"].includes(player.subtabs.tokens.mainTabs)) {
+                                                layers.tokens.buyables[81].buy()
+                                        }
+                                }
+                        }
+                },
+                ],
+        layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown},
         prestigeButtonText(){
                 return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
         },
@@ -6079,7 +6240,7 @@ addLayer("tokens", {
 
                         if (hasMilestone("tokens", 2)) remove = filterOut(remove, [51, 52])
 
-                        player.h.upgrades = filterOut(player.h.upgrades, remove)
+                        if (!hasMilestone("n", 1)) player.h.upgrades = filterOut(player.h.upgrades, remove)
                         player.h.points = new Decimal(0)
                         player.h.best = new Decimal(0)
                         player.h.atomic_hydrogen.points = new Decimal(0)
@@ -6148,7 +6309,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[11].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[11].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6204,7 +6365,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[12].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[12].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6256,7 +6417,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[13].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6308,7 +6469,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 21)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[21].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[21].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6366,7 +6527,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 22)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[22].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6420,7 +6581,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[23].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[23].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6479,7 +6640,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[31].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[31].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6532,7 +6693,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[32].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[32].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6587,7 +6748,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 33)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[33].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[33].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6639,7 +6800,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[41].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[41].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6691,7 +6852,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 42)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[42].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6743,7 +6904,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 43)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[43].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[43].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6795,7 +6956,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 51)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[51].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[51].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6831,6 +6992,7 @@ addLayer("tokens", {
                                 let ret = new Decimal(1.01)
                                 if (hasMilestone("tokens", 18)) ret = ret.plus(.01)
                                 if (hasMilestone("tokens", 20)) ret = ret.plus(.01)
+                                if (hasUpgrade("n", 14)) ret = ret.plus(.001)
                                 return ret
                         },
                         effect(){
@@ -6848,7 +7010,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 52)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[52].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[52].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6884,6 +7046,7 @@ addLayer("tokens", {
                                 let ret = new Decimal(1.01)
                                 if (hasUpgrade("c", 22)) ret = ret.plus(.01)
                                 if (hasUpgrade("c", 25)) ret = ret.plus(.01)
+                                if (hasUpgrade("n", 15)) ret = ret.plus(.001)
                                 return ret
                         },
                         effect(){
@@ -6901,7 +7064,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 53)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[53].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[53].base, 3, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6954,7 +7117,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 61)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[61].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[61].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -7007,7 +7170,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 62)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[62].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = format(tmp.tokens.buyables[62].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -8183,7 +8346,7 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[73].cost)) return false
                                 return hasUpgrade("h", 73) || (!hasUpgrade("tokens", 71) && !hasUpgrade("tokens", 72))
                         },
-                        cost:() => new Decimal(4000),
+                        cost:() => new Decimal(2000),
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
@@ -8367,7 +8530,7 @@ addLayer("tokens", {
 
                                         return a + b
                                 }
-                                return "The autobuyer can buy each buyable once per trigger and [maybe something]"
+                                return "The autobuyer can buy each buyable once per trigger"
                         },
                         canAfford(){
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[95].cost)) return false
