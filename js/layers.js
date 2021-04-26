@@ -920,7 +920,7 @@ addLayer("h", {
                                 return format(tmp.h.upgrades[61].effect)
                         },
                         unlocked(){
-                                return hasMilestone("tokens", 2) || hasUpgrade("o", 15) && hasUpgrade("c", 15) 
+                                return hasUpgrade("h", 61) || hasMilestone("tokens", 2) || hasUpgrade("o", 15) && hasUpgrade("c", 15) 
                         }, //hasUpgrade("h", 61)
                 },
                 62: {
@@ -2244,7 +2244,7 @@ addLayer("n", {
 
                 if (init.lt(1)) return new Decimal(0)
 
-                let base = init.log(2).sub(15).div(5).pow(3)
+                let base = init.log(2).sub(19).pow(3)
 
                 if (base.lt(1)) base = new Decimal(0)
 
@@ -2254,7 +2254,7 @@ addLayer("n", {
                 let curr = tmp.n.getResetGain
                 let goal = curr.plus(1)
                 let v1 = goal.div(tmp.n.getGainMult)
-                let v2 = v1.root(3).times(5).plus(15)
+                let v2 = v1.root(3).plus(19)
                 let v3 = Decimal.pow(2, v2)
                 let v4 = v3.times(105)
                 let v5 = Decimal.pow(10, v4)
@@ -2422,7 +2422,7 @@ addLayer("n", {
                                 return new Decimal(1)
                         },
                         effectDescription(){
-                                let a = "Reward: Token resets keep Hydrogen upgrades and the A and B buyable autobuyer bulks 5x.<br>"
+                                let a = "Reward: Token resets keep Hydrogen upgrades, the A and B buyable autobuyer bulks 5x, and per milestone squared multiply C Point gain by 10.<br>"
                                 let b = "Currently: " + format(tmp.n.milestones[1].effect)
                                 if (false && shiftDown) {
                                         let formula = "Formula: idk"
@@ -2431,6 +2431,91 @@ addLayer("n", {
                                 return a // b
                         },
                 }, // hasMilestone("n", 1)
+                2: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[2].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.n.milestones[2].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 1)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: You can bulk 5x C buyables, 4x A and B buyables, gain 10x coins, and keep a token milestone per Nitrogen reset.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 2)
+                3: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[3].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(3)
+                        },
+                        done(){
+                                return tmp.n.milestones[3].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 2)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep Corn and Deuterium VIII, Corn interval is at most 5, and gain 100x A, B, and C Points.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 3)
+                4: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[4].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(4)
+                        },
+                        done(){
+                                return tmp.n.milestones[4].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 3)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        toggles:() => ["tokens", "autobuytokens"],
+                        effectDescription(){
+                                let a = "Reward: Keep Coffee [not yet] and autobuy tokens [done].<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -2540,6 +2625,7 @@ addLayer("n", {
                                    21, 22, 23, 24, 25, 
                                    31, 32, 33, 34, 35,        
                                    41, 42, 43, 44, 45, ]
+                        if (hasMilestone("n", 3)) rem = filterOut(rem, [12])
                         data1.upgrades = filterOut(data1.upgrades, rem) // 3b
                 }
 
@@ -2557,8 +2643,12 @@ addLayer("n", {
                         } //4a
                         data2.coins.points = new Decimal(0)
                         data2.coins.best = new Decimal(0)
-                        data2.upgrades = [] //dont keep any atm
-                        data2.milestones = []
+                        let keep0 = []
+                        data2.upgrades = filter(data2.upgrades, keep0)
+                        // hasMilestone("n", 2)
+                        let keep1 = []
+                        if (hasMilestone("n", 2)) keep1 = keep1.concat(data2.milestones.slice(0, player.n.times))
+                        data2.milestones = filter(data2.milestones, keep1)
                 }
 
                 // 5: C
@@ -2594,6 +2684,8 @@ addLayer("n", {
                                       71, 72, 73, 74, 75,
                                       81, 82, 83, 84, 85,
                                       ]
+
+                        if (hasMilestone("n", 3)) remove = filterOut(remove, [73])
 
                         player.h.upgrades = filterOut(player.h.upgrades, remove)
                         player.h.points = new Decimal(0)
@@ -2785,6 +2877,7 @@ addLayer("mini", {
                         lastRollTime: new Date().getTime(),
                         displayCharacters: true,
                 },
+                autobuytokens: false,
         }},
         color: "#7D5D58",
         branches: [],
@@ -2841,6 +2934,7 @@ addLayer("mini", {
                                 if (hasMilestone("tokens", 3)) max = max.times(10)
                                 if (hasMilestone("tokens", 13)) max = max.times(5)
                                 if (hasMilestone("n", 1)) max = max.times(5)
+                                if (hasMilestone("n", 2)) max = max.times(4)
 
 
                                 for (i = 0; i < list1.length; i++){
@@ -2869,6 +2963,7 @@ addLayer("mini", {
                                 let bulk = new Decimal(1)
                                 if (hasUpgrade("mini", 41)) bulk = bulk.times(5)
                                 if (hasUpgrade("mini", 44)) bulk = bulk.times(2)
+                                if (hasMilestone("n", 2)) bulk = bulk.times(5)
                                 // other things
                                 bulk = bulk.sub(1)
 
@@ -2878,13 +2973,13 @@ addLayer("mini", {
                                         if (getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
-                                                if (!hasUpgrade("tokens", 95)) break
                                                 if (bulk.eq(0)) continue
                                                 if (id == 71) continue // cant be bulked
                                                 let maxAfford = tmp.mini.buyables[id].maxAfford
                                                 let curr = getBuyableAmount("mini", id)
                                                 let add = maxAfford.sub(curr).max(0).min(bulk)
                                                 player.mini.buyables[id] = player.mini.buyables[id].plus(add)
+                                                if (!hasUpgrade("tokens", 95)) break
                                         }
                                 }
                         }
@@ -2900,6 +2995,10 @@ addLayer("mini", {
                         if (timeSinceLast >= 1000 * tmp.mini.upgrades[12].timeNeeded) {
                                 layers.mini.clickables[41].onClick()
                         }
+                }
+                if (data.autobuytokens && hasMilestone("n", 4)) {
+                        // autobuy tokens
+                        if (canReset("tokens")) doReset("tokens")
                 }
         },
         row: "side",
@@ -2939,6 +3038,7 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[62].effect)
                         ret = ret.times(tmp.mini.buyables[51].effect)
                         ret = ret.times(tmp.tokens.buyables[31].effect)
+                        if (hasMilestone("n", 3)) ret = ret.times(100)
                         if (hasUpgrade("mini", 45)) ret = ret.times(player.mini.c_points.points.max(1))
 
                         return ret
@@ -2993,6 +3093,7 @@ addLayer("mini", {
                         ret = ret.times(tmp.tokens.buyables[32].effect)
                         if (hasUpgrade("o", 21)) ret = ret.times(player.h.points.max(1))
                         if (hasUpgrade("mini", 42)) ret = ret.times(player.mini.c_points.points.max(1))
+                        if (hasMilestone("n", 3)) ret = ret.times(100)
 
                         if (hasUpgrade("o", 13)) ret = ret.pow(tmp.o.upgrades[13].effect)
                         ret = ret.pow(tmp.tokens.buyables[62].effect)
@@ -3020,6 +3121,8 @@ addLayer("mini", {
                         ret = ret.times(tmp.mini.buyables[112].effect)
                         ret = ret.times(tmp.mini.buyables[113].effect)
                         ret = ret.times(tmp.n.effect)
+                        if (hasMilestone("n", 1)) ret = ret.times(Decimal.pow(10, player.n.milestones.length ** 2))
+                        if (hasMilestone("n", 3)) ret = ret.times(100)
                         if (hasUpgrade("mini", 13))   ret = ret.times(tmp.tokens.buyables[23].effect.max(10).log10())
                         if (hasUpgrade("mini", 14))   ret = ret.times(player.points.max(10).log10())
                         if (hasUpgrade("mini", 15))   ret = ret.times(player.mini.b_points.points.max(10).log10())
@@ -5469,6 +5572,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 21)) ret = 7
                                 if (hasUpgrade("mini", 22)) ret = 6
                                 if (hasUpgrade("mini", 23)) ret = 5
+                                if (hasMilestone("n", 3)) ret = 5
                                 if (hasMilestone("tokens", 25)) ret = 3
                                 if (hasMilestone("tokens", 26)) ret = 1
                                 if (hasUpgrade("tokens", 92)) ret = .25
@@ -5799,7 +5903,7 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Clam</bdi>"
                         },
                         description(){
-                                let a = "Unlock Nitrogen, a new layer, [not yet :)] and C Points multiply A Points"
+                                let a = "Unlock Nitrogen, a new layer, and C Points multiply A Points"
 
                                 return a
                         },
@@ -5821,6 +5925,19 @@ addLayer("mini", {
                                 unlocked(){
                                         return true
                                 },
+                                shouldNotify(){
+                                        x = ["11", "12", "13", "14", "15", 
+                                             "21", "22", "23", "24", "25", 
+                                             "31", "32", "33", "34", "35", 
+                                             "41", "42", "43", "44", "45"]
+                                        for (let i = 0; i < x.length; i++){
+                                                id = x[i]
+                                                if (canAffordUpgrade("mini", id)) {
+                                                        if (!hasUpgrade("mini", id)) return true
+                                                }
+                                        }
+                                        return false
+                                },
                         },
                         "Buyables": {
                                 content: [
@@ -5832,8 +5949,10 @@ addLayer("mini", {
                                                             91,  92,  93, 101, 102,
                                                            103, 111, 112, 113, ]
                                                 for (i = 0; i < ids.length; i++){
-                                                        a = a.min(data[ids[i]].cost)
-                                                        if (a.eq(data[ids[i]].cost)) num = ids[i]
+                                                        let id = ids[i]
+                                                        if (!data[id].unlocked) continue
+                                                        a = a.min(data[id].cost)
+                                                        if (a.eq(data[id].cost)) num = id
                                                 }
                                                 let start = "The cheapest buyable (" + (num-60) + ") costs " + format(a) + "."
                                                 if (!shiftDown) return start
@@ -5853,6 +5972,19 @@ addLayer("mini", {
                                 ],
                                 unlocked(){
                                         return true
+                                },
+                                shouldNotify(){
+                                        let x = [ 72,  73,  81,  82,  83,
+                                                    91,  92,  93, 101, 102,
+                                                   103, 111, 112, 113, ]
+                                        for (let i = 0; i < x.length; i++){
+                                                id = x[i]
+                                                if (getBuyableAmount("mini", id).eq(0)) {
+                                                        if (!tmp.mini.buyables[id].canAfford) continue
+                                                        if (tmp.mini.buyables[id].unlocked) return true
+                                                }
+                                        }
+                                        return false
                                 },
                         },
                 },
@@ -5948,7 +6080,8 @@ addLayer("mini", {
                                         let a = "You have spelled " + formatWhole(player.wordsSpelled)
                                         let b = " words correctly!"
                                         let c = "<br><br>"
-                                        return c + c + c + c + c + c + a + b
+                                        let d = "<br>Press space to get a new word. This is just a minigame :)"
+                                        return c + c + c + c + c + c + a + b + d
                                 }],
                         ],
                         unlocked(){
@@ -6116,7 +6249,7 @@ addLayer("tokens", {
                         if (hasUpgrade("h", 71)) ret = ret.times(10)
                         if (hasUpgrade("tokens", 81)) ret = ret.times(81)
                         if (hasUpgrade("tokens", 93)) ret = ret.times(81)
-
+                        if (hasMilestone("n", 2)) ret = ret.times(10)
                         if (player.hardMode) ret = ret.div(3)
 
                         if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
@@ -7342,7 +7475,7 @@ addLayer("tokens", {
                                 }
                                 return a + b
                         },
-                }, //hasMilestone("tokens", 1)
+                }, // hasMilestone("tokens", 1)
                 2: {
                         requirementDescription(){
                                 let a = "Requires: " + formatWhole(tmp.tokens.milestones[2].requirement)
@@ -7356,7 +7489,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[2].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 1)
                         },
                         effect(){
                                 return player.tokens.total.max(1)
@@ -7384,7 +7517,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[3].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 2)
                         },
                         effect(){
                                 return player.tokens.total.max(1)
@@ -7412,7 +7545,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[4].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 3)
                         },
                         effectDescription(){
                                 let a = "Reward: Radio Waves and Constant are based on best amount, cube X-Ray effect, and add .05 to A Point gain exponent<br>"
@@ -7432,7 +7565,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[5].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 4)
                         },
                         effectDescription(){
                                 let a = "Reward: Microwaves and Logarithimic are based on best amount, add .01 to Exponential and Semi-exponential, and each milestone keeps three Hydrogen upgrades<br>"
@@ -7452,7 +7585,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[6].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 5)
                         },
                         effect(){
                                 return player.tokens.total.max(1)
@@ -7480,7 +7613,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[7].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 6)
                         },
                         effect(){
                                 return player.mini.a_points.points.plus(1).ln().max(1)
@@ -7508,7 +7641,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[8].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 7)
                         },
                         effectDescription(){
                                 let a = "Reward: Near-ultraviolet and Cubic are based on best amount, and [A Points]^.1 multipies B Point gain.<br>"
@@ -7528,7 +7661,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[9].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 8)
                         },
                         effectDescription(){
                                 let a = "Reward: Ultraviolet and Polynomial are based on best amount, and [B Points]^.1 multipies A Point gain.<br>"
@@ -7548,7 +7681,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[10].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 9)
                         },
                         effect(){
                                 return player.mini.b_points.points.plus(1).ln().max(1)
@@ -7576,7 +7709,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[11].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 10)
                         },
                         effectDescription(){
                                 let a = "Reward: Gamma Rays and Exponential are based on best amount, square Ultraviolet, and keep Oxygen and Carbon upgrades upon token reset.<br>"
@@ -7596,7 +7729,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[12].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 11)
                         },
                         effectDescription(){
                                 let a = "Reward: UHF Gamma Rays and Double-exponential are based on best amount and unlock an Oxygen upgrade.<br>"
@@ -7616,7 +7749,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[13].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 12)
                         },
                         effectDescription(){
                                 let a = "Reward: Square Oxygen IV, best token buyables are synchronized, and you can bulk 5x more A and B buyables.<br>"
@@ -7636,7 +7769,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[14].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 13)
                         },
                         effectDescription(){
                                 let a = "Reward: Tokens multiply coin gain.<br>"
@@ -7656,7 +7789,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[15].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 14)
                         },
                         effectDescription(){
                                 let a = "Reward: Each milestone multiplies Near-ultraviolet base by 1.2.<br>"
@@ -7676,7 +7809,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[16].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 15)
                         },
                         effect(){
                                 let a = player.tokens.total.max(1)
@@ -7706,7 +7839,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[17].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 16)
                         },
                         effectDescription(){
                                 let a = "Reward: Cube base Oxygen gain"
@@ -7726,7 +7859,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[18].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 17)
                         },
                         effectDescription(){
                                 let a = "Reward: Keep upgrades 42, 61, and 62 and add .01 to Cubic base"
@@ -7746,7 +7879,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[19].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 18)
                         },
                         effectDescription(){
                                 let a = "Reward: Raise Hydrogen XVI to the 1.5"
@@ -7766,7 +7899,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[20].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 19)
                         },
                         effectDescription(){
                                 let a = "Reward: Keep the first six rows of upgrades and add .01 to Cubic base"
@@ -7786,7 +7919,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[21].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 20)
                         },
                         effectDescription(){
                                 let a = "Reward: Add .03 to Semi-exponential base"
@@ -7806,7 +7939,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[22].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 21)
                         },
                         effectDescription(){
                                 let a = "Reward: Add .03 to Exponential base"
@@ -7826,7 +7959,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[23].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 22)
                         },
                         effect(){
                                 let c = new Decimal(4) // red c red d
@@ -7864,7 +7997,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[24].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 23)
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock another possible character and C Point gain 4's ln becomes log2" 
@@ -7885,7 +8018,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[25].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 24)
                         },
                         effectDescription(){
                                 let a = "Reward: Reduce Corn interval to 3" 
@@ -7906,7 +8039,7 @@ addLayer("tokens", {
                                 return player.tokens.total.gte(tmp.tokens.milestones[26].requirement)
                         },
                         unlocked(){
-                                return true
+                                return hasMilestone("tokens", 25)
                         },
                         effectDescription(){
                                 let a = "Reward: Reduce Corn interval to 1 and you can gamble after 1 second" 
@@ -8553,6 +8686,9 @@ addLayer("tokens", {
                         ],
                         unlocked(){
                                 return true
+                        },
+                        shouldNotify(){
+                                return canReset("tokens")
                         },
                 },
                 "Flat": {

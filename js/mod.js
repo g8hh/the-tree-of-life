@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.031",
+	num: "0.032",
 	name: "Beginnings",
 }
 
@@ -25,7 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.031</h3><br>
+	<br><h3 style='color: #CC0000'>v0.032</h3><br> 3 milestones, notifications, milestones hiddne until previous one unlocked
+		- Added notification for various resets and upgrades.<br>
+		- Added three nitrogen milestones.<br>
+		- Gave nitrogen an effect.<br>
+		- Made token milestones hidden until the previous was unlocked.<br>
+	<br><h3 style='color: #CC0000'>v0.031</h3><br> 
 		- Made achievements not disappear after nitrogen resetting.<br>
 		- Added a nitrogen milestone<br>.
 		- Gave nitrogen an effect.<br>
