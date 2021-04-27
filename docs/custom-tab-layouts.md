@@ -61,7 +61,10 @@ These are the existing components, but you can create more in [components.js](/j
 - text-input: A text input box. The argument is the name of the variable in player[layer] that the input is for, player[layer][argument]
     (Works with strings, numbers, and Decimals!)
 
-
+- slider: Lets the user input a value with a slider. The argument a 3-element array: [name, min, max].
+    The name is the name of the variable in player[layer] that the input that the input is for, and min and max are the limits of the slider.
+    (Does not work for Decimal values)
+    
 
 The rest of the components are sub-components. They can be used just like other components, but are typically part of another component.
 

@@ -407,6 +407,13 @@ function loadVue() {
 		`
 	})
 
+// Updates the value in player[layer][data]
+	Vue.component('slider', {
+		props: ['layer', 'data'],
+		template: `
+			<div><input type="range" v-model="player[layer][data[0]]" :min="data[1]" :max="data[2]"></div>
+		`
+	})
 
 	// These are for buyables, data is the id of the corresponding buyable
 	Vue.component('sell-one', {

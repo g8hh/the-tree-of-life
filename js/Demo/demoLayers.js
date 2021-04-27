@@ -14,6 +14,7 @@ addLayer("c", {
             buyables: {}, // You don't actually have to initialize this one
             beep: false,
             thingy: "pointy",
+            otherThingy: 10,
         }},
         color: "#4BDC13",
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -341,7 +342,9 @@ addLayer("c", {
                 unlocked() {return (hasUpgrade("c", 13))},
                 content:[
                     ["raw-html", function() {return "<h1> C O N F I R M E D </h1>"}], "blank",
-                    ["microtabs", "stuff", {'width': '600px', 'height': '350px', 'background-color': 'brown', 'border-style': 'solid'}]
+                    ["microtabs", "stuff", {'width': '600px', 'height': '350px', 'background-color': 'brown', 'border-style': 'solid'}],
+                    ["display-text", "Adjust how many points H gives you!"],
+                    ["slider", ["otherThingy", 1, 30]],
                 ]
             }
 
