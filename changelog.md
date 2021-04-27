@@ -1,5 +1,6 @@
 # The Modding Tree changelog:
 
+- Added a text-input component.
 - The red layer highlight will not appear before a layer is unlocked.
 
 # v2.π.1 - 4/7/21

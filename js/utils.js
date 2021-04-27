@@ -360,7 +360,14 @@ function isPlainObject(obj) {
 
 document.title = modInfo.name
 
-
+// Converts a string value to whatever it's supposed to be
+function toValue(value, oldValue) {
+	if (oldValue instanceof Decimal)
+		return new Decimal (value)
+	else if (!isNaN(oldValue))
+		return value.toNumber()
+	else return value
+}
 
 // Variables that must be defined to display popups
 var activePopups = [];

@@ -13,6 +13,7 @@ addLayer("c", {
             total: new Decimal(0),
             buyables: {}, // You don't actually have to initialize this one
             beep: false,
+            thingy: "pointy",
         }},
         color: "#4BDC13",
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -296,8 +297,10 @@ addLayer("c", {
                     "prestige-button", "resource-display",
                     ["blank", "5px"], // Height
                     ["raw-html", function() {return "<button onclick='console.log(`yeet`)'>'HI'</button>"}],
+                    ["display-text", "Name your points!"],
+                    ["text-input", "thingy"],
                     ["display-text",
-                        function() {return 'I have ' + format(player.points) + ' pointy points!'},
+                        function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
             },
@@ -374,7 +377,7 @@ addLayer("f", {
         unlocked: false,
         points: new Decimal(0),
         boop: false,
-        clickables: {[11]: "Start"} // Optional default Clickable state
+        clickables: {[11]: "Start"}, // Optional default Clickable state
     }},
     color: "#FE0102",
     requires() {return new Decimal(10)}, 
