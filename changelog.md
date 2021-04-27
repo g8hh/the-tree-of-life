@@ -3,6 +3,7 @@
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
 - Added text-input and slider components.
 - The red layer highlight will not appear before a layer is unlocked.
+- Added unlocking hotkeys.
 - Node symbols can use HTML.
 
 # v2.π.1 - 4/7/21
