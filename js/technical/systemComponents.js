@@ -37,8 +37,8 @@ var systemComponents = {
 				resetNotify: tmp[layer].prestigeNotify,
 				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
 			}"
-			v-bind:style="tmp[layer].computedNodeStyle">
-			{{(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'}}
+			v-bind:style="tmp[layer].computedNodeStyle"
+			v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'">
 			<tooltip
 			v-bind:text="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
