@@ -12,29 +12,24 @@ var systemComponents = {
 	},
 
 	'tree-node': {
-		props: ['layer', 'abb', 'size'],
+		props: ['layer', 'abb', 'size', 'hover'],
 		template: `
-		<button v-if="nodeShown(layer)"
+		<button v-if="nodeShown(layer)"       @mouseover="hover = true" @mouseleave="hover = false"
 			v-bind:id="layer"
 			v-on:click="function() {
-				if(tmp[layer].isLayer) {showTab(layer)}
+				if (shiftDown) player[layer].forceTooltip = !player[layer].forceTooltip
+				else if(tmp[layer].isLayer) {showTab(layer)}
 				else {run(layers[layer].onClick, layers[layer])}
 			}"
 
-			v-bind:tooltip="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
-				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
-				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
-			)
-			: (
-				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
-				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
-			)
-			"
+
 			v-bind:class="{
 				treeNode: tmp[layer].isLayer,
 				treeButton: !tmp[layer].isLayer,
 				smallNode: size == 'small',
 				[layer]: true,
+				tooltipBox: true,
+				forceTooltip: player[layer].forceTooltip,
 				ghost: tmp[layer].layerShown == 'ghost',
 				hidden: !tmp[layer].layerShown,
 				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
@@ -44,6 +39,15 @@ var systemComponents = {
 			}"
 			v-bind:style="tmp[layer].computedNodeStyle">
 			{{(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'}}
+			<tooltip
+			v-bind:text="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
+				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
+				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
+			)
+			: (
+				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
+				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
+			)"></tooltip>
 		</button>
 		`
 	},
@@ -164,5 +168,11 @@ var systemComponents = {
         template: `
         <button v-bind:class="back" onclick="goBack()">←</button>
         `
-    }
+    },
+
+	'tooltip' : {
+		props: ['text'],
+		template: `<div class="tooltip" v-html="text"></div>
+		`
+	}
 }

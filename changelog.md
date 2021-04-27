@@ -1,5 +1,6 @@
 # The Modding Tree changelog:
 
+- Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
 - Added 2 new input components, text-input and slider.
 - The red layer highlight will not appear before a layer is unlocked.
 

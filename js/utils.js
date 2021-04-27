@@ -316,11 +316,14 @@ function addTime(diff, layer) {
 	else data.timePlayed = time
 }
 
+shiftDown = false
+ctrlDown = false
+
 document.onkeydown = function (e) {
 	if (player === undefined) return;
 	if (gameEnded && !player.keepGoing) return;
-	let shiftDown = e.shiftKey
-	let ctrlDown = e.ctrlKey
+	shiftDown = e.shiftKey
+	ctrlDown = e.ctrlKey
 	let key = e.key
 	if (ctrlDown) key = "ctrl+" + key
 	if (onFocused) return
