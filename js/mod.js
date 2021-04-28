@@ -12,19 +12,22 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.033",
+	num: "0.034",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 6 nitrogren resets<br><br>
+		- ~30 nitrogen resets<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.034</h3><br> 
+		- Added two nitrogen upgrades.<br>
+		- Added six nitrogen milestones.<br>
 	<br><h3 style='color: #CC0000'>v0.033</h3><br> 
 		- Made the autobuy token autobuyer work as intended.<br>
 		- Fixed a lot of display issues with things now being down.<br>

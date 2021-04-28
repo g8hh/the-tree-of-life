@@ -1415,6 +1415,7 @@ addLayer("c", {
                 if (hasUpgrade("c", 21)) x = x.times(tmp.c.upgrades[21].effect)
                 x = x.times(tmp.mini.buyables[101].effect)
                 x = x.times(tmp.n.effect)
+                if (hasUpgrade("n", 23)) x = x.times(tmp.n.upgrades[23].effect)
 
                 return x
         },
@@ -1502,7 +1503,7 @@ addLayer("c", {
                                 return format(tmp.c.upgrades[12].effect, 4)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 11)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 11)
                         }, //hasUpgrade("c", 12)
                 },
                 13: {
@@ -1520,7 +1521,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(190) : new Decimal(40)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 12)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 12)
                         }, //hasUpgrade("c", 13)
                 },
                 14: {
@@ -1548,7 +1549,7 @@ addLayer("c", {
                                 return format(tmp.c.upgrades[14].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 13)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 13)
                         }, //hasUpgrade("c", 14)
                 },
                 15: {
@@ -1566,7 +1567,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(3000) : new Decimal(1000)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 14)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 14)
                         }, //hasUpgrade("c", 15)
                 },
                 21: {
@@ -1593,7 +1594,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(6e20) : new Decimal(3e20)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 21)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 21)
                         }, //hasUpgrade("c", 21)
                 },
                 22: {
@@ -1623,7 +1624,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(1e37) : new Decimal(3e36)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 22)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 22)
                         }, //hasUpgrade("c", 22)
                 },
                 23: {
@@ -1640,7 +1641,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(3e73) : new Decimal(1e73)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 23)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 23)
                         }, //hasUpgrade("c", 23)
                 },
                 24: {
@@ -1657,7 +1658,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(8.1e155) : new Decimal(5e155)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 24)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 24)
                         }, //hasUpgrade("c", 24)
                 },
                 25: {
@@ -1674,7 +1675,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(6.1e220) : new Decimal(5e220)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 25)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 25)
                         }, //hasUpgrade("c", 25)
                 },
         },
@@ -1915,7 +1916,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[12].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 11)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 11)
                         }, //hasUpgrade("o", 12)
                 },
                 13: {
@@ -1940,7 +1941,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[13].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 12)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 12)
                         }, //hasUpgrade("o", 13)
                 },
                 14: {
@@ -1972,7 +1973,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[14].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 13)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 13)
                         }, //hasUpgrade("o", 14)
                 },
                 15: {
@@ -2005,7 +2006,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[15].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("o", 14)
+                                return hasMilestone("n", 6) || hasUpgrade("o", 14)
                         }, //hasUpgrade("o", 15)
                 },
                 21: {
@@ -2020,7 +2021,7 @@ addLayer("o", {
                         },
                         cost:() => new Decimal(3e22),
                         unlocked(){
-                                return hasMilestone("tokens", 12)
+                                return hasMilestone("n", 6) || hasMilestone("tokens", 12)
                         }, //hasUpgrade("o", 21)
                 },
                 22: {
@@ -2035,7 +2036,7 @@ addLayer("o", {
                         },
                         cost:() => new Decimal(2e30),
                         unlocked(){
-                                return hasUpgrade("c", 21)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 21)
                         }, //hasUpgrade("o", 22)
                 },
                 23: {
@@ -2060,7 +2061,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[23].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 22)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 22)
                         }, //hasUpgrade("o", 23)
                 },
                 24: {
@@ -2085,7 +2086,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[24].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("h", 81)
+                                return hasMilestone("n", 6) || hasUpgrade("h", 81)
                         }, //hasUpgrade("o", 24)
                 },
                 25: {
@@ -2110,7 +2111,7 @@ addLayer("o", {
                                 return format(tmp.o.upgrades[25].effect)
                         },
                         unlocked(){
-                                return hasUpgrade("c", 24)
+                                return hasMilestone("n", 6) || hasUpgrade("c", 24)
                         }, //hasUpgrade("o", 25)
                 },
         },
@@ -2295,7 +2296,7 @@ addLayer("n", {
                 return amt + nxt
         },
         canReset(){
-                return tmp.n.getResetGain.gt(0)
+                return tmp.n.getResetGain.gt(0) && hasUpgrade("mini", 45)
         },
         upgrades: {
                 rows: 1000,
@@ -2380,6 +2381,36 @@ addLayer("n", {
                         unlocked(){
                                 return hasUpgrade("n", 11) && hasUpgrade("n", 12) && hasUpgrade("n", 13) && hasUpgrade("n", 14) && hasUpgrade("n", 15)
                         }, // hasUpgrade("n", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen VII"
+                        },
+                        description(){
+                                let a = "Keep the first row of Oxygen and Carbon upgrades upon Nitrogen reset and each upgrade raises C point gain ^1.0002"
+                                return a
+                        },
+                        cost:() => new Decimal(3),
+                        unlocked(){
+                                return hasUpgrade("n", 21) 
+                        }, // hasUpgrade("n", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen VIII"
+                        },
+                        description(){
+                                let a = "Per upgrade multiply C Point and Carbon gain by Nitrogen<br>Currently: "
+                                let b = format(tmp.n.upgrades[23].effect)
+                                return a + b
+                        },
+                        cost:() => new Decimal(20),
+                        effect(){
+                                return player.n.points.max(1).pow(player.n.upgrades.length)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 11) || player.n.best.gt(19) 
+                        }, // hasUpgrade("n", 23)
                 },
         },
         milestones: {
@@ -2487,7 +2518,7 @@ addLayer("n", {
                         },
                         toggles:() => [["tokens", "autobuytokens"]],
                         effectDescription(){
-                                let a = "Reward: Keep Coffee and autobuy tokens.<br>"
+                                let a = "Reward: Keep Coffee, autobuy tokens, and you can bulk 4x C buyables.<br>"
                                 let b = "Currently: " + format(tmp.n.milestones[2].effect)
                                 if (false && shiftDown) {
                                         let formula = "Formula: idk"
@@ -2524,6 +2555,175 @@ addLayer("n", {
                                 return a // b
                         },
                 }, // hasMilestone("n", 5)
+                6: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[6].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(6)
+                        },
+                        done(){
+                                return tmp.n.milestones[6].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 5)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep Carbon and Nitrogen upgrades unlocked and tokens do not reset Carbon upgrades.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 6)
+                7: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[7].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(7)
+                        },
+                        done(){
+                                return tmp.n.milestones[7].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 6)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        toggles:() => [["tokens", "autobuyradio"]],
+                        effectDescription(){
+                                let a = "Reward: Keep one C point upgrade per reset and unlock an autobuyer for Radio Waves.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 7)
+                8: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[8].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(9)
+                        },
+                        done(){
+                                return tmp.n.milestones[8].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 7)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Gain 20x coins, keep Egg is here., and you can autobuyer the first level of C buyables.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 8)
+                9: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[9].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(12)
+                        },
+                        done(){
+                                return tmp.n.milestones[9].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 8)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep coin upgrades.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 9)
+                10: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[10].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(15)
+                        },
+                        done(){
+                                return tmp.n.milestones[10].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 9)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep all Oxygen and Carbon upgrades upon Nitrogen reset.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 10)
+                11: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[11].requirement)
+                                let b = " Nitrogen resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(20)
+                        },
+                        done(){
+                                return tmp.n.milestones[11].requirement.lte(player.n.times)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 10)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Token resets don't reset anything.<br>"
+                                let b = "Currently: " + format(tmp.n.milestones[2].effect)
+                                if (false && shiftDown) {
+                                        let formula = "Formula: idk"
+                                        return a + formula
+                                }
+                                return a // b
+                        },
+                }, // hasMilestone("n", 11)
         },
         tabFormat: {
                 "Upgrades": {
@@ -2546,6 +2746,11 @@ addLayer("n", {
                 },
                 "Milestones": {
                         content: ["main-display",
+                                ["display-text", function(){
+                                        let a = "You have done " 
+                                        let b = formatWhole(player.n.times) + " Nitrogen resets"
+                                        return a + b
+                                }],
                                 ["milestones", [1]],
                                 ],
                         unlocked(){
@@ -2636,6 +2841,7 @@ addLayer("n", {
                                    21, 22, 23, 24, 25, 
                                    31, 32, 33, 34, 35,        
                                    41, 42, 43, 44, 45, ]
+                        if (hasMilestone("n", 7)) rem = rem.slice(player.n.times)
                         if (hasMilestone("n", 3)) rem = filterOut(rem, [12])
                         if (hasMilestone("n", 4)) rem = filterOut(rem, [22])
                         if (hasMilestone("n", 5)) rem = filterOut(rem, [43])
@@ -2658,7 +2864,8 @@ addLayer("n", {
                         data2.coins.best = new Decimal(0)
                         let keep0 = []
                         if (hasMilestone("n", 5)) keep0.push(95)
-                        data2.upgrades = filter(data2.upgrades, keep0)
+                        if (hasMilestone("n", 8)) keep0.push(82)
+                        if (!hasMilestone("n", 9)) data2.upgrades = filter(data2.upgrades, keep0)
                         // hasMilestone("n", 2)
                         let keep1 = []
                         if (hasMilestone("n", 2)) keep1 = keep1.concat(data2.milestones.slice(0, player.n.times))
@@ -2667,9 +2874,10 @@ addLayer("n", {
 
                 // 5: C
                 if (!false) {
-                        if (!false) {
+                        if (!hasMilestone("n", 10)) {
                                 let rem = [11, 12, 13, 14, 15, 
                                            21, 22, 23, 24, 25]
+                                if (hasUpgrade("n", 22)) rem = filterOut(rem, [11, 12, 13, 14, 15])
                                 player.c.upgrades = filterOut(player.c.upgrades, rem)
                         }
                         player.c.points = new Decimal(0)
@@ -2678,9 +2886,10 @@ addLayer("n", {
 
                 // 6: O
                 if (!false) {
-                        if (!false) {
+                        if (!hasMilestone("n", 10)) {
                                 let rem = [11, 12, 13, 14, 15, 
                                            21, 22, 23, 24, 25]
+                                if (hasUpgrade("n", 22)) rem = filterOut(rem, [11, 12, 13, 14, 15])
                                 player.o.upgrades = filterOut(player.o.upgrades, rem)
                         }
                         player.o.points = new Decimal(0)
@@ -2897,6 +3106,7 @@ addLayer("mini", {
                         displayCharacters: true,
                 },
                 autobuytokens: false,
+                autobuyradio: false,
         }},
         color: "#7D5D58",
         branches: [],
@@ -2983,13 +3193,14 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 41)) bulk = bulk.times(5)
                                 if (hasUpgrade("mini", 44)) bulk = bulk.times(2)
                                 if (hasMilestone("n", 2)) bulk = bulk.times(5)
+                                if (hasMilestone("n", 4)) bulk = bulk.times(4)
                                 // other things
                                 bulk = bulk.sub(1)
 
                                 for (i = 0; i < list2.length; i++){
                                         let id = list2[i]
                                         if (!tmp.mini.buyables[id].unlocked) continue
-                                        if (getBuyableAmount("mini", id).eq(0)) continue
+                                        if (!hasMilestone("n", 8) && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
                                                 if (bulk.eq(0)) continue
@@ -3013,12 +3224,14 @@ addLayer("mini", {
                         let timeSinceLast = new Date().getTime() - player.mini.c_points.lastRollTime 
                         if (timeSinceLast >= 1000 * tmp.mini.upgrades[12].timeNeeded) {
                                 layers.mini.clickables[41].onClick()
-                                console.log("rolled")
                         }
                 }
                 if (player.tokens.autobuytokens && hasMilestone("n", 4)) {
                         // autobuy tokens
                         if (canReset("tokens")) doReset("tokens")
+                }
+                if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
+                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy()
                 }
         },
         row: "side",
@@ -3151,8 +3364,10 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 34))   ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
                         if (hasUpgrade("tokens", 92)) ret = ret.times(player.mini.c_points.points.max(1).pow(.01))
                         if (hasUpgrade("mini", 35))   ret = ret.times(Decimal.pow(50, player.mini.upgrades.length))
+                        if (hasUpgrade("n", 23))      ret = ret.times(tmp.n.upgrades[23].effect)
 
                         if (hasUpgrade("n", 11)) ret = ret.pow(1.001)
+                        if (hasUpgrade("n", 22)) ret = ret.pow(Decimal.pow(1.0002, player.n.upgrades.length))
 
                         return ret
                 },
@@ -4883,7 +5098,7 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[103].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 103)) + " C Points</b><br>"
-                                let eformula = "(Exponential effect)<sup>x</sup><br>" + format(getBuyableBase("mini", 103)) + "^x"
+                                let eformula = "(Semi-exponential effect)<sup>x</sup><br>" + format(getBuyableBase("mini", 103)) + "^x"
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6206,7 +6421,8 @@ addLayer("tokens", {
                                  3807e3, 4666e3, 5383e3, 9500e3, 9871e3,
                                  11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
                                  16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
-                                 60576e3, 91049e3, 11858e4,
+                                 60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
+                                 13793e4,
                                  ]/*1e6-1,*/
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -6258,6 +6474,9 @@ addLayer("tokens", {
                         datac.best = datac.best.max(datac.points)
                 }
         },
+        resetsNothing(){
+                return hasMilestone("n", 11)
+        },
         coins: {
                 getGainMult(){ //coin gain coins gain
                         let ret = new Decimal(1)
@@ -6268,6 +6487,7 @@ addLayer("tokens", {
                         if (hasUpgrade("h", 71)) ret = ret.times(10)
                         if (hasUpgrade("tokens", 81)) ret = ret.times(81)
                         if (hasUpgrade("tokens", 93)) ret = ret.times(81)
+                        if (hasMilestone("n", 8)) ret = ret.times(20)
                         if (hasMilestone("n", 2)) ret = ret.times(10)
                         if (player.hardMode) ret = ret.div(3)
 
@@ -6362,7 +6582,7 @@ addLayer("tokens", {
 
                 // 3: C
                 if (!false) {
-                        if (!hasMilestone("tokens", 11)) {
+                        if (!hasMilestone("tokens", 11) && !hasMilestone("n", 6)) {
                                 player.c.upgrades = filterOut(player.c.upgrades, [11, 12, 13, 14, 15])
                         }
                         player.c.points = new Decimal(0)
@@ -8776,7 +8996,7 @@ addLayer("tokens", {
                                 ["buyables", [8]],
                         ],
                         unlocked(){
-                                return hasUpgrade("c", 21)
+                                return hasUpgrade("c", 21) || hasMilestone("n", 9)
                         },
                 },
         },
