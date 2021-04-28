@@ -336,6 +336,11 @@ document.onkeydown = function (e) {
 	}
 }
 
+document.onkeyup = function (e) {
+	shiftDown = e.shiftKey
+	ctrlDown = e.ctrlKey
+}
+
 var onFocused = false
 function focused(x) {
 	onFocused = x
