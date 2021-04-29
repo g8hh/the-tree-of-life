@@ -231,6 +231,7 @@ function readData(data, args=null){
 }
 
 function setRowCol(upgrades) {
+    if (upgrades.rows && upgrades.cols) return
     let maxRow = 0
     let maxCol = 0
     for (up in upgrades) {
