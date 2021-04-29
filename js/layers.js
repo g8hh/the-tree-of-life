@@ -1444,6 +1444,7 @@ addLayer("c", {
         row: 1, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
                 {key: "shift+C", description: "Shift+C: Go to Carbon", onPress(){
+                                if (!tmp.c.layerShown) return
                                 showTab("c")
                         }
                 },
@@ -1872,6 +1873,7 @@ addLayer("o", {
         row: 1, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
                 {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
+                                if (!tmp.o.layerShown) return
                                 showTab("o")
                         }
                 },
@@ -2201,6 +2203,7 @@ addLayer("n", {
                 time: 0,
                 times: 0,
                 autotimes: 0,
+                passivetime: 0,
         }},
         color: "#99582E",
         branches: [],
@@ -2288,6 +2291,11 @@ addLayer("n", {
                 if (hasMilestone("n", 13)) {
                         data.points = data.points.plus(tmp.n.getResetGain.times(diff))
                         data.total = data.total.plus(tmp.n.getResetGain.times(diff))
+                        data.passivetime += Math.min(1, diff)
+                        if (data.passivetime > 1) {
+                                data.passivetime += -1
+                                data.times ++
+                        }
                 }
 
                 if (false) {
@@ -2300,6 +2308,7 @@ addLayer("n", {
         row: 2, // Row the layer is in on the tree (0 is the first row)
         hotkeys: [
                 {key: "shift+N", description: "Shift+N: Go to Nitrogen", onPress(){
+                                if (!tmp.n.layerShown) return
                                 showTab("n")
                         }
                 },
@@ -2633,7 +2642,7 @@ addLayer("n", {
                                 return new Decimal(1)
                         },
                         effectDescription(){
-                                let a = "Reward: Keep Carbon and Nitrogen upgrades unlocked and tokens do not reset Carbon upgrades.<br>"
+                                let a = "Reward: Keep Carbon and Oxygen upgrades unlocked and tokens do not reset Carbon upgrades.<br>"
                                 let b = "Currently: " + format(tmp.n.milestones[2].effect)
                                 if (false && shiftDown) {
                                         let formula = "Formula: idk"
@@ -3346,17 +3355,22 @@ addLayer("mini", {
         row: "side",
         hotkeys: [{key: "shift+@", description: "Shift+2: Go to minigames", 
                         onPress(){
+                                if (!tmp.mini.layerShown) return
                                 player.tab = "mini"
                         }
                 },
                 {key: "shift+A", description: "Shift+A: Go to A", 
                         onPress(){
+                                if (!tmp.mini.layerShown) return
+                                if (!tmp.mini.tabFormat.A.unlocked) return 
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "A"
                         }
                 },
                 {key: "shift+B", description: "Shift+B: Go to B", 
                         onPress(){
+                                if (!tmp.mini.layerShown) return
+                                if (!tmp.mini.tabFormat.B.unlocked) return 
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "B"
                         }
@@ -6609,11 +6623,13 @@ addLayer("tokens", {
         row: "side",
         hotkeys: [{key: "shift+#", description: "Shift+3: Go to tokens", 
                         onPress(){
+                                if (!tmp.tokens.layerShown) return
                                 player.tab = "tokens"
                         }
                 },
                 {key: "t", description: "T: Reset for tokens", 
                         onPress(){
+                                if (!tmp.tokens.layerShown) return
                                 if (canReset("tokens")) doReset("tokens")
                         }
                 },
@@ -6623,8 +6639,6 @@ addLayer("tokens", {
                                         if (["Flat", "Scaling"].includes(player.subtabs.tokens.mainTabs)) {
                                                 layers.tokens.buyables[71].buy()
                                         }
-                                }
-                                if (player.tab == "tokens") {
                                         if (["Coins"].includes(player.subtabs.tokens.mainTabs)) {
                                                 layers.tokens.buyables[81].buy()
                                         }
