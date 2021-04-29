@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-## v2.4: Rationalized Edition -
+## v2.4: Rationalized Edition - 4/29/21
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
 - Added text-input and slider components.
 - Added the ability to toggle respec confirmations.
