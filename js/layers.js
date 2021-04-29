@@ -1678,6 +1678,21 @@ addLayer("c", {
                                 return hasMilestone("n", 6) || hasUpgrade("o", 25)
                         }, //hasUpgrade("c", 25)
                 },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(605) + "'>Carbon XI"
+                        },
+                        description(){
+                                let a = "Square base Nitrogen gain"
+                                return a
+                        },
+                        cost() {
+                                return Decimal.pow(10, 69000)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 32)
+                        }, // hasUpgrade("c", 31)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -1982,15 +1997,15 @@ addLayer("o", {
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
-                                a = "Oxygen^[upgrades]"
-                                if (hasMilestone("tokens", 10)) a = "Oxygen^[upgrades]<sup>2</sup>"
+                                a = "min(1ee6, Oxygen) ^[upgrades]"
+                                if (hasMilestone("tokens", 10)) a = "min(1ee6, Oxygen) ^[upgrades]<sup>2</sup>"
                                 if (hasUpgrade("tokens", 11)) a = a.replace("[upgrades]","([upgrades]+3)")
                                 if (hasUpgrade("o", 15)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[15].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
                         cost:() => new Decimal(5e4),
                         effect(){
-                                let base = player.o.points.max(1)
+                                let base = player.o.points.max(1).min(Decimal.pow(10, 1e6))
                                 
                                 let exp = new Decimal(player.o.upgrades.length)
                                 if (hasUpgrade("tokens", 11)) exp = exp.plus(3)
@@ -2114,6 +2129,35 @@ addLayer("o", {
                                 return hasMilestone("n", 6) || hasUpgrade("c", 24)
                         }, //hasUpgrade("o", 25)
                 },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(54) + "'>Oxygen XI"
+                        },
+                        description(){
+                                let a = "C Point gain 9's log10 becomes a ln"
+                                return a 
+                        },
+                        cost:() => new Decimal(2048),
+                        currencyLocation:() => player.n,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen",
+                        unlocked(){
+                                return hasUpgrade("n", 25)
+                        }, //hasUpgrade("o", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(54) + "'>Oxygen XII"
+                        },
+                        description(){
+                                let a = "Add .08 to color gain exponent"
+                                return a 
+                        },
+                        cost:() => new Decimal(10, 310400),
+                        unlocked(){
+                                return hasUpgrade("o", 31)
+                        }, // hasUpgrade("o", 32)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -2140,37 +2184,6 @@ addLayer("o", {
                                 return true
                         },
                 },
-                /*
-                "Deuterium": {
-                        content: [["secondary-display", "deuterium"],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
-                                                if (shiftDown) {
-                                                        p1 = player.h.deuterium
-                                                        t1 = tmp.h.deuterium
-                                                        return "Your best Deuterium is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
-                                                }
-                                                return "You are gaining " + format(tmp.h.deuterium.getResetGain) + " Deuterium per second"
-                                        }
-                                ],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
-                                                if (shiftDown) return "Formula: .0002 * Hydrogen * [multipliers]"
-                                                return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
-                                        },
-                                ],
-
-                                "blank", 
-                                ["upgrades", [2]]
-                                ],
-                        unlocked(){
-                                return hasUpgrade("h", 21)
-                        },
-                },*/
         },
         doReset(layer){},
 })
@@ -2204,15 +2217,22 @@ addLayer("n", {
 
                 return ret.floor()
         },
+        getGainExp(){
+                let ret = new Decimal(3)
+                if (hasUpgrade("c", 31)) ret = ret.times(2)
+
+                return ret
+        },
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(10)) return new Decimal(0)
 
                 let init = pts.log10().div(105)
+                let exp = tmp.n.getGainExp
 
                 if (init.lt(1)) return new Decimal(0)
 
-                let base = init.log(2).sub(19).pow(3)
+                let base = init.log(2).sub(19).pow(exp)
 
                 if (base.lt(1)) base = new Decimal(0)
 
@@ -2220,9 +2240,8 @@ addLayer("n", {
         },
         getNextAt(){
                 let curr = tmp.n.getResetGain
-                let goal = curr.plus(1)
-                let v1 = goal.div(tmp.n.getGainMult)
-                let v2 = v1.root(3).plus(19)
+                let v1 = curr.plus(1)
+                let v2 = v1.root(tmp.n.getGainExp).plus(19)
                 let v3 = Decimal.pow(2, v2)
                 let v4 = v3.times(105)
                 let v5 = Decimal.pow(10, v4)
@@ -2230,6 +2249,8 @@ addLayer("n", {
         },
         getGainMult(){//nitrogen gain
                 let x = new Decimal(1)
+
+                if (hasUpgrade("n", 24)) x = x.times(tmp.n.upgrades[24].effect)
 
                 return x
         },
@@ -2239,6 +2260,8 @@ addLayer("n", {
                 let base = amt.sqrt().times(2).plus(1)
 
                 let exp = amt.plus(7).log2()
+
+                if (hasUpgrade("n", 25)) exp = exp.times(player.n.upgrades.length)
 
                 let ret = base.pow(exp)
 
@@ -2262,7 +2285,10 @@ addLayer("n", {
                 data.best = data.best.max(data.points)
                 
                 // do nitrogen gain
-                if (false) data.points = data.points.plus(tmp.n.getResetGain.times(diff))
+                if (hasMilestone("n", 13)) {
+                        data.points = data.points.plus(tmp.n.getResetGain.times(diff))
+                        data.total = data.total.plus(tmp.n.getResetGain.times(diff))
+                }
 
                 if (false) {
                         //do autobuyer stuff
@@ -2278,7 +2304,7 @@ addLayer("n", {
                         }
                 },
                 {key: "Control+N", description: "Control+N: Reset for Nitrogen", onPress(){
-                                doReset("n")
+                                if (canReset("n")) doReset("n")
                         }
                 },
         ],
@@ -2296,7 +2322,7 @@ addLayer("n", {
                 return amt + nxt
         },
         canReset(){
-                return tmp.n.getResetGain.gt(0) && hasUpgrade("mini", 45)
+                return !hasMilestone("n", 13) && tmp.n.getResetGain.gt(0) && hasUpgrade("mini", 45)
         },
         upgrades: {
                 rows: 1000,
@@ -2400,17 +2426,50 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen VIII"
                         },
                         description(){
-                                let a = "Per upgrade multiply C Point and Carbon gain by Nitrogen<br>Currently: "
+                                let a = "Per upgrade multiply C Point and Carbon gain by best Nitrogen<br>Currently: "
                                 let b = format(tmp.n.upgrades[23].effect)
                                 return a + b
                         },
                         cost:() => new Decimal(20),
                         effect(){
-                                return player.n.points.max(1).pow(player.n.upgrades.length)
+                                return player.n.best.max(1).pow(player.n.upgrades.length)
                         },
                         unlocked(){
                                 return hasMilestone("n", 11) || player.n.best.gt(19) 
                         }, // hasUpgrade("n", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen IX"
+                        },
+                        description(){
+                                let a = "Token cost exponent is .55 and ln(Nitrogen) multiplies Nitrogen<br>"
+                                let b = "Currently: " + format(tmp.n.upgrades[24].effect)
+                                return a + b
+                        },
+                        cost:() => new Decimal(25),
+                        effect(){
+                                return player.n.points.max(1).ln().max(1)
+                        },
+                        unlocked(){
+                                return hasUpgrade("n", 23)
+                        }, // hasUpgrade("n", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen X"
+                        },
+                        description(){
+                                let a = "Double-exponential divider is 1 and raise Nitrogen effect to the number of upgrades"
+                                return a
+                        },
+                        cost:() => new Decimal(100),
+                        effect(){
+                                return player.n.points.max(1).ln().max(1)
+                        },
+                        unlocked(){
+                                return hasUpgrade("n", 24)
+                        }, // hasUpgrade("n", 25)
                 },
         },
         milestones: {
@@ -2505,7 +2564,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(4)
+                                return new Decimal(player.hardMode ? 5 : 4)
                         },
                         done(){
                                 return tmp.n.milestones[4].requirement.lte(player.n.times)
@@ -2534,7 +2593,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(5)
+                                return new Decimal(player.hardMode ? 7 : 5)
                         },
                         done(){
                                 return tmp.n.milestones[5].requirement.lte(player.n.times)
@@ -2562,7 +2621,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(6)
+                                return new Decimal(player.hardMode ? 9 : 6)
                         },
                         done(){
                                 return tmp.n.milestones[6].requirement.lte(player.n.times)
@@ -2590,7 +2649,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(7)
+                                return new Decimal(player.hardMode ? 11 : 7)
                         },
                         done(){
                                 return tmp.n.milestones[7].requirement.lte(player.n.times)
@@ -2619,7 +2678,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(9)
+                                return new Decimal(player.hardMode ? 14 : 9)
                         },
                         done(){
                                 return tmp.n.milestones[8].requirement.lte(player.n.times)
@@ -2647,7 +2706,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(12)
+                                return new Decimal(player.hardMode ? 17 : 12)
                         },
                         done(){
                                 return tmp.n.milestones[9].requirement.lte(player.n.times)
@@ -2675,7 +2734,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(15)
+                                return new Decimal(player.hardMode ? 21 : 15)
                         },
                         done(){
                                 return tmp.n.milestones[10].requirement.lte(player.n.times)
@@ -2703,7 +2762,7 @@ addLayer("n", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal(20)
+                                return new Decimal(player.hardMode ? 25 : 20)
                         },
                         done(){
                                 return tmp.n.milestones[11].requirement.lte(player.n.times)
@@ -2724,17 +2783,65 @@ addLayer("n", {
                                 return a // b
                         },
                 }, // hasMilestone("n", 11)
+                12: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[12].requirement)
+                                let b = " Nitrogen"
+                                return a + b
+                        },
+                        requirement(){
+                                let m = player.hardMode ? 5 : 1
+                                return Decimal.pow(2, 7).times(m)
+                        },
+                        done(){
+                                return tmp.n.milestones[12].requirement.lte(player.n.points)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 11)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Start with 50 tokens.<br>"
+                                return a
+                        },
+                }, // hasMilestone("n", 12)
+                13: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[13].requirement)
+                                let b = " Nitrogen"
+                                return a + b
+                        },
+                        requirement(){
+                                let m = player.hardMode ? 5 : 1
+                                return Decimal.pow(2, 9).times(m)
+                        },
+                        done(){
+                                return tmp.n.milestones[13].requirement.lte(player.n.points)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 12)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second.<br>"
+                                return a
+                        },
+                }, // hasMilestone("n", 13)
         },
         tabFormat: {
                 "Upgrades": {
                         content: ["main-display",
-                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["prestige-button", "", function (){ return hasMilestone("n", 13) ? {'display': 'none'} : {}}],
                                 ["display-text",
                                         function() {
                                                 if (player.tab != "n") return ""
                                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                                 if (shiftDown) return "Your best Nitrogen is " + format(player.n.best)
-                                                if (false) return "You are gaining " + format(tmp.n.getResetGain) + " Nitrogen per second"
+                                                if (hasMilestone("n", 13)) return "You are gaining " + format(tmp.n.getResetGain) + " Nitrogen per second"
                                         }
                                 ],
 
@@ -2850,8 +2957,10 @@ addLayer("n", {
 
                 // 4: Tokens
                 if (!false){
-                        data2.total = new Decimal(0)
-                        data2.points = new Decimal(0)
+                        let starting = new Decimal(0)
+                        if (hasMilestone("n", 12)) starting = new Decimal(50)
+                        data2.total = starting
+                        data2.points = starting
                         let list4 = ["11", "12", "13", "21", "22", 
                                      "23", "31", "32", "33", "41", 
                                      "42", "43", "51", "52", "53", 
@@ -3295,12 +3404,13 @@ addLayer("mini", {
 
                         return ret
                 },
-                getColorGainExp(){
+                getColorGainExp(){ // color gain exponent color gain exp
                         let exp = hasUpgrade("h", 54) ? .52 : .5
                         if (hasUpgrade("h", 55)) exp += .004
                         if (hasUpgrade("c", 12)) exp += tmp.c.upgrades[12].effect.toNumber()
                         exp += tmp.tokens.buyables[63].effect.toNumber()
                         if (hasMilestone("tokens", 4)) exp += .05
+                        if (hasUpgrade("o", 32)) exp += .08
 
                         return exp
                 },
@@ -6422,7 +6532,7 @@ addLayer("tokens", {
                                  11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
                                  16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
                                  60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
-                                 13793e4,
+                                 13793e4, 18750e4,
                                  ]/*1e6-1,*/
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -6630,6 +6740,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (hasUpgrade("n", 24))      return x.pow(.55).round()
                         if (hasUpgrade("mini", 33))   return x.pow(.6).round()
                         if (hasUpgrade("tokens", 82)) return x.pow(.65).round()
                         if (hasUpgrade("h", 75))      return x.pow(.7).round()
@@ -6640,6 +6751,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (hasUpgrade("n", 24))      return "round(x<sup>.55</sup>)"
                         if (hasUpgrade("mini", 33))   return "round(x<sup>.6</sup>)"
                         if (hasUpgrade("tokens", 82)) return "round(x<sup>.65</sup>)"
                         if (hasUpgrade("h", 75))      return "round(x<sup>.7</sup>)"
@@ -7580,6 +7692,7 @@ addLayer("tokens", {
                                 let div = 20
                                 if (hasUpgrade("c", 24)) div /= 2
                                 if (hasUpgrade("c", 25)) div /= 2
+                                if (hasUpgrade("n", 25)) div /= 5
                                 if (hasMilestone("tokens", 12)) {
                                         return player.tokens.best_buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                                 }
@@ -7598,6 +7711,7 @@ addLayer("tokens", {
                                 let eformula = ".2-.2/(1+x/20)" //+ getBuyableEffectString(layer, id)
                                 if (hasUpgrade("c", 24)) eformula = eformula.replace("20", "10")
                                 if (hasUpgrade("c", 25)) eformula = eformula.replace("10", "5")
+                                if (hasUpgrade("n", 25)) eformula = eformula.replace("x/5", "x")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
