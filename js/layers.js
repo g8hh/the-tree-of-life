@@ -2153,7 +2153,7 @@ addLayer("o", {
                                 let a = "Add .08 to color gain exponent"
                                 return a 
                         },
-                        cost:() => new Decimal(10, 310400),
+                        cost:() => Decimal.pow(10, 310400),
                         unlocked(){
                                 return hasUpgrade("o", 31)
                         }, // hasUpgrade("o", 32)
@@ -2240,7 +2240,7 @@ addLayer("n", {
         },
         getNextAt(){
                 let curr = tmp.n.getResetGain
-                let v1 = curr.plus(1)
+                let v1 = curr.plus(1).div(tmp.n.getGainMult)
                 let v2 = v1.root(tmp.n.getGainExp).plus(19)
                 let v3 = Decimal.pow(2, v2)
                 let v4 = v3.times(105)
