@@ -16,8 +16,6 @@ Clickables should be formatted like this:
 
 ```js
 clickables: {
-    rows: # of rows,
-    cols: # of columns,
     11: {
         display() {return "Blah"},
         etc

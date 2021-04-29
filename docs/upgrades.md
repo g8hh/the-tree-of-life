@@ -12,8 +12,6 @@ Upgrades are stored in the following format:
 
 ```js
 upgrades: {
-    rows: # of rows,
-    cols: # of columns,
     11: {
         description: "Blah",
         cost: new Decimal(100),

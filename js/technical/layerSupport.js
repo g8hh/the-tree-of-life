@@ -64,6 +64,7 @@ function updateLayers(){
 function setupLayer(layer){
     layers[layer].layer = layer
     if (layers[layer].upgrades){
+        setRowCol(layers[layer].upgrades)
         for (thing in layers[layer].upgrades){
             if (!isNaN(thing)){
                 layers[layer].upgrades[thing].id = thing
@@ -84,6 +85,7 @@ function setupLayer(layer){
         }
     }
     if (layers[layer].achievements){
+        setRowCol(layers[layer].achievements)
         for (thing in layers[layer].achievements){
             if (!isNaN(thing)){
                 layers[layer].achievements[thing].id = thing
@@ -94,6 +96,7 @@ function setupLayer(layer){
         }
     }
     if (layers[layer].challenges){
+        setRowCol(layers[layer].challenges)
         for (thing in layers[layer].challenges){
             if (!isNaN(thing)){
                 layers[layer].challenges[thing].id = thing
@@ -108,6 +111,7 @@ function setupLayer(layer){
     }
     if (layers[layer].buyables){
         layers[layer].buyables.layer = layer
+        setRowCol(layers[layer].buyables)
         for (thing in layers[layer].buyables){
             if (!isNaN(thing)){
                 layers[layer].buyables[thing].id = thing
@@ -120,6 +124,7 @@ function setupLayer(layer){
 
     if (layers[layer].clickables){
         layers[layer].clickables.layer = layer
+        setRowCol(layers[layer].clickables)
         for (thing in layers[layer].clickables){
             if (!isNaN(thing)){
                 layers[layer].clickables[thing].id = thing
@@ -223,6 +228,19 @@ function readData(data, args=null){
 		return data(args);
 	else
 		return data;
+}
+
+function setRowCol(upgrades) {
+    let maxRow = 0
+    let maxCol = 0
+    for (up in upgrades) {
+        if (!isNaN(up)) {
+            if (Math.floor(up/10) > maxRow) maxRow = Math.floor(up/10)
+            if (up%10 > maxCol) maxCol = up%10
+        }
+    }
+    upgrades.rows = maxRow
+    upgrades.cols = maxCol
 }
 
 function someLayerUnlocked(row){

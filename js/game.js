@@ -5,8 +5,8 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.π.1",
-	tmtName: "Incrementally Updated"
+	tmtNum: "2.4",
+	tmtName: "Rationalized Edition"
 }
 
 function getResetGain(layer, useType = null) {

@@ -14,8 +14,6 @@ Buyables should be formatted like this:
 
 ```js
 buyables: {
-    rows: # of rows,
-    cols: # of columns,
     11: {
         cost(x) { return new Decimal(1).mul(x || getBuyableAmt(this.layer, this.id)) },
         display() { return "Blah" },

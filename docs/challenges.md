@@ -12,8 +12,6 @@ Challenges are stored in the following format:
 
 ```js
 challenges: {
-    rows: # of rows,
-    cols: # of columns,
     11: {
         name: "Ouch",
         challengeDescription: "description of ouchie",

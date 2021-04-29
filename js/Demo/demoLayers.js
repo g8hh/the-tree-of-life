@@ -78,8 +78,7 @@ addLayer("c", {
                 },
         },
         challenges: {
-            rows: 2,
-    		cols: 12,
+
 		    11: {
                 name: "Fun",
                 completionLimit: 3,
@@ -100,8 +99,7 @@ addLayer("c", {
             },
         }, 
         upgrades: {
-            rows: 2,
-            cols: 3,
+
             11: {
                 title: "Generator of Genericness",
                 description: "Gain 1 Point every second.",
@@ -150,8 +148,7 @@ addLayer("c", {
             },
         },
         buyables: {
-            rows: 1,
-            cols: 12,
+
             showRespec: true,
             respec() { // Optional, reset things and give back your currency. Having this function makes a respec button appear
                 player[this.layer].points = player[this.layer].points.add(player[this.layer].spentOnBuyables) // A built-in thing to keep track of this but only keeps a single value
@@ -421,8 +418,7 @@ addLayer("f", {
     },
     // This is also non minimal, a Clickable!
     clickables: {
-        rows: 1,
-        cols: 1,
+
         masterButtonPress() {
             if (getClickableState(this.layer, 11) == "Borkened...")
                 player[this.layer].clickables[11] = "Start"
@@ -495,8 +491,6 @@ addLayer("a", {
         },
         achievementPopups: true,
         achievements: {
-            rows: 2,
-            cols: 3,
             11: {
                 image: "discord.png",
                 name: "Get me!",
