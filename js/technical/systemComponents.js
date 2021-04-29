@@ -12,9 +12,9 @@ var systemComponents = {
 	},
 
 	'tree-node': {
-		props: ['layer', 'abb', 'size', 'hover'],
+		props: ['layer', 'abb', 'size'],
 		template: `
-		<button v-if="nodeShown(layer)"       @mouseover="hover = true" @mouseleave="hover = false"
+		<button v-if="nodeShown(layer)"       
 			v-bind:id="layer"
 			v-on:click="function() {
 				if (shiftDown) player[layer].forceTooltip = !player[layer].forceTooltip
@@ -40,7 +40,7 @@ var systemComponents = {
 			v-bind:style="tmp[layer].computedNodeStyle">
 			<span v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
 			<tooltip
-			v-bind:text="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
+			:text="(tmp[layer].tooltip == '') ? false : (tmp[layer].isLayer) ? (
 				player[layer].unlocked ? (tmp[layer].tooltip ? tmp[layer].tooltip : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
 			)
@@ -169,6 +169,7 @@ var systemComponents = {
         <button v-bind:class="back" onclick="goBack()">←</button>
         `
     },
+
 
 	'tooltip' : {
 		props: ['text'],

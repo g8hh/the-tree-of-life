@@ -74,6 +74,7 @@ function getStartLayerData(layer) {
 		layerdata.forceTooltip = false;
 
 	layerdata.buyables = getStartBuyables(layer);
+	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false
 	if (layerdata.clickables == undefined)
 		layerdata.clickables = getStartClickables(layer);
 	layerdata.spentOnBuyables = new Decimal(0);

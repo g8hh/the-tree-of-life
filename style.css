@@ -558,6 +558,7 @@ ul {
   }
   
   .tooltip { 
+	pointer-events: none;
 	text-align: center;
 	width: 150px;
 	font-size: 16px;

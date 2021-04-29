@@ -241,7 +241,10 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].buyables" class="upgTable">
-			<respec-button v-if="tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['respec-button']]"></respec-button>
+			<div>
+				<div class="tooltipBox"><input type="checkbox" v-model="player[layer].noRespecConfirm" ><tooltip v-bind:text="'Disable respec confirmation'"></tooltip></div>
+				<respec-button v-if="tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['respec-button']]"></respec-button>
+			</div>
 			<div v-for="row in tmp[layer].buyables.rows" class="upgRow">
 				<div v-for="col in tmp[layer].buyables.cols"><div v-if="tmp[layer].buyables[row*10+col]!== undefined && tmp[layer].buyables[row*10+col].unlocked" class="upgAlign" v-bind:style="{'margin-left': '7px', 'margin-right': '7px',  'height': (data ? data : 'inherit'),}">
 					<buyable :layer = "layer" :data = "row*10+col" :size = "data"></buyable>
@@ -274,7 +277,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 			<button v-if="tmp[layer].buyables && tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" v-on:click="respecBuyables(layer)" v-bind:class="{ longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked }">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
-	`
+			`
 	})
 
 	// data = button size, in px
@@ -367,7 +370,7 @@ function loadVue() {
 
 	// data = id
 	Vue.component('achievement', {
-		props: ['layer', 'data', 'hover'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].achievements && tmp[layer].achievements[data]!== undefined && tmp[layer].achievements[data].unlocked" v-bind:class="{ [layer]: true, achievement: true, tooltipBox:true, locked: !hasAchievement(layer, data), bought: hasAchievement(layer, data)}"
 			v-bind:style="tmp[layer].achievements[data].computedStyle">
@@ -410,7 +413,7 @@ function loadVue() {
 	Vue.component('slider', {
 		props: ['layer', 'data'],
 		template: `
-			<div class="tooltipBox" @mouseover="hover = true" @mouseleave="hover = false">
+			<div class="tooltipBox">
 			<tooltip :text="player[layer][data[0]]"></tooltip><input type="range" v-model="player[layer][data[0]]" :min="data[1]" :max="data[2]"></div>
 		`
 	})
