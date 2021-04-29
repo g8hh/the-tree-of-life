@@ -159,6 +159,7 @@ addLayer("c", {
                 doReset(this.layer, true) // Force a reset
             },
             respecText: "Respec Thingies", // Text on Respec button, optional
+            respecMessage: "Are you sure? Respeccing these doesn't accomplish much.",
             11: {
                 title: "Exhancers", // Optional, displayed at the top in a larger font
                 cost(x=player[this.layer].buyables[this.id]) { // cost for buying xth buyable, can be an object if there are multiple currencies
@@ -422,7 +423,7 @@ addLayer("f", {
     clickables: {
         rows: 1,
         cols: 1,
-        masterButtonPress() { // Optional, reset things and give back your currency. Having this function makes a respec button appear
+        masterButtonPress() {
             if (getClickableState(this.layer, 11) == "Borkened...")
                 player[this.layer].clickables[11] = "Start"
         },

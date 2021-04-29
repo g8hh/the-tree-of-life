@@ -2,9 +2,12 @@
 
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
 - Added text-input and slider components.
+- Added the ability to toggle respec confirmations.
+- Added custom respec confirmation messages.
 - The red layer highlight will not appear before a layer is unlocked.
 - Added unlocking hotkeys.
 - Node symbols can use HTML.
+- Added documentation for the respec button.
 
 # v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.
