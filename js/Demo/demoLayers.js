@@ -304,6 +304,7 @@ addLayer("c", {
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
             },
             thingies: {
+                prestigeNotify: true,
                 style() {return  {'background-color': '#222222'}},
                 buttonStyle() {return {'border-color': 'orange'}},
                 content:[ 

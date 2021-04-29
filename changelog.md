@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-## v2.4: Rationalized Edition
+## v2.4: Rationalized Edition -
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
 - Added text-input and slider components.
 - Added the ability to toggle respec confirmations.
@@ -10,7 +10,9 @@
 - You no longer need to supply 'rows' and 'cols' for any Big Features.
 - Node symbols can use HTML.
 - Added documentation for the respec button.
+- Added prestigeNotify to subtabs, and prestigeNotify in subtabs also highlights the layer node.
 - The version number no longer contains special characters or irrational numbers.
+
 
 # v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.

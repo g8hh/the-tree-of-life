@@ -219,7 +219,20 @@ function layOver(obj1, obj2) {
 
 function prestigeNotify(layer) {
 	if (layers[layer].prestigeNotify) return layers[layer].prestigeNotify()
-	else if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false
+	
+	if (isPlainObject(tmp[layer].tabFormat)) {
+		for (subtab in tmp[layer].tabFormat){
+			if (subtabResetNotify(layer, 'mainTabs', subtab))
+				return true
+		}
+	}
+	for (family in tmp[layer].microtabs) {
+		for (subtab in tmp[layer].microtabs[family]){
+			if (subtabResetNotify(layer, family, subtab))
+				return true
+		}
+	}
+	if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false
 	else if (tmp[layer].type == "static") return tmp[layer].canReset
 	else if (tmp[layer].type == "normal") return (tmp[layer].canReset && (tmp[layer].resetGain.gte(player[layer].points.div(10))))
 	else return false
@@ -244,7 +257,7 @@ function subtabResetNotify(layer, family, id) {
 	if (family == "mainTabs") subtab = tmp[layer].tabFormat[id]
 	else subtab = tmp[layer].microtabs[family][id]
 	if (subtab.embedLayer) return tmp[subtab.embedLayer].prestigeNotify
-	else return false
+	else return subtab.prestigeNotify
 }
 
 function nodeShown(layer) {
