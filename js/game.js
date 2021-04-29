@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.4",
+	tmtNum: "2.4.0.1",
 	tmtName: "Rationalized Edition"
 }
 

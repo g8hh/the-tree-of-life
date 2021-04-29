@@ -10,6 +10,7 @@
 - You no longer need to supply 'rows' and 'cols' for any Big Features.
 - Node symbols can use HTML.
 - Added documentation for the respec button.
+- Added ctrlDown and shiftDown variables.
 - Added prestigeNotify to subtabs, and prestigeNotify in subtabs also highlights the layer node.
 - The version number no longer contains special characters or irrational numbers.
 
