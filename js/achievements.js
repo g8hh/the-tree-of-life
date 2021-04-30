@@ -244,6 +244,13 @@ PROGRESSION_MILESTONES = {
         138: () => player.tokens.total.gt(81),
         139: () => player.tokens.total.gt(82),
         140: () => player.tokens.total.gt(83),
+        141: () => player.n.points.max(10).log10().gt(7),
+        142: () => player.n.points.max(10).log10().gt(10),
+        143: () => player.n.points.max(10).log10().gt(15),
+        144: () => player.n.points.max(10).log10().gt(20),
+        145: () => player.n.points.max(10).log10().gt(27),
+        146: () => player.n.points.max(10).log10().gt(35),
+        147: () => player.n.points.max(10).log10().gt(45),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -387,6 +394,13 @@ PROGRESSION_MILESTONES_TEXT = {
         138: "82 tokens",
         139: "83 tokens",
         140: "84 tokens",
+        141: "10^7 Nitrogen",
+        142: "10^10 Nitrogen",
+        143: "10^15 Nitrogen",
+        144: "10^20 Nitrogen",
+        145: "10^27 Nitrogen",
+        146: "10^35 Nitrogen",
+        147: "10^45 Nitrogen",
 }
 
 

@@ -136,6 +136,14 @@ function hasChallenge(layer, id) {
 	return (player[layer].challenges[id])
 }
 
+function layerChallengeCompletions(layer){
+	let a = 0
+	for (i in player[layer].challenges){
+		a += player[layer].challenges[i]
+	}
+	return a
+}
+
 function maxedChallenge(layer, id) {
 	return (player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit)
 }

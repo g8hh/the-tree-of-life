@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.035.2",
+	num: "0.036",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.036</h3><br> 
+		- Added three nitrogen challenges.<br>
+		- Hard mode resets more stuff during nitrogen challenges, and might make some of them unplayable, hmu.<br>
+		- Added two nitrogen milestones.<br>
+		- Added a row of achievements.<br>
 	<br><h3 style='color: #CC0000'>v0.035</h3><br> 
 		- Added two nitrogen upgrades.<br>
 		- Added two oxygen upgrades.<br>
