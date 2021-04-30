@@ -36,11 +36,11 @@ addNode("g", {
 addNode("h", {
     branches: ["g"],
     layerShown: true,
-    tooltip: "Restore your points to 10",
-    tooltipLocked: "Restore your points to 10",
+    tooltip() {return "Restore your points to " + player.c.otherThingy},
+    tooltipLocked() {return "Restore your points to " + player.c.otherThingy},
     row: "side",
-    canClick() {return player.points.lt(10)},
-    onClick() {player.points = new Decimal(10)}
+    canClick() {return player.points.lt(player.c.otherThingy)},
+    onClick() {player.points = new Decimal(player.c.otherThingy)}
 }, 
 )
 

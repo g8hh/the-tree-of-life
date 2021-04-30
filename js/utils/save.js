@@ -78,8 +78,11 @@ function getStartLayerData(layer) {
 		layerdata.best = new Decimal(0);
 	if (layerdata.resetTime === undefined)
 		layerdata.resetTime = 0;
+	if (layerdata.forceTooltip === undefined)
+		layerdata.forceTooltip = false;
 
 	layerdata.buyables = getStartBuyables(layer);
+	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false
 	if (layerdata.clickables == undefined)
 		layerdata.clickables = getStartClickables(layer);
 	layerdata.spentOnBuyables = new Decimal(0);
@@ -182,7 +185,7 @@ function load() {
 	if (get === null || get === undefined)
 		player = getStartPlayer();
 	else
-		player = Object.assign(getStartPlayer(), JSON.parse(atob(get)));
+		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 	fixSave();
 
 	if (player.offlineProd) {

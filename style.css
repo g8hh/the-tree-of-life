@@ -544,69 +544,61 @@ ul {
 	transition-duration: 0s
 }
 
-[tooltip] {
+.tooltipBox { 
 	position: relative;
-	z-index: 99999999 !important
-}
+	display: inline-block;
+  }
+  
+  .tooltipBox:hover .tooltip{
+	opacity: 1;
+  }
 
-[tooltip]:before,
-[tooltip]:after {
-	visibility: hidden;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-	opacity: 0;
+  .forceTooltip .tooltip{
+	opacity: 1;
+  }
+  
+  .tooltip { 
 	pointer-events: none;
-	white-space: pre-wrap;
-	-webkit-transform:translate3d(0,0,0);
-}
-
-[tooltip]:before {
-	position: absolute;
+	text-align: center;
+	width: 150px;
+	font-size: 16px;
+	line-height: 1.2;
 	bottom: 100%;
 	left: 50%;
 	margin-bottom: 5px;
 	margin-left: -80px;
 	padding: 7px;
-	width: 160px;
+	font-family: "Lucida Console", "Courier New", monospace;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.5s;
+  
+	position: absolute;
+	z-index: 99999999 !important;
+  
 	background-color: var(--background_tooltip);
 	color: var(--points);
 	content: attr(tooltip);
-	text-align: center;
-	font-size: 14px;
-	line-height: 1.2;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
-}
+	font-size:14px;
 
-[tooltip]:after {
+  }
+
+  .tooltip::after {
+	content: " ";
 	position: absolute;
 	bottom: 100%;
 	left: 50%;
+
+	top: 100%;
+	left: 50%;
 	margin-left: -5px;
-	width: 0;
-	border-top: 5px solid var(--background_tooltip);
-	border-right: 5px solid transparent;
-	border-left: 5px solid transparent;
-	content: " ";
-	font-size: 0;
-	line-height: 0;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
-}
-
-[tooltip]:hover:before,
-[tooltip]:hover:after {
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-	visibility: visible;
-	opacity: 1;
-	white-space: pre-wrap;
-	-webkit-transform:translate3d(0,0,0);
-
-}
-
+	border-width: 5px;
+	border-style: solid;
+	border-color: var(--background_tooltip) transparent transparent transparent;
+  }
+  
 #loadingSection {
 	display: flex;
 	flex-direction: column;

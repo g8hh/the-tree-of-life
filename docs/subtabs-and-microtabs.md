@@ -50,7 +50,7 @@ Normal subtabs and microtab subtabs both use the same features:
 
 - unlocked(): **optional**. a function to determine if the button for this subtab should be visible. By default, a subtab is always unlocked. You can't use the "this" keyword in this function.
 
-- shouldNotify(): **optional**, if true, the tab button will be highlighted to notify the player that there is something there.
+- shouldNotify()/prestigeNotify(): **optional**, if true, the tab button will be highlighted to notify the player that there is something there.
 
 - embedLayer: **SIGNIFICANT**, the id of another layer. If you have this, it will override "content", "style" and "shouldNotify",
                 instead displaying the entire layer in the subtab.

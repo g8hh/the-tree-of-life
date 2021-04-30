@@ -1,5 +1,27 @@
 # The Modding Tree changelog:
 
+# v2.4.1 - 4/29/21
+- A number of minor fixes, many thanks to thepaperpilot.
+- The respec confirmation checkbox is now part of the respec-button component.
+- Added a few missing changes to the 2.4 changelog (the two at the bottom)
+
+## v2.4: Rationalized Edition - 4/29/21
+- Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
+- Added text-input and slider components.
+- Added the ability to toggle respec confirmations.
+- Added custom respec confirmation messages.
+- The red layer highlight will not appear before a layer is unlocked.
+- Added unlocking hotkeys.
+- You no longer need to supply 'rows' and 'cols' for any Big Features.
+- Node symbols can use HTML.
+- Added documentation for the respec button.
+- Added prestigeNotify to subtabs, and prestigeNotify in subtabs also highlights the layer node.
+- The version number no longer contains special characters or irrational numbers.
+
+- Added ctrlDown and shiftDown variables.
+- Tooltips now use HTML (this means you need to replace any newlines with <br>)
+
+
 # v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.
 - Upgrades will expand if there is too much text to display. 
