@@ -3,7 +3,8 @@
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
 - The respec confirmation checkbox is now part of the respec-button component.
-- Added a few missing changes to the 2.4 changelog (the two at the bottom)
+    (This also fixes the checkbox appearing when there is no respec button)
+- Added a few undocumented changes to the 2.4 changelog (the two at the bottom)
 
 ## v2.4: Rationalized Edition - 4/29/21
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
