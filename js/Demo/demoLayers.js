@@ -360,7 +360,7 @@ addLayer("c", {
         },
         tooltip() { // Optional, tooltip displays when the layer is unlocked
             let tooltip = formatWhole(player[this.layer].points) + " " + this.resource
-            if (player[this.layer].buyables[11].gt(0)) tooltip += "\n" + formatWhole(player[this.layer].buyables[11]) + " Exhancers"
+            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers"
             return tooltip
         },
         shouldNotify() { // Optional, layer will be highlighted on the tree if true.
