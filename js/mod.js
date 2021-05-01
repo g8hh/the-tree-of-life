@@ -12,19 +12,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.036",
+	num: "0.037",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- All the upgrades<br><br>
+		- 4e12 N<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.037</h3><br> 
+		- Added two nitrogen challenges.<br>
+		- Added two nitrogen milestones.<br>
+		- Added two nitrogen upgrades.<br>
+		- Fixed a mini-bug in break_eternity.js<br>
 	<br><h3 style='color: #CC0000'>v0.036</h3><br> 
 		- Added three nitrogen challenges.<br>
 		- Hard mode resets more stuff during nitrogen challenges, and might make some of them unplayable, hmu.<br>

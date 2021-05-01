@@ -1821,10 +1821,12 @@
       var a = this;
       var b = decimal;
 
-      //special case: if a is 0, then return 0
-      if (a.sign === 0) { return a; }
       //special case: if a is 1, then return 1
       if (a.sign === 1 && a.layer === 0 && a.mag === 1) { return a; }
+      //special case (pg): if a=b=0 then return 1
+      if (a.sign === 0 && b.sign === 0) { return FC_NN(1, 0, 1);} 
+      //special case: if a is 0, then return 0
+      if (a.sign === 0) { return a; }
       //special case: if b is 0, then return 1
       if (b.sign === 0) { return FC_NN(1, 0, 1); }
       //special case: if b is 1, then return a

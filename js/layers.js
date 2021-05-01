@@ -100,9 +100,9 @@ addLayer("h", {
                 if (hasUpgrade("h", 31)) ret = ret.plus(.001)
                 if (hasUpgrade("h", 35)) ret = ret.sub( .0012)
 
+                if (hasUpgrade("n", 32)) ret = ret.times(100)
 
-
-                return ret.max(.00001)
+                return ret
         },
         getGainMult(){
                 let x = new Decimal(1)
@@ -1400,6 +1400,7 @@ addLayer("c", {
                 let ret = new Decimal(.01)
 
                 if (hasUpgrade("h", 81)) ret = ret.times(50)
+                if (hasUpgrade("n", 32)) ret = ret.times(100)
 
                 return ret.max(.00001)
         },
@@ -1826,6 +1827,7 @@ addLayer("o", {
                 let ret = new Decimal(.01)
 
                 if (hasUpgrade("h", 81)) ret = ret.times(50)
+                if (hasUpgrade("n", 32)) ret = ret.times(100)
 
                 return ret.max(.00001)
         }, //oxygen gain
@@ -2486,12 +2488,35 @@ addLayer("n", {
                                 return a
                         },
                         cost:() => new Decimal(100),
-                        effect(){
-                                return player.n.points.max(1).ln().max(1)
-                        },
                         unlocked(){
                                 return hasUpgrade("n", 24)
                         }, // hasUpgrade("n", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen XI"
+                        },
+                        description(){
+                                let a = "Token buyable exponent is .5"
+                                return a
+                        },
+                        cost:() => new Decimal(5e8),
+                        unlocked(){
+                                return hasChallenge("n", 21)
+                        }, // hasUpgrade("n", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen XI"
+                        },
+                        description(){
+                                let a = "You lose 100x Oxygen, Carbon, and Hydrogen"
+                                return a
+                        },
+                        cost:() => new Decimal(1e11),
+                        unlocked(){
+                                return hasChallenge("n", 22)
+                        }, // hasUpgrade("n", 32)
                 },
         },
         milestones: {
@@ -2901,6 +2926,30 @@ addLayer("n", {
                                 return a
                         },
                 }, // hasMilestone("n", 15)
+                16: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[16].requirement)
+                                let b = " Nitrogen"
+                                return a + b
+                        },
+                        requirement(){
+                                let m = player.hardMode ? 10 : 1
+                                return Decimal.pow(2, 30).times(m)
+                        },
+                        done(){
+                                return tmp.n.milestones[16].requirement.lte(player.n.points)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 15)
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: C Point gain 10 amount multiplies its base.<br>"
+                                return a
+                        },
+                }, // hasMilestone("n", 16)
         },
         challenges: {
                 11: {
@@ -2943,12 +2992,12 @@ addLayer("n", {
                         },
                         */
                         unlocked(){
-                                return true
+                                return hasChallenge("n", 11)
                         },
                         countsAs: [],
                 }, // inChallenge("n", 12)
                 21: {
-                        name: "Eight",
+                        name: "Nine",
                         challengeDescription: "Four and C Point gain 6 is nullified",
                         goalDescription: () => format(tmp.n.challenges[21].goal) + " Points",
                         goal: () => Decimal.pow(10, 112e5),
@@ -2956,18 +3005,60 @@ addLayer("n", {
                         rewardDescription(){
                                 let a = "<bdi style='color:#CC0033'>C</bdi> increase 1 base is multiplied by the sqaure root of the number of challenge completions"
                                 let b = "<br>"
-                                let c = "Currently: +" + format(tmp.n.challenges[21].rewardEffect, 3)
-                                return a
+                                let c = "Currently: *" + format(tmp.n.challenges[21].rewardEffect, 3)
+                                return a + b + c
                         },
                         rewardEffect() {
                                 let comps = layerChallengeCompletions("n")
                                 return Decimal.sqrt(comps)
                         },
                         unlocked(){
-                                return true
+                                return hasChallenge("n", 12)
                         },
                         countsAs: [11],
                 }, // inChallenge("n", 21)
+                22: {
+                        name: "Ten",
+                        challengeDescription: "Six and <bdi style='color:#CC0033'>C</bdi> increase 2 is nullified",
+                        goalDescription: () => format(tmp.n.challenges[22].goal) + " Points",
+                        goal: () => Decimal.pow(10, 176e6),
+                        canComplete: () => player.points.gte(tmp.n.challenges[22].goal),
+                        rewardDescription(){
+                                let a = "C Point Gain 7's base is multiplied by log10(Nitrogen)"
+                                let b = "<br>"
+                                let c = "Currently: *" + format(tmp.n.challenges[22].rewardEffect, 3)
+                                return a + b + c
+                        },
+                        rewardEffect() {
+                                let ret = player.n.points.max(10).log10()
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("n", 31)
+                        },
+                        countsAs: [12],
+                }, // inChallenge("n", 22)
+                31: {
+                        name: "Fourteen",
+                        challengeDescription: "Nine and you cannot reset for tokens",
+                        goalDescription: () => format(tmp.n.challenges[31].goal) + " Points",
+                        goal: () => Decimal.pow(10, 186e5),
+                        canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
+                        rewardDescription(){
+                                let a = "[nothing currently] C Point Gain 7's base is multiplied by log10(Nitrogen)"
+                                let b = "<br>"
+                                let c = "Currently: *" + format(tmp.n.challenges[31].rewardEffect, 3)
+                                return a + b + c
+                        },
+                        rewardEffect() {
+                                let ret = player.n.points.max(10).log10()
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("n", 31)
+                        },
+                        countsAs: [11, 21],
+                }, // inChallenge("n", 31) hasChallenge("n", 31)
         },
         tabFormat: {
                 "Upgrades": {
@@ -5045,10 +5136,9 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 73).gt(300)
                         },
                         base(){
+                                if (inChallenge("n", 22)) return new Decimal(0)
                                 let amt = player.mini.buyables[91]
                                 let ret = amt.div(100).plus(1.2).ln()
-
-
                                 
                                 return ret
                         },
@@ -5303,6 +5393,7 @@ addLayer("mini", {
                                 let ret = player.c.points.max(10).log10()
 
                                 if (hasUpgrade("mini", 41)) ret = ret.times(Math.log(10)/Math.log(2))
+                                if (hasChallenge("n", 22)) ret = ret.times(tmp.n.challenges[22].rewardEffect)
 
                                 return ret
                         },
@@ -5320,6 +5411,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 102)) + " C Points</b><br>"
                                 let eformula = "(log10(Carbon))<sup>x</sup><br>" + format(getBuyableBase("mini", 102)) + "^x"
                                 if (hasUpgrade("mini", 41)) eformula = eformula.replace("log10", "log2")
+                                if (hasChallenge("n", 22)) eformula = eformula.replace("(","(log10(Nitrogen)*")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -5549,6 +5641,8 @@ addLayer("mini", {
                         base(){
                                 let ret = player.mini.b_points.points.max(10).log10()
 
+                                if (hasMilestone("n", 16)) ret = ret.times(player.mini.buyables[113].max(1))
+
                                 return ret
                         },
                         effect(){
@@ -5564,6 +5658,7 @@ addLayer("mini", {
                                 let eff2 = format(tmp.mini.buyables[113].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 113)) + " C Points</b><br>"
                                 let eformula = "(log10(B Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 113)) + "^x"
+                                if (hasMilestone("n", 16)) eformula = eformula.replace("(l", "(x*l")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -6687,7 +6782,7 @@ addLayer("tokens", {
                 return new Decimal(0)
         },
         shouldNotify(){
-                return tmp.tokens.getResetGain.gt(0)
+                return tmp.tokens.canReset
         },
         getNextAt(){
                 let log_costs = [  6420,   7587,   7630,   8184,   8314, 
@@ -6810,8 +6905,8 @@ addLayer("tokens", {
         prestigeButtonText(){
                 return "Reset for a token (" + formatWhole(player.tokens.total.plus(1)) + ")<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
         },
-        canReset(){
-                return tmp.tokens.getResetGain.gt(0) && hasUpgrade("h", 55)
+        canReset(){ // tokens canReset
+                return tmp.tokens.getResetGain.gt(0) && hasUpgrade("h", 55) && !inChallenge("n", 31)
         },
         doReset(layer){
                 if (layer != "tokens") return
@@ -6914,6 +7009,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (hasUpgrade("n", 31))      return x.pow(.5).round()
                         if (hasUpgrade("n", 24))      return x.pow(.55).round()
                         if (hasUpgrade("mini", 33))   return x.pow(.6).round()
                         if (hasUpgrade("tokens", 82)) return x.pow(.65).round()
@@ -6925,6 +7021,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (hasUpgrade("n", 31))      return "round(x<sup>.5</sup>)"
                         if (hasUpgrade("n", 24))      return "round(x<sup>.55</sup>)"
                         if (hasUpgrade("mini", 33))   return "round(x<sup>.6</sup>)"
                         if (hasUpgrade("tokens", 82)) return "round(x<sup>.65</sup>)"
