@@ -35,7 +35,7 @@ Features:
 - cost(): cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th purchase. (x is a `Decimal`).
     Can return an object if there are multiple currencies.
                     
-- effect(): **optional**. A function that calculates and returns the current values of bonuses of this buyable.  Can have an optional argument "x", similar to cost. 
+- effect(): **optional**. A function that calculates and returns the current values of bonuses of this buyable.  Can have an optional argument "x" to calculate the effect of having x of the buyable.. 
     Can return a value or an object containing multiple values.
 
 - display(): A function returning everything that should be displayed on the buyable after the title, likely including the description, amount bought, cost, and current effect. Can use basic HTML.
@@ -49,7 +49,9 @@ Features:
 - buyMax(): **optional**. A function that implements buying as many of the buyable as possible.
 
 - style: **optional**. Applies CSS to this buyable, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
-         
+        
+- purchaseLimit: **optional**. The limit on how many of the buyable can be bought. The default is no limit.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
 - id: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.

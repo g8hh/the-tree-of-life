@@ -175,7 +175,7 @@ addLayer("c", {
                 display() { // Everything else displayed in the buyable button after the title
                     let data = tmp[this.layer].buyables[this.id]
                     return "Cost: " + format(data.cost) + " lollipops\n\
-                    Amount: " + player[this.layer].buyables[this.id] + "\n\
+                    Amount: " + player[this.layer].buyables[this.id] + "/4\n\
                     Adds + " + format(data.effect.first) + " things and multiplies stuff by " + format(data.effect.second)
                 },
                 unlocked() { return player[this.layer].unlocked }, 
@@ -189,6 +189,7 @@ addLayer("c", {
                 },
                 buyMax() {}, // You'll have to handle this yourself if you want
                 style: {'height':'222px'},
+                purchaseLimit: new Decimal(4),
                 sellOne() {
                     let amount = getBuyableAmount(this.layer, this.id)
                     if (amount.lte(0)) return // Only sell one if there is at least one
@@ -360,7 +361,7 @@ addLayer("c", {
         },
         tooltip() { // Optional, tooltip displays when the layer is unlocked
             let tooltip = formatWhole(player[this.layer].points) + " " + this.resource
-            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers"
+            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br><i>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers</i>"
             return tooltip
         },
         shouldNotify() { // Optional, layer will be highlighted on the tree if true.

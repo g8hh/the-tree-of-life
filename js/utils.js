@@ -16,6 +16,11 @@ function canAffordUpgrade(layer, id) {
 	return canAffordPurchase(layer, upg, cost)
 }
 
+function canBuyBuyable(layer, id) {
+	let b = temp[layer].buyables[id]
+	return (b.unlocked && b.canAfford && player[layer].buyables[id].lt(b.purchaseLimit))
+}
+
 function hasUpgrade(layer, id) {
 	return (player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString()))
 }
@@ -152,7 +157,7 @@ function buyMaxBuyable(layer, id) {
 function buyBuyable(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].buyables[id].unlocked) return
-	if (!tmp[layer].buyables[id].canAfford) return
+	if (!tmp[layer].buyables[id].canBuy) return
 
 	run(layers[layer].buyables[id].buy, layers[layer].buyables[id])
 	updateBuyableTemp(layer)
