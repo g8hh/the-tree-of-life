@@ -32,9 +32,11 @@ Features:
 
 - title: **optional**. displayed at the top in a larger font. It can also be a function that returns updating text.
 
-- cost(): cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th object, but needs to use "current amount" as a default value for x. (x is a `Decimal`). Can return an object if there are multiple currencies.
+- cost(): cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th purchase. (x is a `Decimal`).
+    Can return an object if there are multiple currencies.
                     
-- effect(): **optional**. A function that calculates and returns the current values of bonuses of this buyable. Can return a value or an object containing multiple values.
+- effect(): **optional**. A function that calculates and returns the current values of bonuses of this buyable.  Can have an optional argument "x", similar to cost. 
+    Can return a value or an object containing multiple values.
 
 - display(): A function returning everything that should be displayed on the buyable after the title, likely including the description, amount bought, cost, and current effect. Can use basic HTML.
 

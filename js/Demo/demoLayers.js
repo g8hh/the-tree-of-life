@@ -158,12 +158,12 @@ addLayer("c", {
             respecMessage: "Are you sure? Respeccing these doesn't accomplish much.",
             11: {
                 title: "Exhancers", // Optional, displayed at the top in a larger font
-                cost(x=player[this.layer].buyables[this.id]) { // cost for buying xth buyable, can be an object if there are multiple currencies
+                cost(x) { // cost for buying xth buyable, can be an object if there are multiple currencies
                     if (x.gte(25)) x = x.pow(2).div(25)
                     let cost = Decimal.pow(2, x.pow(1.5))
                     return cost.floor()
                 },
-                effect(x=player[this.layer].buyables[this.id]) { // Effects of owning x of the items, x is a decimal
+                effect(x) { // Effects of owning x of the items, x is a decimal
                     let eff = {}
                     if (x.gte(0)) eff.first = Decimal.pow(25, x.pow(1.1))
                     else eff.first = Decimal.pow(1/25, x.times(-1).pow(1.1))

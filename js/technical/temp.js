@@ -7,7 +7,7 @@ var NaNalert = false;
 var activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
 	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "masterButtonPress",
-	"sellOne", "sellAll", "pay",
+	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick
@@ -36,6 +36,7 @@ function setupTemp() {
 		tmp[layer].prestigeButtonText = {}
 		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
+		setupBuyables(layer)
 	}
 	temp = tmp
 }
@@ -228,5 +229,23 @@ function setupBarStyles(layer){
 		let bar = tmp[layer].bars[id]
 		bar.dims = {}
 		bar.fillDims = {}
+	}
+}
+
+function setupBuyables(layer) {
+	for (id in layers[layer].buyables) {
+		if (!isNaN(id)) {
+			let b = layers[layer].buyables[id]
+			b.actualCostFunction = b.cost
+			b.cost = function(x) {
+				x = x ?? player[this.layer].buyables[this.id]
+				return layers[this.layer].buyables[this.id].actualCostFunction(x)
+			}
+			b.actualEffectFunction = b.effect
+			b.effect = function(x) {
+				x = x ?? player[this.layer].buyables[this.id]
+				return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+			}
+		}
 	}
 }

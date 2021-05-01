@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Amount is automatically supplied to buyable cost and effect functions.
+
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
 - The respec confirmation checkbox is now part of the respec-button component.
