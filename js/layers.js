@@ -1417,6 +1417,11 @@ addLayer("c", {
                 x = x.times(tmp.mini.buyables[101].effect)
                 x = x.times(tmp.n.effect)
                 if (hasUpgrade("n", 23)) x = x.times(tmp.n.upgrades[23].effect)
+                if (hasChallenge("n", 32)) {
+                        let exp = tmp.n.challenges[32].rewardEffect
+                        let base = player.o.points.max(10).log10()
+                        x = x.times(base.pow(exp))
+                }
 
                 return x
         },
@@ -2507,7 +2512,7 @@ addLayer("n", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen XI"
+                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>Nitrogen XII"
                         },
                         description(){
                                 let a = "You lose 100x Oxygen, Carbon, and Hydrogen"
@@ -3026,7 +3031,7 @@ addLayer("n", {
                         rewardDescription(){
                                 let a = "C Point Gain 7's base is multiplied by log10(Nitrogen)"
                                 let b = "<br>"
-                                let c = "Currently: *" + format(tmp.n.challenges[22].rewardEffect, 3)
+                                let c = "Currently: *" + format(tmp.n.challenges[22].rewardEffect)
                                 return a + b + c
                         },
                         rewardEffect() {
@@ -3045,20 +3050,106 @@ addLayer("n", {
                         goal: () => Decimal.pow(10, 186e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
                         rewardDescription(){
-                                let a = "[nothing currently] C Point Gain 7's base is multiplied by log10(Nitrogen)"
+                                let a = "Nitrogen multiplies Near-ultraviolet base and cube Near-ultraviolet base"
                                 let b = "<br>"
-                                let c = "Currently: *" + format(tmp.n.challenges[31].rewardEffect, 3)
-                                return a + b + c
-                        },
-                        rewardEffect() {
-                                let ret = player.n.points.max(10).log10()
-                                return ret
+                                //let c = "Currently: *" + format(tmp.n.challenges[31].rewardEffect, 3)
+                                return a
                         },
                         unlocked(){
                                 return hasUpgrade("n", 31)
                         },
                         countsAs: [11, 21],
                 }, // inChallenge("n", 31) hasChallenge("n", 31)
+                32: {
+                        name: "Fifteen",
+                        challengeDescription: "Ten and C Point gain 5 is nullified",
+                        goalDescription: () => format(tmp.n.challenges[32].goal) + " Points",
+                        goal: () => Decimal.pow(10, 180.7e6),
+                        canComplete: () => player.points.gte(tmp.n.challenges[32].goal),
+                        rewardDescription(){ //red d redd
+                                let a = "log10(Oxygen)^<bdi style='color:#CC0033'>D</bdi> multiplies Carbon gain and unlock a minigame for <bdi style='color:#CC0033'>D</bdi>"
+                                let b = "<br>"
+                                let c = "Currently: <bdi style='color:#CC0033'>D</bdi>=" + format(tmp.n.challenges[32].rewardEffect)
+                                return a + b + c
+                        },
+                        rewardEffect() {
+                                let ret = new Decimal(100)
+
+                                return ret
+                        },
+                        unlocked(){
+                                return hasChallenge("n", 31)
+                        },
+                        countsAs: [12, 22],
+                }, // inChallenge("n", 32) hasChallenge("n", 32)
+        },
+        microtabs: {
+                challenge_content: {
+                        "All": {
+                                content: [
+                                       ["challenges", [1,2,3,4,5,6,7]] 
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "1": {
+                                content: [
+                                       ["challenges", [1]] 
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "2": {
+                                content: [
+                                       ["challenges", [2]] 
+                                ],
+                                unlocked(){
+                                        return tmp.n.challenges[21].unlocked
+                                },
+                        },
+                        "3": {
+                                content: [
+                                       ["challenges", [3]] 
+                                ],
+                                unlocked(){
+                                        return tmp.n.challenges[31].unlocked
+                                },
+                        },
+                        "4": {
+                                content: [
+                                       ["challenges", [4]] 
+                                ],
+                                unlocked(){
+                                        return false //tmp.n.challenges[41].unlocked
+                                },
+                        },
+                        "5": {
+                                content: [
+                                       ["challenges", [5]] 
+                                ],
+                                unlocked(){
+                                        return false // return tmp.n.challenges[51].unlocked
+                                },
+                        },
+                        "6": {
+                                content: [
+                                       ["challenges", [6]] 
+                                ],
+                                unlocked(){
+                                        return false // return tmp.n.challenges[61].unlocked
+                                },
+                        },
+                        "7": {
+                                content: [
+                                       ["challenges", [7]] 
+                                ],
+                                unlocked(){
+                                        return false //return tmp.n.challenges[71].unlocked
+                                },
+                        },
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -3081,7 +3172,7 @@ addLayer("n", {
                 },
                 "Challenges": {
                         content: ["main-display",
-                                ["challenges", [1,2,3,4,5,6,7]]],
+                                ["microtabs", "challenge_content"]],
                         unlocked(){
                                 return hasMilestone("n", 14)
                         },
@@ -5198,6 +5289,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 83).gt(50)
                         },
                         base(){
+                                if (inChallenge("n", 32)) return new Decimal(1)
                                 let ret = player.points.max(10).log10()
 
                                 if (hasMilestone("n", 14)) ret = ret.times(Math.log(10))
@@ -6801,7 +6893,7 @@ addLayer("tokens", {
                                  11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
                                  16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
                                  60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
-                                 13793e4, 18750e4, 40300e4,
+                                 13793e4, 18750e4, 40300e4, 91919e4,
                                  ]/*1e6-1,*/
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
@@ -7264,7 +7356,9 @@ addLayer("tokens", {
                                 if (hasMilestone("tokens", 15)) ret = ret.times(Decimal.pow(1.2, player.tokens.milestones.length))
                                 if (hasUpgrade("h", 72)) ret = ret.times(tmp.h.upgrades[72].effect)
                                 if (hasUpgrade("mini", 13)) ret = ret.times(player.mini.c_points.points.max(10).log10())
+                                if (hasChallenge("n", 31)) ret = ret.times(player.n.points.max(1))
 
+                                if (hasChallenge("n", 31)) ret = ret.pow(3)
 
                                 return ret
                         },

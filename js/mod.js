@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.037",
+	num: "0.038",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.038</h3><br> 
+		- Fixed up the nitrogen challenge display.<br>
+		- Added a challenge and gave Fourteen a reward.<br>
 	<br><h3 style='color: #CC0000'>v0.037</h3><br> 
 		- Added two nitrogen challenges.<br>
 		- Added two nitrogen milestones.<br>
