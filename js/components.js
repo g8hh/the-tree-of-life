@@ -295,7 +295,7 @@ function loadVue() {
 		template: `
 		<div v-if="tmp[layer].clickables" class="upgTable">
 			<master-button v-if="tmp[layer].clickables.masterButtonPress && !(tmp[layer].clickables.showMasterButton !== undefined && tmp[layer].clickables.showMasterButton == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['master-button']]"></master-button>
-			<div v-for="row in tmp[layer].clickables.rows" class="upgRow">
+			<div v-for="row in (data === undefined ? tmp[layer].clickables.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].clickables.cols"><div v-if="tmp[layer].clickables[row*10+col]!== undefined && tmp[layer].clickables[row*10+col].unlocked" class="upgAlign" v-bind:style="{'margin-left': '7px', 'margin-right': '7px',  'height': (data ? data : 'inherit'),}">
 					<clickable :layer = "layer" :data = "row*10+col" :size = "data" v-bind:style="tmp[layer].componentStyles.clickable"></clickable>
 				</div></div>

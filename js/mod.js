@@ -12,20 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.038",
+	num: "0.039",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 4e12 N<br><br>
+		- e380 D Points<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.038</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.039</h3><br>
+		- Added 3 D Point upgrades.<br>
+		- Added 6 D Point buyables.<br>
+	<br><h3 style='color: #CC0000'>v0.038</h3><br>
 		- Fixed up the nitrogen challenge display.<br>
 		- Added a challenge and gave Fourteen a reward.<br>
 	<br><h3 style='color: #CC0000'>v0.037</h3><br> 
