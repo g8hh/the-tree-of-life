@@ -5,6 +5,7 @@
 - Layer nodes will be highlighted even if the player is on the same tab.
 - Added buyable purchaseLimit.
 - Amount is automatically supplied to buyable cost and effect functions.
+- Re-centered respec buttons.
 
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
