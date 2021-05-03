@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+# v2.4.2 (beta)
+- Optimizations, hopefully a significant amount.
 - Added buyable purchaseLimit.
 - Amount is automatically supplied to buyable cost and effect functions.
 
