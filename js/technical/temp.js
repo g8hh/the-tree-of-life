@@ -33,7 +33,6 @@ function setupTemp() {
 		tmp[layer].canReset = {}
 		tmp[layer].notify = {}
 		tmp[layer].prestigeNotify = {}
-		tmp[layer].prestigeButtonText = {}
 		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
 		setupBuyables(layer)
@@ -84,7 +83,6 @@ function updateTemp() {
 		tmp[layer].canReset = canReset(layer)
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
-		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
 		constructAchievementStyles(layer)
 		constructNodeStyle(layer)
