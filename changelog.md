@@ -2,6 +2,7 @@
 
 # v2.4.2 (beta)
 - Optimizations, hopefully a significant amount.
+- Layer nodes will be highlighted even if the player is on the same tab.
 - Added buyable purchaseLimit.
 - Amount is automatically supplied to buyable cost and effect functions.
 
