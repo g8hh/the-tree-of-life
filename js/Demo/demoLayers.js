@@ -406,7 +406,7 @@ addLayer("f", {
     // The following are only currently used for "custom" Prestige type:
     prestigeButtonText() { //Is secretly HTML
         if (!this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you a Farm Point in exchange for all of your points and lollipops! (At least " + formatWhole(tmp[this.layer].nextAt) + " points)"
-        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your points and lollipops! (You'll get another one at " + formatWhole(tmp[layer].nextAtDisp) + " points)"
+        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your points and lollipops! (You'll get another one at " + formatWhole(tmp[this.layer].nextAtDisp) + " points)"
     },
     getResetGain() {
         return getResetGain(this.layer, useType = "static")
