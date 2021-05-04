@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.039",
+	num: "0.040",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.040</h3><br>
+		- Added 2 D Point upgrades.<br>
+		- Added 2 D Point buyables.<br>
+		- Made fourteen completeable in hard mode.<br>
 	<br><h3 style='color: #CC0000'>v0.039</h3><br>
 		- Added 3 D Point upgrades.<br>
 		- Added 6 D Point buyables.<br>
