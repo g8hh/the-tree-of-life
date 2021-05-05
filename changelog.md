@@ -7,6 +7,7 @@
 - Amount is automatically supplied to buyable cost and effect functions.
 - Locked (not yet visible) milestones no longer take up space. Also fixed hidden milestones taking a tiny bit of space.
 - Re-centered respec buttons.
+- Force-displayed tooltips are not hidden by resets.
 
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
