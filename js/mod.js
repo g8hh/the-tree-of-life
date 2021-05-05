@@ -12,19 +12,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.040",
+	num: "0.041",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- e380 D Points<br><br>
+		- e5200 D Points<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.041</h3><br> 
+		- Added 4 D Point upgrades.<br>
+		- Added 4 D Point buyables.<br>
+		- Changed formatting slightly from ee9 to ee10.<br>
+		- Made D buyables not display on the C buyables tab.<br>
 	<br><h3 style='color: #CC0000'>v0.040</h3><br>
 		- Added 2 D Point upgrades.<br>
 		- Added 2 D Point buyables.<br>
