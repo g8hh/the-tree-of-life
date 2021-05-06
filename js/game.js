@@ -409,7 +409,8 @@ var interval = setInterval(function() {
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
 	updateTemp();
-	updateOther(diff);
+	updateOomps(diff);
+	updateWidth()
 	gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(0.05) 

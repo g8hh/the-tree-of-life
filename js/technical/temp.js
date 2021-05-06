@@ -41,6 +41,7 @@ function setupTemp() {
 
 	tmp.other = {
 		screenWidth: window.innerWidth,
+		splitScreen: window.innerWidth >=1024,
 		lastPoints: player.points || new Decimal(0),
 		oomps: new Decimal(0),
     }
@@ -211,41 +212,5 @@ function setupBuyables(layer) {
 				return layers[this.layer].buyables[this.id].actualEffectFunction(x)
 			}
 		}
-	}
-}
-
-function updateOther(diff) {
-	tmp.other.oompsMag = 0
-	if (player.points.lte(new Decimal(1e100))) return
-
-	var pp = new Decimal(player.points);
-	var lp = tmp.other.lastPoints || new Decimal(0);
-	if (pp.gt(lp)) {
-		if (pp.gte("10^^8")) {
-			pp = pp.slog(1e10)
-			lp = lp.slog(1e10)
-			tmp.other.oomps = pp.sub(lp).div(diff)
-			tmp.other.oompsMag = -1;
-		} else {
-			while (pp.div(lp).log(10).div(diff).gte("100") && tmp.other.oompsMag <= 5 && lp.gt(0)) {
-				pp = pp.log(10)
-				lp = lp.log(10)
-				tmp.other.oomps = pp.sub(lp).div(diff)
-				tmp.other.oompsMag++;
-			}
-		}
-	}
-
-	var screenWidth = window.innerWidth
-	var splitScreen = screenWidth >= 1024
-	if (player.splitMode === "disabled") splitScreen = false
-	if (player.splitMode === "enabled") splitScreen = true
-
-	tmp.other = {
-		screenWidth: screenWidth,
-		splitScreen: splitScreen,
-		lastPoints: player.points,
-		oomps: tmp.other.oomps,
-		oompsMag: tmp.other.oompsMag,
 	}
 }

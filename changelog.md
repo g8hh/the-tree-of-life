@@ -4,6 +4,7 @@
 - Optimizations, hopefully a significant amount.
 - Added OOM/s point gen display at high values (thanks to Ducdat!)
 - Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
+- New milestone setting will also show the most recently unlocked milestone. (Also renamed all settings to be clearer)
 - Layer nodes will be highlighted even if the player is on the same tab.
 - Added customizable node glowColor.
 - Added buyable purchaseLimit.
