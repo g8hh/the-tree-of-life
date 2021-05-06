@@ -407,8 +407,9 @@ var interval = setInterval(function() {
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}
-	tmp.scrolled = document.getElementById('treeTab').scrollTop > 30
+	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
 	updateTemp();
+	updateOther(diff);
 	gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(0.05) 

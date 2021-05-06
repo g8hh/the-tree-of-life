@@ -2,6 +2,8 @@
 
 # v2.4.2 (beta)
 - Optimizations, hopefully a significant amount.
+- Added OOM/s point gen display at high values (thanks to Ducdat!)
+- Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
 - Layer nodes will be highlighted even if the player is on the same tab.
 - Added buyable purchaseLimit.
 - Amount is automatically supplied to buyable cost and effect functions.
