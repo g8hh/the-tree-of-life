@@ -22,6 +22,7 @@ function commaFormat(num, precision) {
 function regularFormat(num, precision) {
     if (num === null || num === undefined) return "NaN"
     if (num.mag < 0.001) return (0).toFixed(precision)
+    if (num.mag < 0.01) precision = 3
     return num.toStringWithDecimalPlaces(precision)
 }
 
@@ -35,7 +36,8 @@ function sumValues(x) {
     return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision = 2,) {
+function format(decimal, precision = 2, small) {
+    small = small || modInfo.allowSmall
     decimal = new Decimal(decimal)
     if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
         player.hasNaN = true;
@@ -52,7 +54,18 @@ function format(decimal, precision = 2,) {
     else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
     else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
     else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
-    else return regularFormat(decimal, precision)
+    else if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
+    else if (decimal.eq(0)) return (0).toFixed(precision)
+
+    decimal = invertOOM(decimal)
+    let val = ""
+    if (decimal.lt(1e1000)){
+        val = exponentialFormat(decimal, precision)
+    }
+    else   
+        val = format(decimal, precision)
+    return val.replace(/([^(?:e|F)]*)$/, '-$1')
+
 }
 
 function formatWhole(decimal) {
@@ -77,4 +90,18 @@ function toPlaces(x, precision, maxAccepted) {
         result = new Decimal(maxAccepted - Math.pow(0.1, precision)).toStringWithDecimalPlaces(precision)
     }
     return result
+}
+
+// Will also display very small numbers
+function formatSmall(x, precision=2) { 
+    return format(x, precision, true)    
+}
+
+function invertOOM(x){
+    let e = x.log10().ceil()
+    let m = x.div(Decimal.pow(10, e))
+    e = e.neg()
+    x = new Decimal(10).pow(e).times(m)
+
+    return x
 }

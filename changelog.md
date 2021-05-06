@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-# v2.5 (beta)
+# v2.5: Dreams Really Do Come True - 
 - Optimizations, hopefully a significant amount.
 - Added OOM/s point gen display at high values (thanks to Ducdat!)
 - Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
@@ -12,6 +12,7 @@
 - Locked (not yet visible) milestones no longer take up space. Also fixed hidden milestones taking a tiny bit of space.
 - Re-centered respec buttons.
 - Force-displayed tooltips are not hidden by resets.
+- Added formatting support for very small numbers. Disabled in most places by default because rounding errors can cause issues. Access it with formatSmall, or enable it globally by adding "allowSmall: true" to modInfo.
 
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.

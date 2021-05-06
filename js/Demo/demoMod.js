@@ -11,8 +11,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.4.2",
-	name: "Rationalized Edition",
+	num: "2.5",
+	name: "Dreams Really Do Come True",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
