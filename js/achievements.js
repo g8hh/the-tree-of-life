@@ -4,7 +4,7 @@ function getColRowCode(det, base = 7){
         return 10 * tens + extra
 }
 
-function getNumberName(n){ //currently only works up to 100
+function getNumberName(n){ //currently only works up to 1000
         if (n < 100) return getNumberNameLT100(n)
         if (n < 1000) {
                 if (n % 100 == 0) return getNumberNameLT100(n / 100) + " Hundred"
@@ -251,6 +251,13 @@ PROGRESSION_MILESTONES = {
         145: () => player.n.points.max(10).log10().gt(27),
         146: () => player.n.points.max(10).log10().gt(35),
         147: () => player.n.points.max(10).log10().gt(45),
+        148: () => player.tokens.total.gt(84),
+        149: () => player.tokens.total.gt(85),
+        150: () => player.tokens.total.gt(86),
+        151: () => player.tokens.total.gt(87),
+        152: () => player.tokens.total.gt(88),
+        153: () => player.tokens.total.gt(89),
+        154: () => player.tokens.total.gt(90),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -401,6 +408,13 @@ PROGRESSION_MILESTONES_TEXT = {
         145: "10^27 Nitrogen",
         146: "10^35 Nitrogen",
         147: "10^45 Nitrogen",
+        148: "85 tokens",
+        149: "86 tokens",
+        150: "87 tokens",
+        151: "88 tokens",
+        152: "89 tokens",
+        153: "90 tokens",
+        154: "91 tokens",
 }
 
 

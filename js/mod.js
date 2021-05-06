@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.042",
+	num: "0.043",
 	name: "Beginnings",
 }
 
@@ -25,7 +25,15 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.042</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.043</h3><br>
+		- Added 3 D Point upgrades.<br>
+		- Added 2 D Point buyables.<br>
+		- Added 2 Nitrogen challenges.<br>
+		- Fixed some bugs with not having all C Point upgrades.<br>
+		- Improved the fuel display with colors and information.<br>
+		- Added a row of achievements.<br>
+		- Code was cleaned up.<br>
+	<br><h3 style='color: #CC0000'>v0.042</h3><br>
 		- Added 3 D Point upgrades.<br>
 		- Added a D Point buyable.<br>
 	<br><h3 style='color: #CC0000'>v0.041</h3><br> 
