@@ -355,6 +355,7 @@ addLayer("c", {
             'color': '#3325CC',
             'text-decoration': 'underline' 
         }},
+        glowColor: "orange", // If the node is highlighted, it will be this color (default is red)
         componentStyles: {
             "challenge"() {return {'height': '200px'}},
             "prestige-button"() {return {'color': '#AA66AA'}},
