@@ -12,19 +12,28 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.043.1",
+	num: "0.044",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- e5200 D Points<br><br>
+		- E content unlocked<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.044</h3><br>
+		- Added 2 D Point upgrades.<br>
+		- Added a D Point buyable.<br>
+		- Added 3 Nitrogen upgrades.<br>
+		- Added E minigame.<br>
+		- Added an E Point buyables.<br>
+		- Buffed supper to include making buyables not cost anything.<br>
+		- Made all uses of format run only if it is being displayed.<br>
+		- Display one more digit on currencies.<br>
 	<br><h3 style='color: #CC0000'>v0.043</h3><br>
 		- Added 3 D Point upgrades.<br>
 		- Added 2 D Point buyables.<br>
