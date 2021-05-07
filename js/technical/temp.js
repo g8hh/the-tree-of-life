@@ -137,10 +137,7 @@ function updateTempData(layerData, tmpData, funcsData) {
 				}
 			}
 
-			if (tmpData[item] === undefined)
-				Vue.set(tmpData, item, value)
-			else
-				tmpData[item]=value
+			Vue.set(tmpData, item, value)
 		}
 	}	
 }
