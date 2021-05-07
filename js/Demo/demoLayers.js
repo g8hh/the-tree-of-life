@@ -302,6 +302,8 @@ addLayer("c", {
                         function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
+                glowColor: "blue",
+
             },
             thingies: {
                 prestigeNotify: true,

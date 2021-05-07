@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+# v2.5.2 - 5/7/21
+- Added glowColor for subtabs.
 - Improved the display for extremely small numbers.
 - Fixed issues in the buyable docs.
 

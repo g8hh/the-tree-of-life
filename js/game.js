@@ -88,21 +88,27 @@ function shouldNotify(layer){
 		return true
 	}
 
+	if (tmp[layer].shouldNotify)
+		return true
+
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat){
-			if (subtabShouldNotify(layer, 'mainTabs', subtab))
+			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
+				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor
 				return true
+			}
 		}
 	}
 
 	for (family in tmp[layer].microtabs) {
 		for (subtab in tmp[layer].microtabs[family]){
 			if (subtabShouldNotify(layer, family, subtab))
+				tmp[layer].trueGlowColor = tmp[layer].microtabs[family][subtab].glowColor
 				return true
 		}
 	}
 	 
-	return tmp[layer].shouldNotify
+	return false
 	
 }
 
