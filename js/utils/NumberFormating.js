@@ -19,10 +19,10 @@ function commaFormat(num, precision) {
 
 
 function regularFormat(num, precision) {
-    if (num === null || num === undefined) return "NaN"
-    if (num.mag < 0.001) return (0).toFixed(precision)
-    if (num.mag < 0.01) precision = 3
-    return num.toStringWithDecimalPlaces(precision)
+        if (num === null || num === undefined) return "NaN"
+        if (num.mag < 0.001) return (0).toFixed(precision)
+        if (num.mag < 0.01) precision = 3
+        return num.toStringWithDecimalPlaces(precision)
 }
 
 function fixValue(x, y = 0) {
@@ -55,6 +55,7 @@ function format(decimal, precision = 2, small) {
         else if (decimal.gte("ee7")) return exponentialFormat(decimal, 0, false)
         else if (decimal.gte("ee5")) return exponentialFormat(decimal, 0)
         else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
+        else if (decimal.gte(1e3)) return commaFormat(decimal, precision)
         else if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
         else if (decimal.eq(0)) return (0).toFixed(precision)
 
