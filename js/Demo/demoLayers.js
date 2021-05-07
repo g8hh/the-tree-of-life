@@ -158,12 +158,12 @@ addLayer("c", {
             respecMessage: "Are you sure? Respeccing these doesn't accomplish much.",
             11: {
                 title: "Exhancers", // Optional, displayed at the top in a larger font
-                cost(x=player[this.layer].buyables[this.id]) { // cost for buying xth buyable, can be an object if there are multiple currencies
+                cost(x) { // cost for buying xth buyable, can be an object if there are multiple currencies
                     if (x.gte(25)) x = x.pow(2).div(25)
                     let cost = Decimal.pow(2, x.pow(1.5))
                     return cost.floor()
                 },
-                effect(x=player[this.layer].buyables[this.id]) { // Effects of owning x of the items, x is a decimal
+                effect(x) { // Effects of owning x of the items, x is a decimal
                     let eff = {}
                     if (x.gte(0)) eff.first = Decimal.pow(25, x.pow(1.1))
                     else eff.first = Decimal.pow(1/25, x.times(-1).pow(1.1))
@@ -175,7 +175,7 @@ addLayer("c", {
                 display() { // Everything else displayed in the buyable button after the title
                     let data = tmp[this.layer].buyables[this.id]
                     return "Cost: " + format(data.cost) + " lollipops\n\
-                    Amount: " + player[this.layer].buyables[this.id] + "\n\
+                    Amount: " + player[this.layer].buyables[this.id] + "/4\n\
                     Adds + " + format(data.effect.first) + " things and multiplies stuff by " + format(data.effect.second)
                 },
                 unlocked() { return player[this.layer].unlocked }, 
@@ -189,6 +189,7 @@ addLayer("c", {
                 },
                 buyMax() {}, // You'll have to handle this yourself if you want
                 style: {'height':'222px'},
+                purchaseLimit: new Decimal(4),
                 sellOne() {
                     let amount = getBuyableAmount(this.layer, this.id)
                     if (amount.lte(0)) return // Only sell one if there is at least one
@@ -354,13 +355,14 @@ addLayer("c", {
             'color': '#3325CC',
             'text-decoration': 'underline' 
         }},
+        glowColor: "orange", // If the node is highlighted, it will be this color (default is red)
         componentStyles: {
             "challenge"() {return {'height': '200px'}},
             "prestige-button"() {return {'color': '#AA66AA'}},
         },
         tooltip() { // Optional, tooltip displays when the layer is unlocked
             let tooltip = formatWhole(player[this.layer].points) + " " + this.resource
-            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers"
+            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br><i>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers</i>"
             return tooltip
         },
         shouldNotify() { // Optional, layer will be highlighted on the tree if true.
@@ -405,7 +407,7 @@ addLayer("f", {
     // The following are only currently used for "custom" Prestige type:
     prestigeButtonText() { //Is secretly HTML
         if (!this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you a Farm Point in exchange for all of your points and lollipops! (At least " + formatWhole(tmp[this.layer].nextAt) + " points)"
-        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your points and lollipops! (You'll get another one at " + formatWhole(tmp[layer].nextAtDisp) + " points)"
+        if (this.canBuyMax()) return "Hi! I'm a <u>weird dinosaur</u> and I'll give you <b>" + formatWhole(tmp[this.layer].resetGain) + "</b> Farm Points in exchange for all of your points and lollipops! (You'll get another one at " + formatWhole(tmp[this.layer].nextAtDisp) + " points)"
     },
     getResetGain() {
         return getResetGain(this.layer, useType = "static")
@@ -450,8 +452,10 @@ addLayer("f", {
                     default:
                         player[this.layer].clickables[this.id] = "Start"
                         break;
-
                 }
+            },
+            onHold(){
+                console.log("Clickkkkk...")
             },
             style() {
                 switch(getClickableState(this.layer, this.id)){

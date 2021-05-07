@@ -1,9 +1,26 @@
 # The Modding Tree changelog:
 
+# v2.5: Dreams Really Do Come True - 5/7/21
+- Optimizations, hopefully a significant amount.
+- Added OOM/s point gen display at high values (thanks to Ducdat!)
+- Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
+- Holding down a buyable's button now buys it continuously.
+- New milestone setting will also show the most recently unlocked milestone. (Also renamed all settings to be clearer)
+- Added an onHold feature for clickables.
+- Layer nodes will be highlighted even if the player is on the same tab.
+- Added customizable node glowColor.
+- Added buyable purchaseLimit.
+- Amount is automatically supplied to buyable cost and effect functions.
+- Locked (not yet visible) milestones no longer take up space. Also fixed hidden milestones taking a tiny bit of space.
+- Re-centered respec buttons.
+- Force-displayed tooltips are not hidden by resets.
+- Added formatting support for very small numbers. Disabled in most places by default because rounding errors can cause issues. Access it with formatSmall, or enable it globally by adding "allowSmall: true" to modInfo.
+
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
 - The respec confirmation checkbox is now part of the respec-button component.
-- Added a few missing changes to the 2.4 changelog (the two at the bottom)
+    (This also fixes the checkbox appearing when there is no respec button)
+- Added a few undocumented changes to the 2.4 changelog (the two at the bottom)
 
 ## v2.4: Rationalized Edition - 4/29/21
 - Completely reworked tooltips. Shift-click a node to force its tooltip to stay displayed. (And hopefully finally fixed flickering!)
