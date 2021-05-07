@@ -120,6 +120,11 @@ function canAffordUpgrade(layer, id) {
 	return canAffordPurchase(layer, upg, cost)
 }
 
+function canBuyBuyable(layer, id) {
+	let b = temp[layer].buyables[id]
+	return (b.unlocked && b.canAfford && player[layer].buyables[id].lt(b.purchaseLimit))
+}
+
 function hasUpgrade(layer, id) {
 	return (player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString()))
 }
@@ -264,7 +269,7 @@ function buyMaxBuyable(layer, id) {
 function buyBuyable(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].buyables[id].unlocked) return
-	if (!tmp[layer].buyables[id].canAfford) return
+	if (!tmp[layer].buyables[id].canBuy) return
 
 	run(layers[layer].buyables[id].buy, layers[layer].buyables[id])
 	updateBuyableTemp(layer)
@@ -390,6 +395,7 @@ function layerunlocked(layer) {
 function keepGoing() {
 	player.keepGoing = true;
 	needCanvasUpdate = true;
+	goBack()
 }
 
 function toNumber(x) {
@@ -403,6 +409,7 @@ function updateMilestones(layer) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
 			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
+			player[layer].lastMilestone = id
 		}
 	}
 }
@@ -488,19 +495,6 @@ function focused(x) {
 	onFocused = x
 }
 
-function prestigeButtonText(layer) {
-	if (layers[layer].prestigeButtonText !== undefined)
-		return layers[layer].prestigeButtonText()
-	else if (tmp[layer].type == "normal")
-		return `${player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") : ""}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource} ${tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? `<br><br>Next at ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${tmp[layer].baseResource}` : ""}`
-	else if (tmp[layer].type == "static")
-		return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && (tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax ? "Next:" : "Req:") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${tmp[layer].baseResource}		
-		`
-	else if (tmp[layer].type == "none")
-		return ""
-	else
-		return "You need prestige button text"
-}
 
 function isFunction(obj) {
 	return !!(obj && obj.constructor && obj.call && obj.apply);

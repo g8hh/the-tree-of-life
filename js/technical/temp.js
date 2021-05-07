@@ -6,8 +6,9 @@ var NaNalert = false;
 // Tmp will not call these
 var activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
-	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "masterButtonPress",
-	"sellOne", "sellAll", "pay",
+	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "onHold", "masterButtonPress",
+	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
+	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick
@@ -33,10 +34,26 @@ function setupTemp() {
 		tmp[layer].canReset = {}
 		tmp[layer].notify = {}
 		tmp[layer].prestigeNotify = {}
-		tmp[layer].prestigeButtonText = {}
 		tmp[layer].computedNodeStyle = []
 		setupBarStyles(layer)
+		setupBuyables(layer)
 	}
+
+	tmp.other = {
+		screenWidth: window.innerWidth,
+		splitScreen: window.innerWidth >=1024,
+		lastPoints: player.points || new Decimal(0),
+		oomps: new Decimal(0),
+
+		held: {
+			time: null,
+			id: null,
+			layer: null,
+			type: null,
+		}
+    }
+
+
 	temp = tmp
 }
 
@@ -83,12 +100,7 @@ function updateTemp() {
 		tmp[layer].canReset = canReset(layer)
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
-		tmp[layer].prestigeButtonText = prestigeButtonText(layer)
 		constructBarStyles(layer)
-		constructAchievementStyles(layer)
-		constructNodeStyle(layer)
-		updateChallengeDisplay(layer)
-
 	}
 
 	tmp.pointGen = getPointGen()
@@ -125,8 +137,10 @@ function updateTempData(layerData, tmpData, funcsData) {
 				}
 			}
 
-
-			Vue.set(tmpData, item, value)
+			if (tmpData[item] === undefined)
+				Vue.set(tmpData, item, value)
+			else
+				tmpData[item]=value
 		}
 	}	
 }
@@ -134,20 +148,8 @@ function updateTempData(layerData, tmpData, funcsData) {
 function updateChallengeTemp(layer)
 {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
-	updateChallengeDisplay(layer)
 }
 
-function updateChallengeDisplay(layer) {
-	for (id in player[layer].challenges) {
-		let style = "locked"
-		if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) style = "canComplete"
-		else if (hasChallenge(layer, id)) style = "done"
-		tmp[layer].challenges[id].defaultStyle = style
-
-		tmp[layer].challenges[id].buttonText = (player[layer].activeChallenge==(id)?(canCompleteChallenge(layer, id)?"Finish":"Exit Early"):(hasChallenge(layer, id)?"Completed":"Start"))
-	}
-
-}
 
 function updateBuyableTemp(layer)
 {
@@ -159,33 +161,6 @@ function updateClickableTemp(layer)
 	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
 }
 
-function constructNodeStyle(layer){
-	let style = []
-	if ((tmp[layer].isLayer && layerunlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick))
-		style.push({'background-color': tmp[layer].color})
-	if (tmp[layer].image !== undefined)
-		style.push({'background-image': 'url("' + tmp[layer].image + '")'})
-	style.push(tmp[layer].nodeStyle)
-	Vue.set(tmp[layer], 'computedNodeStyle', style)
-}
-
-
-
-
-function constructAchievementStyles(layer){
-	for (id in tmp[layer].achievements) {
-		ach = tmp[layer].achievements[id]
-		if (isPlainObject(ach)) {
-			let style = []
-			if (ach.image){ 
-				style.push({'background-image': 'url("' + ach.image + '")'})
-			} 
-			if (!ach.unlocked) style.push({'visibility': 'hidden'})
-			style.push(ach.style)
-			Vue.set(ach, 'computedStyle', style)
-		}
-	}
-}
 
 function constructBarStyles(layer){
 	if (layers[layer].bars === undefined)
@@ -229,5 +204,23 @@ function setupBarStyles(layer){
 		let bar = tmp[layer].bars[id]
 		bar.dims = {}
 		bar.fillDims = {}
+	}
+}
+
+function setupBuyables(layer) {
+	for (id in layers[layer].buyables) {
+		if (!isNaN(id)) {
+			let b = layers[layer].buyables[id]
+			b.actualCostFunction = b.cost
+			b.cost = function(x) {
+				x = x ?? player[this.layer].buyables[this.id]
+				return layers[this.layer].buyables[this.id].actualCostFunction(x)
+			}
+			b.actualEffectFunction = b.effect
+			b.effect = function(x) {
+				x = x ?? player[this.layer].buyables[this.id]
+				return layers[this.layer].buyables[this.id].actualEffectFunction(x)
+			}
+		}
 	}
 }
