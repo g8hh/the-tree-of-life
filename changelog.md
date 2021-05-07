@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed issues in the buyable docs
+
 # v2.5.1 - 5/7/21
 - Fixed dynamic things in tabFormat not updating.
 

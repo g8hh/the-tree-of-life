@@ -15,12 +15,12 @@ Buyables should be formatted like this:
 ```js
 buyables: {
     11: {
-        cost(x) { return new Decimal(1).mul(x || getBuyableAmt(this.layer, this.id)) },
+        cost(x) { return new Decimal(1).mul(x) },
         display() { return "Blah" },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
         buy() {
             player[this.layer].points = player[this.layer].points.sub(this.cost())
-            setBuyableAmount(this.layer, this.id, getBuyableAmt(this.layer, this.id).add(1))
+            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
         etc
     },
@@ -68,7 +68,7 @@ Including a `sellOne` or `sellAll` function will cause an additional button to a
 To add a respec button, or something similar, add the respecBuyables function to the main buyables object (not individual buyables).
 You can use these features along with it: 
 
-- respecBuyables(): **optional**. This is called when the button is pressed (after a toggleable confirmation message).
+- respec(): **optional**. This is called when the button is pressed (after a toggleable confirmation message).
 
 - respecText: **optional**. Text to display on the respec Button.
 
