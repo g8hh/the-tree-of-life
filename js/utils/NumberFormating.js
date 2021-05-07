@@ -59,12 +59,12 @@ function format(decimal, precision = 2, small) {
 
     decimal = invertOOM(decimal)
     let val = ""
-    if (decimal.lt(1e1000)){
+    if (decimal.lt("1e1000")){
         val = exponentialFormat(decimal, precision)
+        return val.replace(/([^(?:e|F)]*)$/, '-$1')
     }
     else   
-        val = format(decimal, precision)
-    return val.replace(/([^(?:e|F)]*)$/, '-$1')
+        return format(decimal, precision) + "⁻¹"
 
 }
 
