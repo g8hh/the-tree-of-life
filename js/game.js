@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5",
+	tmtNum: "2.5.1",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -319,7 +319,7 @@ function gameLoop(diff) {
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
-	for (x = 0; x <= maxRow; x++){
+	for (let x = 0; x <= maxRow; x++){
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item]
 			player[layer].resetTime += diff
@@ -337,7 +337,7 @@ function gameLoop(diff) {
 		}
 	}	
 
-	for (x = maxRow; x >= 0; x--){
+	for (let x = maxRow; x >= 0; x--){
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);

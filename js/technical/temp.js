@@ -136,7 +136,6 @@ function updateTempData(layerData, tmpData, funcsData) {
 					NaNalert = true;
 				}
 			}
-
 			Vue.set(tmpData, item, value)
 		}
 	}	
