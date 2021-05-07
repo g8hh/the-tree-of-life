@@ -20,7 +20,6 @@ function getPointGen() {
 }
 
 function makeRed(c){
-        //<bdi style='color:#CC0033'>A</bdi>
         return "<bdi style='color:#CC0033'>" + c + "</bdi>"
 }
                                                                                                                                                                                                                                                                         
@@ -2894,10 +2893,18 @@ addLayer("n", {
                 11: {
                         name: "Four",
                         challengeDescription: "A buyables and <bdi style='color:#CC0033'>C</bdi> increase 1 effects are nullified",
-                        goalDescription: () => format(tmp.n.challenges[11].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[11].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, 291590e3),
                         canComplete: () => player.points.gte(tmp.n.challenges[11].goal),
                         rewardDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "Per N challenge completion add .001 to Semi-exponential base"
                                 let b = "<br>"
                                 let c = "Currently: +" + format(tmp.n.challenges[11].rewardEffect, 3)
@@ -2915,10 +2922,18 @@ addLayer("n", {
                 12: {
                         name: "Six",
                         challengeDescription: "Square root Oxygen gain",
-                        goalDescription: () => format(tmp.n.challenges[12].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[12].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, 112e6),
                         canComplete: () => player.points.gte(tmp.n.challenges[12].goal),
                         rewardDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "C Point gain 9's log10 becomes ln"
                                 return a
                         },
@@ -2930,10 +2945,18 @@ addLayer("n", {
                 21: {
                         name: "Nine",
                         challengeDescription: "Four and C Point gain 6 is nullified",
-                        goalDescription: () => format(tmp.n.challenges[21].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[21].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, 112e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[21].goal),
                         rewardDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "<bdi style='color:#CC0033'>C</bdi> increase 1 base is multiplied by the sqaure root of the number of challenge completions"
                                 let b = "<br>"
                                 let c = "Currently: *" + format(tmp.n.challenges[21].rewardEffect, 3)
@@ -2951,10 +2974,18 @@ addLayer("n", {
                 22: {
                         name: "Ten",
                         challengeDescription: "Six and <bdi style='color:#CC0033'>C</bdi> increase 2 is nullified",
-                        goalDescription: () => format(tmp.n.challenges[22].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[22].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, 176e6),
                         canComplete: () => player.points.gte(tmp.n.challenges[22].goal),
                         rewardDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "C Point Gain 7's base is multiplied by log10(Nitrogen)"
                                 let b = "<br>"
                                 let c = "Currently: *" + format(tmp.n.challenges[22].rewardEffect)
@@ -2972,10 +3003,18 @@ addLayer("n", {
                 31: {
                         name: "Fourteen",
                         challengeDescription: "Nine and you cannot reset for tokens",
-                        goalDescription: () => format(tmp.n.challenges[31].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[31].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, player.hardMode ? 4280e3 : 186e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
                         rewardDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "Nitrogen multiplies Near-ultraviolet base and cube Near-ultraviolet base"
                                 return a
                         },
@@ -2987,10 +3026,18 @@ addLayer("n", {
                 32: {
                         name: "Fifteen",
                         challengeDescription: "Ten and C Point gain 5 is nullified",
-                        goalDescription: () => format(tmp.n.challenges[32].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[32].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, player.hardMode ? 19926e4 : 180.7e6),
                         canComplete: () => player.points.gte(tmp.n.challenges[32].goal),
                         rewardDescription(){ //red d redd
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "log10(Oxygen)^<bdi style='color:#CC0033'>D</bdi> multiplies Carbon gain and unlock a minigame for <bdi style='color:#CC0033'>D</bdi>"
                                 let b = "<br>"
                                 let c = "Currently: <bdi style='color:#CC0033'>D</bdi>=" + format(tmp.n.challenges[32].rewardEffect)
@@ -3012,10 +3059,18 @@ addLayer("n", {
                 41: {
                         name: "Sixteen",
                         challengeDescription: "Fourteen and you can't gain A Points",
-                        goalDescription: () => format(tmp.n.challenges[41].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[41].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, 25395e4),
                         canComplete: () => player.points.gte(tmp.n.challenges[41].goal),
                         rewardDescription(){ //red d redd
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "Per challenge completion add .03 to fuel square rooting factor"
                                 let b = "<br>"
                                 let c = "Currently: +" + format(tmp.n.challenges[41].rewardEffect)
@@ -3036,10 +3091,18 @@ addLayer("n", {
                 42: {
                         name: "Twenty-one",
                         challengeDescription: "Fifteen and Oxygen gain cannot be increased from base",
-                        goalDescription: () => format(tmp.n.challenges[42].goal) + " Points",
+                        goalDescription(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
+                                return format(tmp.n.challenges[42].goal) + " Points"
+                        },
                         goal: () => Decimal.pow(10, player.hardMode ? 16904e4:16666e4),
                         canComplete: () => player.points.gte(tmp.n.challenges[42].goal),
                         rewardDescription(){ //red d redd
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Challenges") return ""
+                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "Add .001 to Exponential Increase 1 base"
                                 return a
                         },
@@ -10072,7 +10135,7 @@ addLayer("tokens", {
                                 let b = a.ln().max(1).pow(a.sub(17).max(0))
                                 return b.min(1000)
                         },
-                        effectDescription(){
+                        effectDescription(){ // please fix this : make the display not format things unless on the tab
                                 let a = "Reward: ln(tokens)^[tokens-17] multiplies coin gain (capped at 1000).<br>"                     
                                 let b = "Currently: *" + format(tmp.tokens.milestones[16].effect)
                                 if (shiftDown) {
