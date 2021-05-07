@@ -9705,25 +9705,13 @@ addLayer("tokens", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.tokens.points = player.tokens.total
-                                player.tokens.buyables = {
-                                        11: new Decimal(0),
-                                        12: new Decimal(0),
-                                        13: new Decimal(0),
-                                        21: new Decimal(0),
-                                        22: new Decimal(0),
-                                        23: new Decimal(0),
-                                        31: new Decimal(0),
-                                        32: new Decimal(0),
-                                        33: new Decimal(0),
-                                        41: new Decimal(0),
-                                        42: new Decimal(0),
-                                        43: new Decimal(0),
-                                        51: new Decimal(0),
-                                        52: new Decimal(0),
-                                        53: new Decimal(0),
-                                        61: new Decimal(0),
-                                        62: new Decimal(0),
-                                        63: new Decimal(0),
+                                x = ["11", "12", "13", "21", "22", 
+                                     "23", "31", "32", "33", "41", 
+                                     "42", "43", "51", "52", "53", 
+                                     "61", "62", "63"]
+                                for (i in x){
+                                        id = x[i]
+                                        player.tokens.buyables[id] = new Decimal(0)
                                 }
                         },
                         style(){
