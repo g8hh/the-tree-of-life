@@ -22,6 +22,10 @@ function getPointGen() {
 function makeRed(c){
         return "<bdi style='color:#CC0033'>" + c + "</bdi>"
 }
+
+function makeBlue(c){
+        return "<bdi style='color:#3379E3'>" + c + "</bdi>"
+}
                                                                                                                                                                                                                                                                         
 function filter(list, keep){
         return list.filter(x => keep.includes(x))
@@ -330,6 +334,8 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(2) + "'>Hydrogen III"
                         },
                         description(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "1+Achievements multiplies Hydrogen gain"
                                 a = "1+[Achievements]"
                                 if (hasUpgrade("h", 32)) a = "(" + a + ")^" + format(tmp.h.upgrades[32].effect)
@@ -663,6 +669,8 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(15) + "'>Hydrogen VI"
                         },
                         description(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "ln(3+[Atomic Hydrogen])^<bdi style='color:#CC0033'>A</bdi> multiplies Deuterium gain"
                                 eff = format(tmp.h.upgrades[41].effect)
                                 a = "ln(3+[Atomic Hydrogen])^" + eff
@@ -696,6 +704,8 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(16) + "'>Hydrogen VII"
                         },
                         description(){
+                                if (player.tab != "h") return ""
+                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "ln(3+[Deuterium])^<bdi style='color:#CC0033'>B</bdi> multiplies Atomic Hydrogen gain"
                                 eff = format(tmp.h.upgrades[42].effect)
                                 a = "ln(3+[Deuterium])^" + eff
@@ -1705,37 +1715,6 @@ addLayer("c", {
                                 return true
                         },
                 },
-                /*
-                "Deuterium": {
-                        content: [["secondary-display", "deuterium"],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
-                                                if (shiftDown) {
-                                                        p1 = player.h.deuterium
-                                                        t1 = tmp.h.deuterium
-                                                        return "Your best Deuterium is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
-                                                }
-                                                return "You are gaining " + format(tmp.h.deuterium.getResetGain) + " Deuterium per second"
-                                        }
-                                ],
-                                ["display-text",
-                                        function() {
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
-                                                if (shiftDown) return "Formula: .0002 * Hydrogen * [multipliers]"
-                                                return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
-                                        },
-                                ],
-
-                                "blank", 
-                                ["upgrades", [2]]
-                                ],
-                        unlocked(){
-                                return hasUpgrade("h", 21)
-                        },
-                },*/
         },
         doReset(layer){},
 })
@@ -2206,7 +2185,8 @@ addLayer("n", {
         },
         getGainExp(){
                 let ret = new Decimal(3)
-                if (hasUpgrade("c", 31)) ret = ret.times(2)
+                if (hasUpgrade("c", 31))        ret = ret.times(2)
+                if (hasUpgrade("mini", 82))     ret = ret.times(2)
 
                 return ret
         },
@@ -2239,6 +2219,11 @@ addLayer("n", {
 
                 if (hasUpgrade("n", 24))        x = x.times(tmp.n.upgrades[24].effect)
                 if (hasUpgrade("mini", 73))     x = x.times(tmp.mini.d_points.getEffectiveFuelAux)
+                if (hasUpgrade("mini", 81))     x = x.times(tmp.mini.d_points.getUpgrades)
+                if (hasUpgrade("n", 35)) {
+                        let rede = tmp.n.upgrades[35].effect
+                                                x = x.times(player.points.max(10).log10().log10().max(1).pow(rede))
+                }
 
                 return x
         },
@@ -2256,6 +2241,7 @@ addLayer("n", {
                 return ret
         },
         effectDescription(){
+                if (player.tab != "n") return ""
                 if (shiftDown) {
                         let a = "effect formula: (sqrt(x)*2+1)^log2(x+7)"
                         return a
@@ -2275,14 +2261,15 @@ addLayer("n", {
                 // do nitrogen gain
                 if (hasMilestone("n", 13)) {
                         let g = tmp.n.getResetGain
-                        if (hasUpgrade("mini", 75) && !g.times(1e4).gt(data.points)) {
-                                let rem = data.points.div(g).sub(1e4).times(-1).div(1000) 
+                        if (hasUpgrade("mini", 75) && g.times(1e4).gt(data.points)) {
+                                let div = player.hardMode ? 100 : 1000
+                                let rem = data.points.div(g).sub(1e4).times(-1).div(div) 
                                 //number of seconds left of fast stuff
                                 if (rem.lt(diff)) {
                                         // do rem worth of fast
                                         data.points = Decimal.sub(diff, rem).plus(1e4).times(g)
                                 } else {
-                                        data.points = data.points.plus(g.times(diff).times(1000))
+                                        data.points = data.points.plus(g.times(diff).times(div))
                                 }
                         } else {
                                 data.points = data.points.plus(tmp.n.getResetGain.times(diff))
@@ -2316,6 +2303,8 @@ addLayer("n", {
         ],
         layerShown(){return hasUpgrade("mini", 45) || player.n.best.gt(0)},
         prestigeButtonText(){
+                if (player.tab != "n") return ""
+                
                 let gain = tmp.n.getResetGain
                 let nextAt = tmp.n.getNextAt
                 if (gain.eq(0)) {
@@ -2431,7 +2420,10 @@ addLayer("n", {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor(70) + "'>Nitrogen VIII"
                         },
-                        description(){
+                        description(){ 
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+
                                 let a = "Per upgrade multiply C Point and Carbon gain by best Nitrogen<br>Currently: "
                                 let b = format(tmp.n.upgrades[23].effect)
                                 return a + b
@@ -2449,6 +2441,9 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor(71) + "'>Nitrogen IX"
                         },
                         description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
                                 if (shiftDown) {
                                         let a = "ln(Nitrogen)"
                                         if (hasMilestone("n", 15)) a += "^[challenges]"
@@ -2510,6 +2505,55 @@ addLayer("n", {
                         unlocked(){
                                 return hasChallenge("n", 22)
                         }, // hasUpgrade("n", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(75) + "'>Nitrogen XIII"
+                        },
+                        description(){
+                                let a = "Fuel<sup>.001</sup> multiplies D Point gain"
+                                return a
+                        },
+                        cost:() => new Decimal(5.45e27),
+                        unlocked(){
+                                return getBuyableAmount("mini", 181).gte(75)
+                        }, // hasUpgrade("n", 33)
+                },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XIV"
+                        },
+                        description(){
+                                let a = "Per upgrade D Points<sup>.01</sup> multiplies maxmimum fuel"
+                                return a
+                        },
+                        cost:() => new Decimal(2.75e32),
+                        unlocked(){
+                                return getBuyableAmount("mini", 181).gte(145)
+                        }, // hasUpgrade("n", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XIV"
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let a = "log10(log10(Points))<sup>" + makeRed("E") + "</sup> multiplies Nitrogen gain"
+                                let b = "<br>"
+                                let c = "Currently: " + makeRed("E") + "=" + format(tmp.n.upgrades[35].effect)
+                                return a + b + c
+                        },
+                        effect(){
+                                let ret = new Decimal(1)
+
+                                return ret
+                        },
+                        cost:() => new Decimal(3e32),
+                        unlocked(){
+                                return getBuyableAmount("mini", 181).gte(153)
+                        }, // hasUpgrade("n", 35)
                 },
         },
         milestones: {
@@ -3578,6 +3622,10 @@ addLayer("mini", {
                         fuelTimer1: 0,
                         fuelTimer2: 0,
                 },
+                e_points: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                },
                 autobuytokens: false,
                 autobuyradio: false,
         }},
@@ -3599,6 +3647,8 @@ addLayer("mini", {
                 let bpts = data.b_points
                 let apts = data.a_points
                 let dpts = data.d_points
+                let epts = data.e_points
+                
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "B" && tmp.mini.tabFormat.B.unlocked) {
                         bpts.points = bpts.points.plus(tmp.mini.b_points.getResetGain.times(diff))
                 }
@@ -3694,7 +3744,7 @@ addLayer("mini", {
                                                                      ].concat(list3)
 
                                 if (hasUpgrade("mini", 53)) list3 = [151, 152, 153, 161, 162, 
-                                                                     163, 171, 172, 173, ].concat(list3)
+                                                                     163, 171, 172, 173, 181,].concat(list3)
 
                                 let bulk2 = new Decimal(1)
                                 if (hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
@@ -3753,6 +3803,10 @@ addLayer("mini", {
                                 if (dpts.fuelTimer2 > 11) dpts.fuelTimer2 = 11
                                 layers.mini.clickables[51].onClick()
                         }
+                }
+                if (tmp.mini.tabFormat.E.unlocked) {
+                        epts.best = epts.best.max(epts.points)
+                        epts.points = epts.points.plus(tmp.mini.e_points.getPointProduction.times(diff))
                 }
         },
         row: "side",
@@ -3940,8 +3994,10 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.mini.buyables[171].effect)
                                                         ret = ret.times(tmp.mini.buyables[172].effect)
                                                         ret = ret.times(tmp.mini.buyables[173].effect)
+                                                        ret = ret.times(tmp.mini.buyables[181].effect)
                         if (hasUpgrade("mini", 54))     ret = ret.times(player.n.points.max(1))
                         if (hasUpgrade("mini", 65))     ret = ret.times(3)
+                        if (hasUpgrade("n", 33))        ret = ret.times(player.mini.d_points.fuel.max(1).pow(.001))
 
                         return ret
                 },
@@ -4022,6 +4078,10 @@ addLayer("mini", {
 
                         ret = ret.times(tmp.mini.buyables[122].effect)
                         ret = ret.times(tmp.mini.buyables[123].effect)
+                        if (hasUpgrade("n", 34)) {
+                                let exp = new Decimal(.01).times(player.n.upgrades.length)
+                                ret = ret.times(Decimal.pow(player.mini.d_points.points.max(1), exp))
+                        }
 
                         return ret
                 },  
@@ -4032,6 +4092,61 @@ addLayer("mini", {
                                 if (x[i] > 50) a ++
                         }
                         return a
+                },
+        },
+        e_points: {
+                getGainMult(){ // cpoint gain c point gain cpt gain
+                        let ret = new Decimal(1)
+
+                        if (player.hardMode)            ret = ret.div(4)
+
+                        return ret
+                },
+                getPointProduction(){
+                        let data = tmp.mini.e_points
+
+                        let a = data.getA
+                        let b = data.getB
+                        let c = data.getC
+                        let d = data.getD
+                        let iter = data.getMaxInterations
+
+                        let f = function(x){
+                                return a.times(x).plus(b).times(x).plus(c).times(x).plus(d)
+                        }
+
+                        let init = recurse(f, new Decimal(0), iter)
+
+                        let ret = init.times(data.getGainMult)
+
+                        return ret
+                },
+                getA(){
+                        let ret = new Decimal(0)
+
+                        return ret
+                },
+                getB(){
+                        let ret = new Decimal(0)
+
+                        return ret
+                },
+                getC(){
+                        let ret = new Decimal(1)
+
+                        return ret
+                },
+                getD(){
+                        let ret = new Decimal(1)
+
+                        return ret
+                },
+                getMaxInterations(){
+                        let ret = 1
+
+                        ret += tmp.mini.buyables[201].effect.toNumber()
+
+                        return ret
                 },
         },
         buyables: {
@@ -4524,7 +4639,10 @@ addLayer("mini", {
                 },
                 22: {
                         display(){
-                                return "A Point production is the product of <br><b>(1+[amounts])</b><br> over all colors minus 1<br>Currently: " + format(tmp.mini.a_points.getResetGain) + "/sec"
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "A") return ""
+                                let a = "A Point production is the product of <br><b>(1+[amounts])</b><br> over all colors minus 1<br>Currently: "
+                                return a + format(tmp.mini.a_points.getResetGain) + "/sec"
                         }
                 },
                 31: {
@@ -5083,6 +5201,7 @@ addLayer("mini", {
                         display(){
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[71]) + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
@@ -5143,6 +5262,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[72]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5203,6 +5323,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[73]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5267,6 +5388,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[81]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -5329,6 +5451,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[82]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5394,6 +5517,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5458,6 +5582,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -5521,6 +5646,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5588,6 +5714,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5651,6 +5778,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[101]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5714,6 +5842,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[102]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5776,6 +5905,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[103]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5837,6 +5967,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -5899,6 +6030,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5962,6 +6094,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "C") return ""
+                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[113]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -5998,6 +6131,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[121] = player.mini.buyables[121].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[121].cost)
                         },
                         maxAfford(){
@@ -6030,6 +6164,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[121]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -6068,6 +6203,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[122] = player.mini.buyables[122].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[122].cost)
                         },
                         maxAfford(){
@@ -6095,6 +6231,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[122]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6130,6 +6267,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[123] = player.mini.buyables[123].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[123].cost)
                         },
                         maxAfford(){
@@ -6155,6 +6293,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[123]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6190,6 +6329,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[131] = player.mini.buyables[131].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[131].cost)
                         },
                         maxAfford(){
@@ -6219,6 +6359,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -6255,6 +6396,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[132] = player.mini.buyables[132].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[132].cost)
                         },
                         maxAfford(){
@@ -6282,6 +6424,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[132]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -6312,15 +6455,16 @@ addLayer("mini", {
                 },
                 133: {
                         title: "Fuel Efficiency 1",
-                        cost:() => new Decimal("1e32450").times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 133), 1.5))),
+                        cost:() => new Decimal("1e32462").times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 133), 1.5))),
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[133].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[133] = player.mini.buyables[133].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[133].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal("1e32450")
+                                let div = new Decimal("1e32462")
                                 let base = 1e8
                                 let exp = 1.5
                                 let pts = player.mini.d_points.points
@@ -6342,6 +6486,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Speed") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[133]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -6361,7 +6506,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e32450)*(1e8^x<sup>1.5</sup>)" 
+                                let cost2 = "(1e32462)*(1e8^x<sup>1.5</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -6377,6 +6522,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[151] = player.mini.buyables[151].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[151].cost)
                         },
                         maxAfford(){
@@ -6402,6 +6548,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[151]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6437,6 +6584,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[152] = player.mini.buyables[152].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[152].cost)
                         },
                         maxAfford(){
@@ -6462,6 +6610,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[152]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6497,6 +6646,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[153] = player.mini.buyables[153].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[153].cost)
                         },
                         maxAfford(){
@@ -6522,6 +6672,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[153]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6557,6 +6708,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[161] = player.mini.buyables[161].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[161].cost)
                         },
                         maxAfford(){
@@ -6582,6 +6734,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[161]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6617,6 +6770,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[162] = player.mini.buyables[162].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[162].cost)
                         },
                         maxAfford(){
@@ -6642,6 +6796,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[162]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6677,6 +6832,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[163] = player.mini.buyables[163].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[163].cost)
                         },
                         maxAfford(){
@@ -6702,6 +6858,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[163]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6737,6 +6894,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[171] = player.mini.buyables[171].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[171].cost)
                         },
                         maxAfford(){
@@ -6762,6 +6920,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[171]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6797,6 +6956,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[172] = player.mini.buyables[172].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[172].cost)
                         },
                         maxAfford(){
@@ -6822,6 +6982,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[172]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6857,6 +7018,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[173] = player.mini.buyables[173].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[173].cost)
                         },
                         maxAfford(){
@@ -6882,6 +7044,7 @@ addLayer("mini", {
                                 // other than softcapping fully general
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[173]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -6907,6 +7070,110 @@ addLayer("mini", {
 
 
                                 let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                181: {
+                        title: "Parking Brake", //Door but make the D red :)
+                        cost:() => new Decimal("1e41258").times(Decimal.pow(1e35, Decimal.pow(getBuyableAmount("mini", 181), 1.3))),
+                        canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[181].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[181] = player.mini.buyables[181].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
+                                player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[181].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e41258")
+                                let base = 1e35
+                                let exp = 1.3
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 151).gte(2900)
+                        },
+                        base(){
+                                let ret = player.mini.c_points.points.max(10).log10()
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[181].base.pow(player.mini.buyables[181])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[181]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[181].effect) + " to D Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 181)) + " D Points</b><br>"
+                                let eformula = "log10(C Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 181)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e41258)*(1e35^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                201: {
+                        title: "Iterations",
+                        cost:() => Decimal.tetrate(2, getBuyableAmount("mini", 201).plus(3)),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[201].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[201] = player.mini.buyables[201].plus(1)
+                                if (false) return 
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[201].cost)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return getBuyableAmount("mini", 201)
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[201].effect) + " interations</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2^^(x+3)" // =2<sup>2<sup>2<sup>...2</sup></sup></sup> (x+3 many) 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allCost
                                 return "<br>" + end
                         },
                 },
@@ -8010,7 +8277,7 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Supper</bdi>"
                         },
                         description(){
-                                let a = "Bulk 10x"
+                                let a = "Bulk 10x and D buyables no longer cost anything"
 
                                 return a
                         },
@@ -8019,7 +8286,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(1620)
+                                return getBuyableAmount("mini", 151).gte(2300)
                         }, // hasUpgrade("mini", 74)
                 },
                 75: {
@@ -8027,7 +8294,8 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Dinner</bdi>"
                         },
                         description(){
-                                let a = "If you have less than 10,000 seconds worth of Nitrogen Production you will gain 1000x"
+                                let x = player.hardMode ? "100" : "1000"
+                                let a = "If you have less than 10,000 seconds worth of Nitrogen Production you will gain " + x + "x"
 
                                 return a
                         },
@@ -8039,6 +8307,40 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2600)
                         }, // hasUpgrade("mini", 75)
                 },
+                81: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Multiplicative Identity</bdi>"
+                        },
+                        description(){
+                                let a = "Each upgrade doubles Nitrogen gain"
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 45032),
+                        currencyLocation:() => player.mini.d_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "D Points",
+                        unlocked(){
+                                return getBuyableAmount("mini", 151).gte(3100)
+                        }, // hasUpgrade("mini", 81)
+                },
+                82: {
+                        title(){ // https://www.food.com/topic/c
+                                return "<bdi style='color: #FF0000'>Even Prime</bdi>"
+                        },
+                        description(){
+                                let a = "Square base Nitrogen gain" 
+
+                                return a
+                        },
+                        cost:() => Decimal.pow(10, 56382),
+                        currencyLocation:() => player.mini.d_points,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "D Points",
+                        unlocked(){
+                                return getBuyableAmount("mini", 151).gte(3670)
+                        }, // hasUpgrade("mini", 82)
+                },
         },
         bars: {
                 fuel: {
@@ -8049,6 +8351,9 @@ addLayer("mini", {
                                 return player.mini.d_points.fuel.div(tmp.mini.d_points.getMaximumFuel)
                         },
                         display(){
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Fuel") return ""
                                 if (true) {
                                         let a = format(player.mini.d_points.fuel) + "/"
                                         let b = format(tmp.mini.d_points.getMaximumFuel) + " fuel"
@@ -8076,6 +8381,9 @@ addLayer("mini", {
                                 content: [
                                         ["bar", "fuel"],
                                         ["display-text", function(){
+                                                if (player.tab != "mini") return ""
+                                                if (player.subtabs.mini.mainTabs != "D") return ""
+                                                if (player.subtabs.mini.d_content != "Fuel") return ""
                                                 let a = "Current speed formula: " 
                                                 let data = tmp.mini.d_points
                                                 let redx = makeRed("x")
@@ -8107,7 +8415,7 @@ addLayer("mini", {
                                                 let a = "This tab has upgrades for passive fuel generation"
                                                 return a
                                         }],
-                                        ["upgrades", [5, 6, 7]]
+                                        ["upgrades", [5, 6, 7, 8]]
                                 ],
                                 unlocked(){
                                         return true
@@ -8115,7 +8423,8 @@ addLayer("mini", {
                                 shouldNotify(){
                                         x = ["51", "52", "53", "54", "55", 
                                              "61", "62", "63", "64", "65",
-                                             "71", "72", "73", "74", "75"]
+                                             "71", "72", "73", "74", "75",
+                                             "81", "82", "83", "84", "85"]
                                         for (let i = 0; i < x.length; i++){
                                                 id = x[i]
                                                 if (layers.mini.upgrades[id] == undefined) continue
@@ -8130,6 +8439,9 @@ addLayer("mini", {
                         "Multipliers": {//buff point gain
                                 content: [
                                         ["display-text", function(){
+                                                if (player.tab != "mini") return ""
+                                                if (player.subtabs.mini.mainTabs != "D") return ""
+                                                if (player.subtabs.mini.d_content != "Multipliers") return ""
                                                 if (hasUpgrade("mini", 55)) {
                                                         let data = tmp.mini.buyables
                                                         let a = data[151].cost
@@ -8208,6 +8520,9 @@ addLayer("mini", {
                                 content: [
                                         ["upgrades", [1,2,3,4]],
                                         ["display-text", function(){
+                                                if (player.tab != "mini") return ""
+                                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                                if (player.subtabs.mini.c_content != "Upgrades") return ""
                                                 if (!shiftDown) return ""
                                                 let poss = getAllowedCharacterValues()
                                                 let len = poss.length
@@ -8241,6 +8556,9 @@ addLayer("mini", {
                         "Buyables": {
                                 content: [ 
                                         ["display-text", function(){
+                                                if (player.tab != "mini") return ""
+                                                if (player.subtabs.mini.mainTabs != "C") return ""
+                                                if (player.subtabs.mini.c_content != "Buyables") return ""
                                                 let data = tmp.mini.buyables
                                                 let a = data[71].cost
                                                 let num = 71
@@ -8289,11 +8607,17 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "a_points"],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "A") return 
                                         if (hasUpgrade("h", 51)) return ""
+                                        
                                         return "You need to be on this tab to keep this minigame ticking!"
                                 }],
                                 ["display-text", "Each color produces the next color clockwise!"],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "A") return 
+
                                         if (!shiftDown) return ""
                                         a = "Formula: sqrt(amt)/20*2^levels*multipliers"
                                         let exp = tmp.mini.a_points.getColorGainExp
@@ -8310,12 +8634,18 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "b_points"],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "B") return 
+
                                         if (hasUpgrade("h", 51)) {
                                                 return hasUpgrade("h", 52) ? "" : "Costs after 1000 are increased (x->x*log(x)/log(1000))"
                                         }
                                         return "You need to be on this tab to keep this minigame ticking!"
                                 }],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "B") return 
+
                                         a = "You are currently getting " + format(tmp.mini.b_points.getResetGain)
                                         b = " B Points per second"
                                         return a + b
@@ -8330,6 +8660,9 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "c_points"],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "C") return 
+
                                         let a = "Each character has a given value, and the more of said character you get,<br> the more powerful its value is."
 
                                         let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>Finally, point gain is the product of all above values time multipliers."
@@ -8348,6 +8681,9 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "d_points"],
                                 ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "D") return 
+                                        
                                         let a = "You can refuel the car by clicking. The car goes faster based on how much fuel it has."
 
                                         let b = "<br>Point gain is based on speed (which is based on fuel), but you lose 1% of your fuel every second."
@@ -8364,6 +8700,40 @@ addLayer("mini", {
                         ],
                         unlocked(){
                                 return hasChallenge("n", 32)
+                        },
+                },
+                "E": {
+                        content: [
+                                ["secondary-display", "e_points"],
+                                ["display-text", function(){
+                                        if (player.tab != "mini") return
+                                        if (player.subtabs.mini.mainTabs != "E") return 
+                                        let data = tmp.mini.e_points
+
+                                        let br = "<br>"
+                                        let mb = makeBlue
+                                        let a = "Current gain is " + format(data.getPointProduction)
+                                        let b = ""
+                                        let c = "Gain formula is f<sup> n</sup>(0) times multipliers where n="
+                                        c += formatWhole(data.getMaxInterations)
+
+                                        if (shiftDown) {
+                                                b += "Function formula: f(x)=" + mb("a") + "x^3+" + mb("b") + "x^2+"
+                                                b += mb("c") + "x+" + mb("d") + br
+                                                b += mb("a") + "=" + format(data.getA) + " "
+                                                b += mb("b") + "=" + format(data.getB) + " "
+                                                b += mb("c") + "=" + format(data.getC) + " "
+                                                b += mb("d") + "=" + format(data.getD) + " " + br
+                                                c += br
+                                                c += "f<sup>1</sup>(x) = f(x) and f<sup> n+1</sup>(x) = f(f<sup> n</sup>(x))"
+                                        }
+
+                                        return a + br + b + c
+                                }],
+                                ["buyables", [20, 21, 22, 23, 24, 25]]
+                        ],
+                        unlocked(){
+                                return hasUpgrade("n", 35)
                         },
                 },
                 "Spelling": {
@@ -8591,6 +8961,8 @@ addLayer("tokens", {
                 ],
         layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown},
         prestigeButtonText(){
+                if (player.tab != "tokens") return ""
+                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
                 return "Reset for a token (" + formatWhole(player.tokens.total.plus(1)) + ")<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
         },
         canReset(){ // tokens canReset
@@ -9786,6 +10158,9 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+
                                 let a = "Reward: Raise Radio Wave effect to the total number of tokens.<br>"
                                 let b = "Currently: " + format(tmp.tokens.milestones[1].effect)
                                 if (shiftDown) {
@@ -9814,6 +10189,9 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: Raise Microwaves effect to the total number of tokens and keep Hydrogen XI and XII.<br>"
                                 let b = "Currently: " + format(tmp.tokens.milestones[2].effect)
                                 if (shiftDown) {
@@ -9842,6 +10220,9 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: Multiply and then raise UHF Gamma Rays effect to the total number of tokens and the autobuyer bulks 10x. Multiply Oxygen and Carbon gain by the number of achievements.<br>"                     
                                 let b = "Currently: " + format(tmp.tokens.milestones[3].effect)
                                 if (shiftDown) {
@@ -9910,6 +10291,9 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: Infrared and Linear are based on best amount, and raise Gamma Ray effect to the number of tokens.<br>"                     
                                 let b = "Currently: ^" + format(tmp.tokens.milestones[6].effect)
                                 if (shiftDown) {
@@ -9938,6 +10322,9 @@ addLayer("tokens", {
                                 return player.mini.a_points.points.plus(1).ln().max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: Visible and Quadratic are based on best amount, and ln(A Points) multiplies Radio Waves' base.<br>"                     
                                 let b = "Currently: *" + format(tmp.tokens.milestones[7].effect)
                                 if (shiftDown) {
@@ -10006,6 +10393,9 @@ addLayer("tokens", {
                                 return player.mini.b_points.points.plus(1).ln().max(1)
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: X-Rays and Semi-exponential are based on best amount, square Oxygen V exponent, and ln(B Points) multiplies Microwaves' base.<br>"                     
                                 let b = "Currently: *" + format(tmp.tokens.milestones[10].effect)
                                 if (shiftDown) {
@@ -10135,7 +10525,10 @@ addLayer("tokens", {
                                 let b = a.ln().max(1).pow(a.sub(17).max(0))
                                 return b.min(1000)
                         },
-                        effectDescription(){ // please fix this : make the display not format things unless on the tab
+                        effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: ln(tokens)^[tokens-17] multiplies coin gain (capped at 1000).<br>"                     
                                 let b = "Currently: *" + format(tmp.tokens.milestones[16].effect)
                                 if (shiftDown) {
@@ -10292,6 +10685,9 @@ addLayer("tokens", {
                                 return c
                         },
                         effectDescription(){
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                
                                 let a = "Reward: log10(Carbon)^<bdi style='color:#CC0033'>C</bdi> multiplies Oxygen and unlock a minigame for increasing <bdi style='color:#CC0033'>C</bdi>"                                                                                    
                                 let b = ""
 
@@ -11064,6 +11460,9 @@ addLayer("tokens", {
                         content: [
                                 ["secondary-display", "coins"],
                                 ["display-text", function(){
+                                        if (player.tab != "tokens") return ""
+                                        if (player.subtabs.tokens.mainTabs != "Coins") return ""
+                                
                                         let a = "You passively gain coins. Hold shift to see upgrade numbers and when upgrades get locked.<br>At any time you can remove all upgrades, but you do NOT get coins back."
                                         if (!shiftDown) return a 
                                         let b = "Formula: " + format(tmp.tokens.coins.getGainMult) + "/(1+coins)"

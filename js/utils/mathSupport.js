@@ -56,7 +56,10 @@ function getLogisticAmount(current, gain, loss, diff){
 }
 
 
-
+function recurse(func, startingValue, times){
+        if (times <= 0) return startingValue
+        return recurse(func, func(startingValue), times-1)
+}
 
 
 
