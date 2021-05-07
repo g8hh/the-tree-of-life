@@ -1,10 +1,12 @@
 # The Modding Tree changelog:
 
-# v2.5: Dreams Really Do Come True - 
+# v2.5: Dreams Really Do Come True - 5/7/21
 - Optimizations, hopefully a significant amount.
 - Added OOM/s point gen display at high values (thanks to Ducdat!)
 - Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
+- Holding down a buyable's button now buys it continuously.
 - New milestone setting will also show the most recently unlocked milestone. (Also renamed all settings to be clearer)
+- Added an onHold feature for clickables.
 - Layer nodes will be highlighted even if the player is on the same tab.
 - Added customizable node glowColor.
 - Added buyable purchaseLimit.

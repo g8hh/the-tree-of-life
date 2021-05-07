@@ -452,8 +452,10 @@ addLayer("f", {
                     default:
                         player[this.layer].clickables[this.id] = "Start"
                         break;
-
                 }
+            },
+            onHold(){
+                console.log("Clickkkkk...")
             },
             style() {
                 switch(getClickableState(this.layer, this.id)){

@@ -56,13 +56,10 @@ function updateWidth() {
 	if (player.splitMode === "disabled") splitScreen = false
 	if (player.splitMode === "enabled") splitScreen = true
 
-	tmp.other = {
-		screenWidth: screenWidth,
-		splitScreen: splitScreen,
-		lastPoints: player.points,
-		oomps: tmp.other.oomps,
-		oompsMag: tmp.other.oompsMag,
-	}
+
+	tmp.other.screenWidth = screenWidth
+	tmp.other.splitScreen = splitScreen
+	tmp.other.lastPoints = player.points
 }
 
 function updateOomps(diff)

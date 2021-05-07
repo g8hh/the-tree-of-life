@@ -6,7 +6,7 @@ var NaNalert = false;
 // Tmp will not call these
 var activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
-	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "masterButtonPress",
+	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
 	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
 ]
@@ -44,7 +44,15 @@ function setupTemp() {
 		splitScreen: window.innerWidth >=1024,
 		lastPoints: player.points || new Decimal(0),
 		oomps: new Decimal(0),
+
+		held: {
+			time: null,
+			id: null,
+			layer: null,
+			type: null,
+		}
     }
+
 
 	temp = tmp
 }
