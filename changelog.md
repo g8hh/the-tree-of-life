@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.5.2.1 - 5/7/21
+- Fixed microtabs making layers highlight incorrectly.
+
 # v2.5.2 - 5/7/21
 - Added glowColor for subtabs.
 - Improved the display for extremely small numbers.

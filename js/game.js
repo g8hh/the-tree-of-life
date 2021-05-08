@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.1",
+	tmtNum: "2.5.2.1",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -102,9 +102,10 @@ function shouldNotify(layer){
 
 	for (family in tmp[layer].microtabs) {
 		for (subtab in tmp[layer].microtabs[family]){
-			if (subtabShouldNotify(layer, family, subtab))
+			if (subtabShouldNotify(layer, family, subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].microtabs[family][subtab].glowColor
 				return true
+			}
 		}
 	}
 	 
