@@ -19,6 +19,25 @@ function getPointGen() {
 	return gain
 }
 
+var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350, 
+                      9350,   10000,   10860,   11230,   12600,
+                     14460,   15170,   15430,   19780,   24000,
+                     30810,   33300,   33500,   42600,   45300,
+                     45800,   50650,   60000,   80750,   88222,
+                     93000,   99790,   114e3,  133540,  134125,
+                    137240,  137820,  141200,  176900,  178250,
+                    205700,  227400,  260200,  297450,  298600,
+                    335080,  336336,  357900,  398888,  405900,
+                    432950,  445250,  462700,  467500,  542000,
+                    692000,  774000,  793000,  1085e3,  1380e3,
+                    1804e3,  1870e3,  1996e3,  2044e3,  2354e3,
+                    3807e3,  4666e3,  5383e3,  9500e3,  9871e3,
+                   11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
+                   16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
+                   60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
+                   13793e4, 18750e4, 40300e4, 91919e4, 10000e5,
+                ]/*1e6-1,*/
+
 function makeRed(c){
         return "<bdi style='color:#CC0033'>" + c + "</bdi>"
 }
@@ -1622,7 +1641,7 @@ addLayer("c", {
                                 return format(tmp.c.upgrades[22].effect)
                         },
                         cost() {
-                                return player.hardMode ? new Decimal(1e37) : new Decimal(3e36)
+                                return player.hardMode ? new Decimal(1.4e37) : new Decimal(5e36)
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 22)
@@ -2034,7 +2053,7 @@ addLayer("o", {
                                 if (hasUpgrade("o", 23)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[23].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(5e47),
+                        cost:() => new Decimal(2e48),
                         effect(){
                                 let ret = player.points.max(1).log10().max(1)
 
@@ -8861,24 +8880,8 @@ addLayer("tokens", {
                 return tmp.tokens.canReset
         },
         getNextAt(){
-                let log_costs = [  6390,   7587,   7630,   8184,   8314, 
-                                   9270,    1e4,  10730,  11160,  12590,
-                                  14470,  15200,  15480,  17500,  24000,
-                                  30810,  33300,  33500,  42600,  45300,
-                                  45800,  50650,  60000,  80750,  88222,
-                                  93000,  99790,  114e3, 133540, 134125,
-                                 137240, 137820, 141200, 176900, 178250,
-                                 205700, 227400, 260200, 297450, 298600,
-                                 335080, 336336, 357900, 398888, 405900,
-                                 432950, 445250, 462700, 467500, 542000,
-                                 692000, 774000, 793000, 1085e3, 1380e3,
-                                 1804e3, 1870e3, 1996e3, 2044e3, 2354e3,
-                                 3807e3, 4666e3, 5383e3, 9500e3, 9871e3,
-                                 11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
-                                 16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
-                                 60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
-                                 13793e4, 18750e4, 40300e4, 91919e4, 1000e6,
-                                 ]/*1e6-1,*/
+                let log_costs = TOKEN_COSTS
+                
                 let add = player.hardMode ? 4 : 0
                 let len = log_costs.length
 
@@ -8890,7 +8893,7 @@ addLayer("tokens", {
                 getid = Math.floor(getid)
 
                 if (getid >= len) return new Decimal("10pt10")
-                return Decimal.pow(10, log_costs[getid] + add)
+                return Decimal.pow(10, log_costs[getid]).times(Decimal.pow(10, add))
         },
         update(diff){
                 let data = player.tokens

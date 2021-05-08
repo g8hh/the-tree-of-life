@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.044.1",
+	num: "0.044.2",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.044.2</h3><br>
+		- Rebalanced up to 16 tokens.<br>
 	<br><h3 style='color: #CC0000'>v0.044.1</h3><br>
 		- Changed display to not show digits after the decimal point between 1e6 and 1e9.<br>
 		- Early game cost reductions (basically everything pre minigames is 2x cheaper).<br>
