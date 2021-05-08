@@ -40,7 +40,7 @@ function format(decimal, precision = 2, small) {
         if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
                 player.hasNaN = true;
                 console.log(decimal)
-                console.log("Sorry that a bug has appeared. Please export this save by running export(). Please give the dev a screenshot of the console and a paste of the save.")
+                console.log("Sorry that a bug has appeared. Please export this save by running exportSave(). Please give the dev a screenshot of the console and a paste of the save.")
                 Decimal(0)
                 return "NaN"
         }
@@ -49,24 +49,25 @@ function format(decimal, precision = 2, small) {
         if (decimal.gte("eeee1000")) {
                 var slog = decimal.slog()
                 if (slog.gte(1e6)) return "F" + format(slog.floor())
-                else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
+                return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
         }
-        else if (decimal.gte("ee10")) return "e" + format(decimal.log10())
-        else if (decimal.gte("ee7")) return exponentialFormat(decimal, 0, false)
-        else if (decimal.gte("ee5")) return exponentialFormat(decimal, 0)
-        else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
-        else if (decimal.gte(1e3)) return commaFormat(decimal, precision)
-        else if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
-        else if (decimal.eq(0)) return (0).toFixed(precision)
+        if (decimal.gte("ee10")) return "e" + format(decimal.log10())
+        if (decimal.gte("ee7")) return exponentialFormat(decimal, 0, false)
+        if (decimal.gte("ee5")) return exponentialFormat(decimal, 0)
+        if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
+        if (decimal.gte(1e6)) return commaFormat(decimal, 0)
+        if (decimal.gte(1e3)) return commaFormat(decimal, precision)
+        if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
+        if (decimal.eq(0)) return (0).toFixed(precision)
 
-        decimal = invertOOM(decimal)
-        let val = ""
-        if (decimal.lt(1e1000)){
-                val = exponentialFormat(decimal, precision)
-        }
-        else   
-                val = format(decimal, precision)
-        return val.replace(/([^(?:e|F)]*)$/, '-$1')
+        decimal = invertOOM(decimal) 
+        let val = "" 
+        if (decimal.lt("1e1000")){ 
+                val = exponentialFormat(decimal, precision) 
+                return val.replace(/([^(?:e|F)]*)$/, '-$1') 
+        } 
+        else    
+                return format(decimal, precision) + "⁻¹"        
 
 }
 

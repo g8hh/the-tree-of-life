@@ -203,6 +203,11 @@ addLayer("h", {
                                 save()
                         }
                 },
+                {key: "shift+Control+S", description: "Shift+Control+S: Save", 
+                        onPress(){
+                                save()
+                        }
+                },
                 {key: "shift+!", description: "Shift+1: Go to achievements", 
                         onPress(){
                                 player.tab = "ach"
@@ -432,7 +437,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[22].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(10e3) : new Decimal(10)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e3) : new Decimal(5)
                                 return hasUpgrade("h", 31) ? new Decimal(123456) : new Decimal(30)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -465,7 +470,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[23].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(40e3) : new Decimal(40)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(20e3) : new Decimal(20)
                                 return hasUpgrade("h", 31) ? new Decimal(444444) : new Decimal(80)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -496,7 +501,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(300e3) : new Decimal(300)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(200e3) : new Decimal(200)
                                 return hasUpgrade("h", 31) ? new Decimal(12e6) : new Decimal(1000)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -530,7 +535,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(4000e3) : new Decimal(4000)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(2000e3) : new Decimal(2000)
                                 return hasUpgrade("h", 31) ? new Decimal(5e8) : new Decimal(5e4)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -578,7 +583,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[32].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(40e3) : new Decimal(40)
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(20e3) : new Decimal(20)
                                 return hasUpgrade("h", 21) ? new Decimal(120e3) : new Decimal(250)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -612,7 +617,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(150e3) : new Decimal(150)
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(100e3) : new Decimal(100)
                                 return hasUpgrade("h", 21) ? new Decimal(120e4) : new Decimal(1600)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -633,7 +638,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(1500e3) : new Decimal(1500)
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(1000e3) : new Decimal(1000)
                                 return hasUpgrade("h", 21) ? new Decimal(120e5) : new Decimal(6e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -654,7 +659,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(7000e3) : new Decimal(7000)
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(4000e3) : new Decimal(4000)
                                 return hasUpgrade("h", 21) ? new Decimal(85e6) : new Decimal(25e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -681,7 +686,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[41].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                return player.hardMode ? new Decimal(5.5e9) : new Decimal(3e9)
+                                return player.hardMode ? new Decimal(5.5e9) : new Decimal(2e9)
                         },
                         effect(){
                                 let a = new Decimal(1)
@@ -716,7 +721,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[42].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                return player.hardMode ? new Decimal(7e9) : new Decimal(4e9)
+                                return player.hardMode ? new Decimal(7e9) : new Decimal(3e9)
                         },
                         effect(){
                                 let b = new Decimal(2)
@@ -747,7 +752,7 @@ addLayer("h", {
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[43].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                return player.hardMode ? new Decimal(8e9) : new Decimal(5e9)
+                                return player.hardMode ? new Decimal(8e9) : new Decimal(4e9)
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 42)
@@ -858,7 +863,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(23) + "'>Hydrogen XIV"
                         },
                         description(){
-                                if (!shiftDown) return "sqrt in the A production formula becomes ^.52"
+                                if (!shiftDown) return "^.5 in the A production formula becomes ^.52"
                                 a = ""
                                 if (hasUpgrade("h", 54)) return a
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[54].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
@@ -868,7 +873,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 53) 
-                        }, //hasUpgrade("h", 54)
+                        }, // hasUpgrade("h", 54)
                 },
                 55: {
                         title(){
@@ -2296,7 +2301,7 @@ addLayer("n", {
                                 showTab("n")
                         }
                 },
-                {key: "Control+N", description: "Control+N: Reset for Nitrogen", onPress(){
+                {key: "n", description: "N: Reset for Nitrogen", onPress(){
                                 if (canReset("n")) doReset("n")
                         }
                 },
@@ -3053,7 +3058,7 @@ addLayer("n", {
                                 if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[31].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, player.hardMode ? 4280e3 : 186e5),
+                        goal: () => Decimal.pow(10, player.hardMode ? 42e5 : 186e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -3633,6 +3638,16 @@ addLayer("mini", {
         branches: [],
         requires: new Decimal(0),
         resource: "Minigames completed",
+        tooltip(){
+                let tab = player.subtabs.mini.mainTabs
+                let data = player.mini
+                if (tab == "A") return format(data.a_points.points) + " A Points"
+                if (tab == "B") return format(data.b_points.points) + " B Points"
+                if (tab == "C") return format(data.c_points.points) + " C Points"
+                if (tab == "D") return format(data.d_points.points) + " D Points"
+                if (tab == "E") return format(data.e_points.points) + " E Points"
+                return ""
+        },
         baseResource: "points",
         baseAmount() {return new Decimal(0)},
         type: "custom",
@@ -3694,6 +3709,7 @@ addLayer("mini", {
                                 for (i = 0; i < list1.length; i++){
                                         let id = list1[i]
                                         if (!tmp.mini.buyables[id].unlocked) continue
+                                        if (getBuyableAmount("mini", id).eq(0) && !tmp.tokens.layerShown) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
                                                 let maxaff = tmp.mini.buyables[id].maxAfford
@@ -3907,6 +3923,7 @@ addLayer("mini", {
 
                         ret = ret.times(tmp.tokens.buyables[33].effect)
                         ret = ret.times(tmp.n.effect)
+                        ret = ret.times(player.mini.b_points.points.plus(10).log10().plus(9).log10())
 
                         return ret
                 },
@@ -4213,7 +4230,7 @@ addLayer("mini", {
                 },
                 12: {
                         title: "<bdi style='color:#FF9933'>Orange</bdi>",
-                        cost: () => new Decimal(1e21).times(Decimal.pow(1e9, Decimal.pow(getBuyableAmount("mini", 12), 1.1))),
+                        cost: () => new Decimal(1e20).times(Decimal.pow(1e9, Decimal.pow(getBuyableAmount("mini", 12), 1.1))),
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[12].cost) && getBuyableAmount("mini", 12).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -4221,7 +4238,7 @@ addLayer("mini", {
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[12].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal(1e21)
+                                let div = new Decimal(1e20)
                                 let base = 1e9
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -4261,7 +4278,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e21)*(1e9^x<sup>1.1</sup>)" 
+                                let cost2 = "(1e20)*(1e9^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -5053,7 +5070,7 @@ addLayer("mini", {
                 },
                 52: {
                         title: "B32", 
-                        cost:() => new Decimal("1e18400").times(Decimal.pow(1e4, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 52)), 1.1))),
+                        cost:() => new Decimal("1e18650").times(Decimal.pow(1e4, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 52)), 1.1))),
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[52].cost) && getBuyableAmount("mini", 52).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -5061,7 +5078,7 @@ addLayer("mini", {
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[52].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal("1e18400")
+                                let div = new Decimal("1e18650")
                                 let base = 1e4
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
@@ -5105,7 +5122,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e18400)*(1e4^x<sup>1.1</sup>)" 
+                                let cost2 = "(1e18650)*(1e4^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -5116,7 +5133,7 @@ addLayer("mini", {
                 },
                 53: {
                         title: "B33", 
-                        cost:() => new Decimal("1e21000").times(Decimal.pow(1e3, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2))),
+                        cost:() => new Decimal("1e22000").times(Decimal.pow(1e3, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2))),
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[53].cost) && getBuyableAmount("mini", 53).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -5124,7 +5141,7 @@ addLayer("mini", {
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[53].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal("1e21000")
+                                let div = new Decimal("1e22000")
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -5163,7 +5180,7 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e21000)*(1e3^x<sup>1.2</sup>)" 
+                                let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8619,9 +8636,10 @@ addLayer("mini", {
                                         if (player.subtabs.mini.mainTabs != "A") return 
 
                                         if (!shiftDown) return ""
-                                        a = "Formula: sqrt(amt)/20*2^levels*multipliers"
+                                        let mid = hasUpgrade("h", 45) ? "log10(9+log10(10+B Points))*" : ""
+                                        let end = "*2<sup>levels</sup>*" + mid + "multipliers"
                                         let exp = tmp.mini.a_points.getColorGainExp
-                                        if (exp != .5) a = "Formula: ((amt)^" + format(exp, 4) + ")/20*2^levels*multipliers"
+                                        a = "Formula: amt<sup>" + format(exp, 4) + "</sup>/20" + end
                                         return a
                                 }],
                                 ["buyables", [1,2,6]],
@@ -8843,7 +8861,7 @@ addLayer("tokens", {
                 return tmp.tokens.canReset
         },
         getNextAt(){
-                let log_costs = [  6420,   7587,   7630,   8184,   8314, 
+                let log_costs = [  6390,   7587,   7630,   8184,   8314, 
                                    9270,    1e4,  10730,  11160,  12590,
                                   14470,  15200,  15480,  17500,  24000,
                                   30810,  33300,  33500,  42600,  45300,

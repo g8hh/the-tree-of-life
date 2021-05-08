@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.044",
+	num: "0.044.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,20 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.044.1</h3><br>
+		- Changed display to not show digits after the decimal point between 1e6 and 1e9.<br>
+		- Early game cost reductions (basically everything pre minigames is 2x cheaper).<br>
+		- Reduce the first token cost.<br>
+		- Increase the cost of B33 (by e1000x), reduced orange cost by 10x.<br>
+		- Minigame tooltip now displays minigame points.<br>
+		- Added control+shift+s to save.<br>
+		- Fixed error console message.<br>
+		- Added a couple of empty lines under hotkeys to reduce clutter.<br>
+		- Changed reset for Nitrogen hotkey.<br>
+		- Made log10(9+log10(10+B Points)) multiply color production (to make B->A more playable).<br>
+		- A Point gain formula display improvement.<br>
+		- Reduce fourteen goal in hard mode.<br>
+		- Made the first purchase of B buyables not automatic.<br>
 	<br><h3 style='color: #CC0000'>v0.044</h3><br>
 		- Added 2 D Point upgrades.<br>
 		- Added a D Point buyable.<br>

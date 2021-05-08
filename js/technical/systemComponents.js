@@ -149,9 +149,8 @@ var systemComponents = {
 	</table>
 	<br><br>
         <h2 style='color: #00FF99'>Hotkeys</h2><br>
-        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">{{key.description}}<br></span></div>
-	<br><br>
-	
+        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">{{key.description}}<br></span>
+	<br><br></div>
     `
     },
 
