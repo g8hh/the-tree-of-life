@@ -2248,6 +2248,7 @@ addLayer("n", {
                         let rede = tmp.n.upgrades[35].effect
                                                 x = x.times(player.points.max(10).log10().log10().max(1).pow(rede))
                 }
+                if (hasUpgrade("n", 41))        x = x.times(player.mini.e_points.points.max(10).log10())
 
                 return x
         },
@@ -2558,7 +2559,7 @@ addLayer("n", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XIV"
+                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XV"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -2578,6 +2579,22 @@ addLayer("n", {
                         unlocked(){
                                 return getBuyableAmount("mini", 181).gte(153)
                         }, // hasUpgrade("n", 35)
+                },
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(77) + "'>Nitrogen XVI"
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let a = "log10(Nitrogen) multiplies E Point gain and log10(E Points) multiplies Nitrogen gain"
+                                return a
+                        },
+                        cost:() => new Decimal(4.2e33),
+                        unlocked(){
+                                return player.mini.e_points.best.gte(1e16)
+                        }, // hasUpgrade("n", 41)
                 },
         },
         milestones: {
@@ -4131,14 +4148,16 @@ addLayer("mini", {
                 },
         },
         e_points: {
-                getGainMult(){ // cpoint gain c point gain cpt gain
+                getGainMult(){ // epoint gain e point gain ept gain
                         let ret = new Decimal(1)
 
                         if (player.hardMode)            ret = ret.div(4)
+                                                        ret = ret.times(tmp.mini.buyables[213].effect)
+                        if (hasUpgrade("n", 41))        ret = ret.times(player.n.points.max(10).log10())
 
                         return ret
                 },
-                getPointProduction(){
+                getRecursionValue(){
                         let data = tmp.mini.e_points
 
                         let a = data.getA
@@ -4151,9 +4170,12 @@ addLayer("mini", {
                                 return a.times(x).plus(b).times(x).plus(c).times(x).plus(d)
                         }
 
-                        let init = recurse(f, new Decimal(0), iter)
+                        return recurse(f, new Decimal(0), iter)
+                },
+                getPointProduction(){
+                        let data = tmp.mini.e_points
 
-                        let ret = init.times(data.getGainMult)
+                        let ret = data.getRecursionValue.times(data.getGainMult)
 
                         return ret
                 },
@@ -7305,6 +7327,8 @@ addLayer("mini", {
                         base(){
                                 let ret = new Decimal(1)
 
+                                ret = ret.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
+
                                 return ret
                         },
                         effect(){
@@ -7394,6 +7418,126 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e4)*(4^x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                212: {
+                        title: "a<bdi style='color:#B00E00'>f</bdi>(x) = <bdi style='color:#B00E00'>f</bdi>(ax)",
+                        cost:() => new Decimal("1e8").times(Decimal.pow(7, Decimal.pow(getBuyableAmount("mini", 212), 1.2))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[212].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[212] = player.mini.buyables[212].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[212].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e8")
+                                let base = 7
+                                let exp = 1.2
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 202).gte(25)
+                        },
+                        base(){
+                                let ret = new Decimal(.3)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[212].base.times(player.mini.buyables[212])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[212]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[212].effect, 4) + " to Linear base per Quadratic</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 212)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 212), 4) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e8)*(7^x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                213: {
+                        title: "<bdi style='color:#B00E00'>f</bdi>(x+y) = <bdi style='color:#B00E00'>f</bdi>(x)+<bdi style='color:#B00E00'>f</bdi>(y)",
+                        cost:() => new Decimal("1e9").times(Decimal.pow(5, Decimal.pow(getBuyableAmount("mini", 213), 1.1))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[213].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[213] = player.mini.buyables[213].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[213].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e9")
+                                let base = 5
+                                let exp = 1.1
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 202).gte(31)
+                        },
+                        base(){
+                                let ret = getBuyableAmount("mini", 203).max(1).ln().max(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[213].base.pow(player.mini.buyables[213])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[213]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[213].effect) + " to E Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 213)) + " E Points</b><br>"
+                                let eformula = "ln(Linear levels)^x<br>" + format(getBuyableBase("mini", 213)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e9)*(5^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8938,18 +9082,21 @@ addLayer("mini", {
 
                                         let br = "<br>"
                                         let mb = makeBlue
-                                        let a = "Current gain is " + format(data.getPointProduction)
+                                        let a = "Current gain is " + format(data.getPointProduction) + "/s"
                                         let b = ""
-                                        let c = "Gain formula is f<sup> n</sup>(0) times multipliers where n="
-                                        c += formatWhole(data.getMaxInterations)
+                                        let c = "Gain formula is f<sup> " + formatWhole(data.getMaxInterations) 
+                                        c += "</sup>(0) times multipliers"
+                                        // getRecursionValue
 
                                         if (shiftDown) {
-                                                b += "Function formula: f(x)=" + mb("a") + "x^3+" + mb("b") + "x^2+"
+                                                b += "Function formula: f(x)=" + mb("a") + "x<sup>3</sup>+" + mb("b") + "x<sup>2</sup>+"
                                                 b += mb("c") + "x+" + mb("d") + br
                                                 b += mb("a") + "=" + format(data.getA) + " "
                                                 b += mb("b") + "=" + format(data.getB) + " "
                                                 b += mb("c") + "=" + format(data.getC) + " "
-                                                b += mb("d") + "=" + format(data.getD) + " " + br
+                                                b += mb("d") + "=" + format(data.getD) + " " 
+                                                b += "f<sup> " + formatWhole(data.getMaxInterations) + "</sup>(0)="
+                                                b += format(data.getRecursionValue) + br
                                                 c += br
                                                 c += "f<sup>1</sup>(x) = f(x) and f<sup> n+1</sup>(x) = f(f<sup> n</sup>(x))"
                                         }
