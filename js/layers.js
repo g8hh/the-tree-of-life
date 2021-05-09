@@ -4165,15 +4165,21 @@ addLayer("mini", {
                 getB(){
                         let ret = new Decimal(0)
 
+                        ret = ret.plus(tmp.mini.buyables[211].effect)
+
                         return ret
                 },
                 getC(){
                         let ret = new Decimal(1)
 
+                        ret = ret.plus(tmp.mini.buyables[203].effect)
+
                         return ret
                 },
                 getD(){
                         let ret = new Decimal(1)
+
+                        ret = ret.plus(tmp.mini.buyables[202].effect)
 
                         return ret
                 },
@@ -7173,7 +7179,10 @@ addLayer("mini", {
                 },
                 201: {
                         title: "Iterations",
-                        cost:() => Decimal.tetrate(2, getBuyableAmount("mini", 201).plus(3)),
+                        cost() {
+                                let a = getBuyableAmount("mini", 201)
+                                return Decimal.pow(10, a.plus(1).pow(a.plus(1)).sub(a))
+                        },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[201].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -7194,7 +7203,7 @@ addLayer("mini", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[201].effect) + " interations</b><br>"
+                                let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " interations</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
 
                                 if (!shiftDown) {
@@ -7204,12 +7213,192 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "2^^(x+3)" // =2<sup>2<sup>2<sup>...2</sup></sup></sup> (x+3 many) 
+                                let cost2 = "10^((x+1)<sup>x+1</sup>-x)" // =2<sup>2<sup>2<sup>...2</sup></sup></sup> (x+3 many) 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
 
                                 let end = allCost
+                                return "<br>" + end
+                        },
+                },
+                202: {
+                        title: "Constant",
+                        cost:() => new Decimal("30").times(Decimal.pow(1.5, Decimal.pow(getBuyableAmount("mini", 202), 1.1))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[202].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[202] = player.mini.buyables[202].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[202].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("30")
+                                let base = 1.5
+                                let exp = 1.1
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 201).gte(1)
+                        },
+                        base(){
+                                let ret = new Decimal(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[202].base.times(player.mini.buyables[202])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[202]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 202)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 202)) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(30)*(1.5^x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                203: {
+                        title: "Linear",
+                        cost:() => new Decimal("250").times(Decimal.pow(2, Decimal.pow(getBuyableAmount("mini", 203), 1.2))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[203].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[203] = player.mini.buyables[203].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[203].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("250")
+                                let base = 2
+                                let exp = 1.2
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 202).gte(3)
+                        },
+                        base(){
+                                let ret = new Decimal(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[203].base.times(player.mini.buyables[203])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[203]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[203].effect) + " to " + makeBlue("c") + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 203)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 203)) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(250)*(2^x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                211: {
+                        title: "Quadratic",
+                        cost:() => new Decimal("1e4").times(Decimal.pow(4, Decimal.pow(getBuyableAmount("mini", 211), 1.2))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[211].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[211] = player.mini.buyables[211].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[211].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e4")
+                                let base = 4
+                                let exp = 1.2
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 202).gte(11)
+                        },
+                        base(){
+                                let ret = new Decimal(.2)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[211].base.times(player.mini.buyables[211])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[211]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 211)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 211)) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e4)*(4^x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
                                 return "<br>" + end
                         },
                 },
