@@ -9,6 +9,7 @@ var activeFunctions = [
 	"buy", "buyMax", "respec", "onComplete", "onPurchase", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
 	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
+	"tabFormat", "content",
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick
@@ -35,7 +36,6 @@ function setupTemp() {
 		tmp[layer].notify = {}
 		tmp[layer].prestigeNotify = {}
 		tmp[layer].computedNodeStyle = []
-		setupBarStyles(layer)
 		setupBuyables(layer)
 		tmp[layer].trueGlowColor = []
 	}
@@ -156,59 +156,18 @@ function updateClickableTemp(layer)
 	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
 }
 
-
-
-function constructBarStyle(layer, id) {
-	let bar = tmp[layer].bars[id]
-	let style = {}
-	if (bar.progress instanceof Decimal)
-		bar.progress = bar.progress.toNumber()
-	bar.progress = (1 -Math.min(Math.max(bar.progress, 0), 1)) * 100
-
-	style.dims = {'width': bar.width + "px", 'height': bar.height + "px"}
-	let dir = bar.direction
-	style.fillDims = {'width': (bar.width + 0.5) + "px", 'height': (bar.height + 0.5)  + "px"}
-	if (dir !== undefined)
-	{
-		style.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)'
-		if(dir == UP){
-			style.fillDims['clip-path'] = 'inset(' + bar.progress + '% 0% 0% 0%)'
-		}
-		else if(dir == DOWN){
-			style.fillDims['clip-path'] = 'inset(0% 0% ' + bar.progress + '% 0%)'
-		}
-		else if(dir == RIGHT){
-			style.fillDims['clip-path'] = 'inset(0% ' + bar.progress + '% 0% 0%)'
-		}
-		else if(dir == LEFT){
-			style.fillDims['clip-path'] = 'inset(0% 0% 0% ' + bar.progress + '%)'
-		}
-	}
-	return style
-}
-
-function setupBarStyles(layer){
-	if (layers[layer].bars === undefined)
-		return
-	for (id in layers[layer].bars){
-		let bar = tmp[layer].bars[id]
-		bar.dims = {}
-		bar.fillDims = {}
-	}
-}
-
 function setupBuyables(layer) {
 	for (id in layers[layer].buyables) {
 		if (!isNaN(id)) {
 			let b = layers[layer].buyables[id]
 			b.actualCostFunction = b.cost
 			b.cost = function(x) {
-				x = x ?? player[this.layer].buyables[this.id]
+				x = (x === undefined ? player[this.layer].buyables[this.id] : x)
 				return layers[this.layer].buyables[this.id].actualCostFunction(x)
 			}
 			b.actualEffectFunction = b.effect
 			b.effect = function(x) {
-				x = x ?? player[this.layer].buyables[this.id]
+				x = (x === undefined ? player[this.layer].buyables[this.id] : x)
 				return layers[this.layer].buyables[this.id].actualEffectFunction(x)
 			}
 		}
