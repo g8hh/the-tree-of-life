@@ -102,7 +102,6 @@ function updateTemp() {
 		tmp[layer].trueGlowColor = tmp[layer].glowColor
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
-		constructBarStyles(layer)
 	}
 
 	tmp.pointGen = getPointGen()
@@ -158,39 +157,34 @@ function updateClickableTemp(layer)
 }
 
 
-function constructBarStyles(layer){
-	if (layers[layer].bars === undefined)
-		return
-	for (id in layers[layer].bars){
-		if (id !== "layer") {
-			let bar = tmp[layer].bars[id]
-			if (bar.progress instanceof Decimal)
-				bar.progress = bar.progress.toNumber()
-			bar.progress = (1 -Math.min(Math.max(bar.progress, 0), 1)) * 100
 
-			bar.dims = {'width': bar.width + "px", 'height': bar.height + "px"}
-			let dir = bar.direction
-			bar.fillDims = {'width': (bar.width + 0.5) + "px", 'height': (bar.height + 0.5)  + "px"}
-			if (dir !== undefined)
-			{
-				bar.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)'
-				if(dir == UP){
-					bar.fillDims['clip-path'] = 'inset(' + bar.progress + '% 0% 0% 0%)'
-				}
-				else if(dir == DOWN){
-					bar.fillDims['clip-path'] = 'inset(0% 0% ' + bar.progress + '% 0%)'
-				}
-				else if(dir == RIGHT){
-					bar.fillDims['clip-path'] = 'inset(0% ' + bar.progress + '% 0% 0%)'
-				}
-				else if(dir == LEFT){
-					bar.fillDims['clip-path'] = 'inset(0% 0% 0% ' + bar.progress + '%)'
-				}
+function constructBarStyle(layer, id) {
+	let bar = tmp[layer].bars[id]
+	let style = {}
+	if (bar.progress instanceof Decimal)
+		bar.progress = bar.progress.toNumber()
+	bar.progress = (1 -Math.min(Math.max(bar.progress, 0), 1)) * 100
 
-			}
+	style.dims = {'width': bar.width + "px", 'height': bar.height + "px"}
+	let dir = bar.direction
+	style.fillDims = {'width': (bar.width + 0.5) + "px", 'height': (bar.height + 0.5)  + "px"}
+	if (dir !== undefined)
+	{
+		style.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)'
+		if(dir == UP){
+			style.fillDims['clip-path'] = 'inset(' + bar.progress + '% 0% 0% 0%)'
 		}
-
+		else if(dir == DOWN){
+			style.fillDims['clip-path'] = 'inset(0% 0% ' + bar.progress + '% 0%)'
+		}
+		else if(dir == RIGHT){
+			style.fillDims['clip-path'] = 'inset(0% ' + bar.progress + '% 0% 0%)'
+		}
+		else if(dir == LEFT){
+			style.fillDims['clip-path'] = 'inset(0% 0% 0% ' + bar.progress + '%)'
+		}
 	}
+	return style
 }
 
 function setupBarStyles(layer){

@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Respec confirmation settings are now kept on resets.
+
 # v2.5.2.1 - 5/7/21
 - Fixed microtabs making layers highlight incorrectly.
 
