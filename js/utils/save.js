@@ -19,6 +19,7 @@ function startPlayerBase() {
 		hasNaN: false,
 		hideChallenges: false,
 		showStory: true,
+		forceOneTab: false,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)

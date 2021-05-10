@@ -42,19 +42,11 @@ function setupTemp() {
 	}
 
 	tmp.other = {
-		screenWidth: window.innerWidth,
-		splitScreen: window.innerWidth >=1024,
 		lastPoints: player.points || new Decimal(0),
 		oomps: new Decimal(0),
-
-		held: {
-			time: null,
-			id: null,
-			layer: null,
-			type: null,
-		}
     }
 
+	updateWidth()
 
 	temp = tmp
 }

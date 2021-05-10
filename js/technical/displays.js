@@ -53,10 +53,7 @@ function achievementStyle(layer, id){
 function updateWidth() {
 	var screenWidth = window.innerWidth
 	var splitScreen = screenWidth >= 1024
-	if (player.splitMode === "disabled") splitScreen = false
-	if (player.splitMode === "enabled") splitScreen = true
-
-
+	if (player.forceOneTab) splitScreen = false
 	tmp.other.screenWidth = screenWidth
 	tmp.other.splitScreen = splitScreen
 	tmp.other.lastPoints = player.points
