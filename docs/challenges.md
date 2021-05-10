@@ -15,7 +15,7 @@ challenges: {
     11: {
         name: "Ouch",
         challengeDescription: "description of ouchie",
-        goal: new Decimal(100),
+        canComplete: function() {return player.points.gte(100)},
         etc
     },
     etc
