@@ -21,8 +21,8 @@ function commaFormat(num, precision) {
 
 function regularFormat(num, precision) {
     if (num === null || num === undefined) return "NaN"
-    if (num.mag < 0.001) return (0).toFixed(precision)
-    if (num.mag < 0.01) precision = 3
+    if (num.mag < 0.0001) return (0).toFixed(precision)
+    if (num.mag < 0.1 && precision !==0) precision = 4
     return num.toStringWithDecimalPlaces(precision)
 }
 
@@ -54,7 +54,7 @@ function format(decimal, precision = 2, small) {
     else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
     else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
     else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
-    else if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
+    else if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision)
     else if (decimal.eq(0)) return (0).toFixed(precision)
 
     decimal = invertOOM(decimal)

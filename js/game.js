@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.3",
+	tmtNum: "2.5.4",
 	tmtName: "Dreams Really Do Come True"
 }
 

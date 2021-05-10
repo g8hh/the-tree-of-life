@@ -1,8 +1,10 @@
 # The Modding Tree changelog:
 
+# v2.5.4 - 
 - Added a setting to always use single-tab mode.
-- Added directMult, which multiplies gain after exponents and softcaps. It actually multiplies gain for static layers.
+- Added directMult, which multiplies prestige gain after exponents and softcaps. It actually multiplies gain for static layers.
 - Added onEnter and onExit for challenges.
+- Improved displaying numbers between 0.0001 and 0.1
 - Added documentation on how gainMult/Exp work for static layers.
 
 # v2.5.3 - 5/8/21
