@@ -204,6 +204,7 @@ function load() {
 	setupTemp();
 	updateTemp();
 	updateTemp();
+	updateTemp()
 	loadVue();
 }
 

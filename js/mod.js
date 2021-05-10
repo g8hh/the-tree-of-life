@@ -18,14 +18,17 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 1e80 E Points<br><br>
+		- 1e162 E Points<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.045</h3><br>
+	<br><h3 style='color: #CC0000'>v0.047</h3><br>
+		- Added a E buyable.<br>
+		- Added a Nitrogen upgrade.<br>
+	<br><h3 style='color: #CC0000'>v0.046</h3><br>
 		- Added 2 E buyables.<br>
 		- Added a Nitrogen upgrade.<br>
 		- Improved E Point (shift on) display.<br>
