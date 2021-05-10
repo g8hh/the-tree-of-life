@@ -221,6 +221,8 @@ addLayer("c", {
                     content: ["upgrades", ["display-text", function() {return "confirmed"}]]
                 },
                 second: {
+                    embedLayer: "f",
+
                     content: [["upgrade", 11],
                             ["row", [["upgrade", 11], "blank", "blank", ["upgrade", 11],]],
                         

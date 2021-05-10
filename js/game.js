@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.2.1",
+	tmtNum: "2.5.3",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -418,6 +418,7 @@ var interval = setInterval(function() {
 	updateTemp();
 	updateOomps(diff);
 	updateWidth()
+	updateTabFormats()
 	gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(0.05) 

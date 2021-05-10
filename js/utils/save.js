@@ -190,6 +190,7 @@ function load() {
 	setupTemp();
 	updateTemp();
 	updateTemp();
+	updateTabFormats()
 	loadVue();
 }
 function setupModInfo() {

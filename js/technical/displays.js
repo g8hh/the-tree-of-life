@@ -119,3 +119,76 @@ function constructBarStyle(layer, id) {
 	}
 	return style
 }
+
+function constructTabFormat(layer, id, family){
+	let tabTemp, tabLayer, tabFunc, location, key
+	if (id === undefined){
+		tabTemp = tmp[layer].tabFormat
+		tabLayer = layers[layer].tabFormat
+		tabFunc = funcs[layer].tabFormat
+		location = tmp[layer]
+		key = "tabFormat"
+	}
+	else if (family === undefined) {
+		tabTemp = tmp[layer].tabFormat[id].content
+		tabLayer = layers[layer].tabFormat[id].content
+		tabFunc = funcs[layer].tabFormat[id].content
+		location = tmp[layer].tabFormat[id]
+		key = "content"
+
+	}
+	else {
+		tabTemp = tmp[layer].microtabs[family][id].content
+		tabLayer = layers[layer].microtabs[family][id].content
+		tabFunc = funcs[layer].microtabs[family][id].content
+		location = tmp[layer].microtabs[family][id]
+		key = "tabFormat"
+
+	}
+	if (isFunction(tabLayer)) {
+		
+		let bound = tabLayer.bind(layers[layer])
+		Vue.set(tabTemp, key, bound())
+	}
+	updateTempData(tabLayer, tabTemp, tabFunc)
+	return tabTemp
+}
+
+function updateTabFormats() {
+	updateTabFormat(player.tab)
+	updateTabFormat(player.navTab)
+}
+
+function updateTabFormat(layer) {
+	if (layers[layer]?.tabFormat === undefined) return
+
+	let tab = player.subtabs[layer]?.mainTabs
+	if (isFunction(layers[layer].tabFormat)) {
+		Vue.set(temp[layer], 'tabFormat', layers[layer].tabFormat())
+	}
+	else if (Array.isArray(layers[layer].tabFormat)) {
+		Vue.set(temp[layer], 'tabFormat', constructTabFormat(layer))
+	}
+	else if (isPlainObject(layers[layer].tabFormat)) {
+		if (layers[layer].tabFormat[tab].embedLayer === undefined)
+		Vue.set(temp[layer].tabFormat[tab], 'content', constructTabFormat(layer, tab))
+	}
+
+	// Check for embedded layer
+	if (isPlainObject(tmp[layer].tabFormat) && tmp[layer].tabFormat[tab].embedLayer !== undefined) { 
+		constructTabFormat(tmp[layer].tabFormat[tab].embedLayer)
+	}
+
+	// Update microtabs
+	for (family in layers[layer].microtabs) {
+		tab = player.subtabs[layer][family]
+
+		if (tmp[layer].microtabs[family][tab]) {
+
+			if (tmp[layer].microtabs[family][tab].embedLayer)
+				constructTabFormat(tmp[layer].microtabs[family][tab].embedLayer)
+			else
+				constructTabFormat(layer, tab, family)
+		}
+	}
+}
