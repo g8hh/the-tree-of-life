@@ -95,7 +95,10 @@ addLayer("c", {
                 rewardDisplay() { return format(this.rewardEffect())+"x" },
                 countsAs: [12, 21], // Use this for if a challenge includes the effects of other challenges. Being in this challenge "counts as" being in these.
                 rewardDescription: "Says hi",
-                onComplete() {console.log("hiii")} // Called when you complete the challenge
+                onComplete() {console.log("hiii")}, // Called when you successfully complete the challenge
+                onEnter() {console.log("So challenging")},
+                onExit() {console.log("Sweet freedom!")},
+
             },
         }, 
         upgrades: {

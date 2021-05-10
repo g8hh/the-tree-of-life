@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+- Added directMult, which multiplies gain after exponents and softcaps. It actually multiplies gain for static layers.
+- Added onEnter and onExit for challenges.
+- Added documentation on how gainMult/Exp work for static layers.
+
 # v2.5.3 - 5/8/21
 - Improved performance of tab formats and bars.
 - Respec confirmation settings are now kept on resets.

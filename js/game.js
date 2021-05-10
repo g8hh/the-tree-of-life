@@ -264,8 +264,10 @@ function startChallenge(layer, x) {
 		enter = true
 	}	
 	doReset(layer, true)
-	if(enter) player[layer].activeChallenge = x
-
+	if(enter) {
+		player[layer].activeChallenge = x
+		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])
+	}
 	updateChallengeTemp(layer)
 }
 
@@ -301,6 +303,7 @@ function completeChallenge(layer, x) {
 	let completions = canCompleteChallenge(layer, x)
 	if (!completions){
 		 player[layer].activeChallenge = null
+		 run(layers[layer].challenges[x].onExit, layers[layer].challenges[x])
 		return
 	}
 	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
@@ -310,6 +313,7 @@ function completeChallenge(layer, x) {
 		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, layers[layer].challenges[x])
 	}
 	player[layer].activeChallenge = null
+	run(layers[layer].challenges[x].onExit, layers[layer].challenges[x])
 	updateChallengeTemp(layer)
 }
 

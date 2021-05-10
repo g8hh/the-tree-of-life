@@ -48,6 +48,10 @@ Individual Challenges can have these features:
 
 - onComplete() - **optional**. this function will be called when the challenge is completed when previously incomplete.
 
+- onEnter() - **optional**. this function will be called when entering the challenge
+
+- onExit() - **optional**. this function will be called when exiting the challenge in any way
+
 - countsAs: **optional**. If a challenge combines the effects of other challenges in this layer, you can use this. An array of challenge ids. The player is effectively in all of those challenges when in the current one.
 
 - completionLimit: **optional**. the amount of times you can complete this challenge. Default is 1 completion.
