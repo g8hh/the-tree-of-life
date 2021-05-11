@@ -9,8 +9,6 @@ function getPointGen() {
                                         gain = gain.times(tmp.tokens.buyables[11].effect)
                                         gain = gain.times(tmp.n.effect)
 
-
-
         if (hasUpgrade("h", 25))        gain = gain.pow(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        gain = gain.pow(tmp.o.upgrades[13].effect)
                                         gain = gain.pow(tmp.tokens.buyables[41].effect)
@@ -28,10 +26,10 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                     139530,  140140,  140750,  176444,  177720,
                     205125,  226800,  259560,  296740,  297910,
                     335080,  336363,  357900,  398888,  405900,
-                    432950,  445250,  462700,  467500,  542000,
-                    692000,  774000,  793000,  1085e3,  1380e3,
-                    1804e3,  1870e3,  1996e3,  2044e3,  2354e3,
-                    3807e3,  4666e3,  5383e3,  9500e3,  9871e3,
+                    433950,  445000,  462700,  467500,  542000,
+                    692000,  774000,  793000,  1084e3,  1366e3,
+                    1810e3, 18697e2,  1996e3,  2044e3, 23519e2,
+                    3805e3,  4666e3,  5383e3,  9500e3,  9871e3,
                    11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
                    16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
                    60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
@@ -3853,9 +3851,9 @@ addLayer("mini", {
                         data.autotime = 0
                 }
 
-                if (!tmp.mini.tabFormat.C.unlocked) player.mini.c_points.lastRollTime = new Date().getTime()
+                if (!tmp.mini.tabFormat.C.unlocked) player.mini.c_points.lastRollTime = player.time
                 if (hasUpgrade("mini", 12)) {
-                        let timeSinceLast = new Date().getTime() - player.mini.c_points.lastRollTime 
+                        let timeSinceLast = player.time - player.mini.c_points.lastRollTime 
                         if (timeSinceLast >= 1000 * tmp.mini.upgrades[12].timeNeeded) {
                                 layers.mini.clickables[41].onClick()
                         }
@@ -4022,6 +4020,8 @@ addLayer("mini", {
         c_points: {
                 getGainMult(){ // cpoint gain c point gain cpt gain
                         let ret = new Decimal(1)
+
+                        if (player.dev.cPointMult != undefined) ret = ret.times(player.dev.cPointMult)
 
                         if (player.hardMode)            ret = ret.div(4)
                                                         ret = ret.times(tmp.mini.buyables[72].effect)
@@ -4284,9 +4284,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[11].effect) + " to Atomic Hydrogen gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 11)) + " A Points</b><br>"
-                                let eformula = format(tmp.mini.buyables[11].base) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.mini.buyables[11].base) + "^x"
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4343,9 +4342,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[12].effect) + " to A Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 12)) + " A Points</b><br>"
-                                let eformula = format(tmp.mini.buyables[12].base) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.mini.buyables[12].base) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4402,9 +4400,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[13].effect) + " to Deuterium</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 13)) + " A Points</b><br>"
-                                let eformula = format(tmp.mini.buyables[13].base) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.mini.buyables[13].base) + "^x" 
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4468,13 +4465,12 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[21].effect) + " to <bdi style='color:#CC0033'>A</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 21)) + " A Points</b><br>"
-                                let eformula = "2*x" //+ getBuyableEffectString(layer, id)
+                                let eformula = "2*x"
                                 if (hasUpgrade("h", 53)) eformula = "2*x*ln(x)"
                                 if (hasUpgrade("h", 64)) eformula = "2*x*(ln(x))^2"
 
                                 eformula = eformula.replace("2", format(tmp.mini.buyables[21].initBase))
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4531,10 +4527,9 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[23].effect) + " to Red, Orange, and Yellow base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 23)) + " A Points</b><br>"
-                                let eformula = "x" //+ getBuyableEffectString(layer, id)
+                                let eformula = "x"
                                 if (hasUpgrade("h", 64)) eformula = "log10(x)*x<br>" + format(getBuyableBase("mini", 23)) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4592,9 +4587,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[61].effect) + " to Life Points</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 61)) + " A Points</b><br>"
-                                let eformula = format(tmp.mini.buyables[61].base) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.mini.buyables[61].base) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4651,10 +4645,9 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[62].effect) + " to A Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 62)) + " A Points</b><br>"
-                                let eformula = "ln(10+[A Points])^x<br>" + format(tmp.mini.buyables[62].base) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = "ln(10+[A Points])^x<br>" + format(tmp.mini.buyables[62].base) + "^x" 
                                 if (hasUpgrade("c", 14)) eformula = eformula.replace("ln", "log2")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4710,9 +4703,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[63].effect) + " to Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 63)) + " A Points</b><br>"
-                                let eformula = format(tmp.mini.buyables[63].base) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.mini.buyables[63].base) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4776,9 +4768,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
-                                let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4834,9 +4825,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[32].effect) + " to B Points gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 32)) + " B Points</b><br>"
-                                let eformula = "log2([B Points] + 10)^x<br>" + format(getBuyableBase("mini", 32)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "log2([B Points] + 10)^x<br>" + format(getBuyableBase("mini", 32)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4892,9 +4882,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[33].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 33)) + " B Points</b><br>"
-                                let eformula = ".1*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = ".1*x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -4950,9 +4939,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[41].effect) + " to B Points gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 41)) + " B Points</b><br>"
-                                let eformula = "<bdi style='color:#CC0033'>B</bdi>^x<br>" + format(getBuyableBase("mini", 41)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "<bdi style='color:#CC0033'>B</bdi>^x<br>" + format(getBuyableBase("mini", 41)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5008,9 +4996,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[42].effect) + " to B Points and Hydrogen gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 42)) + " B Points</b><br>"
-                                let eformula = "ln(log8([B points]))^x<br>" + format(getBuyableBase("mini", 42)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "ln(log8([B points]))^x<br>" + format(getBuyableBase("mini", 42)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5066,9 +5053,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[43].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 43)) + " B Points</b><br>"
-                                let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 43), 3) + "*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 43), 3) + "*x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5124,9 +5110,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[51].effect) + " to A Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 51)) + " B Points</b><br>"
-                                let eformula = "ln(ln([B Points]))^x<br>" + format(getBuyableBase("mini", 51), 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "ln(ln([B Points]))^x<br>" + format(getBuyableBase("mini", 51), 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5186,10 +5171,9 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[52].effect) + " to Violet base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 52)) + " B Points</b><br>"
-                                let eformula = ".01*x" //+ getBuyableEffectString(layer, id)
+                                let eformula = ".01*x"
                                 if (hasUpgrade("c", 13)) eformula = ".01*ln(e+sqrt(x)/10)*x<br>" + format(getBuyableBase("mini", 52), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5245,9 +5229,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 53)) + " B Points</b><br>"
-                                let eformula = "(1+x/30)*x<br>" + format(getBuyableBase("mini", 53)) + "*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "(1+x/30)*x<br>" + format(getBuyableBase("mini", 53)) + "*x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5366,9 +5349,8 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 72)) + " C Points</b><br>"
                                 let init = "log10(C Points)<sup>x</sup>"
                                 if (hasUpgrade("tokens", 91)) init = "ln(C Points)<sup>x</sup>"
-                                let eformula = init + "<br>" + format(getBuyableBase("mini", 72)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = init + "<br>" + format(getBuyableBase("mini", 72)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5410,7 +5392,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 72).gt(0)
                         },
                         base(){
-                                return player.tokens.total.max(1).min(100)
+                                return player.tokens.total.max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[73].base.pow(player.mini.buyables[73])
@@ -5425,9 +5407,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[73].effect) + " to C Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 73)) + " C Points</b><br>"
-                                let eformula = "min(100, tokens)<sup>x</sup><br>" + format(getBuyableBase("mini", 73)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "tokens<sup>x</sup><br>" + format(getBuyableBase("mini", 73)) + "^x" 
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5490,9 +5471,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 81)) + " C Points</b><br>"
-                                let eformula = format(getBuyableBase("mini", 81)) + "*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(getBuyableBase("mini", 81)) + "*x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5555,9 +5535,8 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 82)) + " C Points</b><br>"
                                 let baseStr = "<bdi style='color:#CC0033'>C</bdi>"
                                 if (hasUpgrade("mini", 43)) baseStr = "(" + baseStr + " + x)"
-                                let eformula = baseStr + "<sup>x</sup><br>" + format(getBuyableBase("mini", 82)) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = baseStr + "<sup>x</sup><br>" + format(getBuyableBase("mini", 82)) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5619,11 +5598,10 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 83)) + " C Points</b><br>"
-                                let eformula = "(log10(Oxygen))<sup>x</sup><br>" + format(getBuyableBase("mini", 83)) + "^x" //+ getBuyableEffectString(layer, id)
+                                let eformula = "(log10(Oxygen))<sup>x</sup><br>" + format(getBuyableBase("mini", 83)) + "^x"
                                 if (hasUpgrade("mini", 23)) eformula = eformula.replace("log10", "ln")
                                 if (hasMilestone("tokens", 24)) eformula = eformula.replace("ln", "log2")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -5684,9 +5662,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 91)) + " C Points</b><br>"
-                                let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 91)) + "*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 91)) + "*x" 
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -6069,9 +6046,8 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[111].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 111)) + " C Points</b><br>"
-                                let eformula = "(1+x/500)*x<br>" + format(getBuyableBase("mini", 111),3) + "*x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = "(1+x/500)*x<br>" + format(getBuyableBase("mini", 111),3) + "*x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -8068,30 +8044,26 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 92))   ret = .25
                                 if (hasUpgrade("mini", 42))     ret = .1
                                 if (hasUpgrade("mini", 43))     ret = .05
-                                console.log(ret)
                                 return ret
                         },
                         display(){
                                 let last = player.mini.c_points.lastRollTime
-                                let now = new Date().getTime()
+                                let now = player.time
                                 let rem = (now - last)/1000
-                                console.log(now)
                                 let req = tmp.mini.clickables[41].timeRequired
                                 let a = "Time until next spin: " + formatTime(Math.max(0, req-rem)) + "<br>"
-                                let b = ""
-                                console.log(req-rem)
-                                return a + b
+                                return a
                         },
                         unlocked(){
                                 return true
                         },
                         canClick(){
                                 let req = tmp.mini.clickables[41].timeRequired
-                                return new Date().getTime() - player.mini.c_points.lastRollTime >= 1000 * req
+                                return player.time - player.mini.c_points.lastRollTime >= 1000 * req
                         },
                         onClick(){
                                 let data = player.mini.c_points
-                                data.lastRollTime = new Date().getTime()
+                                data.lastRollTime = player.time
                                 data.lastRoll = getRandomSlotValue(tmp.mini.clickables.unlockedSlots)
                                 //then give money and stuff
                                 //getRewardAmount
@@ -8164,6 +8136,7 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Corn</bdi>"
                         },
                         timeNeeded(){
+                                if (player.dev.fastCorn) return .1
                                 let ret = 10
 
                                 if (hasUpgrade("mini", 14))     ret = 9
@@ -8187,7 +8160,7 @@ addLayer("mini", {
                                 a += formatWhole(timeNeed) + " seconds<br>"
 
                                 let last = player.mini.c_points.lastRollTime
-                                let now = new Date().getTime()
+                                let now = player.time
 
                                 let sec = (now-last)/1000
 
@@ -9129,11 +9102,14 @@ addLayer("mini", {
                                 ["display-text", function(){
                                         if (player.tab != "mini") return
                                         if (player.subtabs.mini.mainTabs != "C") return 
+                                        if (!shiftDown) return 
 
-                                        let a = "Each character has a given value, and the more of said character you get,<br> the more powerful its value is."
+                                        let a = "Each character has a given value, and the more of said character you get,"
+                                        a += "<br> the more powerful its value is."
 
-                                        let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>Finally, point gain is the product of all above values time multipliers."
-                                        if (shiftDown) b += "<br>Multipliers: x" + format(tmp.mini.c_points.getGainMult) + " C Point gain"
+                                        let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>"
+                                        b += "Finally, point gain is the product of all above values time multipliers."
+                                        b += "<br>Multipliers: x" + format(tmp.mini.c_points.getGainMult) + " C Point gain"
 
                                         return a + b
                                 }],
@@ -9310,7 +9286,16 @@ addLayer("tokens", {
                 return new Decimal(0)
         },
         shouldNotify(){
-                return tmp.tokens.canReset
+                if (tmp.tokens.canReset) return true
+                let x = ["11", "12", "13", "21", "22", 
+                         "23", "31", "32", "33", "41", 
+                         "42", "43", "51", "52", "53", 
+                         "61", "62", "63"]
+                for (i in x){
+                        id = x[i]
+                        if (!tmp.tokens.buyables[id].canAfford) return false
+                }
+                return true
         },
         getNextAt(){
                 let log_costs = TOKEN_COSTS
@@ -9580,9 +9565,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[11].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[11].base, 3) + "^x" 
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9637,9 +9621,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[12].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[12].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9689,9 +9672,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9741,9 +9723,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 21)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[21].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[21].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9801,9 +9782,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 22)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9856,9 +9836,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[23].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[23].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9915,9 +9894,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[31].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[31].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -9968,9 +9946,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[32].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[32].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10023,9 +10000,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 33)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[33].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[33].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10075,9 +10051,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[41].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[41].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10127,9 +10102,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 42)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10179,9 +10153,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 43)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[43].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[43].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10231,9 +10204,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 51)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[51].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[51].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10285,9 +10257,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 52)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[52].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[52].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10339,9 +10310,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 53)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[53].base, 3, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[53].base, 3, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10393,9 +10363,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 61)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[61].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[61].base, 3) + "^x" 
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10447,9 +10416,8 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 62)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[62].base, 3) + "^x" //+ getBuyableEffectString(layer, id)
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                let eformula = format(tmp.tokens.buyables[62].base, 3) + "^x"
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -10499,12 +10467,11 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 63)) + " Tokens</b><br>"
-                                let eformula = ".2-.2/(1+x/20)" //+ getBuyableEffectString(layer, id)
+                                let eformula = ".2-.2/(1+x/20)"
                                 if (hasUpgrade("c", 24)) eformula = eformula.replace("20", "10")
                                 if (hasUpgrade("c", 25)) eformula = eformula.replace("10", "5")
                                 if (hasUpgrade("n", 25)) eformula = eformula.replace("x/5", "x")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2

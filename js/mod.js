@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.047",
+	num: "0.048",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.048</h3><br>
+		- Rebalanced until e20k C Points.<br>
+		- Made tokens layer notify you when you can afford all 18 buyables.<br>
+		- Added player.dev.cPointMult and player.dev.fastCorn <br>
 	<br><h3 style='color: #CC0000'>v0.047</h3><br>
 		- Added a E buyable.<br>
 		- Added a Nitrogen upgrade.<br>
@@ -295,6 +299,11 @@ function addedPlayerData() { return {
 	lastLettersPressed: [],
 	targetWord: "johnson",
 	wordsSpelled: 0,
+	currentTime: new Date().getTime(),
+	dev: {
+		fastCorn: false,
+		cPointMult: undefined,
+	}
 }}
 
 // Display extra things at the top of the page
