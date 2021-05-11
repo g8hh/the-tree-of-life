@@ -398,8 +398,8 @@ addLayer("f", {
     exponent: 0.5,
     base: 3,
     roundUpCost: true,
-    canBuyMax() {return hasAchievement('a', 13)},
-    directMult() {return new Decimal(player.c.otherThingy)},
+    canBuyMax() {return false},
+    //directMult() {return new Decimal(player.c.otherThingy)},
 
     row: 1,
     layerShown() {return true}, 

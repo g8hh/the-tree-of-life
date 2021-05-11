@@ -1,6 +1,6 @@
 # Achievements
 
-Achievements are awarded to the player when they meet a certain goal, and optionally give some benefit. Currently they are pretty basic, but additional features will be added later to help.
+Achievements are awarded to the player when they meet a certain goal, and optionally give some benefit.
 
 You can make global achievements by putting them in a side layer by making its row equal to "side" instead of a number.
 
