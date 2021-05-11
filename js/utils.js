@@ -166,10 +166,18 @@ function buyBuyable(layer, id) {
 function clickClickable(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].clickables[id].unlocked) return
-	if (!tmp[layer].clickables[id].canClick) return
+	if (!tmp[layer].clickables[id].getCanClick) return
 
 	run(layers[layer].clickables[id].onClick, layers[layer].clickables[id])
 	updateClickableTemp(layer)
+}
+
+function clickGrid(layer, id) {
+	if (!player[layer].unlocked) return
+	if (!run(layers[layer].grid.getUnlocked, layers[layer].grid, id)) return
+	if (!gridRun(layer, 'getCanClick', player[layer].grid[id], id)) return
+
+	gridRun(layer, 'onClick', player[layer].grid[id], id)
 }
 
 // Function to determine if the player is in a challenge
@@ -434,4 +442,13 @@ function run(func, target, args = null) {
 	}
 	else
 		return func;
+}
+
+function gridRun(layer, func, data, id) {
+	if (isFunction(layers[layer].grid[func])) {
+		let bound = layers[layer].grid[func].bind(layers[layer].grid)
+		return bound(data, id)
+	}
+	else
+		return layers[layer].grid[func];
 }

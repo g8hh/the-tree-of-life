@@ -524,5 +524,32 @@ addLayer("a", {
                 onComplete() {console.log("Bork bork bork!")}
             },
         },
-    }, 
+        grid: {
+            maxRows: 3,
+            rows: 2,
+            cols: 2,
+            getStartData(id) {
+                return id
+            },
+            getUnlocked(id) { // Default
+                return true
+            },
+            getCanClick(data, id) {
+                return true
+            },
+            getStyle(data, id) {
+                return {'background-color': '#'+ (data*1234%999999)}
+            },
+            onClick(data, id) {
+                player[this.layer].grid[id]++
+            },
+            getTitle(data, id) {
+                return "#" + id
+            },
+            getDisplay(data, id) {
+                return data 
+            },
+        } ,
+        midsection: ["grid", "blank"]
+    }
 )

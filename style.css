@@ -267,6 +267,22 @@ h1, h2, h3, b, input {
 	font-size: 10px;
 }
 
+.tile {
+	height: 80px;
+	width: 80px;
+	border-radius: 12%;
+	border: 2px solid;
+	border-color: rgba(0, 0, 0, 0.125);
+	font-size: 10px;
+	overflow: visible;
+}
+
+.tile:hover {
+	box-shadow: 0 0 10px var(--points);
+	transform: scale(1.1, 1.1);
+	z-index: 7;
+}
+
 .upgBig {
 	height: 200px;
 	width: 200px;
