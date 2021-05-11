@@ -7233,7 +7233,7 @@ addLayer("mini", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " interations</b><br>"
+                                let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " iterations</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
 
                                 if (!shiftDown) {
