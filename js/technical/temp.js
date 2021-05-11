@@ -42,8 +42,8 @@ function setupTemp() {
 	}
 
 	tmp.other = {
-		lastPoints: player.points || new Decimal(0),
-		oomps: new Decimal(0),
+		lastPoints: player.points || decimalZero,
+		oomps: decimalZero,
     }
 
 	updateWidth()
@@ -74,7 +74,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 		}
 		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
 			funcsData[item] = layerData[item]
-			tmpData[item] = new Decimal(1) // The safest thing to put probably?
+			tmpData[item] = decimalOne // The safest thing to put probably?
 		} else {
 			tmpData[item] = layerData[item]
 		}

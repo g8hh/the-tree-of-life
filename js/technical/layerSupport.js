@@ -165,9 +165,9 @@ function setupLayer(layer){
     if(!layers[layer].componentStyles) layers[layer].componentStyles = {}
     if(layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1)
     if(layers[layer].unlockOrder === undefined) layers[layer].unlockOrder = []
-    if(layers[layer].gainMult === undefined) layers[layer].gainMult = new Decimal(1)
-    if(layers[layer].gainExp === undefined) layers[layer].gainExp = new Decimal(1)
-    if(layers[layer].directMult === undefined) layers[layer].directMult = new Decimal(1)
+    if(layers[layer].gainMult === undefined) layers[layer].gainMult = decimalOne
+    if(layers[layer].gainExp === undefined) layers[layer].gainExp = decimalOne
+    if(layers[layer].directMult === undefined) layers[layer].directMult = decimalOne
     if(layers[layer].type === undefined) layers[layer].type = "none"
     if(layers[layer].base === undefined || layers[layer].base <= 1) layers[layer].base = 2
     if(layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7")
