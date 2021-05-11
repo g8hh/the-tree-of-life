@@ -5,6 +5,8 @@
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none;
 }
 
 *:focus {
