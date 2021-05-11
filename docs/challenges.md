@@ -15,7 +15,7 @@ challenges: {
     11: {
         name: "Ouch",
         challengeDescription: "description of ouchie",
-        goal: new Decimal(100),
+        canComplete: function() {return player.points.gte(100)},
         etc
     },
     etc
@@ -47,6 +47,10 @@ Individual Challenges can have these features:
 - unlocked(): **optional**. A function returning a bool to determine if the challenge is visible or not. Default is unlocked.
 
 - onComplete() - **optional**. this function will be called when the challenge is completed when previously incomplete.
+
+- onEnter() - **optional**. this function will be called when entering the challenge
+
+- onExit() - **optional**. this function will be called when exiting the challenge in any way
 
 - countsAs: **optional**. If a challenge combines the effects of other challenges in this layer, you can use this. An array of challenge ids. The player is effectively in all of those challenges when in the current one.
 

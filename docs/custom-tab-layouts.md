@@ -1,6 +1,6 @@
 # Custom tab layouts
 
-Note: If you are using subtabs, `tabFormat` is used differently, but you still use the same format within each subtabs. [See here for more on subtabs](subtabs-and-microtabs.md).
+Note: If you are using subtabs, `tabFormat` is used differently, but the same format is used for defining their layouts. [See here for more on subtabs](subtabs-and-microtabs.md).
 
 Custom tab layouts can be used to do basically anything in a tab window, especially combined with the "style" layer feature. The `tabFormat` feature is an array of things, like this:
 

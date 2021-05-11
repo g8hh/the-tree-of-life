@@ -1,6 +1,32 @@
 # The Modding Tree changelog:
 
-# v2.5: Dreams Really Do Come True - 5/7/21
+# v2.5.4 - 5/10/21
+- Added a setting to always use single-tab mode.
+- Added directMult, which multiplies prestige gain after exponents and softcaps. It actually multiplies gain for static layers.
+- Added onEnter and onExit for challenges.
+- Improved displaying numbers between 0.0001 and 0.1.
+- Added documentation on how gainMult/Exp work for static layers.
+- Fixed a visual issue on mobile, thanks to thepaperpilot.
+- Improved documentation in general.
+
+# v2.5.3 - 5/8/21
+- Improved performance of tab formats and bars.
+- Respec confirmation settings are now kept on resets.
+- Improved compatibility with older browsers.
+- Fixed missing pixel on vertical bars.
+
+# v2.5.2.1 - 5/7/21
+- Fixed microtabs making layers highlight incorrectly.
+
+# v2.5.2 - 5/7/21
+- Added glowColor for subtabs.
+- Improved the display for extremely small numbers.
+- Fixed issues in the buyable docs.
+
+# v2.5.1 - 5/7/21
+- Fixed dynamic things in tabFormat not updating.
+
+## v2.5: Dreams Really Do Come True - 5/7/21
 - Optimizations, hopefully a significant amount.
 - Added OOM/s point gen display at high values (thanks to Ducdat!)
 - Only one tab will display if the window is not wide enough (also thanks to Ducdat!)
@@ -14,7 +40,8 @@
 - Locked (not yet visible) milestones no longer take up space. Also fixed hidden milestones taking a tiny bit of space.
 - Re-centered respec buttons.
 - Force-displayed tooltips are not hidden by resets.
-- Added formatting support for very small numbers. Disabled in most places by default because rounding errors can cause issues. Access it with formatSmall, or enable it globally by adding "allowSmall: true" to modInfo.
+- Added formatting support for very small numbers. Disabled in most places by default because rounding errors might cause issues. Access it with formatSmall, or enable it globally by adding "allowSmall: true" to modInfo.
+
 
 # v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.

@@ -95,7 +95,10 @@ addLayer("c", {
                 rewardDisplay() { return format(this.rewardEffect())+"x" },
                 countsAs: [12, 21], // Use this for if a challenge includes the effects of other challenges. Being in this challenge "counts as" being in these.
                 rewardDescription: "Says hi",
-                onComplete() {console.log("hiii")} // Called when you complete the challenge
+                onComplete() {console.log("hiii")}, // Called when you successfully complete the challenge
+                onEnter() {console.log("So challenging")},
+                onExit() {console.log("Sweet freedom!")},
+
             },
         }, 
         upgrades: {
@@ -221,6 +224,8 @@ addLayer("c", {
                     content: ["upgrades", ["display-text", function() {return "confirmed"}]]
                 },
                 second: {
+                    embedLayer: "f",
+
                     content: [["upgrade", 11],
                             ["row", [["upgrade", 11], "blank", "blank", ["upgrade", 11],]],
                         
@@ -302,6 +307,8 @@ addLayer("c", {
                         function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
+                glowColor: "blue",
+
             },
             thingies: {
                 prestigeNotify: true,
@@ -391,7 +398,8 @@ addLayer("f", {
     exponent: 0.5,
     base: 3,
     roundUpCost: true,
-    canBuyMax() {return hasAchievement('a', 13)},
+    canBuyMax() {return false},
+    //directMult() {return new Decimal(player.c.otherThingy)},
 
     row: 1,
     layerShown() {return true}, 
