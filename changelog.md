@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-# v2.5.5 - 5/
+# v2.5.5 - 5/12/21
 - Added grids! They are a grid of buttons which behave the same, but have their own data. Good for inventory grids, map tiles, and more!
 - Added "marked" feature to add a mark to a node. Can be an image instead of a star. (Originally by Jacorb)
 - Added "layer-proxy" component that lets you use components from another layer.
