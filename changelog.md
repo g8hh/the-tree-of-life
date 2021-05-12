@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+- Added grids! Description not ready
+- Added the ability to display non-whole numbers in main-display.
+
 # v2.5.4 - 5/10/21
 - Added a setting to always use single-tab mode.
 - Added directMult, which multiplies prestige gain after exponents and softcaps. It actually multiplies gain for static layers.

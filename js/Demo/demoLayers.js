@@ -544,7 +544,7 @@ addLayer("a", {
                 player[this.layer].grid[id]++
             },
             getTitle(data, id) {
-                return "#" + id
+                return "Gridable #" + id
             },
             getDisplay(data, id) {
                 return data 

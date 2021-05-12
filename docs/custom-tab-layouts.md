@@ -35,7 +35,7 @@ These are the existing components, but you can create more in [components.js](/j
 
 - column: Display a list of components vertically. The argument is an array of components in the tab layout format. This is useful to display columns within a row.
 
-- main-display: The text that displays the main currency for the layer and its effects.
+- main-display: The text that displays the main currency for the layer and its effects. The argument is the amount of precision to use, allowing it to display non-whole numbers.
 
 - resource-display: The text that displays the currency that this layer is based on, as well as the best and/or total values for this layer's prestige currency (if they are put in `startData` for this layer).
 
