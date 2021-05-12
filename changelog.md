@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.5.5.1 - 5/12/21
+- Fixed clickables.
+
 # v2.5.5 - 5/12/21
 - Added grids! They are a grid of buttons which behave the same, but have their own data. Good for inventory grids, map tiles, and more!
 - Added "marked" feature to add a mark to a node. Can be an image instead of a star. (Originally by Jacorb)

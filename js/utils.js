@@ -180,7 +180,7 @@ function buyBuyable(layer, id) {
 function clickClickable(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].clickables[id].unlocked) return
-	if (!tmp[layer].clickables[id].getCanClick) return
+	if (!tmp[layer].clickables[id].canClick) return
 
 	run(layers[layer].clickables[id].onClick, layers[layer].clickables[id])
 	updateClickableTemp(layer)
