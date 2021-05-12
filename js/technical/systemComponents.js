@@ -50,6 +50,7 @@ var systemComponents = {
 				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
 			)"></tooltip>
+			<node-mark :layer='layer' :data='layers[layer].marked'></node-mark></span>
 		</button>
 		`
 	},
@@ -177,5 +178,16 @@ var systemComponents = {
 		props: ['text'],
 		template: `<div class="tooltip" v-html="text"></div>
 		`
+	},
+
+	'node-mark': {
+		props: ['layer', 'data'],
+		template: `<div v-if='data'>
+			<div v-if='data === true' class='star' style='position: absolute; left: -10px; top: -10px;'></div>
+			<img v-else class='mark' style='position: absolute; left: -25px; top: -10px;' v-bind:src="data"></div>
+		</div>
+		`
 	}
+
 }
+

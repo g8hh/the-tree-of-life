@@ -142,6 +142,8 @@ You can make almost any value dynamic by using a function in its place, includin
 - tooltip() / tooltipLocked(): **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
     If the value is "", the tooltip will be disabled.
 
+- marked: **optional** Adds a mark to the corner of the node. If it's "true" it will be a star, but it can also be an image URL.
+
 ## Other features
 
 - doReset(resettingLayer): **optional**. Is triggered when a layer on a row greater than or equal to this one does a reset. The default behavior is to reset everything on the row, but only if it was triggered by a layer in a higher row. `doReset` is always called for side layers, but for these the default behavior is to reset nothing.

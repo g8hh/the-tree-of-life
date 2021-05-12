@@ -524,7 +524,7 @@ function loadVue() {
 	})
 
 	// SYSTEM COMPONENTS
-
+	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])

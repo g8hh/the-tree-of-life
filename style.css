@@ -691,3 +691,51 @@ button > * {
 #treeTab td button {
     margin: 0 10px;
 }
+
+.mark {
+	position: relative;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	z-index: 10000;
+	margin-left: 0.9em;
+	margin-right: 0.9em;
+	margin-bottom: 1.2em;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0.7em solid transparent;
+	border-left: 0.3em solid transparent;
+	font-size: 10px;
+	overflow:auto
+}
+
+.star {
+	position: relative;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	z-index: 10000;
+	margin-left: 0.9em;
+	margin-right: 0.9em;
+	margin-bottom: 1.2em;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0.7em solid #ffcc00;
+	border-left: 0.3em solid transparent;
+	font-size: 10px;
+}
+
+.star:before, .star:after {
+	content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: .6em;
+    left: -1em;
+	border-right: 1em solid transparent;
+    border-bottom: 0.7em solid #ffcc00;
+    border-left: 1em solid transparent;
+	transform: rotate(-35deg);
+}
+
+.star:after {
+	transform: rotate(35deg);
+}

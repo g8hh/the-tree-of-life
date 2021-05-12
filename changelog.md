@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
 - Added grids! Description not ready
+- Added "marked" feature to add a mark to a node. Can be an image instead of a star.
 - Added the ability to display non-whole numbers in main-display.
 
 # v2.5.4 - 5/10/21
