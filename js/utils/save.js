@@ -206,6 +206,7 @@ function load() {
 	updateTemp();
 	updateTemp()
 	loadVue();
+	updateTemp()
 }
 
 function setupModInfo() {

@@ -2240,7 +2240,7 @@ addLayer("n", {
                 let x = new Decimal(1)
 
                 if (hasUpgrade("n", 24))        x = x.times(tmp.n.upgrades[24].effect)
-                if (hasUpgrade("mini", 73))     x = x.times(tmp.mini.d_points.getEffectiveFuelAux)
+                if (hasUpgrade("mini", 73))     x = x.times(tmp.mini.d_points.getEffectiveFuelAux.max(1))
                 if (hasUpgrade("mini", 81))     x = x.times(tmp.mini.d_points.getUpgrades)
                 if (hasUpgrade("n", 35)) {
                         let rede = tmp.n.upgrades[35].effect
@@ -2615,7 +2615,7 @@ addLayer("n", {
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e81 E Points<br>"
-                                let a = "Add .01 to " + makeBlue("a")
+                                let a = "Add .1 to " + makeBlue("a")
                                 if (!hasUpgrade("n", 42)) return b + a
                                 return a
                         },
@@ -2623,6 +2623,110 @@ addLayer("n", {
                         unlocked(){
                                 return hasUpgrade("n", 41)
                         }, // hasUpgrade("n", 42)
+                },
+                43: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(79) + "'>Nitrogen XVIII"
+                        },
+                        canAfford(){
+                                if (player.n.points.lt(tmp.n.upgrades[43].cost)) return false
+                                return player.mini.e_points.best.gte(1e162)
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let b = "Req: 1e162 E Points<br>"
+                                let a = "Add .1 to " + makeBlue("a") + " and Quadratic gains a ln(x) term"
+                                if (!hasUpgrade("n", 43)) return b + a
+                                return a
+                        },
+                        cost:() => new Decimal(1.24e35),
+                        unlocked(){
+                                return hasUpgrade("n", 42)
+                        }, // hasUpgrade("n", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(80) + "'>Nitrogen XIX"
+                        },
+                        canAfford(){
+                                if (player.n.points.lt(tmp.n.upgrades[44].cost)) return false
+                                return player.mini.e_points.best.gte(1e197)
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let b = "Req: 1e197 E Points<br>"
+                                let a = "Per existence of 1 add .01 to " + makeBlue("a")
+                                if (!hasUpgrade("n", 44)) return b + a
+                                return a
+                        },
+                        cost:() => new Decimal(1.58e36),
+                        unlocked(){
+                                return hasUpgrade("n", 43)
+                        }, // hasUpgrade("n", 44)
+                },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(81) + "'>Nitrogen XX"
+                        },
+                        canAfford(){
+                                if (player.n.points.lt(tmp.n.upgrades[45].cost)) return false
+                                return player.mini.e_points.best.gte(1e213)
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let b = "Req: 1e213 E Points<br>"
+                                let a = "log10(E Points) multiplies E Points and each existence of 0 past 21 multiplies E Point gain by 2"
+                                if (!hasUpgrade("n", 45)) return b + a
+                                return a
+                        },
+                        cost:() => new Decimal(1.80e36),
+                        unlocked(){
+                                return hasUpgrade("n", 44)
+                        }, // hasUpgrade("n", 45)
+                },
+                51: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(82) + "'>Nitrogen XXI"
+                        },
+                        canAfford(){
+                                if (player.n.points.lt(tmp.n.upgrades[51].cost)) return false
+                                return player.mini.e_points.best.gte(1e234)
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let b = "Req: 1e234 E Points<br>"
+                                let a = "Each upgrade in this row reapples the second part of Nitrogen XX and doubles E Point gain"
+                                if (!hasUpgrade("n", 51)) return b + a
+                                return a
+                        },
+                        cost:() => new Decimal(2.10e36),
+                        unlocked(){
+                                return hasUpgrade("n", 45)
+                        }, // hasUpgrade("n", 51)
+                },
+                52: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(83) + "'>Nitrogen XXII"
+                        },
+                        description(){
+                                if (player.tab != "n") return ""
+                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
+                                
+                                let a = "Autobuy E buyables"
+                                return a
+                        },
+                        cost:() => new Decimal(7e36),
+                        unlocked(){
+                                return hasUpgrade("n", 51)
+                        }, // hasUpgrade("n", 52)
                 },
         },
         milestones: {
@@ -3848,6 +3952,28 @@ addLayer("mini", {
                                                 player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                         }
                                 }
+
+                                let list4 = []
+                                if (hasUpgrade("n", 52)) list4 = [202, 203, 211, 212, 213, 221, 222]
+
+                                let bulk3 = new Decimal(1)
+                                
+                                bulk3 = bulk3.sub(1).floor()
+
+                                for (i = 0; i < list4.length; i++){
+                                        let id = list4[i]
+                                        if (!tmp.mini.buyables[id].unlocked) continue
+                                        if (!false && getBuyableAmount("mini", id).eq(0)) continue
+                                        if (tmp.mini.buyables[id].canAfford) {
+                                                layers.mini.buyables[id].buy()
+                                                if (!false) break
+                                                if (bulk3.eq(0)) continue
+                                                let maxAfford = tmp.mini.buyables[id].maxAfford
+                                                let curr = getBuyableAmount("mini", id)
+                                                let add = maxAfford.sub(curr).max(0).min(bulk3)
+                                                player.mini.buyables[id] = player.mini.buyables[id].plus(add)
+                                        }
+                                }
                         }
                 } else {
                         data.autotime = 0
@@ -4194,6 +4320,20 @@ addLayer("mini", {
                         if (player.hardMode)            ret = ret.div(4)
                                                         ret = ret.times(tmp.mini.buyables[213].effect)
                         if (hasUpgrade("n", 41))        ret = ret.times(player.n.points.max(10).log10())
+                        if (hasUpgrade("n", 45)) {
+                                l = player.mini.buyables[221].sub(21).max(0)
+                                let base = 1
+                                if (hasUpgrade("n", 51)) {
+                                        base ++
+                                        if (hasUpgrade("n", 52)) base ++
+                                        if (hasUpgrade("n", 53)) base ++
+                                        if (hasUpgrade("n", 54)) base ++
+                                        if (hasUpgrade("n", 55)) base ++
+                                                        ret = ret.times(Decimal.pow(2, base-1))
+                                }
+                                                        ret = ret.times(Decimal.pow(2, l.times(base)))
+                                                        ret = ret.times(player.mini.e_points.points.max(10).log10())
+                        }
 
                         return ret
                 },
@@ -4207,7 +4347,7 @@ addLayer("mini", {
                         let iter = data.getMaxInterations
 
                         let f = function(x){
-                                return a.div(1000).times(x).plus(b).times(x).plus(c).times(x).plus(d)
+                                return a.div(10000).times(x).plus(b).times(x).plus(c).times(x).plus(d)
                         }
 
                         return recurse(f, new Decimal(0), iter)
@@ -4222,7 +4362,9 @@ addLayer("mini", {
                 getA(){
                         let ret = new Decimal(0)
 
-                        if (hasUpgrade("n", 42)) ret = ret.plus(.01)
+                        if (hasUpgrade("n", 42)) ret = ret.plus(.1)
+                        if (hasUpgrade("n", 43)) ret = ret.plus(.1)
+                        if (hasUpgrade("n", 44)) ret = ret.plus(player.mini.buyables[222].times(.01))
 
                         return ret
                 },
@@ -7406,8 +7548,17 @@ addLayer("mini", {
                         unlocked(){
                                 return getBuyableAmount("mini", 202).gte(11)
                         },
-                        base(){
+                        baseInit(){
                                 let ret = new Decimal(.2)
+
+                                ret = ret.plus(tmp.mini.buyables[222].effect)
+
+                                return ret
+                        },
+                        base(){
+                                let ret = tmp.mini.buyables[211].baseInit
+
+                                if (hasUpgrade("n", 43)) ret = ret.times(player.mini.buyables[211].max(1).ln().max(1))
 
                                 return ret
                         },
@@ -7423,7 +7574,9 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 211)) + " E Points</b><br>"
-                                let eformula = format(getBuyableBase("mini", 211)) + "*x"
+                                let eformula = format(tmp.mini.buyables[211].baseInit) + "*x<br>"
+                                eformula += format(getBuyableBase("mini", 211)) + "*x" 
+                                if (hasUpgrade("n", 43)) eformula = eformula.replace("*x", "*ln(x)*x")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -7468,6 +7621,8 @@ addLayer("mini", {
                         },
                         base(){
                                 let ret = new Decimal(.3)
+
+                                ret = ret.plus(tmp.mini.buyables[222].effect)
 
                                 return ret
                         },
@@ -7618,6 +7773,66 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e138)*(30^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                222: {
+                        title: "∃1 1*x=x*1=x",
+                        cost:() => new Decimal("1e176").times(Decimal.pow(3, Decimal.pow(getBuyableAmount("mini", 222), 1.2))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[222].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[222] = player.mini.buyables[222].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[222].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e176")
+                                let base = 3
+                                let exp = 1.2
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 212).gte(82)
+                        },
+                        base(){
+                                let ret = new Decimal(.02)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[222].base.times(player.mini.buyables[222])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[222]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[222].effect, 4) + " to respecting scalar and Quadratic base</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 222)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 222), 4) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e176)*(3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -9172,7 +9387,7 @@ addLayer("mini", {
                                         // getRecursionValue
 
                                         if (shiftDown) {
-                                                b += "Function formula: f(x)=" + mb("a") + "x<sup>3</sup>/1000+" + mb("b") + "x<sup>2</sup>+"
+                                                b += "Function formula: f(x)=" + mb("a") + "x<sup>3</sup>/1e4+" + mb("b") + "x<sup>2</sup>+"
                                                 b += mb("c") + "x+" + mb("d") + br
                                                 b += mb("a") + "=" + format(data.getA) + " "
                                                 b += mb("b") + "=" + format(data.getB) + " "
