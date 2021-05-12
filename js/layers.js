@@ -3655,7 +3655,7 @@ addLayer("mini", {
         symbol: "♡", 
         position: 2,
         startData() { return {
-                unlocked: true,
+                unlocked: false,
                 abtime: 0,
                 time: 0,
                 autotime: 0,
@@ -3730,6 +3730,7 @@ addLayer("mini", {
                 
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "B" && tmp.mini.tabFormat.B.unlocked) {
                         bpts.points = bpts.points.plus(tmp.mini.b_points.getResetGain.times(diff))
+                        data.unlocked = true
                 }
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "A" && tmp.mini.tabFormat.A.unlocked) {
                         //update A minigame
@@ -3746,6 +3747,7 @@ addLayer("mini", {
                                 extras[addto] = extras[addto].plus(base.times(diff))
                         }
                         apts.points = apts.points.plus(tmp.mini.a_points.getResetGain.times(diff))
+                        data.unlocked = true
 
                         // extras[11] = extras[11].plus(extras[21].root(2).div(10).times(Decimal.pow(2, lvls[21])))
                 }
@@ -3858,7 +3860,7 @@ addLayer("mini", {
                                 layers.mini.clickables[41].onClick()
                         }
                 }
-                if (player.tokens.autobuytokens && hasMilestone("n", 4)) {
+                if ((player.tokens.autobuytokens || player.dev.autobuytokens) && hasMilestone("n", 4)) {
                         if (canReset("tokens")) doReset("tokens")
                 }
                 if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
@@ -3940,6 +3942,8 @@ addLayer("mini", {
                 getGainMult(){ // apoint gain a point gain
                         let ret = new Decimal(1)
 
+                        if (player.dev.aPointMult != undefined) ret = ret.times(player.dev.aPointMult)
+
                         if (player.hardMode)            ret = ret.div(100)
                         if (hasUpgrade("h", 51))        ret = ret.times(1e5)
 
@@ -3995,6 +3999,8 @@ addLayer("mini", {
         b_points: {
                 getResetGain(){ // bpoint gain b point gain
                         let ret = new Decimal(1)
+
+                        if (player.dev.bPointMult != undefined) ret = ret.times(player.dev.bPointMult)
 
                         if (player.hardMode)            ret = ret.div(3)
 
@@ -4067,6 +4073,8 @@ addLayer("mini", {
                 },
                 getGainMult(){ // dpoint gain d point gain dpt gain
                         let ret = new Decimal(1)
+
+                        if (player.dev.dPointMult != undefined) ret = ret.times(player.dev.dPointMult)
 
                                                         ret = ret.times(tmp.mini.buyables[151].effect)
                                                         ret = ret.times(tmp.mini.buyables[152].effect)
@@ -4180,6 +4188,8 @@ addLayer("mini", {
         e_points: {
                 getGainMult(){ // epoint gain e point gain ept gain
                         let ret = new Decimal(1)
+
+                        if (player.dev.ePointMult != undefined) ret = ret.times(player.dev.ePointMult)
 
                         if (player.hardMode)            ret = ret.div(4)
                                                         ret = ret.times(tmp.mini.buyables[213].effect)
@@ -9242,7 +9252,7 @@ addLayer("tokens", {
         symbol: "⥈", 
         position: 3,
         startData() { return {
-                unlocked: true,
+                unlocked: false,
                 abtime: 0,
                 time: 0,
                 best_over_all_time: new Decimal(0),
@@ -9315,7 +9325,10 @@ addLayer("tokens", {
         },
         update(diff){
                 let data = player.tokens
-                let a = ["11", "12", "13", "21", "22", "23", "31", "32", "33", "41", "42", "43", "51", "52", "53", "61", "62", "63"]
+                let a = ["11", "12", "13", "21", "22", 
+                         "23", "31", "32", "33", "41", 
+                         "42", "43", "51", "52", "53", 
+                         "61", "62", "63"]
                 bb = data.best_buyables
                 let maxever = new Decimal(0)
                 for (i = 0; i < a.length; i++){
@@ -9330,10 +9343,10 @@ addLayer("tokens", {
                         }
                 }
                 data.best_over_all_time = data.best_over_all_time.max(data.total)
+                if (data.total.gt(0)) data.unlocked = true
 
                 if (hasUpgrade("c", 21)) {
                         //tick coins
-                        //first tick gain
                         /*
                         dc/dt = N/1+c
                         dc(1+c) = Ndt

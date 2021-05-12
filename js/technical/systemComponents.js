@@ -136,21 +136,37 @@ var systemComponents = {
 	<br>
         Time Played: {{ formatTime(player.timePlayed) }}<br>
 	<h1 style='color: #FF0066'>Shift to see details!</h1><br>
+	Toggles:
 	<table>
 		<tr>
 			<td><button class="opt" onclick="toggleShift()">Force toggle shift</button></td>
 			<td><button class="opt" onclick="toggleControl()">Force toggle control</button></td>
 			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
-			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
 			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys</button></td>
-			<!-- <td><button class="opt" onclick="fixSaveNaN()">Attempt to fix save</button></td> this comments out pog-->
+		</tr>
+	</table>
+	Others:
+	<table>
+		<tr>
+			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
 			<td><button class="opt" onclick="save()">Save</button></td>
+			<td><button class="opt" onclick="player.showBuiltInSaves = true">Show built in saves</button></td>
 		</tr>
 	</table>
 	<br><br>
         <h2 style='color: #00FF99'>Hotkeys</h2><br>
         <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">{{key.description}}<br></span>
-	<br><br></div>
+	<br><br>
+
+	<span v-if="player.showBuiltInSaves">
+		<h2 style='color: #00FF99'>Built in saves</h2><br>
+		You need to import the string with <i>capitalization</i> correct and no trailing spaces.<br>
+		<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
+		<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
+	</span>
+	<br><br>
+	
+	</div>
     `
     },
 

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.049",
+	num: "0.049.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.049.1</h3><br>
+		- Fixed hotkey display with mini hotkeys.<br>
+		- Added custom saves (only 1 right now).<br>
+		- Improved the info tab.<br>
+		- Added in player.dev.autobuytokens and player.dev.aPointMult etc.<br>
 	<br><h3 style='color: #CC0000'>v0.049</h3><br>
 		- Rebalanced until Nitrogen.<br>
 	<br><h3 style='color: #CC0000'>v0.048</h3><br>
@@ -297,15 +302,21 @@ function addedPlayerData() { return {
 	lastSave: new Date().getTime(),
 	hardMode: false,
 	hardFromBeginning: false,
-	arrowHotkeys: false,
+	arrowHotkeys: true,
 	lastLettersPressed: [],
 	targetWord: "johnson",
 	wordsSpelled: 0,
 	currentTime: new Date().getTime(),
+	showBuiltInSaves: false,
 	dev: {
 		fastCorn: false,
+		aPointMult: undefined,
+		bPointMult: undefined,
 		cPointMult: undefined,
-	}
+		dPointMult: undefined,
+		ePointMult: undefined,
+		autobuytokens: false,
+	},
 }}
 
 // Display extra things at the top of the page

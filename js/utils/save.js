@@ -254,13 +254,18 @@ function exportSave() {
 	document.execCommand("copy");
 	document.body.removeChild(el);
 }
+
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined)
-		imported = prompt("Paste your save here");
+	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
+		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
+		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
+		if (tempPlr.versionType != modInfo.id && !forced && !confirm(confirmString)) {
+			// Wrong save (use "Forced" to force it to accept.)
 			return;
+		}
+			
 		player = tempPlr;
 		player.versionType = modInfo.id;
 		fixSave();
@@ -268,6 +273,7 @@ function importSave(imported = undefined, forced = false) {
 		save();
 		window.location.reload();
 	} catch (e) {
+		console.log(e)
 		return;
 	}
 }
