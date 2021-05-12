@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.049.1",
+	num: "0.049.2",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.049.2</h3><br>
+		- Added all the saves from my pastebin.<br>
 	<br><h3 style='color: #CC0000'>v0.049.1</h3><br>
 		- Fixed hotkey display with mini hotkeys.<br>
 		- Added custom saves (only 1 right now).<br>
