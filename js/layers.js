@@ -29,9 +29,9 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                     433950,  445000,  462700,  467500,  542000,
                     692000,  774000,  793000,  1084e3,  1366e3,
                     1810e3, 18697e2,  1996e3,  2044e3, 23519e2,
-                    3805e3,  4666e3,  5383e3,  9500e3,  9871e3,
-                   11531e3, 13127e3, 13539e3, 14553e3, 15542e3,
-                   16528e3, 20892e3, 22977e3, 28491e3, 34256e3,
+                    3805e3,  4666e3,  5338e3,  9499e3,  9859e3,
+                   11518e3, 13127e3, 13539e3, 14553e3, 15542e3,
+                   16455e3, 20892e3, 23072e3, 28491e3, 34256e3,
                    60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
                    13793e4, 18750e4, 40300e4, 91919e4, 10000e5,
                 ]/*1e6-1,*/
@@ -8445,7 +8445,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 97593),
+                        cost:() => Decimal.pow(10, 97590),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -8462,7 +8462,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 128833),
+                        cost:() => Decimal.pow(10, 128846),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",

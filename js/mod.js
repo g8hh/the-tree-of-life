@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.048",
+	num: "0.049",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.049</h3><br>
+		- Rebalanced until Nitrogen.<br>
 	<br><h3 style='color: #CC0000'>v0.048</h3><br>
 		- Rebalanced until e20k C Points.<br>
 		- Made tokens layer notify you when you can afford all 18 buyables.<br>
@@ -312,11 +314,11 @@ var displayThings = [
 		// player.lastSave
 		t1 = player.lastSave
 		t2 = new Date().getTime()
-		list1 = ""
+		list1 = []
 		if (shiftDown) list1 = list1.concat("S")
 		if (controlDown) list1 = list1.concat("C")
 		if (player.undulating) list1 = list1.concat("U")
-		if (!player.arrowHotkeys) list1 = list1.concat("A")
+		if (!player.arrowHotkeys) list1 = list1.concat("¬A")
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning) {
