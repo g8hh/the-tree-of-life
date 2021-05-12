@@ -60,7 +60,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 ## Big features (all optional)
 
-- upgrades: A grid of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses. [See here for more info.](upgrades.md)
+- upgrades: A set of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses. [See here for more info.](upgrades.md)
 
 - milestones: A list of bonuses gained upon reaching certain thresholds of a resource. Often used for automation/QOL. [See here for more info.](milestones.md)
 
@@ -80,7 +80,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - infoboxes: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
 
-- grid: Todo: add description.[See here for more info.](grids.md)
+- grid: A grid of buttons that behave the same, but have their own data.[See here for more info.](grids.md)
 
 ## Prestige formula features
 

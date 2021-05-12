@@ -67,6 +67,7 @@ These are the existing components, but you can create more in [components.js](/j
 
 - grid: Displays the gridable grid for the layer. If you need more than one grid, use a layer proxy.
 
+- layer-proxy: Lets you use components from another layer. The argument is a pair, `[layer, data]`, consisting of the id of the layer to proxy from, and the tabFormat for the components to show.
 
 The rest of the components are sub-components. They can be used just like other components, but are typically part of another component.
 

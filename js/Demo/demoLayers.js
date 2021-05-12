@@ -319,7 +319,7 @@ addLayer("c", {
                     ["buyables", ""], "blank",
                     ["row", [
                         ["toggle", ["c", "beep"]], ["blank", ["30px", "10px"]], // Width, height
-                        ["display-text", function() {return "Beep"}], "blank", ["v-line", "200px"],
+                        ["layer-proxy", ["f", ["prestige-button"]]], "blank", ["v-line", "200px"],
                         ["column", [
                             ["prestige-button", "", {'width': '150px', 'height': '80px'}],
                             ["prestige-button", "", {'width': '100px', 'height': '150px'}],

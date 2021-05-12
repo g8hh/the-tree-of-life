@@ -75,6 +75,18 @@ function loadVue() {
 		`
 	})
 
+	// data [other layer, tabformat for within proxy]
+	Vue.component('layer-proxy', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div>
+			<column :layer="data[0]" :data="data[1]" :key="key + 'col'"></column>
+		</div>
+		`
+	})
 	Vue.component('infobox', {
 		props: ['layer', 'data'],
 		template: `
