@@ -61,6 +61,15 @@ function setClickableState(layer, id, state) {
 	player[layer].clickables[id] = state
 }
 
+
+function getGridData(layer, id) {
+	return (player[layer].grid[id])
+}
+
+function setGridData(layer, id, data) {
+	player[layer].grid[id] = data
+}
+
 function upgradeEffect(layer, id) {
 	return (tmp[layer].upgrades[id].effect)
 }
@@ -80,6 +89,11 @@ function clickableEffect(layer, id) {
 function achievementEffect(layer, id) {
 	return (tmp[layer].achievements[id].effect)
 }
+
+function gridEffect(layer, id) {
+	return (gridRun(layer, 'getEffect', player[layer].grid[id], id))
+}
+
 
 function canAffordPurchase(layer, thing, cost) {
 

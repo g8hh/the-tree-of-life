@@ -39,6 +39,7 @@ While reading this documentation, the following key will be used when describing
 - [Milestones](milestones.md): How to create milestones for a layer.
 - [Buyables](buyables.md): Create rebuyable upgrades for your layer (with the option to make them respec-able). Can be used to make Enhancers or Space Buildings.
 - [Clickables](clickables.md): A more generalized variant of buyables, for any kind of thing that is sometimes clickable. Between these and Buyables, you can do just about anything.
+- [Achievements](achievements.md): How to create achievements for a layer (or for the whole game).
 
 ### Other components and features
 
@@ -46,6 +47,6 @@ While reading this documentation, the following key will be used when describing
 - [Bars](bars.md): Display some information as a progress bar, gauge, or similar. They are highly customizable, and can be horizontal and vertical as well.
 - [Subtabs and Microtabs](subtabs-and-microtabs.md): Create subtabs for your tabs, as well as "microtab" components that you can put inside the tabs.
                         You can even use them to embed a layer inside another layer!
-- [Achievements](achievements.md): How to create achievements for a layer (or for the whole game).
+- [Grids][grids.md]: Create a group of similar button tiles defined by a single object. Good for map tiles, an inventory grid, and more!
 - [Infoboxes](infoboxes.md): Boxes containing text that can be shown or hidden.
 - [Trees](trees-and-tree-customization.md): Make your own trees. You can make non-layer button nodes too!

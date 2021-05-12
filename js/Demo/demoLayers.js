@@ -540,7 +540,7 @@ addLayer("a", {
             getStyle(data, id) {
                 return {'background-color': '#'+ (data*1234%999999)}
             },
-            onClick(data, id) {
+            onClick(data, id) { // Don't forget onHold
                 player[this.layer].grid[id]++
             },
             getTitle(data, id) {

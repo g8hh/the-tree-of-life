@@ -76,9 +76,11 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - achievements: Kind of like milestones, but with a different display style and some other differences. Extra features are on the way at a later date! [See here for more info.](achievements.md)
 
+- achievementPopups, milestonePopups: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
+
 - infoboxes: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
 
-- achievementPopups, milestonePopups: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
+- grid: Todo: add description.[See here for more info.](grids.md)
 
 ## Prestige formula features
 

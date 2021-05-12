@@ -6,10 +6,10 @@ DO NOT USE THESE TO MAKE THINGS THAT YOU CLICK REPEATEDLY FOR A BONUS BECAUSE TH
 
 There are several differences between the two. One is that a buyable's saved data is its amount as a `Decimal`, while Clickables store a "state" which can be a number or string, but not `Decimal`, array, or object). Buyables have a number of extra features which you can see on their page. Clickables also have a smaller default size.
 
-Useful functions for dealing with achievements and implementing their effects:
+Useful functions for dealing with clickables and implementing their effects:
 
 - getClickableState(layer, id): get the state of the clickable the player has
-- setClickableState(layer, id, state): set the state of the buyable the player has
+- setClickableState(layer, id, state): set the state of the clickable the player has
 - clickableEffect(layer, id): Returns the current effects of the clickable, if any.
 
 Clickables should be formatted like this:
@@ -36,7 +36,7 @@ Features:
 
 - canClick(): A function returning a bool to determine if you can click the clickable.
 
-- onClick(): A function that implements clicking one of the clickable. 
+- onClick(): A function that implements clicking the clickable. 
 
 - onHold(): **optional** A function that is called 20x/sec when the button is held for at least 0.25 seconds.
 
