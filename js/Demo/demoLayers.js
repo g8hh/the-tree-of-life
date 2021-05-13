@@ -376,6 +376,7 @@ addLayer("c", {
                          // Layer will automatically highlight if an upgrade is purchasable.
             return (player.c.buyables[11] == 1)
         },
+        marked: "discord.png",
         resetDescription: "Melt your points into ",
 })
 
@@ -522,6 +523,34 @@ addLayer("a", {
                 done() {return player.f.points.gte(1)},
                 tooltip: "Get a farm point.\n\nReward: The dinosaur is now your friend (you can max Farm Points).", // Showed when the achievement is completed
                 onComplete() {console.log("Bork bork bork!")}
+            },
+        },
+        midsection: ["grid", "blank"],
+        grid: {
+            maxRows: 3,
+            rows: 2,
+            cols: 2,
+            getStartData(id) {
+                return id
+            },
+            getUnlocked(id) { // Default
+                return true
+            },
+            getCanClick(data, id) {
+                return player.points.eq(10)
+            },
+            getStyle(data, id) {
+                return {'background-color': '#'+ (data*1234%999999)}
+            },
+            onClick(data, id) { // Don't forget onHold
+                player[this.layer].grid[id]++
+
+            },
+            getTitle(data, id) {
+                return "Gridable #" + id
+            },
+            getDisplay(data, id) {
+                return data 
             },
         },
     }, 

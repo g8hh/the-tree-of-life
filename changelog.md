@@ -2,6 +2,7 @@
 
 - You can now use non-numeric ids for upgrades, buyables, etc.
 - Fixed an exploit that let you buy an extra buyable.
+- Moved basic getter/setter functions to easyAccess.js.
 
 # v2.5.5.2 - 5/12/21
 - Fixed a major issue with buyables.
