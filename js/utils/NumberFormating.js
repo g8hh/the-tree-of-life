@@ -14,7 +14,11 @@ function exponentialFormat(num, precision, mantissa = true) {
 function commaFormat(num, precision) {
         if (num === null || num === undefined) return "NaN"
         if (num.mag < 0.001) return (0).toFixed(precision)
-        return num.toStringWithDecimalPlaces(precision).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+        let init = num.toStringWithDecimalPlaces(precision)
+        let portions = init.split(".")
+        portions[0] = portions[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+        if (portions.length == 1) return portions[0]
+        return portions[0] + "." + portions[1]
 }
 
 

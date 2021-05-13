@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.050",
+	num: "0.050.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.050.1</h3><br>
+		- Added two E Point buyables.<br>
+		- Improved number formatting.<br>
+		- Added a save to the bank.<br>
+		- Made sure that v.050 content was all pushed.<br>
 	<br><h3 style='color: #CC0000'>v0.050</h3><br>
 		- Finally more content!<br>
 		- Added 5 Nitrogen upgrades.<br>
