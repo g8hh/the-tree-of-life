@@ -22,7 +22,7 @@ challenges: {
 }
 ```
 
-Each challenge should have an id where the first digit is the row and the second digit is the column.
+Usually, each challenge should have an id where the first digit is the row and the second digit is the column.
 
 Individual Challenges can have these features:
 

@@ -21,7 +21,7 @@ achievements: {
 }
 ```
 
-Each achievement should have an id where the first digit is the row and the second digit is the column.
+Usually, each achievement should have an id where the first digit is the row and the second digit is the column.
 
 Individual achievement can have these features:
 

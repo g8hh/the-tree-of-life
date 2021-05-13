@@ -66,7 +66,7 @@ function setupLayer(layer){
     if (layers[layer].upgrades){
         setRowCol(layers[layer].upgrades)
         for (thing in layers[layer].upgrades){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].upgrades[thing])){
                 layers[layer].upgrades[thing].id = thing
                 layers[layer].upgrades[thing].layer = layer
                 if (layers[layer].upgrades[thing].unlocked === undefined)
@@ -76,7 +76,7 @@ function setupLayer(layer){
     }
     if (layers[layer].milestones){
         for (thing in layers[layer].milestones){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].milestones[thing])){
                 layers[layer].milestones[thing].id = thing
                 layers[layer].milestones[thing].layer = layer
                 if (layers[layer].milestones[thing].unlocked === undefined)
@@ -87,7 +87,7 @@ function setupLayer(layer){
     if (layers[layer].achievements){
         setRowCol(layers[layer].achievements)
         for (thing in layers[layer].achievements){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].achievements[thing])){
                 layers[layer].achievements[thing].id = thing
                 layers[layer].achievements[thing].layer = layer
                 if (layers[layer].achievements[thing].unlocked === undefined)
@@ -98,7 +98,7 @@ function setupLayer(layer){
     if (layers[layer].challenges){
         setRowCol(layers[layer].challenges)
         for (thing in layers[layer].challenges){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].challenges[thing])){
                 layers[layer].challenges[thing].id = thing
                 layers[layer].challenges[thing].layer = layer
                 if (layers[layer].challenges[thing].unlocked === undefined)
@@ -113,7 +113,7 @@ function setupLayer(layer){
         layers[layer].buyables.layer = layer
         setRowCol(layers[layer].buyables)
         for (thing in layers[layer].buyables){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].buyables[thing])){
                 layers[layer].buyables[thing].id = thing
                 layers[layer].buyables[thing].layer = layer
                 if (layers[layer].buyables[thing].unlocked === undefined)
@@ -125,12 +125,12 @@ function setupLayer(layer){
     
         }
     }
-    
+
     if (layers[layer].clickables){
         layers[layer].clickables.layer = layer
         setRowCol(layers[layer].clickables)
         for (thing in layers[layer].clickables){
-            if (!isNaN(thing)){
+            if (isPlainObject(layers[layer].clickables[thing])){
                 layers[layer].clickables[thing].id = thing
                 layers[layer].clickables[thing].layer = layer
                 if (layers[layer].clickables[thing].unlocked === undefined)
@@ -166,7 +166,6 @@ function setupLayer(layer){
             layers[layer].grid.getCanClick = true
 
     }
-
     if (layers[layer].startData) {
         data = layers[layer].startData()
         if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true
