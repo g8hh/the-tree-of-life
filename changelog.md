@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
 - You can now use non-numeric ids for upgrades, buyables, etc.
+- Fixed an exploit that let you buy an extra buyable.
 
 # v2.5.5.2 - 5/12/21
 - Fixed a major issue with buyables.
@@ -373,11 +374,11 @@ which will break old things)
 - Added a few minor features, and updated the docs with new information.
 
 
-### v1.1.1:
+### v1.1.1 - 9/30/20
 
 - You can define hotkeys directly from layer config.
 
-## v1.1: Enhanced Edition
+## v1.1: Enhanced Edition - 9/30/20
 
 - Added "Buyables", which can function like Space Buildings or Enhancers.
 - Custom CSS can now be used on any component! Make the third argument an object with CSS
@@ -385,5 +386,5 @@ parameters.
 - Lots of minor good things.
 
 
-## v1.0:
+## v1.0 - 9/27/20
 - First release.

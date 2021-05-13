@@ -24,7 +24,7 @@ Here's a breakdown of what's in it:
     - num: The mod's version number, displayed at the top right of the tree tab.
     - name: The version's name, displayed alongside the number in the info tab.
 
-- changelog is the HTML displayed in the changelog tab.
+- changelog is the HTML displayed in the changelog tab. If this gets particularly long, it might be good to put in a separate file (be sure to add the file to index.html)
 
 - doNotCallTheseFunctionsEveryTick is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array.
 
