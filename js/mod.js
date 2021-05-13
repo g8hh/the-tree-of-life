@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.050.1</h3><br> 3upgs milestone buyable
+		- Added a E Point buyables.<br>
+		- Added a Nitrogen milestone.<br>
+		- Added three Nitrogen upgrades.<br>
+		- Added a save to the bank.<br>
 	<br><h3 style='color: #CC0000'>v0.050.1</h3><br>
 		- Added two E Point buyables.<br>
 		- Improved number formatting.<br>
