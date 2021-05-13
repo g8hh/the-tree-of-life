@@ -2642,7 +2642,7 @@ addLayer("n", {
                                 if (!hasUpgrade("n", 43)) return b + a
                                 return a
                         },
-                        cost:() => new Decimal(1.24e35),
+                        cost:() => new Decimal(1.24e36),
                         unlocked(){
                                 return hasUpgrade("n", 42)
                         }, // hasUpgrade("n", 43)
