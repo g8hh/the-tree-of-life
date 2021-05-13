@@ -143,9 +143,7 @@ function constructTabFormat(layer, id, family){
 
 	}
 	if (isFunction(tabLayer)) {
-		
-		let bound = tabLayer.bind(layers[layer])
-		Vue.set(tabTemp, key, bound())
+		return tabLayer()
 	}
 	updateTempData(tabLayer, tabTemp, tabFunc)
 	return tabTemp
@@ -173,7 +171,7 @@ function updateTabFormat(layer) {
 
 	// Check for embedded layer
 	if (isPlainObject(tmp[layer].tabFormat) && tmp[layer].tabFormat[tab].embedLayer !== undefined) { 
-		constructTabFormat(tmp[layer].tabFormat[tab].embedLayer)
+		updateTabFormat(tmp[layer].tabFormat[tab].embedLayer)
 	}
 
 	// Update microtabs
@@ -183,9 +181,9 @@ function updateTabFormat(layer) {
 		if (tmp[layer].microtabs[family][tab]) {
 
 			if (tmp[layer].microtabs[family][tab].embedLayer)
-				constructTabFormat(tmp[layer].microtabs[family][tab].embedLayer)
+				updateTabFormat(tmp[layer].microtabs[family][tab].embedLayer)
 			else
-				constructTabFormat(layer, tab, family)
+				Vue.set(temp[layer].microtabs[family][tab], 'content', constructTabFormat(layer, tab, family))
 		}
 	}
 }

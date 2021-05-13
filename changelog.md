@@ -1,5 +1,10 @@
 # The Modding Tree changelog:
 
+# v2.5.5.2 - 5/12/21
+- Fixed a major issue with buyables.
+- Fixed a variety of tabFormat-related issues.
+- Fixed commas appearing in decimal places (thanks to pg132!)
+
 # v2.5.5.1 - 5/12/21
 - Fixed clickables.
 

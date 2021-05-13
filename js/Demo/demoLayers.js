@@ -6,7 +6,6 @@ addLayer("c", {
         name: "Candies", // This is optional, only used in a few places, If absent it just uses the layer id.
         symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-        marked: "discord.png",
         startData() { return {
             unlocked: true,
 			points: new Decimal(0),
@@ -319,7 +318,7 @@ addLayer("c", {
                     ["buyables", ""], "blank",
                     ["row", [
                         ["toggle", ["c", "beep"]], ["blank", ["30px", "10px"]], // Width, height
-                        ["layer-proxy", ["f", ["prestige-button"]]], "blank", ["v-line", "200px"],
+                        ["display-text", function() {return "Beep"}], "blank", ["v-line", "200px"],
                         ["column", [
                             ["prestige-button", "", {'width': '150px', 'height': '80px'}],
                             ["prestige-button", "", {'width': '100px', 'height': '150px'}],
@@ -427,7 +426,6 @@ addLayer("f", {
     canReset() {
         return tmp[this.layer].baseAmount.gte(tmp[this.layer].nextAt)
     },
-
     // This is also non minimal, a Clickable!
     clickables: {
 
@@ -526,32 +524,5 @@ addLayer("a", {
                 onComplete() {console.log("Bork bork bork!")}
             },
         },
-        grid: {
-            maxRows: 3,
-            rows: 2,
-            cols: 2,
-            getStartData(id) {
-                return id
-            },
-            getUnlocked(id) { // Default
-                return true
-            },
-            getCanClick(data, id) {
-                return true
-            },
-            getStyle(data, id) {
-                return {'background-color': '#'+ (data*1234%999999)}
-            },
-            onClick(data, id) { // Don't forget onHold
-                player[this.layer].grid[id]++
-            },
-            getTitle(data, id) {
-                return "Gridable #" + id
-            },
-            getDisplay(data, id) {
-                return data 
-            },
-        } ,
-        midsection: ["grid", "blank"]
-    }
+    }, 
 )

@@ -118,12 +118,14 @@ function setupLayer(layer){
                 layers[layer].buyables[thing].layer = layer
                 if (layers[layer].buyables[thing].unlocked === undefined)
                     layers[layer].buyables[thing].unlocked = true
-                }
                 layers[layer].buyables[thing].canBuy = function() {return canBuyBuyable(this.layer, this.id)}
                 if (layers[layer].buyables[thing].purchaseLimit === undefined) layers[layer].buyables[thing].purchaseLimit = new Decimal(Infinity)
-        }  
+        
+            }  
+    
+        }
     }
-
+    
     if (layers[layer].clickables){
         layers[layer].clickables.layer = layer
         setRowCol(layers[layer].clickables)
