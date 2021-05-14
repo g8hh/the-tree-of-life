@@ -559,7 +559,7 @@ addLayer("a", {
 const coolParticle = {
     image:"options_wheel.png",
     spread: 20,
-    gravity: 2,
+    gravity: 0,
     time: 9999,
     rotation (id) {
         return 20 * (id - 1.5) + (Math.random() - 0.5) * 10
@@ -568,7 +568,7 @@ const coolParticle = {
         return (Math.random() - 0.5) * 10
     },
     speed() {
-        return (Math.random() + 1.2) * 8 
+        0
     },
     onClick() {
         console.log("yay")

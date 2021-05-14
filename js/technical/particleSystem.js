@@ -67,7 +67,7 @@ function updateParticles(diff) {
 function getNewParticle() {
     particleID++
     return {
-        time: 3,
+        time: 3333,
         id: particleID,
         x: mouseX,
         y: mouseY,
@@ -101,5 +101,16 @@ function constructParticleStyle(particle){
         opacity: ((particle.time < particle.fadeTime) && particle.fadeTime) ? particle.time / particle.fadeTime : 1,
         "pointer-events": (particle.onClick || particle.onHover) ? 'auto' : 'none',
 
+    }
+}
+
+function clearParticles(check) {
+    if (!check)  check = true
+
+    for (p in particles) {
+        console.log(run(check, particles[p], particles[p]))
+        if (run(check, particles[p], particles[p])){
+            Vue.delete(particles, p)
+        }
     }
 }
