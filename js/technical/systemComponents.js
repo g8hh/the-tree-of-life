@@ -187,7 +187,14 @@ var systemComponents = {
 			<img v-else class='mark' style='position: absolute; left: -25px; top: -10px;' v-bind:src="data"></div>
 		</div>
 		`
-	}
+	},
+
+	'particle': {
+		props: ['data', 'index'],
+		template: `<div class='particle' v-bind:style="{left: data.x + 'px', top: data.y + 'px'}">ahragagag
+		</div>
+		`
+	},
 
 }
 

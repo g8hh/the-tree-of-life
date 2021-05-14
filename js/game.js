@@ -406,6 +406,7 @@ var interval = setInterval(function() {
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
+	let trueDiff = diff
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
 		if (player.offTime.remain > 0) {
@@ -427,7 +428,8 @@ var interval = setInterval(function() {
 	updateTabFormats()
 	gameLoop(diff)
 	fixNaNs()
-	adjustPopupTime(0.05) 
+	adjustPopupTime(trueDiff)
+	updateParticles(trueDiff)
 	ticking = false
 }, 50)
 

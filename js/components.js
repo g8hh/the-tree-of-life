@@ -544,6 +544,7 @@ function loadVue() {
 	Vue.component('info-tab', systemComponents['info-tab'])
 	Vue.component('options-tab', systemComponents['options-tab'])
 	Vue.component('tooltip', systemComponents['tooltip'])
+	Vue.component('particle', systemComponents['particle'])
 
 
 	app = new Vue({
@@ -582,6 +583,9 @@ function loadVue() {
 			LAYERS,
 			hotkeys,
 			activePopups,
+			particles,
+			mouseX,
+			mouseY,
 		},
 	})
 }

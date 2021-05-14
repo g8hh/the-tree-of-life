@@ -300,7 +300,7 @@ addLayer("c", {
                     ["main-display",
                     "prestige-button", "resource-display",
                     ["blank", "5px"], // Height
-                    ["raw-html", function() {return "<button onclick='console.log(`yeet`)'>'HI'</button>"}],
+                    ["raw-html", function() {return "<button onclick='console.log(`yeet`); makeParticles(coolParticle, 2)'>'HI'</button>"}],
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
@@ -555,3 +555,5 @@ addLayer("a", {
         },
     }, 
 )
+
+const coolParticle = {}
