@@ -191,8 +191,8 @@ var systemComponents = {
 
 	'particle': {
 		props: ['data', 'index'],
-		template: `<div class='particle' v-bind:style="{left: data.x + 'px', top: data.y + 'px'}">ahragagag
-		</div>
+		template: `<img class='particle instant' v-bind:style="constructParticleStyle(data)" v-bind:src="data.image">
+		</img>
 		`
 	},
 

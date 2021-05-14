@@ -579,6 +579,7 @@ function loadVue() {
 			challengeStyle,
 			challengeButtonText,
 			constructBarStyle,
+			constructParticleStyle,
 			VERSION,
 			LAYERS,
 			hotkeys,

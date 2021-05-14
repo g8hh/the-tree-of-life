@@ -556,4 +556,4 @@ addLayer("a", {
     }, 
 )
 
-const coolParticle = {}
+const coolParticle = {image:"options_wheel.png"}

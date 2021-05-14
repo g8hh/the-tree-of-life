@@ -44,13 +44,8 @@
 }
 
 .particle {
-	border: 4px solid;
-	border-radius: 7px;
-	width: 50px;
-	min-height: 60px;
-	background-color: #696969;
+	background-color: transparent;
 	display: block;
-	border-color: rgba(0, 0, 0, 0.25);
 	position:absolute;
 	z-index: 99999
 }
