@@ -300,7 +300,7 @@ addLayer("c", {
                     ["main-display",
                     "prestige-button", "resource-display",
                     ["blank", "5px"], // Height
-                    ["raw-html", function() {return "<button onclick='console.log(`yeet`); makeParticles(coolParticle, 2)'>'HI'</button>"}],
+                    ["raw-html", function() {return "<button onclick='console.log(`yeet`);'>'HI'</button>"}],
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
@@ -456,6 +456,7 @@ addLayer("f", {
                         player[this.layer].clickables[this.id] = "Maybe that's a bit too far..."
                         break;                        
                     case "Maybe that's a bit too far...":
+                        makeParticles(coolParticle, 4)
                         player[this.layer].clickables[this.id] = "Borkened..."
                         break;
                     default:
@@ -544,16 +545,38 @@ addLayer("a", {
             },
             onClick(data, id) { // Don't forget onHold
                 player[this.layer].grid[id]++
-
             },
             getTitle(data, id) {
                 return "Gridable #" + id
             },
             getDisplay(data, id) {
-                return data 
+                return data
             },
         },
-    }, 
+    },
 )
 
-const coolParticle = {image:"options_wheel.png"}
+const coolParticle = {
+    image:"options_wheel.png",
+    spread: 20,
+    gravity: 2,
+    time: 9999,
+    rotation (id) {
+        return 20 * (id - 1.5) + (Math.random() - 0.5) * 10
+    },
+    dir() {
+        return (Math.random() - 0.5) * 10
+    },
+    speed() {
+        return (Math.random() + 1.2) * 8 
+    },
+    onClick() {
+        console.log("yay")
+    },
+    onHover() {
+        console.log("aaa")
+    },
+    update() {
+        //this.width += 1
+    }
+}

@@ -11,8 +11,11 @@ function makeParticles(data, amount=1) {
         for (thing in data) {
 
             switch(thing) {
-                case 'onClick', 'onHover', 'update': // Functions that should be copied over
+                case 'onClick': // Functions that should be copied over
+                case 'onHover':
+                case 'update':
                     particle[thing] = data[thing]
+                    break;
                 default:
                     particle[thing]=run(data[thing], data, x)
                     
@@ -22,6 +25,9 @@ function makeParticles(data, amount=1) {
             particle.dir = particle.angle
         }
         particle.dir = particle.dir + (particle.spread * (x- amount/2 + 0.5))
+
+        particle.x += particle.offset * sin(particle.dir)
+        particle.y += particle.offset * cos(particle.dir) * -1
 
         particle.xVel = particle.speed * sin(particle.dir)
         particle.yVel = particle.speed * cos(particle.dir) * -1
@@ -41,17 +47,19 @@ function cos(x) {
 
 function updateParticles(diff) {
 	for (p in particles) {
-		particles[p].time -= diff;
-		if (particles[p]["time"] < 0) {
+        let particle = particles[p]
+		particle.time -= diff;
+		if (particle["time"] < 0) {
 			Vue.delete(particles, p); 
             
 		}
         else {
-            if (particles[p].update) run(particles[p].update, particles[p])
-            particles[p].angle += particles[p].rotation
-            particles[p].x += particles[p].xVel
-            particles[p].y += particles[p].yVel
-            particles[p].yVel += particles[p].gravity
+            if (particle.update) run(particle.update, particle)
+            particle.angle += particle.rotation
+            particle.x += particle.xVel
+            particle.y += particle.yVel
+            particle.yVel += particle.gravity
+
         }
 	}
 }
@@ -59,7 +67,7 @@ function updateParticles(diff) {
 function getNewParticle() {
     particleID++
     return {
-        time: 2,
+        time: 3,
         id: particleID,
         x: mouseX,
         y: mouseY,
@@ -68,12 +76,13 @@ function getNewParticle() {
         image: "resources/genericParticle.png",
         angle: 0,
         spread: 30,
-        offset: 20,
-        speed: 20,
+        offset: 10,
+        speed: 15,
         xVel: 0,
         yVel: 0,
         rotation: 0,
-        gravity: 4,
+        gravity: 0,
+        fadeTime: 1,
     }
 }
 
@@ -89,5 +98,8 @@ function constructParticleStyle(particle){
         width: particle.width + 'px',
         height: particle.height + 'px',
         transform: "rotate(" + particle.angle + "deg)",
+        opacity: ((particle.time < particle.fadeTime) && particle.fadeTime) ? particle.time / particle.fadeTime : 1,
+        "pointer-events": (particle.onClick || particle.onHover) ? 'auto' : 'none',
+
     }
 }
