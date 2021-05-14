@@ -265,6 +265,7 @@ h1, h2, h3, b, input {
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;
+	position:relative;
 }
 
 .tile {
@@ -535,6 +536,7 @@ ul {
 
 .hChallenge {
 	background-color: #bf8f8f;
+	position: relative;
 	border: 4px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
@@ -706,6 +708,7 @@ button > * {
 	border-left: 0.3em solid transparent;
 	font-size: 10px;
 	overflow:auto;
+	pointer-events: none;
 }
 
 .star {
@@ -721,6 +724,8 @@ button > * {
 	border-bottom: 0.7em solid #ffcc00;
 	border-left: 0.3em solid transparent;
 	font-size: 10px;
+	pointer-events: none;
+
 }
 
 .star:before, .star:after {

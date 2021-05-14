@@ -105,6 +105,8 @@ function setupLayer(layer){
                     layers[layer].challenges[thing].unlocked = true
                 if (layers[layer].challenges[thing].completionLimit === undefined)
                     layers[layer].challenges[thing].completionLimit = 1
+                else if (layers[layer].challenges[thing].marked === undefined) 
+                    layers[layer].challenges[thing].marked = function() {return maxedChallenge(this.layer, this.id)}
 
             }
         }

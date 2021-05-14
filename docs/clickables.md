@@ -42,6 +42,8 @@ Features:
 
 - style: **optional**. Applies CSS to this clickable, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
+- marked: **optional** Adds a mark to the corner of the clickable. If it's "true" it will be a star, but it can also be an image URL.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
 - id: **assigned automagically**. It's the "key" which the clickable was stored under, for convenient access. The clickable in the example's id is 11.

@@ -52,6 +52,8 @@ Features:
         
 - purchaseLimit: **optional**. The limit on how many of the buyable can be bought. The default is no limit.
 
+- marked: **optional** Adds a mark to the corner of the buyable. If it's "true" it will be a star, but it can also be an image URL.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
 - id: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.

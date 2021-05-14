@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+- Particle
+- Added marked feature to buyables, clickables, and challenges. By default, stars multi-completion challenges when maxed.
+- Improved number formatting more.
+
 # v2.5.6 - 5/14/21
 - You can now use non-numeric ids for upgrades, buyables, etc.
 - Fixed an exploit that let you buy an extra buyable.

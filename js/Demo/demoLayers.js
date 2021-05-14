@@ -527,6 +527,7 @@ addLayer("a", {
             },
         },
         midsection: ["grid", "blank"],
+        marked: true,
         grid: {
             maxRows: 3,
             rows: 2,
