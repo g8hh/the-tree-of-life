@@ -138,6 +138,7 @@ function inChallenge(layer, id) {
 var onTreeTab = true
 function showTab(name) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
+	if (player.tab !== name) clearParticles(function(p) {return p.layer === player.tab})
 	if (player.tab === name && isPlainObject(tmp[name].tabFormat)) {
 		player.subtabs[name].mainTabs = Object.keys(layers[name].tabFormat)[0]
 	}
@@ -153,6 +154,7 @@ function showTab(name) {
 
 function showNavTab(name) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
+	if (player.navTab !== name) clearParticles(function(p) {return p.layer === player.navTab})
 
 	var toTreeTab = name == "tree"
 	player.navTab = name

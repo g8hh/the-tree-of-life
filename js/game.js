@@ -335,6 +335,7 @@ function gameLoop(diff) {
 	if (gameEnded && !player.keepGoing) {
 		diff = 0
 		player.tab = "gameEnded"
+		clearParticles()
 	}
 	if (player.devSpeed) diff *= player.devSpeed
 
