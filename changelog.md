@@ -1,5 +1,6 @@
 # The Modding Tree changelog:
 
+# v2.5.6 - 5/14/21
 - You can now use non-numeric ids for upgrades, buyables, etc.
 - Fixed an exploit that let you buy an extra buyable.
 - Moved basic getter/setter functions to easyAccess.js.
