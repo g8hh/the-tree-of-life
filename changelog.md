@@ -1,8 +1,9 @@
 # The Modding Tree changelog:
 
-- Particle
+# v2.5.7 -
+- Added a particle system! Not only can it be used for visual effects, but particles can interact with the mouse. They could be used to create golden cookies or collectables, for example.
 - Added marked feature to buyables, clickables, and challenges. By default, stars multi-completion challenges when maxed.
-- Improved number formatting more.
+- Improved number formatting slightly.
 
 # v2.5.6 - 5/14/21
 - You can now use non-numeric ids for upgrades, buyables, etc.

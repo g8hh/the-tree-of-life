@@ -573,8 +573,11 @@ const coolParticle = {
     onClick() {
         console.log("yay")
     },
-    onHover() {
-        console.log("aaa")
+    onMouseOver() {
+        console.log("hi")
+    },
+    onMouseLeave() {
+        console.log("bye")
     },
     update() {
         //this.width += 1
