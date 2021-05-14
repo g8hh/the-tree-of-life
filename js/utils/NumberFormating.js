@@ -43,7 +43,7 @@ function format(decimal, precision = 2, small) {
         decimal = new Decimal(decimal)
         if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
                 player.hasNaN = true;
-                console.log(decimal)
+                console.log("Sign:" + decimal.sign + "Mag:" + decimal.mag + "Layer:" + decimal.layer) 
                 console.log("Sorry that a bug has appeared. Please export this save by running exportSave(). Please give the dev a screenshot of the console and a paste of the save.")
                 Decimal(0)
                 return "NaN"
