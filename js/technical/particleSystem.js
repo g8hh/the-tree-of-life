@@ -1,10 +1,8 @@
-// Variables that must be defined to display popups
 var particles = {};
 var particleID = 0;
 var mouseX = 0;
 var mouseY = 0;
 
-// Function to show popups
 function makeParticles(data, amount=1) {
     for (let x = 0; x < amount; x++) {
         let particle = getNewParticle()
@@ -69,7 +67,7 @@ function updateParticles(diff) {
 function getNewParticle() {
     particleID++
     return {
-        time: 3333,
+        time: 3,
         id: particleID,
         x: mouseX,
         y: mouseY,
@@ -105,7 +103,6 @@ function getOpacity(particle) {
 }   
 
 function constructParticleStyle(particle){
-    console.log(getOpacity(particle))
     return {
         left: (particle.x  - particle.height/2) + 'px',
         top: (particle.y - particle.height/2) + 'px',
