@@ -526,6 +526,8 @@ function loadVue() {
 			LAYERS,
 			hotkeys,
 			activePopups,
+			shiftDown,
+			controlDown,
 		},
 	})
 }
