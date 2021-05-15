@@ -32,7 +32,7 @@ function makeParticles(data, amount=1) {
 
         particle.xVel = particle.speed * sin(particle.dir)
         particle.yVel = particle.speed * cos(particle.dir) * -1
-
+        particle.fadeInTimer = particle.fadeInTime
 	    Vue.set(particles, particle.id, particle)
 
     }
@@ -50,6 +50,7 @@ function updateParticles(diff) {
 	for (p in particles) {
         let particle = particles[p]
 		particle.time -= diff;
+        particle.fadeInTimer -= diff;
 		if (particle["time"] < 0) {
 			Vue.delete(particles, p); 
             
@@ -84,6 +85,8 @@ function getNewParticle() {
         rotation: 0,
         gravity: 0,
         fadeTime: 1,
+        fadeInTimer: 0,
+        fadeIn: 0,
     }
 }
 
@@ -92,24 +95,33 @@ function updateMouse(event) {
     mouseY = event.clientY
 }
 
+function getOpacity(particle) {
+    if ((particle.time < particle.fadeTime) && particle.fadeTime)
+        return particle.time / particle.fadeTime
+    if (particle.fadeInTimer > 0) 
+        return 1 - (particle.fadeInTimer / particle.fadeInTime)
+    
+    return 1
+}   
+
 function constructParticleStyle(particle){
+    console.log(getOpacity(particle))
     return {
         left: (particle.x  - particle.height/2) + 'px',
         top: (particle.y - particle.height/2) + 'px',
         width: particle.width + 'px',
         height: particle.height + 'px',
         transform: "rotate(" + particle.angle + "deg)",
-        opacity: ((particle.time < particle.fadeTime) && particle.fadeTime) ? particle.time / particle.fadeTime : 1,
+        opacity: getOpacity(particle),
         "pointer-events": (particle.onClick || particle.onHover) ? 'auto' : 'none',
-
+        "background-image": "url(" + particle.image + ")",
     }
 }
 
 function clearParticles(check) {
-    if (!check)  check = true
+    if (!check) check = true
 
     for (p in particles) {
-        console.log(run(check, particles[p], particles[p]))
         if (run(check, particles[p], particles[p])){
             Vue.delete(particles, p)
         }

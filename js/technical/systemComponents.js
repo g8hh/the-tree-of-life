@@ -191,9 +191,9 @@ var systemComponents = {
 
 	'particle': {
 		props: ['data', 'index'],
-		template: `<img class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" v-bind:src="data.image"
-			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)">
-		</img>
+		template: `<div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
+			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)" ><span v-html="data.text"></span>
+		</div>
 		`
 	},
 

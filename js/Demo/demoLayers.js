@@ -300,7 +300,7 @@ addLayer("c", {
                     ["main-display",
                     "prestige-button", "resource-display",
                     ["blank", "5px"], // Height
-                    ["raw-html", function() {return "<button onclick='console.log(`yeet`);'>'HI'</button>"}],
+                    ["raw-html", function() {return "<button onclick='console.log(`yeet`); makeParticles(textParticle)'>'HI'</button>"}],
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
@@ -560,7 +560,7 @@ const coolParticle = {
     image:"options_wheel.png",
     spread: 20,
     gravity: 2,
-    time: 9999,
+    time: 3,
     rotation (id) {
         return 20 * (id - 1.5) + (Math.random() - 0.5) * 10
     },
@@ -583,4 +583,14 @@ const coolParticle = {
         //this.width += 1
     },
     layer: 'f',
+}
+
+const textParticle = {
+    spread: 20,
+    gravity: 0,
+    time: 3,
+    speed: 0,
+    text: function() { return "<h1 style='color:yellow'>" + format(player.points)},
+    offset: 30,
+    fadeInTime: 1,
 }

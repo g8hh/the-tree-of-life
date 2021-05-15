@@ -37,7 +37,7 @@ While reading this documentation, the following key will be used when describing
 
 - [Upgrades](upgrades.md): How to create upgrades for a layer.
 - [Milestones](milestones.md): How to create milestones for a layer.
-- [Buyables](buyables.md): Create rebuyable upgrades for your layer (with the option to make them respec-able). Can be used to make Enhancers or Space Buildings.
+- [Buyables](buyables.md): Create rebuyable upgrades for your layer (with the option to make them respec-able). Can be used to make Enhancers or Space Buildings, for example.
 - [Clickables](clickables.md): A more generalized variant of buyables, for any kind of thing that is sometimes clickable. Between these and Buyables, you can do just about anything.
 - [Achievements](achievements.md): How to create achievements for a layer (or for the whole game).
 
@@ -50,3 +50,4 @@ While reading this documentation, the following key will be used when describing
 - [Grids][grids.md]: Create a group buttons that behave the same, but have their own data. Good for map tiles, an inventory grid, and more!
 - [Infoboxes](infoboxes.md): Boxes containing text that can be shown or hidden.
 - [Trees](trees-and-tree-customization.md): Make your own trees. You can make non-layer button nodes too!
+- [Particle system](particles.md): Can be used to create particles for visual effects, but also interactable things like golden cookies or collectables.
