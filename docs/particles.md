@@ -23,8 +23,8 @@ Features can be functions or constant. These features will be called when each p
 All distances are in pixels and angles are in degrees, with 0 being up and going clockwise.
 
 - time: The amount of time, in seconds, that the particle will last. Default is 3.
-- fadeTime: The amount of seconds that fading out at the end should take (part of the total lifetime). Default is 1.
-- fadeTime: The amount of seconds that fading in should take (part of the total lifetime). Default is 0.
+- fadeOutTime: The amount of seconds that fading out at the end should take (part of the total lifetime). Default is 1.
+- fadeInTime: The amount of seconds that fading in should take (part of the total lifetime). Default is 0.
 
 - image: The image the particle should display. `""` will display no image. Default is a generic particle.
 - text: Displays text on the particle. Can use basic HTML.

@@ -82,7 +82,7 @@ function getNewParticle() {
         yVel: 0,
         rotation: 0,
         gravity: 0,
-        fadeTime: 1,
+        fadeOutTime: 1,
         fadeInTimer: 0,
         fadeIn: 0,
     }
@@ -94,8 +94,8 @@ function updateMouse(event) {
 }
 
 function getOpacity(particle) {
-    if ((particle.time < particle.fadeTime) && particle.fadeTime)
-        return particle.time / particle.fadeTime
+    if ((particle.time < particle.fadeOutTime) && particle.fadeOutTime)
+        return particle.time / particle.fadeOutTime
     if (particle.fadeInTimer > 0) 
         return 1 - (particle.fadeInTimer / particle.fadeInTime)
     
