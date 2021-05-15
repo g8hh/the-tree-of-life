@@ -173,6 +173,8 @@ componentStyles: {
 }
 ```
 
+- deactivated: **optional**, if this is true, hasUpgrade, hasChallenge, hasAchievement, and hasMilestone will return false for things in the layer, and you will be unable to buy or click things on the layer. You will have to disable effects of buyables, the innate layer effect, and possibly other things yourself.
+
 ## Custom Prestige type  
 (All of these can also be used by other prestige types)
 

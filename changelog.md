@@ -1,8 +1,9 @@
 # The Modding Tree changelog:
 
-# v2.5.7 -
+# v2.5.7 - 5/15/21
 - Added a particle system! Not only can it be used for visual effects, but particles can interact with the mouse. They could be used to create golden cookies or collectables, for example.
 - Added marked feature to buyables, clickables, and challenges. By default, stars multi-completion challenges when maxed.
+- Added 'deactivated' feature to layers, which disables many features.
 - Improved number formatting slightly.
 
 # v2.5.6 - 5/14/21
