@@ -201,6 +201,8 @@ h1, h2, h3, b, input {
     position: absolute;
 	overflow: hidden;
 	margin-left: -0.5px;
+	transition-duration: 0.2s;
+
 }
 
 .overlayText {
