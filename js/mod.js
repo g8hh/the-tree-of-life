@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.052",
+	num: "0.053",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- e23700 E Points OR the last save in the bank<br><br>
+		- 7.5e943 Nitrogen [new layer?] OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.053</h3><br>
+		- Added two E Point buyables.<br>
+		- Added a Oxygen upgrade.<br>
+		- Added two Carbon upgrades.<br>
+		- Added a save to the bank.<br>
+		- Buffed Oxygen XII and nerfed Nitrogen XV.<br>
 	<br><h3 style='color: #CC0000'>v0.052</h3><br>
 		- Added a D Point buyable.<br>
 		- Added two Oxygen upgrades.<br>

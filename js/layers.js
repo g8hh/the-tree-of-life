@@ -1750,6 +1750,36 @@ addLayer("c", {
                                 return hasUpgrade("c", 32)
                         }, // hasUpgrade("c", 33)
                 },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XIV"
+                        },
+                        description(){
+                                let a = "Square the ln(x) component in Quadratic"
+                                return a
+                        },
+                        cost() {
+                                return Decimal.pow(10, player.hardMode ? 10550e3 : 10530e3)
+                        },
+                        unlocked(){
+                                return hasUpgrade("o", 34)
+                        }, // hasUpgrade("c", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XV"
+                        },
+                        description(){
+                                let a = "Add a ln(x) component to Constant"
+                                return a
+                        },
+                        cost() {
+                                return Decimal.pow(10, 11840e3)
+                        },
+                        unlocked(){
+                                return hasUpgrade("c", 34)
+                        }, // hasUpgrade("c", 35)
+                },
                 
         },
         tabFormat: {
@@ -2177,7 +2207,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor(62) + "'>Oxygen XII"
                         },
                         description(){
-                                let a = "Add .08 to color gain exponent"
+                                let a = "Add .08 to color gain exponent and apply the prior upgrade again"
                                 return a 
                         },
                         cost:() => Decimal.pow(10, 314000),
@@ -2210,6 +2240,19 @@ addLayer("o", {
                         unlocked(){
                                 return hasUpgrade("o", 33)
                         }, // hasUpgrade("o", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(64) + "'>Oxygen XV"
+                        },
+                        description(){
+                                let a = "Nitrogen<sup>.26</sup> multiplies E Point gain and you bulk 5x E buyables"
+                                return a 
+                        },
+                        cost:() => Decimal.pow(10, player.hardMode ? 404e6 : 403e6),
+                        unlocked(){
+                                return hasUpgrade("c", 35)
+                        }, // hasUpgrade("o", 35)
                 },
         },
         tabFormat: {
@@ -2636,8 +2679,10 @@ addLayer("n", {
                                 let c = "Currently: " + makeRed("E") + "=" + format(tmp.n.upgrades[35].effect)
                                 return a + b + c
                         },
-                        effect(){
+                        effect(){ // red e rede
                                 let ret = new Decimal(1)
+
+                                ret = ret.plus(tmp.mini.buyables[232].effect)
 
                                 return ret
                         },
@@ -2842,7 +2887,7 @@ addLayer("n", {
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
-                                let a = "E Points multiply D Points"
+                                let a = "E Points multiply D Points (up to 1e50000)"
                                 return a
                         },
                         cost:() => new Decimal(4.75e53),
@@ -4018,6 +4063,7 @@ addLayer("mini", {
                                 if (hasMilestone("n", 1)) max = max.times(5)
                                 if (hasMilestone("n", 2)) max = max.times(4)
                                 if (hasUpgrade("o", 31)) max = max.times(10)
+                                if (hasUpgrade("o", 32)) max = max.times(10)
 
 
                                 for (i = 0; i < list1.length; i++){
@@ -4048,6 +4094,7 @@ addLayer("mini", {
                                 if (hasMilestone("n", 2))       bulk = bulk.times(5)
                                 if (hasMilestone("n", 4))       bulk = bulk.times(4)
                                 if (hasUpgrade("o", 31))        bulk = bulk.times(10)
+                                if (hasUpgrade("o", 32))        bulk = bulk.times(10)
                                 
                                 bulk = bulk.sub(1)
 
@@ -4100,11 +4147,13 @@ addLayer("mini", {
 
                                 let list4 = []
                                 if (hasUpgrade("n", 52)) list4 = [202, 203, 211, 212, 213, 
-                                                                  221, 222, 223, 231]
+                                                                  221, 222, 223, 231, 232,
+                                                                  233]
 
                                 let bulk3 = new Decimal(1)
                                 if (hasMilestone("n", 17)) bulk3 = bulk3.times(5)
                                 if (hasUpgrade("o", 33)) bulk3 = bulk3.times(4)
+                                if (hasUpgrade("o", 35)) bulk3 = bulk3.times(5)
                                 
                                 bulk3 = bulk3.sub(1).floor()
 
@@ -4367,7 +4416,7 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 65))     ret = ret.times(3)
                         if (hasUpgrade("mini", 52))     ret = ret.times(2)
                         if (hasUpgrade("n", 33))        ret = ret.times(player.mini.d_points.fuel.max(1).pow(.001))
-                        if (hasUpgrade("n", 55))        ret = ret.times(player.mini.e_points.points.max(1))
+                        if (hasUpgrade("n", 55))        ret = ret.times(player.mini.e_points.points.max(1).min("1e50000"))
 
                         return ret
                 },
@@ -4474,7 +4523,9 @@ addLayer("mini", {
                         if (player.hardMode)            ret = ret.div(4)
                                                         ret = ret.times(tmp.mini.buyables[213].effect)
                                                         ret = ret.times(tmp.mini.buyables[223].effect)
+                                                        ret = ret.times(tmp.mini.buyables[233].effect)
                         if (hasUpgrade("n", 41))        ret = ret.times(player.n.points.max(10).log10())
+                        if (hasUpgrade("o", 35))        ret = ret.times(player.n.points.max(1).pow(.26))
                         if (hasUpgrade("n", 45)) {
                                 l = player.mini.buyables[221].sub(21).max(0)
                                 let base = 1
@@ -4612,7 +4663,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -4670,7 +4720,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -4727,7 +4776,6 @@ addLayer("mini", {
                                 let cost2 = "(1e6)*(1e6^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -4797,7 +4845,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -4855,7 +4902,6 @@ addLayer("mini", {
                                 let cost2 = "(1e31)*(1e11^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -4915,7 +4961,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -4974,7 +5019,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5030,7 +5074,6 @@ addLayer("mini", {
                                 let cost2 = "(1e10)*(1e8^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5096,7 +5139,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5152,7 +5194,6 @@ addLayer("mini", {
                                 let cost2 = "(3e6)*(5e5^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5210,7 +5251,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5266,7 +5306,6 @@ addLayer("mini", {
                                 let cost2 = "(1e33)*(10^x<sup>1.5</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5324,7 +5363,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5381,7 +5419,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5437,7 +5474,6 @@ addLayer("mini", {
                                 let cost2 = "(1e5600)*(1e8^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5500,7 +5536,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5556,7 +5591,6 @@ addLayer("mini", {
                                 let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5614,7 +5648,6 @@ addLayer("mini", {
                                 let cost2 = "(" + base + ")^(" + comp1 + "<sup>" + exp + "</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allCost + "<br>You can only have 15 slots"
                                 return "<br>" + end 
@@ -5677,7 +5710,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5734,7 +5766,6 @@ addLayer("mini", {
                                 let cost2 = "(5000)*(200^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5799,7 +5830,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5862,7 +5892,6 @@ addLayer("mini", {
                                 let cost2 = "(1e180)*(1e4^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -5928,7 +5957,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -5989,7 +6017,6 @@ addLayer("mini", {
                                 let cost2 = "(1e1300)*(1e8^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6054,7 +6081,6 @@ addLayer("mini", {
                                 let cost2 = "(1e1900)*(1e50^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6125,7 +6151,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6185,7 +6210,6 @@ addLayer("mini", {
                                 let cost2 = "(1e13000)*(100^x<sup>1.4</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6252,7 +6276,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6313,7 +6336,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6373,7 +6395,6 @@ addLayer("mini", {
                                 let cost2 = "(1e56700)*(1e11^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6438,7 +6459,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6501,7 +6521,6 @@ addLayer("mini", {
                                 let cost2 = "(1e80870)*(1.80e308^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6574,7 +6593,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6638,7 +6656,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6699,7 +6716,6 @@ addLayer("mini", {
                                 let cost2 = "(1e383)*(5^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6767,7 +6783,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6831,7 +6846,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -6892,7 +6906,6 @@ addLayer("mini", {
                                 let cost2 = "(1e32717)*(1e8^x<sup>1.5</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -6955,7 +6968,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7016,7 +7028,6 @@ addLayer("mini", {
                                 let cost2 = "(5e32)*(1e3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7079,7 +7090,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7140,7 +7150,6 @@ addLayer("mini", {
                                 let cost2 = "(1e213)*(1e20^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7203,7 +7212,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7264,7 +7272,6 @@ addLayer("mini", {
                                 let cost2 = "(1e1344)*(1e24^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7327,7 +7334,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7388,7 +7394,6 @@ addLayer("mini", {
                                 let cost2 = "(1e4751)*(1e20^x<sup>1.4</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7451,13 +7456,12 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
                 },
                 181: {
-                        title: "Parking Brake", //Door but make the D red :)
+                        title: "Parking Brake",
                         cost:() => new Decimal("1e41025").times(Decimal.pow(1e35, Decimal.pow(getBuyableAmount("mini", 181), 1.3))),
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[181].cost),
                         buy(){
@@ -7512,7 +7516,6 @@ addLayer("mini", {
                                 let cost2 = "(1e41025)*(1e35^x<sup>1.3</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7575,7 +7578,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7620,7 +7622,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allCost
                                 return "<br>" + end
                         },
@@ -7650,10 +7651,13 @@ addLayer("mini", {
 
                                 ret = ret.plus(tmp.mini.buyables[221].effect.times(player.mini.buyables[202]))
 
+
                                 return ret
                         },
                         effect(){
-                                return tmp.mini.buyables[202].base.times(player.mini.buyables[202])                                                                                                                     
+                                let ret = tmp.mini.buyables[202].base.times(player.mini.buyables[202])   
+                                if (hasUpgrade("c", 35)) ret = ret.times(player.mini.buyables[202].max(1).ln().max(1))
+                                return ret                                                                                                                  
                         },
                         display(){
                                 // other than softcapping fully general
@@ -7665,6 +7669,7 @@ addLayer("mini", {
                                 let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 202)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 202)) + "*x"
+                                if (hasUpgrade("c", 35)) eformula = eformula.replace("*x", "*ln(x)*x")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -7681,7 +7686,6 @@ addLayer("mini", {
                                 let cost2 = "(30)*(1.5^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7744,7 +7748,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7779,7 +7782,11 @@ addLayer("mini", {
                         base(){
                                 let ret = tmp.mini.buyables[211].baseInit
 
-                                if (hasUpgrade("n", 43)) ret = ret.times(player.mini.buyables[211].max(1).ln().max(1))
+                                if (hasUpgrade("n", 43)) {
+                                        let exp = new Decimal(1)
+                                        if (hasUpgrade("c", 34)) exp = exp.times(2)
+                                        ret = ret.times(player.mini.buyables[211].max(1).ln().max(1).pow(exp))
+                                }
 
                                 return ret
                         },
@@ -7798,6 +7805,7 @@ addLayer("mini", {
                                 let eformula = format(tmp.mini.buyables[211].baseInit) + "*x<br>"
                                 eformula += format(getBuyableBase("mini", 211)) + "*x" 
                                 if (hasUpgrade("n", 43)) eformula = eformula.replace("*x", "*ln(x)*x")
+                                if (hasUpgrade("c", 34)) eformula = eformula.replace(")", ")<sup>2</sup>")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -7814,7 +7822,6 @@ addLayer("mini", {
                                 let cost2 = "(1e4)*(4^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -7877,7 +7884,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -7928,7 +7934,7 @@ addLayer("mini", {
                                 if (hasUpgrade("c", 32)) {
                                         let init = format(tmp.c.upgrades[32].effect,1)
                                         if (init == "2.0") init = "2"
-                                        eformula = eformula.replace("ln", "log_" + init)
+                                        eformula = eformula.replace("ln", "log" + init)
                                 }
                                 //if its undefined set it to that
                                 //otherwise use normal formula
@@ -7946,7 +7952,6 @@ addLayer("mini", {
                                 let cost2 = "(1e9)*(5^x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -8007,7 +8012,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -8066,7 +8070,6 @@ addLayer("mini", {
                                 let cost2 = "(1e176)*(3^x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -8130,7 +8133,6 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -8157,6 +8159,8 @@ addLayer("mini", {
                         },
                         base(){
                                 let ret = new Decimal(2.5)
+
+                                ret = ret.plus(tmp.mini.buyables[232].effect)
 
                                 return ret
                         },
@@ -8200,10 +8204,127 @@ addLayer("mini", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
+                },
+                232: {
+                        title: "a*(b+c)=a*b+a*c",
+                        cost:() => new Decimal("1e34464").times(Decimal.pow(6, Decimal.pow(getBuyableAmount("mini", 232), 1.3))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[232].cost),
+                        buy(){
+                                if (!this.canAfford()) return
+                                player.mini.buyables[232] = player.mini.buyables[232].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[232].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e34464")
+                                let base = 6
+                                let exp = 1.3
+                                let pts = player.mini.e_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 221).gte(2280)
+                        },
+                        base(){
+                                let ret = new Decimal(.1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[232].base.times(player.mini.buyables[232])                                                                                                            
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[232]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.mini.buyables[232].effect) + " to " + makeRed("E") + " and addition is associative base</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 232)) + " E Points</b><br>"
+                                let eformula = format(getBuyableBase("mini", 232)) + "*x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e34464)*(6^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        }, 
+                },
+                233: {
+                        title: "(a+b)*c=a*c+b*c",
+                        cost:() => new Decimal("1e34833").times(Decimal.pow(100, Decimal.pow(getBuyableAmount("mini", 233), 1.3))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[233].cost),
+                        buy(){
+                                if (!this.canAfford()) return
+                                player.mini.buyables[233] = player.mini.buyables[233].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[233].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e34833")
+                                let base = 100
+                                let exp = 1.3
+                                let pts = player.mini.e_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return getBuyableAmount("mini", 221).gte(2300)
+                        },
+                        base(){
+                                let ret = tmp.n.upgrades[35].effect.max(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[233].base.pow(player.mini.buyables[233])                                                                                                            
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[233]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[233].effect) + " to E Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 233)) + " E Points</b><br>"
+                                let eformula = makeRed("E") + "^x<br>" + format(getBuyableBase("mini", 233)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e34833)*(100^x<sup>1.3</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        }, 
                 },
         },
         clickables: {
@@ -9476,7 +9597,7 @@ addLayer("mini", {
                                                         let data = tmp.mini.buyables
                                                         let a = data[151].cost
                                                         let num = 151
-                                                        let ids = [151, 152, 153, 161, 162, 
+                                                        let ids = [152, 153, 161, 162, 
                                                                    163, 171, 172, 173, 181,
                                                                    182, 183, 191, 192, 193]
                                                         for (i = 0; i < ids.length; i++){
@@ -9595,6 +9716,10 @@ addLayer("mini", {
                                                 let ids = [ 72,  73,  81,  82,  83,
                                                             91,  92,  93, 101, 102,
                                                            103, 111, 112, 113, ]
+                                                if (player.mini.buyables[71].eq(11)) {
+                                                        num = 72
+                                                        a = data[72].cost
+                                                }
                                                 for (i = 0; i < ids.length; i++){
                                                         let id = ids[i]
                                                         if (!data[id].unlocked) continue
@@ -10176,7 +10301,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10232,7 +10356,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10283,7 +10406,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10333,7 +10455,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10393,7 +10514,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10446,7 +10566,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10505,7 +10624,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10556,7 +10674,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10611,7 +10728,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10661,7 +10777,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10713,7 +10828,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10764,7 +10878,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10814,7 +10927,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10868,7 +10980,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -10920,7 +11031,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -10974,7 +11084,6 @@ addLayer("tokens", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
@@ -11026,7 +11135,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
@@ -11080,7 +11188,6 @@ addLayer("tokens", {
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
-
 
                                 let end = allEff + allCost
                                 return "<br>" + end
