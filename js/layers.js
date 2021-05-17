@@ -3293,6 +3293,27 @@ addLayer("n", {
                                 return a
                         },
                 }, // hasMilestone("n", 17)
+                18: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.n.milestones[18].requirement)
+                                let b = " Nitrogen"
+                                return a + b
+                        },
+                        requirement(){
+                                let m = player.hardMode ? 7.5 : 7.4
+                                return Decimal.pow(10, 942).times(m)
+                        },
+                        done(){
+                                return tmp.n.milestones[18].requirement.lte(player.n.points)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 17)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Add .01 to to left distributivity.<br>"
+                                return a
+                        },
+                }, // hasMilestone("n", 18)
         },
         challenges: {
                 11: {
@@ -8230,6 +8251,8 @@ addLayer("mini", {
                         },
                         base(){
                                 let ret = new Decimal(.1)
+
+                                if (hasMilestone("n", 18)) ret = ret.plus(.01)
 
                                 return ret
                         },
