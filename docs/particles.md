@@ -2,7 +2,7 @@
 
 Particles are free-floating elements that can move and have many different behaviors. They can also interact with the mouse.
 
-To make particles, use `makeParticles(particle, amount)`. `particle` is a particle-defining object, with features as explained below. There are also a few other useful things listed at the end.
+To make particles, use `makeParticles(particle, amount)`. `particle` is a particle-defining object, with features as explained below. There is also `makeShinies`, which uses different defaults and creates stationary particles at a random location. There are also a few other useful things listed at the end.
 
 ```js
 

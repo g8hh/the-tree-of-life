@@ -3,9 +3,9 @@ var particleID = 0;
 var mouseX = 0;
 var mouseY = 0;
 
-function makeParticles(data, amount=1) {
+function makeParticles(data, amount=1, type = "normal") {
     for (let x = 0; x < amount; x++) {
-        let particle = getNewParticle()
+        let particle = newParticles[type]()
         for (thing in data) {
 
             switch(thing) {
@@ -25,8 +25,10 @@ function makeParticles(data, amount=1) {
         }
         particle.dir = particle.dir + (particle.spread * (x- amount/2 + 0.5))
 
-        particle.x += particle.offset * sin(particle.dir)
-        particle.y += particle.offset * cos(particle.dir) * -1
+        if(particle.offset) {
+            particle.x += particle.offset * sin(particle.dir)
+            particle.y += particle.offset * cos(particle.dir) * -1
+        }
 
         particle.xVel = particle.speed * sin(particle.dir)
         particle.yVel = particle.speed * cos(particle.dir) * -1
@@ -34,6 +36,11 @@ function makeParticles(data, amount=1) {
 	    Vue.set(particles, particle.id, particle)
 
     }
+}
+
+// Makes a particle at a random location that stays still until it despawns
+function makeShinies(data, amount=1) {
+    makeParticles(data, amount, "shiny")
 }
 
 function sin(x) {
@@ -64,29 +71,56 @@ function updateParticles(diff) {
 	}
 }
 
-function getNewParticle() {
-    particleID++
-    return {
-        time: 3,
-        id: particleID,
-        x: mouseX,
-        y: mouseY,
-        width: 35,
-        height: 35,
-        image: "resources/genericParticle.png",
-        angle: 0,
-        spread: 30,
-        offset: 10,
-        speed: 15,
-        xVel: 0,
-        yVel: 0,
-        rotation: 0,
-        gravity: 0,
-        fadeOutTime: 1,
-        fadeInTimer: 0,
-        fadeIn: 0,
-    }
+const newParticles = {
+    normal() {
+        particleID++
+        return {
+            time: 3,
+            id: particleID,
+            x: mouseX,
+            y: mouseY,
+            width: 35,
+            height: 35,
+            image: "resources/genericParticle.png",
+            angle: 0,
+            spread: 30,
+            offset: 10,
+            speed: 15,
+            xVel: 0,
+            yVel: 0,
+            rotation: 0,
+            gravity: 0,
+            fadeOutTime: 1,
+            fadeInTimer: 0,
+            fadeInTime: 0,
+        }
+    },
+    shiny() {
+        particleID++
+        return {
+            time: 10,
+            id: particleID,
+            x: Math.random() * (tmp.other.screenWidth - 100) + 50,
+            y: Math.random() * (tmp.other.screenHeight - 100) + 50,
+            width: 50,
+            height: 50,
+            image: "resources/genericParticle.png",
+            angle: 0,
+            spread: 0,
+            offset: 0,
+            speed: 0,
+            xVel: 0,
+            yVel: 0,
+            rotation: 0,
+            gravity: 0,
+            fadeOutTime: 1,
+            fadeInTimer: 0,
+            fadeInTime: 0.5,
+        }
+    },
 }
+
+
 
 function updateMouse(event) {
     mouseX = event.clientX

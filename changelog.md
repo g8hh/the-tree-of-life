@@ -1,5 +1,12 @@
 # The Modding Tree changelog:
 
+# v2.5.8 - 5/15/21
+- Added makeShinies, which creates a stationary particle in a random spot.
+- Bars will visually update more quickly.
+- Fixed a major particle-related issue.
+- Fixed autoUpgrade.
+- Fixed a minor visal issue with tree nodes.
+
 # v2.5.7 - 5/15/21
 - Added a particle system! Not only can it be used for visual effects, but particles can interact with the mouse. They could be used to create golden cookies or collectables, for example.
 - Added marked feature to buyables, clickables, and challenges. By default, stars multi-completion challenges when maxed.

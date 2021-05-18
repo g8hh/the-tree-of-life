@@ -5,7 +5,7 @@ var scrolled = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.7",
+	tmtNum: "2.5.8",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -370,7 +370,7 @@ function gameLoop(diff) {
 			let layer = TREE_LAYERS[x][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
-			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
+			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
 
