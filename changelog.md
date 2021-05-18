@@ -1,6 +1,6 @@
 # The Modding Tree changelog:
 
-# v2.5.8 - 5/15/21
+# v2.5.8 - 5/17/21
 - Added makeShinies, which creates a stationary particle in a random spot.
 - Bars will visually update more quickly.
 - Fixed a major particle-related issue.
