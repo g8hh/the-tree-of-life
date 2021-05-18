@@ -581,6 +581,7 @@ const coolParticle = {
     },
     update() {
         //this.width += 1
+        //setDir(this, 135)
     },
     layer: 'f',
 }

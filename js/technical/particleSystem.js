@@ -43,13 +43,6 @@ function makeShinies(data, amount=1) {
     makeParticles(data, amount, "shiny")
 }
 
-function sin(x) {
-    return Math.sin(x*Math.PI/180)
-}
-
-function cos(x) {
-    return Math.cos(x*Math.PI/180)
-}
 
 function updateParticles(diff) {
 	for (p in particles) {
@@ -65,10 +58,23 @@ function updateParticles(diff) {
             particle.angle += particle.rotation
             particle.x += particle.xVel
             particle.y += particle.yVel
+            particle.speed = Math.sqrt(Math.pow(particle.xVel, 2) + Math.pow(particle.yVel, 2))
+            particle.dir = atan(-particle.xVel/particle.yVel)
             particle.yVel += particle.gravity
-
         }
 	}
+}
+
+function setDir(particle, dir) {
+    particle.dir = dir
+    particle.xVel = particle.speed * sin(particle.dir)
+    particle.yVel = particle.speed * cos(particle.dir) * -1
+}
+
+function setSpeed(particle, speed) {
+    particle.speed = speed
+    particle.xVel = particle.speed * sin(particle.dir)
+    particle.yVel = particle.speed * cos(particle.dir) * -1
 }
 
 const newParticles = {
@@ -137,7 +143,7 @@ function getOpacity(particle) {
 }   
 
 function constructParticleStyle(particle){
-    return {
+    let style =  {
         left: (particle.x  - particle.height/2) + 'px',
         top: (particle.y - particle.height/2) + 'px',
         width: particle.width + 'px',
@@ -145,8 +151,15 @@ function constructParticleStyle(particle){
         transform: "rotate(" + particle.angle + "deg)",
         opacity: getOpacity(particle),
         "pointer-events": (particle.onClick || particle.onHover) ? 'auto' : 'none',
-        "background-image": "url(" + particle.image + ")",
     }
+    if (particle.color) {
+        style["background-color"] = particle.color
+        style.mask = "url(#pmask" + particle.id + ")"
+        style["-webkit-mask-box-image"] = "url(" + particle.image + ")"
+    }
+    else 
+        style["background-image"] = "url(" + particle.image + ")"
+    return style
 }
 
 function clearParticles(check) {
@@ -158,3 +171,16 @@ function clearParticles(check) {
         }
     }
 }
+
+// Trig with degrees
+function sin(x) { return Math.sin(x*Math.PI/180)}
+
+function cos(x) {return Math.cos(x*Math.PI/180)}
+
+function tan(x) {return Math.tan(x*Math.PI/180)}
+
+function asin(x) { return Math.asin(x)*180/Math.PI}
+
+function acos(x) { return Math.acos(x)*180/Math.PI}
+
+function atan(x) { return Math.atan(x)*180/Math.PI}

@@ -18,7 +18,7 @@ While reading this documentation, the following key will be used when describing
 - **sometimes required**: This is may be required, depending on other things in the layer.
 - **optional**: You can leave this out if you don't intend to use that feature for the layer.
 - **assigned automagically**: This value will be set automatically and override any value you set.
-- **deprecated**: This feature is not recommended to be used anymore, and may be removed in future versions of TMT.
+- **deprecated**: This feature is not recommended to be used, because newer features are able to achieve the same thing in a better, easier way.
 
 ## Table of Contents
 

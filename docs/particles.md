@@ -30,9 +30,10 @@ All distances are in pixels and angles are in degrees, with 0 being up and going
 - text: Displays text on the particle. Can use basic HTML.
 - style: Lets you apply other CSS styling to the particle.
 - width, height: The dimensions of the particle. Default is 35 and 35.
+- color: Sets the color of the image to this color.
 
 - angle: The angle that the particle should face. Default is 0.
-- dir: The angle that the particles should move in, before spread is factored in. Default is whatever angle is.
+- dir: The initial angle that the particles should move in, before spread is factored in. Default is whatever angle is.
 - spread: If there are several particles, they will be spread out by this many degrees, centered on dir. Default is 30.
 
 - rotation: The amount that the (visual) angle of the particle should change by. Default is 0.
@@ -41,9 +42,10 @@ All distances are in pixels and angles are in degrees, with 0 being up and going
 
 - x, y: The starting coordinates of the particle. Default is at the mouse position.
 - offset: How far from the start each particle should appear. Default is 10.
+- xVel, yVel: Set initially based on other properties, then used to update movement.
 
 - layer: When changing tabs, if leaving the `layer` tab, this particle will be erased.
-
+- You can add other features to particles, but you must impliment their effects yourself.
 
 Function features: These stay as functions and are for more advanced things. They are optional.
 
@@ -53,7 +55,9 @@ Function features: These stay as functions and are for more advanced things. The
 
 Other useful things that are not features of the particle object:
 
+- setDir(particle, dir), setSpeed(particle, speed): Set the speed/direction on a particle.
 - clearParticles(check): Function to delete particles. With no check, it deletes all particles. Check is a function that takes a particle, and returns true if that particle should be deleted.
 - You can use Vue.delete(particles, this.id) to make a particle delete itself.
 - mouseX and mouseY are variables that track the mouse position.
-- sin(x), cos(x): functions that do these operations, with x in degrees. (Instead of radians).
+- sin(x), cos(x), tan(x): functions that do these operations, with x in degrees. (Instead of radians).
+- asin(x), acos(x), atan(x): functions that do these operations, with the returned value in degrees. (instead of radians).

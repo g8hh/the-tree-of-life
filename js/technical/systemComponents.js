@@ -191,8 +191,14 @@ var systemComponents = {
 
 	'particle': {
 		props: ['data', 'index'],
-		template: `<div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
+		template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
 			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)" ><span v-html="data.text"></span>
+		</div>
+		<svg version="2" v-if="data.color">
+		<mask v-bind:id="'pmask' + data.id">
+        <image id="img" v-bind:href="data.image" x="0" y="0" :height="data.width" :width="data.height" />
+    	</mask>
+    	</svg>
 		</div>
 		`
 	},
