@@ -336,9 +336,9 @@ document.title = modInfo.name
 function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal)
 		return new Decimal (value)
-	else if (!isNaN(oldValue))
-		return value.toNumber()
-	else return value
+	if (!isNaN(oldValue)) 
+		return parseInt(value, 10)
+	return value
 }
 
 // Variables that must be defined to display popups
