@@ -20,7 +20,7 @@ function makeParticles(data, amount=1) {
                     
             }
         }
-        if (data.angle === undefined) {
+        if (data.dir === undefined) {
             particle.dir = particle.angle
         }
         particle.dir = particle.dir + (particle.spread * (x- amount/2 + 0.5))
