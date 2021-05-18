@@ -334,10 +334,13 @@ document.title = modInfo.name
 
 // Converts a string value to whatever it's supposed to be
 function toValue(value, oldValue) {
-	if (oldValue instanceof Decimal)
-		return new Decimal (value)
+	if (oldValue instanceof Decimal) {
+		value = new Decimal (value)
+		if (value.eq(decimalNaN)) return decimalZero
+		return value
+	}
 	if (!isNaN(oldValue)) 
-		return parseFloat(value)
+		return parseFloat(value) || 0
 	return value
 }
 

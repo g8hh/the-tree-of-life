@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.5.9.1 - 5/18/21
+- Made text inputs never give NaNs.
+
 ### v2.5.9 - 5/18/21
 - Fixed issue when using text inputs for Numbers.
 - Added particle color feature.
