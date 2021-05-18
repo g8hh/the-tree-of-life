@@ -121,20 +121,17 @@ h1, h2, h3, b, input {
 
 .resetNotify {
 	box-shadow: var(--hqProperty2a), 0 0 8px #ffffff;
-	z-index: 3
 }
 
 .treeNode.can:hover {
 	transform: scale(1.15, 1.15);
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
-	z-index: 4
 }
 
 .notify {
 	transform: scale(1.05, 1.05);
 	border-color: rgba(0, 0, 0, 0.125);
 	box-shadow: var(--hqProperty2a), 0 0 20px #ff0000;
-	z-index: 3
 }
 
 .bought {

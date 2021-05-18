@@ -379,8 +379,8 @@ function gameLoop(diff) {
 			let layer = OTHER_LAYERS[row][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
-			player[layer].best = player[layer].best.max(player[layer].points)
-			if (layers[layer].autoUpgrade) autobuyUpgrades(layer)
+				player[layer].best = player[layer].best.max(player[layer].points)
+			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
 
