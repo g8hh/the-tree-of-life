@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed using text inputs for Numbers.
+
 # v2.5.8 - 5/17/21
 - Added makeShinies, which creates a stationary particle in a random spot.
 - Bars will visually update more quickly.

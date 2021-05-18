@@ -337,7 +337,7 @@ function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal)
 		return new Decimal (value)
 	if (!isNaN(oldValue)) 
-		return parseInt(value, 10)
+		return parseFloat(value)
 	return value
 }
 
