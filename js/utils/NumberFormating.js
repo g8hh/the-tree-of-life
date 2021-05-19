@@ -3,12 +3,12 @@ function exponentialFormat(num, precision, mantissa = true) {
         let e = num.log10().floor()
         let m = num.div(Decimal.pow(10, e))
         if (m.toStringWithDecimalPlaces(precision) == 10) {
-                m = new Decimal(1)
+                m = decimalOne
                 e = e.add(1)
         }
         e = e.gte(10000) ? commaFormat(e, 0) : e.toStringWithDecimalPlaces(0)
         if (mantissa) return m.toStringWithDecimalPlaces(precision) + "e" + e
-        else return "e" + e
+        return "e" + e
 }
 
 function commaFormat(num, precision) {
@@ -35,7 +35,7 @@ function fixValue(x, y = 0) {
 
 function sumValues(x){
         x = Object.values(x)
-        if (!x[0]) return new Decimal(0)
+        if (!x[0]) return decimalZero
         return x.reduce((a, b) => Decimal.add(a, b))
 }
 
@@ -95,9 +95,9 @@ function formatTime(s) {
         if (s.eq(new Decimal(1/0))) return "Infinite Time"
         if (s < 60) return format(s) + "s"
         else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-        else if (s < 84600) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+        else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
         else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-        else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 84600) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+        else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
 }
 
 function toPlaces(x, precision, maxAccepted) {
@@ -111,14 +111,14 @@ function toPlaces(x, precision, maxAccepted) {
 
 // Will also display very small numbers
 function formatSmall(x, precision=2) { 
-    return format(x, precision, true)    
+        return format(x, precision, true)    
 }
 
 function invertOOM(x){
-    let e = x.log10().ceil()
-    let m = x.div(Decimal.pow(10, e))
-    e = e.neg()
-    x = new Decimal(10).pow(e).times(m)
+        let e = x.log10().ceil()
+        let m = x.div(Decimal.pow(10, e))
+        e = e.neg()
+        x = new Decimal(10).pow(e).times(m)
 
-    return x
+        return x
 }

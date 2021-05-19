@@ -13,18 +13,16 @@ function getResetGain(layer, useType = null) {
 	let type = useType
 	if (!useType){ 
 		type = tmp[layer].type
-		if (layers[layer].getResetGain !== undefined)
-			return layers[layer].getResetGain()
+		if (layers[layer].getResetGain !== undefined) return layers[layer].getResetGain()
 	} 
-	if(tmp[layer].type == "none")
-		return new Decimal (0)
+	if (tmp[layer].type == "none") return decimalZero
 	if (tmp[layer].gainExp.eq(0)) return decimalZero
-	if (type=="static") {
+	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1))
 		gain = gain.times(tmp[layer].directMult)
 		return gain.floor().sub(player[layer].points).add(1).max(1);
-	} else if (type=="normal"){
+	} else if (type == "normal"){
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp)
 		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
@@ -32,9 +30,8 @@ function getResetGain(layer, useType = null) {
 		return gain.floor().max(0);
 	} else if (type == "custom"){
 		return layers[layer].getResetGain()
-	} else {
-		return decimalZero
-	}
+	} 
+	return decimalZero
 }
 
 function getNextAt(layer, canMax=false, useType = null) {
@@ -47,14 +44,14 @@ function getNextAt(layer, canMax=false, useType = null) {
 		if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity)
 		if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity)
 
-		if (type=="static") {
+		if (type == "static") {
 			if (!tmp[layer].canBuyMax) canMax = false
 			let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0)
 			let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult)
 			let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires)
 			if (tmp[layer].roundUpCost) cost = cost.ceil()
 			return cost;
-		} else if (type=="normal"){
+		} else if (type == "normal"){
 			let next = tmp[layer].resetGain.add(1)
 			if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower))
 			next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
@@ -62,9 +59,8 @@ function getNextAt(layer, canMax=false, useType = null) {
 			return next;
 		} else if (type == "custom"){
 			return layers[layer].getNextAt(canMax)
-		} else {
-			return new Decimal(0)
 		}
+		return decimalZero
 	}
 }
 
@@ -86,8 +82,7 @@ function shouldNotify(layer){
 		return true
 	}
 
-	if (tmp[layer].shouldNotify)
-		return true
+	if (tmp[layer].shouldNotify) return true
 
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat){
@@ -108,27 +103,23 @@ function shouldNotify(layer){
 	}
 	 
 	return false
-	
 }
 
 function canReset(layer){	
-	if (layers[layer].canReset!== undefined)
-		return run(layers[layer].canReset, layers[layer])
-	else if (tmp[layer].type == "normal")
-		return tmp[layer].baseAmount.gte(tmp[layer].requires)
-	else if (tmp[layer].type== "static")
-		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
+	if (layers[layer].canReset!== undefined) return run(layers[layer].canReset, layers[layer])
+	else if (tmp[layer].type == "normal") return tmp[layer].baseAmount.gte(tmp[layer].requires)
+	else if (tmp[layer].type== "static") return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
 	else return false
 }
 
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
-		if(layers[lr].doReset) {
+		if (layers[lr].doReset) {
 			player[lr].activeChallenge = null // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
+		} else if (tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) {
+			layerDataReset(lr)
 		}
-		else
-			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
 	}
 }
 
@@ -158,8 +149,7 @@ function layerDataReset(layer, keep = []) {
 }
 
 function resetBuyables(layer){
-	if (layers[layer].buyables) 
-		player[layer].buyables = getStartBuyables(layer)
+	if (layers[layer].buyables) player[layer].buyables = getStartBuyables(layer)
 	player[layer].spentOnBuyables = decimalZero
 }
 
@@ -182,11 +172,11 @@ function doReset(layer, force=false) {
 	if (!force) {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
 		let gain = tmp[layer].resetGain
-		if (tmp[layer].type=="static") {
+		if (tmp[layer].type == "static") {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
-			gain =(tmp[layer].canBuyMax ? gain : 1)
+			gain = (tmp[layer].canBuyMax ? gain : 1)
 		} 
-		if (tmp[layer].type=="custom") {
+		if (tmp[layer].type == "custom") {
 			if (!tmp[layer].canReset) return;
 		} 
 		
@@ -194,7 +184,6 @@ function doReset(layer, force=false) {
 		if (layers[layer].onPrestige) run(layers[layer].onPrestige, layers[layer], gain)
 		updateMilestones(layer)
 		updateAchievements(layer)
-
 
 		if (!player[layer].unlocked) {
 			player[layer].unlocked = true;
@@ -211,7 +200,6 @@ function doReset(layer, force=false) {
 	}
 
 	if (tmp[layer].resetsNothing) return
-
 
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
@@ -252,11 +240,9 @@ function startChallenge(layer, x) {
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
 		player[layer].activeChallenge = null
-	} else {
-		enter = true
-	}	
+	} else enter = true
 	doReset(layer, true)
-	if(enter) {
+	if (enter) {
 		player[layer].activeChallenge = x
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])
 	}
@@ -272,14 +258,11 @@ function canCompleteChallenge(layer, x){
 		let name = challenge.currencyInternalName
 		if (challenge.currencyLocation){
 			return !(challenge.currencyLocation[name].lt(challenge.goal)) 
-		}
-		else if (challenge.currencyLayer){
+		} else if (challenge.currencyLayer){
 			let lr = challenge.currencyLayer
 			return !(player[lr][name].lt(challenge.goal)) 
 		}
-		else {
-			return !(player[name].lt(challenge.goal))
-		}
+		return !(player[name].lt(challenge.goal))
 	}
 	return !(player.points.lt(challenge.goal))
 }
@@ -290,8 +273,8 @@ function completeChallenge(layer, x) {
 	
 	let completions = canCompleteChallenge(layer, x)
 	if (!completions){
-		 player[layer].activeChallenge = null
-		 run(layers[layer].challenges[x].onExit, layers[layer].challenges[x])
+		player[layer].activeChallenge = null
+		run(layers[layer].challenges[x].onExit, layers[layer].challenges[x])
 		return
 	}
 	if (player[layer].challenges[x] < tmp[layer].challenges[x].completionLimit) {
@@ -329,8 +312,7 @@ function gameLoop(diff) {
 
 	if (maxTickLength) {
 		let limit = maxTickLength()
-		if(diff > limit)
-			diff = limit
+		if (diff > limit) diff = limit
 	}
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
@@ -389,9 +371,9 @@ function hardReset() {
 var ticking = false
 
 var interval = setInterval(function() {
-	if (player===undefined||tmp===undefined) return;
+	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
-	if (gameEnded&&!player.keepGoing) return;
+	if (gameEnded && !player.keepGoing) return;
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3

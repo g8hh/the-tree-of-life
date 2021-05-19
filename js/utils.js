@@ -128,16 +128,6 @@ function canBuyBuyable(layer, id) {
 	return (b.unlocked && b.canAfford && c.lt(b.purchaseLimit))
 }
 
-
-
-function hasAchievement(layer, id) {
-	return (player[layer].achievements.includes(toNumber(id)) || player[layer].achievements.includes(id.toString()))
-}
-
-function hasChallenge(layer, id) {
-	return (player[layer].challenges[id])
-}
-
 function layerChallengeCompletions(layer){
 	let a = 0
 	for (i in player[layer].challenges){
@@ -146,64 +136,15 @@ function layerChallengeCompletions(layer){
 	return a
 }
 
-function maxedChallenge(layer, id) {
-	return (player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit)
-}
-
-function challengeCompletions(layer, id) {
-	return (player[layer].challenges[id])
-}
-
-function getBuyableAmount(layer, id) {
-	return (player[layer].buyables[id])
-}
-
-function setBuyableAmount(layer, id, amt) {
-	player[layer].buyables[id] = amt
-}
-
-function getClickableState(layer, id) {
-	return (player[layer].clickables[id])
-}
-
-function setClickableState(layer, id, state) {
-	player[layer].clickables[id] = state
-}
-
-function upgradeEffect(layer, id) {
-	return (tmp[layer].upgrades[id].effect)
-}
-
-function challengeEffect(layer, id) {
-	return (tmp[layer].challenges[id].rewardEffect)
-}
-
-function buyableEffect(layer, id) {
-	return (tmp[layer].buyables[id].effect)
-}
-
-function clickableEffect(layer, id) {
-	return (tmp[layer].clickables[id].effect)
-}
-
-function achievementEffect(layer, id) {
-	return (tmp[layer].achievements[id].effect)
-}
-
 function canAffordPurchase(layer, thing, cost) {
-
 	if (thing.currencyInternalName) {
 		let name = thing.currencyInternalName
-		if (thing.currencyLocation) {
-			return !(thing.currencyLocation[name].lt(cost))
-		}
+		if (thing.currencyLocation) return !(thing.currencyLocation[name].lt(cost))
 		else if (thing.currencyLayer) {
 			let lr = thing.currencyLayer
 			return !(player[lr][name].lt(cost))
 		}
-		else {
-			return !(player[name].lt(cost))
-		}
+		else return !(player[name].lt(cost))
 	}
 	else {
 		return !(player[layer].points.lt(cost))
@@ -348,15 +289,14 @@ function prestigeNotify(layer) {
 	if (layers[layer].prestigeNotify) return layers[layer].prestigeNotify()
 	
 	if (isPlainObject(tmp[layer].tabFormat)) {
-		for (subtab in tmp[layer].tabFormat){
+		for (subtab in tmp[layer].tabFormat) {
 			if (subtabResetNotify(layer, 'mainTabs', subtab))
 				return true
 		}
 	}
 	for (family in tmp[layer].microtabs) {
-		for (subtab in tmp[layer].microtabs[family]){
-			if (subtabResetNotify(layer, family, subtab))
-				return true
+		for (subtab in tmp[layer].microtabs[family]) {
+			if (subtabResetNotify(layer, family, subtab)) return true
 		}
 	}
 	if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false

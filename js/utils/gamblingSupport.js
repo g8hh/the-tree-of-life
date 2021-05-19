@@ -1,5 +1,3 @@
-
-
 function getAllowedCharacterValues(){
         let a = [1,2,3,4,5,6,7]
         if (hasUpgrade("mini", 24)) a.push(8)
@@ -109,3 +107,4 @@ function getRewardAmount(spins){
 
         return val
 }
+

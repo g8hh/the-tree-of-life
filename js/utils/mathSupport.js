@@ -1,15 +1,4 @@
-/*
 
-
-dx/dt = A-Bx
-dx/(A-Bx) = dt
--ln(A-Bx)/B = t+c
-
-so c = -ln(A-B[CURRENT])/B
-
-
-
-*/
 function getLogisticTimeConstant(current, gain, loss){
         if (current.eq(gain.div(loss))) return Infinity
         if (current.gt(gain.div(loss))) return current.times(loss).sub(gain).ln().div(-1).div(loss)
