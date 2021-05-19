@@ -113,8 +113,8 @@ function updateTempData(layerData, tmpData, funcsData) {
 	
 	for (item in funcsData){
 		if (Array.isArray(layerData[item])) {
-			if (item === "tabFormat" || item === "content") return // These are only updated when needed
-			updateTempData(layerData[item], tmpData[item], funcsData[item])
+			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
+				updateTempData(layerData[item], tmpData[item], funcsData[item])
 		}
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
 			updateTempData(layerData[item], tmpData[item], funcsData[item])
