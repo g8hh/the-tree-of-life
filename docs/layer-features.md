@@ -60,7 +60,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 ## Big features (all optional)
 
-- upgrades: A grid of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses. [See here for more info.](upgrades.md)
+- upgrades: A set of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses. [See here for more info.](upgrades.md)
 
 - milestones: A list of bonuses gained upon reaching certain thresholds of a resource. Often used for automation/QOL. [See here for more info.](milestones.md)
 
@@ -76,9 +76,11 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - achievements: Kind of like milestones, but with a different display style and some other differences. Extra features are on the way at a later date! [See here for more info.](achievements.md)
 
+- achievementPopups, milestonePopups: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
+
 - infoboxes: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
 
-- achievementPopups, milestonePopups: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
+- grid: A grid of buttons that behave the same, but have their own data.[See here for more info.](grids.md)
 
 ## Prestige formula features
 
@@ -101,7 +103,10 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - roundUpCost: **optional**. a bool, which is true if the resource cost needs to be rounded up. (use if the base resource is a "static" currency.)
 
-- gainMult(), gainExp(): **optional**. Functions that calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in any bonuses here.
+- gainMult(), gainExp(): **optional**. For normal layers, these functions calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in most bonuses here.
+    For static layers, they instead divide and root the cost of the resource.
+
+- directMult(): **optional**. Directly multiplies the resource gain, after exponents and softcaps. For static layers, actually multiplies resource gain instead of reducing the cost.
 
 - softcap, softcapPower: **optional**. For normal layers, gain beyond [softcap] points is put to the [softcapPower]th power
     Default for softcap is e1e7, and for power is 0.5.
@@ -137,6 +142,8 @@ You can make almost any value dynamic by using a function in its place, includin
 - tooltip() / tooltipLocked(): **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
     If the value is "", the tooltip will be disabled.
 
+- marked: **optional** Adds a mark to the corner of the node. If it's "true" it will be a star, but it can also be an image URL.
+
 ## Other features
 
 - doReset(resettingLayer): **optional**. Is triggered when a layer on a row greater than or equal to this one does a reset. The default behavior is to reset everything on the row, but only if it was triggered by a layer in a higher row. `doReset` is always called for side layers, but for these the default behavior is to reset nothing.
@@ -165,6 +172,8 @@ componentStyles: {
     "prestige-button"() { return {'color': '#AA66AA'} }
 }
 ```
+
+- deactivated: **optional**, if this is true, hasUpgrade, hasChallenge, hasAchievement, and hasMilestone will return false for things in the layer, and you will be unable to buy or click things on the layer. You will have to disable effects of buyables, the innate layer effect, and possibly other things yourself.
 
 ## Custom Prestige type  
 (All of these can also be used by other prestige types)

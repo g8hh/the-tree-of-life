@@ -21,7 +21,7 @@ upgrades: {
 }
 ```
 
-Each upgrade should have an id where the first digit is the row and the second digit is the column.
+Usually, upgrades should have an id where the first digit is the row and the second digit is the column.
 
 Individual upgrades can have these features:
 

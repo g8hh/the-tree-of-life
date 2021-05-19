@@ -5,6 +5,8 @@
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none;
 }
 
 *:focus {
@@ -119,20 +121,17 @@ h1, h2, h3, b, input {
 
 .resetNotify {
 	box-shadow: var(--hqProperty2a), 0 0 8px #ffffff;
-	z-index: 3
 }
 
 .treeNode.can:hover {
 	transform: scale(1.15, 1.15);
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
-	z-index: 4
 }
 
 .notify {
 	transform: scale(1.05, 1.05);
 	border-color: rgba(0, 0, 0, 0.125);
 	box-shadow: var(--hqProperty2a), 0 0 20px #ff0000;
-	z-index: 3
 }
 
 .bought {
@@ -199,6 +198,8 @@ h1, h2, h3, b, input {
     position: absolute;
 	overflow: hidden;
 	margin-left: -0.5px;
+	transition-duration: 0.2s;
+
 }
 
 .overlayText {
@@ -263,6 +264,23 @@ h1, h2, h3, b, input {
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	font-size: 10px;
+	position:relative;
+}
+
+.tile {
+	height: 80px;
+	width: 80px;
+	border-radius: 15%;
+	border: 2px solid;
+	border-color: rgba(0, 0, 0, 0.125);
+	font-size: 10px;
+	overflow: visible;
+}
+
+.tile.can:hover {
+	box-shadow: 0 0 10px var(--points);
+	transform: scale(1.1, 1.1);
+	z-index: 7;
 }
 
 .upgBig {
@@ -517,6 +535,7 @@ ul {
 
 .hChallenge {
 	background-color: #bf8f8f;
+	position: relative;
 	border: 4px solid;
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
@@ -672,4 +691,55 @@ button > * {
 
 #treeTab td button {
     margin: 0 10px;
+}
+
+.mark {
+	position: relative;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	z-index: 10000;
+	margin-left: 0.9em;
+	margin-right: 0.9em;
+	margin-bottom: 1.2em;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0.7em solid transparent;
+	border-left: 0.3em solid transparent;
+	font-size: 10px;
+	overflow:auto;
+	pointer-events: none;
+}
+
+.star {
+	position: relative;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	z-index: 10000;
+	margin-left: 0.9em;
+	margin-right: 0.9em;
+	margin-bottom: 1.2em;
+	border-right: 0.3em solid transparent;
+	border-bottom: 0.7em solid #ffcc00;
+	border-left: 0.3em solid transparent;
+	font-size: 10px;
+	pointer-events: none;
+
+}
+
+.star:before, .star:after {
+	content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: .6em;
+    left: -1em;
+	border-right: 1em solid transparent;
+    border-bottom: 0.7em solid #ffcc00;
+    border-left: 1em solid transparent;
+	transform: rotate(-35deg);
+}
+
+.star:after {
+	transform: rotate(35deg);
 }

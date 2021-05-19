@@ -1,6 +1,74 @@
 # The Modding Tree changelog:
 
-# v2.5.1 - 5/7/21
+### v2.5.9.2 - 5/19/21
+- Fixed many issues with things not updating.
+
+### v2.5.9.1 - 5/18/21
+- Made text inputs never give NaNs.
+
+### v2.5.9 - 5/18/21
+- Fixed issue when using text inputs for Numbers.
+- Added particle color feature.
+- Particle speed and dir are updated as it moves.
+- Added setSpeed and setDir for particles.
+- Added more trig functions.
+
+### v2.5.8 - 5/17/21
+- Added makeShinies, which creates a stationary particle in a random spot.
+- Bars will visually update more quickly.
+- Fixed a major particle-related issue.
+- Fixed autoUpgrade.
+- Fixed a minor visual issue with tree nodes.
+
+### v2.5.7 - 5/15/21
+- Added a particle system! Not only can it be used for visual effects, but particles can interact with the mouse. They could be used to create golden cookies or collectables, for example.
+- Added marked feature to buyables, clickables, and challenges. By default, stars multi-completion challenges when maxed.
+- Added 'deactivated' feature to layers, which disables many features.
+- Improved number formatting slightly.
+
+### v2.5.6 - 5/14/21
+- You can now use non-numeric ids for upgrades, buyables, etc.
+- Fixed an exploit that let you buy an extra buyable.
+- Moved basic getter/setter functions to easyAccess.js.
+
+### v2.5.5.2 - 5/12/21
+- Fixed a major issue with buyables.
+- Fixed a variety of tabFormat-related issues.
+- Fixed commas appearing in decimal places (thanks to pg132!)
+
+### v2.5.5.1 - 5/12/21
+- Fixed clickables.
+
+### v2.5.5 - 5/12/21
+- Added grids! They are a grid of buttons which behave the same, but have their own data. Good for inventory grids, map tiles, and more!
+- Added "marked" feature to add a mark to a node. Can be an image instead of a star. (Originally by Jacorb)
+- Added "layer-proxy" component that lets you use components from another layer.
+- Added the ability to display non-whole numbers in main-display.
+
+### v2.5.4 - 5/10/21
+- Added a setting to always use single-tab mode.
+- Added directMult, which multiplies prestige gain after exponents and softcaps. It actually multiplies gain for static layers.
+- Added onEnter and onExit for challenges.
+- Improved displaying numbers between 0.0001 and 0.1.
+- Added documentation on how gainMult/Exp work for static layers.
+- Fixed a visual issue on mobile, thanks to thepaperpilot.
+- Improved documentation in general.
+
+### v2.5.3 - 5/8/21
+- Improved performance of tab formats and bars.
+- Respec confirmation settings are now kept on resets.
+- Improved compatibility with older browsers.
+- Fixed missing pixel on vertical bars.
+
+### v2.5.2.1 - 5/7/21
+- Fixed microtabs making layers highlight incorrectly.
+
+### v2.5.2 - 5/7/21
+- Added glowColor for subtabs.
+- Improved the display for extremely small numbers.
+- Fixed issues in the buyable docs.
+
+### v2.5.1 - 5/7/21
 - Fixed dynamic things in tabFormat not updating.
 
 ## v2.5: Dreams Really Do Come True - 5/7/21
@@ -20,7 +88,7 @@
 - Added formatting support for very small numbers. Disabled in most places by default because rounding errors might cause issues. Access it with formatSmall, or enable it globally by adding "allowSmall: true" to modInfo.
 
 
-# v2.4.1 - 4/29/21
+### v2.4.1 - 4/29/21
 - A number of minor fixes, many thanks to thepaperpilot.
 - The respec confirmation checkbox is now part of the respec-button component.
     (This also fixes the checkbox appearing when there is no respec button)
@@ -43,7 +111,7 @@
 - Tooltips now use HTML (this means you need to replace any newlines with <br>)
 
 
-# v2.π.1 - 4/7/21
+### v2.π.1 - 4/7/21
 - Fixed formatting for some larger numbers.
 - Upgrades will expand if there is too much text to display. 
 - Fixed styling challenges.
@@ -59,28 +127,28 @@
 - Code reorganization and style improvements by fudo.
 
 
-## v2.3.5 - 12/21/20
+### v2.3.5 - 12/21/20
 - Added resetTime, which tracks the time since a layer prestiged or was reset.
 - A layer node will be highlighted red if one of its subtabs is highlighted red.
 - Fixed issues with keeping challenges, buyables, and clickables on reset.
 - Improved the unlocking of custom layers.
 - Other minor fixes.
 
-## v2.3.4 - 12/16/20
+### v2.3.4 - 12/16/20
 - Added a node image feature.
 - Resource display now always shows the amount of the currency the layer's gain is based on.
 - Added spacing between tree nodes.
 - Another attempt to fix tooltip flickering.
 
-## v2.3.3 - 12/13/20
+### v2.3.3 - 12/13/20
 - Fixed the first node in a row always taking up space.
 - layerShown is now optional.
 - All prestige types can now use features for custom prestige types.
 
-## v2.3.2 - 12/13/20
+### v2.3.2 - 12/13/20
 - Fixed achievement/milestone popups.
 
-## v2.3.1 - 12/12/20
+### v2.3.1 - 12/12/20
 - Another attempt to fix flickering tooltips.
 - The "this" keyword should work everywhere except tabFormat arrays (although I may have missed some things).
 - Fixed tree branches not updating when scrolling on the right-side tab.
@@ -334,11 +402,11 @@ which will break old things)
 - Added a few minor features, and updated the docs with new information.
 
 
-### v1.1.1:
+### v1.1.1 - 9/30/20
 
 - You can define hotkeys directly from layer config.
 
-## v1.1: Enhanced Edition
+## v1.1: Enhanced Edition - 9/30/20
 
 - Added "Buyables", which can function like Space Buildings or Enhancers.
 - Custom CSS can now be used on any component! Make the third argument an object with CSS
@@ -346,5 +414,5 @@ parameters.
 - Lots of minor good things.
 
 
-## v1.0:
+## v1.0 - 9/27/20
 - First release.

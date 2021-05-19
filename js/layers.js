@@ -1316,7 +1316,11 @@ addLayer("h", {
                                 "blank", 
                                 ["upgrades", [2,7]]
                                 ],
+                        adasd(){
+                                console.log("xs")
+                        },
                         unlocked(){
+                                console.log("x")
                                 return hasUpgrade("h", 21)
                         },
                 },
