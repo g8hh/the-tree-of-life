@@ -314,6 +314,11 @@ function gameLoop(diff) {
 		let limit = maxTickLength()
 		if (diff > limit) diff = limit
 	}
+
+	if (isNaN(tmp.pointGen)) Decimal(0) //toss an error
+	if (isNaN(player.h.deuterium.points.plus(3).ln())) Decimal(0)
+	if (isNaN(player.h.atomic_hydrogen.points.plus(3).ln())) Decimal(0)
+	
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
@@ -369,6 +374,7 @@ function hardReset() {
 }
 
 var ticking = false
+var pastTickTimes = []
 
 var interval = setInterval(function() {
 	if (player === undefined || tmp === undefined) return;
@@ -401,6 +407,8 @@ var interval = setInterval(function() {
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
+	pastTickTimes = pastTickTimes.slice(0, 9)
+	pastTickTimes.push(Date.now() - now)
 	ticking = false
 }, 50)
 

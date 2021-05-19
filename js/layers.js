@@ -17,6 +17,17 @@ function getPointGen() {
 	return gain
 }
 
+function logPointContributers(){
+        console.log(tmp.h.upgrades[11].effect.mag)
+        console.log(tmp.h.upgrades[22].effect.mag)
+        console.log(tmp.h.upgrades[13].effect.mag)
+        console.log(tmp.mini.buyables[61].effect.mag)
+        console.log(tmp.o.upgrades[15].effect.mag)
+        console.log(tmp.h.upgrades[61].effect.mag)
+        console.log(tmp.tokens.buyables[11].effect.mag)
+        console.log(tmp.n.effect.mag)
+}
+
 var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350, 
                       9350,   10000,   10860,   11230,   12600,
                      14460,   15170,   15430,   19780,   24000,
@@ -103,7 +114,7 @@ addLayer("h", {
                 return ret
         },
         getNextAt(){
-                return new Decimal(0) //this doesnt matter
+                return new Decimal(0)
         },
         getLossRate() { //hydrogen loss
                 let ret = new Decimal(.01)
@@ -152,12 +163,6 @@ addLayer("h", {
                                                                          tmp.h.atomic_hydrogen.getResetGain, 
                                                                          tmp.h.atomic_hydrogen.getLossRate, 
                                                                          diff)
-
-                if (false) {
-                        //do autobuyer stuff
-                } else {
-                        data.abtime = 0
-                }
                 data.time += diff
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -431,9 +436,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Search through your Hydrogen to find the special .02% -- Deuterium"
-                                a = ""
-                                if (hasUpgrade("h", 21)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 21)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e5) : new Decimal(1)
@@ -514,9 +518,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Raise Deuterium II to the number of upgrades in this row"
-                                a = ""
-                                if (hasUpgrade("h", 24)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
+                                if (hasUpgrade("h", 24)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(200e3) : new Decimal(200)
@@ -578,9 +581,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Wait for your Hydrogen to cool and bond at a brisk .1% rate"
-                                a = ""
-                                if (hasUpgrade("h", 31)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 31)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(3e5) : new Decimal(1)
@@ -630,9 +632,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Make the ln in Hydrogen I a log2"
-                                a = ""
-                                if (hasUpgrade("h", 33)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                                if (hasUpgrade("h", 33)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(100e3) : new Decimal(100)
@@ -651,9 +652,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Hydrogen III effects Life Points"
-                                a = ""
-                                if (hasUpgrade("h", 34)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                                if (hasUpgrade("h", 34)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(1000e3) : new Decimal(1000)
@@ -672,9 +672,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "You lose .12% less Hydrogen per second"
-                                a = ""
-                                if (hasUpgrade("h", 35)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
+                                if (hasUpgrade("h", 35)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
                         cost(){
                                 if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(4000e3) : new Decimal(4000)
@@ -765,9 +764,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Double Hydrogen II and make the ln in Hydrogen IV a log2"
-                                a = ""
-                                if (hasUpgrade("h", 43)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[43].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 43)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[43].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal(8e9) : new Decimal(4e9)
@@ -782,9 +780,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>A</bdi>, but square Hydrogen X cost"
-                                a = ""
-                                if (hasUpgrade("h", 44)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[44].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 44)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[44].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
@@ -807,9 +804,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>B</bdi>, but square Hydrogen IX cost"
-                                a = ""
-                                if (hasUpgrade("h", 45)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[45].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 45)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[45].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 a = player.hardMode ? new Decimal(13e9) : new Decimal(6e9)
@@ -831,9 +827,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
-                                a = ""
-                                if (hasUpgrade("h", 51)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[51].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 51)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[51].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal(1e36) : new Decimal(1e39)
@@ -848,9 +843,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='font-size: 80%'> The autobuyer can buy A buyables, all autobuyers trigger per tick and works 10x as fast. Remove the softcap for B buyables</bdi>"
-                                a = ""
-                                if (hasUpgrade("h", 52)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[52].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 52)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[52].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal(1e98) : new Decimal(1e80)
@@ -865,9 +859,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Add 1 to the Violet base and ln(White) multiplies White effect"
-                                a = ""
-                                if (hasUpgrade("h", 53)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[53].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 53)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[53].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal("1e360") : new Decimal("1e321")
@@ -882,9 +875,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "^.5 in the A production formula becomes ^.52"
-                                a = ""
-                                if (hasUpgrade("h", 54)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[54].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 54)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[54].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal("1e364") : new Decimal("1e360")
@@ -899,9 +891,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "^.52 in the A production formula becomes ^.524 and unlock Carbon (C) and Oxygen (O)"
-                                a = ""
-                                if (hasUpgrade("h", 55)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[55].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 55)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[55].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? new Decimal("1e385") : new Decimal("1e380")
@@ -947,9 +938,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen IV effects Carbon gain and double autobuyer speed"
-                                a = ""
-                                if (hasUpgrade("h", 62)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[62].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 62)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[62].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? Decimal.pow(2, 2250) : Decimal.pow(2, 2200)
@@ -991,9 +981,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Square the ln(x) term in White and add a log10(x) term to Green"
-                                a = ""
-                                if (hasUpgrade("h", 64)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[64].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 64)) return ''
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[64].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? Decimal.pow(10, 1034) : Decimal.pow(10, 1024)
@@ -1008,9 +997,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "Unlock tokens"
-                                a = ""
-                                if (hasUpgrade("h", 65)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[65].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 65)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[65].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
                                 return player.hardMode ? Decimal.pow(10, 1310) : Decimal.pow(10, 1304)
@@ -1088,9 +1076,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
-                                a = ""
-                                return a
+                                return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
                                 return Decimal.pow(10, 4516e3)
@@ -1111,9 +1097,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Square Oxygen I and remove the -9"
-                                a = ""
-                                return a
+                                return "Square Oxygen I and remove the -9"
                         },
                         cost(){
                                 return Decimal.pow(10, 7111e3)
@@ -1134,9 +1118,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Change token buyable costs from ceiling to rounding"
-                                a = ""
-                                return a
+                                return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
                                 return Decimal.pow(10, 7686e3)
@@ -1180,9 +1162,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Per token per upgrade multiply Microwave base by 1.01"
-                                a = ""
-                                return a
+                                return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
                                 return Decimal.pow(10, 6750e3)
@@ -1203,9 +1183,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Raise token buyable costs ^.9 (ceilinged)"
-                                a = ""
-                                return a
+                                return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
                                 return Decimal.pow(10, 7070e3)
@@ -1226,9 +1204,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Change token buyable exponent to .8"
-                                a = ""
-                                return a
+                                return "Change token buyable exponent to .8"
                         },
                         cost(){
                                 return Decimal.pow(10, 7913e3)
@@ -1249,9 +1225,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Change token buyable exponent to .7"
-                                a = ""
-                                return a
+                                return "Change token buyable exponent to .7"
                         },
                         cost(){
                                 return Decimal.pow(10, 8362e3)
@@ -1577,9 +1551,8 @@ addLayer("c", {
                         },
                         description(){
                                 if (!shiftDown) return "Deuterium V multiplies and then exponentiates Carbon gain"
-                                a = ""
-                                if (hasUpgrade("c", 15)) return a
-                                return a + "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[15].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 15)) return ""
+                                return "<br>Estimated time: " + logisticTimeUntil(tmp.c.upgrades[15].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost() {
                                 if (hasUpgrade("o", 11)) return player.hardMode ? new Decimal(6000) : new Decimal(3000)

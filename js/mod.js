@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.056",
+	num: "0.056.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.056.1</h3><br>
+		- Added a mspt display.<br>
+		- Cleaned up a bit of code, and created some error catchers.<br>
 	<br><h3 style='color: #CC0000'>v0.056</h3><br>
 		- Merged v2.5.9.2 of TMT.<br>
 	<br><h3 style='color: #CC0000'>v0.055</h3><br>
@@ -369,11 +372,17 @@ var displayThings = [
 		if (!player.arrowHotkeys) list1 = list1.concat("¬A")
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
-		if (player.hardFromBeginning) {
-			end += player.hardMode ? "{HARD}" : "{dev easy}"
-		}
+		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
 		else if (player.hardMode) end += "{Hard}"
-		return "Last save was: " + formatTime((t2-t1)/1000) + " ago " + end
+		let saveFinal = "Last save was: " + formatTime((t2-t1)/1000) + " ago. " + end
+		let len = pastTickTimes.length
+		if (len <= 3) return saveFinal
+		let a = 0
+		for (i = 0; i < len; i++){
+			a += pastTickTimes[i]
+		}
+		let msptFinal = " ms/tick = " + formatWhole(Math.round(a/len))
+		return saveFinal + msptFinal
 	}
 ]
 
