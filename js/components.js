@@ -603,7 +603,6 @@ function loadVue() {
 			particles,
 			mouseX,
 			mouseY,
-			ctrlDown,
 		},
 	})
 }

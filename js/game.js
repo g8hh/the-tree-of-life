@@ -68,29 +68,6 @@ function getNextAt(layer, canMax=false, useType = null) {
 	}
 }
 
-	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity)
-	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity)
-
-	if (type=="static") 
-	{
-		if (!tmp[layer].canBuyMax) canMax = false
-		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult)
-		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult)
-		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires)
-		if (tmp[layer].roundUpCost) cost = cost.ceil()
-		return cost;
-	} else if (type=="normal"){
-		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult)
-		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower))
-		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires)
-		if (tmp[layer].roundUpCost) next = next.ceil()
-		return next;
-	} else if (type=="custom"){
-		return layers[layer].getNextAt(canMax)
-	} else {
-		return decimalZero
-	}}
-
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value
 	return value.pow(power).times(cap.pow(decimalOne.sub(power)))
