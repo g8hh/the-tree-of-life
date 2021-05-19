@@ -15,14 +15,14 @@ challenges: {
     11: {
         name: "Ouch",
         challengeDescription: "description of ouchie",
-        goal: new Decimal(100),
+        canComplete: function() {return player.points.gte(100)},
         etc
     },
     etc
 }
 ```
 
-Each challenge should have an id where the first digit is the row and the second digit is the column.
+Usually, each challenge should have an id where the first digit is the row and the second digit is the column.
 
 Individual Challenges can have these features:
 
@@ -48,11 +48,17 @@ Individual Challenges can have these features:
 
 - onComplete() - **optional**. this function will be called when the challenge is completed when previously incomplete.
 
+- onEnter() - **optional**. this function will be called when entering the challenge
+
+- onExit() - **optional**. this function will be called when exiting the challenge in any way
+
 - countsAs: **optional**. If a challenge combines the effects of other challenges in this layer, you can use this. An array of challenge ids. The player is effectively in all of those challenges when in the current one.
 
 - completionLimit: **optional**. the amount of times you can complete this challenge. Default is 1 completion.
 
 - style: **optional**. Applies CSS to this challenge, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+
+- marked: **optional** Adds a mark to the corner of the challenge. If it's "true" it will be a star, but it can also be an image URL. By default, if the challenge has multiple completions, it will be starred at max completions.
 
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do player[this.layer].points or similar
 

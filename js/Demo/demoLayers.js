@@ -95,7 +95,10 @@ addLayer("c", {
                 rewardDisplay() { return format(this.rewardEffect())+"x" },
                 countsAs: [12, 21], // Use this for if a challenge includes the effects of other challenges. Being in this challenge "counts as" being in these.
                 rewardDescription: "Says hi",
-                onComplete() {console.log("hiii")} // Called when you complete the challenge
+                onComplete() {console.log("hiii")}, // Called when you successfully complete the challenge
+                onEnter() {console.log("So challenging")},
+                onExit() {console.log("Sweet freedom!")},
+
             },
         }, 
         upgrades: {
@@ -221,6 +224,8 @@ addLayer("c", {
                     content: ["upgrades", ["display-text", function() {return "confirmed"}]]
                 },
                 second: {
+                    embedLayer: "f",
+
                     content: [["upgrade", 11],
                             ["row", [["upgrade", 11], "blank", "blank", ["upgrade", 11],]],
                         
@@ -295,13 +300,15 @@ addLayer("c", {
                     ["main-display",
                     "prestige-button", "resource-display",
                     ["blank", "5px"], // Height
-                    ["raw-html", function() {return "<button onclick='console.log(`yeet`)'>'HI'</button>"}],
+                    ["raw-html", function() {return "<button onclick='console.log(`yeet`); makeParticles(textParticle)'>'HI'</button>"}],
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
                         function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
+                glowColor: "blue",
+
             },
             thingies: {
                 prestigeNotify: true,
@@ -369,6 +376,7 @@ addLayer("c", {
                          // Layer will automatically highlight if an upgrade is purchasable.
             return (player.c.buyables[11] == 1)
         },
+        marked: "discord.png",
         resetDescription: "Melt your points into ",
 })
 
@@ -391,7 +399,8 @@ addLayer("f", {
     exponent: 0.5,
     base: 3,
     roundUpCost: true,
-    canBuyMax() {return hasAchievement('a', 13)},
+    canBuyMax() {return false},
+    //directMult() {return new Decimal(player.c.otherThingy)},
 
     row: 1,
     layerShown() {return true}, 
@@ -447,6 +456,7 @@ addLayer("f", {
                         player[this.layer].clickables[this.id] = "Maybe that's a bit too far..."
                         break;                        
                     case "Maybe that's a bit too far...":
+                        makeParticles(coolParticle, 4)
                         player[this.layer].clickables[this.id] = "Borkened..."
                         break;
                     default:
@@ -516,5 +526,72 @@ addLayer("a", {
                 onComplete() {console.log("Bork bork bork!")}
             },
         },
-    }, 
+        midsection: ["grid", "blank"],
+        grid: {
+            maxRows: 3,
+            rows: 2,
+            cols: 2,
+            getStartData(id) {
+                return id
+            },
+            getUnlocked(id) { // Default
+                return true
+            },
+            getCanClick(data, id) {
+                return player.points.eq(10)
+            },
+            getStyle(data, id) {
+                return {'background-color': '#'+ (data*1234%999999)}
+            },
+            onClick(data, id) { // Don't forget onHold
+                player[this.layer].grid[id]++
+            },
+            getTitle(data, id) {
+                return "Gridable #" + id
+            },
+            getDisplay(data, id) {
+                return data
+            },
+        },
+    },
 )
+
+const coolParticle = {
+    image:"options_wheel.png",
+    spread: 20,
+    gravity: 2,
+    time: 3,
+    rotation (id) {
+        return 20 * (id - 1.5) + (Math.random() - 0.5) * 10
+    },
+    dir() {
+        return (Math.random() - 0.5) * 10
+    },
+    speed() {
+        return (Math.random() + 1.2) * 8 
+    },
+    onClick() {
+        console.log("yay")
+    },
+    onMouseOver() {
+        console.log("hi")
+    },
+    onMouseLeave() {
+        console.log("bye")
+    },
+    update() {
+        //this.width += 1
+        //setDir(this, 135)
+    },
+    layer: 'f',
+}
+
+const textParticle = {
+    spread: 20,
+    gravity: 0,
+    time: 3,
+    speed: 0,
+    text: function() { return "<h1 style='color:yellow'>" + format(player.points)},
+    offset: 30,
+    fadeInTime: 1,
+}

@@ -15,12 +15,12 @@ Buyables should be formatted like this:
 ```js
 buyables: {
     11: {
-        cost(x) { return new Decimal(1).mul(x || getBuyableAmt(this.layer, this.id)) },
+        cost(x) { return new Decimal(1).mul(x) },
         display() { return "Blah" },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
         buy() {
             player[this.layer].points = player[this.layer].points.sub(this.cost())
-            setBuyableAmount(this.layer, this.id, getBuyableAmt(this.layer, this.id).add(1))
+            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
         etc
     },
@@ -52,6 +52,8 @@ Features:
         
 - purchaseLimit: **optional**. The limit on how many of the buyable can be bought. The default is no limit.
 
+- marked: **optional** Adds a mark to the corner of the buyable. If it's "true" it will be a star, but it can also be an image URL.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
 - id: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.
@@ -68,7 +70,7 @@ Including a `sellOne` or `sellAll` function will cause an additional button to a
 To add a respec button, or something similar, add the respecBuyables function to the main buyables object (not individual buyables).
 You can use these features along with it: 
 
-- respecBuyables(): **optional**. This is called when the button is pressed (after a toggleable confirmation message).
+- respec(): **optional**. This is called when the button is pressed (after a toggleable confirmation message).
 
 - respecText: **optional**. Text to display on the respec Button.
 

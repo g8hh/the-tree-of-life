@@ -1,12 +1,13 @@
 # mod.js
 
-All of the non-layer code and data that you're likely to edit is here in [mod.js](/js/mod.js)! Everything in [mod.js](/js/mod.js) will not be altered by updates, besides the addition of new things.
+Most of the non-layer code and data that you're likely to edit is here in [mod.js](/js/mod.js).
+Everything in [mod.js](/js/mod.js) will not be altered by updates, besides the addition of new things.
 
 Here's a breakdown of what's in it:
 
 - modInfo is where most of the basic configuration for the mod is. It contains:
     - name: The name of your mod. (a string)
-    - id: The id for your mod, a unique string that is used to determine savefile location. Setting it is important!
+    - id: The id for your mod, a unique string that is used to determine savefile location. Be sure to set it when you start making a mod, and don't change it later because it will erase all saves.
     - author: The name of the author, displayed in the info tab.
     - pointsName: This changes what is displayed instead of "points" for the main currency. (It does not affect it in the code.)
     - discordName, discordLink: If you have a Discord server or other discussion place, you can add a link to it.
@@ -23,9 +24,9 @@ Here's a breakdown of what's in it:
     - num: The mod's version number, displayed at the top right of the tree tab.
     - name: The version's name, displayed alongside the number in the info tab.
 
-- changelog is the HTML displayed in the changelog tab.
+- changelog is the HTML displayed in the changelog tab. If this gets particularly long, it might be good to put in a separate file (be sure to add the file to index.html)
 
-- doNotCallTheseFunctionsEveryTick is very important. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array.
+- doNotCallTheseFunctionsEveryTick is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array.
 
 ```js
 // (The ones here are examples, all official functions are already taken care of)
@@ -54,3 +55,5 @@ function addedPlayerData() { return {
 Less important things beyond this point!
 
 - maxTickLength(): Returns the maximum tick length, in milliseconds. Only really useful if you have something that reduces over time, which long ticks mess up (usually a challenge).
+
+- fixOldSave(): Can be used to modify a save file when loading into a new version of the game. Use this to undo inflation, never forcibly hard reset your players.

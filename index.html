@@ -20,12 +20,15 @@
 	<script src="js/mod.js"></script>
 	<script src="js/technical/temp.js"></script>
 	<script src="js/technical/displays.js"></script>
+	
 	<script src="js/game.js"></script>
 	<script src="js/utils.js"></script>
+	<script src="js/utils/easyAccess.js"></script>
 	<script src="js/technical/systemComponents.js"></script>
 	<script src="js/technical/customSaves.js"></script>
 	<script src="js/components.js"></script>
 	<script src="js/technical/canvas.js"></script>
+	<script src="js/technical/particleSystem.js"></script>
 	<script src="js/utils/NumberFormating.js"></script>
 	<script src="js/utils/options.js"></script>
 	<script src="js/utils/save.js"></script>
@@ -34,7 +37,7 @@
 
 </head>
 
-<body onload="load()">
+<body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(gameEnded && !player.keepGoing)"></canvas>
 
@@ -115,6 +118,11 @@
 					<h2 v-html="popup.message"></h2>
 				</div>
 			</transition-group>
+		</div>
+		<div class="particle-container">
+				<div v-for="particle,index in particles">
+					<particle :data="particle" :index="index" v-bind:key="'b' + particle.id"></particle>
+				</div>
 		</div>
 
 		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" style="background-color:var(--background)" v-bind:class="{ fullWidth: player.navTab == 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree), col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">
