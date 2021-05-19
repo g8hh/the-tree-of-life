@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.5.9.2 - 5/19/21
+- Fixed many issues with things not updating.
+
 ### v2.5.9.1 - 5/18/21
 - Made text inputs never give NaNs.
 
