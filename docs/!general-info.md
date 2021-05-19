@@ -4,6 +4,8 @@ Making a game in The Modding Tree mostly involves defining parameters or functio
 
 Beyond that, the main way to add content is through creating layers, often in [layers.js](/js/layers.js). You can add new layers by calling `addLayer(layername, layerdata)`. There is an example of a basic layer in [layers.js](/js/layers.js) showing the recommended method. It is just an example and can be freely deleted. You can also use it as a reference or a base for your own layers. 
 
+You can test your mod by opening the [index.html][/index.html] file in your browser.
+
 Most of the time, you won't need to dive deep into the code to create things, but you still can if you really want to, for example to add new Vue components in [components.js](/js/components.js).
 
 The Modding Tree uses [break\_eternity.js](https://github.com/Patashu/break_eternity.js) to store large values. This means that many numbers are `Decimal` objects, and must be treated differently. For example, you have to use `new Decimal(x)` to create a `Decimal` value instead of a plain number, and perform operations on them by calling functions. e.g, instead of `x = x + y`, use `x = x.add(y)`. Keep in mind this also applies to comparison operators, which should be replaced with calling the `.gt`, `.gte`, `.lt`, `.lte`, `.eq`, and `.neq` functions. See the [break\_eternity.js](https://github.com/Patashu/break_eternity.js) docs for more details on working with `Decimal` values.
