@@ -327,7 +327,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything",
 					"costFormulaID"]
 
 function getStartPoints(){
-    return new Decimal(modInfo.initialStartPoints)
+    	return new Decimal(modInfo.initialStartPoints)
 }
 
 // Determines if it should show points/sec
@@ -500,7 +500,6 @@ function toggleControl(){
 
 function toggleUndulating(){
 	player.undulating = !player.undulating
-	console.log("currently nothing undulates lol")
 }
 
 function enterHardMode(){
