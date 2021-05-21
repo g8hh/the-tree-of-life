@@ -3880,6 +3880,7 @@ addLayer("p", {
 
                 let exp2 = new Decimal(3)
                 if (hasMilestone("p", 4)) exp2 = exp2.plus(.1)
+                if (hasMilestone("p", 5)) exp2 = exp2.plus(.04)
 
                 let exp = amt.plus(1).log10().pow(exp2)
 
@@ -3892,6 +3893,7 @@ addLayer("p", {
                 if (shiftDown) {
                         let a = "effect formula: 10^(log10(x+1)^3)"
                         if (hasMilestone("p", 4)) a = a.replace("3", "3.1")
+                        if (hasMilestone("p", 5)) a = a.replace("3.1", "3.14")
                         return a
                 }
                 let eff = tmp.p.effect
@@ -4084,7 +4086,7 @@ addLayer("p", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep Nitrogen challenges.<br>"
+                                let a = "Reward: Keep Nitrogen challenges and Nitrogen resets and increase effect exponent to 3.14.<br>"
                                 return a
                         },
                 }, // hasMilestone("p", 5)
@@ -4172,7 +4174,7 @@ addLayer("p", {
 
                 // 0: Nitrogen stuff
                 if (!false) {
-                        player.n.times = 0
+                        if (!hasMilestone("p", 5)) player.n.times = 0
                         player.n.time = 0
                         player.n.passivetime = 0
                         player.n.best = new Decimal(0)
