@@ -12,19 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.056.1",
+	num: "0.057",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 7.5e943 Nitrogen [new layer?] OR the last save in the bank<br><br>
+		- 8 Phosphorus resets OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.057</h3><br>
+		- Added Phosphorus (P).<br>
+		- Improved notification for side-layers.<br>
+		- Added a D Point buyable.<br>
+		- Added a Phosphorus upgrade.<br>
+		- Added five Phosphorus milestones.<br>
+		- Added two saves to the bank.<br>
+		- Hotfixed a couple of bugs, not sure if it actually works tho.<br>
 	<br><h3 style='color: #CC0000'>v0.056.1</h3><br>
 		- Added a mspt display.<br>
 		- Cleaned up a bit of code, and created some error catchers.<br>

@@ -258,6 +258,13 @@ PROGRESSION_MILESTONES = {
         152: () => player.tokens.total.gt(88),
         153: () => player.tokens.total.gt(89),
         154: () => player.tokens.total.gt(90),
+        155: () => player.p.points.gt(Decimal.pow(10, 1)),
+        156: () => player.p.points.gt(Decimal.pow(10, 2)),
+        157: () => player.p.points.gt(Decimal.pow(10, 4)),
+        158: () => player.p.points.gt(Decimal.pow(10, 8)),
+        159: () => player.p.points.gt(Decimal.pow(10, 16)),
+        160: () => player.p.points.gt(Decimal.pow(10, 32)),
+        161: () => player.p.points.gt(Decimal.pow(10, 64)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -415,6 +422,13 @@ PROGRESSION_MILESTONES_TEXT = {
         152: "89 tokens",
         153: "90 tokens",
         154: "91 tokens",
+        155: "10 Phosphorus",
+        156: "100 Phosphorus",
+        157: "1e4 Phosphorus",
+        158: "1e8 Phosphorus",
+        159: "1e16 Phosphorus",
+        160: "1e32 Phosphorus",
+        161: "1e64 Phosphorus",
 }
 
 

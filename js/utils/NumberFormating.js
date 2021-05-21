@@ -55,7 +55,7 @@ function format(decimal, precision = 2, small) {
                 if (slog.gte(1e6)) return "F" + format(slog.floor())
                 return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
         }
-        if (decimal.gte("ee10")) return "e" + format(decimal.log10())
+        if (decimal.gte("ee10")) return "e" + format(decimal.log10(), precision)
         if (decimal.gte("ee7")) return exponentialFormat(decimal, 0, false)
         if (decimal.gte("ee5")) return exponentialFormat(decimal, 0)
         if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)

@@ -253,7 +253,7 @@ addLayer("h", {
 
                         ret = ret.pow(tmp.tokens.buyables[51].effect)
 
-                        return ret
+                        return ret.max(0)
                 },
                 getLossRate() { //deuterium loss
                         return new Decimal(.01)
@@ -262,9 +262,11 @@ addLayer("h", {
                         let x = new Decimal(1)
 
                         if (hasUpgrade("h", 23))        x = x.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41))        x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.plus(3).ln(), tmp.h.upgrades[41].effect))
+                        if (hasUpgrade("h", 41))        x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
                                                         x = x.times(tmp.mini.buyables[13].effect)
                                                         x = x.times(tmp.tokens.buyables[21].effect)
+
+                        if (x.lt(0))  Decimal(0)
 
                         return x
                 },
@@ -278,7 +280,7 @@ addLayer("h", {
 
                         ret = ret.pow(tmp.tokens.buyables[43].effect)
 
-                        return ret
+                        return ret.max(0)
                 },
                 getLossRate() { //atomic hydrogen loss atomic loss
                         return new Decimal(.01)
@@ -286,7 +288,7 @@ addLayer("h", {
                 getGainMult(){
                         let x = new Decimal(1)
 
-                        if (hasUpgrade("h", 42))        x = x.times(Decimal.pow(player.h.deuterium.points.plus(3).ln(), tmp.h.upgrades[42].effect))
+                        if (hasUpgrade("h", 42))        x = x.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
                                                         x = x.times(tmp.mini.buyables[11].effect)
                                                         x = x.times(tmp.tokens.buyables[13].effect)
 
@@ -697,7 +699,7 @@ addLayer("h", {
                                 eff = format(tmp.h.upgrades[41].effect)
                                 a = "ln(3+[Atomic Hydrogen])^" + eff
                                 if (hasUpgrade("h", 41)) {
-                                        a += "<br>" + format(player.h.atomic_hydrogen.points.plus(3).ln()) + "^" + eff
+                                        a += "<br>" + format(player.h.atomic_hydrogen.points.max(3).ln()) + "^" + eff
                                         return a
                                 } // red a 
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[41].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
@@ -732,7 +734,7 @@ addLayer("h", {
                                 eff = format(tmp.h.upgrades[42].effect)
                                 a = "ln(3+[Deuterium])^" + eff
                                 if (hasUpgrade("h", 42)) {
-                                        a += "<br>" + format(player.h.deuterium.points.plus(3).ln()) + "^" + eff
+                                        a += "<br>" + format(player.h.deuterium.points.max(3).ln()) + "^" + eff
                                         return a
                                 } //red b
                                 return a + "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[42].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
@@ -1532,7 +1534,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(270) : new Decimal(100)
                         },
                         effect(){
-                                let init = player.h.deuterium.points.plus(3).ln().div(1000).max(1)
+                                let init = player.h.deuterium.points.max(3).ln().div(1000).max(1)
 
                                 return ret
                         },
@@ -2330,6 +2332,7 @@ addLayer("n", {
                 }
                 if (hasUpgrade("n", 41))        x = x.times(player.mini.e_points.points.max(10).log10())
                 if (hasUpgrade("n", 53))        x = x.times(Decimal.pow(1.01, player.mini.buyables[211]))
+                                                x = x.times(player.p.points.plus(1))
 
                 return x
         },
@@ -2388,6 +2391,12 @@ addLayer("n", {
                         }
                 }
 
+                if (hasUpgrade("p", 11)) {
+                        let m = .5
+                        data.points = data.points.plus(diff * m)
+                        data.total = data.total.plus(diff * m)
+                }
+
                 if (false) {
                         //do autobuyer stuff
                 } else {
@@ -2407,7 +2416,7 @@ addLayer("n", {
                         }
                 },
         ],
-        layerShown(){return hasUpgrade("mini", 45) || player.n.best.gt(0)},
+        layerShown(){return hasUpgrade("mini", 45) || player.n.best.gt(0) || player.p.best.gt(0)},
         prestigeButtonText(){
                 if (player.tab != "n") return ""
                 
@@ -2507,7 +2516,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(2),
                         unlocked(){
-                                return hasUpgrade("n", 11) && hasUpgrade("n", 12) && hasUpgrade("n", 13) && hasUpgrade("n", 14) && hasUpgrade("n", 15)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 11) && hasUpgrade("n", 12) && hasUpgrade("n", 13) && hasUpgrade("n", 14) && hasUpgrade("n", 15)
                         }, // hasUpgrade("n", 21)
                 },
                 22: {
@@ -2520,7 +2529,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(3),
                         unlocked(){
-                                return hasUpgrade("n", 21) 
+                                return hasMilestone("p", 4) || hasUpgrade("n", 21) 
                         }, // hasUpgrade("n", 22)
                 },
                 23: {
@@ -2540,7 +2549,7 @@ addLayer("n", {
                                 return player.n.best.max(1).pow(player.n.upgrades.length)
                         },
                         unlocked(){
-                                return hasMilestone("n", 11) || player.n.best.gt(19) 
+                                return hasMilestone("p", 4) || hasMilestone("n", 11) || player.n.best.gt(19) 
                         }, // hasUpgrade("n", 23)
                 },
                 24: {
@@ -2571,7 +2580,7 @@ addLayer("n", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("n", 23)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 23)
                         }, // hasUpgrade("n", 24)
                 },
                 25: {
@@ -2584,7 +2593,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(100),
                         unlocked(){
-                                return hasUpgrade("n", 24)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 24)
                         }, // hasUpgrade("n", 25)
                 },
                 31: {
@@ -2597,7 +2606,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(3e8),
                         unlocked(){
-                                return hasChallenge("n", 21)
+                                return hasMilestone("p", 4) || hasChallenge("n", 21)
                         }, // hasUpgrade("n", 31)
                 },
                 32: {
@@ -2610,7 +2619,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1e11),
                         unlocked(){
-                                return hasChallenge("n", 22)
+                                return hasMilestone("p", 4) || hasChallenge("n", 22)
                         }, // hasUpgrade("n", 32)
                 },
                 33: {
@@ -2623,7 +2632,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(5.48e27),
                         unlocked(){
-                                return getBuyableAmount("mini", 181).gte(75)
+                                return hasMilestone("p", 4) || getBuyableAmount("mini", 181).gte(75)
                         }, // hasUpgrade("n", 33)
                 },
                 34: {
@@ -2636,7 +2645,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(2.75e32),
                         unlocked(){
-                                return getBuyableAmount("mini", 181).gte(145)
+                                return hasMilestone("p", 4) || getBuyableAmount("mini", 181).gte(145)
                         }, // hasUpgrade("n", 34)
                 },
                 35: {
@@ -2661,7 +2670,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(3e32),
                         unlocked(){
-                                return getBuyableAmount("mini", 181).gte(153)
+                                return hasMilestone("p", 4) || getBuyableAmount("mini", 181).gte(153)
                         }, // hasUpgrade("n", 35)
                 },
                 41: {
@@ -2685,7 +2694,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(4.2e33),
                         unlocked(){
-                                return hasUpgrade("n", 35)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 35)
                         }, // hasUpgrade("n", 41)
                 },
                 42: {
@@ -2707,7 +2716,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(5.6e35),
                         unlocked(){
-                                return hasUpgrade("n", 41)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 41)
                         }, // hasUpgrade("n", 42)
                 },
                 43: {
@@ -2729,7 +2738,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1.24e36),
                         unlocked(){
-                                return hasUpgrade("n", 42)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 42)
                         }, // hasUpgrade("n", 43)
                 },
                 44: {
@@ -2751,7 +2760,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1.58e36),
                         unlocked(){
-                                return hasUpgrade("n", 43)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 43)
                         }, // hasUpgrade("n", 44)
                 },
                 45: {
@@ -2773,7 +2782,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1.80e36),
                         unlocked(){
-                                return hasUpgrade("n", 44)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 44)
                         }, // hasUpgrade("n", 45)
                 },
                 51: {
@@ -2789,13 +2798,13 @@ addLayer("n", {
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e234 E Points<br>"
-                                let a = "Each upgrade in this row reapples the second part of Nitrogen XX and doubles E Point gain"
+                                let a = "Each upgrade in this row reapplies the second part of Nitrogen XX and doubles E Point gain"
                                 if (!hasUpgrade("n", 51)) return b + a
                                 return a
                         },
                         cost:() => new Decimal(2.10e36),
                         unlocked(){
-                                return hasUpgrade("n", 45)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 45)
                         }, // hasUpgrade("n", 51)
                 },
                 52: {
@@ -2811,7 +2820,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(7e36),
                         unlocked(){
-                                return hasUpgrade("n", 51)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 51)
                         }, // hasUpgrade("n", 52)
                 },
                 53: {
@@ -2833,7 +2842,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1.83e37),
                         unlocked(){
-                                return hasUpgrade("n", 52)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 52)
                         }, // hasUpgrade("n", 53)
                 },
                 54: {
@@ -2849,7 +2858,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(1.44e42),
                         unlocked(){
-                                return hasUpgrade("n", 53)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 53)
                         }, // hasUpgrade("n", 54)
                 },
                 55: {
@@ -2865,7 +2874,7 @@ addLayer("n", {
                         },
                         cost:() => new Decimal(4.75e53),
                         unlocked(){
-                                return hasUpgrade("n", 54)
+                                return hasMilestone("p", 4) || hasUpgrade("n", 54)
                         }, // hasUpgrade("n", 55)
                 },
         },
@@ -3792,6 +3801,566 @@ addLayer("n", {
         },
 })
 
+addLayer("p", {
+        name: "Phosphorus", // This is optional, only used in a few places, If absent it just uses the layer id.
+        symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
+        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        startData() { return {
+                unlocked: false,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                abtime: 0,
+                time: 0,
+                times: 0,
+                autotimes: 0,
+                passivetime: 0,
+                currentGainPerSec: new Decimal(0),
+        }},
+        color: "#466BA2",
+        branches: [],
+        requires:() => Decimal.pow(10, 2155).times(1.3), // Can be a function that takes requirement increases into account
+        resource: "Phosphorus", // Name of prestige currency
+        baseResource: "Nitrogen", // Name of resource prestige is based on
+        baseAmount() {return player.n.points.floor()}, // Get the current amount of baseResource
+        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        getResetGain() {
+                let base = tmp.p.getBaseGain
+                let mult = tmp.p.getGainMult
+
+                let ret = base.times(mult)
+
+                return ret.floor()
+        },
+        getGainExp(){
+                let ret = new Decimal(4)
+
+                return ret
+        },
+        getBaseGain(){
+                let pts = player.n.points.div(1.3)
+                if (pts.lt(10)) return new Decimal(0)
+
+                let init = pts.log10().sub(2027)
+                let exp = tmp.p.getGainExp
+
+                if (init.lt(0)) return new Decimal(0)
+
+                let base = init.root(7).sub(1)
+
+                if (base.lt(1)) base = new Decimal(0)
+
+                return base.pow(exp)
+        },
+        getNextAt(){
+                let curr = tmp.p.getResetGain
+                let exp = tmp.p.getGainExp
+                let mult = tmp.p.getGainMult
+
+                let v1 = curr.div(mult).plus(1).root(exp)
+                let v2 = v1.plus(1).pow(7)
+                let v3 = v2.plus(2027).pow10().times(1.3)
+
+                return v3
+        },
+        getGainMult(){//phosphorus gain
+                let x = new Decimal(1)
+
+                return x
+        },
+        getPassiveGainMult(){
+                let x = new Decimal(1)
+
+                if (hasMilestone("p", 2)) x = x.times(tmp.p.milestones[2].effect)
+
+                return x
+        },
+        effect(){
+                let amt = player.p.total
+
+                let exp2 = new Decimal(3)
+                if (hasMilestone("p", 4)) exp2 = exp2.plus(.1)
+
+                let exp = amt.plus(1).log10().pow(exp2)
+
+                let ret = Decimal.pow(10, exp)
+
+                return ret
+        },
+        effectDescription(){
+                if (player.tab != "p") return ""
+                if (shiftDown) {
+                        let a = "effect formula: 10^(log10(x+1)^3)"
+                        if (hasMilestone("p", 4)) a = a.replace("3", "3.1")
+                        return a
+                }
+                let eff = tmp.p.effect
+                let effstr = format(eff)
+                let start = " multiplying all minigame point gain by "
+                let end = "."
+                let init = start + effstr
+                let end2 = " and Nitrogen gain by " + format(player.p.points.plus(1))
+                return init + end2 + end
+        },
+        update(diff){
+                let data = player.p
+                
+                if (tmp.p.layerShown) data.unlocked = true
+                data.best = data.best.max(data.points)
+                
+                // do phosphorus gain
+                if (false) {
+                        data.currentGainPerSec = data.currentGainPerSec.plus(tmp.p.getResetGain.times(diff))
+                        
+                        data.passivetime += Math.min(1, diff)
+                        if (data.passivetime > 1) {
+                                data.passivetime += -1
+                                data.times ++
+                        }
+                }
+                
+                let x = tmp.p.getPassiveGainMult.times(diff)
+                data.points = data.points.plus(data.currentGainPerSec.times(x))
+                data.total = data.total.plus(data.currentGainPerSec.times(x))
+
+                if (false) {
+                        //do autobuyer stuff
+                } else {
+                        data.abtime = 0
+                }
+                data.time += diff
+        },
+        row: 2, // Row the layer is in on the tree (0 is the first row)
+        hotkeys: [
+                {key: "shift+P", description: "Shift+P: Go to Phosphorus", onPress(){
+                                if (!tmp.p.layerShown) return
+                                showTab("p")
+                        }
+                },
+                {key: "p", description: "P: Reset for Phosphorus", onPress(){
+                                if (canReset("p")) doReset("p")
+                        }
+                },
+        ],
+        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0)},
+        prestigeButtonText(){
+                if (player.tab != "p") return ""
+                
+                let gain = tmp.p.getResetGain
+                let nextAt = tmp.p.getNextAt
+                if (gain.eq(0)) {
+                        let a = "You cannot reset for base Phosphorus/s, you need<br>"
+                        let b = format(nextAt) + " Nitrogen for the first"
+                }
+                let amt = "You can reset for <br>" + formatWhole(gain) + " base Phosphorus/s"
+                let nxt = ""
+                if (gain.lt(1000)) nxt = "<br>You need " + format(nextAt) + "<br>Nitrogen for the next"
+                if (player.p.time > 1 && gain.lt(1e6) && gain.gt(1) && shiftDown) nxt += "<br>" + format(gain.div(player.p.time)) + "/s"
+                return amt + nxt
+        },
+        canReset(){
+                return !false && tmp.p.getResetGain.gt(0)
+        },
+        upgrades: {
+                rows: 1000,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(163) + "'>Phosphorus I"
+                        },
+                        description(){
+                                let a = "Gain .5 Nitrogen per second and you have one less token for prestige purposes"
+                                if (shiftDown) {
+                                        return "What is the imaginary period of exponential speed on two? Hint: There are generally an even number."
+                                }
+                                return a
+                        },
+                        cost:() => new Decimal(25000),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("p", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.p.milestones[1].requirement)
+                                let b = " Phosphorus reset"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(1)
+                        },
+                        done(){
+                                return tmp.p.milestones[1].requirement.lte(player.p.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep one Nitrogen milestone per reset, you have one less tokens for prestige purposes, and bulk 5x D buyables.<br>"
+                                return a
+                        },
+                }, // hasMilestone("p", 1)
+                2: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.p.milestones[2].requirement)
+                                let b = " Phosphorus resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.p.milestones[2].requirement.lte(player.p.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return Decimal.pow(2, Math.min(10, player.p.times))
+                        },
+                        effectDescription(){
+                                let a = "Reward: Each of the first ten resets doubles Phosphorus gain and bulk 5x E buyables.<br>"
+                                return a
+                        },
+                }, // hasMilestone("p", 2)
+                3: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.p.milestones[3].requirement)
+                                let b = " Phosphorus resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(4)
+                        },
+                        done(){
+                                return tmp.p.milestones[3].requirement.lte(player.p.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Unlock a D buyable and E Points<sup>.001</sup> multiply E Point gain.<br>"
+                                return a
+                        },
+                }, // hasMilestone("p", 3)
+                4: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.p.milestones[4].requirement)
+                                let b = " Phosphorus resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(6)
+                        },
+                        done(){
+                                return tmp.p.milestones[4].requirement.lte(player.p.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep a D Point upgrade per reset, keep Nitrogen XXII, and increase effect exponent to 3.1.<br>"
+                                return a
+                        },
+                }, // hasMilestone("p", 4)
+                5: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.p.milestones[5].requirement)
+                                let b = " Phosphorus resets"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(8)
+                        },
+                        done(){
+                                return tmp.p.milestones[5].requirement.lte(player.p.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Keep Nitrogen challenges.<br>"
+                                return a
+                        },
+                }, // hasMilestone("p", 5)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: ["main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "p") return ""
+                                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
+                                                if (shiftDown) return "Your best Phosphorus is " + format(player.p.best)
+                                                let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
+                                                a = "You are gaining " + format(x, 3) + " Phosphorus/s"
+                                                if (!false) return a
+                                                return a + " and " + format(tmp.p.getResetGain) + " base Phosphorus/s<sup>2</sup>"
+                                        }
+                                ],
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7]]],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: ["main-display",
+                                ["display-text", function(){
+                                        let a = "You have done " 
+                                        let b = formatWhole(player.p.times) + " Phosphorus resets"
+                                        return a + b
+                                }],
+                                ["milestones", [1]],
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                ["display-text", function(){
+                                        let a = "Resetting Phosphorus gives you phrosphorus per second instead of flat gain"
+                                        let b = "The base gain formula is (log10(Nitrogen/13)-2154)<sup>1/7</sup>-1"
+                                        let br = "<br>"
+                                        let c = "Resetting resets all prior currencies, all prior minigame buyables, "
+                                        let d = " all D and E point content, C Point upgrades, "
+                                        let e = " Nitrogen content, and third row Oxygen and Carbon upgrades."
+                                        return a + br + b + br + c + br + d + br + e
+                                }]
+                        ],
+                        unlocked(){
+                                return true
+                        }
+                },     
+        },
+        onPrestige(gain){
+                player.p.times ++
+                player.p.currentGainPerSec = player.p.currentGainPerSec.plus(gain)
+        },
+        doReset(layer){
+                /*
+                Things to reset:
+                1. A Point stuff
+                1a. A buyables
+                2. B Point stuff
+                2a. B buyables
+                3. C Point stuff
+                3a. C buuyables
+                3b. upgrades
+                4. Tokens
+                4a. Token buyables
+                4b. Coins
+                5. Carbon stuff
+                6. Oxygen stuff
+                7. Hydorgen stuff
+                */
+
+                
+                if (layer != "p") return
+ 
+                player.p.time = 0
+                let inChallenge = false
+                let data1 = player.mini
+                let data2 = player.tokens
+
+                // 0: Nitrogen stuff
+                if (!false) {
+                        player.n.times = 0
+                        player.n.time = 0
+                        player.n.passivetime = 0
+                        player.n.best = new Decimal(0)
+                        player.n.points = new Decimal(0)
+                        player.n.total = new Decimal(0)
+
+                        let remupg = [11, 12, 13, 14, 15, 
+                                      21, 22, 23, 24, 25, 
+                                      31, 32, 33, 34, 35, 
+                                      41, 42, 43, 44, 45, 
+                                      51, 52, 53, 54, 55,]
+                        if (hasMilestone("p", 4)) remupg = filterOut(remupg, [52])
+                        player.n.upgrades = filterOut(player.n.upgrades, remupg)
+
+                        if (hasMilestone("p", 1)) {
+                                let keep = ["1", "2", "3", "4", "5", 
+                                            "6", "7", "8", "9", "10", 
+                                            "11", "12", "13", "14", 
+                                            "15", "16", "17", "18"].slice(0, player.p.times)
+                                player.n.milestones = filter(player.n.milestones, keep)
+                        }
+                        if (!hasMilestone("p", 5)) player.n.challenges = {
+                                11: 0,
+                                12: 0,
+                                21: 0,
+                                22: 0,
+                                31: 0,
+                                32: 0,
+                                41: 0,
+                                42: 0,
+                        }
+                }
+
+                // 1: A point stuff
+                if (!false) {
+                        data1.a_points = {
+                                points: new Decimal(0), // 1
+                                best: new Decimal(0), //1 cont
+                                extras: { // 1 cont
+                                        11: new Decimal(1),
+                                        12: new Decimal(0),
+                                        13: new Decimal(0),
+                                        21: new Decimal(0),
+                                        23: new Decimal(0),
+                                        61: new Decimal(0),
+                                        62: new Decimal(0),
+                                        63: new Decimal(0),
+                                }
+                        }
+                        let list1 = ["11", "12", "13", "21", 
+                                     "22", "23", "61", 
+                                     "62", "63"]
+                        for (i = 0; i < list1.length; i++){
+                                data1.buyables[list1[i]] = new Decimal(0)
+                        }// 1a
+                }
+
+                player.subtabs.mini.mainTabs = "A"
+                
+                // 2: B point stuff
+                if (!false) {
+                        data1.b_points = {
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                        } // 2
+                        let list2 = ["31", "32", 
+                                     "33", "41", "42", "43", 
+                                     "51", "52", "53"]
+                        for (i = 0; i < list2.length; i++){
+                                data1.buyables[list2[i]] = new Decimal(0)
+                        } //2a
+                }
+
+                // 3: C point stuff
+                if (!false) {
+                        data1.c_points = {
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                                lastRoll: [],
+                                lastRollTime: data1.c_points.lastRollTime,
+                                displayCharacters: data1.c_points.displayCharacters,
+                        } // 3
+                        let list3 = ["71", "72", "73", "81", "82", 
+                                     "83", "91", "92", "93", "101", 
+                                     "102", "103", "111", "112", "113"]
+                        for (i = 0; i < list3.length; i++){
+                                data1.buyables[list3[i]] = new Decimal(0)
+                        } //3a
+                        let rem = [11, 12, 13, 14, 15, 
+                                   21, 22, 23, 24, 25, 
+                                   31, 32, 33, 34, 35,        
+                                   41, 42, 43, 44, 45, ]
+                        if (hasMilestone("n", 7)) rem = rem.slice(player.n.times)
+                        if (hasMilestone("n", 3)) rem = filterOut(rem, [12])
+                        if (hasMilestone("n", 4)) rem = filterOut(rem, [22])
+                        if (hasMilestone("n", 5)) rem = filterOut(rem, [43])
+                        data1.upgrades = filterOut(data1.upgrades, rem) // 3b
+                }
+
+                // 4: Tokens
+                if (!false){
+                        let starting = new Decimal(0)
+                        if (!player.hardMode) starting = new Decimal(50)
+                        data2.total = starting
+                        data2.points = starting
+                        let list4 = ["11", "12", "13", "21", "22", 
+                                     "23", "31", "32", "33", "41", 
+                                     "42", "43", "51", "52", "53", 
+                                     "61", "62", "63"]
+                        for (i = 0; i < list4.length; i++){
+                                data2.buyables[list4[i]] = new Decimal(0)
+                                data2.best_buyables[list4[i]] = new Decimal(0)
+                        } //4a
+
+                        //4b
+                        data2.coins.points = new Decimal(0)
+                        data2.coins.best = new Decimal(0)
+                }
+
+                // 5: C
+                if (!false) {
+                        player.c.points = new Decimal(0)
+                        player.c.best = new Decimal(0)
+                        let remC = [31, 32, 33, 34, 35]
+                        player.c.upgrades = filterOut(player.c.upgrades, remC)
+                }
+
+                // 6: O
+                if (!false) {
+                        player.o.points = new Decimal(0)
+                        player.o.best = new Decimal(0)
+                        let remO = [31, 32, 33, 34, 35]
+                        player.o.upgrades = filterOut(player.o.upgrades, remO)
+                }
+
+                // 7: H
+                if (!false) {
+                        player.h.points = new Decimal(0)
+                        player.h.best = new Decimal(0)
+                        player.h.atomic_hydrogen.points = new Decimal(0)
+                        player.h.atomic_hydrogen.best = new Decimal(0)
+                        player.h.deuterium.points = new Decimal(0)
+                        player.h.deuterium.best = new Decimal(0)
+                }
+
+                // 8: D Points
+                if (!false) {
+                        let remove = [51, 52, 53, 54, 55, 
+                                      61, 62, 63, 64, 65, 
+                                      71, 72, 73, 74, 75, 
+                                      81, 82, 83, 84, 85]
+                        if (hasMilestone("p", 4)) remove = remove.slice(player.p.times, )
+                        data1.upgrades = filterOut(data1.upgrades, remove)
+                        
+                        data1.d_points = { 
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                                fuel: new Decimal(0),
+                                fuelTimer1: data1.d_points.fuelTimer1,
+                                fuelTimer2: data1.d_points.fuelTimer2,
+                        }
+                        let list4 = ["121", "122", "123", "131", "132", "133",
+                                     "151", "152", "153", "161", "162", 
+                                     "163", "171", "172", "173", "181", 
+                                     "182", "183", ]
+                        for (i = 0; i < list4.length; i++){
+                                data1.buyables[list4[i]] = new Decimal(0)
+                        } // reset buyables
+                }
+
+                // 9: E Points
+                if (!false) {
+                        data1.e_points = { 
+                                points: new Decimal(0),
+                                best: new Decimal(0),
+                        }
+                        let list4 = ["201", "202", "203", "211",
+                                     "212", "213", "221", "222",
+                                     "223", "231", "232", "233"]
+                        for (i = 0; i < list4.length; i++){
+                                data1.buyables[list4[i]] = new Decimal(0)
+                        } // reset buyables
+                }
+
+                
+        },
+})
+
 
 addLayer("ach", {
         name: "Goals",
@@ -4019,6 +4588,7 @@ addLayer("mini", {
                         bpts.points = bpts.points.plus(tmp.mini.b_points.getResetGain.times(diff))
                         data.unlocked = true
                 }
+
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "A" && tmp.mini.tabFormat.A.unlocked) {
                         //update A minigame
                         let extras = apts.extras
@@ -4035,9 +4605,8 @@ addLayer("mini", {
                         }
                         apts.points = apts.points.plus(tmp.mini.a_points.getResetGain.times(diff))
                         data.unlocked = true
-
-                        // extras[11] = extras[11].plus(extras[21].root(2).div(10).times(Decimal.pow(2, lvls[21])))
                 }
+                
                 if (hasUpgrade("h", 51)) {
                         let mult = 1
                         if (hasUpgrade("h", 52)) mult *= 10
@@ -4117,12 +4686,13 @@ addLayer("mini", {
 
                                 if (hasUpgrade("mini", 53)) list3 = [151, 152, 153, 161, 162, 
                                                                      163, 171, 172, 173, 181,
-                                                                     182,].concat(list3)
+                                                                     182, 183].concat(list3)
 
                                 let bulk2 = new Decimal(1) // d
                                 if (hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
                                 if (hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
                                 if (hasUpgrade("mini", 85))     bulk2 = bulk2.times(100)
+                                if (hasMilestone("p", 1))       bulk2 = bulk2.times(5)
                                 
                                 bulk2 = bulk2.sub(1).floor()
 
@@ -4152,6 +4722,7 @@ addLayer("mini", {
                                 if (hasUpgrade("o", 33))        bulk3 = bulk3.times(4)
                                 if (hasUpgrade("o", 35))        bulk3 = bulk3.times(5)
                                 if (hasUpgrade("mini", 85))     bulk3 = bulk3.times(100)
+                                if (hasMilestone("p", 2))       bulk3 = bulk3.times(5)
                                 
                                 bulk3 = bulk3.sub(1).floor()
 
@@ -4182,12 +4753,15 @@ addLayer("mini", {
                                 layers.mini.clickables[41].onClick()
                         }
                 }
+                
                 if ((player.tokens.autobuytokens || player.dev.autobuytokens) && hasMilestone("n", 4)) {
                         if (canReset("tokens")) doReset("tokens")
                 }
+
                 if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
                         if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy()
                 }
+
                 if (tmp.mini.tabFormat.D.unlocked) {
                         if (!false) dpts.fuel = dpts.fuel.times(Decimal.pow(.99, diff))
                         if (hasUpgrade("mini", 54)) {
@@ -4208,6 +4782,7 @@ addLayer("mini", {
                                 layers.mini.clickables[51].onClick()
                         }
                 }
+
                 if (tmp.mini.tabFormat.E.unlocked) {
                         epts.best = epts.best.max(epts.points)
                         epts.points = epts.points.plus(tmp.mini.e_points.getPointProduction.times(diff))
@@ -4260,6 +4835,15 @@ addLayer("mini", {
         canReset(){
                 return false
         },
+        shouldNotify(){
+                let data = tmp.mini.tabFormat
+                let x = ["A", "B", "C", "D", "E"]
+                for (id in x){
+                        i = x[id]
+                        if (data[i].shouldNotify) return true
+                }
+                return false
+        },
         a_points: {
                 getGainMult(){ // apoint gain a point gain
                         let ret = new Decimal(1)
@@ -4275,6 +4859,7 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.tokens.buyables[31].effect)
                         if (hasMilestone("n", 3))       ret = ret.times(100)
                         if (hasUpgrade("mini", 45))     ret = ret.times(player.mini.c_points.points.max(1))
+                                                        ret = ret.times(tmp.p.effect)
 
                         return ret
                 },
@@ -4334,6 +4919,7 @@ addLayer("mini", {
                         if (hasUpgrade("o", 21))        ret = ret.times(player.h.points.max(1))
                         if (hasUpgrade("mini", 42))     ret = ret.times(player.mini.c_points.points.max(1))
                         if (hasMilestone("n", 3))       ret = ret.times(100)
+                                                        ret = ret.times(tmp.p.effect)
 
                         if (hasUpgrade("o", 13))        ret = ret.pow(tmp.o.upgrades[13].effect)
                                                         ret = ret.pow(tmp.tokens.buyables[62].effect)
@@ -4375,6 +4961,7 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 35))     ret = ret.times(Decimal.pow(50, player.mini.upgrades.length))
                         if (hasUpgrade("n", 23))        ret = ret.times(tmp.n.upgrades[23].effect)
                         if (hasUpgrade("mini", 64))     ret = ret.times(player.mini.d_points.points.max(1))
+                                                        ret = ret.times(tmp.p.effect)
 
                         if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                         if (hasUpgrade("n", 22))        ret = ret.pow(Decimal.pow(1.0002, player.n.upgrades.length))
@@ -4409,13 +4996,14 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.mini.buyables[173].effect)
                                                         ret = ret.times(tmp.mini.buyables[181].effect)
                                                         ret = ret.times(tmp.mini.buyables[182].effect)
-                                                        //ret = ret.times(tmp.mini.buyables[183].effect)
+                                                        ret = ret.times(tmp.mini.buyables[183].effect)
                         if (hasUpgrade("mini", 54))     ret = ret.times(player.n.points.max(1))
                         if (hasUpgrade("mini", 65))     ret = ret.times(3)
                         if (hasUpgrade("mini", 52))     ret = ret.times(2)
                         if (hasUpgrade("n", 33))        ret = ret.times(player.mini.d_points.fuel.max(1).pow(.001))
                         if (hasUpgrade("n", 55))        ret = ret.times(player.mini.e_points.points.max(1).min("1e50000"))
                         if (hasUpgrade("mini", 83))     ret = ret.times(player.mini.e_points.points.pow(.1))
+                                                        ret = ret.times(tmp.p.effect)
 
                         return ret
                 },
@@ -4540,6 +5128,8 @@ addLayer("mini", {
                                                         ret = ret.times(player.mini.e_points.points.max(10).log10())
                         }
                         if (hasUpgrade("mini", 84))     ret = ret.times(Decimal.pow(1.02, getBuyableAmount("mini", 222)))
+                                                        ret = ret.times(tmp.p.effect)
+                        if (hasMilestone("p", 3))       ret = ret.times(player.mini.e_points.points.max(1).pow(.001))
 
                         return ret
                 },
@@ -7581,7 +8171,68 @@ addLayer("mini", {
                                 let end = allEff + allCost
                                 return "<br>" + end
                         },
-                },
+                }, 
+                183: {
+                        title: "Tire",
+                        cost:() => new Decimal("3e14159").times(Decimal.pow(265358, Decimal.pow(getBuyableAmount("mini", 183), 2))),
+                        canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[183].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.mini.buyables[183] = player.mini.buyables[183].plus(1)
+                                if (hasUpgrade("mini", 74)) return 
+                                player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[183].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("3e14159")
+                                let base = 265358
+                                let exp = 2
+                                let pts = player.mini.d_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return hasMilestone("p", 3)
+                        },
+                        base(){
+                                let ret = player.p.points.max(1)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[183].base.pow(player.mini.buyables[183])                                                                                                                     
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "D") return ""
+                                if (player.subtabs.mini.d_content != "Multipliers") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[183]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[183].effect) + " to D Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 183)) + " D Points</b><br>"
+                                let eformula = "Phosphorus<sup>x</sup><br>" + format(getBuyableBase("mini", 183)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(3e14159)*(265358^x<sup>2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                }, 
                 201: {
                         title: "Iterations",
                         cost() {
@@ -9219,7 +9870,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(9)
+                                return getBuyableAmount("mini", 151).gte(9) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 51)
                 },
                 52: {
@@ -9239,7 +9890,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(33)
+                                return getBuyableAmount("mini", 151).gte(33) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 52)
                 },
                 53: {
@@ -9256,7 +9907,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(73)
+                                return getBuyableAmount("mini", 151).gte(73) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 53)
                 },
                 54: {
@@ -9273,7 +9924,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(83)
+                                return getBuyableAmount("mini", 151).gte(83) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 54)
                 },
                 55: {
@@ -9290,7 +9941,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(162)
+                                return getBuyableAmount("mini", 151).gte(162) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 55)
                 },
                 61: {
@@ -9307,7 +9958,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(255)
+                                return getBuyableAmount("mini", 151).gte(255) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 61)
                 },
                 62: {
@@ -9324,7 +9975,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(310)
+                                return getBuyableAmount("mini", 151).gte(310) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 62)
                 },
                 63: {
@@ -9341,7 +9992,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(400)
+                                return getBuyableAmount("mini", 151).gte(400) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 63)
                 },
                 64: {
@@ -9358,7 +10009,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(490)
+                                return getBuyableAmount("mini", 151).gte(490) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 64)
                 },
                 65: {
@@ -9375,7 +10026,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(590)
+                                return getBuyableAmount("mini", 151).gte(590) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 65)
                 },
                 71: {
@@ -9392,7 +10043,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(700)
+                                return getBuyableAmount("mini", 151).gte(700) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 71)
                 },
                 72: {
@@ -9409,7 +10060,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(880)
+                                return getBuyableAmount("mini", 151).gte(880) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 72)
                 },
                 73: {
@@ -9426,7 +10077,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(1620)
+                                return getBuyableAmount("mini", 151).gte(1620) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 73)
                 },
                 74: {
@@ -9444,7 +10095,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(2300)
+                                return getBuyableAmount("mini", 151).gte(2300) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 74)
                 },
                 75: {
@@ -9462,7 +10113,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(2600)
+                                return getBuyableAmount("mini", 151).gte(2600) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 75)
                 },
                 81: {
@@ -9479,7 +10130,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(3100)
+                                return getBuyableAmount("mini", 151).gte(3100) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 81)
                 },
                 82: {
@@ -9496,7 +10147,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(3670)
+                                return getBuyableAmount("mini", 151).gte(3670) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 82)
                 },
                 83: {
@@ -9513,7 +10164,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(25e3)
+                                return getBuyableAmount("mini", 151).gte(25e3) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 83)
                 },
                 84: {
@@ -9530,7 +10181,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(27e3)
+                                return getBuyableAmount("mini", 151).gte(27e3) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 84)
                 },
                 85: {
@@ -9547,7 +10198,7 @@ addLayer("mini", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "D Points",
                         unlocked(){
-                                return getBuyableAmount("mini", 151).gte(28e3)
+                                return getBuyableAmount("mini", 151).gte(28e3) || player.p.best.gt(0)
                         }, // hasUpgrade("mini", 85)
                 },
         },
@@ -9893,6 +10544,29 @@ addLayer("mini", {
                         unlocked(){
                                 return hasMilestone("tokens", 23) 
                         },
+                        shouldNotify(){
+                                let y = ["11", "12", "13", "14", "15", 
+                                        "21", "22", "23", "24", "25", 
+                                        "31", "32", "33", "34", "35", 
+                                        "41", "42", "43", "44", "45"]
+                                for (let i = 0; i < y.length; i++){
+                                        id = y[i]
+                                        if (canAffordUpgrade("mini", id)) {
+                                                if (!hasUpgrade("mini", id)) return true
+                                        }
+                                }
+                                let x = [ 72, 73,  81,  82,  83,
+                                          91,  92,  93, 101, 102,
+                                          103, 111, 112, 113, ]
+                                for (let i = 0; i < x.length; i++){
+                                        id = x[i]
+                                        if (getBuyableAmount("mini", id).eq(0)) {
+                                                if (!tmp.mini.buyables[id].canAfford) continue
+                                                if (tmp.mini.buyables[id].unlocked) return true
+                                        }
+                                }
+                                return false
+                        },
                 },
                 "D": {
                         content: [
@@ -9917,6 +10591,33 @@ addLayer("mini", {
                         ],
                         unlocked(){
                                 return hasChallenge("n", 32)
+                        },
+                        shouldNotify(){
+                                let y = [151, 152, 153, 161, 162, 
+                                        163, 171, 172, 173, 181,
+                                        182, 183, 191, 192, 193]
+                                for (let i = 0; i < y.length; i++){
+                                        id = y[i]
+                                        if (layers.mini.buyables[id] == undefined) continue
+                                        if (!tmp.mini.buyables[id].unlocked) continue
+                                        if (tmp.mini.buyables[id].canAfford) {
+                                                if (getBuyableAmount("mini", id).eq(0)) return true
+                                        }
+                                }
+                                
+                                let x = ["51", "52", "53", "54", "55", 
+                                        "61", "62", "63", "64", "65",
+                                        "71", "72", "73", "74", "75",
+                                        "81", "82", "83", "84", "85"]
+                                for (let i = 0; i < x.length; i++){
+                                        id = x[i]
+                                        if (layers.mini.upgrades[id] == undefined) continue
+                                        if (!tmp.mini.upgrades[id].unlocked) continue
+                                        if (hasUpgrade("mini", id)) continue
+                                        if (player.mini.d_points.points.lt(tmp.mini.upgrades[id].cost)) continue
+                                        return true
+                                }
+                                return false
                         },
                 },
                 "E": {
@@ -9954,6 +10655,20 @@ addLayer("mini", {
                         ],
                         unlocked(){
                                 return hasUpgrade("n", 35)
+                        },
+                        shouldNotify(){
+                                x = [201, 202, 203, 211, 212,
+                                     213, 221, 222, 223, 231, 
+                                     232, 233, 241,]
+                                for (let i = 0; i < x.length; i++){
+                                        id = x[i]
+                                        if (layers.mini.buyables[id] == undefined) continue
+                                        if (!tmp.mini.buyables[id].unlocked) continue
+                                        if (tmp.mini.buyables[id].canAfford) {
+                                                if (getBuyableAmount("mini", id).eq(0)) return true
+                                        }
+                                }
+                                return false
                         },
                 },
                 "Spelling": {
@@ -10060,7 +10775,7 @@ addLayer("tokens", {
                 return new Decimal(0)
         },
         shouldNotify(){
-                if (tmp.tokens.canReset) return true
+                if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) return true
                 let x = ["11", "12", "13", "21", "22", 
                          "23", "31", "32", "33", "41", 
                          "42", "43", "51", "52", "53", 
@@ -10069,7 +10784,7 @@ addLayer("tokens", {
                         id = x[i]
                         if (!tmp.tokens.buyables[id].canAfford) return false
                 }
-                return true
+                return !player.tokens.autobuyradio || !hasMilestone("n", 7)
         },
         getNextAt(){
                 let log_costs = TOKEN_COSTS
@@ -10080,6 +10795,9 @@ addLayer("tokens", {
                 let getid = player.tokens.total.toNumber()
 
                 if (hasUpgrade("tokens", 73)) getid += -1
+                if (hasMilestone("p", 1)) getid += -1
+                if (hasUpgrade("p", 11)) getid += -1
+                
                 if (getid < 0) return Decimal.pow(10, 5000)
 
                 getid = Math.floor(getid)
@@ -12432,7 +13150,7 @@ addLayer("tokens", {
                         currencyDisplayName:() => "Coins",
                         unlocked(){
                                 return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
-                        }, //hasUpgrade("tokens", 82)
+                        }, // hasUpgrade("tokens", 82)
                 },
                 91: {
                         title(){
@@ -12457,7 +13175,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
-                                return player.tokens.total.gte(54) || hasMilestone("n", 5)
+                                return hasUpgrade("tokens", 91) || player.tokens.total.gte(54) || hasMilestone("n", 5)
                         }, //hasUpgrade("tokens", 91)
                 },
                 92: {
@@ -12483,7 +13201,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
-                                return player.tokens.total.gte(56) || hasMilestone("n", 5)
+                                return hasUpgrade("tokens", 92) || player.tokens.total.gte(56) || hasMilestone("n", 5)
                         }, // hasUpgrade("tokens", 92)
                 },
                 93: {
@@ -12509,7 +13227,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
-                                return player.tokens.total.gte(61) || hasMilestone("n", 5)
+                                return hasUpgrade("tokens", 93) || player.tokens.total.gte(61) || hasMilestone("n", 5)
                         }, // hasUpgrade("tokens", 93)
                 },
                 94: {
@@ -12535,7 +13253,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
-                                return player.tokens.total.gte(63) || hasMilestone("n", 5)
+                                return hasUpgrade("tokens", 94) || player.tokens.total.gte(63) || hasMilestone("n", 5)
                         }, // hasUpgrade("tokens", 94)
                 },
                 95: {
@@ -12561,7 +13279,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
-                                return player.tokens.total.gte(64) || hasMilestone("n", 5)
+                                return hasUpgrade("tokens", 95) || player.tokens.total.gte(64) || hasMilestone("n", 5)
                         }, // hasUpgrade("tokens", 95)
                 },
         },
