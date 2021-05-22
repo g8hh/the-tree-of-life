@@ -32,3 +32,34 @@ Upgrades are one of several Big Features in TMT, and most of them work the same 
 
 "upgrades" is an object, which contains an object for each upgrade. Each upgrade has an id that corresponds to its position. The upgrade "12" will appear as the second upgrade in the first row.
 
+Given that, let's make our first upgrade! Insert this line in between the brackets after "upgrades":
+
+```js
+        11: {
+
+        },
+```
+
+Reload the page, and an upgrade will appear in the layer's tab! It will just be blank though. We need to fill out its features, which works similarly to giving a layer features. Here are the features we'll need:
+
+```js
+    name: "Make this whatever you want!",
+    description: "Double your point gain.",
+    cost: new Decimal(1),
+```
+
+Reload the page, and the upgrade will appear, fully formed! But it won't have any effect when you buy it! To impliment a boost, we need to go to the place where it is calculated. In this case, point gain is calculated in getPointGen in mod.js, so let's head over there.
+
+It's time to explain Decimals. Decimals are a special way of handling numbers over the normal Javascript limit. They are handled in a very different way. To perform any operations, instead of doing x = x + y, you have to do x = x.add(y). x has to be a Decimal, but y can be either a Decimal or Number (regular javascript number). A more detailed description is in [!general-info.md](!general-info.md)
+
+With that knowledge in hand, what we need to do is check if the player has the upgrade, and then boost point gain if so. We can do that by inserting this line between gain being defined and returned:
+```js
+if (hasUpgrade('p', 11)) gain = gain.times(2)
+```
+
+Refresh the page again, and it should work! You are gaining 2 points per second!
+
+
+## Upgraded upgrades
+
+To be continued...
