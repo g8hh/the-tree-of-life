@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.058",
+	num: "0.058.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.058.1</h3><br>
+		- So my brain exploded three times, I had to be revived, thanks doc!<br>
+		- Fixed the jumping production bug<br>
+		(Dinner didn't add to total Nitrogen, which Nitrogen's effect is based on)<br>
+		- Added 4 Phosphorus milestones.<br>
+		- Added two Phosphorus upgrades.<br>
+		- Misc QoL changes.<br>
 	<br><h3 style='color: #CC0000'>v0.058</h3><br>
 		- My brain will explode... idk man.<br>
 	<br><h3 style='color: #CC0000'>v0.057</h3><br>

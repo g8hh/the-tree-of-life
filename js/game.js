@@ -317,6 +317,8 @@ function gameLoop(diff) {
 
 	if (isNaN(tmp.pointGen)) Decimal(0) //toss an error
 	if (isNaN(player.h.deuterium.points.plus(3).ln())) Decimal(0)
+	if (tmp.h.atomic_hydrogen.getResetGain.lt(0)) Decimal(0)
+	if (tmp.h.deuterium.getResetGain.lt(0)) Decimal(0)
 	if (isNaN(player.h.atomic_hydrogen.points.plus(3).ln())) Decimal(0)
 	
 	addTime(diff)
@@ -411,9 +413,12 @@ function runInterval(){
 	pastTickTimes.push(Date.now() - now)
 	ticking = false
 }
+/* */
 
 var interval = setInterval(function() {
 	runInterval()
 }, 50)
+
+/* */
 
 setInterval(function() {needCanvasUpdate = true}, 500)
