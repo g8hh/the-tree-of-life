@@ -3361,7 +3361,7 @@ addLayer("n", {
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Challenges") return ""
                                 if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "<bdi style='color:#CC0033'>C</bdi> increase 1 base is multiplied by the sqaure root of the number of challenge completions"
+                                let a = "<bdi style='color:#CC0033'>C</bdi> increase 1 base is multiplied by the square root of the number of challenge completions"
                                 let b = "<br>"
                                 let c = "Currently: *" + format(tmp.n.challenges[21].rewardEffect, 3)
                                 return a + b + c
@@ -4035,7 +4035,7 @@ addLayer("p", {
                                 return new Decimal(1)
                         },
                         effectDescription(){
-                                let a = "Reward: Keep one Nitrogen milestone per reset, you have one less tokens for prestige purposes, and bulk 5x D buyables.<br>"
+                                let a = "Reward: Keep one Nitrogen milestone per reset, you have one less token for prestige purposes, and bulk 5x D buyables.<br>"
                                 return a
                         },
                 }, // hasMilestone("p", 1)
@@ -4138,7 +4138,7 @@ addLayer("p", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep Nitrogen upgrades and increase effect exponent to π.<br>"
+                                let a = "Reward: Keep Carbon and Oxygen upgrades and increase effect exponent to π.<br>"
                                 return a
                         },
                 }, // hasMilestone("p", 6)
@@ -4415,7 +4415,7 @@ addLayer("p", {
                 if (!false) {
                         player.c.points = new Decimal(0)
                         player.c.best = new Decimal(0)
-                        if (!hasMilestone("n", 10)) {
+                        if (!hasMilestone("p", 6)) {
                                 let remC = [31, 32, 33, 34, 35]
                                 player.c.upgrades = filterOut(player.c.upgrades, remC)
                         }
@@ -4425,7 +4425,7 @@ addLayer("p", {
                 if (!false) {
                         player.o.points = new Decimal(0)
                         player.o.best = new Decimal(0)
-                        if (!hasMilestone("n", 10)) {
+                        if (!hasMilestone("p", 6)) {
                                 let remO = [31, 32, 33, 34, 35]
                                 player.o.upgrades = filterOut(player.o.upgrades, remO)
                         }
