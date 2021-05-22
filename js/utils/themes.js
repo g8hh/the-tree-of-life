@@ -18,12 +18,12 @@ function getThemeName() {
 	return player.theme ? theme_names[player.theme] : "Default";
 }
 function switchTheme() {
-	if (player.theme === undefined)
+	if (player.theme === null)
 		player.theme = themes[1];
 	else {
 		player.theme = themes[Object.keys(themes)[player.theme] + 1];
 		if (!player.theme)
-			delete player.theme;
+			player.theme = null;
 	}
 	changeTheme();
 	resizeCanvas();

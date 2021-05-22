@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+- Tooltips can now show over the top overlay again.
+- Fixed text on two settings buttons not changing.
+
 ### v2.5.9.2 - 5/19/21
 - Fixed many issues with things not updating.
 

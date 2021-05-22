@@ -10,6 +10,8 @@ function startPlayerBase() {
 		autosave: true,
 		notify: {},
 		msDisplay: "always",
+		theme: null,
+		hqTree: false,
 		offlineProd: true,
 		versionType: modInfo.id,
 		version: VERSION.num,
