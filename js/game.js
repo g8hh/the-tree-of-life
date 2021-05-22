@@ -376,7 +376,7 @@ function hardReset() {
 var ticking = false
 var pastTickTimes = []
 
-var interval = setInterval(function() {
+function runInterval(){
 	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
 	if (gameEnded && !player.keepGoing) return;
@@ -410,6 +410,10 @@ var interval = setInterval(function() {
 	pastTickTimes = pastTickTimes.slice(0, 9)
 	pastTickTimes.push(Date.now() - now)
 	ticking = false
+}
+
+var interval = setInterval(function() {
+	runInterval()
 }, 50)
 
 setInterval(function() {needCanvasUpdate = true}, 500)

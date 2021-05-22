@@ -422,6 +422,7 @@ function fixHotkeyCode(s){
 }
 
 var logHotkey = false
+var qForClear = false
 
 document.onkeydown = function(e) {
 	if (player === undefined) return;
@@ -438,6 +439,7 @@ document.onkeydown = function(e) {
 		}
 	}
 	if (logHotkey) console.log(key)
+	if (key == "q" && qForClear) clearInterval(interval)
 }
 
 var onFocused = false
