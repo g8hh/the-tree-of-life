@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.058.3",
+	num: "0.059",
 	name: "Beginnings",
 }
 
@@ -25,8 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v0.058.3</h3><br>
+	<br><h3 style='color: #CC0000'>v0.059</h3><br>
 		- Wording fixes.<br>
+		- Implemented 2e10 Phosphorus milestone.<br>
+		- Removed some unnecessary stuff after 1ee6 fuel.<br>
 	<br><h3 style='color: #CC0000'>v0.058.2</h3><br>
 		- Added a save to the save bank.<br>
 		- Updated endgame.<br>

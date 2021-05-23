@@ -3836,6 +3836,8 @@ addLayer("p", {
         getGainExp(){
                 let ret = new Decimal(4)
 
+                if (hasMilestone("p", 9)) ret = ret.times(2)
+
                 return ret
         },
         getBaseGain(){
@@ -9599,7 +9601,7 @@ addLayer("mini", {
                                 return "Gain 5 + 2% fuel"
                         },
                         unlocked(){
-                                return true
+                                return player.mini.d_points.best.lt("5ee5")
                         },
                         canClick(){
                                 return true
@@ -10340,17 +10342,20 @@ addLayer("mini", {
                         width: 600,
                         height: 50,
                         progress(){
-                                return player.mini.d_points.fuel.div(tmp.mini.d_points.getMaximumFuel)
+                                let f = player.mini.d_points.fuel
+                                if (f.gt("1ee6")) return Math.sin(player.time/5000)**2
+                                return f.div(tmp.mini.d_points.getMaximumFuel)
                         },
                         display(){
                                 if (player.tab != "mini") return ""
                                 if (player.subtabs.mini.mainTabs != "D") return ""
                                 if (player.subtabs.mini.d_content != "Fuel") return ""
-                                if (true) {
+                                if (player.mini.d_points.fuel.lt("1ee6")) {
                                         let a = format(player.mini.d_points.fuel) + "/"
                                         let b = format(tmp.mini.d_points.getMaximumFuel) + " fuel"
                                         return a + b
                                 }
+                                return format(player.mini.d_points.fuel) + " fuel"
                         },
                         unlocked(){
                                 return true
