@@ -4178,7 +4178,7 @@ addLayer("p", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: You can autobuy Iterations and the first levels of the first four rows of E upgrades.<br>"
+                                let a = "Reward: You can autobuy Iterations and the first levels of the first four rows of E buyables.<br>"
                                 return a
                         },
                 }, // hasMilestone("p", 8)
