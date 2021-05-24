@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.5.10.2 - 5/24/21
+- Fixed some things in the tree tab not being clickable.
+
 ### v2.5.10.1 - 5/23/21
 - Actually fixed the tooltip issue.
 
