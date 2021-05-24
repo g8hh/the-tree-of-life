@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.5.10.1 - 5/23/21
+- Actually fixed the tooltip issue.
+
 ### v2.5.10 - 5/22/21
 - Tooltips can now show over the top overlay again.
 - Tweaked number formatting (e1000's keep the decimal places on the mantissa.)

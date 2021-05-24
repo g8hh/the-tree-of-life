@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.10",
+	tmtNum: "2.5.10.1",
 	tmtName: "Dreams Really Do Come True"
 }
 
