@@ -2,6 +2,7 @@
 
 - The challenge that you are currently in is highlighted, and will not be hidden if "hide completed challenges" is on and it is already completed.
 - Fixed the infobox not appearing in default tabFormat.
+- Fixed upgrade/buyable layering when they are hovered over.
 
 ### v2.5.10.2 - 5/24/21
 - Fixed some things in the tree tab not being clickable.
