@@ -410,7 +410,7 @@ function runInterval(){
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
 	pastTickTimes = pastTickTimes.slice(0, 9)
-	pastTickTimes.push(Date.now() - now)
+	pastTickTimes = [Date.now() - now].concat(pastTickTimes)
 	ticking = false
 }
 /* */

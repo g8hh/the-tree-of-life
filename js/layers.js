@@ -2322,6 +2322,7 @@ addLayer("n", {
                 if (hasUpgrade("n", 41))        x = x.times(player.mini.e_points.points.max(10).log10())
                 if (hasUpgrade("n", 53))        x = x.times(Decimal.pow(1.01, player.mini.buyables[211]))
                                                 x = x.times(player.p.points.plus(1))
+                if (hasUpgrade("p", 14))        x = x.times(tmp.p.upgrades[14].effect)
 
                 return x
         },
@@ -3869,6 +3870,8 @@ addLayer("p", {
         getGainMult(){//phosphorus gain
                 let x = new Decimal(1)
 
+                if (hasUpgrade("p", 15)) x = x.times(tmp.p.upgrades[15].effect)
+
                 return x
         },
         getPassiveGainMult(){
@@ -4008,13 +4011,86 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor(165) + "'>Phosphorus III"
                         },
                         description(){
-                                let a = "Remove tha ability to prestige but gain 100% of Phosphorus/s per second"
+                                let a = "Remove the ability to prestige but gain 100% of Phosphorus/s per second"
                                 return a
                         },
                         cost:() => new Decimal(player.hardMode ? 5e10 : 1e10),
                         unlocked(){
                                 return hasUpgrade("p", 12)
                         }, // hasUpgrade("p", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(166) + "'>Phosphorus IV"
+                        },
+                        description(){
+                                let a = "Per Iteration Phosphorus multiplies Nitrogen"
+                                let b = "<br>Currently: " + format(tmp.p.upgrades[14].effect)
+                                return a + b
+                        },
+                        effect(){
+                                return player.p.points.max(1).pow(tmp.mini.e_points.getMaxInterations)
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e12 : 2e11),
+                        unlocked(){
+                                return hasUpgrade("p", 13)
+                        }, // hasUpgrade("p", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(166) + "'>Phosphorus V"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'> Log10(E Points) multiplies base Phosphorus gain and commutativity of addition's outer ln becomes log2"
+                                let b = "<br>Currently: " + format(tmp.p.upgrades[15].effect) + "</bdi>"
+                                return a + b
+                        },
+                        effect(){
+                                return player.mini.e_points.points.max(10).log10()
+                        },
+                        cost:() => new Decimal(player.hardMode ? 3e12 : 6e11),
+                        unlocked(){
+                                return hasUpgrade("p", 14)
+                        }, // hasUpgrade("p", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VI"
+                        },
+                        description(){
+                                let a = "Each upgrade adds .01 to left distributivity base"
+                                return a
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e18 : 1e17),
+                        unlocked(){
+                                return hasUpgrade("p", 15)
+                        }, // hasUpgrade("p", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VII"
+                        },
+                        description(){
+                                let a = "Each upgrade makes E Points<sup>.05</sup> multiply D Point gain"
+                                return a
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e19 : 1e18),
+                        unlocked(){
+                                return hasUpgrade("p", 21)
+                        }, // hasUpgrade("p", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VII"
+                        },
+                        description(){
+                                let a = "Each respect scalar multiples E Point gain by 1 + [upgrades]/10"
+                                return a
+                        },
+                        cost:() => new Decimal(player.hardMode ? 3e19 : 3e18),
+                        unlocked(){
+                                return hasUpgrade("p", 22)
+                        }, // hasUpgrade("p", 23)
                 },
         },
         milestones: {
@@ -5137,6 +5213,7 @@ addLayer("mini", {
                         if (hasUpgrade("n", 55))        ret = ret.times(player.mini.e_points.points.max(1).min("1e50000"))
                         if (hasUpgrade("mini", 83))     ret = ret.times(player.mini.e_points.points.pow(.1))
                                                         ret = ret.times(tmp.p.effect)
+                        if (hasUpgrade("p", 22))        ret = ret.times(player.mini.e_points.points.pow(.05 * player.p.upgrades.length))
 
                         return ret
                 },
@@ -5264,6 +5341,11 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 84))     ret = ret.times(Decimal.pow(1.02, getBuyableAmount("mini", 222)))
                                                         ret = ret.times(tmp.p.effect)
                         if (hasMilestone("p", 3))       ret = ret.times(player.mini.e_points.points.max(1).pow(.001))
+                        if (hasUpgrade("p", 23))        {
+                                let base = 1 + player.p.upgrades.length/10
+                                let exp = getBuyableAmount("mini", 212)
+                                                        ret = ret.times(Decimal.pow(base, exp))
+                        }
 
                         return ret
                 },
@@ -8888,6 +8970,7 @@ addLayer("mini", {
                                 let ret = init.max(10).log10()
 
                                 if (hasUpgrade("o", 34)) ret = ret.times(Math.log(10))
+                                if (hasUpgrade("p", 15)) ret = ret.div(Math.log(2))
 
                                 return ret
                         },
@@ -8906,6 +8989,7 @@ addLayer("mini", {
                                 let eformula = "log10(log10(E Points))^x<br>" + format(getBuyableBase("mini", 223)) + "^x"
                                 if (hasUpgrade("o", 34)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 83)) eformula = eformula.replace("log10", "ln")
+                                if (hasUpgrade("p", 15)) eformula = eformula.replace("ln", "log2")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
@@ -9022,6 +9106,7 @@ addLayer("mini", {
                                 let ret = new Decimal(.1)
 
                                 if (hasMilestone("n", 18)) ret = ret.plus(.01)
+                                if (hasUpgrade("p", 21)) ret = ret.plus(.01 * player.p.upgrades.length)
 
                                 return ret
                         },
