@@ -336,7 +336,6 @@ function gameLoop(diff) {
 		player.tab = "gameEnded"
 		clearParticles()
 	}
-	if (player.devSpeed) diff *= player.devSpeed
 
 	if (maxTickLength) {
 		let limit = maxTickLength()
