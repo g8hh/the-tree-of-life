@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.060",
+	num: "0.061",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.061</h3><br>
+		- Added two Phosphorus upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.060</h3><br>
 		- Wording fixes.<br>
 		- Added four Phosphorus upgrades.<br>

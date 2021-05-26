@@ -3871,6 +3871,7 @@ addLayer("p", {
                 let x = new Decimal(1)
 
                 if (hasUpgrade("p", 15)) x = x.times(tmp.p.upgrades[15].effect)
+                if (hasUpgrade("p", 24)) x = x.times(tmp.p.upgrades[24].effect)
 
                 return x
         },
@@ -4081,7 +4082,7 @@ addLayer("p", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VII"
+                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VIII"
                         },
                         description(){
                                 let a = "Each respect scalar multiples E Point gain by 1 + [upgrades]/10"
@@ -4091,6 +4092,39 @@ addLayer("p", {
                         unlocked(){
                                 return hasUpgrade("p", 22)
                         }, // hasUpgrade("p", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus IX"
+                        },
+                        description(){
+                                let a = "Each upgrade multiplies base Phosphorus gain by log10(log10(E Points))"
+                                let b = "<br>Currently: " + format(tmp.p.upgrades[24].effect) + "</bdi>"
+                                return a + b
+                        },
+                        effect(){
+                                return player.mini.e_points.points.max(10).log10().max(10).log10().pow(player.p.upgrades.length)
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e20 : 1e19),
+                        unlocked(){
+                                return hasUpgrade("p", 23)
+                        }, // hasUpgrade("p", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus X"
+                        },
+                        description(){
+                                let a = "Inner ln of commutativity of addition becomes log2 and square " + makeBlue("a")
+                                return a
+                        },
+                        effect(){
+                                return player.mini.e_points.points.max(10).log10().max(10).log10().pow(player.p.upgrades.length)
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e26 : 1e25),
+                        unlocked(){
+                                return hasUpgrade("p", 24)
+                        }, // hasUpgrade("p", 25)
                 },
         },
         milestones: {
@@ -5379,6 +5413,7 @@ addLayer("mini", {
                         if (hasUpgrade("n", 44)) ret = ret.plus(player.mini.buyables[222].times(.01))
 
                         if (hasUpgrade("o", 33) && ret.gt(1)) ret = ret.pow(2) 
+                        if (hasUpgrade("p", 25) && ret.gt(1)) ret = ret.pow(2)
 
                         return ret
                 },
@@ -8967,6 +9002,8 @@ addLayer("mini", {
                         base(){
                                 let init = player.mini.e_points.points.max(10).log10()
                                 if (hasUpgrade("mini", 83)) init = init.times(Math.log(10))
+                                if (hasUpgrade("p", 25)) init = init.div(Math.log(2))
+
                                 let ret = init.max(10).log10()
 
                                 if (hasUpgrade("o", 34)) ret = ret.times(Math.log(10))
@@ -8990,6 +9027,7 @@ addLayer("mini", {
                                 if (hasUpgrade("o", 34)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 83)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("p", 15)) eformula = eformula.replace("ln", "log2")
+                                if (hasUpgrade("p", 25)) eformula = eformula.replace("ln", "log2")
                                 //if its undefined set it to that
                                 //otherwise use normal formula
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
