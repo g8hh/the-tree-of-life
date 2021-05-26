@@ -285,7 +285,7 @@ addLayer("h", {
                 },
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -1415,7 +1415,8 @@ addLayer("c", {
                 data.best = data.best.max(data.points)
                 
                 // do carbon gain
-                data.points = getLogisticAmount(data.points, tmp.c.getResetGain, tmp.c.getLossRate, diff)
+                if (hasMilestone("mu", 1)) data.points = data.points.plus(tmp.c.getResetGain.times(diff))
+                else data.points = getLogisticAmount(data.points, tmp.c.getResetGain, tmp.c.getLossRate, diff)
 
                 if (false) {
                         //do autobuyer stuff
@@ -1440,7 +1441,7 @@ addLayer("c", {
                 return false
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -1761,6 +1762,7 @@ addLayer("c", {
                                         function() {
                                                 if (player.tab != "c") return ""
                                                 if (player.subtabs.c.mainTabs != "Upgrades") return ""
+                                                if (hasMilestone("mu", 1)) return ""
                                                 return "You are losing " + format(tmp.c.getLossRate.times(100)) + "% of your Carbon per second"
                                         },
                                 ],
@@ -1880,7 +1882,8 @@ addLayer("o", {
                 data.best = data.best.max(data.points)
                 
                 // do oxygen gain
-                data.points = getLogisticAmount(data.points, tmp.o.getResetGain, tmp.o.getLossRate, diff)
+                if (hasMilestone("mu", 1)) data.points = data.points.plus(tmp.o.getResetGain.times(diff))
+                else data.points = getLogisticAmount(data.points, tmp.o.getResetGain, tmp.o.getLossRate, diff)
 
                 if (false) {
                         //do autobuyer stuff
@@ -1905,7 +1908,7 @@ addLayer("o", {
                 return false
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -2234,6 +2237,7 @@ addLayer("o", {
                                         function() {
                                                 if (player.tab != "o") return ""
                                                 if (player.subtabs.o.mainTabs != "Upgrades") return ""
+                                                if (hasMilestone("mu", 1)) return ""
                                                 return "You are losing " + format(tmp.o.getLossRate.times(100)) + "% of your Oxygen per second"
                                         },
                                 ],
@@ -2432,7 +2436,7 @@ addLayer("n", {
                 return !hasMilestone("n", 13) && tmp.n.getResetGain.gt(0) && hasUpgrade("mini", 45)
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -2661,6 +2665,7 @@ addLayer("n", {
                                 let ret = new Decimal(1)
 
                                 ret = ret.plus(tmp.mini.buyables[232].effect)
+                                if (hasMilestone("mu", 3)) ret = ret.plus(getBuyableAmount("mini", 231).div(100))
 
                                 return ret
                         },
@@ -3838,6 +3843,7 @@ addLayer("p", {
                 let ret = new Decimal(4)
 
                 if (hasMilestone("p", 9)) ret = ret.times(2)
+                if (hasUpgrade("p", 31)) ret = ret.times(2)
 
                 return ret
         },
@@ -3867,7 +3873,7 @@ addLayer("p", {
 
                 return v3
         },
-        getGainMult(){//phosphorus gain
+        getGainMult(){//phosphorus gain pgain rusgain
                 let x = new Decimal(1)
 
                 if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
@@ -3882,6 +3888,10 @@ addLayer("p", {
                 if (hasMilestone("p", 2))       x = x.times(tmp.p.milestones[2].effect)
                                                 x = x.times(player.p.points.max(1).pow(tmp.mu.effect))
                 if (hasUpgrade("mu", 11))       x = x.times(tmp.n.upgrades[35].effect)
+                if (hasUpgrade("mu", 12))       x = x.times(player.mu.points.div(100).plus(1).pow(getBuyableAmount("mini", 241).sqrt()))
+                if (hasUpgrade("p", 33))        x = x.times(tmp.p.upgrades[33].effect)
+                if (hasUpgrade("mu", 13))       x = x.times(tmp.mu.upgrades[13].effect)
+                if (hasUpgrade("mu", 14))       x = x.times(10)
 
                 return x
         },
@@ -3976,7 +3986,7 @@ addLayer("p", {
                 return !false && tmp.p.getResetGain.gt(0)
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -4128,6 +4138,52 @@ addLayer("p", {
                         unlocked(){
                                 return hasUpgrade("p", 24)
                         }, // hasUpgrade("p", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus XI"
+                        },
+                        description(){
+                                let a = "Square initial Phosphorus gain and " + makeBlue("a")
+                                return a
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e38 : 1e37),
+                        unlocked(){
+                                return hasMilestone("mu", 2)
+                        }, // hasUpgrade("p", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(169) + "'>Phosphorus XII"
+                        },
+                        description(){
+                                let a = "You can bulk 100x more C Point buyables"
+                                return a
+                        },
+                        effect(){
+                                return player.mini.e_points.points.max(10).log10().max(10).log10().pow(player.p.upgrades.length)
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e43 : 1e42),
+                        unlocked(){
+                                return hasUpgrade("p", 31)
+                        }, // hasUpgrade("p", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(169) + "'>Phosphorus XIII"
+                        },
+                        description(){
+                                let a = "Per µ iterations multiply Phosphorus gain"
+                                let b = "<br>Currently:" + format(tmp.p.upgrades[33].effect)
+                                return a
+                        },
+                        effect(){
+                                return Decimal.pow(tmp.mini.e_points.getMaxInterations, player.mu.points)
+                        },
+                        cost:() => new Decimal(player.hardMode ? 1e61 : 1e60),
+                        unlocked(){
+                                return hasUpgrade("p", 32)
+                        }, // hasUpgrade("p", 33)
                 },
         },
         milestones: {
@@ -4365,7 +4421,8 @@ addLayer("p", {
                                         let c = "Resetting resets all prior currencies, all prior minigame buyables, "
                                         let d = " all D and E point content, C Point upgrades, "
                                         let e = " Nitrogen content, and third row Oxygen and Carbon upgrades."
-                                        return a + br + b + br + c + br + d + br + e
+                                        let f = "The effect on D and E points is hardcapped at 1ee7 and 1ee6 respectively."
+                                        return a + br + b + br + c + br + d + br + e + br + f
                                 }]
                         ],
                         unlocked(){
@@ -4622,7 +4679,9 @@ addLayer("mu", {
         baseAmount() {return player.p.points.floor()}, // Get the current amount of baseResource
         type: "static",
         base(){
-                return new Decimal(100)
+                let ret = new Decimal(100)
+                if (hasUpgrade("mu", 12)) ret = ret.sub(tmp.mu.upgrades[12].effect)
+                return ret
         },
         gainMult(){
                 return new Decimal(1)
@@ -4630,7 +4689,7 @@ addLayer("mu", {
         exponent: new Decimal(2),
         gainExp: new Decimal(1),
         effect(){
-                let amt = player.mu.best
+                let amt = player.mu.points
 
                 let ret = amt.div(100)
 
@@ -4661,8 +4720,8 @@ addLayer("mu", {
         row: 2, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
                 if (shiftDown) {
-                        let p1 = "Formula:<br>" + format(tmp.mu.requires)
-                        let p2 = "*100^(x<sup>2</sup>)"
+                        let p1 = "Formula:<br>" + format(tmp.mu.requires, 0) + "*"
+                        let p2 = formatWhole(tmp.mu.base) + "^(x<sup>2</sup>)"
                         return p1+p2
                 }
 
@@ -4690,7 +4749,7 @@ addLayer("mu", {
         ],
         layerShown(){return hasUpgrade("p", 25)},
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){
@@ -4704,6 +4763,81 @@ addLayer("mu", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("mu", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ II"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'> Per sqrt(associativity of *) multiply Phosphorus gain by 1 + µ/100 and reduces the µ cost base by ceil(40*[this row upgrades]<sup>.5</sup>)"
+                                let b = "<br>Currently: -" + formatWhole(tmp.mu.upgrades[12].effect) + "</bdi>"
+                                return a + b
+                        },
+                        cost:() => new Decimal(4),
+                        effect(){
+                                a = 1
+                                if (hasUpgrade("mu", 11)) a += 1
+                                if (hasUpgrade("mu", 13)) a += 1
+                                if (hasUpgrade("mu", 14)) a += 1
+                                if (hasUpgrade("mu", 15)) a += 1
+                                return new Decimal(a).sqrt().times(40).ceil()
+                        },
+                        unlocked(){
+                                return hasUpgrade("mu", 11)
+                        }, // hasUpgrade("mu", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ III"
+                        },
+                        description(){
+                                let a = "Per µ multiply Phosphorus gain by log10(Phosphorus)"
+                                let b = "<br>Currently: " + formatWhole(tmp.mu.upgrades[13].effect)
+                                return a + b
+                        },
+                        cost:() => new Decimal(6),
+                        effect(){
+                                return player.p.points.max(100).log10().pow(player.mu.points)
+                        },
+                        unlocked(){
+                                return hasUpgrade("mu", 12)
+                        }, // hasUpgrade("mu", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ IV"
+                        },
+                        description(){
+                                let a = "Bulk 10x C, D, and E buyables and gain 10x Phosphorus"
+                                return a
+                        },
+                        cost:() => new Decimal(1e108),
+                        currencyLocation:() => player.p,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Phosphorus",
+                        unlocked(){
+                                return hasUpgrade("mu", 13)
+                        }, // hasUpgrade("mu", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ V"
+                        },
+                        description(){
+                                let a = "All future upgrades that cost Phosphorus set µ to 0 and do a µ reset"
+                                return a
+                        },
+                        cost:() => new Decimal(1e118),
+                        currencyLocation:() => player.p,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Phosphorus",
+                        onPurchase(){
+                                player.mu.points = new Decimal(0)
+                                doReset("mu", true)
+                        },
+                        unlocked(){
+                                return hasUpgrade("mu", 14)
+                        }, // hasUpgrade("mu", 15)
                 },
         },
         milestones: {
@@ -4723,7 +4857,7 @@ addLayer("mu", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Per milestone multiply base Phosphorus gain by total tokens.<br>"
+                                let a = "Reward: Per milestone multiply base Phosphorus gain by total tokens and you no longer lose Oxygen or Carbon.<br>"
                                 return a
                         },
                 }, // hasMilestone("mu", 1)
@@ -4742,14 +4876,52 @@ addLayer("mu", {
                         unlocked(){
                                 return true
                         },
-                        effect(){
-                                return new Decimal(1)
-                        },
                         effectDescription(){
-                                let a = "Reward: Unlock a new E buyable [not yet].<br>"
+                                let a = "Reward: Unlock a new E buyable.<br>"
                                 return a
                         },
                 }, // hasMilestone("mu", 2)
+                3: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.mu.milestones[3].requirement)
+                                let b = " µ"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.p.milestones[3].requirement.lte(player.mu.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: E Points multiply D Points and each associativity of addition adds .01 to "
+                                a += makeRed("E") + ".<br>"
+                                return a
+                        },
+                }, // hasMilestone("mu", 3)
+                4: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.mu.milestones[4].requirement)
+                                let b = " µ"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(7)
+                        },
+                        done(){
+                                return tmp.p.milestones[4].requirement.lte(player.mu.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Iterations cost exponent is now x<sup>x</sup>"
+                                return a
+                        },
+                }, // hasMilestone("mu", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -5092,6 +5264,8 @@ addLayer("mini", {
                                 if (hasUpgrade("o", 31))        bulk = bulk.times(10)
                                 if (hasUpgrade("o", 32))        bulk = bulk.times(10)
                                 if (hasUpgrade("mini", 85))     bulk = bulk.times(5)
+                                if (hasUpgrade("p", 32))        bulk = bulk.times(100)
+                                if (hasUpgrade("mu", 14))       bulk = bulk.times(10)
                                 
                                 bulk = bulk.sub(1)
 
@@ -5125,6 +5299,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
                                 if (hasUpgrade("mini", 85))     bulk2 = bulk2.times(5)
                                 if (hasMilestone("p", 1))       bulk2 = bulk2.times(5)
+                                if (hasUpgrade("mu", 14))       bulk2 = bulk2.times(10)
                                 
                                 bulk2 = bulk2.sub(1).floor()
 
@@ -5147,7 +5322,7 @@ addLayer("mini", {
                                 let list4 = []
                                 if (hasUpgrade("n", 52)) list4 = [201, 202, 203, 211, 212, 
                                                                   213, 221, 222, 223, 231, 
-                                                                  232, 233]
+                                                                  232, 233, 241]
 
                                 let bulk3 = new Decimal(1) // e
                                 if (hasMilestone("n", 17))      bulk3 = bulk3.times(5)
@@ -5161,6 +5336,7 @@ addLayer("mini", {
                                 if (hasUpgrade("o", 35))        bulk3 = bulk3.times(5)
                                 if (hasUpgrade("mini", 85))     bulk3 = bulk3.times(5)
                                 if (hasMilestone("p", 2))       bulk3 = bulk3.times(5)
+                                if (hasUpgrade("mu", 14))       bulk3 = bulk3.times(10)
                                 
                                 bulk3 = bulk3.sub(1).floor()
 
@@ -5443,8 +5619,9 @@ addLayer("mini", {
                         if (hasUpgrade("n", 33))        ret = ret.times(player.mini.d_points.fuel.max(1).pow(.001))
                         if (hasUpgrade("n", 55))        ret = ret.times(player.mini.e_points.points.max(1).min("1e50000"))
                         if (hasUpgrade("mini", 83))     ret = ret.times(player.mini.e_points.points.pow(.1))
-                                                        ret = ret.times(tmp.p.effect)
+                                                        ret = ret.times(tmp.p.effect.min("1ee7"))
                         if (hasUpgrade("p", 22))        ret = ret.times(player.mini.e_points.points.pow(.05 * player.p.upgrades.length))
+                        if (hasMilestone("mu", 3))      ret = ret.times(player.mini.e_points.points)
 
                         return ret
                 },
@@ -5552,6 +5729,7 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.mini.buyables[213].effect)
                                                         ret = ret.times(tmp.mini.buyables[223].effect)
                                                         ret = ret.times(tmp.mini.buyables[233].effect)
+                                                        ret = ret.times(tmp.mini.buyables[241].effect)
                         if (hasUpgrade("p", 12))        ret = ret.times(tmp.mini.buyables[183].effect)
                         if (hasUpgrade("n", 41))        ret = ret.times(player.n.points.max(10).log10())
                         if (hasUpgrade("o", 35))        ret = ret.times(player.n.points.max(1).pow(.26))
@@ -5570,7 +5748,7 @@ addLayer("mini", {
                                                         ret = ret.times(player.mini.e_points.points.max(10).log10())
                         }
                         if (hasUpgrade("mini", 84))     ret = ret.times(Decimal.pow(1.02, getBuyableAmount("mini", 222)))
-                                                        ret = ret.times(tmp.p.effect)
+                                                        ret = ret.times(tmp.p.effect.min("1ee6"))
                         if (hasMilestone("p", 3))       ret = ret.times(player.mini.e_points.points.max(1).pow(.001))
                         if (hasUpgrade("p", 23))        {
                                 let base = 1 + player.p.upgrades.length/10
@@ -5612,6 +5790,7 @@ addLayer("mini", {
 
                         if (hasUpgrade("o", 33) && ret.gt(1)) ret = ret.pow(2) 
                         if (hasUpgrade("p", 25) && ret.gt(1)) ret = ret.pow(2)
+                        if (hasUpgrade("p", 31) && ret.gt(1)) ret = ret.pow(2)
 
                         return ret
                 },
@@ -5647,7 +5826,7 @@ addLayer("mini", {
                 },
         },
         buyables: {
-                rows: 15,
+                rows: 25,
                 cols: 3,
                 11: {
                         title: "<bdi style='color:#FF0000'>Red</bdi>",
@@ -8686,6 +8865,7 @@ addLayer("mini", {
                         title: "Iterations",
                         cost() {
                                 let a = getBuyableAmount("mini", 201)
+                                if (hasMilestone("mu", 4)) return Decimal.pow(10, a.pow(a))
                                 if (hasUpgrade("mini", 85)) return Decimal.pow(10, a.plus(1).pow(a))
                                 return Decimal.pow(10, a.plus(1).pow(a.plus(1)).sub(a))
                         },
@@ -8721,6 +8901,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10^((x+1)<sup>x+1</sup>-x)" 
                                 if (hasUpgrade("mini", 85)) cost2 = "10^(x+1<sup>x</sup>)" 
+                                if (hasMilestone("mu", 4)) cost2 = "10^(x<sup>x</sup>)"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -9439,6 +9620,65 @@ addLayer("mini", {
                                 return "<br>" + end
                         }, 
                 },
+                241: {
+                        title: "(a*b)*c=a*(b*c)",
+                        cost:() => new Decimal("1e122e4").times(Decimal.pow(1e5, Decimal.pow(getBuyableAmount("mini", 241), 1.1))),
+                        canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[241].cost),
+                        buy(){
+                                if (!this.canAfford()) return
+                                player.mini.buyables[241] = player.mini.buyables[241].plus(1)
+                                player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[241].cost)
+                        },
+                        maxAfford(){
+                                let div = new Decimal("1e122e4")
+                                let base = 1e5
+                                let exp = 1.1
+                                let pts = player.mini.e_points.points
+                                if (pts.lt(div)) return new Decimal(0)
+                                return pts.div(div).log(base).root(exp).floor().plus(1)
+                        },
+                        unlocked(){
+                                return hasMilestone("mu", 2)
+                        },
+                        base(){
+                                let ret = player.p.points.max(10).log10()
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.mini.buyables[241].base.pow(player.mini.buyables[241])                                                                                                            
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "mini") return ""
+                                if (player.subtabs.mini.mainTabs != "E") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[241]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.mini.buyables[241].effect) + " to E Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 241)) + " E Points</b><br>"
+                                let eformula = "log10(Phosphorus)^x<br>" + format(getBuyableBase("mini", 241)) + "^x"
+                                //if its undefined set it to that
+                                //otherwise use normal formula
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = amt + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "(1e1,220,000)*(1e5^x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        }, 
+                },
         },
         clickables: {
                 rows: 5,
@@ -9937,7 +10177,7 @@ addLayer("mini", {
                 },  
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){ // https://www.food.com/topic/c
@@ -13111,7 +13351,7 @@ addLayer("tokens", {
 
         },
         upgrades: {
-                rows: 1000,
+                rows: 10,
                 cols: 5,
                 11: {
                         title(){

@@ -314,12 +314,6 @@ function gameLoop(diff) {
 		let limit = maxTickLength()
 		if (diff > limit) diff = limit
 	}
-
-	if (isNaN(tmp.pointGen)) Decimal(0) //toss an error
-	if (isNaN(player.h.deuterium.points.plus(3).ln())) Decimal(0)
-	if (tmp.h.atomic_hydrogen.getResetGain.lt(0)) Decimal(0)
-	if (tmp.h.deuterium.getResetGain.lt(0)) Decimal(0)
-	if (isNaN(player.h.atomic_hydrogen.points.plus(3).ln())) Decimal(0)
 	
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
