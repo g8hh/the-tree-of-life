@@ -4851,7 +4851,7 @@ addLayer("mu", {
                                 return new Decimal(1)
                         },
                         done(){
-                                return tmp.p.milestones[1].requirement.lte(player.mu.points)
+                                return tmp.mu.milestones[1].requirement.lte(player.mu.points)
                         },
                         unlocked(){
                                 return true
@@ -4871,7 +4871,7 @@ addLayer("mu", {
                                 return Decimal.pow(10, 12e5)
                         },
                         done(){
-                                return tmp.p.milestones[2].requirement.lte(player.mini.e_points.points)
+                                return tmp.mu.milestones[2].requirement.lte(player.mini.e_points.points)
                         },
                         unlocked(){
                                 return true
@@ -4891,7 +4891,7 @@ addLayer("mu", {
                                 return new Decimal(5)
                         },
                         done(){
-                                return tmp.p.milestones[3].requirement.lte(player.mu.points)
+                                return tmp.mu.milestones[3].requirement.lte(player.mu.points)
                         },
                         unlocked(){
                                 return true
@@ -4912,7 +4912,7 @@ addLayer("mu", {
                                 return new Decimal(7)
                         },
                         done(){
-                                return tmp.p.milestones[4].requirement.lte(player.mu.points)
+                                return tmp.mu.milestones[4].requirement.lte(player.mu.points)
                         },
                         unlocked(){
                                 return true
