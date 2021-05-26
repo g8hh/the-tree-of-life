@@ -3870,15 +3870,18 @@ addLayer("p", {
         getGainMult(){//phosphorus gain
                 let x = new Decimal(1)
 
-                if (hasUpgrade("p", 15)) x = x.times(tmp.p.upgrades[15].effect)
-                if (hasUpgrade("p", 24)) x = x.times(tmp.p.upgrades[24].effect)
+                if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
+                if (hasUpgrade("p", 24))        x = x.times(tmp.p.upgrades[24].effect)
+                if (hasMilestone("mu", 1))      x = x.times(player.tokens.total.pow(player.mu.milestones.length))
 
                 return x
         },
         getPassiveGainMult(){
                 let x = new Decimal(1)
 
-                if (hasMilestone("p", 2)) x = x.times(tmp.p.milestones[2].effect)
+                if (hasMilestone("p", 2))       x = x.times(tmp.p.milestones[2].effect)
+                                                x = x.times(player.p.points.max(1).pow(tmp.mu.effect))
+                if (hasUpgrade("mu", 11))       x = x.times(tmp.n.upgrades[35].effect)
 
                 return x
         },
@@ -4115,7 +4118,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus X"
                         },
                         description(){
-                                let a = "Inner ln of commutativity of addition becomes log2 and square " + makeBlue("a")
+                                let a = "Inner ln of commutativity of addition becomes log2 and square " + makeBlue("a") + " and unlock another layer"
                                 return a
                         },
                         effect(){
@@ -4593,6 +4596,200 @@ addLayer("p", {
                 }
 
                 
+        },
+})
+
+addLayer("mu", {
+        name: "µ", // This is optional, only used in a few places, If absent it just uses the layer id.
+        symbol: "µ", // This appears on the layer's node. Default is the id with the first letter capitalized
+        position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        startData() { return {
+                unlocked: false,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                abtime: 0,
+                time: 0,
+                times: 0,
+                autotimes: 0,
+                passivetime: 0,
+        }},
+        color: "#8200B0",
+        branches: [],
+        requires:() => Decimal.pow(10, 26).times(player.hardMode ? 10 : 2), // Can be a function that takes requirement increases into account
+        resource: "µ", // Name of prestige currency
+        baseResource: "Phosphorus", // Name of resource prestige is based on
+        baseAmount() {return player.p.points.floor()}, // Get the current amount of baseResource
+        type: "static",
+        base(){
+                return new Decimal(100)
+        },
+        gainMult(){
+                return new Decimal(1)
+        },
+        exponent: new Decimal(2),
+        gainExp: new Decimal(1),
+        effect(){
+                let amt = player.mu.best
+
+                let ret = amt.div(100)
+
+                return ret
+        },
+        effectDescription(){
+                if (player.tab != "mu") return ""
+                if (shiftDown) {
+                        let a = "effect formula: .01*x"
+                        if (tmp.mu.effect.lt(1) && false) {
+                                a += format(tmp.mu.effect.sub(1).recip().times(-1), 3) 
+                        }
+                        return a
+                }
+                let eff = tmp.mu.effect
+                let effstr = format(eff)
+                let start = " multiplying Phosphorus gain by Phosphorus<sup>" 
+                let end = "</sup>."
+                let ret = start + effstr + end
+                return ret
+        },
+        update(diff){
+                let data = player.mu
+                
+                if (tmp.mu.layerShown) data.unlocked = true
+                data.best = data.best.max(data.points)
+        },
+        row: 2, // Row the layer is in on the tree (0 is the first row)
+        prestigeButtonText(){
+                if (shiftDown) {
+                        let p1 = "Formula:<br>" + format(tmp.mu.requires)
+                        let p2 = "*100^(x<sup>2</sup>)"
+                        return p1+p2
+                }
+
+                let a = "Reset for <b>" + formatWhole(tmp.mu.resetGain) + "</b> " + tmp.mu.resource
+                let br = "<br>"
+                let b = ""
+                if (player.mu.points.lt(30)) {
+                        let d = tmp.mu.canBuyMax
+                        b = tmp.mu.baseAmount.gte(tmp.mu.nextAt) && (d !== undefined) && d ? "Next: " : "Req: "
+                }
+                let c = formatWhole(tmp.mu.baseAmount) + "/" + format(tmp.mu.nextAtDisp) + " " + tmp.mu.baseResource
+
+                return a + br + br + b + c
+        },
+        hotkeys: [
+                {key: "shift+M", description: "Shift+M: Go to µ", onPress(){
+                                if (!tmp.mu.layerShown) return
+                                showTab("mu")
+                        }
+                },
+                {key: "m", description: "M: Reset for µ", onPress(){
+                                if (canReset("mu")) doReset("mu")
+                        }
+                },
+        ],
+        layerShown(){return hasUpgrade("p", 25)},
+        upgrades: {
+                rows: 1000,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>µ I"
+                        },
+                        description(){
+                                let a = "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
+                                return a
+                        },
+                        cost:() => new Decimal(2),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("mu", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.mu.milestones[1].requirement)
+                                let b = " µ"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(1)
+                        },
+                        done(){
+                                return tmp.p.milestones[1].requirement.lte(player.mu.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Per milestone multiply base Phosphorus gain by total tokens.<br>"
+                                return a
+                        },
+                }, // hasMilestone("mu", 1)
+                2: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.mu.milestones[2].requirement)
+                                let b = " E Points"
+                                return a + b
+                        },
+                        requirement(){
+                                return Decimal.pow(10, 12e5)
+                        },
+                        done(){
+                                return tmp.p.milestones[2].requirement.lte(player.mini.e_points.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return new Decimal(1)
+                        },
+                        effectDescription(){
+                                let a = "Reward: Unlock a new E buyable [not yet].<br>"
+                                return a
+                        },
+                }, // hasMilestone("mu", 2)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: ["main-display",
+                                ["prestige-button", ""],
+                                ["display-text",
+                                        function() {
+                                                if (player.tab != "p") return ""
+                                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
+                                                if (shiftDown) {
+                                                        let b = "Your best Phosphorus is " + format(player.p.best)
+                                                        let c = " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
+                                                        return b + c
+                                                }
+                                                let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
+                                                let a = "You are gaining " + format(x, 3) + " Phosphorus/s"
+                                                if (!hasUpgrade("p", 13)) return a
+                                                return a + " and " + format(tmp.p.getResetGain) + " base Phosphorus/s<sup>2</sup>"
+                                        }
+                                ],
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7]]],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: ["main-display",
+                                ["milestones", [1]],
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },    
+        },
+        doReset(layer){
+                player.p.points = new Decimal(0)
+                player.p.total = new Decimal(0)
+                player.p.best = new Decimal(0)
+                player.p.currentGainPerSec = new Decimal(0)
         },
 })
 
@@ -5380,6 +5577,7 @@ addLayer("mini", {
                                 let exp = getBuyableAmount("mini", 212)
                                                         ret = ret.times(Decimal.pow(base, exp))
                         }
+                        if (hasUpgrade("mu", 11))       ret = ret.times(player.mu.points.plus(10).log10().pow(getBuyableAmount("mini", 202)))
 
                         return ret
                 },

@@ -265,6 +265,20 @@ PROGRESSION_MILESTONES = {
         159: () => player.p.points.gt(Decimal.pow(10, 16)),
         160: () => player.p.points.gt(Decimal.pow(10, 32)),
         161: () => player.p.points.gt(Decimal.pow(10, 64)),
+        162: () => player.mu.points.gte(7),
+        163: () => player.mu.points.gte(14),
+        164: () => player.mu.points.gte(21),
+        165: () => player.mu.points.gte(28),
+        166: () => player.mu.points.gte(35),
+        167: () => player.mu.points.gte(42),
+        168: () => player.mu.points.gte(49),
+        169: () => player.mu.points.gte(56),
+        170: () => player.mu.points.gte(63),
+        171: () => player.mu.points.gte(70),
+        172: () => player.mu.points.gte(77),
+        173: () => player.mu.points.gte(84),
+        174: () => player.mu.points.gte(91),
+        175: () => player.mu.points.gte(98),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -429,6 +443,20 @@ PROGRESSION_MILESTONES_TEXT = {
         159: "1e16 Phosphorus",
         160: "1e32 Phosphorus",
         161: "1e64 Phosphorus",
+        162: "7 µ",
+        163: "14 µ",
+        164: "21 µ",
+        165: "28 µ",
+        166: "35 µ",
+        167: "42 µ",
+        168: "49 µ",
+        169: "56 µ",
+        170: "63 µ",
+        171: "70 µ",
+        172: "77 µ",
+        173: "84 µ",
+        174: "91 µ",
+        175: "98 µ",
 }
 
 

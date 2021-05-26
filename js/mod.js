@@ -12,19 +12,26 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.061",
+	num: "0.062",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 2e10 Phosphorus OR the last save in the bank<br><br>
+		- 3 µ (mu) OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.062</h3><br>
+		- Added µ (new layer).<br>
+		- Added two rows of achievements.<br>
+		- Added a save to the bank.<br>
+		- Added two mu milestones.<br>
+		- Added a mu upgrade.<br>
+		- Guess why I chose to name it µ and get your name in the game (again possibly)!<br>
 	<br><h3 style='color: #CC0000'>v0.061</h3><br>
 		- Added two Phosphorus upgrades.<br>
 	<br><h3 style='color: #CC0000'>v0.060</h3><br>
