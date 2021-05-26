@@ -4,7 +4,7 @@ This guide assumes you have already gone through the [getting started guide](get
 
 ## Setting up mod info
 
-Open mod.js. This is where you define things that are for the mod in general as opposed to layer-specific. For now, modInfo, you can set the mod name and author name, and also the points name, which changes what the game calls your basic points (but they're still referred to as points in the code). Be sure that you set a mod id as well.
+Open mod.js. This is where you define things that are for the mod in general as opposed to layer-specific. For now, modInfo, you can set the mod name and author name, and also the points name, which changes what the game calls your basic points (but they're still referred to as `player.points` in the code). Be sure that you set a mod id as well.
 
 ## Making a layer
 
@@ -62,4 +62,41 @@ Refresh the page again, and it should work! You are gaining 2 points per second!
 
 ## Upgraded upgrades
 
-Now that you know how to make an upgrade, let's 
+Now that you know how to make a simple upgrade, let's make a more interesting one, that scales its effect based on your prestige points! 
+
+Copying things is often the easiest way to do things, so copy upgrade 11 and paste it afterwards. Replace the 11 with a 12, and change the name and description as you see fit, and bump the cost up to 2. Now, let's add an effect. effect is a function that calculates the bonus from an upgrade, and effectDisplay lets you display the effect. 
+
+```js
+    effect() {
+        return player[this.layer].points.add(1).pow(0.5)
+    },
+    effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+```
+
+this.layer and this.id are automatically set to the layer that the upgrade is in, and the id of the upgrade (in this case "12"). Using them makes it much easier to reuse code. You can also see that player[this.layer].points gets the prestige currency amount for this layer.
+
+Now, in mod.js, under the last line you added, you can apply the effect with 
+
+```js
+    if (hasUpgrade('p', 12)) gain = gain.times(upgradeEffect('p', 12))
+```
+
+Refresh it to see that it works! Now, for one last upgrade, let's make points boost prestige point gain! Copy the last upgrade, and change the number to 13. Change the title and name, set the cost to 5. (This mod is balanced to be fast-paced and easy to test). We can reuse the effectDisplay, so we just need to change the effect:
+
+```js
+    effect() {
+        return player.points.add(1).pow(0.15)
+    },
+```
+
+To implement this effect, we modify gainMult, which returns the multiplier to this layer's prestige gain.
+
+```js
+    gainMult() {
+        let mult = new Decimal(1)
+        if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13))
+        return mult
+    },
+```
+
+Refresh the page and see your new upgrade! Next time: a new layer...
