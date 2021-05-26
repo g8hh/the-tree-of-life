@@ -384,6 +384,15 @@ addLayer("c", {
 
 // This layer is mostly minimal but it uses a custom prestige type and a clickable
 addLayer("f", {
+    infoboxes:{
+        coolInfo: {
+            title: "Lore",
+            titleStyle: {'color': '#FE0000'},
+            body: "DEEP LORE!",
+            bodyStyle: {'background-color': "#0000EE"}
+        }
+    },
+
     startData() { return {
         unlocked: false,
         points: new Decimal(0),

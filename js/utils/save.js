@@ -87,6 +87,7 @@ function getStartLayerData(layer) {
 	layerdata.achievements = [];
 	layerdata.challenges = getStartChallenges(layer);
 	layerdata.grid = getStartGrid(layer);
+	layerdata.prevTab = ""
 
 	return layerdata;
 }

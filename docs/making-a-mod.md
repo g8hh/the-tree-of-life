@@ -62,4 +62,4 @@ Refresh the page again, and it should work! You are gaining 2 points per second!
 
 ## Upgraded upgrades
 
-To be continued...
+Now that you know how to make an upgrade, let's 
