@@ -67,8 +67,7 @@
 			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px" >
 				{{VERSION.withoutName}}</div>
 			<button
-				v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab].prevTab)"
-				class="other-back overlayThing" onclick="goBack(player.navTab == 'none' ? player.tab : player.navTab)">←</button>
+			v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)"				class="other-back overlayThing" onclick="goBack(player.navTab == 'none' ? player.tab : player.navTab)">←</button>
 			<img id="optionWheel" class="overlayThing" v-if="player.tab!='options-tab'" src="options_wheel.png"
 				onclick="showTab('options-tab')"></img>
 			<div id="info" v-if="player.tab!='info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>

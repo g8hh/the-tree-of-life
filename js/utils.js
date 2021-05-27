@@ -173,7 +173,7 @@ function goBack(layer) {
 	let nextTab = "none"
 
 	if (player[layer].prevTab) nextTab = player[layer].prevTab
-	if (player.navTab !== "none" && (tmp[layer]?.row == "side" || tmp[layer].row == "side")) nextTab = player.lastSafeTab
+	if (player.navTab === "none" && (tmp[layer]?.row == "side" || tmp[layer].row == "otherside")) nextTab = player.lastSafeTab
 
 	if (tmp[layer].leftTab) showNavTab(nextTab, layer)
 	else showTab(nextTab, layer)

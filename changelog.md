@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+### v2.5.11.1 - 5/27/21
+- Fixed issues caused when the tree tab is disabled.
+
 ### v2.5.11 - 5/27/21
 - Finished part 1 of the "making a mod" tutorial.
 - The challenge that you are currently in is highlighted, and will not be hidden if "hide completed challenges" is on and it is already completed.
