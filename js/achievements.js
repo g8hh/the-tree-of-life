@@ -71,7 +71,7 @@ function getAchStuffFromNumber(n){
         } else if (n <= 1111) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
-                        return player.tokens.total.gt(0) || tmp.n.layerShown
+                        return player.tokens.total.gt(0) || tmp.n.layerShown || tmp.l.layerShown
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -279,6 +279,13 @@ PROGRESSION_MILESTONES = {
         173: () => player.mu.points.gte(84),
         174: () => player.mu.points.gte(91),
         175: () => player.mu.points.gte(98),
+        176: () => player.l.total.gte(1),
+        177: () => player.l.total.gte(2),
+        178: () => player.l.total.gte(3),
+        179: () => player.l.total.gte(4),
+        180: () => player.l.total.gte(5),
+        181: () => player.l.total.gte(6),
+        182: () => player.l.total.gte(7),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -457,6 +464,13 @@ PROGRESSION_MILESTONES_TEXT = {
         173: "84 µ",
         174: "91 µ",
         175: "98 µ",
+        176: "a life :(",
+        177: "2 lives",
+        178: "3 lives",
+        179: "4 lives",
+        180: "5 lives",
+        181: "6 lives",
+        182: "7 lives",
 }
 
 
