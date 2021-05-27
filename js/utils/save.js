@@ -5,7 +5,7 @@ function save() {
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
-		navTab: (layoutInfo.showTree ? "tree-tab" : "none"),
+		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
 		autosave: true,
 		notify: {},

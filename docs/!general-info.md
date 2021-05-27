@@ -1,6 +1,6 @@
 # The-Modding-Tree
 
-Making a game in The Modding Tree mostly involves defining parameters or functions on objects. If you aren't following the [getting started guide](getting-started.md), you should start by [setting up your basic mod info](main-mod-info.md) in [mod.js](/js/mod.js). It's important to set a mod id to ensure saving works properly.
+Making a game in The Modding Tree mostly involves defining parameters or functions on objects. If you aren't following the [getting started guide](tutorials/getting-started.md), you should start by [setting up your basic mod info](main-mod-info.md) in [mod.js](/js/mod.js). It's important to set a mod id to ensure saving works properly.
 
 Beyond that, the main way to add content is through creating layers, often in [layers.js](/js/layers.js). You can add new layers by calling `addLayer(layername, layerdata)`. There is an example of a basic layer in [layers.js](/js/layers.js) showing the recommended method. It is just an example and can be freely deleted. You can also use it as a reference or a base for your own layers. 
 
@@ -24,16 +24,19 @@ While reading this documentation, the following key will be used when describing
 
 ## Table of Contents
 
+
+
 ### General
 
-- [Getting Started](getting-started.md): Getting your own copy of the code set up with Github Desktop.
+- [Getting Started](tutorial/getting-started.md): A guide to getting your own copy of the code set up with Github Desktop.
+- [Making a Mod](tutorial/making-a-mod.md): A guide to using TMT to make a basic mod.
 - [Main mod info](main-mod-info.md): How to set up general things for your mod in [mod.js](/js/mod.js).
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
 - [Custom Tab Layouts](custom-tab-layouts.md): An optional way to give your tabs a different layout. You can even create entirely new components to use.
 - [Custom game layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree,
     or even customize the tab's layout like a layer tab.
-- [Updating TMT](updating-tmt.md): Using Github Desktop to update your mod's version of TMT.
+- [Updating TMT](tutorials/updating-tmt.md): Using Github Desktop to update your mod's version of TMT.
 
 ### Common components
 

@@ -1,6 +1,8 @@
 // treeLayout will override the default tree's layout if used
 var layoutInfo = {
     startTab: "c",
+    startNavTab: "tree-tab",
+
 	showTree: true,
 
     //treeLayout: ""

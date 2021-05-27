@@ -1,8 +1,10 @@
 # The Modding Tree changelog:
 
+### v2.5.11 - 5/27/21
 - Finished part 1 of the "making a mod" tutorial.
 - The challenge that you are currently in is highlighted, and will not be hidden if "hide completed challenges" is on and it is already completed.
 - Added leftTab, which makes a layer use the left tab instead of the right one (good for trees-within-trees and such)
+- Added startNavTab, which lets you choose which tab starts out on the left side.
 - Fixed the infobox not appearing in default tabFormat.
 - Fixed upgrade/buyable layering when they are hovered over.
 - Fixed devSpeed being applied twice.
