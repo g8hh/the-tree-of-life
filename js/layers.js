@@ -4958,6 +4958,7 @@ addLayer("mu", {
                 },    
         },
         doReset(layer){
+                if (layer != "mu") return 
                 player.p.points = new Decimal(0)
                 player.p.total = new Decimal(0)
                 player.p.best = new Decimal(0)
