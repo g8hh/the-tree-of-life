@@ -4174,8 +4174,8 @@ addLayer("p", {
                         },
                         description(){
                                 let a = "Per µ iterations multiply Phosphorus gain"
-                                let b = "<br>Currently:" + format(tmp.p.upgrades[33].effect)
-                                return a
+                                let b = "<br>Currently: " + format(tmp.p.upgrades[33].effect)
+                                return a + b
                         },
                         effect(){
                                 return Decimal.pow(tmp.mini.e_points.getMaxInterations, player.mu.points)
