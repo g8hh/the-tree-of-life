@@ -13,13 +13,20 @@ var systemComponents = {
 	},
 
 	'tree-node': {
-		props: ['layer', 'abb', 'size'],
+		props: ['layer', 'abb', 'size', 'prev'],
 		template: `
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
 				if (shiftDown) player[layer].forceTooltip = !player[layer].forceTooltip
-				else if(tmp[layer].isLayer) {showTab(layer)}
+				else if(tmp[layer].isLayer) {
+					if (tmp[layer].leftTab) {
+						showNavTab(layer, prev)
+						showTab('none')
+					}
+					else
+						showTab(layer, prev)
+				}
 				else {run(layers[layer].onClick, layers[layer])}
 			}"
 
@@ -36,7 +43,8 @@ var systemComponents = {
 				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
 				notify: tmp[layer].notify && player[layer].unlocked,
 				resetNotify: tmp[layer].prestigeNotify,
-				can: ((player[layer].unlocked || tmp[layer].isLayer) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				front: !tmp.scrolled,
 			}"
 			v-bind:style="constructNodeStyle(layer)">
 			<span v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
@@ -59,10 +67,10 @@ var systemComponents = {
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]">
-		<div v-if="back"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack()">←</button></div>
+		<div v-if="back"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">←</button></div>
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
-			<info-box v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></info-box>
+			<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></infobox>
 			<main-display v-bind:style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
 			<div v-if="tmp[layer].type !== 'none'">
 				<prestige-button v-bind:style="tmp[layer].componentStyles['prestige-button']" :layer="layer"></prestige-button>

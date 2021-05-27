@@ -118,6 +118,13 @@ h1, h2, h3, b, input {
 	box-shadow: 0 0 20px var(--points)
 }
 
+.can.upg:hover {
+	z-index: 2
+}
+
+.can.buyable:hover {
+	z-index: 2
+}
 
 .resetNotify {
 	box-shadow: var(--hqProperty2a), 0 0 8px #ffffff;
@@ -595,7 +602,7 @@ ul {
 	transition: opacity 0.5s;
   
 	position: absolute;
-	z-index: 99999999 !important;
+	z-index: 20000 ;
   
 	background-color: var(--background_tooltip);
 	color: var(--points);
@@ -627,6 +634,10 @@ ul {
 .treeOverlay {
 	pointer-events:none;
 	overflow:hidden;
+}
+
+.front {
+	z-index: 30000
 }
 
 .overlayThing {

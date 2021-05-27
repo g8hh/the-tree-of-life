@@ -104,7 +104,7 @@ You can make almost any value dynamic by using a function in its place, includin
 - roundUpCost: **optional**. a bool, which is true if the resource cost needs to be rounded up. (use if the base resource is a "static" currency.)
 
 - gainMult(), gainExp(): **optional**. For normal layers, these functions calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in most bonuses here.
-    For static layers, they instead divide and root the cost of the resource.
+    For static layers, they instead multiply and roots the cost of the resource. (So to make a boost you want to make gainMult smaller and gainExp larger.)
 
 - directMult(): **optional**. Directly multiplies the resource gain, after exponents and softcaps. For static layers, actually multiplies resource gain instead of reducing the cost.
 
@@ -172,6 +172,10 @@ componentStyles: {
     "prestige-button"() { return {'color': '#AA66AA'} }
 }
 ```
+
+- leftTab: **optional**, if true, this layer will use the left tab instead of the right tab.
+
+- previousTab: **optional**, a layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id. 
 
 - deactivated: **optional**, if this is true, hasUpgrade, hasChallenge, hasAchievement, and hasMilestone will return false for things in the layer, and you will be unable to buy or click things on the layer. You will have to disable effects of buyables, the innate layer effect, and possibly other things yourself.
 

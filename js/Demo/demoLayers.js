@@ -369,7 +369,7 @@ addLayer("c", {
         },
         tooltip() { // Optional, tooltip displays when the layer is unlocked
             let tooltip = formatWhole(player[this.layer].points) + " " + this.resource
-            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br><i>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers</i>"
+            if (player[this.layer].buyables[11].gt(0)) tooltip += "<br><i><br><br><br>" + formatWhole(player[this.layer].buyables[11]) + " Exhancers</i>"
             return tooltip
         },
         shouldNotify() { // Optional, layer will be highlighted on the tree if true.
@@ -384,6 +384,15 @@ addLayer("c", {
 
 // This layer is mostly minimal but it uses a custom prestige type and a clickable
 addLayer("f", {
+    infoboxes:{
+        coolInfo: {
+            title: "Lore",
+            titleStyle: {'color': '#FE0000'},
+            body: "DEEP LORE!",
+            bodyStyle: {'background-color': "#0000EE"}
+        }
+    },
+
     startData() { return {
         unlocked: false,
         points: new Decimal(0),

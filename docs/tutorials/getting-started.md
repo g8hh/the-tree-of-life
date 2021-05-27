@@ -45,4 +45,4 @@ The benefits of using Github:
 
 8. You can view your project on line, or share it with others, by going to https://raw.githack.com/[YOUR-GITHUB-USERNAME]/The-Modding-Tree/master/index.html. **You do NOT need to do this to test your mod locally.**
 
-And now, you have successfully used Github! You can look at the [documentation](!general-info.md) to see how The Modding Tree's system works and to make your mod a reality.
+And now, you have successfully used Github! You can look at the next tutorial on [making a mod](tutorials/making-a-mod.md), or look at the [documentation](!general-info.md) to see how The Modding Tree's system works and to make your mod a reality.

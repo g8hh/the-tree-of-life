@@ -1,5 +1,26 @@
 # The Modding Tree changelog:
 
+### v2.5.11 - 5/27/21
+- Finished part 1 of the "making a mod" tutorial.
+- The challenge that you are currently in is highlighted, and will not be hidden if "hide completed challenges" is on and it is already completed.
+- Added leftTab, which makes a layer use the left tab instead of the right one (good for trees-within-trees and such)
+- Added startNavTab, which lets you choose which tab starts out on the left side.
+- Fixed the infobox not appearing in default tabFormat.
+- Fixed upgrade/buyable layering when they are hovered over.
+- Fixed devSpeed being applied twice.
+
+### v2.5.10.2 - 5/24/21
+- Fixed some things in the tree tab not being clickable.
+
+### v2.5.10.1 - 5/23/21
+- Actually fixed the tooltip issue.
+
+### v2.5.10 - 5/22/21
+- Tooltips can now show over the top overlay again.
+- Tweaked number formatting (e1000's keep the decimal places on the mantissa.)
+- Fixed text on two settings buttons not changing.
+- Started making a new tutorial.
+
 ### v2.5.9.2 - 5/19/21
 - Fixed many issues with things not updating.
 
