@@ -1271,6 +1271,7 @@ addLayer("h", {
                                         function() {
                                                 if (player.tab != "h") return ""
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                                if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Your best Hydrogen is " + format(player.h.best) + " and you are netting " + format(tmp.h.getResetGain.sub(tmp.h.getLossRate.times(player.h.points))) + " Hydrogen per second"
                                                 return "You are gaining " + format(tmp.h.getResetGain) + " Hydrogen per second"
                                         }
@@ -1279,6 +1280,7 @@ addLayer("h", {
                                         function() {
                                                 if (player.tab != "h") return ""
                                                 if (player.subtabs.h.mainTabs != "Upgrades") return ""
+                                                if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Formula: min(" + formatWhole(tmp.h.getDefaultMaximum) + ",ln(points))*[multipliers]"
                                                 return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
                                         },
@@ -5078,7 +5080,7 @@ addLayer("mu", {
                                 let a = "µ III log6 becomes log5"
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e963" : "1e962"),
+                        cost:() => new Decimal(player.hardMode ? "1e963" : "5e961"),
                         currencyLocation:() => player.p,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
