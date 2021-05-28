@@ -5248,26 +5248,6 @@ addLayer("mu", {
                                 return a
                         },
                 }, // hasMilestone("mu", 5)
-                5: {
-                        requirementDescription(){
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[5].requirement)
-                                let b = " Phosphorus"
-                                return a + b
-                        },
-                        requirement(){
-                                return new Decimal(1e194)
-                        },
-                        done(){
-                                return tmp.mu.milestones[5].requirement.lte(player.mu.points)
-                        },
-                        unlocked(){
-                                return true
-                        },
-                        effectDescription(){
-                                let a = "µ^10 multiplies " + makeBlue("b")
-                                return a
-                        },
-                }, // hasMilestone("mu", 5)
                 6: {
                         requirementDescription(){
                                 let a = "Requires: " + formatWhole(tmp.mu.milestones[6].requirement)
