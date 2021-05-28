@@ -55,6 +55,7 @@ function updateWidth() {
 
 	var splitScreen = screenWidth >= 1024
 	if (player.forceOneTab) splitScreen = false
+	if (player.navTab == "none") splitScreen = true
 	tmp.other.screenWidth = screenWidth
 	tmp.other.screenHeight = window.innerHeight
 
