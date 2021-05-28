@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.001",
+	num: "1.001.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.001.1</h3><br> 
+		- Added two rows of achievements.<br>
 	<br><h3 style='color: #CC0000'>v1.001</h3><br> 
 		- Added 2 µ buyables.<br>
 		- Added 14 Life milestones.<br>
