@@ -12,19 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.063.1",
+	num: "0.064",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 11 µ (mu) OR the last save in the bank<br><br>
+		- ee308 OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v0.064</h3><br>
+		- Finished phase 1!<br>
+		- Next patch will be v1 with balancing!<br>
+		- Added two Phosphorus upgrades.<br>
+		- Added ten µ upgrades.<br>
+		- Added nine µ milestones.<br>
+		- Added seven µ buyables.<br>
+		- Made E point recursion simulated after 5 iterations.<br>
 	<br><h3 style='color: #CC0000'>v0.063</h3><br>
 		- Added 4 µ upgrades.<br>
 		- Added 2 µ milestones.<br>
