@@ -12,19 +12,22 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.001.1",
+	num: "1.001.2",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 29 Dilation completions OR the last save in the bank<br><br>
+		- 30 Dilation completions OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.001.2</h3><br> 
+		- Added a Life milestone.<br>
+		- Next up is a Life buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.001.1</h3><br> 
 		- Added two rows of achievements.<br>
 	<br><h3 style='color: #CC0000'>v1.001</h3><br> 

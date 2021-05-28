@@ -5957,6 +5957,8 @@ addLayer("mu", {
                         base(){
                                 let ret = new Decimal(.01)
                                 
+                                if (hasMilestone("l", 16)) ret = ret.plus(.0001 * player.l.milestones.length)
+
                                 return ret
                         },
                         effect(){
@@ -6638,16 +6640,36 @@ addLayer("l", {
                                 return new Decimal(5e21)
                         },
                         done(){
-                                return tmp.l.milestones[14].requirement.lte(player.mu.points)
+                                return tmp.l.milestones[15].requirement.lte(player.mu.points)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔP levels multiply Life gain.<br>"
+                                let a = "Reward: N → Δµ levels multiply Life gain.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 15)
+                16: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.l.milestones[16].requirement)
+                                let b = " µ"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(2e22)
+                        },
+                        done(){
+                                return tmp.l.milestones[16].requirement.lte(player.mu.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Each milestone adds .0001 to N → ΔP base.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 16)
         },
         challenges: {
                 11: {
