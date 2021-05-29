@@ -5962,7 +5962,7 @@ addLayer("mu", {
                                 return ret
                         },
                         effect(){
-                                return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.3)
+                                return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.4)
                         },
                         display(){
                                 // other than softcapping fully general
@@ -5992,7 +5992,7 @@ addLayer("mu", {
 
                                 let end = allEff + allCost + "<br>"
                                 if (!hasMilestone("l", 14)) end += "Note: Can only buy while in Dilation<br>"
-                                return "<br>" + end + "Effect is hardcapped at .3"
+                                return "<br>" + end + "Effect is hardcapped at .4"
                         },
                 },
                 33: {
@@ -6145,11 +6145,19 @@ addLayer("l", {
         baseAmount() {return player.points}, // Get the current amount of baseResource
         type: "custom",
         getResetGain(){
+                return tmp.l.getBaseGain.times(tmp.l.getGainMult).floor()
+        },
+        getBaseGain(){
                 let pts = player.points
                 let init = pts.max(10).log(10).log(2)
                 if (init.lt(1024)) return new Decimal(0)
 
-                return init.log(2).sub(9).root(2).times(tmp.l.getGainMult).floor()
+                return init.log(2).sub(9).pow(tmp.l.getGainExp)
+        },
+        getGainExp(){
+                let ret = new Decimal(.5)
+
+                return ret
         },
         getGainMult(){
                 let ret = new Decimal(1)
@@ -6163,7 +6171,7 @@ addLayer("l", {
         getNextAt(){
                 let gain = tmp.l.getResetGain
                 let reqInit = gain.plus(1).div(tmp.l.getGainMult).max(1)
-                let v1 = reqInit.pow(2).plus(9)
+                let v1 = reqInit.root(tmp.l.getGainExp).plus(9)
                 let v2 = Decimal.pow(2, v1)
                 let v3 = Decimal.pow(2, v2).pow10()
                 return v3
@@ -6296,7 +6304,8 @@ addLayer("l", {
         prestigeButtonText(){
                 let a = "Reset for <b>" + formatWhole(tmp.l.getResetGain) + "</b> Lives"
 
-                let b = "<br>Next: " + format(tmp.l.getNextAt) + " points."
+                let b = ""
+                if (tmp.l.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.l.getNextAt) + " points."
 
                 return a + b
         },
@@ -6698,10 +6707,11 @@ addLayer("l", {
                                 let a = "Each tenth challenge unlocks a buyable and boost life gain"
                                 let br = "<br>"
                                 let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
-                                let c = "You have completed this challenge " + formatWhole(player.l.challenges[11]) + " times"
+                                let c = "You have completed this challenge<br>" 
+                                c += formatWhole(player.l.challenges[11]) + "/110 times"
                                 return a + br + b + br + c
                         },
-                        completionLimit: 99,
+                        completionLimit: 110,
                         rewardEffect() {
                                 let comps = player.l.challenges[11]
                                 return Decimal.pow(comps + 1, 2)
