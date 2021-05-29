@@ -6505,7 +6505,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep token and µ milestones.<br>"
+                                let a = "Reward: Keep token and µ milestones and unlock a challenge.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 8)
@@ -6717,7 +6717,7 @@ addLayer("l", {
                                 return Decimal.pow(comps + 1, 2)
                         },
                         unlocked(){
-                                return player.l.best.gte(10)
+                                return hasMilestone("l", 8)
                         },
                         countsAs: [],
                 }, // inChallenge("l", 11)
