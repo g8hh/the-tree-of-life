@@ -701,7 +701,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(13) + "'>Atomic Hydrogen IV"
                         },
                         description(){
-                                if (!shiftDown) return "Hydrogen III effects Life Points"
+                                if (!shiftDown) return "Hydrogen III affects Life Points"
                                 if (hasUpgrade("h", 34)) return ""
                                 return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
@@ -987,7 +987,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor(26) + "'>Hydrogen XVII"
                         },
                         description(){
-                                if (!shiftDown) return "Oxygen IV effects Carbon gain and double autobuyer speed"
+                                if (!shiftDown) return "Oxygen IV affects Carbon gain and double autobuyer speed"
                                 if (hasUpgrade("h", 62)) return ""
                                 return "<br>Estimated time: " + logisticTimeUntil(tmp.h.upgrades[62].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -2941,7 +2941,7 @@ addLayer("n", {
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
-                                let a = "Existence of 0 effects fuel square rooting factor and you can buy each buyable every tick"
+                                let a = "Existence of 0 affects fuel square rooting factor and you can buy each buyable every tick"
                                 return a
                         },
                         cost:() => new Decimal(1.44e42),
@@ -4131,7 +4131,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor(164) + "'>Phosphorus II"
                         },
                         description(){
-                                let a = "Tire effects E Point gain"
+                                let a = "Tire affects E Point gain"
                                 if (shiftDown) {
                                         return "Hint: There are generally an even number, and you should depress your shift key."
                                 }
@@ -6817,7 +6817,7 @@ addLayer("l", {
                                         let a = "Life gain: sqrt(log2(log2(log10(Life Points)))-9)"
                                         let br = "<br>"
                                         let b = "Life resets reset everything before Life except achievements"
-                                        let c = "Life effects most prior currencies:"
+                                        let c = "Life affects most prior currencies:"
                                         let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, "
                                         let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color,"
                                         let f = "A Points, B Points, C Points, D Points, and E Points."
