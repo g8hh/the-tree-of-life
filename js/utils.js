@@ -152,7 +152,7 @@ function canAffordPurchase(layer, thing, cost) {
 }
 
 function buyUpgrade(layer, id) {
-	buyUpg(layer, id)
+	return buyUpg(layer, id)
 }
 
 function buyUpg(layer, id) {
@@ -192,6 +192,7 @@ function buyUpg(layer, id) {
 	player[layer].upgrades.push(id);
 	if (upg.onPurchase != undefined)
 		run(upg.onPurchase, upg)
+	return true
 }
 
 function buyMaxBuyable(layer, id) {

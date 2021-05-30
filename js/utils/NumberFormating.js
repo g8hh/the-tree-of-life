@@ -61,7 +61,7 @@ function format(decimal, precision = 2, small) {
         if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
         if (decimal.gte(1e6)) return commaFormat(decimal, 0)
         if (decimal.gte(1e3)) return commaFormat(decimal, precision)
-        if (decimal.gte(0.001) || !small) return regularFormat(decimal, precision)
+        if (decimal.gte(Decimal.pow(.1, 1+precision)) || !small) return regularFormat(decimal, precision)
         if (decimal.eq(0)) return (0).toFixed(precision)
 
         decimal = invertOOM(decimal) 

@@ -286,6 +286,20 @@ PROGRESSION_MILESTONES = {
         180: () => player.l.total.gte(5),
         181: () => player.l.total.gte(6),
         182: () => player.l.total.gte(7),
+        183: () => player.l.total.gte(Decimal.pow(10, 1)),
+        184: () => player.l.total.gte(Decimal.pow(10, 2)),
+        185: () => player.l.total.gte(Decimal.pow(10, 3)),
+        186: () => player.l.total.gte(Decimal.pow(10, 4)),
+        187: () => player.l.total.gte(Decimal.pow(10, 5)),
+        188: () => player.l.total.gte(Decimal.pow(10, 6)),
+        189: () => player.l.total.gte(Decimal.pow(10, 7)),
+        190: () => player.l.total.gte(Decimal.pow(10, 8)),
+        191: () => player.l.total.gte(Decimal.pow(10, 9)),
+        192: () => player.l.total.gte(Decimal.pow(10, 10)),
+        193: () => player.l.total.gte(Decimal.pow(10, 11)),
+        194: () => player.l.total.gte(Decimal.pow(10, 12)),
+        195: () => player.l.total.gte(Decimal.pow(10, 13)),
+        196: () => player.l.total.gte(Decimal.pow(10, 14)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -471,6 +485,20 @@ PROGRESSION_MILESTONES_TEXT = {
         180: "5 lives",
         181: "6 lives",
         182: "7 lives",
+        183: "10 lives",
+        184: "100 lives",
+        185: "1e3 lives",
+        186: "1e4 lives",
+        187: "1e5 lives",
+        188: "1e6 lives",
+        189: "1e7 lives",
+        190: "1e8 lives",
+        191: "1e9 lives",
+        192: "1e10 lives",
+        193: "1e11 lives",
+        194: "1e12 lives",
+        195: "1e13 lives",
+        196: "1e14 lives",
 }
 
 
