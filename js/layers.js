@@ -6083,13 +6083,14 @@ addLayer("mu", {
                 "Buyables": {
                         content: ["main-display",
                                 ["display-text", function(){
+                                        if (player.mu.points.gt(1e10)) {
+                                                return "You are gaining an estimated "  + format(tmp.mu.resetGain.times(20)) + " µ/s"
+                                        }
                                         if (shiftDown) {
                                                 let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
-                                                return "You are gaining " + format(x, 3) + " Phosphorus/s"
+                                                return " " + format(x, 3) + " Phosphorus/s"
                                         }
-                                        let a = "You have " + format(player.p.points) + " Phosphorus and "
-                                        let b = formatWhole(player.mu.points) + " µ"
-                                        return a + b 
+                                        return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
                                 ["buyables", [1,2,3]],
                                 ],
@@ -6164,9 +6165,10 @@ addLayer("l", {
         getGainMult(){
                 let ret = new Decimal(1)
 
-                ret = ret.times(tmp.l.challenges[11].rewardEffect)
-                if (hasMilestone("l", 14)) ret = ret.times(Decimal.pow(1.25, player.mu.buyables[32]))
-                if (hasMilestone("l", 15)) ret = ret.times(player.mu.buyables[31].max(1))
+                                                ret = ret.times(tmp.l.challenges[11].rewardEffect)
+                if (hasMilestone("l", 14))      ret = ret.times(Decimal.pow(1.25, player.mu.buyables[32]))
+                if (hasMilestone("l", 15))      ret = ret.times(player.mu.buyables[31].max(1))
+                                                ret = ret.times(tmp.l.buyables[11].effect)
 
                 return ret
         },
@@ -6681,6 +6683,46 @@ addLayer("l", {
                                 return a
                         },
                 }, // hasMilestone("l", 16)
+                17: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.l.milestones[17].requirement)
+                                let b = " Lives"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(2.7e12)
+                        },
+                        done(){
+                                return tmp.l.milestones[17].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Ponder the universe.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 17)
+                18: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.l.milestones[18].requirement)
+                                let b = " µ"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(1e25)
+                        },
+                        done(){
+                                return tmp.l.milestones[18].requirement.lte(player.mu.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Reduce token cost exponent to .49.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 18)
         },
         challenges: {
                 11: {
@@ -6728,47 +6770,44 @@ addLayer("l", {
                 rows: 3,
                 cols: 3,
                 11: {
-                        title: "µ → Δµ",
+                        title: "α → ∂α",
                         cost() {
-                                let amt = getBuyableAmount("mu", 11)
-                                let exp = amt.div(tmp.mu.buyables[11].expDiv).plus(1)
-                                return amt.pow(exp).floor()
+                                let amt = getBuyableAmount("l", 11)
+                                let exp = amt.div(tmp.l.buyables[11].expDiv).plus(1)
+                                return new Decimal(7e11).times(Decimal.pow(4, amt.pow(exp).floor()))
                         },
                         expDiv() {
-                                let ret = new Decimal(10)
-                                ret = ret.plus(tmp.mu.buyables[13].effect)
-                                ret = ret.plus(tmp.mu.buyables[23].effect)
+                                let ret = new Decimal(20)
                                 
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("mu", 21)
+                                return player.l.challenges[11] >= 30
                         },
-                        canAfford:() => player.mu.points.gte(tmp.mu.buyables[11].cost),
+                        canAfford:() => player.l.points.gte(tmp.l.buyables[11].cost),
                         buy(){
                                 if (!this.canAfford()) return 
-                                player.mu.buyables[11] = player.mu.buyables[11].plus(1)
-                                if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(tmp.mu.buyables[11].cost)
-                                doReset("mu", true)
+                                player.l.buyables[11] = player.l.buyables[11].plus(1)
+                                if (!false) player.l.points = player.l.points.sub(tmp.l.buyables[11].cost)
                         },
                         base(){
-                                let ret = player.points.max(10).log10().max(10).log10()
+                                let ret = player.points.max(10).log10().max(10).log10().max(10).log10()
                                 
                                 return ret
                         },
                         effect(){
-                                return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
+                                return tmp.l.buyables[11].base.pow(player.l.buyables[11])
                         },
                         display(){
                                 // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
+                                if (player.tab != "l") return ""
+                                if (player.subtabs.l.mainTabs != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[11]) + "</b><br>"
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mu.buyables[11].effect) + " to Phosphorus gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 11)) + " µ</b><br>"
-                                let eformula = "log10(log10(Points))^x<br>" + format(tmp.mu.buyables[11].base) + "^x"
+                                let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 11)) + " Lives</b><br>"
+                                let eformula = "log10(log10(log10(Points)))^x<br>" + format(tmp.l.buyables[11].base) + "^x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -6781,7 +6820,7 @@ addLayer("l", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "floor(x<sup>1+x/" + formatWhole(tmp.mu.buyables[11].expDiv) + "</sup>)" 
+                                let cost2 = "7e11*4^(x<sup>1+x/" + formatWhole(tmp.l.buyables[11].expDiv) + "</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -6811,6 +6850,15 @@ addLayer("l", {
                                 ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Buyables": {
+                        content: ["main-display",
+                                "blank",
+                                ["buyables", [1,2,3]],
+                                ],
+                        unlocked(){
+                                return player.l.challenges[11] >= 30
                         },
                 },
                 "Info": {
@@ -13914,6 +13962,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (hasMilestone("l", 18))      return x.pow(.49).floor()
                         if (hasMilestone("l", 10))      return x.pow(.5).floor()
                         if (hasUpgrade("n", 31))        return x.pow(.5).round()
                         if (hasUpgrade("n", 24))        return x.pow(.55).round()
@@ -13927,6 +13976,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (hasMilestone("l", 18))      return "floor(x<sup>.49</sup>)"
                         if (hasMilestone("l", 10))      return "floor(x<sup>.5</sup>)"
                         if (hasUpgrade("n", 31))        return "round(x<sup>.5</sup>)"
                         if (hasUpgrade("n", 24))        return "round(x<sup>.55</sup>)"
