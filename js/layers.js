@@ -15,6 +15,7 @@ function getPointGen() {
                                         gain = gain.pow(tmp.tokens.buyables[41].effect)
         if (hasUpgrade("n", 11))        gain = gain.pow(1.001)
         if (hasMilestone("l", 1))       gain = gain.pow(tmp.l.milestones[1].effect)
+        if (hasMilestone("l", 18))      gain = gain.pow(2)
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -5224,6 +5225,19 @@ addLayer("mu", {
                                 return hasUpgrade("mu", 34) || hasMilestone("l", 3)
                         }, // hasUpgrade("mu", 35)
                 },
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(174) + "'>µ XVI"
+                        },
+                        description(){
+                                let a = "N → ΔP base is 9"
+                                return a
+                        },
+                        cost:() => new Decimal(1e26),
+                        unlocked(){
+                                return player.l.challenges[11] >= 34
+                        }, // hasUpgrade("mu", 41)
+                },
         },
         milestones: {
                 1: {
@@ -5939,7 +5953,13 @@ addLayer("mu", {
                         title: "N → ΔP",
                         cost() {
                                 let amt = getBuyableAmount("mu", 32)
-                                return tmp.mu.buyables[32].initialCost.times(Decimal.pow(10, amt))
+                                return tmp.mu.buyables[32].initialCost.times(Decimal.pow(tmp.mu.buyables[32].costBase, amt))
+                        },
+                        costBase(){
+                                let ret = 10
+                                if (hasUpgrade("mu", 41)) ret = 9
+                                if (hasMilestone("l", 19)) ret = 8
+                                return ret
                         },
                         initialCost(){
                                 let ret = new Decimal(1e4)
@@ -5964,7 +5984,7 @@ addLayer("mu", {
                                 return ret
                         },
                         effect(){
-                                return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.4)
+                                return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.5)
                         },
                         display(){
                                 // other than softcapping fully general
@@ -5988,13 +6008,14 @@ addLayer("mu", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = format(tmp.mu.buyables[32].initialCost, 2, true) + "*10<sup>x<sup>" 
+                                let cost2 = format(tmp.mu.buyables[32].initialCost, 2, true) + "*"
+                                cost2 += formatWhole(tmp.mu.buyables[32].costBase) + "<sup>x<sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost + "<br>"
                                 if (!hasMilestone("l", 14)) end += "Note: Can only buy while in Dilation<br>"
-                                return "<br>" + end + "Effect is hardcapped at .4"
+                                return "<br>" + end + "Effect is hardcapped at .5"
                         },
                 },
                 33: {
@@ -6387,7 +6408,7 @@ addLayer("l", {
                         },
                         toggles:() => [["l", "autobuyhco"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of assocaitivity of multiplcation.<br>"
+                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplcation.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 2)
@@ -6719,10 +6740,30 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Reduce token cost exponent to .49.<br>"
+                                let a = "Reward: Reduce token cost exponent to .49 and square point gain.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 18)
+                19: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.l.milestones[19].requirement)
+                                let b = " Points"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal("ee1000")
+                        },
+                        done(){
+                                return tmp.l.milestones[19].requirement.lte(player.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: N → ΔP cost base is 8.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 19)
         },
         challenges: {
                 11: {
@@ -6731,7 +6772,7 @@ addLayer("l", {
                                 let a = "All prior currencies are dilated ^" 
                                 a += format(tmp.l.challenges[11].challengeEffect,3)
 
-                                if (shiftDown) return "Affects all currencies in the info tab except coins"
+                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
 
                                 return a
                         },
@@ -6749,6 +6790,7 @@ addLayer("l", {
                                 if (player.tab != "l") return ""
                                 if (player.subtabs.l.mainTabs != "Challenges") return ""
                                 let a = "Each tenth challenge unlocks a buyable and boost life gain"
+                                if (shiftDown) return a
                                 let br = "<br>"
                                 let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
                                 let c = "You have completed this challenge<br>" 
@@ -6871,7 +6913,11 @@ addLayer("l", {
                                         let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, "
                                         let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color,"
                                         let f = "A Points, B Points, C Points, D Points, and E Points."
-                                        return a + br + b + br + c + br + d + br + e + br + f
+                                        if (!tmp.l.challenges[11].unlocked){
+                                                return a + br + b + br + c + br + d + br + e + br + f
+                                        } 
+                                        let g = "Dilation nerfs x → 10^(log10(x)^exp)"
+                                        return a + br + b + br + c + br + d + br + e + br + f + br + g
                                 }],
                                 ],
                         unlocked(){
@@ -7673,6 +7719,7 @@ addLayer("mini", {
                 let x = ["A", "B", "C", "D", "E"]
                 for (id in x){
                         i = x[id]
+                        if (!data[i].unlocked) continue
                         if (data[i].shouldNotify) return true
                 }
                 return false
@@ -12875,7 +12922,7 @@ addLayer("mini", {
                 },
                 55: {
                         title(){ // https://www.food.com/topic/c
-                                return "<bdi style='color: #FF0000'>Ancle sprain</bdi>"
+                                return "<bdi style='color: #FF0000'>Ankle sprain</bdi>"
                         },
                         description(){
                                 let a = "Each Gas Pedal adds 1 to <bdi style='color:#CC0033'>D</bdi> and Speed buyables no longer cost anything"

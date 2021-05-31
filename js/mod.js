@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.002",
+	num: "1.003",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.003</h3><br> 
+		- Added a µ upgrade.<br>
+		- Added a Life milestone.<br>
+		- Added a custom save.<br>
+		- Small spelling fixes.<br>
+		- Added an explination for how dilation works [go play AD y'all].<br>
 	<br><h3 style='color: #CC0000'>v1.002</h3><br> 
 		- Added two Life milestones.<br>
 		- Added a life buyable.<br>
