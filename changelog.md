@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+- Fixed demo.html
+- Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
+
 ### v2.5.11.1 - 5/27/21
 - Fixed issues caused when the tree tab is disabled.
 
