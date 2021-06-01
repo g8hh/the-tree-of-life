@@ -6179,6 +6179,7 @@ addLayer("mu", {
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
+                                        if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation"
                                         let start = lvl + eff1 + eff2 + cost
                                         return "<br>" + start + end
                                 }
