@@ -304,7 +304,7 @@ addLayer("c", {
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
-                        function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
+                        function() {return 'I have ' + format(player.points) + ' ' + player[this.layer].thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
                 glowColor: "blue",

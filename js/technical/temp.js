@@ -109,18 +109,20 @@ function updateTemp() {
 	}
 }
 
-function updateTempData(layerData, tmpData, funcsData) {
-	
+function updateTempData(layerData, tmpData, funcsData, useThis) {
 	for (item in funcsData){
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
-				updateTempData(layerData[item], tmpData[item], funcsData[item])
+				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis)
 		}
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
-			updateTempData(layerData[item], tmpData[item], funcsData[item])
+			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis)
 		}
 		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
-			let value = layerData[item]()
+			let value
+
+			if (useThis !== undefined) value = layerData[item].bind(useThis)()
+			else value = layerData[item]()
 			if (value !== value || value === decimalNaN){
 				if (NaNalert === true || confirm ("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")){
 					NaNalert = true
