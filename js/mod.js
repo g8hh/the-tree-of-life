@@ -12,19 +12,30 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.003",
+	num: "1.004",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 32 Dilation completions OR the last save in the bank<br><br>
+		- 87 Dilation completions OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.004</h3><br> 
+		- Added four Phosphorus upgrades.<br>
+		- Added nine µ upgrades.<br>
+		- Added five Life milestones.<br>
+		- Added five Life buyables.<br>
+		- Changed µ V text.<br>
+		- Added four rows of achievements.<br>
+		- Added a save to the bank.<br>
+		- The 2.7e12 Life milestone now has an effect.<br>
+		- Added a base gain/gain exp display in info tab (for Life) after they are relavent.<br>
+		- Made the mspt display red when over 50 mspt.<br>
 	<br><h3 style='color: #CC0000'>v1.003</h3><br> 
 		- Added a µ upgrade.<br>
 		- Added a Life milestone.<br>
@@ -434,26 +445,37 @@ function addedPlayerData() { return {
 // Display extra things at the top of the page
 var displayThings = [
 	function(){
-		// player.lastSave
-		t1 = player.lastSave
-		t2 = new Date().getTime()
+		let t1 = player.lastSave
+		let t2 = new Date().getTime()
+
 		list1 = []
 		if (shiftDown) list1 = list1.concat("S")
 		if (controlDown) list1 = list1.concat("C")
 		if (player.undulating) list1 = list1.concat("U")
 		if (!player.arrowHotkeys) list1 = list1.concat("¬A")
+		
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
 		else if (player.hardMode) end += "{Hard}"
 		let saveFinal = "Last save was: " + formatTime((t2-t1)/1000) + " ago. " + end
+
 		let len = pastTickTimes.length
 		if (len <= 3) return saveFinal
 		let a = 0
 		for (i = 0; i < len; i++){
 			a += pastTickTimes[i]
 		}
-		let msptFinal = " ms/tick = " + formatWhole(Math.round(a/len))
+
+		let val = Math.round(a/len)
+		let p1 = ""
+		let p2 = ""
+		if (val > 50) {
+			p1 = "<bdi style='color: #CC0000'>"
+			p2 = "</bdi>"
+		}
+
+		let msptFinal = " ms/tick = " + p1 + formatWhole(val) + p2
 		return saveFinal + msptFinal
 	}
 ]
