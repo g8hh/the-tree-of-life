@@ -4390,6 +4390,19 @@ addLayer("p", {
                                 return player.l.challenges[11] >= 86
                         }, // hasUpgrade("p", 44)
                 },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XX"
+                        },
+                        description(){
+                                let a = "N → ΔP cost base is 4.5 and each N → ΔN adds .01 to its base"
+                                return a
+                        },
+                        cost:() => new Decimal("e3e45"),
+                        unlocked(){
+                                return player.l.challenges[11] >= 87
+                        }, // hasUpgrade("p", 45)
+                },
         },
         milestones: {
                 1: {
@@ -6135,6 +6148,7 @@ addLayer("mu", {
                                 if (hasUpgrade("mu", 53))       ret = 6
                                 if (hasUpgrade("p", 43))        ret = 5.5
                                 if (hasUpgrade("p", 44))        ret = 5
+                                if (hasUpgrade("p", 45))        ret = 4.5
                                 return ret
                         },
                         initialCost(){
@@ -6215,6 +6229,7 @@ addLayer("mu", {
                                 let ret = new Decimal(2)
 
                                 if (hasMilestone("l", 12)) ret = ret.plus(.1 * player.l.milestones.length)
+                                if (hasUpgrade("p", 45)) ret = ret.plus(player.mu.buyables[33].times(.01))
                                 
                                 return ret
                         },
@@ -6381,6 +6396,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.l.buyables[12].effect)
                                                 ret = ret.times(tmp.l.buyables[21].effect)
                                                 ret = ret.times(tmp.l.buyables[22].effect)
+                                                ret = ret.times(tmp.l.buyables[31].effect)
                 if (hasMilestone("l", 22)) {
                         let exp = player.mu.buyables[32].sub(40).max(0)
                                                 ret = ret.times(Decimal.pow(1.5, exp))
@@ -7098,6 +7114,7 @@ addLayer("l", {
                         },
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
+                                if (eff > 91) eff = eff * 1.5 - 45.5
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
                                 return new Decimal(1).sub(eff/1000)
@@ -7501,6 +7518,65 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "4e53*200^(x<sup>1+x/" + formatWhole(tmp.l.buyables[23].expDiv) + "</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                31: {
+                        title: "𝛾 → ∂α",
+                        cost() {
+                                let amt = getBuyableAmount("l", 31)
+                                let exp = amt.div(tmp.l.buyables[31].expDiv).plus(1)
+                                return new Decimal(7e84).times(Decimal.pow(160, amt.pow(exp)))
+                        },
+                        expDiv() {
+                                let ret = new Decimal(8)
+
+                                return ret
+                        },
+                        unlocked(){
+                                return player.l.challenges[11] >= 90
+                        },
+                        canAfford:() => player.l.points.gte(tmp.l.buyables[31].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                player.l.buyables[31] = player.l.buyables[31].plus(1)
+                                if (!false) player.l.points = player.l.points.sub(tmp.l.buyables[31].cost)
+                        },
+                        base(){
+                                let ret = player.l.points.max(10).log10()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.l.buyables[31].base.pow(player.l.buyables[31])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "l") return ""
+                                if (player.subtabs.l.mainTabs != "Buyables") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[31]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 31)) + " Lives</b><br>"
+                                let eformula = "log10(Lives)^x<br>" + format(tmp.l.buyables[31].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "7e84*160^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
