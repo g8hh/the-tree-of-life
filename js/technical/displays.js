@@ -49,11 +49,10 @@ function achievementStyle(layer, id){
 
 
 
-
 function updateWidth() {
-	var screenWidth = window.innerWidth
-
-	var splitScreen = screenWidth >= 1024
+	let screenWidth = window.innerWidth
+	let last = tmp.other.splitScreen
+	let splitScreen = screenWidth >= 1024
 	if (player.forceOneTab) splitScreen = false
 	if (player.navTab == "none") splitScreen = true
 	tmp.other.screenWidth = screenWidth
@@ -61,6 +60,7 @@ function updateWidth() {
 
 	tmp.other.splitScreen = splitScreen
 	tmp.other.lastPoints = player.points
+	if (last !== tmp.other.splitScreen) needCanvasUpdate = true
 }
 
 function updateOomps(diff)

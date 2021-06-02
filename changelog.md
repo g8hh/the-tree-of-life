@@ -1,5 +1,6 @@
 # The Modding Tree changelog:
 
+### v2.5.12 - 6/2/21
 - Fixed issues with NaN checking. Saves should never break now unless something really unusual happens.
 - Fixed demo.html
 - You can now use "this" in tabFormat!
@@ -12,6 +13,7 @@
 - inChallenge no longer can return undefined.
 - Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
 - Things are 0.2% more optimized.
+- Fixed problems in the documentation.
 
 ### v2.5.11.1 - 5/27/21
 - Fixed issues caused when the tree tab is disabled.

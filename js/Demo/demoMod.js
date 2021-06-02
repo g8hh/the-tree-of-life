@@ -11,7 +11,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.5.11.1",
+	num: "2.5.12",
 	name: "Dreams Really Do Come True",
 }
 

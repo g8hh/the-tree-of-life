@@ -250,6 +250,7 @@ function layerunlocked(layer) {
 function keepGoing() {
 	player.keepGoing = true;
 	needCanvasUpdate = true;
+	showTab(player.lastSafeTab)
 }
 
 function toNumber(x) {

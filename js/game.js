@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.11.1",
+	tmtNum: "2.5.12",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -328,7 +328,10 @@ function autobuyUpgrades(layer){
 }
 
 function gameLoop(diff) {
-	if (isEndgame() || gameEnded) gameEnded = 1
+	if (isEndgame() || gameEnded){
+		gameEnded = 1
+		clearParticles()
+	}
 
 	if (isNaN(diff)) diff = 0
 	if (gameEnded && !player.keepGoing) {
