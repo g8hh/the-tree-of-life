@@ -290,7 +290,7 @@ addLayer("c", {
 
             },
         },
-
+        
         // Optional, lets you format the tab yourself by listing components. You can create your own components in v.js.
         tabFormat: {
             "main tab": {
