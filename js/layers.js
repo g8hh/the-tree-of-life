@@ -7530,7 +7530,7 @@ addLayer("l", {
                         cost() {
                                 let amt = getBuyableAmount("l", 31)
                                 let exp = amt.div(tmp.l.buyables[31].expDiv).plus(1)
-                                return new Decimal(7e84).times(Decimal.pow(160, amt.pow(exp)))
+                                return new Decimal(7e84).times(Decimal.pow(158, amt.pow(exp)))
                         },
                         expDiv() {
                                 let ret = new Decimal(8)
@@ -7576,7 +7576,7 @@ addLayer("l", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "7e84*160^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)" 
+                                let cost2 = "7e84*158^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
