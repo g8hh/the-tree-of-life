@@ -4403,6 +4403,32 @@ addLayer("p", {
                                 return player.l.challenges[11] >= 87
                         }, // hasUpgrade("p", 45)
                 },
+                51: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXI"
+                        },
+                        description(){
+                                let a = "N → ΔP cost base is 4 and autobuy N → ΔN"
+                                return a
+                        },
+                        cost:() => new Decimal("e3.5e45"),
+                        unlocked(){
+                                return player.l.challenges[11] >= 93 && player.l.best.gte(7e105)
+                        }, // hasUpgrade("p", 51)
+                },
+                52: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXII"
+                        },
+                        description(){
+                                let a = "Each Dilation completion after 90 doubles Life gain"
+                                return a
+                        },
+                        cost:() => new Decimal("e3.5e45"),
+                        unlocked(){
+                                return player.l.challenges[11] >= 94
+                        }, // hasUpgrade("p", 52)
+                },
         },
         milestones: {
                 1: {
@@ -6149,6 +6175,7 @@ addLayer("mu", {
                                 if (hasUpgrade("p", 43))        ret = 5.5
                                 if (hasUpgrade("p", 44))        ret = 5
                                 if (hasUpgrade("p", 45))        ret = 4.5
+                                if (hasUpgrade("p", 51))        ret = 4
                                 return ret
                         },
                         initialCost(){
@@ -6401,6 +6428,10 @@ addLayer("l", {
                         let exp = player.mu.buyables[32].sub(40).max(0)
                                                 ret = ret.times(Decimal.pow(1.5, exp))
                 }
+                if (hasUpgrade("p", 52)) {
+                        let exp = new Decimal(player.l.challenges[11]).sub(90).max(0)
+                                                ret = ret.times(Decimal.pow(2, exp))
+                }
 
                 return ret
         },
@@ -6503,6 +6534,7 @@ addLayer("l", {
 
                         let muBuyKeys = [11, 12, 13, 21,
                                          22, 23, 31,]
+                        if (hasUpgrade("p", 51)) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
                                 buyBuyable("mu", muBuyKeys[i])
                         }
@@ -7095,6 +7127,26 @@ addLayer("l", {
                                 return a
                         },
                 }, // hasMilestone("l", 24)
+                25: {
+                        requirementDescription(){
+                                let a = "Requires: " + formatWhole(tmp.l.milestones[25].requirement)
+                                let b = " Lives"
+                                return a + b
+                        },
+                        requirement(){
+                                return new Decimal(5e113)
+                        },
+                        done(){
+                                return tmp.l.milestones[25].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 25)
         },
         challenges: {
                 11: {
@@ -7548,6 +7600,8 @@ addLayer("l", {
                         },
                         base(){
                                 let ret = player.l.points.max(10).log10()
+
+                                if (hasMilestone("l", 25)) ret = ret.times(Math.log(10))
                                 
                                 return ret
                         },
@@ -7564,6 +7618,7 @@ addLayer("l", {
                                 let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 31)) + " Lives</b><br>"
                                 let eformula = "log10(Lives)^x<br>" + format(tmp.l.buyables[31].base) + "^x"
+                                if (hasMilestone("l", 25)) eformula = eformula.replace("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -7616,11 +7671,22 @@ addLayer("l", {
                         unlocked(){
                                 return player.l.challenges[11] >= 30
                         },
+                        shouldNotify(){
+                                x = [11, 12, 13, 21, 22,
+                                     23, 31, 32, 33]
+                                for (i in x) {
+                                        id = x[i]
+                                        if (layers.l.buyables[id] == undefined) continue
+                                        if (!tmp.l.buyables[id].unlocked) continue
+                                        if (tmp.l.buyables[id].canBuy) return true
+                                }
+                                return false
+                        }
                 },
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        let a = "Life gain: sqrt(log2(log2(log10(Life Points)))-9)"
+                                        let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)"
                                         let br = "<br>"
                                         let b = "Life resets reset everything before Life except achievements"
                                         let c = "Life affects most prior currencies:"
@@ -14730,6 +14796,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (hasMilestone("l", 25))      return x.pow(.46).floor()
                         if (hasMilestone("l", 24))      return x.pow(.47).floor()
                         if (hasUpgrade("mu", 44))       return x.pow(.48).floor()
                         if (hasMilestone("l", 18))      return x.pow(.49).floor()
@@ -14746,6 +14813,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (hasMilestone("l", 25))      return "floor(x<sup>.46</sup>)"
                         if (hasMilestone("l", 24))      return "floor(x<sup>.47</sup>)"
                         if (hasUpgrade("mu", 44))       return "floor(x<sup>.48</sup>)"
                         if (hasMilestone("l", 18))      return "floor(x<sup>.49</sup>)"
