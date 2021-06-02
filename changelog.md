@@ -5,6 +5,7 @@
 - The prestige/sec display now shows decimals.
 - resetsNothing now works immediately on a reset that enables it.
 - Added onComplete for milestones.
+- Added addBuyables.
 
 - Fixed challenges with no currencyDisplayName using "points" instead of the mod's pointsName.
 - inChallenge no longer can return undefined.
