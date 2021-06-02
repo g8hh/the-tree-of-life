@@ -84,6 +84,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 	}	
 }
 
+
 function updateTemp() {
 	if (tmp === undefined)
 		setupTemp()
@@ -91,16 +92,34 @@ function updateTemp() {
 	updateTempData(layers, tmp, funcs)
 
 	for (layer in layers){
+		let problem = ""
 		tmp[layer].resetGain = getResetGain(layer)
+		if (checkDecimalNaN(tmp[layer].resetGain))
+			problem = "resetGain"
 		tmp[layer].nextAt = getNextAt(layer)
+		if (checkDecimalNaN(tmp[layer].nextAt))
+			problem = "nextAt"
 		tmp[layer].nextAtDisp = getNextAt(layer, true)
 		tmp[layer].canReset = canReset(layer)
 		tmp[layer].trueGlowColor = tmp[layer].glowColor
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
+		if (problem && !NaNalert) {
+			confirm("Invalid value found in temp." + layer + "." + problem + ". Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
+			clearInterval(interval);
+			NaNalert = true;
+			return
+		}
+
 	}
 
 	tmp.pointGen = getPointGen()
+	if (checkDecimalNaN(tmp.pointGen) && !NaNalert) {
+		confirm("Invalid value found in temp.pointGen. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
+		clearInterval(interval);
+		NaNalert = true;
+		return
+	}
 	tmp.displayThings = []
 	for (thing in displayThings){
 		let text = displayThings[thing]
@@ -123,15 +142,12 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 
 			if (useThis !== undefined) value = layerData[item].bind(useThis)()
 			else value = layerData[item]()
-			if (value !== value || value === decimalNaN){
-				if (NaNalert === true || confirm ("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")){
-					NaNalert = true
-					value = (value !== value ? 0 : decimalZero)
-				}
-				else {
+			if (value !== value || checkDecimalNaN(value)){
+				if (!NaNalert) {
+					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 					clearInterval(interval);
-					player.autosave = false;
 					NaNalert = true;
+					return
 				}
 			}
 			Vue.set(tmpData, item, value)
@@ -171,4 +187,8 @@ function setupBuyables(layer) {
 			}
 		}
 	}
+}
+
+function checkDecimalNaN(x) {
+	return (x instanceof Decimal) && !x.eq(x)
 }

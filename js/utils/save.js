@@ -1,5 +1,6 @@
 // ************ Save stuff ************
 function save() {
+	if (NaNalert) return
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 }
 function startPlayerBase() {
@@ -228,15 +229,12 @@ function NaNcheck(data) {
 		else if (Array.isArray(data[item])) {
 			NaNcheck(data[item]);
 		}
-		else if (data[item] !== data[item] || data[item] === decimalNaN) {
-			if (NaNalert === true || confirm("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")) {
-				NaNalert = true;
-				data[item] = (data[item] !== data[item] ? 0 : decimalZero);
-			}
-			else {
+		else if (data[item] !== data[item] || checkDecimalNaN(data[item])) {
+			if (!NaNalert) {
+				confirm("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				clearInterval(interval);
-				player.autosave = false;
 				NaNalert = true;
+				return
 			}
 		}
 		else if (data[item] instanceof Decimal) { // Convert to Decimal
@@ -247,6 +245,7 @@ function NaNcheck(data) {
 	}
 }
 function exportSave() {
+	if (NaNalert) return
 	let str = btoa(JSON.stringify(player));
 
 	const el = document.createElement("textarea");
