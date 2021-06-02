@@ -7,7 +7,6 @@ function retrieveCanvasData() {
 	let treeCanv = document.getElementById("treeCanvas")
 	let treeTab = document.getElementById("treeTab")
 	if (treeCanv===undefined||treeCanv===null) return false;
-	if (treeTab===undefined||treeTab===null) return false;
 	canvas = treeCanv;
 	ctx = canvas.getContext("2d");
 	return true;
@@ -52,7 +51,6 @@ function drawTree() {
 function drawTreeBranch(num1, data) { // taken from Antimatter Dimensions & adjusted slightly
 	let num2 = data
 	let color_id = 1
-
 	if (Array.isArray(data)){
 		num2 = data[0]
 		color_id = data[1]

@@ -328,6 +328,8 @@ addLayer("c", {
                     ["display-image", "discord.png"],],
             },
             jail: {
+                style() {return  {'background-color': '#222222'}},
+
                 content: [
                     ["infobox", "coolInfo"],
                     ["bar", "longBoi"], "blank",

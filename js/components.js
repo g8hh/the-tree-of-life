@@ -550,6 +550,7 @@ function loadVue() {
 	Vue.component('options-tab', systemComponents['options-tab'])
 	Vue.component('tooltip', systemComponents['tooltip'])
 	Vue.component('particle', systemComponents['particle'])
+	Vue.component('bg', systemComponents['bg'])
 
 
 	app = new Vue({
