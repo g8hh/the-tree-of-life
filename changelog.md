@@ -3,7 +3,9 @@
 - Fixed demo.html
 - You can now use "this" in tabFormat!
 - The prestige/sec display now shows decimals.
+- Added onComplete for milestones.
 - Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
+- Things are 0.2% more optimized.
 
 ### v2.5.11.1 - 5/27/21
 - Fixed issues caused when the tree tab is disabled.

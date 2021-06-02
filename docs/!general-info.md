@@ -28,8 +28,8 @@ While reading this documentation, the following key will be used when describing
 
 ### General
 
-- [Getting Started](tutorial/getting-started.md): A guide to getting your own copy of the code set up with Github Desktop.
-- [Making a Mod](tutorial/making-a-mod.md): A guide to using TMT to make a basic mod.
+- [Getting Started](tutorials/getting-started.md): A guide to getting your own copy of the code set up with Github Desktop.
+- [Making a Mod](tutorials/making-a-mod.md): A guide to using TMT to make a basic mod.
 - [Main mod info](main-mod-info.md): How to set up general things for your mod in [mod.js](/js/mod.js).
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
