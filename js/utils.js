@@ -131,7 +131,8 @@ function inChallenge(layer, id) {
 	if (challenge == id) return true
 
 	if (layers[layer].challenges[challenge].countsAs)
-		return tmp[layer].challenges[challenge].countsAs.includes(id)
+		return tmp[layer].challenges[challenge].countsAs.includes(id) || false
+	return false
 }
 
 // ************ Misc ************
