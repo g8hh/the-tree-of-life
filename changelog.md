@@ -2,6 +2,7 @@
 
 - Fixed demo.html
 - You can now use "this" in tabFormat!
+- The prestige/sec display now shows decimals.
 - Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
 
 ### v2.5.11.1 - 5/27/21
