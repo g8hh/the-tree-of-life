@@ -15,6 +15,7 @@ addLayer("c", {
             beep: false,
             thingy: "pointy",
             otherThingy: 10,
+            drop: "drip",
         }},
         color: "#4BDC13",
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -221,7 +222,7 @@ addLayer("c", {
         microtabs: {
             stuff: {
                 first: {
-                    content: ["upgrades", ["display-text", function() {return "confirmed"}]]
+                    content: ["upgrades", ["display-text", function() {return "confirmed<br>" + player.c.drop}], ["drop-down", ["drop", ["drip", "drop"]]]]
                 },
                 second: {
                     embedLayer: "f",

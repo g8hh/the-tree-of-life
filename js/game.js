@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.12",
+	tmtNum: "2.6",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -333,7 +333,7 @@ function gameLoop(diff) {
 		clearParticles()
 	}
 
-	if (isNaN(diff)) diff = 0
+	if (isNaN(diff) || diff < 0) diff = 0
 	if (gameEnded && !player.keepGoing) {
 		diff = 0
 		//player.tab = "gameEnded"

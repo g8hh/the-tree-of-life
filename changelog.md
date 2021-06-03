@@ -1,7 +1,9 @@
 # The Modding Tree changelog:
 
-### v2.5.12 - 6/2/21
+### v2.6 - 6/2/21
 - Fixed issues with NaN checking. Saves should never break now unless something really unusual happens.
+- Added a drop-down menu component!
+- Options are now saved separately, and not affected by hard resetting or importing saves.
 - Fixed demo.html
 - Fixed branches not working on the right tab.
 - Fixed background color not working on the left tab.
@@ -13,6 +15,7 @@
 - resetsNothing now works immediately on a reset that enables it.
 - Made the star on maxed challenges larger.
 
+- diff can no longer be negative.
 - Fixed challenges with no currencyDisplayName using "points" instead of the mod's pointsName.
 - inChallenge no longer can return undefined.
 - Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).

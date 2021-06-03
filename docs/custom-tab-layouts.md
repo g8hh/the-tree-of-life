@@ -45,8 +45,11 @@ These are the existing components, but you can create more in [components.js](/j
     (Works with strings, numbers, and Decimals!)
 
 - slider: Lets the user input a value with a slider. The argument a 3-element array: [name, min, max].
-    The name is the name of the variable in player[layer] that the input that the input is for, and min and max are the limits of the slider.
+    The name is the name of the variable in player[layer] that the input  is for, and min and max are the limits of the slider.
     (Does not work for Decimal values)
+
+- drop-down: Lets the user input a value with a dropdown menu. The argument a 2-element array: [name, options].
+    The name is the name of the variable in player[layer] that the input is for, and options is an array of strings for options you can use.
 
 - upgrades: The layer's upgrades. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
 

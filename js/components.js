@@ -515,7 +515,7 @@ function loadVue() {
 		`
 	})
 
-// Updates the value in player[layer][data]
+	// Updates the value in player[layer][data][0]
 	Vue.component('slider', {
 		props: ['layer', 'data'],
 		template: `
@@ -524,6 +524,15 @@ function loadVue() {
 		`
 	})
 
+	// Updates the value in player[layer][data[0]], options are an array in data[1]
+	Vue.component('drop-down', {
+		props: ['layer', 'data'],
+		template: `
+			<select v-model="player[layer][data[0]]">
+				<option v-for="item in data[1]" v-bind:value="item">{{item}}</option>
+			</select>
+		`
+	})
 	// These are for buyables, data is the id of the corresponding buyable
 	Vue.component('sell-one', {
 		props: ['layer', 'data'],
@@ -599,6 +608,8 @@ function loadVue() {
 			mouseY,
 			shiftDown,
 			ctrlDown,
+			run,
+			gridRun,
 		},
 	})
 }

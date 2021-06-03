@@ -2,7 +2,7 @@
 
 Grids are an easier way of making a group of similar clickables. They all have the same behavior, but are different based on their data.
 
-**NOTE: Gridables are similar to clickables in some respects, but are fundamentally different from normal TMT components in quite a few ways. Be sure to keep these in mind:**
+**NOTE: Gridables are similar to clickables in some respects, but are fundamentally different from normal TMT Big Features in quite a few ways. Be sure to keep these in mind:**
   - Gridable ids use base 100 instead of base 10, so you can have more than 10 tiles in a row. This means that a grid might look like this:
     101  102
     201  202
