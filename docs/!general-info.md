@@ -28,8 +28,8 @@ While reading this documentation, the following key will be used when describing
 
 ### General
 
-- [Getting Started](tutorial/getting-started.md): A guide to getting your own copy of the code set up with Github Desktop.
-- [Making a Mod](tutorial/making-a-mod.md): A guide to using TMT to make a basic mod.
+- [Getting Started](tutorials/getting-started.md): A guide to getting your own copy of the code set up with Github Desktop.
+- [Making a Mod](tutorials/making-a-mod.md): A guide to using TMT to make a basic mod.
 - [Main mod info](main-mod-info.md): How to set up general things for your mod in [mod.js](/js/mod.js).
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
@@ -52,7 +52,7 @@ While reading this documentation, the following key will be used when describing
 - [Bars](bars.md): Display some information as a progress bar, gauge, or similar. They are highly customizable, and can be horizontal and vertical as well.
 - [Subtabs and Microtabs](subtabs-and-microtabs.md): Create subtabs for your tabs, as well as "microtab" components that you can put inside the tabs.
                         You can even use them to embed a layer inside another layer!
-- [Grids][grids.md]: Create a group buttons that behave the same, but have their own data. Good for map tiles, an inventory grid, and more!
+- [Grids](grids.md): Create a group buttons that behave the same, but have their own data. Good for map tiles, an inventory grid, and more!
 - [Infoboxes](infoboxes.md): Boxes containing text that can be shown or hidden.
 - [Trees](trees-and-tree-customization.md): Make your own trees. You can make non-layer button nodes too!
 - [Particle system](particles.md): Can be used to create particles for visual effects, but also interactable things like golden cookies or collectables.

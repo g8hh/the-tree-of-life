@@ -1,5 +1,34 @@
 # The Modding Tree changelog:
 
+## v2.6: Fixed Reality - 6/3/21
+- Fixed issues with NaN checking. The game also will not save if the save is broken.
+- Added a drop-down menu component!
+- Added upgrade-tree component!
+- Options are now saved separately, and not affected by hard resetting or importing saves.
+- Fixed demo.html
+- Fixed branches not working on the right tab.
+- Fixed background color not working on the left tab.
+- Fixed branches not updating when tree tab is not shown.
+- You can now use "this" in tabFormat!
+- Added per-row displaying for achievements, challenges, milestones, grids, buyables, and clickables. THIS WILL BREAK BUYABLES/CLICKABLES THAT PREVIOUSLY USED THEIR TABFORMAT ARGUMENT FOR SIZE.
+- Added onComplete for milestones.
+- Added addBuyables.
+- The prestige/sec display now shows non-whole numbers.
+- resetsNothing now works immediately on a reset that enables it.
+- Made the star on maxed challenges larger.
+
+- diff can no longer be negative.
+- Fixed challenges with no currencyDisplayName using "points" instead of the mod's pointsName.
+- inChallenge no longer can return undefined.
+- Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
+- Things are 0.2% more optimized.
+- Fixed problems in the documentation.
+- Added more customization to the "mark" component (but not an easy way to access it)
+
+
+### v2.5.11.1 - 5/27/21
+- Fixed issues caused when the tree tab is disabled.
+
 ### v2.5.11 - 5/27/21
 - Finished part 1 of the "making a mod" tutorial.
 - The challenge that you are currently in is highlighted, and will not be hidden if "hide completed challenges" is on and it is already completed.
@@ -395,7 +424,6 @@
 - Moved old changelogs to a separate place.
 - Fixed hasMilestone and incr_order.
 - Static layers now show the currency amount needed for the next one if you can buy max.
-
 
 
 ### v1.2.4 - 10/4/20

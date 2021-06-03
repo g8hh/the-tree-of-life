@@ -49,12 +49,10 @@ function achievementStyle(layer, id){
 
 
 
-
 function updateWidth() {
-	var screenWidth = window.innerWidth
-
-	var splitScreen = screenWidth >= 1024
-	if (player.forceOneTab) splitScreen = false
+	let screenWidth = window.innerWidth
+	let splitScreen = screenWidth >= 1024
+	if (options.forceOneTab) splitScreen = false
 	if (player.navTab == "none") splitScreen = true
 	tmp.other.screenWidth = screenWidth
 	tmp.other.screenHeight = window.innerHeight
@@ -147,9 +145,9 @@ function constructTabFormat(layer, id, family){
 
 	}
 	if (isFunction(tabLayer)) {
-		return tabLayer()
+		return tabLayer.bind(location)()
 	}
-	updateTempData(tabLayer, tabTemp, tabFunc)
+	updateTempData(tabLayer, tabTemp, tabFunc, {layer, id, family})
 	return tabTemp
 }
 

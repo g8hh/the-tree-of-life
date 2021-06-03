@@ -2,10 +2,13 @@
 
 var logSave = false
 function save() {
+	if (NaNalert) return
 	let t = new Date().getTime()
 	if (logSave) console.log("saved at " + t)
 	if (!(player === null)) player.lastSave = t
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+
 }
 
 function startPlayerBase() {
@@ -13,21 +16,14 @@ function startPlayerBase() {
 		tab: layoutInfo.startTab,
 		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
-		autosave: true,
 		notify: {},
-		msDisplay: "always",
-		theme: null,
-		hqTree: false,
-		offlineProd: true,
 		versionType: modInfo.id,
 		version: VERSION.num,
 		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-		hideChallenges: false,
-		showStory: true,
-		forceOneTab: false,
+
 		points: modInfo.initialStartPoints,
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
@@ -201,11 +197,16 @@ function fixData(defaultData, newData) {
 
 function load() {
 	let get = localStorage.getItem(modInfo.id);
-	if (get === null || get === undefined)
+
+	if (get === null || get === undefined) {
 		player = getStartPlayer();
-	else
+		options = getStartOptions();
+	}
+	else {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
-	fixSave();
+		fixSave();
+		loadOptions();
+	}
 
 	if (player.offlineProd) {
 		if (player.offTime === undefined)
@@ -228,6 +229,16 @@ function load() {
 	updateTemp()
 }
 
+function loadOptions() {
+	let get2 = localStorage.getItem(modInfo.id+"_options");
+	if (get2) 
+		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
+	else 
+		options = getStartOptions()
+	
+
+}
+
 function setupModInfo() {
 	modInfo.changelog = changelog;
 	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`;
@@ -245,15 +256,12 @@ function NaNcheck(data) {
 		else if (Array.isArray(data[item])) {
 			NaNcheck(data[item]);
 		}
-		else if (data[item] !== data[item] || data[item] === decimalNaN) {
-			if (NaNalert === true || confirm("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! Would you like to try to auto-fix the save and keep going?")) {
-				NaNalert = true;
-				data[item] = (data[item] !== data[item] ? 0 : decimalZero);
-			}
-			else {
+		else if (data[item] !== data[item] || checkDecimalNaN(data[item])) {
+			if (!NaNalert) {
+				confirm("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				clearInterval(interval);
-				player.autosave = false;
 				NaNalert = true;
+				return
 			}
 		}
 		else if (data[item] instanceof Decimal) { // Convert to Decimal
@@ -264,6 +272,7 @@ function NaNcheck(data) {
 	}
 }
 function exportSave() {
+	if (NaNalert) return
 	let str = btoa(JSON.stringify(player));
 
 	const el = document.createElement("textarea");
@@ -323,7 +332,7 @@ var saveInterval = setInterval(function () {
 		return;
 	if (gameEnded && !player.keepGoing)
 		return;
-	if (player.autosave)
+	if (options.autosave)
 		save();
 }, 5000);
 

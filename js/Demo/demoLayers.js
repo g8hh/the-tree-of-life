@@ -15,6 +15,7 @@ addLayer("c", {
             beep: false,
             thingy: "pointy",
             otherThingy: 10,
+            drop: "drip",
         }},
         color: "#4BDC13",
         requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -108,6 +109,7 @@ addLayer("c", {
                 description: "Gain 1 Point every second.",
                 cost: new Decimal(1),
                 unlocked() { return player[this.layer].unlocked }, // The upgrade is only visible when this is true
+                branches: [12]
             },
             12: {
                 description: "Point generation is faster based on your unspent Lollipops.",
@@ -221,7 +223,7 @@ addLayer("c", {
         microtabs: {
             stuff: {
                 first: {
-                    content: ["upgrades", ["display-text", function() {return "confirmed"}]]
+                    content: ["upgrades", ["display-text", function() {return "confirmed<br>" + player.c.drop}], ["drop-down", ["drop", ["drip", "drop"]]]]
                 },
                 second: {
                     embedLayer: "f",
@@ -290,7 +292,7 @@ addLayer("c", {
 
             },
         },
-
+        
         // Optional, lets you format the tab yourself by listing components. You can create your own components in v.js.
         tabFormat: {
             "main tab": {
@@ -304,7 +306,7 @@ addLayer("c", {
                     ["display-text", "Name your points!"],
                     ["text-input", "thingy"],
                     ["display-text",
-                        function() {return 'I have ' + format(player.points) + ' ' + player.c.thingy + ' points!'},
+                        function() {return 'I have ' + format(player.points) + ' ' + player[this.layer].thingy + ' points!'},
                         {"color": "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
                     "h-line", "milestones", "blank", "upgrades", "challenges"],
                 glowColor: "blue",
@@ -315,7 +317,7 @@ addLayer("c", {
                 style() {return  {'background-color': '#222222'}},
                 buttonStyle() {return {'border-color': 'orange'}},
                 content:[ 
-                    ["buyables", ""], "blank",
+                    "buyables", "blank",
                     ["row", [
                         ["toggle", ["c", "beep"]], ["blank", ["30px", "10px"]], // Width, height
                         ["display-text", function() {return "Beep"}], "blank", ["v-line", "200px"],
@@ -328,6 +330,8 @@ addLayer("c", {
                     ["display-image", "discord.png"],],
             },
             jail: {
+                style() {return  {'background-color': '#222222'}},
+
                 content: [
                     ["infobox", "coolInfo"],
                     ["bar", "longBoi"], "blank",
@@ -350,7 +354,8 @@ addLayer("c", {
                     ["raw-html", function() {return "<h1> C O N F I R M E D </h1>"}], "blank",
                     ["microtabs", "stuff", {'width': '600px', 'height': '350px', 'background-color': 'brown', 'border-style': 'solid'}],
                     ["display-text", "Adjust how many points H gives you!"],
-                    ["slider", ["otherThingy", 1, 30]],
+                    ["slider", ["otherThingy", 1, 30]], "blank", ["upgrade-tree", [[11], 
+                    [12, 22, 22, 11]]]
                 ]
             }
 

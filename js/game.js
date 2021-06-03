@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.5.11",
+	tmtNum: "2.6",
 	tmtName: "Dreams Really Do Come True"
 }
 
@@ -198,13 +198,13 @@ function doReset(layer, force=false) {
 		tmp[layer].baseAmount = decimalZero // quick fix
 	}
 
-	if (tmp[layer].resetsNothing) return
+	if (run(layers[layer].resetsNothing, layers[layer])) return
 
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
 	}
 
-	prevOnReset = {...player} //Deep Copy
+	prevOnReset = {...player} 
 	player.points = (row == 0 ? decimalZero : getStartPoints())
 
 	for (let x = row; x >= 0; x--) rowReset(x, layer)
@@ -299,12 +299,15 @@ function autobuyUpgrades(layer){
 }
 
 function gameLoop(diff) {
-	if (isEndgame() || gameEnded) gameEnded = 1
+	if (isEndgame() || gameEnded){
+		gameEnded = 1
+		clearParticles()
+	}
 
-	if (isNaN(diff)) diff = 0
+	if (isNaN(diff) || diff < 0) diff = 0
 	if (gameEnded && !player.keepGoing) {
 		diff = 0
-		player.tab = "gameEnded"
+		//player.tab = "gameEnded"
 		clearParticles()
 	}
 

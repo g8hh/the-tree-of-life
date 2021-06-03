@@ -23,6 +23,8 @@ Milestone features:
 
 - done(): A function returning a boolean to determine if the milestone should be awarded.
 
+- onComplete() - **optional**. this function will be called when the milestone is completed.
+
 - toggles: **optional**. Creates toggle buttons that appear on the milestone when it is unlocked. The toggles can toggle a given boolean value in a layer. It is defined as an array of paired items, one pair per toggle. The first is the internal name of the layer the value being toggled is stored in, and the second is the internal name of the variable to toggle. (e.g. [["b", "auto"], ["g", "auto"])
 
    **Tip:** Toggles are not de-set if the milestone becomes locked! In this case, you should also check if the player has the milestone.
@@ -35,4 +37,4 @@ Milestone features:
 
 - id: **assigned automagically**. It's the "key" which the milestone was stored under, for convenient access. The milestone in the example's id is 0.
 
-Disaable milestone popups by adding `milestonePopups: false` to the layer.
+Disable milestone popups by adding `milestonePopups: false` to the layer.
