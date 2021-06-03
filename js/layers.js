@@ -30,6 +30,7 @@ function getPointGen() {
                 let exp = player.mu.buyables[33]
                                         gain = gain.pow(Decimal.pow(base, exp))
         }
+                                        gain = gain.pow(layers.l.grid.getGemEffect(102))
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -4994,15 +4995,20 @@ addLayer("mu", {
                 return new Decimal(1)
         },
         exponent(){
-                let sub = new Decimal(0)
-                                                sub = sub.plus(tmp.mu.buyables[32].effect)
-                if (hasUpgrade("mu", 43))       sub = sub.plus(.01)
-                if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(sub)
-                if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(sub)
-                if (hasMilestone("mu", 9))      return new Decimal(1.92).sub(sub)
-                if (hasMilestone("mu", 7))      return new Decimal(1.93).sub(sub)
-                if (hasMilestone("mu", 6))      return new Decimal(1.96).sub(sub)
-                                                return new Decimal(2).sub(sub)
+                let rem = new Decimal(0)
+                                                rem = rem.plus(tmp.mu.buyables[32].effect)
+                if (hasUpgrade("mu", 43))       rem = rem.plus(.01)
+                if (inChallenge("l", 12))       {
+                        let depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                                                rem = rem.sub(.01 * depth)
+                }
+                
+                if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
+                if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
+                if (hasMilestone("mu", 9))      return new Decimal(1.92).sub(rem)
+                if (hasMilestone("mu", 7))      return new Decimal(1.93).sub(rem)
+                if (hasMilestone("mu", 6))      return new Decimal(1.96).sub(rem)
+                                                return new Decimal(2.00).sub(rem)
         },
         gainExp: new Decimal(1),
         effect(){
@@ -6227,6 +6233,17 @@ addLayer("mu", {
                                 let amt = getBuyableAmount("mu", 32)
                                 return tmp.mu.buyables[32].initialCost.times(Decimal.pow(tmp.mu.buyables[32].costBase, amt))
                         },
+                        getMaxAfford(){
+                                if (player.mu.points.lt(1)) return new Decimal(0)
+                                return player.mu.points.div(tmp.mu.buyables[32].initialCost).log(tmp.mu.buyables[32].costBase).floor().plus(1).max(0)
+                        },
+                        getMaxBulk(){
+                                let ret = new Decimal(1)
+
+                                if (hasMilestone("l", 27)) ret = ret.times(5)
+
+                                return ret
+                        },
                         costBase(){
                                 let ret = 10
                                 if (hasUpgrade("mu", 41))       ret = 9
@@ -6250,8 +6267,10 @@ addLayer("mu", {
                         canAfford:() => player.mu.points.gte(tmp.mu.buyables[32].cost) && (inChallenge("l", 11) || hasMilestone("l", 14)),
                         buy(){
                                 if (!this.canAfford()) return 
+                                let data = tmp.mu.buyables[32]
+                                let bulk = data.getMaxBulk.min(data.getMaxAfford.sub(player.mu.buyables[32]))
                                 player.mu.buyables[32] = player.mu.buyables[32].plus(1)
-                                if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(tmp.mu.buyables[32].cost)
+                                if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(data.cost)
                                 doReset("mu", true)
                         },
                         base(){
@@ -6495,6 +6514,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.l.buyables[22].effect)
                                                 ret = ret.times(tmp.l.buyables[31].effect)
                                                 ret = ret.times(tmp.l.buyables[32].effect)
+                                                ret = ret.times(layers.l.grid.getGemEffect(101))
                 if (hasMilestone("l", 22)) {
                         let exp = player.mu.buyables[32].sub(40).max(0)
                                                 ret = ret.times(Decimal.pow(1.5, exp))
@@ -7267,7 +7287,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log10 becomes log7.<br>"
+                                let a = "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 27)
@@ -7411,114 +7431,6 @@ addLayer("l", {
                                 return a
                         },
                 }, // hasMilestone("l", 34)
-        },
-        challenges: {
-                11: {
-                        name: "Dilation",
-                        challengeDescription() {
-                                let a = "All prior currencies are dilated ^" 
-                                a += format(tmp.l.challenges[11].challengeEffect,3)
-
-                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
-
-                                return a
-                        },
-                        goalDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-                                return "e1.80e308 Points"
-                        },
-                        challengeEffect(){
-                                let eff = player.l.challenges[11] + 1
-                                if (eff > 91) eff = eff * 1.5 - 45.5
-                                if (eff > 65) eff = eff * 2 - 65
-                                if (eff > 50) eff = eff * 2 - 50
-                                return new Decimal(1).sub(eff/1000)
-                        },
-                        goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
-                        canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
-                        rewardDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-                                let a = "Each tenth challenge unlocks a buyable and boost life gain"
-                                if (shiftDown) return a
-                                let br = "<br>"
-                                let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
-                                let c = "You have completed this challenge<br>" 
-                                c += formatWhole(player.l.challenges[11]) + "/110 times"
-                                return a + br + b + br + c
-                        },
-                        completionLimit: 110,
-                        rewardEffect() {
-                                let comps = player.l.challenges[11]
-                                return Decimal.pow(comps + 1, 2)
-                        },
-                        unlocked(){
-                                return hasMilestone("l", 8)
-                        },
-                        countsAs: [],
-                }, // inChallenge("l", 11)
-                12: {
-                        name: "Customizable", 
-                        baseReward(){
-                                return player.points.max(10).log10().max(10).log(2).max(10).log(2).sub(9)
-                        },
-                        gemGainMult(){
-                                let ret = new Decimal(1)
-                                return ret
-                        },
-                        reward(){
-                                let data = tmp.l.challenges[12]
-                                if (data.baseReward.lt(1)) return new Decimal(0)
-                                return data.baseReward.times(data.gemGainMult).floor()
-                        },
-                        goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
-                        canComplete(){ 
-                                if (player.l.challenges[11] < 110) return false
-                                return player.points.gt(tmp.l.challenges[12].goal)
-                        },
-                        onComplete(){
-                                player.l.challenges[12] = 0
-                                let data = player.l.grid[player.l.activeChallengeID]
-                                data.gems = data.gems.plus(tmp.l.challenges[12].reward)
-                        },
-                        completionLimit: 1,
-                        fullDisplay(){
-                                let data = tmp.l.challenges[12]
-                                let br = "<br>"
-                                let a = "Dilation at 110 completions<br>"
-                                a += "Gets harder based on which challenge is selected from below" + br
-                                let b = "Goal: e1.80e308 Points" + br
-                                let c = ""
-                                if (player.l.activeChallengeID) {
-                                        let data2 = player.l.grid[player.l.activeChallengeID]
-                                        c = "Upon Completion: +" + formatWhole(data.reward) + " C"
-                                        c += (data2.hundreds*10 + data2.units) + " Gems"
-                                }
-                                let d = "Effects: Press shift to see"
-                                return a + b + c + br + d
-                        },
-                        unlocked(){
-                                return player.l.challenges[11] >= 110
-                        },
-                        countsAs: [11],
-                        getChallengeDepths(){
-                                let id = player.l.activeChallengeID
-                                let data = player.l.grid[id]
-
-                                let h = data.hundreds
-                                let u = data.units
-                                return [0, 
-                                        0, 
-                                        2*h+u-3, 
-                                        h == 3 + h == 3 + u == 3,
-                                        h == 4 + h == 4 + u == 4,
-                                        h == 5 + h == 5 + u == 5,
-                                        h == 6 + h == 6 + u == 6,
-                                        h == 7 + h == 7 + u == 7,
-                                        h == 8 + h == 8 + u == 8,]
-                        },
-                }, // inChallenge("l", 12)
         },
         buyables: {
                 rows: 3,
@@ -8132,6 +8044,114 @@ addLayer("l", {
                         },
                 },
         },
+        challenges: {
+                11: {
+                        name: "Dilation",
+                        challengeDescription() {
+                                let a = "All prior currencies are dilated ^" 
+                                a += format(tmp.l.challenges[11].challengeEffect,3)
+
+                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
+
+                                return a
+                        },
+                        goalDescription(){
+                                if (player.tab != "l") return ""
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+                                return "e1.80e308 Points"
+                        },
+                        challengeEffect(){
+                                let eff = player.l.challenges[11] + 1
+                                if (eff > 91) eff = eff * 1.5 - 45.5
+                                if (eff > 65) eff = eff * 2 - 65
+                                if (eff > 50) eff = eff * 2 - 50
+                                return new Decimal(1).sub(eff/1000)
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
+                        canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
+                        rewardDescription(){
+                                if (player.tab != "l") return ""
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+                                let a = "Each tenth challenge unlocks a buyable and boost life gain"
+                                if (shiftDown) return a
+                                let br = "<br>"
+                                let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
+                                let c = "You have completed this challenge<br>" 
+                                c += formatWhole(player.l.challenges[11]) + "/110 times"
+                                return a + br + b + br + c
+                        },
+                        completionLimit: 110,
+                        rewardEffect() {
+                                let comps = player.l.challenges[11]
+                                return Decimal.pow(comps + 1, 2)
+                        },
+                        unlocked(){
+                                return hasMilestone("l", 8)
+                        },
+                        countsAs: [],
+                }, // inChallenge("l", 11)
+                12: {
+                        name: "Customizable", 
+                        baseReward(){
+                                return player.points.max(10).log10().max(10).log(2).max(10).log(2).sub(9)
+                        },
+                        gemGainMult(){
+                                let ret = new Decimal(1)
+                                return ret
+                        },
+                        reward(){
+                                let data = tmp.l.challenges[12]
+                                if (data.baseReward.lt(1)) return new Decimal(0)
+                                return data.baseReward.times(data.gemGainMult).floor()
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[12].goal)
+                        },
+                        onComplete(){
+                                player.l.challenges[12] = 0
+                                let data = player.l.grid[player.l.activeChallengeID]
+                                data.gems = data.gems.plus(tmp.l.challenges[12].reward)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.l.challenges[12]
+                                let br = "<br>"
+                                let a = "Dilation at 110 completions<br>"
+                                a += "Gets harder based on which challenge is selected from below" + br
+                                let b = "Goal: e1.80e308 Points" + br
+                                let c = ""
+                                if (player.l.activeChallengeID) {
+                                        let data2 = player.l.grid[player.l.activeChallengeID]
+                                        c = "Upon Completion: +" + formatWhole(data.reward) + " C"
+                                        c += (data2.hundreds*10 + data2.units) + " Gems"
+                                }
+                                let d = "Effects: Press shift to see"
+                                return a + b + c + br + d
+                        },
+                        unlocked(){
+                                return player.l.challenges[11] >= 110
+                        },
+                        countsAs: [11],
+                        getChallengeDepths(){
+                                let id = player.l.activeChallengeID
+                                let data = player.l.grid[id]
+
+                                let h = data.hundreds
+                                let u = data.units
+                                return [0, 
+                                        0, 
+                                        2*h+u-3, 
+                                        h >= 3 + h >= 3 + u >= 3,
+                                        h >= 4 + h >= 4 + u >= 4,
+                                        h >= 5 + h >= 5 + u >= 5,
+                                        h >= 6 + h >= 6 + u >= 6,
+                                        h >= 7 + h >= 7 + u >= 7,
+                                        h >= 8 + h >= 8 + u >= 8,]
+                        },
+                }, // inChallenge("l", 12)
+        },
         grid: {
                 rows: 8,
                 cols: 8,
@@ -8142,7 +8162,10 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110
                 },
                 getCanClick(data, id) {
-                        return id == 101 // for now
+                        if (inChallenge("l", 12)) return false
+                        let maxAllowed = 2 // manually change this
+                        if (data.units > maxAllowed) return false
+                        if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
                                 if (player.l.grid[id-1].gems.eq(0)) return false
                         }
@@ -8180,7 +8203,7 @@ addLayer("l", {
                         if (x == 1) {
                                 return GEM_EFFECT_DESCRIPTIONS[id]
                         }
-                        return "Currently: " + format(layers.l.grid.getGemEffect(id))
+                        return "Currently: " + format(layers.l.grid.getGemEffect(id), 4)
                 },
                 getGemEffect(id) {
                         if (GEM_EFFECT_FORMULAS[id] == undefined) return new Decimal(0)
@@ -8252,10 +8275,8 @@ addLayer("l", {
                                                 return a + br2 + b + br2 + c + br + d + br + e + br2 + f
                                         } 
                                         let g = "Dilation nerfs x → 10^(log10(x)^exp)"
-                                        let start = a + br2 + b + br2 + c + br + d + br + e + br + f + br2 + g
-                                        if (player.l.challenges[11] < 50) {
-                                                return start
-                                        }
+                                        let step1 = a + br2 + b + br2 + c + br + d + br + e + br + f + br2 + g
+                                        if (player.l.challenges[11] < 50) return step1
                                         let formExp = format(tmp.l.getGainExp)
                                         let h = "Current base gain is " + format(tmp.l.getBaseGain)
                                         h += " and gain exp is " + formExp
@@ -8263,7 +8284,27 @@ addLayer("l", {
                                         if (tmp.l.getBaseSubAmount.gt(0)) i += "-" + format(tmp.l.getBaseSubAmount)
                                         else i += "+" + format(tmp.l.getBaseSubAmount.times(-1))
                                         i += ")^" + formExp
-                                        return start + br2 + h + br + i
+                                        let step2 = step1 + br2 + h + br + i
+                                        if (player.l.challenges[11] < 110) return step2
+                                        let j = "Challenges:"
+                                        let k = "If you are in challenge AB then you are in challenge A twice and challenge B once."
+                                        let l = "Additionally each challenge above 2 puts you in the previous challenge, and challenge 2 again."
+                                        let m = "For example, challenge 45: By default its challenge 4 twice and challenge 5 once."
+                                        let n = "However, you are also in challenge 4 again because you are in challenge 5."
+                                        let o = "So in effect you are in challenges 2/3/4/5 a total of 10/3/3/1 times."
+                                        let step3 = step2 + br2 + j + br + k + br + l + br + m + br + n + br + o
+
+                                        let c2 = "Challenge 2: Add .01 to µ gain exponent"
+                                        let c3 = "Challenge 3: Tetrate Oxygen gain ^[tbd]"
+                                        let c4 = "Challenge 4: Tetrate Carbon gain ^[tbd]"
+                                        let c5 = "Challenge 5: Tetrate Point gain ^[tbd]"
+                                        let c6 = "Challenge 6: Divide N → ΔN base by 1+depth [tbd]"
+                                        let c7 = "Challenge 7: You have 5 [tbp] more tokens for prestige purposes"
+                                        let c8 = "Challenge 8: Tetrate Phosphorus gain ^[tbd]"
+
+                                        let step4 = step3 + br2 + c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
+
+                                        return step4
                                 }],
                                 ],
                         unlocked(){
