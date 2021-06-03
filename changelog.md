@@ -3,12 +3,14 @@
 ### v2.6 - 6/2/21
 - Fixed issues with NaN checking. Saves should never break now unless something really unusual happens.
 - Added a drop-down menu component!
+- Added upgrade-tree component!
 - Options are now saved separately, and not affected by hard resetting or importing saves.
 - Fixed demo.html
 - Fixed branches not working on the right tab.
 - Fixed background color not working on the left tab.
 - Fixed branches not updating when tree tab is not shown.
 - You can now use "this" in tabFormat!
+- Added per-row displaying for achievements, challenges, milestones, grids
 - Added onComplete for milestones.
 - Added addBuyables.
 - The prestige/sec display now shows decimals.

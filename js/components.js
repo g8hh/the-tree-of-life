@@ -121,11 +121,11 @@ function loadVue() {
 	})
 
 	Vue.component('challenges', {
-		props: ['layer'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].challenges" class="upgTable">
-			<div v-for="row in tmp[layer].challenges.rows" class="upgRow">
-				<div v-for="col in tmp[layer].challenges.cols">
+		<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" class="upgRow">
+		<div v-for="col in tmp[layer].challenges.cols">
 					<challenge v-if="tmp[layer].challenges[row*10+col]!== undefined && tmp[layer].challenges[row*10+col].unlocked" :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.challenge"></challenge>
 				</div>
 			</div>
@@ -186,11 +186,11 @@ function loadVue() {
 	})
 
 	Vue.component('milestones', {
-		props: ['layer'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].milestones">
 			<table>
-				<tr v-for="id in Object.keys(tmp[layer].milestones)" v-if="tmp[layer].milestones[id]!== undefined && tmp[layer].milestones[id].unlocked && milestoneShown(layer, id)">
+				<tr v-for="id in (data === undefined ? Object.keys(tmp[layer].milestones) : data)" v-if="tmp[layer].milestones[id]!== undefined && tmp[layer].milestones[id].unlocked && milestoneShown(layer, id)">
 					<milestone :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles.milestone"></milestone>
 				</tr>
 			</table>
@@ -377,7 +377,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].grid" class="upgTable">
-			<div v-for="row in tmp[layer].grid.rows" class="upgRow">
+			<div v-for="row in (data === undefined ? tmp[layer].grid.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].grid.cols"><div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row*100+col)"
 					class="upgAlign" v-bind:style="{'margin': '1px',  'height': 'inherit',}">
 					<gridable :layer = "layer" :data = "row*100+col" v-bind:style="tmp[layer].componentStyles.gridable"></gridable>
@@ -461,10 +461,10 @@ function loadVue() {
 
 
 	Vue.component('achievements', {
-		props: ['layer'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].achievements" class="upgTable">
-			<div v-for="row in tmp[layer].achievements.rows" class="upgRow">
+			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].achievements.cols"><div v-if="tmp[layer].achievements[row*10+col]!== undefined && tmp[layer].achievements[row*10+col].unlocked" class="upgAlign">
 					<achievement :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.achievement"></achievement>
 				</div></div>
