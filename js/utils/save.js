@@ -2,27 +2,22 @@
 function save() {
 	if (NaNalert) return
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+
 }
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
 		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
-		autosave: true,
 		notify: {},
-		msDisplay: "always",
-		theme: null,
-		hqTree: false,
-		offlineProd: true,
 		versionType: modInfo.id,
 		version: VERSION.num,
 		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-		hideChallenges: false,
-		showStory: true,
-		forceOneTab: false,
+
 		points: modInfo.initialStartPoints,
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
@@ -190,11 +185,16 @@ function fixData(defaultData, newData) {
 }
 function load() {
 	let get = localStorage.getItem(modInfo.id);
-	if (get === null || get === undefined)
+
+	if (get === null || get === undefined) {
 		player = getStartPlayer();
-	else
+		options = getStartOptions();
+	}
+	else {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
-	fixSave();
+		fixSave();
+		loadOptions();
+	}
 
 	if (player.offlineProd) {
 		if (player.offTime === undefined)
@@ -214,6 +214,17 @@ function load() {
 	updateTabFormats()
 	loadVue();
 }
+
+function loadOptions() {
+	let get2 = localStorage.getItem(modInfo.id+"_options");
+	if (get2) 
+		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
+	else 
+		options = getStartOptions()
+	
+
+}
+
 function setupModInfo() {
 	modInfo.changelog = changelog;
 	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`;
@@ -297,6 +308,6 @@ var saveInterval = setInterval(function () {
 		return;
 	if (gameEnded && !player.keepGoing)
 		return;
-	if (player.autosave)
+	if (options.autosave)
 		save();
 }, 5000);

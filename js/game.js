@@ -224,7 +224,7 @@ function doReset(layer, force=false) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
 	}
 
-	prevOnReset = {...player} //Deep Copy
+	prevOnReset = {...player} 
 	player.points = (row == 0 ? decimalZero : getStartPoints())
 
 	for (let x = row; x >= 0; x--) rowReset(x, layer)
@@ -336,7 +336,7 @@ function gameLoop(diff) {
 	if (isNaN(diff)) diff = 0
 	if (gameEnded && !player.keepGoing) {
 		diff = 0
-		player.tab = "gameEnded"
+		//player.tab = "gameEnded"
 		clearParticles()
 	}
 

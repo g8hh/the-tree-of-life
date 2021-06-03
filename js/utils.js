@@ -233,13 +233,7 @@ function subtabResetNotify(layer, family, id) {
 }
 
 function nodeShown(layer) {
-	if (layerShown(layer)) return true
-	switch (layer) {
-		case "idk":
-			return player.idk.unlocked
-			break;
-	}
-	return false
+	return layerShown(layer)
 }
 
 function layerunlocked(layer) {
@@ -250,7 +244,6 @@ function layerunlocked(layer) {
 function keepGoing() {
 	player.keepGoing = true;
 	needCanvasUpdate = true;
-	showTab(player.lastSafeTab)
 }
 
 function toNumber(x) {
