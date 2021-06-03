@@ -257,9 +257,9 @@ function loadVue() {
 		template: `
 		<div v-if="tmp[layer].buyables" class="upgTable">
 			<respec-button v-if="tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['respec-button']]"></respec-button>
-			<div v-for="row in tmp[layer].buyables.rows" class="upgRow">
+			<div v-for="row in (data === undefined ? tmp[layer].buyables.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].buyables.cols"><div v-if="tmp[layer].buyables[row*10+col]!== undefined && tmp[layer].buyables[row*10+col].unlocked" class="upgAlign" v-bind:style="{'margin-left': '7px', 'margin-right': '7px',  'height': (data ? data : 'inherit'),}">
-					<buyable :layer = "layer" :data = "row*10+col" :size = "data"></buyable>
+					<buyable :layer = "layer" :data = "row*10+col"></buyable>
 				</div></div>
 				<br>
 			</div>
@@ -267,7 +267,6 @@ function loadVue() {
 	`
 	})
 
-	// data = id of buyable
 	Vue.component('buyable', {
 		props: ['layer', 'data', 'size'],
 		template: `
@@ -313,15 +312,14 @@ function loadVue() {
 			`
 	})
 	
-	// data = button size, in px
 	Vue.component('clickables', {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].clickables" class="upgTable">
 			<master-button v-if="tmp[layer].clickables.masterButtonPress && !(tmp[layer].clickables.showMasterButton !== undefined && tmp[layer].clickables.showMasterButton == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['master-button']]"></master-button>
-			<div v-for="row in tmp[layer].clickables.rows" class="upgRow">
+			<div v-for="row in (data === undefined ? tmp[layer].clickables.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].clickables.cols"><div v-if="tmp[layer].clickables[row*10+col]!== undefined && tmp[layer].clickables[row*10+col].unlocked" class="upgAlign" v-bind:style="{'margin-left': '7px', 'margin-right': '7px',  'height': (data ? data : 'inherit'),}">
-					<clickable :layer = "layer" :data = "row*10+col" :size = "data" v-bind:style="tmp[layer].componentStyles.clickable"></clickable>
+					<clickable :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.clickable"></clickable>
 				</div></div>
 				<br>
 			</div>

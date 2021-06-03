@@ -51,11 +51,7 @@ These are the existing components, but you can create more in [components.js](/j
 - drop-down: Lets the user input a value with a dropdown menu. The argument a 2-element array: [name, options].
     The name is the name of the variable in player[layer] that the input is for, and options is an array of strings for options you can use.
 
-- upgrades: The layer's upgrades. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
-
-- milestones, challenges, achievements: Display the upgrades, milestones, and challenges for a layer, as appropriate.
-
-- buyables, clickables: Display all of the buyables/clickables for this layer, as appropriate. The argument is optional and is the size of the boxes in pixels.
+- upgrades, milestones, challenges, achievements, buyables, clickables: Displays the layers upgrades/challenges/etc, as appropriate. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
 
 - microtabs: Display a set of subtabs for an area. The argument is the name of the set of microtabs in the "microtabs" feature.
 
@@ -70,7 +66,7 @@ These are the existing components, but you can create more in [components.js](/j
 
 - toggle: A toggle button that toggles a bool value. The argument is a pair that identifies the location in player of the bool to toggle, e.g. `[layer, id]`. 'layer' also affects the color of the toggle.
 
-- grid: Displays the gridable grid for the layer. If you need more than one grid, use a layer proxy.
+- grid: Displays the gridable grid for the layer. If you need more than one grid, use a layer proxy. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
 
 - layer-proxy: Lets you use components from another layer. The argument is a pair, `[layer, data]`, consisting of the id of the layer to proxy from, and the tabFormat for the components to show.
     (Note: you cannot use a microtab within a layer proxy)

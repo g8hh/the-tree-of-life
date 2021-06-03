@@ -1,7 +1,7 @@
 # The Modding Tree changelog:
 
-### v2.6 - 6/2/21
-- Fixed issues with NaN checking. Saves should never break now unless something really unusual happens.
+## v2.6: Fixed Reality - 6/3/21
+- Fixed issues with NaN checking. The game also will not save if the save is broken.
 - Added a drop-down menu component!
 - Added upgrade-tree component!
 - Options are now saved separately, and not affected by hard resetting or importing saves.
@@ -10,10 +10,10 @@
 - Fixed background color not working on the left tab.
 - Fixed branches not updating when tree tab is not shown.
 - You can now use "this" in tabFormat!
-- Added per-row displaying for achievements, challenges, milestones, grids
+- Added per-row displaying for achievements, challenges, milestones, grids, buyables, and clickables. THIS WILL BREAK BUYABLES/CLICKABLES THAT PREVIOUSLY USED THEIR TABFORMAT ARGUMENT FOR SIZE.
 - Added onComplete for milestones.
 - Added addBuyables.
-- The prestige/sec display now shows decimals.
+- The prestige/sec display now shows non-whole numbers.
 - resetsNothing now works immediately on a reset that enables it.
 - Made the star on maxed challenges larger.
 
@@ -24,6 +24,7 @@
 - Things are 0.2% more optimized.
 - Fixed problems in the documentation.
 - Added more customization to the "mark" component (but not an easy way to access it)
+
 
 ### v2.5.11.1 - 5/27/21
 - Fixed issues caused when the tree tab is disabled.
@@ -423,7 +424,6 @@
 - Moved old changelogs to a separate place.
 - Fixed hasMilestone and incr_order.
 - Static layers now show the currency amount needed for the next one if you can buy max.
-
 
 
 ### v1.2.4 - 10/4/20

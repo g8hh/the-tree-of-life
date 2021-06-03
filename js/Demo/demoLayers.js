@@ -317,7 +317,7 @@ addLayer("c", {
                 style() {return  {'background-color': '#222222'}},
                 buttonStyle() {return {'border-color': 'orange'}},
                 content:[ 
-                    ["buyables", ""], "blank",
+                    "buyables", "blank",
                     ["row", [
                         ["toggle", ["c", "beep"]], ["blank", ["30px", "10px"]], // Width, height
                         ["display-text", function() {return "Beep"}], "blank", ["v-line", "200px"],
