@@ -221,10 +221,10 @@ function load() {
 	setupModInfo();
 
 	setupTemp();
-	updateTemp();
-	updateTemp();
+	updateTemp(true);
+	updateTemp(true);
 	updateTabFormats()
-	updateTemp()
+	updateTemp(true)
 	loadVue();
 	updateTemp()
 }

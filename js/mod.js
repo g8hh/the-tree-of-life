@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.008",
+	num: "1.008.2",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.008.2</h3><br> 
+		- Merged v2.6 of TMT.<br>
+	<br><h3 style='color: #CC0000'>v1.008.1</h3><br> 
+		- Implemented challenge 2.<br>
+		- Made the first 2x2 square possible.<br>
 	<br><h3 style='color: #CC0000'>v1.008</h3><br> 
 		- Info tab improvement in Life.<br>
 		- Added my first grid!<br>

@@ -631,8 +631,6 @@ function loadVue() {
 			particles,
 			mouseX,
 			mouseY,
-			shiftDown,
-			ctrlDown,
 			run,
 			gridRun,
 		},

@@ -85,11 +85,10 @@ function setupTempData(layerData, tmpData, funcsData) {
 }
 
 
-function updateTemp() {
-	if (tmp === undefined)
-		setupTemp()
+function updateTemp(noError = false) {
+	if (tmp === undefined) setupTemp()
 
-	updateTempData(layers, tmp, funcs)
+	updateTempData(layers, tmp, funcs, undefined, noError)
 
 	for (layer in layers){
 		let problem = ""
@@ -130,14 +129,14 @@ function updateTemp() {
 
 }
 
-function updateTempData(layerData, tmpData, funcsData, useThis) {
+function updateTempData(layerData, tmpData, funcsData, useThis, noError = false) {
 	for (item in funcsData){
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
-				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis)
+				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis, noError)
 		}
 		else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)){
-			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis)
+			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis, noError)
 		}
 		else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
 			let value
@@ -145,8 +144,9 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 			if (useThis !== undefined) value = layerData[item].bind(useThis)()
 			else value = layerData[item]()
 			if (value !== value || checkDecimalNaN(value)){
-				if (!NaNalert) {
+				if (!NaNalert && !noError) {
 					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
+					console.log(value, layerData, funcsData, tmpData, useThis)
 					clearInterval(interval);
 					NaNalert = true;
 					return

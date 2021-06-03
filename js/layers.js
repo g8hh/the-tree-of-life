@@ -3739,7 +3739,7 @@ addLayer("n", {
                                         let b = formatWhole(player.n.times) + " Nitrogen resets"
                                         return a + b
                                 }],
-                                ["milestones", [1]],
+                                "milestones",
                                 ],
                         unlocked(){
                                 return true
@@ -4712,7 +4712,7 @@ addLayer("p", {
                                         let b = formatWhole(player.p.times) + " Phosphorus resets"
                                         return a + b
                                 }],
-                                ["milestones", [1]],
+                                "milestones",
                                 ],
                         unlocked(){
                                 return true
@@ -6403,7 +6403,7 @@ addLayer("mu", {
                 },
                 "Milestones": {
                         content: ["main-display",
-                                ["milestones", [1]],
+                                "milestones",
                                 ],
                         unlocked(){
                                 return true
@@ -8220,7 +8220,7 @@ addLayer("l", {
                                   "blank", 
                                   ["challenges", [1,2,3,4,5,6,7]],
                                   "blank",
-                                  ["grid", ""],
+                                  "grid",
                                   ["clickables", [1]],
                                 ],
                         unlocked(){
@@ -8234,7 +8234,7 @@ addLayer("l", {
                                         let b = formatWhole(player.l.times) + " Life resets"
                                         return a + b
                                 }],
-                                ["milestones", [1]],
+                                "milestones",
                                 ],
                         unlocked(){
                                 return true
@@ -17716,7 +17716,7 @@ addLayer("tokens", {
                 "Milestones": {
                         content: [
                                 ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                ["milestones", [1]],
+                                "milestones",
                         ],
                         unlocked(){
                                 return true
