@@ -172,7 +172,7 @@ function loadVue() {
 	Vue.component('upgrade', {
 		props: ['layer', 'data'],
 		template: `
-		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
+		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
 			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
 			<span v-else>
@@ -503,6 +503,22 @@ function loadVue() {
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>
 
+	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('upgrade-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `<div>
+		<span class="upgRow" v-for="(row, r) in data"><table>
+			<span v-for="id in row" style = "{width: 0px; height: 0px;}" v-if="tmp[layer].upgrades[id]!== undefined && tmp[layer].upgrades[id].unlocked" class="upgAlign">
+				<upgrade :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles.upgrade" class = "treeThing"></upgrade>
+			</span>
+			<tr><table><button class="treeNode hidden"></button></table></tr>
+		</span></div>
 	`
 	})
 

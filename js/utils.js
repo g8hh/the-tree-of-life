@@ -85,6 +85,7 @@ function buyUpg(layer, id) {
 	player[layer].upgrades.push(id);
 	if (upg.onPurchase != undefined)
 		run(upg.onPurchase, upg)
+	needCanvasUpdate = true
 }
 
 function buyMaxBuyable(layer, id) {

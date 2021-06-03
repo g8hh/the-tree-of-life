@@ -109,6 +109,7 @@ addLayer("c", {
                 description: "Gain 1 Point every second.",
                 cost: new Decimal(1),
                 unlocked() { return player[this.layer].unlocked }, // The upgrade is only visible when this is true
+                branches: [12]
             },
             12: {
                 description: "Point generation is faster based on your unspent Lollipops.",
@@ -353,7 +354,8 @@ addLayer("c", {
                     ["raw-html", function() {return "<h1> C O N F I R M E D </h1>"}], "blank",
                     ["microtabs", "stuff", {'width': '600px', 'height': '350px', 'background-color': 'brown', 'border-style': 'solid'}],
                     ["display-text", "Adjust how many points H gives you!"],
-                    ["slider", ["otherThingy", 1, 30]],
+                    ["slider", ["otherThingy", 1, 30]], "blank", ["upgrade-tree", [[11], 
+                    [12, 22, 22, 11]]]
                 ]
             }
 
