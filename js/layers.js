@@ -62,6 +62,16 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                    24380e5, 29250e5, 
                 ]//1e6-1,
 
+var GEM_EFFECT_DESCRIPTIONS = {
+        101: "Boost life gain<br>*1+sqrt(x)",
+        102: "Boost point gain<br>^1+cbrt(x)",
+}
+
+var GEM_EFFECT_FORMULAS = {
+        101: (x) => x.sqrt().plus(1),
+        102: (x) => x.cbrt().plus(1)
+}
+
 /*
 All option+character:
 ¡™£¢∞§¶•ªº–≠
@@ -6271,7 +6281,7 @@ addLayer("mu", {
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
-                                        if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation"
+                                        if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation "
                                         let start = lvl + eff1 + eff2 + cost
                                         return "<br>" + start + end
                                 }
@@ -6439,6 +6449,8 @@ addLayer("l", {
                 times: 0,
                 autotimes: 0,
                 passivetime: 0,
+                activeChallengeID: 101,
+                challengesDisplayState: 0,
         }},
         color: "#BE0E00",
         branches: [],
@@ -7446,6 +7458,67 @@ addLayer("l", {
                         },
                         countsAs: [],
                 }, // inChallenge("l", 11)
+                12: {
+                        name: "Customizable", 
+                        baseReward(){
+                                return player.points.max(10).log10().max(10).log(2).max(10).log(2).sub(9)
+                        },
+                        gemGainMult(){
+                                let ret = new Decimal(1)
+                                return ret
+                        },
+                        reward(){
+                                let data = tmp.l.challenges[12]
+                                if (data.baseReward.lt(1)) return new Decimal(0)
+                                return data.baseReward.times(data.gemGainMult).floor()
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[12].goal)
+                        },
+                        onComplete(){
+                                player.l.challenges[12] = 0
+                                let data = player.l.grid[player.l.activeChallengeID]
+                                data.gems = data.gems.plus(tmp.l.challenges[12].reward)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.l.challenges[12]
+                                let br = "<br>"
+                                let a = "Dilation at 110 completions<br>"
+                                a += "Gets harder based on which challenge is selected from below" + br
+                                let b = "Goal: e1.80e308 Points" + br
+                                let c = ""
+                                if (player.l.activeChallengeID) {
+                                        let data2 = player.l.grid[player.l.activeChallengeID]
+                                        c = "Upon Completion: +" + formatWhole(data.reward) + " C"
+                                        c += (data2.hundreds*10 + data2.units) + " Gems"
+                                }
+                                let d = "Effects: Press shift to see"
+                                return a + b + c + br + d
+                        },
+                        unlocked(){
+                                return player.l.challenges[11] >= 110
+                        },
+                        countsAs: [11],
+                        getChallengeDepths(){
+                                let id = player.l.activeChallengeID
+                                let data = player.l.grid[id]
+
+                                let h = data.hundreds
+                                let u = data.units
+                                return [0, 
+                                        0, 
+                                        2*h+u-3, 
+                                        h == 3 + h == 3 + u == 3,
+                                        h == 4 + h == 4 + u == 4,
+                                        h == 5 + h == 5 + u == 5,
+                                        h == 6 + h == 6 + u == 6,
+                                        h == 7 + h == 7 + u == 7,
+                                        h == 8 + h == 8 + u == 8,]
+                        },
+                }, // inChallenge("l", 12)
         },
         buyables: {
                 rows: 3,
@@ -8032,12 +8105,101 @@ addLayer("l", {
                         },
                 },
         },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return "<h3 style='color: #0033FF'>Toggle</h3>"
+                        },
+                        display(){
+                                let x = player.l.challengesDisplayState
+                                if (x == 0) return "Display Gems"
+                                if (x == 1) return "Display description"
+                                if (x == 2) return "Display effect"
+                        },
+                        unlocked(){
+                                return player.l.challenges[11] >= 110
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.l.challengesDisplayState = (player.l.challengesDisplayState + 1) % 3
+                                if (shiftDown) {
+                                        player.l.challengesDisplayState = (player.l.challengesDisplayState + 1) % 3
+                                }
+                        },
+                },
+        },
+        grid: {
+                rows: 8,
+                cols: 8,
+                getStartData(id) {
+                        return {active: id == 101, gems: new Decimal(0), units: id % 100, hundreds: (id-id%100)/100}
+                },
+                getUnlocked(id) {
+                        return player.l.challenges[11] >= 110
+                },
+                getCanClick(data, id) {
+                        return id == 101 // for now
+                        if (data.units > 1) {
+                                if (player.l.grid[id-1].gems.eq(0)) return false
+                        }
+                        if (data.hundreds > 1) {
+                                if (player.l.grid[id-100].gems.eq(0)) return false
+                        }
+                        return true
+                },
+                onClick(data, id) {
+                        if (player.l.activeChallengeID == undefined) {
+                                player.l.activeChallengeID = id
+                                data.active = true
+                        } else {
+                                player.l.grid[player.l.activeChallengeID].active = false
+                                data.active = true
+                                player.l.activeChallengeID = id
+                        }
+                },
+                getStyle(data, id){
+                        if (data.active) {
+                                return {"background-color":"#6666CC"}
+                        }
+                        let x = ["#CC0033", "#D21A39", "#D93340", "#DF4D46", "#E6664D",
+                                 "#EC8053", "#F29959", "#F9B360",]
+                        let valId = Math.max(data.units, data.hundreds)
+                        return {"background-color": x[valId-1]}
+                },
+                getDisplay(data, id) {
+                        let x = player.l.challengesDisplayState
+                        if (x == 0) {
+                                let a = "Gems: " + formatWhole(data.gems)
+                                let b = "<br>Currently: " + (data.active ? "On" : "Off")
+                                return a + b
+                        }
+                        if (x == 1) {
+                                return GEM_EFFECT_DESCRIPTIONS[id]
+                        }
+                        return "Currently: " + format(layers.l.grid.getGemEffect(id))
+                },
+                getGemEffect(id) {
+                        if (GEM_EFFECT_FORMULAS[id] == undefined) return new Decimal(0)
+                        return GEM_EFFECT_FORMULAS[id](player.l.grid[id].gems)
+                },
+                getTitle(data, id){
+                        return "C" + (data.hundreds*10+data.units)
+                },
+        },
         tabFormat: {
                 "Challenges": {
                         content: ["main-display",
-                                ["prestige-button", ""],
-                                "blank", 
-                                ["challenges", [1,2,3,4,5,6,7]]],
+                                  ["prestige-button", ""],
+                                  "blank", 
+                                  ["challenges", [1,2,3,4,5,6,7]],
+                                  "blank",
+                                  ["grid", ""],
+                                  ["clickables", [1]],
+                                ],
                         unlocked(){
                                 return true
                         },
@@ -8080,16 +8242,17 @@ addLayer("l", {
                                 ["display-text", function(){
                                         let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)"
                                         let br = "<br>"
+                                        let br2 = br + br
                                         let b = "Life resets reset everything before Life except achievements"
                                         let c = "Life affects most prior currencies:"
                                         let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, "
                                         let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color,"
                                         let f = "A Points, B Points, C Points, D Points, and E Points."
                                         if (!tmp.l.challenges[11].unlocked){
-                                                return a + br + b + br + c + br + d + br + e + br + f
+                                                return a + br2 + b + br2 + c + br + d + br + e + br2 + f
                                         } 
                                         let g = "Dilation nerfs x → 10^(log10(x)^exp)"
-                                        let start = a + br + b + br + c + br + d + br + e + br + f + br + g
+                                        let start = a + br2 + b + br2 + c + br + d + br + e + br + f + br2 + g
                                         if (player.l.challenges[11] < 50) {
                                                 return start
                                         }
@@ -8100,13 +8263,14 @@ addLayer("l", {
                                         if (tmp.l.getBaseSubAmount.gt(0)) i += "-" + format(tmp.l.getBaseSubAmount)
                                         else i += "+" + format(tmp.l.getBaseSubAmount.times(-1))
                                         i += ")^" + formExp
-                                        return start + br + h + br + i
+                                        return start + br2 + h + br + i
                                 }],
                                 ],
                         unlocked(){
                                 return true
                         },
                 },
+                
         },
         onPrestige(){
                 player.l.times ++
@@ -14724,6 +14888,7 @@ addLayer("mini", {
                                 return hasMilestone("tokens", 23) 
                         },
                         shouldNotify(){
+                                if (hasMilestone("l", 1)) return false
                                 let y = ["11", "12", "13", "14", "15", 
                                         "21", "22", "23", "24", "25", 
                                         "31", "32", "33", "34", "35", 
@@ -14772,6 +14937,7 @@ addLayer("mini", {
                                 return hasChallenge("n", 32)
                         },
                         shouldNotify(){
+                                if (hasMilestone("l", 1)) return false
                                 let y = [121, 122, 123, 131, 132, 
                                          133, 141, 142, 143, 151, 
                                          152, 153, 161, 162, 163, 
@@ -14838,6 +15004,7 @@ addLayer("mini", {
                                 return hasUpgrade("n", 35)
                         },
                         shouldNotify(){
+                                if (hasMilestone("l", 1)) return false
                                 x = [201, 202, 203, 211, 212,
                                      213, 221, 222, 223, 231, 
                                      232, 233, 241,]
@@ -14846,7 +15013,9 @@ addLayer("mini", {
                                         if (layers.mini.buyables[id] == undefined) continue
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (tmp.mini.buyables[id].canAfford) {
-                                                if (getBuyableAmount("mini", id).eq(0) || id == 201) return true
+                                                if (getBuyableAmount("mini", id).eq(0)) return true
+                                                if (id != 201) continue
+                                                if (!hasMilestone("p", 8)) return true
                                         }
                                 }
                                 return false

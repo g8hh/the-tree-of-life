@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.007",
+	num: "1.008",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.008</h3><br> 
+		- Info tab improvement in Life.<br>
+		- Added my first grid!<br>
+		- Added another Life challenge.<br>
+		- Improved minigame highlighting.<br>
 	<br><h3 style='color: #CC0000'>v1.007</h3><br> 
 		- Added a save to the bank.<br>
 		- Dilation is now fully completeable.<br>
@@ -420,7 +425,10 @@ let winText = `Congratulations! You have reached the end and beaten this game, b
 // (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything",
 					"costFormula",
-					"costFormulaID"]
+					"costFormulaID",
+					"getCoords",
+					"getMaxCoord",
+					"getGemEffect",]
 
 function getStartPoints(){
     	return new Decimal(modInfo.initialStartPoints)
