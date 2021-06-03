@@ -3,17 +3,22 @@
 ### v2.5.12 - 6/2/21
 - Fixed issues with NaN checking. Saves should never break now unless something really unusual happens.
 - Fixed demo.html
+- Fixed branches not working on the right tab.
+- Fixed background color not working on the left tab.
+- Fixed branches not updating when tree tab is not shown.
 - You can now use "this" in tabFormat!
 - Added onComplete for milestones.
 - Added addBuyables.
 - The prestige/sec display now shows decimals.
 - resetsNothing now works immediately on a reset that enables it.
+- Made the star on maxed challenges larger.
 
 - Fixed challenges with no currencyDisplayName using "points" instead of the mod's pointsName.
 - inChallenge no longer can return undefined.
 - Fixed certain things skipping negative rows (now they are treated like non-numeric rows, and don't appear in the tree still).
 - Things are 0.2% more optimized.
 - Fixed problems in the documentation.
+- Added more customization to the "mark" component (but not an easy way to access it)
 
 ### v2.5.11.1 - 5/27/21
 - Fixed issues caused when the tree tab is disabled.

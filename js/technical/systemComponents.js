@@ -187,10 +187,10 @@ var systemComponents = {
 	},
 
 	'node-mark': {
-		props: ['layer', 'data'],
+		props: ['layer', 'data', 'offset', 'scale'],
 		template: `<div v-if='data'>
-			<div v-if='data === true' class='star' style='position: absolute; left: -10px; top: -10px;'></div>
-			<img v-else class='mark' style='position: absolute; left: -25px; top: -10px;' v-bind:src="data"></div>
+			<div v-if='data === true' class='star' v-bind:style='{position: "absolute", left: (offset-10) + "px", top: (offset-10) + "px", transform: "scale( " + scale + ", " + scale + ")"}'></div>
+			<img v-else class='mark' v-bind:style='{position: "absolute", left: (offset-10) + "px", top: (offset-10) + "px", transform: "scale( " + scale + ", " + scale + ")"}' v-bind:src="data"></div>
 		</div>
 		`
 	},
