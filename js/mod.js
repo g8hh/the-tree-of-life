@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.008.2",
+	num: "1.008.3",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.008.3</h3><br> 
+		- Added two Life milestones.<br>
+		- Made C12 and C21 completeable.<br>
+		- Gave C21 a tentative effect [not implement though].<br>
 	<br><h3 style='color: #CC0000'>v1.008.2</h3><br> 
 		- Merged v2.6 of TMT.<br>
 	<br><h3 style='color: #CC0000'>v1.008.1</h3><br> 
