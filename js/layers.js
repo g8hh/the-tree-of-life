@@ -66,7 +66,7 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
 var GEM_EFFECT_DESCRIPTIONS = {
         101: "Boost life gain<br>*1+sqrt(x)",
         102: "Boost point gain<br>^1+cbrt(x)",
-        201: "Divide N → ΔP cost [not yet]<br>10^cbrt(x)"
+        201: "Divide N → ΔP initial cost<br>10^cbrt(x)"
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -1462,6 +1462,10 @@ addLayer("c", {
                 }
 
                 if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                if (inChallenge("l", 12)) {
+                        let depth = tmp.l.challenges[12].getChallengeDepths[3] || 0
+                                                ret = dilate(ret, Decimal.pow(.99, depth))
+                }
 
                 return ret
         },
@@ -1930,6 +1934,10 @@ addLayer("o", {
 
                 if (inChallenge("n", 12))       ret = ret.root(2)
                 if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                if (inChallenge("l", 12)) {
+                        let depth = tmp.l.challenges[12].getChallengeDepths[3] || 0
+                                                ret = dilate(ret, Decimal.pow(.99, depth))
+                }
 
                 return ret
         },
@@ -1962,7 +1970,7 @@ addLayer("o", {
                 if (hasUpgrade("n", 32)) ret = ret.times(100)
 
                 return ret.max(.00001)
-        }, //oxygen gain
+        }, //oxygen gain o gain ogain oxygengain 
         getGainMult(){
                 if (inChallenge("n", 42)) return new Decimal(1)
                 let x = new Decimal(1)
@@ -6260,7 +6268,10 @@ addLayer("mu", {
                         },
                         initialCost(){
                                 let ret = new Decimal(1e4)
+                                
                                 ret = ret.div(tmp.mu.buyables[33].effect)
+                                ret = ret.div(layers.l.grid.getGemEffect(201))
+
                                 return ret
                         },
                         unlocked(){
@@ -8186,17 +8197,19 @@ addLayer("l", {
                                 let id = player.l.activeChallengeID
                                 let data = player.l.grid[id]
 
+                                if (player.points.lt(0)) x = 3
+
                                 let h = data.hundreds
                                 let u = data.units
                                 return [0, 
                                         0, 
                                         2*h+u-3, 
-                                        h >= 3 + h >= 3 + u >= 3,
-                                        h >= 4 + h >= 4 + u >= 4,
-                                        h >= 5 + h >= 5 + u >= 5,
-                                        h >= 6 + h >= 6 + u >= 6,
-                                        h >= 7 + h >= 7 + u >= 7,
-                                        h >= 8 + h >= 8 + u >= 8,]
+                                        (h >= 3) + (h >= 3) + (u >= 3),
+                                        (h >= 4) + (h >= 4) + (u >= 4),
+                                        (h >= 5) + (h >= 5) + (u >= 5),
+                                        (h >= 6) + (h >= 6) + (u >= 6),
+                                        (h >= 7) + (h >= 7) + (u >= 7),
+                                        (h >= 8) + (h >= 8) + (u >= 8),]
                         },
                 }, // inChallenge("l", 12)
         },
@@ -8211,7 +8224,7 @@ addLayer("l", {
                 },
                 getCanClick(data, id) {
                         if (inChallenge("l", 12)) return false
-                        let maxAllowed = 2 // manually change this
+                        let maxAllowed = 3 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
@@ -8343,7 +8356,7 @@ addLayer("l", {
                                         let step3 = step2 + br2 + j + br + k + br + l + br + m + br + n + br + o
 
                                         let c2 = "Challenge 2: Add .01 to µ gain exponent"
-                                        let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^[tbd]"
+                                        let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99"
                                         let c4 = "Challenge 4: Subtract [tbd] from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^[tbd]"
                                         let c6 = "Challenge 6: Divide N → ΔN base by 1+depth [tbd]"
