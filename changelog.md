@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- If an upgrade has both canAfford and cost, it checks both.
+
 ## v2.6.0.1 - 6/4/21
 - Removed excess NaN alerts (now only checks player, not temp).
 - Fixed background images covering up tree branches.

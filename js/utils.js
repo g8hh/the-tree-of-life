@@ -12,9 +12,12 @@ function respecBuyables(layer) {
 function canAffordUpgrade(layer, id) {
 	let upg = tmp[layer].upgrades[id]
 	if(tmp[layer].deactivated) return false
-	if (tmp[layer].upgrades[id].canAfford !== undefined) return tmp[layer].upgrades[id].canAfford
+	if (tmp[layer].upgrades[id].canAfford === false) return false
 	let cost = tmp[layer].upgrades[id].cost
-	return canAffordPurchase(layer, upg, cost)
+	if (cost !== undefined) 
+		return canAffordPurchase(layer, upg, cost)
+
+	return true
 }
 
 function canBuyBuyable(layer, id) {
@@ -25,7 +28,6 @@ function canBuyBuyable(layer, id) {
 
 
 function canAffordPurchase(layer, thing, cost) {
-
 	if (thing.currencyInternalName) {
 		let name = thing.currencyInternalName
 		if (thing.currencyLocation) {
