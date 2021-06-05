@@ -1,5 +1,6 @@
 // ************ Save stuff ************
 function save() {
+	NaNcheck(player)
 	if (NaNalert) return
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));

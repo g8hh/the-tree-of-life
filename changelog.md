@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+## v2.6.0.1 - 6/4/21
+- Removed excess NaN alerts (now only checks player, not temp).
+- Fixed background images covering up tree branches.
+
 ## v2.6: Fixed Reality - 6/3/21
 - Fixed issues with NaN checking. The game also will not save if the save is broken.
 - Added a drop-down menu component!

@@ -768,3 +768,10 @@ button > * {
 	background-color: var(--background);
 	top: 0
 }
+
+.noBackground {
+	background: transparent !important;
+	background-image: none !important;
+	--background: transparent !important;
+}
+
