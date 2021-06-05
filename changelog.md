@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
 - If an upgrade has both canAfford and cost, it checks both.
+- Releasing a held buyable/clickable with onHold doesn't click it again.
 
 ## v2.6.0.1 - 6/4/21
 - Removed excess NaN alerts (now only checks player, not temp).
