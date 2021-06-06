@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.008.5",
+	num: "1.008.6",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.008.6</h3><br> 
+		- A couple small balance changes.<br>
+		- Fixed some bugs with tokens being zero.<br>
 	<br><h3 style='color: #CC0000'>v1.008.5</h3><br> 
 		- Made some checks to only run format when necessary.<br>
 		- Gave C22 Gems an effect.<br>

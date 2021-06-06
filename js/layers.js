@@ -16,7 +16,12 @@ function getPointGen() {
                                         gain = gain.pow(tmp.tokens.buyables[41].effect)
         if (hasUpgrade("n", 11))        gain = gain.pow(1.001)
         if (hasMilestone("l", 1))       gain = gain.pow(tmp.l.milestones[1].effect)
-        if (hasMilestone("l", 18))      gain = gain.pow(2)
+        if (hasMilestone("l", 18))      {
+                                        gain = gain.pow(2)
+                if (player.l.challenges[11] == 33) {
+                                        gain = gain.pow(1.5)
+                }
+        }
         if (hasUpgrade("mu", 51))       gain = gain.pow(player.l.points.max(10).log10())
         if (hasMilestone("l", 31)) {
                 let exp = new Decimal(player.l.challenges[11]).sub(100).max(0)
@@ -4054,7 +4059,7 @@ addLayer("p", {
 
                 if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
                 if (hasUpgrade("p", 24))        x = x.times(tmp.p.upgrades[24].effect)
-                if (hasMilestone("mu", 1))      x = x.times(player.tokens.total.pow(player.mu.milestones.length))
+                if (hasMilestone("mu", 1))      x = x.times(player.tokens.total.max(1).pow(player.mu.milestones.length))
                                                 x = x.times(tmp.l.effect)
 
                 return x
@@ -5500,7 +5505,7 @@ addLayer("mu", {
                                 let a = "N → ΔP base is 9"
                                 return a
                         },
-                        cost:() => new Decimal(1e26),
+                        cost:() => new Decimal(5e25),
                         unlocked(){
                                 return player.l.challenges[11] >= 34
                         }, // hasUpgrade("mu", 41)
@@ -7318,7 +7323,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Reduce token cost exponent to .49 and square point gain.<br>"
+                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.5 if you are at exactly 33 completions.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 18)
@@ -7355,7 +7360,7 @@ addLayer("l", {
                                 return a + b
                         },
                         requirement(){
-                                return new Decimal("e3.5e306")
+                                return new Decimal("e3.2e306")
                         },
                         done(){
                                 if (player.l.challenges[11] > 35) return true
@@ -7367,7 +7372,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let init = "Note: Requires having 1e3.5e306 being in Dilation with 35 completions.<br>"
+                                let init = "Note: Requires having 1e3.2e306 being in Dilation with 35 completions.<br>"
                                 let a = "Reward: N → ΔP cost base is 7.<br>"
                                 return init + a
                         },
@@ -15939,7 +15944,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(20)
-                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.pow(3))
+                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.max(1).pow(3))
                                 return ret
                         },
                         effect(){
@@ -15989,7 +15994,7 @@ addLayer("tokens", {
                         },
                         base(){
                                 let ret = new Decimal(20)
-                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.pow(3))
+                                if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.max(1).pow(3))
                                 return ret
                         },
                         effect(){
