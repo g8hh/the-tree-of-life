@@ -12,21 +12,28 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.008.4",
+	num: "1.008.5",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 1e311 Lives OR the last save in the bank<br><br>
+		- 1 C13 Gem OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.008.5</h3><br> 
+		- Made some checks to only run format when necessary.<br>
+		- Gave C22 Gems an effect.<br>
+		- Added a row of achievements.<br>
+		- Added a save to the bank.<br>
+		- Note: I haven't gotten to a C13 gem, but I am close so it should be possible.<br>
 	<br><h3 style='color: #CC0000'>v1.008.4</h3><br> 
 		- Allowed C22 to be completeable.<br>
+		- Implemented C21 reward.<br>
 		- Next up is C22 reward.<br>
 	<br><h3 style='color: #CC0000'>v1.008.3</h3><br>
 		- Added two Life milestones.<br>

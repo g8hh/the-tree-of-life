@@ -328,6 +328,13 @@ PROGRESSION_MILESTONES = {
         222: () => player.l.challenges[11] >= 102,
         223: () => player.l.challenges[11] >= 106,
         224: () => player.l.challenges[11] >= 110,
+        225: () => player.l.grid[102].gems.gt(0),
+        226: () => player.l.grid[201].gems.gt(0),
+        227: () => player.l.grid[202].gems.gt(0),
+        228: () => player.l.grid[103].gems.gt(0),
+        229: () => player.l.grid[203].gems.gt(0),
+        230: () => player.l.grid[301].gems.gt(0),
+        231: () => player.l.grid[302].gems.gt(0),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -555,6 +562,13 @@ PROGRESSION_MILESTONES_TEXT = {
         222: "102 Dilation completions",
         223: "106 Dilation completions",
         224: "110 Dilation completions",
+        225: "a C12 Gem",
+        226: "a C21 Gem",
+        227: "a C22 Gem",
+        228: "a C13 Gem",
+        229: "a C23 Gem",
+        230: "a C31 Gem",
+        231: "a C32 Gem",
 }
 
 
