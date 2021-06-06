@@ -8454,7 +8454,7 @@ addLayer("l", {
                                 let data = tmp.l.challenges[12]
                                 let br = "<br>"
                                 let a = "Dilation at 110 completions<br>"
-                                a += "Gets harder based on which challenge is selected from below" + br
+                                a += "Gets harder based on which challenge is selected from below (check info)" + br
                                 let b = "Goal: e1.80e308 Points" + br
 
                                 let data2 = player.l.grid[player.l.activeChallengeID]
@@ -8462,7 +8462,7 @@ addLayer("l", {
                                 c += (data2.hundreds*10 + data2.units) + " Gems"
                                 c += "<br>Next at " + format(tmp.l.challenges[12].nextAt)
 
-                                let d = "Effects: Press shift to see"
+                                let d = "Effects: Toggle below to see"
                                 return a + b + c + br + d
                         },
                         unlocked(){
