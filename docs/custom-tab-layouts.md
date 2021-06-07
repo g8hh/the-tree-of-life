@@ -62,7 +62,7 @@ These are the existing components, but you can create more in [components.js](/j
 - tree: Displays a tree. The argument is an array of arrays containing the names of the nodes in the tree (first by row, then by column)
     [See here for more information on tree layouts and nodes!](trees-and-tree-customization.md)
 
-- upgrade-tree: Displays a of upgrades from this layer. The argument is an array of arrays containing the ids of the upgrades in the tree (first by row, then by column)
+- upgrade-tree, buyable-tree, clickable-tree: Displays a tree of upgrades/buyables/clickables from this layer. The argument is an array of arrays containing the ids of the upgrade/etc in the tree (first by row, then by column). A tree can only have one type of component in it.
 
 - toggle: A toggle button that toggles a bool value. The argument is a pair that identifies the location in player of the bool to toggle, e.g. `[layer, id]`. 'layer' also affects the color of the toggle.
 

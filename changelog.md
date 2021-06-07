@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Added buyable and clickable trees.
+
 ## v2.6.1 - 6/7/21
 - Added global background style to mod.js.
 - Tree branches can have custom line widths.

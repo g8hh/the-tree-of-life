@@ -55,3 +55,7 @@ You can also use these features on the clickables object to add a button above a
 - masterButtonText: **optional**. Text to display on the Master Button.
 
 - showMasterButton(): **optional**. A function determining whether or not to show the button, if masterButtonPress is defined. Defaults to true if absent.
+
+
+
+- branches: **optional**, This is primarially useful for clickable trees. An array of clickable ids. A line will appear from this clickable to all of the clickables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the clickable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
