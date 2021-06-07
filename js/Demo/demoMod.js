@@ -66,6 +66,10 @@ function isEndgame() {
 
 // Less important things beyond this point!
 
+// Style for the background, can be a function
+var backgroundStyle = {
+}
+
 // You can change this if you have things that can be messed up by long tick lengths
 function maxTickLength() {
 	return(3600) // Default is 1 hour which is just arbitrarily large

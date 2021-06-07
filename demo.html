@@ -32,7 +32,7 @@
 </head>
 
 <body onload="load()" onmousemove="updateMouse(event)">
-	<div id="app" v-bind:style = "tmp.backgroundStyle">
+	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">
@@ -126,5 +126,7 @@
 			<bg :layer="player.tab" ></bg>
 
 		</div>
+		<div class = "bg2" v-bind:style = "tmp.backgroundStyle"></div>
+
 	</div>
 </body>
