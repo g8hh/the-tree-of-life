@@ -7,6 +7,7 @@
 - Releasing a held buyable/clickable with onHold doesn't click it again.
 - Fixed hard resetting while NaN'ed and exporting NaN saves for debugging.
 - Attempt to fix buttons sometimes not updating.
+- Added "instant" feature for bars. (not useful for most people)
 - Improvements to theme code, partially by Cubedey.
 
 ## v2.6.0.1 - 6/4/21

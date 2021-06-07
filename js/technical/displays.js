@@ -116,6 +116,10 @@ function constructBarStyle(layer, id) {
 		case DEFAULT:
 			style.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)'
 	}
+
+	if (bar.instant) {
+		style.fillDims['transition-duration'] = '0s'
+	}
 	return style
 }
 
