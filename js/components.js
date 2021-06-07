@@ -510,15 +510,25 @@ function loadVue() {
 		computed: {
 			key() {return this.$vnode.key}
 		},
+		template: `<thing-tree :layer="layer" :data = "data" :type = "'upgrade'"></thing-tree>`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('thing-tree', {
+		props: ['layer', 'data', 'type'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
 		template: `<div>
 		<span class="upgRow" v-for="(row, r) in data"><table>
-			<span v-for="id in row" style = "{width: 0px; height: 0px;}" v-if="tmp[layer].upgrades[id]!== undefined && tmp[layer].upgrades[id].unlocked" class="upgAlign">
-				<upgrade :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles.upgrade" class = "treeThing"></upgrade>
+			<span v-for="id in row" style = "{width: 0px; height: 0px;}" v-if="tmp[layer][type+'s'][id]!== undefined && tmp[layer][type+'s'][id].unlocked" class="upgAlign">
+				<div v-bind:is="type" :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles[type]" class = "treeThing"></div>
 			</span>
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>
 	`
 	})
+
 
 	// Updates the value in player[layer][data]
 	Vue.component('text-input', {
