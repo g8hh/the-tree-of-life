@@ -1,7 +1,10 @@
 # The Modding Tree changelog:
 
+- Added backgroundStyle to mod.js.
 - If an upgrade has both canAfford and cost, it checks both.
 - Releasing a held buyable/clickable with onHold doesn't click it again.
+- Attempt to fix buttons sometimes not updating.
+- Improvements to theme code, partially by Cubedey.
 
 ## v2.6.0.1 - 6/4/21
 - Removed excess NaN alerts (now only checks player, not temp).

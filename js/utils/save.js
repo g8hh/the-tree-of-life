@@ -222,7 +222,7 @@ function loadOptions() {
 		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
 	else 
 		options = getStartOptions()
-	
+	if (themes.indexOf(options.theme) < 0) theme = "default"
 
 }
 
