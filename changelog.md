@@ -5,6 +5,7 @@
 - Tree branches can have custom line widths.
 - If an upgrade has both canAfford and cost, it checks both. (So you can use canAfford for other things)
 - Releasing a held buyable/clickable with onHold doesn't click it again.
+- Fixed hard resetting while NaN'ed and exporting NaN saves for debugging.
 - Attempt to fix buttons sometimes not updating.
 - Improvements to theme code, partially by Cubedey.
 

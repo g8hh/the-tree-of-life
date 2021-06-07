@@ -1,7 +1,7 @@
 // ************ Save stuff ************
-function save() {
+function save(force) {
 	NaNcheck(player)
-	if (NaNalert) return
+	if (NaNalert && !force) return
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
 
@@ -257,7 +257,7 @@ function NaNcheck(data) {
 	}
 }
 function exportSave() {
-	if (NaNalert) return
+	//if (NaNalert) return
 	let str = btoa(JSON.stringify(player));
 
 	const el = document.createElement("textarea");
@@ -279,6 +279,7 @@ function importSave(imported = undefined, forced = false) {
 		player.versionType = modInfo.id;
 		fixSave();
 		versionCheck();
+		NaNcheck(save)
 		save();
 		window.location.reload();
 	} catch (e) {
