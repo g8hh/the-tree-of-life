@@ -25,6 +25,7 @@ var traversableClasses = []
 function setupTemp() {
 	tmp = {}
 	tmp.pointGen = {}
+	tmp.backgroundStyle = {}
 	tmp.displayThings = []
 	tmp.scrolled = 0
 	funcs = {}
@@ -103,6 +104,8 @@ function updateTemp() {
 	}
 
 	tmp.pointGen = getPointGen()
+	tmp.backgroundStyle = readData(backgroundStyle)
+
 	tmp.displayThings = []
 	for (thing in displayThings){
 		let text = displayThings[thing]
