@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.009",
+	num: "1.010",
 	name: "Beginnings",
 }
 
@@ -25,7 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.009</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.010</h3><br>
+		- Added a Life milestone.<br>
+		- Gave C31 and C32 a reward.<br>
+		- Made C3 more stringent.<br>
+		- Fixed a couple wording issues.<br>
+	<br><h3 style='color: #CC0000'>v1.009</h3><br>
 		- Gave C13/23 rewards.<br>
 		- Made C23 completeable.<br>
 		- Nerfed Life milestone 13 in hard.<br>

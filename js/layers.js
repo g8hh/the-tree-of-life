@@ -37,6 +37,10 @@ function getPointGen() {
         }
                                         gain = gain.pow(layers.l.grid.getGemEffect(102))
         if (hasMilestone("l", 36))      gain = gain.pow(1.1)
+        if (true) {
+                let base = layers.l.grid.getGemEffect(301)
+                                        gain = gain.pow(base.pow(tmp.l.getNonZeroGemCount))
+        }
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -76,6 +80,9 @@ var GEM_EFFECT_DESCRIPTIONS = {
         202: "Add to α → ∂𝛾 base<br>log10(1+x)/10",
         103: "Add to N → ΔN base<br>sqrt(x)/10+<wbr>cbrt(x)/5",
         203: "Add to Constant base<br>log10(1+x)/200",
+        301: "Boost point gain per non-0 gem count<br>ln(e+x)",
+        302: "Add to β → ∂𝛾 base<br>log10(1+x)/10",
+        303: "Less tokens for prestige<br>floor(log2<wbr>(log2(2+2x)))"
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -85,6 +92,41 @@ var GEM_EFFECT_FORMULAS = {
         202: (x) => x.plus(1).log10().div(10),
         103: (x) => x.sqrt().div(10).plus(x.cbrt().div(5)),
         203: (x) => x.plus(1).log10().div(200),
+        301: (x) => x.plus(Math.E).ln(),
+        302: (x) => x.plus(1).log10().div(10),
+        303: (x) => x.times(2).plus(2).log(2).log(2).floor(),
+}
+
+function nCk(n, k){
+        return binomial(n, k)
+}
+
+var binomials = [
+        [1],
+        [1,1],
+        [1,2,1],
+        [1,3,3,1],
+        [1,4,6,4,1],
+        [1,5,10,10,5,1],
+        [1,6,15,20,15,6,1],
+        [1,7,21,35,35,21,7,1],
+        [1,8,28,56,70,56,28,8,1],
+];
+
+// step 2: a function that builds out the LUT if it needs to.
+function binomial(n,k) {
+        if (n > 30) return 
+        while (n >= binomials.length) {
+                let s = binomials.length;
+                let nextRow = [];
+                nextRow[0] = 1;
+                for (let i = 1, prev = s - 1; i < s; i++) {
+                        nextRow[i] = binomials[prev][i-1] + binomials[prev][i];
+                }
+                nextRow[s] = 1;
+                binomials.push(nextRow);
+        }
+        return binomials[n][k];
 }
 
 /*
@@ -1476,7 +1518,8 @@ addLayer("c", {
                 if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
                 if (inChallenge("l", 12)) {
                         let depth = tmp.l.challenges[12].getChallengeDepths[3] || 0
-                                                ret = dilate(ret, Decimal.pow(.99, depth))
+                        let exp = nCk(depth + 1, 2)
+                                                ret = dilate(ret, Decimal.pow(.99, exp))
                 }
 
                 return ret
@@ -1948,7 +1991,8 @@ addLayer("o", {
                 if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
                 if (inChallenge("l", 12)) {
                         let depth = tmp.l.challenges[12].getChallengeDepths[3] || 0
-                                                ret = dilate(ret, Decimal.pow(.99, depth))
+                        let exp = nCk(depth + 1, 2)
+                                                ret = dilate(ret, Decimal.pow(.99, exp))
                 }
 
                 return ret
@@ -6754,7 +6798,7 @@ addLayer("l", {
                         },
                         toggles:() => [["l", "autobuyhco"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplcation.<br>"
+                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 2)
@@ -7414,6 +7458,24 @@ addLayer("l", {
                                 return a
                         },
                 }, // hasMilestone("l", 37)
+                38: {
+                        requirementDescription(){
+                                return "Requires: 1.00e434 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e434")
+                        },
+                        done(){
+                                return tmp.l.milestones[38].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: β → ∂α's log10 becomes log8.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 38)
         },
         buyables: {
                 rows: 3,
@@ -7658,6 +7720,8 @@ addLayer("l", {
                         },
                         base(){
                                 let ret = player.tokens.total.max(10).log10()
+
+                                if (hasMilestone("l", 38)) ret = ret.times(Math.log(10)/Math.log(8))
                                 
                                 return ret
                         },
@@ -7674,6 +7738,7 @@ addLayer("l", {
                                 let eff2 = format(tmp.l.buyables[21].effect) + " to Life gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 21)) + " Lives</b><br>"
                                 let eformula = "log10(tokens)^x<br>" + format(tmp.l.buyables[21].base) + "^x"
+                                if (hasMilestone("l", 38)) eformula = eformula.replace("log10", "log8")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -7781,6 +7846,8 @@ addLayer("l", {
                         },
                         base(){
                                 let ret = new Decimal(2)
+
+                                ret = ret.plus(layers.l.grid.getGemEffect(302))
                                 
                                 return ret
                         },
@@ -7796,7 +7863,7 @@ addLayer("l", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.l.buyables[23].effect) + " to prior exp dividers</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 23)) + " Lives</b><br>"
-                                let eformula = format(tmp.l.buyables[23].base) + "*x"
+                                let eformula = format(tmp.l.buyables[23].base, 4) + "*x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8159,9 +8226,32 @@ addLayer("l", {
                         },
                 }, // inChallenge("l", 12)
         },
+        getNonZeroGemCount(){
+                let data = player.l.grid
+                let keys = ["101", "102", "103", "104", "105", "106", "107", "108", 
+                            "201", "202", "203", "204", "205", "206", "207", "208", 
+                            "301", "302", "303", "304", "305", "306", "307", "308", 
+                            "401", "402", "403", "404", "405", "406", "407", "408", 
+                            "501", "502", "503", "504", "505", "506", "507", "508", 
+                            "601", "602", "603", "604", "605", "606", "607", "608", 
+                            "701", "702", "703", "704", "705", "706", "707", "708", 
+                            "801", "802", "803", "804", "805", "806", "807", "808"]
+                let a = 0
+                for (i in keys) {
+                        let id = keys[i]
+                        if (data[id].gems.gt(0)) a += 1
+                }
+                return a
+        },
         grid: {
-                rows: 8,
-                cols: 8,
+                rows(){
+                        return false ? 8 : 3
+                },
+                cols(){
+                        return false ? 8 : 3
+                },
+                maxRows: 8,
+                maxCols: 8,
                 getStartData(id) {
                         return {active: id == 101, gems: new Decimal(0), units: id % 100, hundreds: (id-id%100)/100}
                 },
@@ -8169,7 +8259,6 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110
                 },
                 getCanClick(data, id) {
-                        if (inChallenge("l", 12)) return false
                         let maxAllowed = 3 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
@@ -8182,6 +8271,9 @@ addLayer("l", {
                         return true
                 },
                 onClick(data, id) {
+                        if (inChallenge("l", 12) && id != player.l.activeChallengeID) {
+                                player.l.activeChallenge = null
+                        }
                         if (player.l.activeChallengeID == undefined) {
                                 player.l.activeChallengeID = id
                                 data.active = true
@@ -8215,9 +8307,12 @@ addLayer("l", {
                         }
                         if (id == 203) {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
-                                return "Currently: " + f + "/100"
+                                return "Currently:<br>" + f + "/100"
                         }
-                        return "Currently: " + format(layers.l.grid.getGemEffect(id), 4)
+                        if (id == 303) {
+                                return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(303))
+                        }
+                        return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
                 },
                 getGemEffect(id) {
                         if (GEM_EFFECT_FORMULAS[id] == undefined) return new Decimal(0)
@@ -8314,8 +8409,8 @@ addLayer("l", {
                                         let o = "So in effect you are in challenges 2/3/4/5 a total of 10/3/3/1 times."
                                         let step3 = step2 + br2 + j + br + k + br + l + br + m + br + n + br + o
 
-                                        let c2 = "Challenge 2: Add .01 to µ gain exponent"
-                                        let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99"
+                                        let c2 = "Challenge 2: Add .01 to µ cost exponent"
+                                        let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                         let c4 = "Challenge 4: Subtract [tbd] from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^[tbd]"
                                         let c6 = "Challenge 6: Divide N → ΔN base by 1+depth [tbd]"
@@ -8323,7 +8418,7 @@ addLayer("l", {
                                         let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
-                                        let p = "Note: All above descriptions except challenge 6 are per depth/time you are in the challenge.<br>"
+                                        let p = "Note: All above descriptions are per depth/time you are in the challenge unless otherwise stated.<br>"
 
                                         let step4 = step3 + br2 + challs + br + p
 
@@ -9052,7 +9147,7 @@ addLayer("mini", {
                 }
 
                 if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
-                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy()
+                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
                 }
 
                 if (tmp.mini.tabFormat.D.unlocked) {
@@ -15222,6 +15317,19 @@ addLayer("tokens", {
                 }
                 return !player.tokens.autobuyradio || !hasMilestone("n", 7)
         },
+        getMinusEffectiveTokens(){
+                let a = 0
+                if (hasUpgrade("tokens", 73))   a += 1
+                if (hasMilestone("p", 1))       a += 1
+                if (hasUpgrade("p", 11))        a += 1
+                if (hasUpgrade("mu", 22))       a += 1
+                if (hasUpgrade("mu", 24))       a += 1
+                if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/2)
+                if (hasUpgrade("p", 41))        a += 1
+                                                a += layers.l.grid.getGemEffect(303).toNumber()
+                
+                return a
+        },
         getNextAt(){
                 let log_costs = TOKEN_COSTS
                 
@@ -15230,13 +15338,7 @@ addLayer("tokens", {
 
                 let getid = player.tokens.total.toNumber()
 
-                if (hasUpgrade("tokens", 73))   getid += -1
-                if (hasMilestone("p", 1))       getid += -1
-                if (hasUpgrade("p", 11))        getid += -1
-                if (hasUpgrade("mu", 22))       getid += -1
-                if (hasUpgrade("mu", 24))       getid += -1
-                if (hasMilestone("l", 9))       getid -= Math.floor(player.l.challenges[11]/2)
-                if (hasUpgrade("p", 41))        getid += -1
+                getid -= tmp.tokens.getMinusEffectiveTokens
                 
                 if (getid < 0) return Decimal.pow(10, 5000)
 
@@ -15496,8 +15598,9 @@ addLayer("tokens", {
                         title: "<bdi style='color:#FF0000'>Radio Waves</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(11),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
-                        buy(){
+                        buy(auto = false){//player.tokens.autobuyradio && hasMilestone("n", 7)
                                 if (!this.canAfford()) return 
+                                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !auto) return 
                                 player.tokens.buyables[11] = player.tokens.buyables[11].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[11].cost)
                         },
