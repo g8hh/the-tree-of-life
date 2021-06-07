@@ -1,6 +1,7 @@
 # The Modding Tree changelog:
 
-- Added backgroundStyle to mod.js.
+- Added global background style to mod.js.
+- Tree branches can have custom line widths.
 - If an upgrade has both canAfford and cost, it checks both.
 - Releasing a held buyable/clickable with onHold doesn't click it again.
 - Attempt to fix buttons sometimes not updating.

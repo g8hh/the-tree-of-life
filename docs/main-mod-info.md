@@ -54,6 +54,8 @@ function addedPlayerData() { return {
 
 Less important things beyond this point!
 
+- backgroundStyle: A CSS object containing the styling for the background of the full game. Can be a function!
+
 - maxTickLength(): Returns the maximum tick length, in milliseconds. Only really useful if you have something that reduces over time, which long ticks mess up (usually a challenge).
 
 - fixOldSave(): Can be used to modify a save file when loading into a new version of the game. Use this to undo inflation, never forcibly hard reset your players.

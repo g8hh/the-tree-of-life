@@ -65,4 +65,4 @@ If you want to do something more complicated like upgrades that cost two currenc
 
 
 
-- branches: **optional**, This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors).
+- branches: **optional**, This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2 or 3-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). The third element optionally specifies line width.
