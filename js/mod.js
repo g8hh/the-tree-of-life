@@ -12,19 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.008.6",
+	num: "1.009",
 	name: "Beginnings",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 1 C13 Gem OR the last save in the bank<br><br>
+		- 1 C23 Gem OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.009</h3><br> 
+		- Gave C13/23 rewards.<br>
+		- Made C23 completeable.<br>
+		- Nerfed Life milestone 13 in hard.<br>
+		- Slightly buffed Life milestone 36.<br>
+		- Added a new Life milestones.<br>
+		- Fixed milestone titles.<br>
+		- Addded a save to the bank.<br>
 	<br><h3 style='color: #CC0000'>v1.008.6</h3><br> 
 		- A couple small balance changes.<br>
 		- Fixed some bugs with tokens being zero.<br>

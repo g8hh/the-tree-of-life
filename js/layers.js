@@ -36,6 +36,7 @@ function getPointGen() {
                                         gain = gain.pow(Decimal.pow(base, exp))
         }
                                         gain = gain.pow(layers.l.grid.getGemEffect(102))
+        if (hasMilestone("l", 36))      gain = gain.pow(1.1)
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -73,6 +74,8 @@ var GEM_EFFECT_DESCRIPTIONS = {
         102: "Boost point gain<br>^1+cbrt(x)",
         201: "Divide N → ΔP initial cost<br>10^cbrt(x)",
         202: "Add to α → ∂𝛾 base<br>log10(1+x)/10",
+        103: "Add to N → ΔN base<br>sqrt(x)/10+<wbr>cbrt(x)/5",
+        203: "Add to Constant base<br>log10(1+x)/200",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -80,6 +83,8 @@ var GEM_EFFECT_FORMULAS = {
         102: (x) => x.cbrt().plus(1),
         201: (x) => x.cbrt().pow10(),
         202: (x) => x.plus(1).log10().div(10),
+        103: (x) => x.sqrt().div(10).plus(x.cbrt().div(5)),
+        203: (x) => x.plus(1).log10().div(200),
 }
 
 /*
@@ -3077,12 +3082,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 3)
                 4: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[4].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 5 : 4) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 5 : 4)
@@ -3104,12 +3104,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 4)
                 5: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[5].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 7 : 5) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 7 : 5)
@@ -3130,12 +3125,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 5)
                 6: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[6].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 9 : 6) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 9 : 6)
@@ -3156,12 +3146,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 6)
                 7: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[7].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 11 : 7) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 11 : 7)
@@ -3183,12 +3168,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 7)
                 8: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[8].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 14 : 9) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 14 : 9)
@@ -3209,12 +3189,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 8)
                 9: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[9].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 17 : 12) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 17 : 12)
@@ -3235,12 +3210,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 9)
                 10: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[10].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 21 : 15) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 21 : 15)
@@ -3262,12 +3232,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 10)
                 11: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[11].requirement)
-                                let b = " Nitrogen resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 25 : 20) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 25 : 20)
@@ -3288,12 +3253,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 11)
                 12: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[12].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 640 : 128) + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 5 : 1
@@ -3315,12 +3275,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 12)
                 13: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[13].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "2,560" : 256) + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -3342,12 +3297,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 13)
                 14: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[14].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -3369,12 +3319,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 14)
                 15: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[15].requirement)
-                                let b = " Nitrogen and 3 Nitrogen challenges"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "10,485,760" : "1,048,576") + " Nitrogen and 3 Nitrogen challenges"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -3396,12 +3341,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 15)
                 16: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[16].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "1.07e10" : "1.07e9") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -3423,12 +3363,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 16)
                 17: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[17].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "1.00e47" : "1.00e46") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -3447,12 +3382,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 17)
                 18: {
                         requirementDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.n.milestones[18].requirement)
-                                let b = " Nitrogen"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "7.50e942" : "7.40e942") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 7.5 : 7.4
@@ -4175,7 +4105,7 @@ addLayer("p", {
                         }
                 },
         ],
-        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0)},
+        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5)},
         prestigeButtonText(){
                 if (player.tab != "p") return ""
                 
@@ -4566,12 +4496,7 @@ addLayer("p", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[1].requirement)
-                                let b = " Phosphorus reset"
-                                return a + b
+                                return "Requires: 1 Phosphorus reset"
                         },
                         requirement(){
                                 return new Decimal(1)
@@ -4592,12 +4517,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 1)
                 2: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[2].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: 2 Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -4618,12 +4538,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 2)
                 3: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[3].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: 4 Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -4641,12 +4556,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 3)
                 4: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[4].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 7 : 6) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 7 : 6)
@@ -4664,15 +4574,10 @@ addLayer("p", {
                 }, // hasMilestone("p", 4)
                 5: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[5].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 11 : 8) + " Phosphorus resets"
                         },
                         requirement(){
-                                return new Decimal(player.hardMode ? 11 :8)
+                                return new Decimal(player.hardMode ? 11 : 8)
                         },
                         done(){
                                 return tmp.p.milestones[5].requirement.lte(player.p.times)
@@ -4687,15 +4592,10 @@ addLayer("p", {
                 }, // hasMilestone("p", 5)
                 6: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[6].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 16 : 10) + " Phosphorus resets"
                         },
                         requirement(){
-                                return new Decimal(player.hardMode ? 16 :10)
+                                return new Decimal(player.hardMode ? 16 : 10)
                         },
                         done(){
                                 return tmp.p.milestones[6].requirement.lte(player.p.times)
@@ -4710,12 +4610,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 6)
                 7: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[7].requirement)
-                                let b = " Phosphorus resets"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? 22 : 13) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 22 : 13)
@@ -4733,12 +4628,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 7)
                 8: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[8].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "5.00e9" : "1.00e9") + " Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 5e9 : 1e9)
@@ -4756,12 +4646,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 8)
                 9: {
                         requirementDescription(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.p.milestones[9].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: " + (player.hardMode ? "1.00e11" : "2.00e10") + " Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 1e11 : 2e10)
@@ -5631,12 +5516,7 @@ addLayer("mu", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[1].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 1 µ"
                         },
                         requirement(){
                                 return new Decimal(1)
@@ -5654,12 +5534,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 1)
                 2: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[2].requirement)
-                                let b = " E Points"
-                                return a + b
+                                return "Requires: 1e1,200,000 E Points"
                         },
                         requirement(){
                                 return Decimal.pow(10, 12e5)
@@ -5677,12 +5552,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 2)
                 3: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[3].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 5 µ"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -5701,12 +5571,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 3)
                 4: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[4].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 7 µ"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -5724,12 +5589,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 4)
                 5: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[5].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e194 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e194)
@@ -5747,12 +5607,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 5)
                 6: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[6].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e211 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e211)
@@ -5770,12 +5625,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 6)
                 7: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[7].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e243 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e243)
@@ -5793,12 +5643,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 7)
                 8: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[8].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 19 µ"
                         },
                         requirement(){
                                 return new Decimal(19)
@@ -5816,12 +5661,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 8)
                 9: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[9].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e345 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e345")
@@ -5839,12 +5679,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 9)
                 10: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[10].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e370 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e370")
@@ -5862,12 +5697,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 10)
                 11: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[11].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e398 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e398")
@@ -5885,12 +5715,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 11)
                 12: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[12].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e1283 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e1283")
@@ -5908,12 +5733,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 12)
                 13: {
                         requirementDescription(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.mu.milestones[13].requirement)
-                                let b = " Phosphorus"
-                                return a + b
+                                return "Requires: 1.00e1456 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e1456")
@@ -6490,6 +6310,7 @@ addLayer("mu", {
 
                                 if (hasMilestone("l", 12)) ret = ret.plus(.1 * player.l.milestones.length)
                                 if (hasUpgrade("p", 45)) ret = ret.plus(player.mu.buyables[33].times(.01))
+                                ret = ret.plus(layers.l.grid.getGemEffect(103))
                                 
                                 return ret
                         },
@@ -6512,7 +6333,7 @@ addLayer("mu", {
                                 let eff1 = "<b><h2>Effect</h2>: /"
                                 let eff2 = format(tmp.mu.buyables[33].effect) + " to N → ΔP cost</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 33)) + " Lives</b><br>"
-                                let eformula = format(tmp.mu.buyables[33].base)  + "^x"
+                                let eformula = format(tmp.mu.buyables[33].base, 4)  + "^x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -6676,6 +6497,10 @@ addLayer("l", {
                         let exp = player.mu.buyables[32].sub(40).max(0)
                                                 ret = ret.times(Decimal.pow(1.5, exp))
                 }
+                if (hasMilestone("l", 37)) {
+                        let exp = player.mu.buyables[32].sub(300).max(0)
+                                                ret = ret.times(Decimal.pow(2, exp))
+                }
                 if (hasUpgrade("p", 52)) {
                         let exp = new Decimal(player.l.challenges[11]).sub(90).max(0)
                         let base = 2
@@ -6830,13 +6655,14 @@ addLayer("l", {
                                 data.total = data.total.plus(netGain)
                         } else {
                                 let gain = tmp.l.getResetGain
-                                let totalLeft = Decimal.sub(10, data.points.div(gain).div(1e3))
+                                let div = player.hardMode ? 100 : 1000
+                                let totalLeft = Decimal.sub(1e4/div, data.points.div(gain).div(div))
                                 if (diff < totalLeft) {
-                                        let ng = tmp.l.getResetGain.times(diff).times(1e3)
+                                        let ng = tmp.l.getResetGain.times(diff).times(div)
                                         data.points = data.points.plus(ng)
                                         data.total = data.total.plus(ng)
                                 } else {
-                                        let ng = tmp.l.getResetGain.times(totalLeft.times(999).plus(diff))
+                                        let ng = tmp.l.getResetGain.times(totalLeft.times(div-1).plus(diff))
                                         data.points = data.points.plus(ng)
                                         data.total = data.total.plus(ng)
                                 }
@@ -6887,12 +6713,7 @@ addLayer("l", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[1].requirement)
-                                let b = " Life"
-                                return a + b
+                                return "Requires: 1 Life"
                         },
                         requirement(){
                                 return new Decimal(1)
@@ -6920,12 +6741,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 1)
                 2: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[2].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 2 Lives"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -6944,12 +6760,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 2)
                 3: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[3].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 3 Lives"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -6967,12 +6778,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 3)
                 4: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[4].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 4 Lives"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -6991,12 +6797,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 4)
                 5: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[5].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 5 Lives"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -7014,12 +6815,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 5)
                 6: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[6].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 6 Lives"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -7038,12 +6834,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 6)
                 7: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[7].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 7 Lives"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -7061,12 +6852,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 7)
                 8: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[8].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 10 Lives"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -7084,12 +6870,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 8)
                 9: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[9].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 12 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(12)
@@ -7107,12 +6888,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 9)
                 10: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[10].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 13 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(13)
@@ -7140,12 +6916,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 10)
                 11: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[11].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 14 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(14)
@@ -7163,12 +6934,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 11)
                 12: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[12].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 24 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(24)
@@ -7186,12 +6952,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 12)
                 13: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[13].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 25 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(25)
@@ -7203,18 +6964,14 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain 1000x.<br>"
+                                let x = player.hardMode ? 100 : 1000
+                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(x) + "x.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 13)
                 14: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[14].requirement)
-                                let b = " Dilation completions"
-                                return a + b
+                                return "Requires: 26 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(26)
@@ -7236,12 +6993,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 14)
                 15: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[15].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 5.00e21 µ"
                         },
                         requirement(){
                                 return new Decimal(5e21)
@@ -7259,12 +7011,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 15)
                 16: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[16].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 2.00e22 µ"
                         },
                         requirement(){
                                 return new Decimal(2e22)
@@ -7282,12 +7029,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 16)
                 17: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[17].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 2.70e12 Lives"
                         },
                         requirement(){
                                 return new Decimal(2.7e12)
@@ -7306,12 +7048,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 17)
                 18: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[18].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 1.00e25 µ"
                         },
                         requirement(){
                                 return new Decimal(1e25)
@@ -7329,12 +7066,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 18)
                 19: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[19].requirement)
-                                let b = " Points"
-                                return a + b
+                                return "Requires: e1.00e1000 Points"
                         },
                         requirement(){
                                 return new Decimal("ee1000")
@@ -7352,12 +7084,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 19)
                 20: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[20].requirement)
-                                let b = " Points"
-                                return a + b
+                                return "Requires: e3.20e306 Points"
                         },
                         requirement(){
                                 return new Decimal("e3.2e306")
@@ -7379,12 +7106,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 20)
                 21: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[21].requirement)
-                                let b = " Points"
-                                return a + b
+                                return "Requires: e9.50e305 Points"
                         },
                         requirement(){
                                 return new Decimal("e9.5e305")
@@ -7406,12 +7128,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 21)
                 22: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[22].requirement)
-                                let b = " µ"
-                                return a + b
+                                return "Requires: 1.00e31 µ"
                         },
                         requirement(){
                                 return new Decimal(1e31)
@@ -7429,12 +7146,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 22)
                 23: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[23].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 3.45e31 Lives"
                         },
                         requirement(){
                                 return new Decimal(3.45e31)
@@ -7452,12 +7164,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 23)
                 24: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[24].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 1.70e50 Lives"
                         },
                         requirement(){
                                 return new Decimal(1.7e50)
@@ -7475,12 +7182,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 24)
                 25: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[25].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 5.00e113 Lives"
                         },
                         requirement(){
                                 return new Decimal(5e113)
@@ -7498,12 +7200,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 25)
                 26: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[26].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 7.00e125 Lives"
                         },
                         requirement(){
                                 return new Decimal(7e125)
@@ -7521,12 +7218,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 26)
                 27: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[27].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 4.00e128 Lives"
                         },
                         requirement(){
                                 return new Decimal(4e128)
@@ -7544,12 +7236,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 27)
                 28: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[28].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 1.00e148 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e148)
@@ -7567,12 +7254,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 28)
                 29: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[29].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 1.00e157 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e157)
@@ -7590,12 +7272,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 29)
                 30: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[30].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 1.00e182 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e182)
@@ -7613,12 +7290,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 30)
                 31: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[31].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 4.00e198 Lives"
                         },
                         requirement(){
                                 return new Decimal(4e198)
@@ -7636,12 +7308,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 31)
                 32: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[32].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 2.00e219 Lives"
                         },
                         requirement(){
                                 return new Decimal(2e219)
@@ -7659,12 +7326,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 32)
                 33: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[33].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 7.00e242 Lives"
                         },
                         requirement(){
                                 return new Decimal(7e242)
@@ -7682,12 +7344,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 33)
                 34: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[34].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 2.00e261 Lives"
                         },
                         requirement(){
                                 return new Decimal(2e261)
@@ -7705,12 +7362,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 34)
                 35: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[35].requirement)
-                                let b = " Lives"
-                                return a + b
+                                return "Requires: 5.00e311 Lives"
                         },
                         requirement(){
                                 return new Decimal("5e311")
@@ -7728,12 +7380,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 35)
                 36: {
                         requirementDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.l.milestones[36].requirement)
-                                let b = " C12 Gems"
-                                return a + b
+                                return "Requires: 5 C12 Gems"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -7745,10 +7392,28 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β ln becomes log2 and Universe is ee51.<br>"
+                                let a = "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise point gain ^1.1.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 36)
+                37: {
+                        requirementDescription(){
+                                return "Requires: 3.00e382 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("3e382")
+                        },
+                        done(){
+                                return tmp.l.milestones[37].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Each N → ΔP level after 300 doubles Life gain.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 37)
         },
         buyables: {
                 rows: 3,
@@ -8419,7 +8084,7 @@ addLayer("l", {
                 12: {
                         name: "Customizable", 
                         baseReward(){
-                                return player.points.max(10).log10().max(10).log(2).sqrt().sub(31)
+                                return player.points.max(10).log10().max(10).log(2).sub(960).max(49).sqrt().sub(7)
                         },
                         gemGainMult(){
                                 let ret = new Decimal(1)
@@ -8436,7 +8101,7 @@ addLayer("l", {
                                 let mult = data.gemGainMult
 
                                 let v1 = gain.plus(1).div(mult).max(1)
-                                let v2 = v1.plus(31).pow(2)
+                                let v2 = v1.plus(7).pow(2).plus(960)
                                 let v3 = Decimal.pow(2, v2).pow10()
 
                                 return v3
@@ -8547,6 +8212,10 @@ addLayer("l", {
                         }
                         if (x == 1) {
                                 return GEM_EFFECT_DESCRIPTIONS[id]
+                        }
+                        if (id == 203) {
+                                let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
+                                return "Currently: " + f + "/100"
                         }
                         return "Currently: " + format(layers.l.grid.getGemEffect(id), 4)
                 },
@@ -16322,6 +15991,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("p", 42)) ret = ret.plus(.01)
                                 if (hasUpgrade("p", 54)) ret = ret.plus(.01)
                                 if (hasUpgrade("p", 55)) ret = ret.plus(.01)
+                                ret = ret.plus(layers.l.grid.getGemEffect(203))
 
                                 return ret
                         },
@@ -16340,7 +16010,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[41].base, 3) + "^x"
+                                let eformula = format(tmp.tokens.buyables[41].base, 4) + "^x"
                                 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -16833,12 +16503,7 @@ addLayer("tokens", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[1].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 2 total tokens"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -16867,12 +16532,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 1)
                 2: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[2].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 3 total tokens"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -16901,12 +16561,7 @@ addLayer("tokens", {
                 }, //hasMilestone("tokens", 2)
                 3: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[3].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 4 total tokens"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -16935,12 +16590,7 @@ addLayer("tokens", {
                 }, //hasMilestone("tokens", 3)
                 4: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[4].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 5 total tokens"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -16958,12 +16608,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 4)
                 5: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[5].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 6 total tokens"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -16981,12 +16626,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 5)
                 6: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[6].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 7 total tokens"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -17015,12 +16655,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 6)
                 7: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[7].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 8 total tokens"
                         },
                         requirement(){
                                 return new Decimal(8)
@@ -17049,12 +16684,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 7)
                 8: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[8].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 9 total tokens"
                         },
                         requirement(){
                                 return new Decimal(9)
@@ -17072,12 +16702,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 8)
                 9: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[9].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 10 total tokens"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -17095,12 +16720,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 9)
                 10: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[10].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 11 total tokens"
                         },
                         requirement(){
                                 return new Decimal(11)
@@ -17129,12 +16749,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 10)
                 11: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[11].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 12 total tokens"
                         },
                         requirement(){
                                 return new Decimal(12)
@@ -17152,12 +16767,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 11)
                 12: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[12].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 13 total tokens"
                         },
                         requirement(){
                                 return new Decimal(13)
@@ -17175,12 +16785,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 12)
                 13: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[13].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 14 total tokens"
                         },
                         requirement(){
                                 return new Decimal(14)
@@ -17198,12 +16803,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 13)
                 14: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[14].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 16 total tokens"
                         },
                         requirement(){
                                 return new Decimal(16)
@@ -17221,12 +16821,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 14)
                 15: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[15].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 18 total tokens"
                         },
                         requirement(){
                                 return new Decimal(18)
@@ -17244,12 +16839,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 15)
                 16: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[16].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 19 total tokens"
                         },
                         requirement(){
                                 return new Decimal(19)
@@ -17280,12 +16870,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 16)
                 17: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[17].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 22 total tokens"
                         },
                         requirement(){
                                 return new Decimal(22)
@@ -17303,12 +16888,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 17)
                 18: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[18].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 24 total tokens"
                         },
                         requirement(){
                                 return new Decimal(24)
@@ -17326,12 +16906,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 18)
                 19: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[19].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 27 total tokens"
                         },
                         requirement(){
                                 return new Decimal(27)
@@ -17349,12 +16924,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 19)
                 20: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[20].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 31 total tokens"
                         },
                         requirement(){
                                 return new Decimal(31)
@@ -17372,12 +16942,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 20)
                 21: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[21].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 35 total tokens"
                         },
                         requirement(){
                                 return new Decimal(35)
@@ -17395,12 +16960,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 21)
                 22: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[22].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 39 total tokens"
                         },
                         requirement(){
                                 return new Decimal(39)
@@ -17418,12 +16978,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 22)
                 23: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[23].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 43 total tokens"
                         },
                         requirement(){
                                 return new Decimal(43) 
@@ -17462,12 +17017,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 23)
                 24: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[24].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 51 total tokens"
                         },
                         requirement(){
                                 return new Decimal(51) 
@@ -17486,12 +17036,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 24)
                 25: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[25].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 53 total tokens"
                         },
                         requirement(){
                                 return new Decimal(53) 
@@ -17510,12 +17055,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 25)
                 26: {
                         requirementDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
-                                let a = "Requires: " + formatWhole(tmp.tokens.milestones[26].requirement)
-                                let b = " total tokens"
-                                return a + b
+                                return "Requires: 55 total tokens"
                         },
                         requirement(){
                                 return new Decimal(55) 
