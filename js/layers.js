@@ -3968,6 +3968,7 @@ addLayer("p", {
 		points: new Decimal(0),
                 best: new Decimal(0),
                 total: new Decimal(0),
+                best_over_amino: new Decimal(0),
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -4097,6 +4098,7 @@ addLayer("p", {
                 
                 if (tmp.p.layerShown) data.unlocked = true
                 data.best = data.best.max(data.points)
+                data.best_over_amino = data.best_over_amino.max(data.points)
                 
                 // do phosphorus gain
                 if (hasUpgrade("p", 13)) {
@@ -6681,6 +6683,8 @@ addLayer("l", {
                         if (hasMilestone("l", 35))      str = "ee50"
                         if (hasMilestone("l", 36))      str = "ee51"
 
+                        if (hasMilestone("l", 42)) str = player.p.best_over_amino
+
                         player.p.points = player.p.points.max(str)
                 }
 
@@ -7476,6 +7480,78 @@ addLayer("l", {
                                 return a
                         },
                 }, // hasMilestone("l", 38)
+                39: {
+                        requirementDescription(){
+                                return "Requires: 1.00e486 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e486")
+                        },
+                        done(){
+                                return tmp.l.milestones[39].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: β → ∂α's log8 becomes log6.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 39)
+                40: {
+                        requirementDescription(){
+                                return "Requires: 1.00e500 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e500")
+                        },
+                        done(){
+                                return tmp.l.milestones[40].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: β → ∂α's log6 becomes log5.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 40)
+                41: {
+                        requirementDescription(){
+                                return "Requires: 1.00e532 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e532")
+                        },
+                        done(){
+                                return tmp.l.milestones[41].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: β → ∂α's log5 becomes log4 and you have one less token for prestige purposes.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 41)
+                42: {
+                        requirementDescription(){
+                                return "Requires: 1.00e547 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e547")
+                        },
+                        done(){
+                                return tmp.l.milestones[42].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: β → ∂α's log4 becomes log3 and Universe becomes best Phosphorus over Amino reset.<br>Note: Amino is unlocked by getting a C33 gem.<br>"
+                                return a
+                        },
+                }, // hasMilestone("l", 42)
         },
         buyables: {
                 rows: 3,
@@ -7722,6 +7798,10 @@ addLayer("l", {
                                 let ret = player.tokens.total.max(10).log10()
 
                                 if (hasMilestone("l", 38)) ret = ret.times(Math.log(10)/Math.log(8))
+                                if (hasMilestone("l", 39)) ret = ret.times(Math.log(8)/Math.log(6))
+                                if (hasMilestone("l", 40)) ret = ret.times(Math.log(6)/Math.log(5))
+                                if (hasMilestone("l", 41)) ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
                                 
                                 return ret
                         },
@@ -7739,6 +7819,10 @@ addLayer("l", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 21)) + " Lives</b><br>"
                                 let eformula = "log10(tokens)^x<br>" + format(tmp.l.buyables[21].base) + "^x"
                                 if (hasMilestone("l", 38)) eformula = eformula.replace("log10", "log8")
+                                if (hasMilestone("l", 39)) eformula = eformula.replace("log8", "log6")
+                                if (hasMilestone("l", 40)) eformula = eformula.replace("log6", "log5")
+                                if (hasMilestone("l", 41)) eformula = eformula.replace("log5", "log4")
+                                if (hasMilestone("l", 42)) eformula = eformula.replace("log4", "log3")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8513,6 +8597,7 @@ addLayer("l", {
                 data2.points = new Decimal(0)
                 data2.best = new Decimal(0)
                 data2.total = new Decimal(0)
+                //data2.best_over_amino = new Decimal(0)
 
                 // 3: Nitrogen conent
                 if (!false) {
@@ -15327,6 +15412,7 @@ addLayer("tokens", {
                 if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/2)
                 if (hasUpgrade("p", 41))        a += 1
                                                 a += layers.l.grid.getGemEffect(303).toNumber()
+                if (hasMilestone("l", 41))      a += 1
                 
                 return a
         },
