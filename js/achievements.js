@@ -335,14 +335,13 @@ PROGRESSION_MILESTONES = {
         229: () => player.l.grid[203].gems.gt(0),
         230: () => player.l.grid[301].gems.gt(0),
         231: () => player.l.grid[302].gems.gt(0),
-
         232: () => player.l.grid[303].gems.gt(0),
-        233: () => false,
-        234: () => false,
-        235: () => false,
-        236: () => false,
-        237: () => false,
-        238: () => false,
+        233: () => player.a.points.gte(2),
+        234: () => player.a.points.gte(4),
+        235: () => player.a.points.gte(8),
+        236: () => player.a.points.gte(16),
+        237: () => player.a.points.gte(32),
+        238: () => player.a.points.gte(64),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -577,14 +576,13 @@ PROGRESSION_MILESTONES_TEXT = {
         229: "a C23 Gem",
         230: "a C31 Gem",
         231: "a C32 Gem",
-
         232: "a C33 Gem",
-        233: "not yet",
-        234: "not yet",
-        235: "not yet",
-        236: "not yet",
-        237: "not yet",
-        238: "not yet",
+        233: "2 Amino Acids",
+        234: "4 Amino Acids",
+        235: "8 Amino Acids",
+        236: "16 Amino Acids",
+        237: "32 Amino Acids",
+        238: "64 Amino Acids",
 }
 
 
