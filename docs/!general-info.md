@@ -34,9 +34,10 @@ While reading this documentation, the following key will be used when describing
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
 - [Custom Tab Layouts](custom-tab-layouts.md): An optional way to give your tabs a different layout. You can even create entirely new components to use.
-- [Custom game layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree,
+- [Custom Game Layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree,
     or even customize the tab's layout like a layer tab.
 - [Updating TMT](tutorials/updating-tmt.md): Using Github Desktop to update your mod's version of TMT.
+- [Other Things](other.md): Other neat features that TMT has that don't merit their own page.
 
 ### Common components
 
