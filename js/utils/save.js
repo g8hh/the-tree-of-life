@@ -1,8 +1,8 @@
 // ************ Save stuff ************
-
-var logSave = false
-function save() {
-	if (NaNalert) return
+var logSave = false 
+function save(force) {
+	NaNcheck(player)
+	if (NaNalert && !force) return
 	let t = new Date().getTime()
 	if (logSave) console.log("saved at " + t)
 	if (!(player === null)) player.lastSave = t
@@ -235,7 +235,7 @@ function loadOptions() {
 		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
 	else 
 		options = getStartOptions()
-	
+	if (themes.indexOf(options.theme) < 0) theme = "default"
 
 }
 
@@ -272,7 +272,7 @@ function NaNcheck(data) {
 	}
 }
 function exportSave() {
-	if (NaNalert) return
+	//if (NaNalert) return
 	let str = btoa(JSON.stringify(player));
 
 	const el = document.createElement("textarea");
@@ -299,6 +299,7 @@ function importSave(imported = undefined, forced = false) {
 		player.versionType = modInfo.id;
 		fixSave();
 		versionCheck();
+		NaNcheck(save)
 		save();
 		window.location.reload();
 	} catch (e) {

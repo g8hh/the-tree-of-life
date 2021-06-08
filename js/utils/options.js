@@ -6,7 +6,7 @@ function getStartOptions() {
 	return {
 		autosave: true,
 		msDisplay: "always",
-		theme: null,
+		theme: "default",
 		hqTree: false,
 		offlineProd: true,
 		hideChallenges: false,
@@ -44,7 +44,7 @@ function changeTreeQuality() {
 }
 
 function toggleAuto(toggle) {
-	player[toggle[0]][toggle[1]] = !player[toggle[0]][toggle[1]];
+	Vue.set(player[toggle[0]], [toggle[1]], !player[toggle[0]][toggle[1]]);
 	needCanvasUpdate=true
 }
 

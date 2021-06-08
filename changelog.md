@@ -1,5 +1,19 @@
 # The Modding Tree changelog:
 
+## v2.6.1 - 6/7/21
+- Added global background style to mod.js.
+- Tree branches can have custom line widths.
+- If an upgrade has both canAfford and cost, it checks both. (So you can use canAfford for other things)
+- Releasing a held buyable/clickable with onHold doesn't click it again.
+- Fixed hard resetting while NaN'ed and exporting NaN saves for debugging.
+- Attempt to fix buttons sometimes not updating.
+- Added "instant" feature for bars. (not useful for most people)
+- Improvements to theme code, partially by Cubedey.
+
+## v2.6.0.1 - 6/4/21
+- Removed excess NaN alerts (now only checks player, not temp).
+- Fixed background images covering up tree branches.
+
 ## v2.6: Fixed Reality - 6/3/21
 - Fixed issues with NaN checking. The game also will not save if the save is broken.
 - Added a drop-down menu component!

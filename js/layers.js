@@ -8356,7 +8356,7 @@ addLayer("l", {
                 },
                 onClick(data, id) {
                         if (inChallenge("l", 12) && id != player.l.activeChallengeID) {
-                                player.l.activeChallenge = null
+                                Vue.set(player.l, "activeChallenge", null)
                         }
                         if (player.l.activeChallengeID == undefined) {
                                 player.l.activeChallengeID = id

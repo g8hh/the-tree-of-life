@@ -11,7 +11,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.6",
+	num: "2.6.1",
 	name: "Fixed Reality",
 }
 
@@ -65,6 +65,10 @@ function isEndgame() {
 
 
 // Less important things beyond this point!
+
+// Style for the background, can be a function
+var backgroundStyle = {
+}
 
 // You can change this if you have things that can be messed up by long tick lengths
 function maxTickLength() {

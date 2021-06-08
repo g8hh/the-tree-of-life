@@ -25,6 +25,7 @@ var traversableClasses = []
 function setupTemp() {
 	tmp = {}
 	tmp.pointGen = {}
+	tmp.backgroundStyle = {}
 	tmp.displayThings = []
 	tmp.scrolled = 0
 	funcs = {}
@@ -91,34 +92,19 @@ function updateTemp(noError = false) {
 	updateTempData(layers, tmp, funcs, undefined, noError)
 
 	for (layer in layers){
-		let problem = ""
 		tmp[layer].resetGain = getResetGain(layer)
-		if (checkDecimalNaN(tmp[layer].resetGain))
-			problem = "resetGain"
 		tmp[layer].nextAt = getNextAt(layer)
-		if (checkDecimalNaN(tmp[layer].nextAt))
-			problem = "nextAt"
 		tmp[layer].nextAtDisp = getNextAt(layer, true)
 		tmp[layer].canReset = canReset(layer)
 		tmp[layer].trueGlowColor = tmp[layer].glowColor
 		tmp[layer].notify = shouldNotify(layer)
 		tmp[layer].prestigeNotify = prestigeNotify(layer)
-		if (problem && !NaNalert) {
-			confirm("Invalid value found in temp." + layer + "." + problem + ". Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
-			clearInterval(interval);
-			NaNalert = true;
-			return
-		}
 
 	}
 
 	tmp.pointGen = getPointGen()
-	if (checkDecimalNaN(tmp.pointGen) && !NaNalert) {
-		confirm("Invalid value found in temp.pointGen. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
-		clearInterval(interval);
-		NaNalert = true;
-		return
-	}
+	tmp.backgroundStyle = readData(backgroundStyle)
+
 	tmp.displayThings = []
 	for (thing in displayThings){
 		let text = displayThings[thing]

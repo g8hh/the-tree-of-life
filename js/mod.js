@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.011",
+	num: "1.011.1",
 	name: "Beginnings",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.011.1</h3><br>
+		- Merged v2.6.1 of TMT.<br>
 	<br><h3 style='color: #CC0000'>v1.011</h3><br>
 		- "Added" a row of achievements.<br>
 		- Gave C33 a reward.<br>
@@ -548,6 +550,11 @@ function isEndgame() {
 
 
 // Less important things beyond this point!
+
+// Style for the background, can be a function
+var backgroundStyle = {
+
+}
 
 // You can change this if you have things that can be messed up by long tick lengths
 function maxTickLength() {
