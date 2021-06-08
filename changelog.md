@@ -1,7 +1,9 @@
 # The Modding Tree changelog:
 
-- Broke the css file down into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
+- Broke up style.css into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
 - Added buyable and clickable trees.
+- Fixed the passiveGeneration display.
+- Fixed "marked" feature.
 
 ## v2.6.1 - 6/7/21
 - Added global background style to mod.js.

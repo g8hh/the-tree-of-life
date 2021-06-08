@@ -58,7 +58,7 @@ var systemComponents = {
 				tmp[layer].canClick ? (tmp[layer].tooltip ? tmp[layer].tooltip : 'I am a button!')
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'I am a button!')
 			)"></tooltip>
-			<node-mark :layer='layer' :data='layers[layer].marked'></node-mark></span>
+			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
 		</button>
 		`
 	},
