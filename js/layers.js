@@ -15381,7 +15381,7 @@ addLayer("tokens", {
         }},
         color: "#7DC71C",
         branches: [],
-        requires: new Decimal(0),
+        requires: new Decimal("1e5000"),
         resource: "Tokens",
         baseResource: "points",
         baseAmount() {return player.points.floor()},
@@ -15404,6 +15404,7 @@ addLayer("tokens", {
         },
         getMinusEffectiveTokens(){
                 let a = 0
+                
                 if (hasUpgrade("tokens", 73))   a += 1
                 if (hasMilestone("p", 1))       a += 1
                 if (hasUpgrade("p", 11))        a += 1
