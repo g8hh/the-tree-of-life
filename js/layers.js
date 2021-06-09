@@ -5038,6 +5038,8 @@ addLayer("mu", {
                         let depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                                                 rem = rem.sub(.01 * depth)
                 }
+                if (hasMilestone("a", 5))       rem = rem.plus(.01)
+                if (hasMilestone("a", 7))       rem = rem.plus(.01)
                 
                 if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
                 if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
@@ -6565,6 +6567,7 @@ addLayer("l", {
                                                 ret = ret.times(Decimal.pow(base, player.l.milestones.length))
                 }
                                                 ret = ret.times(tmp.a.effect)
+                if (hasMilestone("a", 3))       ret = ret.times(2021)
 
                 return ret
         },
@@ -6667,7 +6670,7 @@ addLayer("l", {
 
                         let muBuyKeys = [11, 12, 13, 21,
                                          22, 23, 31,]
-                        if (hasUpgrade("p", 51)) muBuyKeys.push(33)
+                        if (hasUpgrade("p", 51) || hasMilestone("a", 5)) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
                                 buyBuyable("mu", muBuyKeys[i])
                         }
@@ -6693,6 +6696,16 @@ addLayer("l", {
                         player.p.points = player.p.points.max(str)
                 }
 
+                if (hasMilestone("a", 3)) {
+                        let a = 2 // the value of jumps
+
+                        if (hasMilestone("a", 7)) a = 5
+
+                        if (data.challenges[11] % a != 0) {
+                                data.challenges[11] += 1
+                        }
+                }
+
                 data.time += diff
                 data.passivetime += diff
                 if (hasMilestone("l", 11)) {
@@ -6702,7 +6715,7 @@ addLayer("l", {
                         } 
                         if (data.passivetime > 10) data.passivetime = 10
 
-                        if (!hasMilestone("l", 13) || tmp.l.getResetGain.times(1e4).lt(data.points)) {
+                        if (!hasMilestone("l", 13) || tmp.l.getResetGain.times(1e4).lt(data.points) || hasMilestone("a", 3)) {
                                 let netGain = tmp.l.getResetGain.times(diff)
                                 data.points = data.points.plus(netGain)
                                 data.total = data.total.plus(netGain)
@@ -7439,13 +7452,13 @@ addLayer("l", {
                                 return new Decimal(5)
                         },
                         done(){
-                                return tmp.l.milestones[36].requirement.lte(player.l.grid[102].gems)
+                                return tmp.l.milestones[36].requirement.lte(player.l.grid[102].gems) && player.l.points.gte("5e311")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise point gain ^1.1.<br>"
+                                let a = "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise point gain ^1.1.<br>Note: Requires 5e311 Lives."
                                 return a
                         },
                 }, // hasMilestone("l", 36)
@@ -7752,7 +7765,7 @@ addLayer("l", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[13].effect) + " to prior exp dividers and Life gain exp</b><br>"
+                                let eff2 = format(tmp.l.buyables[13].effect, 4) + " to prior exp dividers and Life gain exp</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 13)) + " Lives</b><br>"
                                 let eformula = format(tmp.l.buyables[13].base, 4) + "*x"
 
@@ -7950,7 +7963,7 @@ addLayer("l", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[23].effect) + " to prior exp dividers</b><br>"
+                                let eff2 = format(tmp.l.buyables[23].effect, 4) + " to prior exp dividers</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 23)) + " Lives</b><br>"
                                 let eformula = format(tmp.l.buyables[23].base, 4) + "*x"
 
@@ -8123,6 +8136,8 @@ addLayer("l", {
                         },
                         base(){
                                 let ret = new Decimal(1)
+
+                                if (hasMilestone("a", 4)) ret = ret.plus(.005 * player.a.milestones.length)
                                 
                                 return ret
                         },
@@ -8136,9 +8151,9 @@ addLayer("l", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[33].effect) + " to prior gain exponents</b><br>"
+                                let eff2 = format(tmp.l.buyables[33].effect, 4) + " to prior exp dividers</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 33)) + " Lives</b><br>"
-                                let eformula = format(tmp.l.buyables[33].base) + "*x"
+                                let eformula = format(tmp.l.buyables[33].base, 4) + "*x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8208,6 +8223,7 @@ addLayer("l", {
                         },
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
+                                if (inChallenge("l", 12)) eff = 111
                                 if (eff > 91) eff = eff * 1.5 - 45.5
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
@@ -8618,7 +8634,7 @@ addLayer("l", {
                                        31, 32, 33, 34, 35,
                                        41, 42, 43, 44, 45,
                                        51, 52, 53, 54, 55,]
-                        if (!false) {// upgrades
+                        if (!hasMilestone("a", 6)) {// upgrades
                                 data3.upgrades = filterOut(data3.upgrades, nUpgRem)
                         }
 
@@ -8647,7 +8663,7 @@ addLayer("l", {
                 data3.total = new Decimal(0)
 
                 // 4 Oxygen content
-                if (!false) {
+                if (!hasMilestone("a", 3)) {
                         let oUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -8663,7 +8679,7 @@ addLayer("l", {
                 data4.total = new Decimal(0)
 
                 // 5 Carbon content
-                if (!false) {
+                if (!hasMilestone("a", 3)) {
                         let cUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -8678,9 +8694,7 @@ addLayer("l", {
                 data5.total = new Decimal(0)
 
                 // 6 minigame content
-                if (!false) {
-                        //player.mini is data6
-                        let resetBuyableIds = []
+                if (!hasMilestone("a", 3)) {
                         if (!false) { //6a
                                 data6.a_points.extras[11] = new Decimal(0)
                                 data6.a_points.extras[12] = new Decimal(0)
@@ -8690,19 +8704,11 @@ addLayer("l", {
                                 data6.a_points.extras[61] = new Decimal(0)
                                 data6.a_points.extras[62] = new Decimal(0)
                                 data6.a_points.extras[63] = new Decimal(0)
-
-                                resetBuyableIds = resetBuyableIds.concat([11, 12, 13, 21, 23, 61, 62, 63])
                         }
 
-                        if (!false) { //6b
-                                resetBuyableIds = resetBuyableIds.concat([31, 32, 33, 41, 42, 43, 51, 52, 53])
-                        }
+                        if (!false) {} //6b
 
                         if (!false) { //6c
-                                resetBuyableIds = resetBuyableIds.concat([71, 72, 73, 81, 82, 
-                                                                          83, 91, 92, 93,101,
-                                                                          102,103,111,112,113])
-
                                 let cPtUpgRem = [11, 12, 13, 14, 15, 
                                                  21, 22, 23, 24, 25, 
                                                  31, 32, 33, 34, 35,
@@ -8714,11 +8720,6 @@ addLayer("l", {
                         }
 
                         if (!false) { //6d
-                                resetBuyableIds = resetBuyableIds.concat([121, 122, 123, 131, 132, 
-                                                                          133, 151, 152, 153, 161,
-                                                                          162, 163, 171, 172, 173, 
-                                                                          181, 182, 183])
-
                                 let dPtUpgRem = [51, 52, 53, 54, 55, 
                                                  61, 62, 63, 64, 65, 
                                                  71, 72, 73, 74, 75,
@@ -8728,16 +8729,28 @@ addLayer("l", {
                                 }
                         }
 
-                        if (!false) { //6e
-                                resetBuyableIds = resetBuyableIds.concat([201, 202, 203, 211, 212, 
-                                                                          213, 221, 222, 223, 231,
-                                                                          232, 233, 241,])
-                        }
+                        if (!false) {} // 6e
+                }
 
-                        for (i in resetBuyableIds){
-                                x = resetBuyableIds[i]
-                                data6.buyables[x] = new Decimal(0)
-                        }
+                let resetBuyableIds = [11, 12, 13, 21, 23, 
+                                       61, 62, 63, 31, 32, 
+                                       33, 41, 42, 43, 51, 
+                                       52, 53, 71, 72, 73, 
+                                       81, 82, 83, 91, 92, 
+                                       93, 101, 102, 103, 
+                                       111, 112, 113, 121, 
+                                       122, 123, 131, 132, 
+                                       133, 151, 152, 153, 
+                                       161, 162, 163, 171, 
+                                       172, 173, 181, 182, 
+                                       183, 201, 202, 203, 
+                                       211, 212, 213, 221, 
+                                       222, 223, 231, 232, 
+                                       233, 241]
+
+                for (i in resetBuyableIds){
+                        x = resetBuyableIds[i]
+                        data6.buyables[x] = new Decimal(0)
                 }
                 
                 data6.a_points.points = new Decimal(0)
@@ -8790,7 +8803,7 @@ addLayer("l", {
                 }
 
                 // 8 Hydrogen content
-                if (!false) {
+                if (!hasMilestone("a", 3)) {
                         data8.points = new Decimal(0)
                         data8.best = new Decimal(0)
                         data8.total = new Decimal(0)
@@ -8828,8 +8841,9 @@ addLayer("a", {
                 abtime: 0,
                 time: 0,
                 times: 0,
-                autotimes: 0,
+                autoBuyableTime: 0,
                 passivetime: 0,
+                gemPassiveTime: 0,
         }},
         color: "#F2990D",
         branches: [],
@@ -8889,8 +8903,26 @@ addLayer("a", {
                 if (player.l.grid[303].gems.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
+                if (hasMilestone("a", 4) && data.autobuypmu45) {
+                        let boughtYet = false
+                        let pMuKeys = ["41", "42", "43", "44", "45", 
+                                       "51", "52", "53", "54", "55"]
+                        for (i in pMuKeys) {
+                                if (boughtYet) break
+                                id = pMuKeys[i]
+                                boughtYet = buyUpg("p", id) 
+                                if (boughtYet) break
+                                boughtYet = buyUpg("mu", id) 
+                        }
+                }
+
                 data.time += diff
                 data.passivetime += diff
+                data.gemPassiveTime += diff
+
+                let buyFactor = 1
+                if (hasMilestone("a", 8)) buyFactor *= 2
+                data.autoBuyableTime += diff * buyFactor
                 if (false) {
                         if (data.passivetime > 5) {
                                 data.passivetime += -5
@@ -8917,6 +8949,45 @@ addLayer("a", {
                                 }
                         }*/
                 } else data.passivetime = 0
+
+                if (hasMilestone("a", 4)) {
+                        if (data.gemPassiveTime > 10) data.gemPassiveTime = 10
+                        if (data.gemPassiveTime > 1) {
+                                data.gemPassiveTime += -1
+                                if (hasMilestone("a", 4)) {
+                                        player.l.grid[101].gems = player.l.grid[101].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 5)) {
+                                        player.l.grid[102].gems = player.l.grid[102].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 6)) {
+                                        player.l.grid[201].gems = player.l.grid[201].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 7)) {
+                                        player.l.grid[202].gems = player.l.grid[202].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 8)) {
+                                        player.l.grid[103].gems = player.l.grid[103].gems.plus(1)
+                                }
+                        }
+                } else data.gemPassiveTime = 0
+
+                if (hasMilestone("a", 5) && data.autobuylbuys) {
+                        if (data.autoBuyableTime > 10) data.autoBuyableTime = 10
+                        if (data.autoBuyableTime > 1) {
+                                data.autoBuyableTime += -1
+                                let ids = [11, 12, 13, 21, 22,
+                                           23, 31, 32, 33]
+
+                                for (i in ids) {
+                                        id = ids[i]
+                                        if (tmp.l.buyables[id].canAfford) {
+                                                layers.l.buyables[id].buy()
+                                                break
+                                        }
+                                }
+                        }
+                } else data.autoBuyableTime = 0
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -8968,7 +9039,7 @@ addLayer("a", {
                                 return new Decimal(1)
                         },
                         done(){
-                                return tmp.l.milestones[1].requirement.lte(player.a.times)
+                                return tmp.a.milestones[1].requirement.lte(player.a.times)
                         },
                         unlocked(){
                                 return true
@@ -8977,7 +9048,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Square base Phosphorus gain, Phosphorus resets do nothing, token content is kept upon Life resets, triple Life reset gain, and per Amino Acid reset keep four life milestones and a gem from every challenge.<br>"
+                                let a = "Reward: Square base Phosphorus gain, Phosphorus resets do nothing, token content is kept upon Life resets, triple Life reset gain, and per Amino Acid reset keep four life milestones and a gem from every challenge."
                                 let b = ""
                                 return a + b
                         },
@@ -8990,7 +9061,7 @@ addLayer("a", {
                                 return new Decimal(2)
                         },
                         done(){
-                                return tmp.l.milestones[2].requirement.lte(player.a.times)
+                                return tmp.a.milestones[2].requirement.lte(player.a.times)
                         },
                         unlocked(){
                                 return true
@@ -8999,11 +9070,145 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Keep Phosphorus milestones upon Life reset and a µ milestone upon Life reset per Amino Acid reset.<br>"
+                                let a = "Reward: Keep Phosphorus milestones upon Life reset and a µ milestone upon Life reset per Amino Acid reset."
                                 let b = ""
                                 return a + b
                         },
                 }, // hasMilestone("a", 2)
+                3: {
+                        requirementDescription(){
+                                return "Requires: 3 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(3)
+                        },
+                        done(){
+                                return tmp.a.milestones[3].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Keep Hydrogen, Carbon, Oxygen, minigame and token content upon Life reset and permanently henceforth. Gain 2021x Lives but nullify boosted Life gain. You gain two dilation completions at once<sup>*</sup>."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 3)
+                4: {
+                        requirementDescription(){
+                                return "Requires: 4 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(4)
+                        },
+                        done(){
+                                return tmp.a.milestones[4].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        toggles:() => [["a", "autobuypmu45"]],
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Autobuy the last two rows of µ and Phosphorus upgrades, gain a C11 gem per second, and each milestone adds .005 to the 𝛾 → ∂𝛾 base."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 4)
+                5: {
+                        requirementDescription(){
+                                return "Requires: 5 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.a.milestones[5].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        toggles:() => [["a", "autobuylbuys"]],
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C12 gem per second, subtract .01 from the µ cost exponent, autobuy Life buyables, and autobuy N → ΔN."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 5)
+                6: {
+                        requirementDescription(){
+                                return "Requires: 6 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(6)
+                        },
+                        done(){
+                                return tmp.a.milestones[6].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C21 gem per second, and keep Nitrogen upgrades upon Life reset."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 6)
+                7: {
+                        requirementDescription(){
+                                return "Requires: 7 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(7)
+                        },
+                        done(){
+                                return tmp.a.milestones[7].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C22 gem per second, and subtract .01 from µ cost exponent. You gain five dilation completions at once<sup>*</sup>"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 7)
+                8: {
+                        requirementDescription(){
+                                return "Requires: 8 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(8)
+                        },
+                        done(){
+                                return tmp.a.milestones[8].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 8)
         },
         buyables: {
                 rows: 3,
@@ -9061,10 +9266,13 @@ addLayer("a", {
 
                                         let part1 = a + br2 + b + br + c + br + d
 
-                                        let e = "Note that you have thus reached a point in the game where henceforth"
-                                        let f = "Carbon, Oxygen, minigame, token, and Hydrogen content will not get reset"
+                                        if (!hasMilestone("a", 3)) return part1
 
-                                        let part2 = part1 + br2 + e + br + f + br
+                                        let e = "Note that you have thus reached a point in the game where henceforth"
+                                        let f = "Carbon, Oxygen, minigame, token, and Hydrogen content will not get reset."
+                                        let g = "<sup>*</sup> it makes it so that if you have an odd number of completions you get a free completion."
+
+                                        let part2 = part1 + br2 + e + br + f + br + g + br
                                         
                                         return part2
                                 }],
