@@ -7822,6 +7822,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 40)) ret = ret.times(Math.log(6)/Math.log(5))
                                 if (hasMilestone("l", 41)) ret = ret.times(Math.log(5)/Math.log(4))
                                 if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("a", 13)) ret = ret.times(Math.log(3))
                                 
                                 return ret
                         },
@@ -7843,6 +7844,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 40)) eformula = eformula.replace("log6", "log5")
                                 if (hasMilestone("l", 41)) eformula = eformula.replace("log5", "log4")
                                 if (hasMilestone("l", 42)) eformula = eformula.replace("log4", "log3")
+                                if (hasMilestone("a", 13)) eformula = eformula.replace("log3", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8225,11 +8227,21 @@ addLayer("l", {
                         },
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
+
                                 if (inChallenge("l", 12)) eff = 111
                                 if (eff > 91) eff = eff * 1.5 - 45.5
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
-                                return new Decimal(1).sub(eff/1000)
+
+                                let init = new Decimal(1).sub(eff/1000)
+
+                                if (inChallenge("l", 12)) {
+                                        let depth = tmp.l.challenges[12].getChallengeDepths[4] || 0
+                                        let v = Math.floor(28*Math.sqrt(depth))
+                                        init = init.sub(v/1000)
+                                }
+
+                                return init
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
                         canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
@@ -8352,10 +8364,12 @@ addLayer("l", {
         },
         grid: {
                 rows(){
-                        return false ? 8 : 3
+                        if (hasMilestone("a", 13)) return 4
+                        return 3
                 },
                 cols(){
-                        return false ? 8 : 3
+                        if (hasMilestone("a", 13)) return 4
+                        return 3
                 },
                 maxRows: 8,
                 maxCols: 8,
@@ -8366,7 +8380,7 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
                 },
                 getCanClick(data, id) {
-                        let maxAllowed = 3 // manually change this
+                        let maxAllowed = 4 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
@@ -8518,7 +8532,7 @@ addLayer("l", {
 
                                         let c2 = "Challenge 2: Add .01 to µ cost exponent"
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
-                                        let c4 = "Challenge 4: Subtract [tbd] from the Dilation exponent"
+                                        let c4 = "Challenge 4: Subtract floor(28*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^[tbd]"
                                         let c6 = "Challenge 6: Divide N → ΔN base by 1+depth [tbd]"
                                         let c7 = "Challenge 7: You have 5 [tbd] more tokens for prestige purposes"
@@ -9314,6 +9328,28 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 12)
+                13: {
+                        requirementDescription(){
+                                return "Requires: 100 Amino Acids"
+                        },
+                        requirement(){
+                                return new Decimal(100)
+                        },
+                        done(){
+                                return tmp.a.milestones[13].requirement.lte(player.a.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock another set of Life challenges and β → ∂α's log3 becomes ln"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 13)
         },
         buyables: {
                 rows: 3,
