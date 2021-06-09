@@ -82,7 +82,8 @@ var GEM_EFFECT_DESCRIPTIONS = {
         203: "Add to Constant base<br>log10(1+x)/200",
         301: "Boost point gain per non-0 gem count<br>ln(e+x)",
         302: "Add to β → ∂𝛾 base<br>log10(1+x)/10",
-        303: "Less tokens for prestige<br>floor(log2<wbr>(log2(2+2x)))"
+        303: "Less tokens for prestige<br>floor(log2<wbr>(log2(2+2x)))",
+        104: "Add to Amino effect exponent<br>cbrt(x)",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -95,6 +96,7 @@ var GEM_EFFECT_FORMULAS = {
         301: (x) => x.plus(Math.E).ln(),
         302: (x) => x.plus(1).log10().div(10),
         303: (x) => x.times(2).plus(2).log(2).log(2).floor(),
+        104: (x) => x.cbrt(),
 }
 
 function nCk(n, k){
@@ -7609,6 +7611,7 @@ addLayer("l", {
                                 if (hasUpgrade("mu", 51)) ret = 5
                                 if (hasUpgrade("mu", 54)) ret = 4
                                 if (hasUpgrade("mu", 55)) ret = 3
+                                if (hasMilestone("a", 15)) ret = Math.E
                                 return ret
                         },
                         base(){
@@ -7631,7 +7634,10 @@ addLayer("l", {
                                 let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 11)) + " Lives</b><br>"
                                 let eformula = "logINS(logINS(logINS(Points)))^x<br>" + format(tmp.l.buyables[11].base) + "^x"
-                                eformula = eformula.replaceAll("logINS", "log" + formatWhole(tmp.l.buyables[11].getLogBase))
+                                let f = "log" + formatWhole(tmp.l.buyables[11].getLogBase)
+                                if (f == "log2.72") f = "ln"
+                                eformula = eformula.replaceAll("logINS", f)
+                                
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -7754,6 +7760,7 @@ addLayer("l", {
                                 let ret = new Decimal(1)
 
                                 ret = ret.plus(layers.l.grid.getGemEffect(202))
+                                if (hasMilestone("a", 14)) ret = ret.plus(.05)
                                 
                                 return ret
                         },
@@ -7823,6 +7830,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 41)) ret = ret.times(Math.log(5)/Math.log(4))
                                 if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
                                 if (hasMilestone("a", 13)) ret = ret.times(Math.log(3))
+                                if (hasMilestone("a", 14)) ret = ret.div(Math.log(2))
                                 
                                 return ret
                         },
@@ -7845,6 +7853,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 41)) eformula = eformula.replace("log5", "log4")
                                 if (hasMilestone("l", 42)) eformula = eformula.replace("log4", "log3")
                                 if (hasMilestone("a", 13)) eformula = eformula.replace("log3", "ln")
+                                if (hasMilestone("a", 14)) eformula = eformula.replace("ln", "log2")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -7954,6 +7963,7 @@ addLayer("l", {
                                 let ret = new Decimal(2)
 
                                 ret = ret.plus(layers.l.grid.getGemEffect(302))
+                                if (hasMilestone("a", 15)) ret = ret.plus(.25)
                                 
                                 return ret
                         },
@@ -8237,7 +8247,7 @@ addLayer("l", {
 
                                 if (inChallenge("l", 12)) {
                                         let depth = tmp.l.challenges[12].getChallengeDepths[4] || 0
-                                        let v = Math.floor(28*Math.sqrt(depth))
+                                        let v = Math.floor(35*Math.sqrt(depth)) //.035
                                         init = init.sub(v/1000)
                                 }
 
@@ -8532,7 +8542,7 @@ addLayer("l", {
 
                                         let c2 = "Challenge 2: Add .01 to µ cost exponent"
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
-                                        let c4 = "Challenge 4: Subtract floor(28*depth<sup>.5</sup>)/1000 from the Dilation exponent"
+                                        let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^[tbd]"
                                         let c6 = "Challenge 6: Divide N → ΔN base by 1+depth [tbd]"
                                         let c7 = "Challenge 7: You have 5 [tbd] more tokens for prestige purposes"
@@ -8901,7 +8911,10 @@ addLayer("a", {
         effect(){
                 let amt = player.a.best
 
-                let ret = amt.plus(1).pow(amt.sqrt().min(10))
+                let exp = amt.sqrt().min(10)
+                exp = exp.plus(layers.l.grid.getGemEffect(104))
+
+                let ret = amt.plus(1).pow(exp)
 
                 return ret
         },
@@ -9257,7 +9270,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Gain a C23 gem per second and keep Dilation completions"
+                                let a = "Reward: Gain a C23 gem per second and keep Dilation completions and Life resets"
                                 let b = ""
                                 return a + b
                         },
@@ -9350,6 +9363,50 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 13)
+                14: {
+                        requirementDescription(){
+                                return "Requires: 1.00e851 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e851")
+                        },
+                        done(){
+                                return tmp.a.milestones[14].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: β → ∂α's ln becomes log2 and add .05 to α → ∂𝛾's base"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 14)
+                15: {
+                        requirementDescription(){
+                                return "Requires: 1.00e882 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e882")
+                        },
+                        done(){
+                                return tmp.a.milestones[15].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: α → ∂α's log3s becomes lns and add .25 to β → ∂𝛾's base"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 15)
         },
         buyables: {
                 rows: 3,
@@ -9486,7 +9543,7 @@ addLayer("a", {
                         if (!hasMilestone("a", 9)) data1.challenges[11] = 0
 
                         //reset times
-                        data1.times = 0
+                        if (!hasMilestone("a", 9)) data1.times = 0
                 }
 
                 data1.points = new Decimal(0)
@@ -16108,7 +16165,7 @@ addLayer("tokens", {
         requires: new Decimal("1e5000"),
         resource: "Tokens",
         baseResource: "points",
-        baseAmount() {return player.points.floor()},
+        baseAmount() {return player.points.floor()}, 
         type: "custom",
         getResetGain() {
                 if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return new Decimal(1)
@@ -16181,7 +16238,7 @@ addLayer("tokens", {
                         }
                 }
                 data.best_over_all_time = data.best_over_all_time.max(data.total)
-                if (data.total.gt(0)) data.unlocked = true
+                if (player.points.gte("e5000")) data.unlocked = true
 
                 if (hasUpgrade("c", 21)) {
                         //tick coins

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.014",
+	num: "1.014.1",
 	name: "Coup de Grâce",
 }
 
@@ -26,7 +26,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v1.014</h3><br>
-		- Added a Life milestone.<br>
+		- Added two Amino Acid milestones.<br>
+		- Made C14 completeable and gave it a reward.<br>
+		- Made C24 completeable.<br>
+		- Made C4 tougher.<br>
+	<br><h3 style='color: #CC0000'>v1.014</h3><br>
+		- Added a Amino Acid milestone.<br>
 		- Added C4.<br>
 	<br><h3 style='color: #CC0000'>v1.013.1</h3><br>
 		- Added a save to the bank.<br>
