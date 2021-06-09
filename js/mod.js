@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.012",
+	num: "1.013",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.013</h3><br>
+		- Added ten Amino Acid milestones.<br> 
 	<br><h3 style='color: #CC0000'>v1.012</h3><br>
 		- Properly added the rest of the achievement row.<br>
 		- Fixed a bug where having 0 E Points caused you to not have D Point production.<br>
