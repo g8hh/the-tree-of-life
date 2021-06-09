@@ -6691,7 +6691,9 @@ addLayer("l", {
                         if (hasMilestone("l", 35))      str = "ee50"
                         if (hasMilestone("l", 36))      str = "ee51"
 
-                        if (hasMilestone("l", 42)) str = player.p.best_over_amino
+                        if (hasMilestone("l", 42) && player.p.best_over_amino.gt(str)) {
+                                                        str = player.p.best_over_amino
+                        }
 
                         player.p.points = player.p.points.max(str)
                 }
@@ -8922,6 +8924,9 @@ addLayer("a", {
 
                 let buyFactor = 1
                 if (hasMilestone("a", 8)) buyFactor *= 2
+                if (hasMilestone("a", 10)) buyFactor *= 2.5
+                if (hasMilestone("a", 11)) buyFactor *= 2
+
                 data.autoBuyableTime += diff * buyFactor
                 if (false) {
                         if (data.passivetime > 5) {
@@ -8954,20 +8959,32 @@ addLayer("a", {
                         if (data.gemPassiveTime > 10) data.gemPassiveTime = 10
                         if (data.gemPassiveTime > 1) {
                                 data.gemPassiveTime += -1
-                                if (hasMilestone("a", 4)) {
+                                if (hasMilestone("a", 4) && player.l.grid[101].gems.lt(1e3)) {
                                         player.l.grid[101].gems = player.l.grid[101].gems.plus(1)
                                 }
-                                if (hasMilestone("a", 5)) {
+                                if (hasMilestone("a", 5) && player.l.grid[102].gems.lt(1e3)) {
                                         player.l.grid[102].gems = player.l.grid[102].gems.plus(1)
                                 }
-                                if (hasMilestone("a", 6)) {
+                                if (hasMilestone("a", 6) && player.l.grid[201].gems.lt(1e3)) {
                                         player.l.grid[201].gems = player.l.grid[201].gems.plus(1)
                                 }
-                                if (hasMilestone("a", 7)) {
+                                if (hasMilestone("a", 7) && player.l.grid[202].gems.lt(1e3)) {
                                         player.l.grid[202].gems = player.l.grid[202].gems.plus(1)
                                 }
-                                if (hasMilestone("a", 8)) {
+                                if (hasMilestone("a", 8) && player.l.grid[103].gems.lt(1e3)) {
                                         player.l.grid[103].gems = player.l.grid[103].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 9) && player.l.grid[203].gems.lt(1e3)) {
+                                        player.l.grid[203].gems = player.l.grid[203].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 10) && player.l.grid[301].gems.lt(1e3)) {
+                                        player.l.grid[301].gems = player.l.grid[301].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 11) && player.l.grid[302].gems.lt(1e3)) {
+                                        player.l.grid[302].gems = player.l.grid[302].gems.plus(1)
+                                }
+                                if (hasMilestone("a", 12) && player.l.grid[303].gems.lt(1e3)) {
+                                        player.l.grid[303].gems = player.l.grid[303].gems.plus(1)
                                 }
                         }
                 } else data.gemPassiveTime = 0
@@ -9115,7 +9132,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Autobuy the last two rows of µ and Phosphorus upgrades, gain a C11 gem per second, and each milestone adds .005 to the 𝛾 → ∂𝛾 base."
+                                let a = "Reward: Autobuy the last two rows of µ and Phosphorus upgrades, gain a C11 gem per second<sup>**</sup>, and each milestone adds .005 to the 𝛾 → ∂𝛾 base."
                                 let b = ""
                                 return a + b
                         },
@@ -9209,6 +9226,94 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 8)
+                9: {
+                        requirementDescription(){
+                                return "Requires: 10 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(10)
+                        },
+                        done(){
+                                return tmp.a.milestones[9].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C23 gem per second and keep Dilation completions"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 9)
+                10: {
+                        requirementDescription(){
+                                return "Requires: 12 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(12)
+                        },
+                        done(){
+                                return tmp.a.milestones[10].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C31 gem per second and you buy Life buyables 2.5x as fast"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 10)
+                11: {
+                        requirementDescription(){
+                                return "Requires: 15 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(15)
+                        },
+                        done(){
+                                return tmp.a.milestones[11].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C32 gem per second and you buy Life buyables twice as fast"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 11)
+                12: {
+                        requirementDescription(){
+                                return "Requires: 18 Amino Acid resets"
+                        },
+                        requirement(){
+                                return new Decimal(18)
+                        },
+                        done(){
+                                return tmp.a.milestones[12].requirement.lte(player.a.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C33 gem per second and keep up to 1,000 of each of the first 9 gems upon Amino Acid reset"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 12)
         },
         buyables: {
                 rows: 3,
@@ -9271,8 +9376,9 @@ addLayer("a", {
                                         let e = "Note that you have thus reached a point in the game where henceforth"
                                         let f = "Carbon, Oxygen, minigame, token, and Hydrogen content will not get reset."
                                         let g = "<sup>*</sup> it makes it so that if you have an odd number of completions you get a free completion."
+                                        let h = "<sup>**</sup> passive gain only gives up to 1,000 gems"
 
-                                        let part2 = part1 + br2 + e + br + f + br + g + br
+                                        let part2 = part1 + br2 + e + br + f + br + g + br + h
                                         
                                         return part2
                                 }],
@@ -9333,11 +9439,15 @@ addLayer("a", {
 
                         for (i in x) {
                                 id = x[i]
-                                gData[id].gems = gData[id].gems.min(keepGems)
+                                let thisKeep = keepGems
+                                if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
+                                        thisKeep = thisKeep.max(1000)
+                                }
+                                gData[id].gems = gData[id].gems.min(thisKeep)
                         }
 
                         //challenges
-                        data1.challenges[11] = 0
+                        if (!hasMilestone("a", 9)) data1.challenges[11] = 0
 
                         //reset times
                         data1.times = 0
