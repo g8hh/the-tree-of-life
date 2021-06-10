@@ -41,6 +41,11 @@ function getPointGen() {
                 let base = layers.l.grid.getGemEffect(301)
                                         gain = gain.pow(base.pow(tmp.l.getNonZeroGemCount))
         }
+        if (hasMilestone("a", 18))      gain = gain.pow(Decimal.pow(3, getBuyableAmount("l", 23)))
+        if (true) {
+                let base = layers.l.grid.getGemEffect(304)
+                                        gain = gain.pow(base.pow(getBuyableAmount("mu", 32)))
+        }
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -84,6 +89,8 @@ var GEM_EFFECT_DESCRIPTIONS = {
         302: "Add to β → ∂𝛾 base<br>log10(1+x)/10",
         303: "Less tokens for prestige<br>floor(log2<wbr>(log2(2+2x)))",
         104: "Add to Amino effect exponent<br>cbrt(x)",
+        204: "Life gain per non-0 gem<br>(x+1)^<wbr>log100(100+x)",
+        304: "Point gain per N → ΔP<br>log10(10+x<sup>.5</sup>)",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -97,6 +104,8 @@ var GEM_EFFECT_FORMULAS = {
         302: (x) => x.plus(1).log10().div(10),
         303: (x) => x.times(2).plus(2).log(2).log(2).floor(),
         104: (x) => x.cbrt(),
+        204: (x) => x.plus(1).pow(x.plus(100).log(100).min(2)),
+        304: (x) => x.sqrt().plus(10).log10(),
 }
 
 function nCk(n, k){
@@ -6265,6 +6274,7 @@ addLayer("mu", {
                                 let ret = new Decimal(1)
 
                                 if (hasMilestone("l", 27)) ret = ret.times(5)
+                                if (hasMilestone("l", 30)) ret = ret.times(5)
 
                                 return ret
                         },
@@ -6570,6 +6580,10 @@ addLayer("l", {
                 }
                                                 ret = ret.times(tmp.a.effect)
                 if (hasMilestone("a", 3))       ret = ret.times(2021)
+                if (true) {
+                        let base = layers.l.grid.getGemEffect(204)
+                                                ret = ret.times(base.pow(tmp.l.getNonZeroGemCount))
+                }
 
                 return ret
         },
@@ -7354,7 +7368,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log5 becomes log4 and token cost exponent is .41.<br>"
+                                let a = "Reward: α → ∂β log5 becomes log4, token cost exponent is .41 and you bulk 5x N → ΔP.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 30)
@@ -7612,6 +7626,7 @@ addLayer("l", {
                                 if (hasUpgrade("mu", 54)) ret = 4
                                 if (hasUpgrade("mu", 55)) ret = 3
                                 if (hasMilestone("a", 15)) ret = Math.E
+                                if (hasMilestone("a", 16)) ret = 2
                                 return ret
                         },
                         base(){
@@ -8136,6 +8151,8 @@ addLayer("l", {
                         },
                         expDiv() {
                                 let ret = new Decimal(20)
+
+                                if (hasMilestone("a", 17)) ret = ret.plus(player.a.milestones.length)
 
                                 return ret
                         },
@@ -8953,6 +8970,7 @@ addLayer("a", {
                 if (hasMilestone("a", 8)) buyFactor *= 2
                 if (hasMilestone("a", 10)) buyFactor *= 2.5
                 if (hasMilestone("a", 11)) buyFactor *= 2
+                if (hasMilestone("a", 16)) buyFactor *= 2
 
                 data.autoBuyableTime += diff * buyFactor
                 if (false) {
@@ -9027,7 +9045,7 @@ addLayer("a", {
                                         id = ids[i]
                                         if (tmp.l.buyables[id].canAfford) {
                                                 layers.l.buyables[id].buy()
-                                                break
+                                                if (!hasMilestone("a", 17)) break
                                         }
                                 }
                         }
@@ -9407,6 +9425,72 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 15)
+                16: {
+                        requirementDescription(){
+                                return "Requires: 1.00e932 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e932")
+                        },
+                        done(){
+                                return tmp.a.milestones[16].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: α → ∂α's lns becomes log2s and you buy Lives buyables twice as fast"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 16)
+                17: {
+                        requirementDescription(){
+                                return "Requires: 1.00e1006 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e1006")
+                        },
+                        done(){
+                                return tmp.a.milestones[17].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 17)
+                18: {
+                        requirementDescription(){
+                                return "Requires: 1.00e1118 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e1118")
+                        },
+                        done(){
+                                return tmp.a.milestones[18].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Each β → ∂𝛾 cubes point gain"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 18)
         },
         buyables: {
                 rows: 3,

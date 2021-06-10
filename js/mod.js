@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.014.1",
+	num: "1.015",
 	name: "Coup de Grâce",
 }
 
@@ -25,7 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.014</h3><br>
+	<br><h3 style='color: #CC0000'>v1.015</h3><br>
+		- Added an effect to Life milestone 30.<br>
+		- Added three Amino milestones.<br>
+		- Added effects to C24 and C34.<br>
+		- Made C41 completeable (I think).<br>
+		- I have surpassed 1MB of data in layers.js, at over 1,033,000 characters in that file alone.<br>
+	<br><h3 style='color: #CC0000'>v1.014.1</h3><br>
 		- Added two Amino Acid milestones.<br>
 		- Made C14 completeable and gave it a reward.<br>
 		- Made C24 completeable.<br>
