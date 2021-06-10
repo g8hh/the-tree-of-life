@@ -109,7 +109,8 @@ addLayer("c", {
                 description: "Gain 1 Point every second.",
                 cost: new Decimal(1),
                 unlocked() { return player[this.layer].unlocked }, // The upgrade is only visible when this is true
-                branches: [12]
+                branches: [12],
+                tooltip: "hi",
             },
             12: {
                 description: "Point generation is faster based on your unspent Lollipops.",
@@ -244,7 +245,6 @@ addLayer("c", {
                 fillStyle: {'background-color' : "#FFFFFF"},
                 baseStyle: {'background-color' : "#696969"},
                 textStyle: {'color': '#04e050'},
-
                 borderStyle() {return {}},
                 direction: RIGHT,
                 width: 300,

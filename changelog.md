@@ -1,7 +1,9 @@
 # The Modding Tree changelog:
 
+## v2.6.2 - 6/10/21
 - Broke up style.css into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
 - Added buyable and clickable trees.
+- Added optional tooltips to upgrades, buyables, clickables, milestones, and gridables.
 - Fixed the passiveGeneration display.
 - Fixed "marked" feature.
 - doReset now will function on non-numeric rows besides "side".
