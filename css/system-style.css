@@ -170,7 +170,6 @@ ul {
 
 .tooltipBox { 
 	position: relative;
-	display: inline-block;
   }
   
   .tooltipBox:hover .tooltip{
@@ -181,7 +180,11 @@ ul {
 	opacity: 1;
   }
   
-  
+.respecCheckbox {
+	display: inline-block;
+}
+
+
 #loadingSection {
 	display: flex;
 	flex-direction: column;

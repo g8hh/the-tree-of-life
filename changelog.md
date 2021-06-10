@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.6.2.1 - 6/10/21
+- Fixed a visual bug with milestones.
+
 ## v2.6.2 - 6/10/21
 - Broke up style.css into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
 - Added buyable and clickable trees.
