@@ -4,6 +4,7 @@
 - Added buyable and clickable trees.
 - Fixed the passiveGeneration display.
 - Fixed "marked" feature.
+- doReset now will function on non-numeric rows besides "side".
 
 ## v2.6.1 - 6/7/21
 - Added global background style to mod.js.

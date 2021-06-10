@@ -228,7 +228,9 @@ function doReset(layer, force=false) {
 	player.points = (row == 0 ? decimalZero : getStartPoints())
 
 	for (let x = row; x >= 0; x--) rowReset(x, layer)
-	rowReset("side", layer)
+	for (r in OTHER_LAYERS){
+		rowReset(r, layer)
+	}
 	prevOnReset = undefined
 
 	player[layer].resetTime = 0
