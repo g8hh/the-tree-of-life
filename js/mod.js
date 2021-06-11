@@ -12,19 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.016",
+	num: "1.017",
 	name: "Coup de Grâce",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 100 Amino Acids OR the last save in the bank<br><br>
+		- e22,222 Protein OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.017</h3><br>
+		- Implemented C5.<br>
+		- Gave C15 and C25 rewards.<br>
+		- Added 15 Amino upgrades.<br>
+		- Added protein.<br>
+		- Added 4 Amino buyables (as a part of protein).<br>
+		- Added 3 Amino milestones.<br>
+		- Added two saves to the bank.<br>
 	<br><h3 style='color: #CC0000'>v1.016</h3><br>
 		- Added a C43 reward.<br>
 		- Added a Life milestone.<br>

@@ -47,8 +47,18 @@ function getPointGen() {
                                         gain = gain.pow(base.pow(getBuyableAmount("mu", 32)))
         }
         if (hasMilestone("a", 19))      gain = gain.pow(tmp.a.milestones[19].effect)
+        if (hasUpgrade("a", 11))        gain = gain.pow(Decimal.pow(3, player.a.upgrades.length))
+        if (hasUpgrade("a", 13))        gain = gain.pow(getBuyableAmount("a", 11).max(1))
+        if (hasUpgrade("a", 15))        gain = gain.pow(getBuyableAmount("a", 12).max(1))
+        if (hasUpgrade("a", 33))        gain = gain.pow(Decimal.pow(100, getBuyableAmount("a", 13)))
+        if (hasUpgrade("a", 34))        gain = gain.pow(player.a.protein.points.max(10).log10())
+        if (hasUpgrade("a", 35))        gain = gain.pow(player.a.protein.points.max(10).log10())
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
+        if (inChallenge("l", 12))       {
+                let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
+                                        gain = dilate(gain, Decimal.pow(.665, c5depth))
+        }
 
 	return gain
 }
@@ -95,21 +105,9 @@ var GEM_EFFECT_DESCRIPTIONS = {
         401: "Passive Amino Acid gain<br>x%/s",
         402: "Add to base of base life gain<br>sqrt(x)", 
         403: "Phosphorus gain<br>^min(10,<wbr>1.02<sup>x</sup>)",
-        404: "Unlock Life upgrades<br>floor(log3(<wbr>2+x/3)) [not yet]"
-
-        /* 
-        First upgrade unlocks proteins
-        Base protein production is log10(Amino)
-        2 buyables
-        1: cost 100*5^x, double protein gain
-        2: cost 300*10^x, triple protein gain
-        second life upgrade costs protein (prb around 1e4)
-        second life upgrade causes each upgrade 1 to add .001 to upgrade 2 effect base up to 3.2
-        third life upgrade causes life -> protein via log(lives)
-        fourth upgrade causes each upgrade 2 to add .001 to upgrade 1 effect base up to 2.2
-
-        prb autobuyers at some pt, and protein directly multiplies life even later
-        */
+        404: "Unlock Amino upgrades<br>min(8,⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋)",
+        105: "Protein gain<br>log10(10+x)",
+        205: "Passive gem gain when completeable<br>10*ln(1+x)%/s",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -128,7 +126,9 @@ var GEM_EFFECT_FORMULAS = {
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
         403: (x) => Decimal.pow(1.02, x).min(10),
-        404: (x) => x.div(3).plus(2).log(3).floor(),
+        404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor().min(8),
+        105: (x) => x.plus(10).log10(),
+        205: (x) => x.plus(1).ln().div(10),
 }
 
 function nCk(n, k){
@@ -6614,6 +6614,7 @@ addLayer("l", {
                         let base = layers.l.grid.getGemEffect(204)
                                                 ret = ret.times(base.pow(tmp.l.getNonZeroGemCount))
                 }
+                if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
 
                 return ret
         },
@@ -6782,6 +6783,14 @@ addLayer("l", {
                                 }
                         }
                 } else data.passivetime = 0
+
+                if (inChallenge("l", 12) && canCompleteChallenge("l", 12)) {
+                        let gemPercentGainps = layers.l.grid.getGemEffect(205)
+                        let gainId = player.l.activeChallengeID
+                        let gemGain = gemPercentGainps.times(tmp.l.challenges[12].reward).times(diff)
+                        player.l.grid[gainId].gems = player.l.grid[gainId].gems.plus(gemGain)
+                }
+                
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -8421,10 +8430,12 @@ addLayer("l", {
         },
         grid: {
                 rows(){
+                        if (hasUpgrade("a", 33)) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
                 cols(){
+                        if (hasUpgrade("a", 33)) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
@@ -8437,7 +8448,7 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
                 },
                 getCanClick(data, id) {
-                        let maxAllowed = 4 // manually change this
+                        let maxAllowed = 5 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
@@ -8487,6 +8498,14 @@ addLayer("l", {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "/100"
                         }
+                        if (id == 205) {
+                                let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
+                                return "Currently:<br>" + f + "%"
+                        }
+                        if (id == 401) {
+                                let f = formatWhole(layers.l.grid.getGemEffect(id).times(100))
+                                return "Currently:<br>" + f + "%"
+                        }
                         if (id == 303 || id == 404) {
                                 return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(id))
                         }
@@ -8494,7 +8513,9 @@ addLayer("l", {
                 },
                 getGemEffect(id) {
                         if (GEM_EFFECT_FORMULAS[id] == undefined) return new Decimal(0)
-                        return GEM_EFFECT_FORMULAS[id](player.l.grid[id].gems)
+                        let g = player.l.grid[id].gems
+                        if (g.gt(1e3)) g = g.log10().plus(7).pow(3)
+                        return GEM_EFFECT_FORMULAS[id](g)
                 },
                 getTitle(data, id){
                         return "C" + (data.hundreds*10+data.units)
@@ -8590,15 +8611,16 @@ addLayer("l", {
                                         let c2 = "Challenge 2: Add .01 to µ cost exponent"
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                         let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
-                                        let c5 = "Challenge 5: Dilate Point gain ^[tbd]"
+                                        let c5 = "Challenge 5: Dilate Point gain ^.665"
                                         let c6 = "Challenge 6: N → ΔP levels in effect formula are raised ^.7 [tbd]"
                                         let c7 = "Challenge 7: You have 5 [tbd] more tokens for prestige purposes"
                                         let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
-                                        let p = "Note: All above descriptions are per depth/time you are in the challenge unless otherwise stated.<br>"
+                                        let p = "Note: All above descriptions are per depth/time you are in the challenge unless otherwise stated."
+                                        let q = "Note2: Gems above 1000 are softcapped x → (7+log10(x))<sup>3</sup>"
 
-                                        let step4 = step3 + br2 + challs + br + p
+                                        let step4 = step3 + br2 + challs + br + p + br + q
 
                                         return step4
                                 }],
@@ -8917,6 +8939,12 @@ addLayer("a", {
                 autoBuyableTime: 0,
                 passivetime: 0,
                 gemPassiveTime: 0,
+                protein: {
+                        best: new Decimal(0),
+                        total: new Decimal(0),
+                        points: new Decimal(0),
+                        passiveTime: 0,
+                }
         }},
         color: "#F2990D",
         branches: [],
@@ -8942,6 +8970,8 @@ addLayer("a", {
         },
         getGainMult(){ //amino gain aminogain again a gain acidgain amino acid aminoacid
                 let ret = new Decimal(1)
+
+                if (hasUpgrade("a", 25)) ret = ret.times(getBuyableAmount("a", 13).max(1))
 
                 return ret
         },
@@ -9022,32 +9052,30 @@ addLayer("a", {
                         if (data.gemPassiveTime > 10) data.gemPassiveTime = 10
                         if (data.gemPassiveTime > 1) {
                                 data.gemPassiveTime += -1
-                                if (hasMilestone("a", 4) && player.l.grid[101].gems.lt(1e3)) {
-                                        player.l.grid[101].gems = player.l.grid[101].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 5) && player.l.grid[102].gems.lt(1e3)) {
-                                        player.l.grid[102].gems = player.l.grid[102].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 6) && player.l.grid[201].gems.lt(1e3)) {
-                                        player.l.grid[201].gems = player.l.grid[201].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 7) && player.l.grid[202].gems.lt(1e3)) {
-                                        player.l.grid[202].gems = player.l.grid[202].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 8) && player.l.grid[103].gems.lt(1e3)) {
-                                        player.l.grid[103].gems = player.l.grid[103].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 9) && player.l.grid[203].gems.lt(1e3)) {
-                                        player.l.grid[203].gems = player.l.grid[203].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 10) && player.l.grid[301].gems.lt(1e3)) {
-                                        player.l.grid[301].gems = player.l.grid[301].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 11) && player.l.grid[302].gems.lt(1e3)) {
-                                        player.l.grid[302].gems = player.l.grid[302].gems.plus(1)
-                                }
-                                if (hasMilestone("a", 12) && player.l.grid[303].gems.lt(1e3)) {
-                                        player.l.grid[303].gems = player.l.grid[303].gems.plus(1)
+                                let gridData = player.l.grid
+
+                                let doThese = []
+                                if (hasMilestone("a", 4))       doThese.push(101)
+                                if (hasMilestone("a", 5))       doThese.push(102)
+                                if (hasMilestone("a", 6))       doThese.push(201)
+                                if (hasMilestone("a", 7))       doThese.push(202)
+                                if (hasMilestone("a", 8))       doThese.push(103)
+                                if (hasMilestone("a", 9))       doThese.push(203)
+                                if (hasMilestone("a", 10))      doThese.push(301)
+                                if (hasMilestone("a", 11))      doThese.push(302)
+                                if (hasMilestone("a", 12))      doThese.push(303)
+                                if (hasMilestone("a", 21))      doThese.push(404)
+                                if (hasUpgrade("a", 23))        doThese.push(401)
+                                if (hasUpgrade("a", 24))        doThese.push(402)
+                                if (hasUpgrade("a", 25))        doThese.push(403)
+                                if (hasUpgrade("a", 31))        doThese.push(304)
+                                if (hasUpgrade("a", 32))        doThese.push(204)
+                                if (hasUpgrade("a", 33))        doThese.push(104)
+                                for (i in doThese) {
+                                        id = doThese[i]
+                                        if (gridData[id].gems.lt(1e3)) {
+                                                gridData[id].gems = gridData[id].gems.plus(1)
+                                        }
                                 }
                         }
                 } else data.gemPassiveTime = 0
@@ -9068,6 +9096,31 @@ addLayer("a", {
                                 }
                         }
                 } else data.autoBuyableTime = 0
+
+                if (hasUpgrade("a", 11)) {
+                        let data2 = data.protein
+                        let gain = tmp.a.protein.getResetGain
+                        data2.points = data2.points.plus(gain.times(diff))
+                        data2.best = data2.best.max(data2.points)
+
+                        let proteinTimeMult = 1
+                        if (hasUpgrade("a", 22)) proteinTimeMult *= 2
+                        if (hasUpgrade("a", 23)) proteinTimeMult *= 2.5
+                        if (hasUpgrade("a", 24)) proteinTimeMult *= 2
+                        if (hasUpgrade("a", 25)) proteinTimeMult *= 2
+                        
+                        data2.passiveTime += diff * proteinTimeMult
+                        if (hasUpgrade("a", 21)) {
+                                if (data2.passiveTime > 10) data2.passiveTime = 10
+                                if (data2.passiveTime > 1) {
+                                        data2.passiveTime += -1
+                                        if (tmp.a.buyables[11].canBuy) layers.a.buyables[11].buy()
+                                        if (hasUpgrade("a", 22) && tmp.a.buyables[12].canBuy) {
+                                                layers.a.buyables[12].buy()
+                                        }
+                                }
+                        } else data2.passiveTime = 0
+                }
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -9093,6 +9146,28 @@ addLayer("a", {
                 },
         ],
         layerShown(){return player.a.unlocked},
+        protein: {
+                getResetGain(){ //protein gain protaingain progain pgain
+                        let ret = player.a.points.plus(10).log10()
+
+                                                        ret = ret.times(tmp.a.buyables[11].effect)
+                                                        ret = ret.times(tmp.a.buyables[12].effect)
+                                                        ret = ret.times(tmp.a.buyables[13].effect)
+                                                        ret = ret.times(tmp.a.buyables[21].effect)
+
+                        if (hasUpgrade("a", 13))        ret = ret.times(getBuyableAmount("a", 11).max(1))
+                        if (hasUpgrade("a", 14))        ret = ret.times(Decimal.pow(2, player.a.upgrades.length))
+                        if (hasUpgrade("a", 15))        ret = ret.times(getBuyableAmount("a", 12).max(1))
+                        if (hasUpgrade("a", 31))        ret = ret.times(getBuyableAmount("a", 13).max(1).pow(3))
+                        if (hasUpgrade("a", 32))        ret = ret.times(Decimal.pow(2, player.a.upgrades.length))
+                        
+                        if (hasMilestone("a", 22))      ret = ret.times(Decimal.pow(1+player.a.milestones.length/100, player.a.milestones.length))
+                        
+                                                        ret = ret.times(layers.l.grid.getGemEffect(105))
+
+                        return ret
+                },
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -9101,13 +9176,240 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid I"
                         },
                         description(){
-                                let a = "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
+                                let a = "Unlock Protein and each upgrade cubes point gain"
                                 return a
                         },
-                        cost:() => new Decimal(2),
+                        cost:() => new Decimal("1e1465"),
+                        currencyLocation:() => player.l,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Lives",
                         unlocked(){
-                                return false
+                                return layers.l.grid.getGemEffect(404) >= 1
                         }, // hasUpgrade("a", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid II"
+                        },
+                        description(){
+                                let a = "Each tRNA adds .001 to mRNA base until 3.2"
+                                return a
+                        },
+                        cost:() => new Decimal(15e3),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 2
+                        }, // hasUpgrade("a", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid III"
+                        },
+                        description(){
+                                let a = "The number of tRNA's multiplies Protein gain and exponentiates Point gain"
+                                return a
+                        },
+                        cost:() => new Decimal(2e5),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 3
+                        }, // hasUpgrade("a", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid IV"
+                        },
+                        description(){
+                                let a = "Each mRNA adds .001 to tRNA base until 2.2 and each upgrade doubles Protein gain"
+                                return a
+                        },
+                        cost:() => new Decimal(3e14),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 4
+                        }, // hasUpgrade("a", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid V"
+                        },
+                        description(){
+                                let a = "The number of mRNA's multiplies Protein gain and exponentiates Point gain"
+                                return a
+                        },
+                        cost:() => new Decimal(3e35),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 5
+                        }, // hasUpgrade("a", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VI"
+                        },
+                        description(){
+                                let a = "Autobuy tRNA"
+                                return a
+                        },
+                        cost:() => new Decimal(1e75),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 6
+                        }, // hasUpgrade("a", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VII"
+                        },
+                        description(){
+                                let a = "Autobuy mRNA and the autobuyer triggers twice as often"
+                                return a
+                        },
+                        cost:() => new Decimal("1e420"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 7
+                        }, // hasUpgrade("a", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VIII"
+                        },
+                        description(){
+                                let a = "The autobuyer triggers 2.5x as often and gain a C41 gem per second"
+                                return a
+                        },
+                        cost:() => new Decimal("1e999"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(404) >= 8
+                        }, // hasUpgrade("a", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid IX"
+                        },
+                        description(){
+                                let a = "Unlock miRNA, gain a C42 gem per second, and the autobuyer triggers twice as often"
+                                return a
+                        },
+                        cost:() => new Decimal("1e1400"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 23)
+                        }, // hasUpgrade("a", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid X"
+                        },
+                        description(){
+                                let a = "miRNA levels multiply Amino Acid gain, gain a C43 gem per second, and the autobuyer triggers twice as often"
+                                return a
+                        },
+                        cost:() => new Decimal("1e3000"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 24)
+                        }, // hasUpgrade("a", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XI"
+                        },
+                        description(){
+                                let a = "Amino resets keep gem content, gain a C34 gem per second, and miRNA levels cubed multiply Protein gain"
+                                return a
+                        },
+                        cost:() => new Decimal("1e3200"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 25)
+                        }, // hasUpgrade("a", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XII"
+                        },
+                        description(){
+                                let a = "Each upgrade doubles Protein gain, gain a C24 gem per second, and tRNA and mRNA cost nothing"
+                                return a
+                        },
+                        cost:() => new Decimal("1e4200"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 31)
+                        }, // hasUpgrade("a", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XIII"
+                        },
+                        description(){
+                                let a = "Unlock the next set of challenges, gain a C14 gem per second, and each miRNA raises point gain ^100"
+                                return a
+                        },
+                        cost:() => new Decimal("1e5100"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 32)
+                        }, // hasUpgrade("a", 33)
+                },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XIV"
+                        },
+                        description(){
+                                let a = "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
+                                return a
+                        },
+                        cost:() => new Decimal("1e5432"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 33)
+                        }, // hasUpgrade("a", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XV"
+                        },
+                        description(){
+                                let a = "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
+                                return a
+                        },
+                        cost:() => new Decimal("1e9000"),
+                        currencyLocation:() => player.a.protein,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein",
+                        unlocked(){
+                                return hasUpgrade("a", 34)
+                        }, // hasUpgrade("a", 35)
                 },
         },
         milestones: {
@@ -9558,10 +9860,324 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 20)
+                21: {
+                        requirementDescription(){
+                                return "Requires: 1.00e34 Proteins"
+                        },
+                        requirement(){
+                                return new Decimal("1e34")
+                        },
+                        done(){
+                                return tmp.a.milestones[21].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },     
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain a C44 gem per second and Protein (up to 1e2000) multiplies Life gain"
+                                let b = "" 
+                                return a + b
+                        },
+                }, // hasMilestone("a", 21)
+                22: {
+                        requirementDescription(){
+                                return "Requires: 10 C25 Gems"
+                        },
+                        requirement(){
+                                return new Decimal(10)
+                        },
+                        done(){
+                                return tmp.a.milestones[22].requirement.lte(player.l.grid[205].gems)
+                        },
+                        unlocked(){
+                                return true
+                        },     
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100"
+                                let b = "" 
+                                return a + b
+                        },
+                }, // hasMilestone("a", 22)
+                23: {
+                        requirementDescription(){
+                                return "Requires: 1e11,111 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e11111")
+                        },
+                        done(){
+                                return tmp.a.milestones[23].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },     
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: You can bulk all tRNA and mRNA"
+                                let b = "" 
+                                return a + b
+                        },
+                }, // hasMilestone("a", 23)
         },
         buyables: {
                 rows: 3,
                 cols: 3,
+                11: {
+                        title: "tRNA", // 1/(1-(Math.log(2.201)/Math.log(5)+Math.log(3.201)/Math.log(10)))
+                        cost() {
+                                let amt = getBuyableAmount("a", 11)
+                                let baseCost = new Decimal(200)
+                                return baseCost.times(Decimal.pow(5, amt))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        maxAfford(){
+                                let pts = player.a.protein.points
+                                return pts.div(200).log(5).plus(1).floor().max(0)
+                        }, //hasMilestone("a", 23)
+                        canAfford:() => player.a.protein.points.gte(tmp.a.buyables[11].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.a
+                                let ma = tmp.a.buyables[11].maxAfford
+                                let up = hasMilestone("a", 23) ? ma.sub(data.buyables[11]) : 1
+                                data.buyables[11] = data.buyables[11].plus(up)
+                                if (!hasUpgrade("a", 32)) {
+                                        data.protein.points = data.protein.points.sub(tmp.a.buyables[11].cost)
+                                }
+                        },
+                        base(){
+                                let ret = new Decimal(2)
+
+                                if (hasUpgrade("a", 14)) ret = ret.plus(getBuyableAmount("a", 12).min(200).div(1000))
+                                if (hasUpgrade("a", 34)) ret = ret.plus(.001)
+                                if (hasUpgrade("a", 35)) ret = ret.plus(.001)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.a.buyables[11].base.pow(player.a.buyables[11])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Protein") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[11]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.a.buyables[11].effect) + " to Protein gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 11)) + " Protein</b><br>"
+                                let eformula = format(tmp.a.buyables[11].base, 3) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "200*5^x"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                12: {
+                        title: "mRNA",
+                        cost() {
+                                let amt = getBuyableAmount("a", 12)
+                                let baseCost = new Decimal(500)
+                                return baseCost.times(Decimal.pow(10, amt))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        maxAfford(){
+                                let pts = player.a.protein.points
+                                return pts.div(500).log(10).plus(1).floor().max(0)
+                        },
+                        canAfford:() => player.a.protein.points.gte(tmp.a.buyables[12].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.a
+                                let ma = tmp.a.buyables[12].maxAfford
+                                let up = hasMilestone("a", 23) ? ma.sub(data.buyables[12]) : 1
+                                data.buyables[12] = data.buyables[12].plus(up)
+                                if (!hasUpgrade("a", 32)) {
+                                        data.protein.points = data.protein.points.sub(tmp.a.buyables[12].cost)
+                                }
+                        },
+                        base(){
+                                let ret = new Decimal(3)
+
+                                if (hasUpgrade("a", 12)) ret = ret.plus(getBuyableAmount("a", 11).min(200).div(1000))
+                                if (hasUpgrade("a", 34)) ret = ret.plus(.001)
+                                if (hasUpgrade("a", 35)) ret = ret.plus(.001)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.a.buyables[12].base.pow(player.a.buyables[12])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Protein") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[12]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.a.buyables[12].effect) + " to Protein gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 12)) + " Protein</b><br>"
+                                let eformula = format(tmp.a.buyables[12].base, 3) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "500*10^x"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                13: {
+                        title: "miRNA",
+                        cost() {
+                                let amt = getBuyableAmount("a", 13)
+                                let baseCost = new Decimal("1e1450")
+                                return baseCost.times(Decimal.pow("1e500", amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("a", 24)
+                        },
+                        canAfford:() => player.a.protein.points.gte(tmp.a.buyables[13].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.a
+                                data.buyables[13] = data.buyables[13].plus(1)
+                                if (!false) {
+                                        data.protein.points = data.protein.points.sub(tmp.a.buyables[13].cost)
+                                }
+                        },
+                        base(){
+                                let ret = player.l.points.max(10).log10()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.a.buyables[13].base.pow(player.a.buyables[13])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Protein") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[13]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 13)) + " Protein</b><br>"
+                                let eformula = "log10(Lives)^x<br>" + format(tmp.a.buyables[13].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e1450*1e500^x<sup>2</sup>"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
+                21: {
+                        title: "rRNA",
+                        cost() {
+                                let amt = getBuyableAmount("a", 21)
+                                let baseCost = new Decimal("1e7350")
+                                return baseCost.times(Decimal.pow("1e200", amt.pow(1.2)))
+                        },
+                        unlocked(){
+                                return hasMilestone("a", 22)
+                        },
+                        canAfford:() => player.a.protein.points.gte(tmp.a.buyables[21].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.a
+                                data.buyables[21] = data.buyables[21].plus(1)
+                                if (!false) {
+                                        data.protein.points = data.protein.points.sub(tmp.a.buyables[21].cost)
+                                }
+                        },
+                        base(){
+                                let ret = new Decimal(tmp.l.getNonZeroGemCount).max(1)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.a.buyables[21].base.pow(player.a.buyables[21])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Protein") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[21]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 21)) + " Protein</b><br>"
+                                let eformula = "[Non zero gem challenges]^x<br>" + format(tmp.a.buyables[21].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e7350*1e200^x<sup>1.2</sup>"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -9591,13 +10207,17 @@ addLayer("a", {
                                 return true
                         },
                 },
-                "Buyables": {
+                "Protein": {
                         content: ["main-display",
+                                ["secondary-display", "protein"],
+                                ["display-text", function(){
+                                        return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
+                                }],
                                 "blank",
                                 ["buyables", [1,2,3]],
                                 ],
                         unlocked(){
-                                return false
+                                return hasUpgrade("a", 11)
                         },
                 },
                 "Info": {
@@ -9624,7 +10244,13 @@ addLayer("a", {
 
                                         let part2 = part1 + br2 + e + br + f + br + g + br + h
                                         
-                                        return part2
+                                        if (!hasUpgrade("a", 11)) return part2
+
+                                        let i = "Base protein gain is log10(10+Amino Acid)"
+                                        
+                                        let part3 = part2 + br + i
+
+                                        return part3
                                 }],
                                 ],
                         unlocked(){
@@ -9668,26 +10294,28 @@ addLayer("a", {
                         data1.buyables[33] = new Decimal(0)
 
                         //gems
-                        let x = ["101", "102", "103", "104", "105", "106", "107", "108", 
-                                 "201", "202", "203", "204", "205", "206", "207", "208", 
-                                 "301", "302", "303", "304", "305", "306", "307", "308", 
-                                 "401", "402", "403", "404", "405", "406", "407", "408", 
-                                 "501", "502", "503", "504", "505", "506", "507", "508", 
-                                 "601", "602", "603", "604", "605", "606", "607", "608", 
-                                 "701", "702", "703", "704", "705", "706", "707", "708", 
-                                 "801", "802", "803", "804", "805", "806", "807", "808"]
-                        let keepGems = new Decimal(0)
-                        if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
+                        if (!hasUpgrade("a", 31)) {
+                                let x = ["101", "102", "103", "104", "105", "106", "107", "108", 
+                                        "201", "202", "203", "204", "205", "206", "207", "208", 
+                                        "301", "302", "303", "304", "305", "306", "307", "308", 
+                                        "401", "402", "403", "404", "405", "406", "407", "408", 
+                                        "501", "502", "503", "504", "505", "506", "507", "508", 
+                                        "601", "602", "603", "604", "605", "606", "607", "608", 
+                                        "701", "702", "703", "704", "705", "706", "707", "708", 
+                                        "801", "802", "803", "804", "805", "806", "807", "808"]
+                                let keepGems = new Decimal(0)
+                                if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
 
-                        let gData = player.l.grid
+                                let gData = player.l.grid
 
-                        for (i in x) {
-                                id = x[i]
-                                let thisKeep = keepGems
-                                if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
-                                        thisKeep = thisKeep.max(1000)
+                                for (i in x) {
+                                        id = x[i]
+                                        let thisKeep = keepGems
+                                        if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
+                                                thisKeep = thisKeep.max(1000)
+                                        }
+                                        gData[id].gems = gData[id].gems.min(thisKeep)
                                 }
-                                gData[id].gems = gData[id].gems.min(thisKeep)
                         }
 
                         //challenges
