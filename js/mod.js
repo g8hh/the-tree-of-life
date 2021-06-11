@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.015",
+	num: "1.015.1",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.015.1</h3><br>
+		- Added a Life milestone.<br>
+		- Added C41 and C42 rewards.<br>
+		- Made C43 possible.<br>
+		- As Nyan Cat would say, RTFSC (<i>p</i><sub>25</sub>?).<br>
 	<br><h3 style='color: #CC0000'>v1.015</h3><br>
 		- Added an effect to Life milestone 30.<br>
 		- Added three Amino milestones.<br>

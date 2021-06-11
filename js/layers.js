@@ -46,6 +46,7 @@ function getPointGen() {
                 let base = layers.l.grid.getGemEffect(304)
                                         gain = gain.pow(base.pow(getBuyableAmount("mu", 32)))
         }
+        if (hasMilestone("a", 19))      gain = gain.pow(tmp.a.milestones[19].effect)
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
 
@@ -90,7 +91,10 @@ var GEM_EFFECT_DESCRIPTIONS = {
         303: "Less tokens for prestige<br>floor(log2<wbr>(log2(2+2x)))",
         104: "Add to Amino effect exponent<br>cbrt(x)",
         204: "Life gain per non-0 gem<br>(x+1)^<wbr>log100(100+x)",
-        304: "Point gain per N → ΔP<br>log10(10+x<sup>.5</sup>)",
+        304: "Point gain per N → ΔP<br>log10(10+x<sup>.8</sup>)",
+        401: "Passive Amino Acid gain<br>x%",
+        402: "Add to base of base life gain<br>sqrt(x)", 
+        //403 = increase p gain ^ 1.01^x hardcap 10
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -105,7 +109,9 @@ var GEM_EFFECT_FORMULAS = {
         303: (x) => x.times(2).plus(2).log(2).log(2).floor(),
         104: (x) => x.cbrt(),
         204: (x) => x.plus(1).pow(x.plus(100).log(100).min(2)),
-        304: (x) => x.sqrt().plus(10).log10(),
+        304: (x) => x.pow(.8).plus(10).log10(),
+        401: (x) => x.div(100),
+        402: (x) => x.sqrt(),
 }
 
 function nCk(n, k){
@@ -6527,6 +6533,7 @@ addLayer("l", {
                 let ret = new Decimal(9)
 
                 if (hasMilestone("l", 29)) ret = ret.sub(player.l.buyables[23].div(5))
+                ret = ret.sub(layers.l.grid.getGemEffect(402))
 
                 return ret
         },
@@ -8979,26 +8986,14 @@ addLayer("a", {
                                 data.times ++
                         } 
                         if (data.passivetime > 10) data.passivetime = 10
-
-                        /*if (!hasMilestone("l", 13) || tmp.l.getResetGain.times(1e4).lt(data.points)) {
-                                let netGain = tmp.l.getResetGain.times(diff)
-                                data.points = data.points.plus(netGain)
-                                data.total = data.total.plus(netGain)
-                        } else {
-                                let gain = tmp.l.getResetGain
-                                let div = player.hardMode ? 100 : 1000
-                                let totalLeft = Decimal.sub(1e4/div, data.points.div(gain).div(div))
-                                if (diff < totalLeft) {
-                                        let ng = tmp.l.getResetGain.times(diff).times(div)
-                                        data.points = data.points.plus(ng)
-                                        data.total = data.total.plus(ng)
-                                } else {
-                                        let ng = tmp.l.getResetGain.times(totalLeft.times(div-1).plus(diff))
-                                        data.points = data.points.plus(ng)
-                                        data.total = data.total.plus(ng)
-                                }
-                        }*/
                 } else data.passivetime = 0
+
+                let gainportion = layers.l.grid.getGemEffect(401)
+                if (gainportion.gt(0)) {
+                        let gainAmt = tmp.a.getResetGain.times(diff).times(gainportion)
+                        data.points = data.points.plus(gainAmt)
+                        data.total = data.total.plus(gainAmt)
+                }
 
                 if (hasMilestone("a", 4)) {
                         if (data.gemPassiveTime > 10) data.gemPassiveTime = 10
@@ -9491,6 +9486,33 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 18)
+                19: {
+                        requirementDescription(){
+                                return "Requires: 1.00e1256 Lives"
+                        },
+                        requirement(){
+                                return new Decimal("1e1256")
+                        },
+                        done(){
+                                return tmp.a.milestones[19].requirement.lte(player.l.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effect(){
+                                let base = new Decimal(1.05)
+                                let exp = getBuyableAmount("mu", 31).pow(1.5)
+                                return base.pow(exp)
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate point gain ^1.05"
+                                let b = "Currently: ^" + format(tmp.a.milestones[19].effect) 
+                                return a + b
+                        },
+                }, // hasMilestone("a", 19)
         },
         buyables: {
                 rows: 3,
