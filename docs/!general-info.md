@@ -2,7 +2,7 @@
 
 Making a game in The Modding Tree mostly involves defining parameters or functions on objects. If you aren't following the [getting started guide](tutorials/getting-started.md), you should start by [setting up your basic mod info](main-mod-info.md) in [mod.js](/js/mod.js). It's important to set a mod id to ensure saving works properly.
 
-Beyond that, the main way to add content is through creating layers, often in [layers.js](/js/layers.js). You can add new layers by calling `addLayer(layername, layerdata)`. There is an example of a basic layer in [layers.js](/js/layers.js) showing the recommended method. It is just an example and can be freely deleted. You can also use it as a reference or a base for your own layers. 
+Beyond that, the main way to add content is through creating layers. You can add new layers by calling `addLayer(layername, layerdata)`. There is an example of a basic layer in [layers.js](/js/layers.js). It is just an example and can be freely deleted. You can also use it as a reference or a base for your own layers. 
 
 You can test your mod by opening the [index.html](/index.html) file in your browser.
 
