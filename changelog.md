@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+# v2.6.3 - 6/11/21
+- Added better support for using multiple layer files and similar. See modFiles in modInfo.
+- The demo now has each layer in its own file as well.
+
 # v2.6.2.2 - 6/10/21
 - Fixed an error message regarding popup.css.
 

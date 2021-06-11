@@ -2,16 +2,18 @@ let modInfo = {
 	name: "The Modding Tree",
 	id: "modbase",
 	pointsName: "points",
+	modFiles: ["Demo/layers/c.js", "Demo/layers/f.js", "Demo/layers/a.js", "Demo/demoTree.js"],
+
+
 	discordName: "",
 	discordLink: "",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	
 	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.6.2.2",
+	num: "2.6.3",
 	name: "Fixed Reality",
 }
 

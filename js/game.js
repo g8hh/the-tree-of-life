@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.2.2",
+	tmtNum: "2.6.3",
 	tmtName: "Fixed Reality"
 }
 
@@ -130,11 +130,11 @@ function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
 		if(layers[lr].doReset) {
 
-			Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
+			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
 		}
 		else
-			if(tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) layerDataReset(lr)
+			if(tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr)
 	}
 }
 
