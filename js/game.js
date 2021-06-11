@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.2.1",
+	tmtNum: "2.6.2.2",
 	tmtName: "Fixed Reality"
 }
 

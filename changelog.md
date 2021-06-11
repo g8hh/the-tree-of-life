@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.6.2.2 - 6/10/21
+- Fixed an error message regarding popup.css.
+
 # v2.6.2.1 - 6/10/21
 - Fixed a visual bug with milestones.
 
