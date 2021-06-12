@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.017",
+	num: "1.018",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.018</h3><br>
+		- Added 3 Amino milestones.<br>
+		- Added 2 Amino upgrades.<br>
+		- Added a protein buyable.<br>
+		- Implemented 5 challenges.<br>
+		- Nerfed C5 at >1 depth.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.017</h3><br>
 		- Implemented C5.<br>
 		- Gave C15 and C25 rewards.<br>
