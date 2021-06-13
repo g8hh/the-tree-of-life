@@ -1831,12 +1831,12 @@
       if (b.sign === 0) { return FC_NN(1, 0, 1); }
       //special case: if b is 1, then return a
       if (b.sign === 1 && b.layer === 0 && b.mag === 1) { return a; }
+
+      var needToNegate = a.sign === -1 && (b.toNumber() % 2 === 1 || b.toNumber() % 2 === -1)
       
       var result = (a.absLog10().mul(b)).pow10();
 
-      if (this.sign === -1 && b.toNumber() % 2 === 1) {
-        return result.neg();
-      }
+      if (needToNegate) return result.neg();
 
       return result;
     };

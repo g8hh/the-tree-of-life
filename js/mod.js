@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.018",
+	num: "1.019",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.019</h3><br>
+		- Fixed a bug in b_e and got patashu to fix it!<br>
+		- Added two custom saves.<br>
+		- Made hardmode nerf protein gain.<br>
+		- Added C54 and C55 rewards.<br>
+		- Added six Amino milestones.<br>
 	<br><h3 style='color: #CC0000'>v1.018</h3><br>
 		- Added 3 Amino milestones.<br>
 		- Added 2 Amino upgrades.<br>

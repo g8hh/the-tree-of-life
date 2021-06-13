@@ -45,6 +45,8 @@ function getPointGen() {
         if (true) {
                 let base = layers.l.grid.getGemEffect(304)
                                         gain = gain.pow(base.pow(getBuyableAmount("mu", 32)))
+                let base2= layers.l.grid.getGemEffect(504)
+                                        gain = gain.pow(base.pow(getBuyableAmount("a", 22)))
         }
         if (hasMilestone("a", 19))      gain = gain.pow(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        gain = gain.pow(Decimal.pow(3, player.a.upgrades.length))
@@ -115,6 +117,8 @@ var GEM_EFFECT_DESCRIPTIONS = {
         501: "mRNA is cheaper<br>100^cbrt(x)",
         502: "Amino gain exp<br>cbrt(x/10)",
         503: "Protein per Amino Acid upgrade<br>log10(10+x<sup>.5</sup>)",
+        504: "Point gain per siRNA<br>log10(10+x)",
+        505: "Life gain per rRNA<br>log100(100+x)",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -140,7 +144,9 @@ var GEM_EFFECT_FORMULAS = {
         405: (x) => x.cbrt().pow10(),
         501: (x) => x.cbrt().pow10().pow(2),
         502: (x) => x.div(10).cbrt(),
-        503: (x) => x.sqrt().plus(10).log10()
+        503: (x) => x.sqrt().plus(10).log10(),
+        504: (x) => x.plus(10).log10(),
+        505: (x) => x.plus(100).log(100),
 }
 
 function nCk(n, k){
@@ -6316,6 +6322,7 @@ addLayer("mu", {
 
                                 if (hasMilestone("l", 27)) ret = ret.times(5)
                                 if (hasMilestone("l", 30)) ret = ret.times(5)
+                                if (hasMilestone("a", 27)) ret = ret.times(5)
 
                                 return ret
                         },
@@ -6625,6 +6632,8 @@ addLayer("l", {
                 if (true) {
                         let base = layers.l.grid.getGemEffect(204)
                                                 ret = ret.times(base.pow(tmp.l.getNonZeroGemCount))
+                        let base2 = layers.l.grid.getGemEffect(505)
+                                                ret = ret.times(base2.pow(getBuyableAmount("a", 21)))
                 }
                 if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
 
@@ -8988,8 +8997,9 @@ addLayer("a", {
         getGainMult(){ //amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
                 let ret = new Decimal(1)
 
-                if (hasUpgrade("a", 25)) ret = ret.times(getBuyableAmount("a", 13).max(1))
-                ret = ret.times(layers.l.grid.getGemEffect(305))
+                if (hasUpgrade("a", 25))        ret = ret.times(getBuyableAmount("a", 13).max(1))
+                                                ret = ret.times(layers.l.grid.getGemEffect(305))
+                if (hasMilestone("a", 28))      ret = ret.times(getBuyableAmount("a", 21).max(1))
 
                 return ret
         },
@@ -9136,8 +9146,17 @@ addLayer("a", {
                                         if (hasUpgrade("a", 22) && tmp.a.buyables[12].canBuy) {
                                                 layers.a.buyables[12].buy()
                                         }
+                                        if (hasMilestone("a", 30) && tmp.a.buyables[21].canBuy) {
+                                                layers.a.buyables[21].buy()
+                                        }
                                 }
                         } else data2.passiveTime = 0
+
+                        if (hasMilestone("a", 32)) {
+                                let init = tmp.a.protein.getAllOtherGain
+                                let exp = tmp.a.protein.mRNAtRNABoostExp
+                                data2.points = data2.points.plus(init.div(1e3).pow(exp))
+                        }
                 }
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
@@ -9165,11 +9184,11 @@ addLayer("a", {
         ],
         layerShown(){return player.a.unlocked},
         protein: {
-                getResetGain(){ //protein gain protaingain progain pgain
+                getAllOtherGain(){
                         let ret = player.a.points.plus(10).log10()
 
-                                                        ret = ret.times(tmp.a.buyables[11].effect)
-                                                        ret = ret.times(tmp.a.buyables[12].effect)
+                        if (player.hardMode)            ret = ret.div(5)
+
                                                         ret = ret.times(tmp.a.buyables[13].effect)
                                                         ret = ret.times(tmp.a.buyables[21].effect)
 
@@ -9183,11 +9202,33 @@ addLayer("a", {
                         if (hasUpgrade("a", 31))        ret = ret.times(getBuyableAmount("a", 13).max(1).pow(3))
                         if (hasUpgrade("a", 13))        ret = ret.times(getBuyableAmount("a", 11).max(1))
                         if (hasUpgrade("a", 42))        ret = ret.times(getBuyableAmount("a", 22).max(1))
+                        if (hasMilestone("a", 28))      ret = ret.times(getBuyableAmount("a", 21).max(1))
                                                         
                         
                         if (hasMilestone("a", 22))      ret = ret.times(Decimal.pow(1+player.a.milestones.length/100, player.a.milestones.length))
+                        if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
+                        if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(1e25).max(1))
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
+
+                        return ret
+                },
+                mRNAtRNAGainPer(){
+                        let a = tmp.a.buyables[11].base
+                        let b = tmp.a.buyables[12].base
+                        return a.log(5).plus(b.log(10))
+                },
+                mRNAtRNABoostExp(){
+                        //1/(1-(Math.log(2.205)/Math.log(5)+Math.log(3.204)/Math.log(10)))
+                        let gain = tmp.a.protein.mRNAtRNAGainPer
+                        if (gain.lt(1)) return gain.sub(1).pow(-1).times(-1)
+                        return "well oops"
+                },
+                getResetGain(){ //protein gain protaingain progain pgain
+                        let ret = tmp.a.protein.getAllOtherGain
+
+                        ret = ret.times(tmp.a.buyables[11].effect)
+                        ret = ret.times(tmp.a.buyables[12].effect)
 
                         return ret
                 },
@@ -10052,6 +10093,138 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 26)
+                27: {
+                        requirementDescription(){
+                                return "Requires: 1e66,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e66000")
+                        },
+                        done(){
+                                return tmp.a.milestones[27].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Add .001 to mRNA base you can bulk 5x N → ΔP"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 27)
+                28: {
+                        requirementDescription(){
+                                return "Requires: 1e76,543 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e76543")
+                        },
+                        done(){
+                                return tmp.a.milestones[28].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: rRNA levels multiply protein and Amino Acid gain"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 28)
+                29: {
+                        requirementDescription(){
+                                return "Requires: 1e79,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e79000")
+                        },
+                        done(){
+                                return tmp.a.milestones[29].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Add .01 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 29)
+                30: {
+                        requirementDescription(){
+                                return "Requires: 1e118,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e118e3")
+                        },
+                        done(){
+                                return tmp.a.milestones[30].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Add .01 to tRNA base and autobuy rRNA"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 30)
+                31: {
+                        requirementDescription(){
+                                return "Requires: 1e160,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e160e3")
+                        },
+                        done(){
+                                return tmp.a.milestones[31].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 31)
+                32: {
+                        requirementDescription(){
+                                return "Requires: 1e175,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e175e3")
+                        },
+                        done(){
+                                return tmp.a.milestones[32].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: mRNA and tRNA production boost is additionally treated as you can buy them in 1ms<sup>*3</sup>"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 32)
         },
         buyables: {
                 rows: 3,
@@ -10064,6 +10237,7 @@ addLayer("a", {
                                 return baseCost.times(Decimal.pow(5, amt))
                         },
                         baseCost(){
+                                if (hasMilestone("a", 31)) return new Decimal(1)
                                 let ret = new Decimal(200)
                                 
                                 ret = ret.div(layers.l.grid.getGemEffect(405))
@@ -10095,6 +10269,8 @@ addLayer("a", {
                                 if (hasUpgrade("a", 34)) ret = ret.plus(.001)
                                 if (hasUpgrade("a", 35)) ret = ret.plus(.001)
                                 if (hasMilestone("a", 25)) ret = ret.plus(.001)
+                                if (hasMilestone("a", 29)) ret = ret.plus(.001)
+                                if (hasMilestone("a", 30)) ret = ret.plus(.001)
                                 
                                 return ret
                         },
@@ -10124,6 +10300,7 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.a.buyables[11].baseCost, 2, true) + "*5^x"
+                                if (hasMilestone("a", 31)) cost2 = "5^x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -10139,6 +10316,7 @@ addLayer("a", {
                                 return baseCost.times(Decimal.pow(10, amt))
                         },
                         baseCost(){
+                                if (hasMilestone("a", 31)) return new Decimal(1)
                                 let ret = new Decimal(500)
                                 
                                 ret = ret.div(layers.l.grid.getGemEffect(501))
@@ -10170,6 +10348,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 34)) ret = ret.plus(.001)
                                 if (hasUpgrade("a", 35)) ret = ret.plus(.001)
                                 if (hasMilestone("a", 26)) ret = ret.plus(.001)
+                                if (hasMilestone("a", 27)) ret = ret.plus(.001)
                                 
                                 return ret
                         },
@@ -10199,6 +10378,7 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.a.buyables[12].baseCost, 2, true) + "*10^x"
+                                if (hasMilestone("a", 31)) cost2 = "10^x"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -10448,8 +10628,15 @@ addLayer("a", {
                                         if (!hasUpgrade("a", 11)) return part2
 
                                         let i = "Base protein gain is log10(10+Amino Acid)"
+
+                                        if (!hasMilestone("a", 32)) return part2 + br2 + i
                                         
-                                        let part3 = part2 + br2 + i
+                                        let j1 = "<sup>*3</sup>If you are gainging X protein/s from sources other than tRNA and mRNA,"
+                                        let j2 = "and your mRNA and tRNA net ^Y protein gain"
+                                        let j3 = "then you get an additional (X/1000)<sup>Y</sup> protein per second"
+                                        let j = j1 + br + j2 + br + j3
+
+                                        let part3 = part2 + br2 + i + br + j
 
                                         return part3
                                 }],
