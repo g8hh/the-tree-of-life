@@ -9167,7 +9167,7 @@ addLayer("a", {
                 let a = "Reset for <b>" + formatWhole(tmp.a.getResetGain) + "</b> Amino Acids"
 
                 let b = ""
-                if (tmp.a.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.a.getNextAt) + " points."
+                if (tmp.a.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.a.getNextAt) + " Lives."
 
                 return a + b
         },
