@@ -485,7 +485,7 @@ addLayer("h", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(0) + "'>Hydrogen I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen I"
                         },
                         description(){
                                 if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
@@ -518,7 +518,7 @@ addLayer("h", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(1) + "'>Hydrogen II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen II"
                         },
                         description(){
                                 if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula"
@@ -546,7 +546,7 @@ addLayer("h", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(2) + "'>Hydrogen III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen III"
                         },
                         description(){
                                 if (player.tab != "h") return ""
@@ -576,7 +576,7 @@ addLayer("h", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(3) + "'>Hydrogen IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IV"
                         },
                         description(){
                                 if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]"
@@ -604,7 +604,7 @@ addLayer("h", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(4) + "'>Hydrogen V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen V"
                         },
                         description(){
                                 if (!shiftDown) return "Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other"
@@ -619,7 +619,7 @@ addLayer("h", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(5) + "'>Deuterium I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium I"
                         },
                         description(){
                                 if (!shiftDown) return "Search through your Hydrogen to find the special .02% -- Deuterium"
@@ -636,7 +636,7 @@ addLayer("h", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(6) + "'>Deuterium II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium II"
                         },
                         description(){
                                 if (!shiftDown) return "ln(ln(10+[best Deuterium])) multiplies Life Point and Hydrogen gain"
@@ -670,7 +670,7 @@ addLayer("h", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(7) + "'>Deuterium III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium III"
                         },
                         description(){
                                 if (!shiftDown) return "ln([best Deuterium]) multiplies Deuterium gain"
@@ -701,7 +701,7 @@ addLayer("h", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(8) + "'>Deuterium IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium IV"
                         },
                         description(){
                                 if (!shiftDown) return "Raise Deuterium II to the number of upgrades in this row"
@@ -734,7 +734,7 @@ addLayer("h", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(9) + "'>Deuterium V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium V"
                         },
                         description(){
                                 if (!shiftDown) return "Each upgrade raises Life Point gain ^1.01"
@@ -764,7 +764,7 @@ addLayer("h", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(10) + "'>Atomic Hydrogen I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen I"
                         },
                         description(){
                                 if (!shiftDown) return "Wait for your Hydrogen to cool and bond at a brisk .1% rate"
@@ -781,7 +781,7 @@ addLayer("h", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(11) + "'>Atomic Hydrogen II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen II"
                         },
                         description(){
                                 if (!shiftDown) return "Upgrades in this row ^ .8 raise Hydrogen III effect"
@@ -815,7 +815,7 @@ addLayer("h", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(12) + "'>Atomic Hydrogen III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen III"
                         },
                         description(){
                                 if (!shiftDown) return "Make the ln in Hydrogen I a log2"
@@ -835,7 +835,7 @@ addLayer("h", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(13) + "'>Atomic Hydrogen IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen IV"
                         },
                         description(){
                                 if (!shiftDown) return "Hydrogen III affects Life Points"
@@ -855,7 +855,7 @@ addLayer("h", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(14) + "'>Atomic Hydrogen V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen V"
                         },
                         description(){
                                 if (!shiftDown) return "You lose .12% less Hydrogen per second"
@@ -875,7 +875,7 @@ addLayer("h", {
                 },
                 41: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(15) + "'>Hydrogen VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VI"
                         },
                         description(){
                                 if (player.tab != "h") return ""
@@ -910,7 +910,7 @@ addLayer("h", {
                 },
                 42: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(16) + "'>Hydrogen VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VII"
                         },
                         description(){
                                 if (player.tab != "h") return ""
@@ -947,7 +947,7 @@ addLayer("h", {
                 },
                 43: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(17) + "'>Hydrogen VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VIII"
                         },
                         description(){
                                 if (!shiftDown) return "Double Hydrogen II and make the ln in Hydrogen IV a log2"
@@ -963,7 +963,7 @@ addLayer("h", {
                 },
                 44: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(18) + "'>Hydrogen IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IX"
                         },
                         description(){
                                 if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>A</bdi>, but square Hydrogen X cost"
@@ -987,7 +987,7 @@ addLayer("h", {
                 },
                 45: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(19) + "'>Hydrogen X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen X"
                         },
                         description(){
                                 if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>B</bdi>, but square Hydrogen IX cost"
@@ -1010,7 +1010,7 @@ addLayer("h", {
                 },
                 51: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(20) + "'>Hydrogen XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XI"
                         },
                         description(){
                                 if (!shiftDown) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
@@ -1026,7 +1026,7 @@ addLayer("h", {
                 },
                 52: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(21) + "'>Hydrogen XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XII"
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='font-size: 80%'> The autobuyer can buy A buyables, all autobuyers trigger per tick and works 10x as fast. Remove the softcap for B buyables</bdi>"
@@ -1042,7 +1042,7 @@ addLayer("h", {
                 },
                 53: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(22) + "'>Hydrogen XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIII"
                         },
                         description(){
                                 if (!shiftDown) return "Add 1 to the Violet base and ln(White) multiplies White effect"
@@ -1058,7 +1058,7 @@ addLayer("h", {
                 },
                 54: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(23) + "'>Hydrogen XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIV"
                         },
                         description(){
                                 if (!shiftDown) return "^.5 in the A production formula becomes ^.52"
@@ -1074,7 +1074,7 @@ addLayer("h", {
                 },
                 55: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(24) + "'>Hydrogen XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XV"
                         },
                         description(){
                                 if (!shiftDown) return "^.52 in the A production formula becomes ^.524 and unlock Carbon (C) and Oxygen (O)"
@@ -1090,7 +1090,7 @@ addLayer("h", {
                 },
                 61: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(25) + "'>Hydrogen XVI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVI"
                         },
                         description(){
                                 if (!shiftDown) return "Per upgrade multiply Life Points by Carbon"
@@ -1121,7 +1121,7 @@ addLayer("h", {
                 },
                 62: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(26) + "'>Hydrogen XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVII"
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen IV affects Carbon gain and double autobuyer speed"
@@ -1137,7 +1137,7 @@ addLayer("h", {
                 },
                 63: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(27) + "'>Hydrogen XVIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVIII"
                         },
                         description(){
                                 if (!shiftDown) return "sqrt(log10(Life Points)) multiplies Carbon and Oxygen gain"
@@ -1164,7 +1164,7 @@ addLayer("h", {
                 },
                 64: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(28) + "'>Hydrogen XIX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIX"
                         },
                         description(){
                                 if (!shiftDown) return "Square the ln(x) term in White and add a log10(x) term to Green"
@@ -1180,7 +1180,7 @@ addLayer("h", {
                 },
                 65: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(29) + "'>Hydrogen XX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XX"
                         },
                         description(){
                                 if (!shiftDown) return "Unlock tokens"
@@ -1199,7 +1199,7 @@ addLayer("h", {
                 },
                 71: { // come back to here pls
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(30) + "'>Deuterium VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium VI"
                         },
                         canAfford(){
                                 if (player.h.deuterium.points.lt(tmp.h.upgrades[71].cost)) return false
@@ -1222,7 +1222,7 @@ addLayer("h", {
                 },
                 72: { // come back to here pls
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(31) + "'>Deuterium VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium VII"
                         },
                         canAfford(){
                                 if (player.h.deuterium.points.lt(tmp.h.upgrades[72].cost)) return false
@@ -1256,7 +1256,7 @@ addLayer("h", {
                 73: { // come back to here pls
                         title(){
                                 let end = shiftDown ? "Jacorb!" : "Deuterium VIII"
-                                return "<bdi style='color: #" + getUndulatingColor(32) + "'>" + end
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>" + end
                         },
                         canAfford(){
                                 if (player.h.deuterium.points.lt(tmp.h.upgrades[73].cost)) return false
@@ -1277,7 +1277,7 @@ addLayer("h", {
                 },
                 74: { // come back to here pls
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(33) + "'>Deuterium IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium IX"
                         },
                         canAfford(){
                                 if (player.h.deuterium.points.lt(tmp.h.upgrades[74].cost)) return false
@@ -1298,7 +1298,7 @@ addLayer("h", {
                 },
                 75: { // come back to here pls
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(34) + "'>Deuterium X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium X"
                         },
                         canAfford(){
                                 if (player.h.deuterium.points.lt(tmp.h.upgrades[75].cost)) return false
@@ -1319,7 +1319,7 @@ addLayer("h", {
                 },
                 81: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(35) + "'>Atomic Hydrogen VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen VI"
                         },
                         canAfford(){
                                 if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[81].cost)) return false
@@ -1342,7 +1342,7 @@ addLayer("h", {
                 },
                 82: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(36) + "'>Atomic Hydrogen VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen VII"
                         },
                         canAfford(){
                                 if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[82].cost)) return false
@@ -1363,7 +1363,7 @@ addLayer("h", {
                 },
                 83: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(37) + "'>Atomic Hydrogen VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen VIII"
                         },
                         canAfford(){
                                 if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[83].cost)) return false
@@ -1384,7 +1384,7 @@ addLayer("h", {
                 },
                 84: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(38) + "'>Atomic Hydrogen IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen IX"
                         },
                         canAfford(){
                                 if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[84].cost)) return false
@@ -1405,7 +1405,7 @@ addLayer("h", {
                 },
                 85: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(39) + "'>Atomic Hydrogen X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen X"
                         },
                         canAfford(){
                                 if (player.h.atomic_hydrogen.points.lt(tmp.h.upgrades[85].cost)) return false
@@ -1662,7 +1662,7 @@ addLayer("c", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(40) + "'>Carbon I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon I"
                         },
                         description(){
                                 if (!shiftDown) return "Begin Production of Carbon, but vastly increase the cost of Oxygen I"
@@ -1680,7 +1680,7 @@ addLayer("c", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(41) + "'>Carbon II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon II"
                         },
                         description(){
                                 if (!shiftDown) return "Add to the A point exponent .126-.126/<br>(1+cbrt([Carbon])/50)"
@@ -1710,7 +1710,7 @@ addLayer("c", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(42) + "'>Carbon III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon III"
                         },
                         description(){
                                 if (!shiftDown) return "Add a ln(e+sqrt(x)/10) term to B32"
@@ -1728,7 +1728,7 @@ addLayer("c", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(43) + "'>Carbon IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon IV"
                         },
                         description(){
                                 if (!shiftDown) return "ln(Deuterium)/1000 multiplies Carbon and Indigo's ln becomes log2"
@@ -1756,7 +1756,7 @@ addLayer("c", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(44) + "'>Carbon V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon V"
                         },
                         description(){
                                 if (!shiftDown) return "Deuterium V multiplies and then exponentiates Carbon gain"
@@ -1773,7 +1773,7 @@ addLayer("c", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(45) + "'>Carbon VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VI"
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='color:#CC0033'>A</bdi> multiplies Carbon gain and X-Rays base and unlock coins"
@@ -1800,7 +1800,7 @@ addLayer("c", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(46) + "'>Carbon VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VII"
                         },
                         description(){
                                 if (!shiftDown) return "cbrt(max(10h, seconds played)) multiplies Ultraviolet base and add .01 to Polynomial base"
@@ -1830,7 +1830,7 @@ addLayer("c", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(47) + "'>Carbon VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VIII"
                         },
                         description(){
                                 if (!shiftDown) return "Change token buyable cost scaling from exponential to linear"
@@ -1847,7 +1847,7 @@ addLayer("c", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(48) + "'>Carbon IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon IX"
                         },
                         description(){
                                 if (!shiftDown) return "Add 1000 to Carbon VII and halve the Double-exponential divider"
@@ -1864,7 +1864,7 @@ addLayer("c", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(49) + "'>Carbon X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon X"
                         },
                         description(){
                                 if (!shiftDown) return "Halve the Double-exponential divider and add .01 to Polynomial base"
@@ -1881,7 +1881,7 @@ addLayer("c", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(50) + "'>Carbon XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XI"
                         },
                         description(){
                                 let a = "Square base Nitrogen gain"
@@ -1896,7 +1896,7 @@ addLayer("c", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XII"
                         },
                         description(){
                                 let a = "Respecting addition log base is decreased to 3 and each upgrade in this row reduces it by .2"
@@ -1919,7 +1919,7 @@ addLayer("c", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XIII"
                         },
                         description(){
                                 let a = "Square addition is associative level effect and unlock a D buyable"
@@ -1934,7 +1934,7 @@ addLayer("c", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XIV"
                         },
                         description(){
                                 let a = "Square the ln(x) component in Quadratic"
@@ -1949,7 +1949,7 @@ addLayer("c", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Carbon XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XV"
                         },
                         description(){
                                 let a = "Add a ln(x) component to Constant"
@@ -2143,7 +2143,7 @@ addLayer("o", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(51) + "'>Oxygen I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen I"
                         },
                         description(){
                                 if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
@@ -2163,7 +2163,7 @@ addLayer("o", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(52) + "'>Oxygen II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen II"
                         },
                         description(){
                                 if (!shiftDown) return "log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7 to Oxygen gain"
@@ -2191,7 +2191,7 @@ addLayer("o", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(53) + "'>Oxygen III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen III"
                         },
                         description(){
                                 if (!shiftDown) return "Each upgrade raises B Point and Life Point gain ^1.02"
@@ -2216,7 +2216,7 @@ addLayer("o", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(54) + "'>Oxygen IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IV"
                         },
                         description(){
                                 if (!shiftDown) return "ln(Oxygen) multiplies Oxygen gain"
@@ -2248,7 +2248,7 @@ addLayer("o", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(55) + "'>Oxygen V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen V"
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
@@ -2281,7 +2281,7 @@ addLayer("o", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(56) + "'>Oxygen VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VI"
                         },
                         description(){
                                 if (!shiftDown) return "Oxygen multiplies Hydrogen gain and Hydrogen multiplies B Point gain"
@@ -2296,7 +2296,7 @@ addLayer("o", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(57) + "'>Oxygen VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VII"
                         },
                         description(){
                                 if (!shiftDown) return "Multiply Gamma Ray base by log10(Life Points) and double coin gain"
@@ -2311,7 +2311,7 @@ addLayer("o", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(58) + "'>Oxygen VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VIII"
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='font-size: 80%'>Multiply Near-ultraviolet base by log10(Life Points) and Infrared and Visible effects are raised to [tokens]^3"
@@ -2336,7 +2336,7 @@ addLayer("o", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(59) + "'>Oxygen IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IX"
                         },
                         description(){
                                 if (!shiftDown) return "Multiply Radio Wave base by log10(Life Points) and square it"
@@ -2361,7 +2361,7 @@ addLayer("o", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(60) + "'>Oxygen X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen X"
                         },
                         description(){
                                 if (!shiftDown) return "Multiply and then exponentiate X-Ray base by the number of upgrades*pi"
@@ -2386,7 +2386,7 @@ addLayer("o", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(61) + "'>Oxygen XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen XI"
                         },
                         description(){
                                 let a = "You can bulk 10x A, B, and C buyables"
@@ -2402,7 +2402,7 @@ addLayer("o", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(62) + "'>Oxygen XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen XII"
                         },
                         description(){
                                 let a = "Add .08 to color gain exponent and apply the prior upgrade again"
@@ -2415,7 +2415,7 @@ addLayer("o", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(63) + "'>Oxygen XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen XIII"
                         },
                         description(){
                                 let a = "Square " + makeBlue("a") + " and you bulk 2x E buyables per upgrade in this row"
@@ -2428,7 +2428,7 @@ addLayer("o", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(63) + "'>Oxygen XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen XIV"
                         },
                         description(){
                                 let a = "Commutativity of addition outer log10 becomes ln"
@@ -2441,7 +2441,7 @@ addLayer("o", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(64) + "'>Oxygen XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen XV"
                         },
                         description(){
                                 let a = "Nitrogen<sup>.26</sup> multiplies E Point gain and you bulk 5x E buyables"
@@ -2676,7 +2676,7 @@ addLayer("n", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(63) + "'>Nitrogen I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen I"
                         },
                         description(){
                                 let a = "All previous primary currencies (hold shift to see) gain is raised ^ 1.001"
@@ -2692,7 +2692,7 @@ addLayer("n", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(64) + "'>Nitrogen II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen II"
                         },
                         description(){
                                 let a = "A Point gain is raised ^ 1.02"
@@ -2705,7 +2705,7 @@ addLayer("n", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(65) + "'>Nitrogen III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen III"
                         },
                         description(){
                                 let a = "B Point gain is raised ^ 1.02"
@@ -2718,7 +2718,7 @@ addLayer("n", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(66) + "'>Nitrogen IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen IV"
                         },
                         description(){
                                 let a = "Add .001 to Cubic base"
@@ -2731,7 +2731,7 @@ addLayer("n", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(67) + "'>Nitrogen V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen V"
                         },
                         description(){
                                 let a = "Add .001 to Polynomial base"
@@ -2744,7 +2744,7 @@ addLayer("n", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(68) + "'>Nitrogen VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VI"
                         },
                         description(){
                                 let a = "Each upgrade adds .001 to Exponential base"
@@ -2757,7 +2757,7 @@ addLayer("n", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(69) + "'>Nitrogen VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VII"
                         },
                         description(){
                                 let a = "Keep the first row of Oxygen and Carbon upgrades upon Nitrogen reset and each upgrade raises C point gain ^1.0002"
@@ -2770,7 +2770,7 @@ addLayer("n", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(70) + "'>Nitrogen VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VIII"
                         },
                         description(){ 
                                 if (player.tab != "n") return ""
@@ -2790,7 +2790,7 @@ addLayer("n", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(71) + "'>Nitrogen IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen IX"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -2821,7 +2821,7 @@ addLayer("n", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(72) + "'>Nitrogen X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen X"
                         },
                         description(){
                                 let a = "Double-exponential divider is 1 and raise Nitrogen effect to the number of upgrades"
@@ -2834,7 +2834,7 @@ addLayer("n", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(73) + "'>Nitrogen XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XI"
                         },
                         description(){
                                 let a = "Token buyable exponent is .5"
@@ -2847,7 +2847,7 @@ addLayer("n", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(74) + "'>Nitrogen XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XII"
                         },
                         description(){
                                 let a = "You lose 100x Oxygen, Carbon, and Hydrogen"
@@ -2860,7 +2860,7 @@ addLayer("n", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(75) + "'>Nitrogen XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XIII"
                         },
                         description(){
                                 let a = "Fuel<sup>.001</sup> multiplies D Point gain"
@@ -2873,7 +2873,7 @@ addLayer("n", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XIV"
                         },
                         description(){
                                 let a = "Per upgrade D Points<sup>.01</sup> multiplies maxmimum fuel"
@@ -2886,7 +2886,7 @@ addLayer("n", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(76) + "'>Nitrogen XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XV"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -2911,7 +2911,7 @@ addLayer("n", {
                 },
                 41: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(77) + "'>Nitrogen XVI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XVI"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[41].cost)) return false
@@ -2935,7 +2935,7 @@ addLayer("n", {
                 },
                 42: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(78) + "'>Nitrogen XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XVII"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[42].cost)) return false
@@ -2957,7 +2957,7 @@ addLayer("n", {
                 },
                 43: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(79) + "'>Nitrogen XVIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XVIII"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[43].cost)) return false
@@ -2979,7 +2979,7 @@ addLayer("n", {
                 },
                 44: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(80) + "'>Nitrogen XIX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XIX"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[44].cost)) return false
@@ -3001,7 +3001,7 @@ addLayer("n", {
                 },
                 45: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(81) + "'>Nitrogen XX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XX"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[45].cost)) return false
@@ -3023,7 +3023,7 @@ addLayer("n", {
                 },
                 51: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(82) + "'>Nitrogen XXI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXI"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[51].cost)) return false
@@ -3045,7 +3045,7 @@ addLayer("n", {
                 },
                 52: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(83) + "'>Nitrogen XXII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXII"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -3061,7 +3061,7 @@ addLayer("n", {
                 },
                 53: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(84) + "'>Nitrogen XXIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXIII"
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[53].cost)) return false
@@ -3083,7 +3083,7 @@ addLayer("n", {
                 },
                 54: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(85) + "'>Nitrogen XXIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXIV"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -3099,7 +3099,7 @@ addLayer("n", {
                 },
                 55: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(85) + "'>Nitrogen XXV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXV"
                         },
                         description(){
                                 if (player.tab != "n") return ""
@@ -4228,7 +4228,7 @@ addLayer("p", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(163) + "'>Phosphorus I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus I"
                         },
                         description(){
                                 let a = "Gain .5 Nitrogen per second and you have one less token for prestige purposes"
@@ -4244,7 +4244,7 @@ addLayer("p", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(164) + "'>Phosphorus II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus II"
                         },
                         description(){
                                 let a = "Tire affects E Point gain"
@@ -4260,7 +4260,7 @@ addLayer("p", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(165) + "'>Phosphorus III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus III"
                         },
                         description(){
                                 let a = "Remove the ability to prestige but gain 100% of Phosphorus/s per second"
@@ -4273,7 +4273,7 @@ addLayer("p", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(166) + "'>Phosphorus IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus IV"
                         },
                         description(){
                                 if (player.tab != "p") return ""
@@ -4293,7 +4293,7 @@ addLayer("p", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(166) + "'>Phosphorus V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus V"
                         },
                         description(){
                                 if (player.tab != "p") return ""
@@ -4313,7 +4313,7 @@ addLayer("p", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VI"
                         },
                         description(){
                                 let a = "Each upgrade adds .01 to left distributivity base"
@@ -4326,7 +4326,7 @@ addLayer("p", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VII"
                         },
                         description(){
                                 let a = "Each upgrade makes E Points<sup>.05</sup> multiply D Point gain"
@@ -4339,7 +4339,7 @@ addLayer("p", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(167) + "'>Phosphorus VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VIII"
                         },
                         description(){
                                 let a = "Each respect scalar multiples E Point gain by 1 + [upgrades]/10"
@@ -4352,7 +4352,7 @@ addLayer("p", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus IX"
                         },
                         description(){
                                 if (player.tab != "p") return ""
@@ -4372,7 +4372,7 @@ addLayer("p", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus X"
                         },
                         description(){
                                 let a = "Inner ln of commutativity of addition becomes log2 and square " + makeBlue("a") + " and unlock another layer"
@@ -4388,7 +4388,7 @@ addLayer("p", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(168) + "'>Phosphorus XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XI"
                         },
                         description(){
                                 let a = "Square initial Phosphorus gain and " + makeBlue("a")
@@ -4401,7 +4401,7 @@ addLayer("p", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(169) + "'>Phosphorus XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XII"
                         },
                         description(){
                                 let a = "You can bulk 100x more C Point buyables"
@@ -4417,7 +4417,7 @@ addLayer("p", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(169) + "'>Phosphorus XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIII"
                         },
                         description(){
                                 if (player.tab != "p") return ""
@@ -4437,7 +4437,7 @@ addLayer("p", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(169) + "'>Phosphorus XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIV"
                         },
                         description(){
                                 let a = "If you have less than 10,000 seconds of base Phosphorus production gain 1000x base Phosphorus"
@@ -4450,7 +4450,7 @@ addLayer("p", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Phosphorus XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XV"
                         },
                         description(){
                                 let a = "Add .05 to P → ΔP base"
@@ -4463,7 +4463,7 @@ addLayer("p", {
                 },
                 41: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>Phosphorus XVI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVI"
                         },
                         description(){
                                 let a = "You have one less token for prestige purposes and Universe becomes ee45"
@@ -4476,7 +4476,7 @@ addLayer("p", {
                 },
                 42: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>Phosphorus XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVII"
                         },
                         description(){
                                 let a = "Add .01 to Constant base"
@@ -4489,7 +4489,7 @@ addLayer("p", {
                 },
                 43: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>Phosphorus XVIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVIII"
                         },
                         description(){
                                 let a = "N → ΔP cost base is 5.5"
@@ -4502,7 +4502,7 @@ addLayer("p", {
                 },
                 44: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>Phosphorus XIX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIX"
                         },
                         description(){
                                 let a = "N → ΔP cost base is 5"
@@ -4515,7 +4515,7 @@ addLayer("p", {
                 },
                 45: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XX"
                         },
                         description(){
                                 let a = "N → ΔP cost base is 4.5 and each N → ΔN adds .01 to its base"
@@ -4528,7 +4528,7 @@ addLayer("p", {
                 },
                 51: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXI"
                         },
                         description(){
                                 let a = "N → ΔP cost base is 4 and autobuy N → ΔN"
@@ -4541,7 +4541,7 @@ addLayer("p", {
                 },
                 52: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXII"
                         },
                         description(){
                                 let a = "Each Dilation completion after 90 doubles Life gain and keep token content upon Life reset"
@@ -4554,7 +4554,7 @@ addLayer("p", {
                 },
                 53: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXIII"
                         },
                         description(){
                                 let a = "Each Dilation completion after 90 doubles Life gain and token cost exponent is .44"
@@ -4567,7 +4567,7 @@ addLayer("p", {
                 },
                 54: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXIV"
                         },
                         description(){
                                 let a = "Universe is ee46 and add .01 to Constant base"
@@ -4580,7 +4580,7 @@ addLayer("p", {
                 },
                 55: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>Phosphorus XXV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXV"
                         },
                         description(){
                                 let a = "Universe is ee47 and add .01 to Constant base"
@@ -5189,7 +5189,7 @@ addLayer("mu", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>µ I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ I"
                         },
                         description(){
                                 let a = "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
@@ -5202,7 +5202,7 @@ addLayer("mu", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ II"
                         },
                         description(){
                                 if (player.tab != "mu") return ""
@@ -5227,7 +5227,7 @@ addLayer("mu", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ III"
                         },
                         description(){
                                 if (player.tab != "mu") return ""
@@ -5256,7 +5256,7 @@ addLayer("mu", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ IV"
                         },
                         description(){
                                 let a = "Bulk 10x C, D, and E buyables and gain 10x Phosphorus"
@@ -5272,7 +5272,7 @@ addLayer("mu", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ V"
                         },
                         description(){
                                 let a = "Note: All future upgrades that cost Phosphorus set µ to 0 and do a µ reset"
@@ -5292,7 +5292,7 @@ addLayer("mu", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(171) + "'>µ VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ VI"
                         },
                         description(){
                                 let a = "Unlock µ buyables. Buying any µ buyable forces a µ reset"
@@ -5312,7 +5312,7 @@ addLayer("mu", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>µ VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ VII"
                         },
                         description(){
                                 let a = "You can buy max µ, you have one less effective token for prestige purposes and µ III becomes log6"
@@ -5332,7 +5332,7 @@ addLayer("mu", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>µ VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ VIII"
                         },
                         description(){
                                 let a = "Per upgrade double Phosphorus gain"
@@ -5352,7 +5352,7 @@ addLayer("mu", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(172) + "'>µ IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ IX"
                         },
                         description(){
                                 let a = "You have one less effective token for prestige purposes"
@@ -5372,7 +5372,7 @@ addLayer("mu", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ X"
                         },
                         description(){
                                 let a = "µ III log6 becomes log5"
@@ -5392,7 +5392,7 @@ addLayer("mu", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XI"
                         },
                         description(){
                                 let a = "µ III log5 becomes log4"
@@ -5412,7 +5412,7 @@ addLayer("mu", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XII"
                         },
                         description(){
                                 let a = "Each upgrade in this row triples Phosphorus gain"
@@ -5440,7 +5440,7 @@ addLayer("mu", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIII"
                         },
                         description(){
                                 let a = "Buyable µ buyables no longer costs µ or Phosphorus and remove the second µ effect softcap"
@@ -5460,7 +5460,7 @@ addLayer("mu", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIV"
                         },
                         description(){
                                 let a = "µ resets no longer do anything and you bulk 100x minigame buyables"
@@ -5473,7 +5473,7 @@ addLayer("mu", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(173) + "'>µ XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XV"
                         },
                         description(){
                                 let a = "Automatically reset for µ and you can bulk unlimited minigame buyables"
@@ -5486,7 +5486,7 @@ addLayer("mu", {
                 },
                 41: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(174) + "'>µ XVI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XVI"
                         },
                         description(){
                                 let a = "N → ΔP base is 9"
@@ -5499,7 +5499,7 @@ addLayer("mu", {
                 },
                 42: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XVII"
                         },
                         description(){
                                 let a = "α → ∂α log10's become log8"
@@ -5512,7 +5512,7 @@ addLayer("mu", {
                 },
                 43: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XVIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XVIII"
                         },
                         description(){
                                 let a = "α → ∂α log8's become log7 and subtract .01 from the µ cost exponent"
@@ -5525,7 +5525,7 @@ addLayer("mu", {
                 },
                 44: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XIX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIX"
                         },
                         description(){
                                 let a = "Oxygen multiplies Point gain and token cost exponent is .48"
@@ -5538,7 +5538,7 @@ addLayer("mu", {
                 },
                 45: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XX"
                         },
                         description(){
                                 let a = "α → ∂α log7's become log6"
@@ -5551,7 +5551,7 @@ addLayer("mu", {
                 },
                 51: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XXI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXI"
                         },
                         description(){
                                 let a = "α → ∂α log6's become log5 and log10(Lives) exponentiates point gain"
@@ -5564,7 +5564,7 @@ addLayer("mu", {
                 },
                 52: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(175) + "'>µ XXII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXII"
                         },
                         description(){
                                 let a = "Every upgrade adds .001 to Constant base"
@@ -5577,7 +5577,7 @@ addLayer("mu", {
                 },
                 53: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(176) + "'>µ XXIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXIII"
                         },
                         description(){
                                 let a = "N → ΔP cost base is 6"
@@ -5590,7 +5590,7 @@ addLayer("mu", {
                 },
                 54: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(176) + "'>µ XXIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXIV"
                         },
                         description(){
                                 let a = "α → ∂α log5's become log4"
@@ -5603,7 +5603,7 @@ addLayer("mu", {
                 },
                 55: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(176) + "'>µ XXV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXV"
                         },
                         description(){
                                 let a = "α → ∂α log4's become log3"
@@ -5888,7 +5888,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
+                                // other than softcapping fully general 
                                 if (player.tab != "mu") return ""
                                 if (player.subtabs.mu.mainTabs != "Buyables") return ""
                                 //if we arent on the tab, then we dont care :) (makes it faster)
@@ -6837,7 +6837,7 @@ addLayer("l", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Life I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life I"
                         },
                         description(){
                                 let a = "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
@@ -9255,7 +9255,7 @@ addLayer("a", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid I"
                         },
                         description(){
                                 let a = "Unlock Protein and each upgrade cubes point gain"
@@ -9271,7 +9271,7 @@ addLayer("a", {
                 },
                 12: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid II"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid II"
                         },
                         description(){
                                 let a = "Each tRNA adds .001 to mRNA base until 3.2"
@@ -9287,7 +9287,7 @@ addLayer("a", {
                 },
                 13: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid III"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid III"
                         },
                         description(){
                                 let a = "The number of tRNA's multiplies Protein gain and exponentiates Point gain"
@@ -9303,7 +9303,7 @@ addLayer("a", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid IV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid IV"
                         },
                         description(){
                                 let a = "Each mRNA adds .001 to tRNA base until 2.2 and each upgrade doubles Protein gain"
@@ -9319,7 +9319,7 @@ addLayer("a", {
                 },
                 15: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid V"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid V"
                         },
                         description(){
                                 let a = "The number of mRNA's multiplies Protein gain and exponentiates Point gain"
@@ -9335,7 +9335,7 @@ addLayer("a", {
                 },
                 21: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid VI"
                         },
                         description(){
                                 let a = "Autobuy tRNA"
@@ -9351,7 +9351,7 @@ addLayer("a", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid VII"
                         },
                         description(){
                                 let a = "Autobuy mRNA and the autobuyer triggers twice as often"
@@ -9367,7 +9367,7 @@ addLayer("a", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid VIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid VIII"
                         },
                         description(){
                                 let a = "The autobuyer triggers 2.5x as often and gain a C41 gem per second"
@@ -9383,7 +9383,7 @@ addLayer("a", {
                 },
                 24: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid IX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid IX"
                         },
                         description(){
                                 let a = "Unlock miRNA, gain a C42 gem per second, and the autobuyer triggers twice as often"
@@ -9399,7 +9399,7 @@ addLayer("a", {
                 },
                 25: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid X"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid X"
                         },
                         description(){
                                 let a = "miRNA levels multiply Amino Acid gain, gain a C43 gem per second, and the autobuyer triggers twice as often"
@@ -9415,7 +9415,7 @@ addLayer("a", {
                 },
                 31: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XI"
                         },
                         description(){
                                 let a = "Amino resets keep gem content, gain a C34 gem per second, and miRNA levels cubed multiply Protein gain"
@@ -9431,7 +9431,7 @@ addLayer("a", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XII"
                         },
                         description(){
                                 let a = "Each upgrade doubles Protein gain, gain a C24 gem per second, and tRNA and mRNA cost nothing"
@@ -9447,7 +9447,7 @@ addLayer("a", {
                 },
                 33: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XIII"
                         },
                         description(){
                                 let a = "Unlock the next set of challenges, gain a C14 gem per second, and each miRNA raises point gain ^100"
@@ -9463,7 +9463,7 @@ addLayer("a", {
                 },
                 34: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XIV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XIV"
                         },
                         description(){
                                 let a = "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
@@ -9479,7 +9479,7 @@ addLayer("a", {
                 },
                 35: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XV"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XV"
                         },
                         description(){
                                 let a = "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
@@ -9495,7 +9495,7 @@ addLayer("a", {
                 },
                 41: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XVI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XVI"
                         },
                         description(){
                                 let a = "Triple gem gain"
@@ -9511,7 +9511,7 @@ addLayer("a", {
                 },
                 42: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XVII"
                         },
                         description(){
                                 let a = "siRNA levels multiply protein gain"
@@ -9527,7 +9527,7 @@ addLayer("a", {
                 },
                 43: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XVIII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XVIII"
                         },
                         description(){
                                 let a = "Each siRNA multiplies Amino Acid gain by 1.02"
@@ -9543,7 +9543,7 @@ addLayer("a", {
                 },
                 44: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XIX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XIX"
                         },
                         description(){
                                 let a = "Unlock crRNA and add .001 to mRNA base"
@@ -9559,7 +9559,7 @@ addLayer("a", {
                 },
                 45: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor(170) + "'>Amino Acid XX"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XX"
                         },
                         description(){
                                 let a = "crRNA levels squred multiply protein gain"
@@ -11009,7 +11009,7 @@ addLayer("a", {
                                                         costId = id
                                                 }
                                         }
-                                        let init = a + makeBlue(tmp.a.buyables[id].title) + " and costs " + format(cost) + "<br>which is "
+                                        let init = a + makeBlue(tmp.a.buyables[costId].title) + " and costs " + format(cost) + "<br>which is "
                                         let mid = format(cost.div(player.a.protein.points)) + " more than what you have, and is estimated to take "
                                         // = OoM/s now / ln(10) * boostExp * (10^(Oom Needed/boost exp)-1) 
                                         // last term is from integral

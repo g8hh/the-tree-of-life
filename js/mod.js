@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.021.1",
+	num: "1.021.2",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.021.2</h3><br>
+		- Fixed undulating colors, and automated it.<br>
 	<br><h3 style='color: #CC0000'>v1.021.1</h3><br>
 		- Improved info of Amino Acid page.<br>
 		- Added displays for each buyable's boost.<br>

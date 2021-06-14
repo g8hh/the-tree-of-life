@@ -90,12 +90,15 @@ function convertToB16(n){
         return codes[(n-x)/16] + codes[x]
 }
 
-function getUndulatingColor(delta = 0, period = Math.sqrt(60)){
+var currentDelta = 0
+
+function getUndulatingColor(period = Math.sqrt(760)){
 	if (!player.undulating) return "000000"
         let t = new Date().getTime()
-        let a = Math.sin(t / 1e3 / period + 0 + delta) 
-        let b = Math.sin(t / 1e3 / period + 2 + delta)
-        let c = Math.sin(t / 1e3 / period + 4 + delta)
+	currentDelta += .2
+        let a = Math.sin(t / 1e3 / period * 2 * Math.PI + 0 + currentDelta) 
+        let b = Math.sin(t / 1e3 / period * 2 * Math.PI + 2 + currentDelta)
+        let c = Math.sin(t / 1e3 / period * 2 * Math.PI + 4 + currentDelta)
         a = convertToB16(Math.floor(a*128) + 128)
         b = convertToB16(Math.floor(b*128) + 128)
         c = convertToB16(Math.floor(c*128) + 128)

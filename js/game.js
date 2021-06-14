@@ -400,6 +400,7 @@ function runInterval(){
 		needCanvasUpdate = false;
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
+	currentDelta = 0
 	updateTemp();
 	updateOomps(diff);
 	updateWidth()
