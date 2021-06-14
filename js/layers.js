@@ -10465,6 +10465,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
+                                if (pts.eq(0)) return new Decimal(0)
                                 return pts.div(tmp.a.buyables[11].baseCost).log(5).plus(1).floor().max(0)
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[11].cost),
@@ -10544,6 +10545,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
+                                if (pts.eq(0)) return new Decimal(0)
                                 return pts.div(tmp.a.buyables[12].baseCost).log(10).plus(1).floor().max(0)
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[12].cost),
