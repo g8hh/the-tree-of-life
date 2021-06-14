@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.019",
+	num: "1.020",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.020</h3><br>
+		- Added three Amino upgrades.<br>
+		- Added seven Amino milestones.<br>
+		- Added a protein buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.019</h3><br>
 		- Fixed a bug in b_e and got patashu to fix it!<br>
 		- Added two custom saves.<br>
