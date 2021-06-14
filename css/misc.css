@@ -35,7 +35,6 @@
 	bottom: 100%;
 	left: 50%;
 	margin-bottom: 5px;
-	margin-left: -80px;
 	padding: 7px;
 	font-family: "Lucida Console", "Courier New", monospace;
 	-webkit-border-radius: 3px;
@@ -43,7 +42,9 @@
 	border-radius: 3px;
 	opacity: 0;
 	transition: opacity 0.5s;
-  
+	transform: translateX(-50%);
+	min-width: max-content; 
+	
 	position: absolute;
 	z-index: 20000 ;
   

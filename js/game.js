@@ -180,8 +180,6 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
-var prevOnReset
-
 function doReset(layer, force=false) {
 	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
@@ -214,24 +212,22 @@ function doReset(layer, force=false) {
 			}
 		}
 	
-		tmp[layer].baseAmount = decimalZero // quick fix
 	}
 
 	if (run(layers[layer].resetsNothing, layers[layer])) return
+	tmp[layer].baseAmount = decimalZero // quick fix
 
 
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
 	}
 
-	prevOnReset = {...player} 
 	player.points = (row == 0 ? decimalZero : getStartPoints())
 
 	for (let x = row; x >= 0; x--) rowReset(x, layer)
 	for (r in OTHER_LAYERS){
 		rowReset(r, layer)
 	}
-	prevOnReset = undefined
 
 	player[layer].resetTime = 0
 

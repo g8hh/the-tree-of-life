@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+- Fixed baseAmount being set to 0 even when a layer resets nothing.
+- Fixed centering on tooltips.
+- Changed some default values on startup to prevent potential issues.
+
 # v2.6.3 - 6/11/21
 - Added better support for using multiple layer files and similar. See modFiles in modInfo.
 - The demo now has each layer in its own file as well.
