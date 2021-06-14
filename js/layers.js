@@ -9198,6 +9198,7 @@ addLayer("a", {
                                                         ret = ret.times(tmp.a.buyables[13].effect)
                                                         ret = ret.times(tmp.a.buyables[21].effect)
                                                         ret = ret.times(tmp.a.buyables[23].effect)
+                                                        ret = ret.times(tmp.a.buyables[31].effect)
 
                         let aUpgBase = new Decimal(1)
                         if (hasUpgrade("a", 14)) aUpgBase = aUpgBase.times(2)
@@ -9220,6 +9221,8 @@ addLayer("a", {
                                 if (hasMilestone("a", 33)) base *= 2
                                 if (hasMilestone("a", 34)) base *= 2
                                 if (hasMilestone("a", 38)) base *= 2
+                                if (hasMilestone("a", 40)) base *= 2
+                                if (hasMilestone("a", 41)) base *= 2
                                                         ret = ret.times(Decimal.pow(base, player.a.milestones.length))
                         }
                         
@@ -10441,6 +10444,50 @@ addLayer("a", {
                                 return a + b
                         },
                 }, // hasMilestone("a", 39)
+                40: {
+                        requirementDescription(){
+                                return "Requires: 1e664,000 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e664e3")
+                        },
+                        done(){
+                                return tmp.a.milestones[40].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock ncRNA and double protein gain per milestone"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 40)
+                41: {
+                        requirementDescription(){
+                                return "Requires: 1e875,700 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("1e875.7e3")
+                        },
+                        done(){
+                                return tmp.a.milestones[41].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Double protein gain per milestone"
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("a", 41)
         },
         buyables: {
                 rows: 3,
@@ -10842,6 +10889,66 @@ addLayer("a", {
                                 return "<br>" + end
                         },
                 },
+                31: {
+                        title: "ncRNA",
+                        cost() {
+                                let amt = getBuyableAmount("a", 31)
+                                let baseCost = new Decimal("1e702000")
+                                return baseCost.times(Decimal.pow("1e6000", amt.pow(1.2)))
+                        },
+                        unlocked(){
+                                return hasMilestone("a", 40)
+                        },
+                        canAfford:() => player.a.protein.points.gte(tmp.a.buyables[31].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.a
+                                data.buyables[31] = data.buyables[31].plus(1)
+                                if (!false) {
+                                        data.protein.points = data.protein.points.sub(tmp.a.buyables[31].cost)
+                                }
+                        },
+                        base(){
+                                let pts = player.points.max(10).log10()
+
+                                let ret = pts.log10()
+                                
+                                return ret.max(1)
+                        },
+                        effect(){
+                                let ret = tmp.a.buyables[31].base.pow(player.a.buyables[31])
+                                return ret
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "a") return ""
+                                if (player.subtabs.a.mainTabs != "Protein") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[31]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.a.buyables[31].effect) + " to Protein gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 31)) + " Protein</b><br>"
+                                let eformula = "log10(log10(Points))^x<br>" + format(tmp.a.buyables[31].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return "<br>" + start + end 
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e702,000*1e6,000^x<sup>1.2</sup>"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return "<br>" + end
+                        },
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -10926,7 +11033,7 @@ addLayer("a", {
                                         j1 += " meaning a 2x boost to protein gain nets " + format(Decimal.pow(2, tmp.a.protein.mRNAtRNABoostExp)) + " more total protein"
                                         let j2 = ""
 
-                                        let idsCheck = [13, 21, 23]
+                                        let idsCheck = [13, 21, 23, 31]
                                         for (idCard in idsCheck) {
                                                 id = idsCheck[idCard]
                                                 if (!tmp.a.buyables[id].unlocked) continue
