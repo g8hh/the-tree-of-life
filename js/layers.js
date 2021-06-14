@@ -10216,7 +10216,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Add .01 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
+                                let a = "Reward: Add .001 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
                                 let b = ""
                                 return a + b
                         },
@@ -10875,7 +10875,18 @@ addLayer("a", {
                         content: ["main-display",
                                 ["secondary-display", "protein"],
                                 ["display-text", function(){
-                                        return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
+                                        if (player.a.protein.points.lt(1e100)) {
+                                                return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
+                                        }
+                                        /*
+                                        let init = tmp.a.protein.getAllOtherGain
+                                let exp = tmp.a.protein.mRNAtRNABoostExp
+                                let mult = .001
+                                if (hasMilestone("a", 39)) mult = .05
+                                data2.points = data2.points.plus(init.times(mult).pow(exp))
+                                        */
+                                        let time = player.a.protein.points.root(tmp.a.protein.mRNAtRNABoostExp).div(tmp.a.protein.getAllOtherGain)
+                                        return "Current time to buy a buyable is approx " + formatTime(time)
                                 }],
                                 "blank",
                                 ["buyables", [1,2,3]],
@@ -10895,7 +10906,7 @@ addLayer("a", {
                                         let br2 = br + br
                                         let b = "Amino resets (in order) Life content, N → ΔN levels, "
                                         let c = " the last two rows of Phosphorus and mu upgrades"
-                                        let d = "and finally does a Life reset"
+                                        let d = "and finally does a Life reset."
 
                                         let part1 = a + br2 + b + br + c + br + d
 
@@ -10904,22 +10915,37 @@ addLayer("a", {
                                         let e = "Note that you have thus reached a point in the game where henceforth"
                                         let f = "Carbon, Oxygen, minigame, token, and Hydrogen content will not get reset."
                                         let g = "<sup>*</sup> it makes it so that if you have an odd number of completions you get a free completion."
-                                        let h = "<sup>**</sup> passive gain only gives up to 1,000 gems"
+                                        let h = "<sup>**</sup> passive gain only gives up to 1,000 gems."
 
                                         let part2 = part1 + br2 + e + br + f + br + g + br + h
                                         
                                         if (!hasUpgrade("a", 11)) return part2
 
                                         let i = "Base protein gain is log10(10+Amino Acid)"
+                                        let j1 = "Currently your mRNA and tRNA make your non-mRNA and non-tRNA boosts<br>effectively ^" + format(tmp.a.protein.mRNAtRNABoostExp)
+                                        j1 += " meaning a 2x boost to protein gain nets " + format(Decimal.pow(2, tmp.a.protein.mRNAtRNABoostExp)) + " more total protein"
+                                        let j2 = ""
 
-                                        if (!hasMilestone("a", 32)) return part2 + br2 + i
+                                        let idsCheck = [13, 21, 23]
+                                        for (idCard in idsCheck) {
+                                                id = idsCheck[idCard]
+                                                if (!tmp.a.buyables[id].unlocked) continue
+                                                j2 += "<br>Each "
+                                                j2 += tmp.a.buyables[id].title + " effectively gives a "
+                                                j2 += format(tmp.a.buyables[id].base.pow(tmp.a.protein.mRNAtRNABoostExp))
+                                                j2 += " boost to protein production."
+                                        }
+
+                                        let j = j1 + j2
+
+                                        if (!hasMilestone("a", 32)) return part2 + br2 + i + br + j
                                         
-                                        let j1 = "<sup>*3</sup>If you are gainging X protein/s from sources other than tRNA and mRNA,"
-                                        let j2 = "and your mRNA and tRNA net ^Y protein gain"
-                                        let j3 = "then you get an additional (X/1000)<sup>Y</sup> protein per second"
-                                        let j = j1 + br + j2 + br + j3
+                                        let k1 = "<sup>*3</sup>If you are gainging X protein/s from sources other than tRNA and mRNA,"
+                                        let k2 = "and your mRNA and tRNA net ^Y protein gain"
+                                        let k3 = "then you get an additional (X/1000)<sup>Y</sup> protein per second."
+                                        let k = k1 + br + k2 + br + k3
 
-                                        let part3 = part2 + br2 + i + br + j
+                                        let part3 = part2 + br2 + i + br + j + br + k
 
                                         return part3
                                 }],
