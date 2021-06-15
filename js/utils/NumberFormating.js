@@ -93,7 +93,7 @@ function formatWhole(decimal) {
 function formatTime(s) {
         s = new Decimal(s)
         if (s.eq(new Decimal(1/0))) return "Infinite Time"
-        if (s < 1) return format(s.times(1000)) + "ms"
+        if (s < 1 && s > .001) return format(s.times(1000)) + "ms"
         if (s < 60) return format(s) + "s"
         else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
         else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
