@@ -142,7 +142,7 @@ var GEM_EFFECT_FORMULAS = {
         403: (x) => Decimal.pow(1.02, x).min(10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor().min(8),
         105: (x) => x.plus(10).log10(),
-        205: (x) => x.plus(1).ln().div(10),
+        205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
         305: (x) => x.times(8).plus(1).sqrt(),
         405: (x) => x.cbrt().pow10(),
         501: (x) => x.cbrt().pow10().pow(2),
@@ -182,6 +182,79 @@ function binomial(n,k) {
                 binomials.push(nextRow);
         }
         return binomials[n][k];
+}
+
+function resetPreLifeCurrencies(){
+        let data1 = player.mu
+        let data2 = player.p
+        let data3 = player.n
+        let data4 = player.o
+        let data5 = player.c
+        let data6 = player.mini
+        let data8 = player.h
+
+        data1.points = new Decimal(0)
+        data1.best = new Decimal(0)
+        data1.total = new Decimal(0)
+
+        data2.currentGainPerSec = new Decimal(0)
+        data2.points = new Decimal(0)
+        data2.best = new Decimal(0)
+        data2.total = new Decimal(0)
+
+        data3.points = new Decimal(0)
+        data3.best = new Decimal(0)
+        data3.total = new Decimal(0)
+        
+        data4.points = new Decimal(0)
+        data4.best = new Decimal(0)
+        data4.total = new Decimal(0)
+
+        data5.points = new Decimal(0)
+        data5.best = new Decimal(0)
+        data5.total = new Decimal(0)
+
+        let resetBuyableIds = [11, 12, 13, 21, 23, 
+                                61, 62, 63, 31, 32, 
+                                33, 41, 42, 43, 51, 
+                                52, 53, 71, 72, 73, 
+                                81, 82, 83, 91, 92, 
+                                93, 101, 102, 103, 
+                                111, 112, 113, 121, 
+                                122, 123, 131, 132, 
+                                133, 151, 152, 153, 
+                                161, 162, 163, 171, 
+                                172, 173, 181, 182, 
+                                183, 201, 202, 203, 
+                                211, 212, 213, 221, 
+                                222, 223, 231, 232, 
+                                233, 241]
+
+        for (i in resetBuyableIds){
+                x = resetBuyableIds[i]
+                data6.buyables[x] = new Decimal(0)
+        }
+        
+        data6.a_points.points = new Decimal(0)
+        data6.a_points.best = new Decimal(0)
+        data6.b_points.points = new Decimal(0)
+        data6.b_points.best = new Decimal(0)
+        data6.c_points.points = new Decimal(0)
+        data6.c_points.best = new Decimal(0)
+        data6.c_points.lastRoll = []
+        data6.d_points.points = new Decimal(0)
+        data6.d_points.best = new Decimal(0)
+        data6.d_points.fuel = new Decimal(hasMilestone("l", 5) ? 1 : 0)
+        data6.e_points.points = new Decimal(0)
+        data6.e_points.best = new Decimal(0)
+
+        data8.points = new Decimal(0)
+        data8.best = new Decimal(0)
+        data8.total = new Decimal(0)
+        data8.atomic_hydrogen.points = new Decimal(0)
+        data8.atomic_hydrogen.best = new Decimal(0)
+        data8.deuterium.points = new Decimal(0)
+        data8.deuterium.best = new Decimal(0)
 }
 
 /*
@@ -4155,7 +4228,6 @@ addLayer("p", {
                 
                 // do phosphorus gain
                 if (hasUpgrade("p", 13)) {
-
                         if (hasUpgrade("p", 34)) {
                                 let cur = data.currentGainPerSec
                                 let gain = tmp.p.getResetGain
@@ -4184,12 +4256,7 @@ addLayer("p", {
                 let x = tmp.p.getPassiveGainMult.times(diff)
                 data.points = data.points.plus(data.currentGainPerSec.times(x))
                 data.total = data.total.plus(data.currentGainPerSec.times(x))
-
-                if (false) {
-                        //do autobuyer stuff
-                } else {
-                        data.abtime = 0
-                }
+                
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
@@ -4204,7 +4271,7 @@ addLayer("p", {
                         }
                 },
         ],
-        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || player.a.points.gt(0)},
+        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown},
         prestigeButtonText(){
                 if (player.tab != "p") return ""
                 
@@ -5091,6 +5158,9 @@ addLayer("mu", {
                 }
                 if (hasMilestone("a", 5))       rem = rem.plus(.01)
                 if (hasMilestone("a", 7))       rem = rem.plus(.01)
+                if (hasUpgrade("d", 11) && !inChallenge("l", 12)){
+                                                rem = rem.plus(.05)
+                }       
                 
                 if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
                 if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
@@ -5170,7 +5240,7 @@ addLayer("mu", {
                 return a + br + br + b + c
         },
         canBuyMax(){
-                return hasUpgrade("mu", 22)
+                return hasUpgrade("mu", 22) || hasMilestone("d", 1)
         },
         hotkeys: [
                 {key: "shift+M", description: "Shift+M: Go to µ", onPress(){
@@ -5183,7 +5253,7 @@ addLayer("mu", {
                         }
                 },
         ],
-        layerShown(){return hasUpgrade("p", 25) || player.a.points.gt(0)},
+        layerShown(){return hasUpgrade("p", 25) || tmp.a.layerShown},
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -6631,6 +6701,7 @@ addLayer("l", {
                                                 ret = ret.times(base2.pow(getBuyableAmount("a", 21)))
                 }
                 if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
+                                                ret = ret.times(tmp.d.effect[0])
 
                 return ret
         },
@@ -6668,7 +6739,7 @@ addLayer("l", {
                 if (player.points.max(10).log10().log(2).gte(1024)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                if (data.autobuyhco && hasMilestone("l", 2)) {
+                if (data.autobuyhco && hasMilestone("l", 2) || hasMilestone("d", 1)) {
                         let boughtYet = false
                         let hKeys = ["11", "12", "13", "14", "15", 
                                      "21", "22", "23", "24", "25", 
@@ -6696,7 +6767,7 @@ addLayer("l", {
                         }
                 }
 
-                if (data.autobuynp && hasMilestone("l", 4)) {
+                if (data.autobuynp && hasMilestone("l", 4) || hasMilestone("d", 1)) {
                         let boughtYet = false
                         let nKeys = ["11", "12", "13", "14", "15", 
                                      "21", "22", "23", "24", "25", 
@@ -6719,7 +6790,7 @@ addLayer("l", {
                         }
                 }
 
-                if (data.autobuymu && hasMilestone("l", 6)) {
+                if (data.autobuymu && hasMilestone("l", 6) || hasMilestone("d", 1)) {
                         let boughtYet = false
 
                         let muKeys = ["11", "12", "13", "14", "15", 
@@ -6733,13 +6804,13 @@ addLayer("l", {
 
                         let muBuyKeys = [11, 12, 13, 21,
                                          22, 23, 31,]
-                        if (hasUpgrade("p", 51) || hasMilestone("a", 5)) muBuyKeys.push(33)
+                        if (hasUpgrade("p", 51) || hasMilestone("a", 5) || hasMilestone("d", 1)) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
                                 buyBuyable("mu", muBuyKeys[i])
                         }
                 }
 
-                if (data.autobuyntodp && hasMilestone("l", 17)) {
+                if (data.autobuyntodp && hasMilestone("l", 17) || hasMilestone("d", 1)) {
                         if (tmp.mu.buyables[32].canAfford) {
                                 layers.mu.buyables[32].buy()
                         }
@@ -6761,10 +6832,11 @@ addLayer("l", {
                         player.p.points = player.p.points.max(str)
                 }
 
-                if (hasMilestone("a", 3)) {
+                if (hasMilestone("a", 3) || hasMilestone("d", 1)) {
                         let a = 2 // the value of jumps
 
                         if (hasMilestone("a", 7)) a = 5
+                        if (hasMilestone("d", 1)) a = 10
 
                         if (data.challenges[11] % a != 0) {
                                 data.challenges[11] += 1
@@ -6867,6 +6939,7 @@ addLayer("l", {
                                 let cap = 50
                                 if (hasMilestone("l", 11)) cap += 5 * player.l.milestones.length
                                 let exp = Math.min(cap, player.l.times)
+                                if (hasUpgrade("d", 11)) exp = cap
                                 return Decimal.pow(1.01, exp)
                         },      
                         effectDescription(){
@@ -8447,12 +8520,12 @@ addLayer("l", {
         },
         grid: {
                 rows(){
-                        if (hasUpgrade("a", 33)) return 5
+                        if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
                 cols(){
-                        if (hasUpgrade("a", 33)) return 5
+                        if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
@@ -8680,7 +8753,7 @@ addLayer("l", {
                 let data8 = player.h
 
                 // 1 Mu content
-                if (!false) {
+                if (!hasMilestone("d", 1)) {
                         let muUpgRem = [11, 12, 13, 14, 15, 
                                         21, 22, 23, 24, 25, 
                                         31, 32, 33, 34, 35]
@@ -8695,24 +8768,23 @@ addLayer("l", {
                                 data1.milestones = data1.milestones.slice(0, muKeptMilestones)
                         }
 
-                        data1.buyables[11] = new Decimal(0)
-                        data1.buyables[12] = new Decimal(0)
-                        data1.buyables[13] = new Decimal(0)
-                        data1.buyables[21] = new Decimal(0)
-                        data1.buyables[22] = new Decimal(0)
-                        data1.buyables[23] = new Decimal(0)
-                        data1.buyables[31] = new Decimal(0) // buyables
-                        data1.buyables[32] = new Decimal(0)
-
                         data1.unlocked = false
                 }
 
                 data1.points = new Decimal(0)
                 data1.best = new Decimal(0)
                 data1.total = new Decimal(0)
+                data1.buyables[11] = new Decimal(0)
+                data1.buyables[12] = new Decimal(0)
+                data1.buyables[13] = new Decimal(0)
+                data1.buyables[21] = new Decimal(0)
+                data1.buyables[22] = new Decimal(0)
+                data1.buyables[23] = new Decimal(0)
+                data1.buyables[31] = new Decimal(0) // buyables
+                data1.buyables[32] = new Decimal(0)
 
                 // 2 Phosphorus content
-                if (!false) {
+                if (!hasMilestone("d", 1)) {
                         let pUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -8738,7 +8810,7 @@ addLayer("l", {
                 //data2.best_over_amino = new Decimal(0)
 
                 // 3: Nitrogen conent
-                if (!false) {
+                if (!hasMilestone("d", 1)) {
                         let nUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35,
@@ -8773,7 +8845,7 @@ addLayer("l", {
                 data3.total = new Decimal(0)
 
                 // 4 Oxygen content
-                if (!hasMilestone("a", 3)) {
+                if (!player.a.everA3) {
                         let oUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -8789,7 +8861,7 @@ addLayer("l", {
                 data4.total = new Decimal(0)
 
                 // 5 Carbon content
-                if (!hasMilestone("a", 3)) {
+                if (!player.a.everA3) {
                         let cUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -8804,7 +8876,7 @@ addLayer("l", {
                 data5.total = new Decimal(0)
 
                 // 6 minigame content
-                if (!hasMilestone("a", 3)) {
+                if (!player.a.everA3) {
                         if (!false) { //6a
                                 data6.a_points.extras[11] = new Decimal(0)
                                 data6.a_points.extras[12] = new Decimal(0)
@@ -8877,7 +8949,7 @@ addLayer("l", {
                 data6.e_points.best = new Decimal(0)
 
                 // 7 token content
-                if (!hasUpgrade("p", 52) && !hasMilestone("a", 1)) {
+                if (!hasUpgrade("p", 52) && !hasMilestone("a", 1) && !player.a.everA3) {
                         let tokenKeptMilestones = 0 //milestones
                         if (!hasMilestone("l", 8)) {
                                 data7.milestones = data7.milestones.slice(0, tokenKeptMilestones)
@@ -8913,7 +8985,7 @@ addLayer("l", {
                 }
 
                 // 8 Hydrogen content
-                if (!hasMilestone("a", 3)) {
+                if (!player.a.everA3) {
                         data8.points = new Decimal(0)
                         data8.best = new Decimal(0)
                         data8.total = new Decimal(0)
@@ -8959,7 +9031,8 @@ addLayer("a", {
                         total: new Decimal(0),
                         points: new Decimal(0),
                         passiveTime: 0,
-                }
+                },
+                everA3: false,
         }},
         color: "#F2990D",
         branches: [],
@@ -8996,6 +9069,7 @@ addLayer("a", {
                 if (hasUpgrade("a", 51))        ret = ret.times(Decimal.pow(2, player.a.milestones.length))
                 if (hasUpgrade("a", 63))        ret = ret.times(player.a.protein.points.max(10).log10())
                                                 ret = ret.times(tmp.a.buyables[33].effect)
+                                                ret = ret.times(tmp.d.effect[1] || 1)
 
                 return ret
         },
@@ -9033,7 +9107,9 @@ addLayer("a", {
                 if (player.l.grid[303].gems.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                if (hasMilestone("a", 4) && data.autobuypmu45) {
+                if (hasMilestone("a", 3)) data.everA3 = true
+
+                if (hasMilestone("a", 4) && data.autobuypmu45 || hasMilestone("d", 1)) {
                         let boughtYet = false
                         let pMuKeys = ["41", "42", "43", "44", "45", 
                                        "51", "52", "53", "54", "55"]
@@ -9055,6 +9131,7 @@ addLayer("a", {
                 if (hasMilestone("a", 10)) buyFactor *= 2.5
                 if (hasMilestone("a", 11)) buyFactor *= 2
                 if (hasMilestone("a", 16)) buyFactor *= 2
+                if (hasMilestone("d", 1)) buyFactor = 20
 
                 data.autoBuyableTime += diff * buyFactor
                 if (false) {
@@ -9118,7 +9195,7 @@ addLayer("a", {
                         }
                 } else data.gemPassiveTime = 0
 
-                if (hasMilestone("a", 5) && data.autobuylbuys) {
+                if (hasMilestone("a", 5) && data.autobuylbuys || hasMilestone("d", 1)) {
                         if (data.autoBuyableTime > 10) data.autoBuyableTime = 10
                         if (data.autoBuyableTime > 1) {
                                 data.autoBuyableTime += -1
@@ -9129,7 +9206,7 @@ addLayer("a", {
                                         id = ids[i]
                                         if (tmp.l.buyables[id].canAfford) {
                                                 layers.l.buyables[id].buy()
-                                                if (!hasMilestone("a", 17)) break
+                                                if (!hasMilestone("a", 17) && !hasMilestone("d", 1)) break
                                         }
                                 }
                         }
@@ -9139,6 +9216,7 @@ addLayer("a", {
                         let data2 = data.protein
                         let gain = tmp.a.protein.getResetGain
                         data2.points = data2.points.plus(gain.times(diff))
+                        data2.total = data2.total.plus(gain.times(diff))
                         data2.best = data2.best.max(data2.points)
 
                         let proteinTimeMult = 1
@@ -9146,23 +9224,24 @@ addLayer("a", {
                         if (hasUpgrade("a", 23)) proteinTimeMult *= 2.5
                         if (hasUpgrade("a", 24)) proteinTimeMult *= 2
                         if (hasUpgrade("a", 25)) proteinTimeMult *= 2
+                        if (hasMilestone("d", 1)) proteinTimeMult = 20
                         
                         data2.passiveTime += diff * proteinTimeMult
-                        if (hasUpgrade("a", 21)) {
+                        if (hasUpgrade("a", 21) || hasMilestone("d", 1)) {
                                 if (data2.passiveTime > 10) data2.passiveTime = 10
                                 if (data2.passiveTime > 1) {
                                         data2.passiveTime += -1
                                         if (tmp.a.buyables[11].canBuy) layers.a.buyables[11].buy()
-                                        if (hasUpgrade("a", 22) && tmp.a.buyables[12].canBuy) {
+                                        if ((hasMilestone("d", 1) || hasUpgrade("a", 22)) && tmp.a.buyables[12].canBuy) {
                                                 layers.a.buyables[12].buy()
                                         }
-                                        if (hasMilestone("a", 30) && tmp.a.buyables[21].canBuy) {
+                                        if ((hasMilestone("d", 1) || hasMilestone("a", 30)) && tmp.a.buyables[21].canBuy) {
                                                 layers.a.buyables[21].buy()
                                         }
-                                        if (hasMilestone("a", 38) && tmp.a.buyables[22].canBuy) {
+                                        if ((hasMilestone("d", 1) || hasMilestone("a", 38)) && tmp.a.buyables[22].canBuy) {
                                                 layers.a.buyables[22].buy()
                                         } 
-                                        if (hasUpgrade("a", 53) && tmp.a.buyables[23].canBuy) {
+                                        if ((hasMilestone("d", 1) || hasUpgrade("a", 53)) && tmp.a.buyables[23].canBuy) {
                                                 layers.a.buyables[23].buy()
                                         } 
                                 }
@@ -9228,6 +9307,7 @@ addLayer("a", {
                         let ret = player.a.points.plus(10).log10()
 
                         if (player.hardMode)            ret = ret.div(5)
+                                                        ret = ret.times(tmp.d.effect[0])
 
                                                         ret = ret.times(tmp.a.buyables[13].effect)
                                                         ret = ret.times(tmp.a.buyables[21].effect)
@@ -10849,7 +10929,7 @@ addLayer("a", {
                                 if (!this.canAfford()) return 
                                 let data = player.a
                                 let ma = tmp.a.buyables[11].maxAfford
-                                let up = hasMilestone("a", 23) ? ma.sub(data.buyables[11]) : 1
+                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) ? ma.sub(data.buyables[11]) : 1
                                 data.buyables[11] = data.buyables[11].plus(up)
                                 if (!hasUpgrade("a", 32)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[11].cost)
@@ -10933,7 +11013,7 @@ addLayer("a", {
                                 if (!this.canAfford()) return 
                                 let data = player.a
                                 let ma = tmp.a.buyables[12].maxAfford
-                                let up = hasMilestone("a", 23) ? ma.sub(data.buyables[12]) : 1
+                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) ? ma.sub(data.buyables[12]) : 1
                                 data.buyables[12] = data.buyables[12].plus(up)
                                 if (!hasUpgrade("a", 32)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[12].cost)
@@ -11490,7 +11570,7 @@ addLayer("a", {
                         content: ["main-display",
                                 ["secondary-display", "protein"],
                                 ["display-text", function(){
-                                        if (player.a.protein.points.lt(1e100)) {
+                                        if (!hasMilestone("a", 31)) { // 160e3
                                                 return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
                                         }
                                         let boostExp = tmp.a.protein.mRNAtRNABoostExp
@@ -11547,7 +11627,7 @@ addLayer("a", {
 
                                         let part1 = a + br2 + b + br + c + br + d
 
-                                        if (!hasMilestone("a", 3)) return part1
+                                        if (!player.a.everA3) return part1
 
                                         let e = "Note that you have thus reached a point in the game where henceforth"
                                         let f = "Carbon, Oxygen, minigame, token, and Hydrogen content will not get reset."
@@ -11655,10 +11735,10 @@ addLayer("a", {
                                         }
 
 
-                                        j += br2 + "That means in total,"
                                         for (idCard in idsCheck) {
                                                 id = idsCheck[idCard]
                                                 if (!tmp.a.buyables[id].unlocked) continue
+                                                if (id == 13) j += br2 + "That means in total,"
                                                 j += "<br>The next "
                                                 j += makeBlue(tmp.a.buyables[id].title) + " gives a "
                                                 j += doEndingFormula(boostPer[id])
@@ -11683,6 +11763,7 @@ addLayer("a", {
         },
         onPrestige(){
                 player.a.times ++
+                if (hasMilestone("d", 1)) player.a.times += 2
                 player.a.time = 0
         },
         doReset(layer){
@@ -11777,6 +11858,359 @@ addLayer("a", {
                                 data3.upgrades = filterOut(data3.upgrades, pUpgRem)
                         }
                 }
+        },
+})
+
+addLayer("d", {
+        name: "DNA", // This is optional, only used in a few places, If absent it just uses the layer id.
+        symbol: "D", // This appears on the layer's node. Default is the id with the first letter capitalized
+        position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        startData() { return {
+                unlocked: false,
+		points: new Decimal(0),
+                best: new Decimal(0),
+                total: new Decimal(0),
+                abtime: 0,
+                time: 0,
+                times: 0,
+                passivetime: 0,
+        }},
+        color: "#8C3300",
+        branches: [],
+        requires:() => new Decimal(4.4e169), // Can be a function that takes requirement increases into account
+        resource: "DNA", // Name of prestige currency
+        baseResource: "Amino Acid", // Name of resource prestige is based on
+        baseAmount() {return player.a.points}, // Get the current amount of baseResource
+        type: "custom",
+        getResetGain(){
+                return tmp.d.getBaseGain.times(tmp.d.getGainMult).floor()
+        },
+        getBaseGain(){
+                let pts = player.a.points
+                let init = pts.div(4.4e144).max(1).log10()
+                if (init.lt(25)) return new Decimal(0)
+
+                return init.sqrt().sub(4).pow(2)
+        },
+        getGainMult(){ // dna gain dnagain dgain d gain
+                let ret = new Decimal(1)
+
+                return ret
+        },
+        getNextAt(){
+                let gain = tmp.d.getResetGain
+                let reqInit = gain.plus(1).div(tmp.d.getGainMult).max(1)
+                let v1 = reqInit.sqrt().plus(4).pow(2).pow10().times(4.4e144)
+                return v1
+        },
+        canReset(){
+                return tmp.d.getResetGain.gt(0)
+        },
+        effect(){
+                let amt = player.d.best
+
+                let exp = amt.cbrt().times(2).min(20)
+
+                let ret1 = amt.plus(1).pow(exp)
+
+                return [ret1, amt.plus(1).pow(2)]
+        },
+        effectDescription(){
+                if (player.tab != "d") return ""
+                let eff = tmp.d.effect
+                let start = " multiplying Life and Protein gain by " 
+                let end = "."
+                let ret = start + format(eff[0]) + " and Amino Acid gain by " + format(eff[1]) + end
+                return ret
+        },
+        update(diff){
+                let data = player.d
+                
+                if (data.points.gt(0)) data.unlocked = true
+                data.best = data.best.max(data.points)
+
+                data.time += diff
+        },
+        row: 3, // Row the layer is in on the tree (0 is the first row)
+        prestigeButtonText(){
+                if (player.tab != "d") return ""
+                if (player.subtabs.d.mainTabs != "Upgrades") return ""
+
+                let a = "Reset for <b>" + formatWhole(tmp.d.getResetGain) + "</b> DNA"
+
+                let b = ""
+                if (tmp.d.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.d.getNextAt) + " Amino Acid."
+
+                return a + b
+        },
+        hotkeys: [
+                {key: "shift+D", description: "Shift+D: Go to DNA", onPress(){
+                                if (!tmp.a.layerShown) return
+                                showTab("d")
+                        }
+                },
+                {key: "d", description: "D: Reset for DNA", onPress(){
+                                if (canReset("d")) doReset("d")
+                        }
+                },
+        ],
+        layerShown(){return player.d.best.gt(0) || hasUpgrade("a", 65)},
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA I"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>The 1 Life reset milestone is always maxed, subtract .05 from µ cost exponent while not in Customizable, and add 100% to C25 effect</bdi>"
+                                return a
+                        },
+                        cost:() => new Decimal(1),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("d", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                return "Requires: 1 DNA reset"
+                        },
+                        requirement(){
+                                return new Decimal(1)
+                        },
+                        done(){
+                                return tmp.d.milestones[1].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Keep Nitrogen, Phosphorus, and µ content on all prior resets, you gain 10 dilation completions at once, keep all prior automation, and gain 3x Amino Acid resets."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 1)
+                2: {
+                        requirementDescription(){
+                                return "Requires: 2 DNA reset"
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.d.milestones[2].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Each reset keeps two Amino Acid milestones [not yet]."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 2)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: ["main-display",
+                                  ["prestige-button", ""],
+                                  "blank", 
+                                  ["upgrades", [1,2,3,4,5,6,7]],
+                                  "blank",
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: ["main-display",
+                                ["display-text", function(){
+                                        if (player.tab != "d") return ""
+                                        if (player.subtabs.d.mainTabs != "Milestones") return ""
+
+                                        let a = "You have done " 
+                                        let b = formatWhole(player.d.times) + " DNA resets"
+                                        return a + b
+                                }],
+                                "milestones",
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: ["main-display",
+                                ["display-text", function(){
+                                        if (player.tab != "d") return ""
+                                        if (player.subtabs.d.mainTabs != "Info") return ""
+
+                                        let a = "Initial Amino Acid gain: (cbrt(log2(Lives)-1368)-7)<sup>2</sup>"
+                                        let b = "Amino resets (in order) Life content, N → ΔN levels, "
+                                        let c = " the last two rows of Phosphorus and mu upgrades"
+                                        let d = "and finally does a Life reset."
+
+                                        let part1 = a + br2 + b + br + c + br + d
+
+                                        return part1
+                                }],
+                                ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        onPrestige(){
+                player.d.times ++
+                player.d.time = 0
+        },
+        doReset(layer){
+                if (layer != "d") return 
+
+                /*
+                1. Amino Acid content
+                2. Life content
+                3. Mu content
+                4. Phoshphorus content
+                */
+
+                let data1 = player.a
+                let data2 = player.l
+                let data3 = player.mu
+                let data4 = player.p
+
+                // 1 Amino Acid content
+                if (!false) {
+                        let aKeptMilestones = 0
+                        if (!false){
+                                data1.milestones = data1.milestones.slice(0, aKeptMilestones)
+                        }
+
+                        data1.buyables[11] = new Decimal(0)
+                        data1.buyables[12] = new Decimal(0)
+                        data1.buyables[13] = new Decimal(0)
+                        data1.buyables[21] = new Decimal(0)
+                        data1.buyables[22] = new Decimal(0)
+                        data1.buyables[23] = new Decimal(0)
+                        data1.buyables[31] = new Decimal(0)
+                        data1.buyables[32] = new Decimal(0)
+                        data1.buyables[33] = new Decimal(0)
+
+                        let aKeptUpgrades = 0
+                        if (!false) {
+                                data1.upgrades = data1.upgrades.slice(0, aKeptUpgrades)
+                        }
+
+                        data1.times = 0
+                }
+
+                data1.points = new Decimal(0)
+                data1.best = new Decimal(0)
+                data1.total = new Decimal(0)
+                data1.protein.best = new Decimal(0)
+                data1.protein.total = new Decimal(0)
+                data1.protein.points = new Decimal(0)
+
+
+                // 2 Life content
+                if (!false) {
+                        let lKeptMilestones = 0
+                        if (hasMilestone("a", 1)) lKeptMilestones += 4 * player.a.times
+                        if (!false) {
+                                data2.milestones = data2.milestones.slice(0, lKeptMilestones)
+                        }
+
+                        data2.buyables[11] = new Decimal(0)
+                        data2.buyables[12] = new Decimal(0)
+                        data2.buyables[13] = new Decimal(0)
+                        data2.buyables[21] = new Decimal(0)
+                        data2.buyables[22] = new Decimal(0)
+                        data2.buyables[23] = new Decimal(0)
+                        data2.buyables[31] = new Decimal(0) // buyables
+                        data2.buyables[32] = new Decimal(0)
+                        data2.buyables[33] = new Decimal(0)
+
+                        //gems
+                        if (!false) {
+                                let x = ["101", "102", "103", "104", "105", "106", "107", "108", 
+                                        "201", "202", "203", "204", "205", "206", "207", "208", 
+                                        "301", "302", "303", "304", "305", "306", "307", "308", 
+                                        "401", "402", "403", "404", "405", "406", "407", "408", 
+                                        "501", "502", "503", "504", "505", "506", "507", "508", 
+                                        "601", "602", "603", "604", "605", "606", "607", "608", 
+                                        "701", "702", "703", "704", "705", "706", "707", "708", 
+                                        "801", "802", "803", "804", "805", "806", "807", "808"]
+                                let keepGems = new Decimal(0)
+                                if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
+
+                                let gData = player.l.grid
+
+                                for (i in x) {
+                                        id = x[i]
+                                        let thisKeep = keepGems
+                                        if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
+                                                thisKeep = thisKeep.max(1000)
+                                        }
+                                        gData[id].gems = gData[id].gems.min(thisKeep)
+                                }
+                        }
+
+                        //challenges
+                        if (!hasMilestone("a", 9)) data2.challenges[11] = 0
+
+                        //reset times
+                        if (!hasMilestone("a", 9)) data2.times = 0
+                }
+
+                data2.points = new Decimal(0)
+                data2.best = new Decimal(0)
+                data2.total = new Decimal(0)
+
+                // 3 Mu content
+                if (!false) { 
+                        // 2 rows of upgrades
+                        data3.buyables[32] = new Decimal(0)
+                        data3.buyables[33] = new Decimal(0)
+
+                        let muUpgRem = [41, 42, 43, 44, 45, 
+                                        51, 52, 53, 54, 55]
+                        
+                        if (!false) { // upgrades
+                                data3.upgrades = filterOut(data3.upgrades, muUpgRem)
+                        }
+                }
+
+                data3.buyables[11] = new Decimal(0)
+                data3.buyables[12] = new Decimal(0)
+                data3.buyables[13] = new Decimal(0)
+                data3.buyables[21] = new Decimal(0)
+                data3.buyables[22] = new Decimal(0)
+                data3.buyables[23] = new Decimal(0)
+                data3.buyables[31] = new Decimal(0) // buyables
+                data3.buyables[32] = new Decimal(0)
+                data3.buyables[33] = new Decimal(0)
+
+                // 4 Phosphorus content
+                if (!false) {
+                        // 2 rows of upgrades
+                        player.p.best_over_amino = new Decimal(0)
+
+                        let pUpgRem = [41, 42, 43, 44, 45, 
+                                       51, 52, 53, 54, 55]
+                        
+                        if (!false) { // upgrades
+                                data4.upgrades = filterOut(data4.upgrades, pUpgRem)
+                        }
+                }
+
+                resetPreLifeCurrencies()
         },
 })
 

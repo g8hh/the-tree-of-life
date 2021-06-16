@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.022",
+	num: "1.023",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.023</h3><br>
+		- Added DNA.<br>
+		- Added a DNA milestone.<br>
+		- Added a DNA upgrade.<br>
+		- Added a µs display.<br>
 	<br><h3 style='color: #CC0000'>v1.022</h3><br>
 		- Added 10 Amino Acid upgrades.<br>
 		- Added 8 Amino Acid milestones.<br>
