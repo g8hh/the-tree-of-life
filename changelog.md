@@ -3,6 +3,7 @@
 # v2.6.4 - 6/17/21
 - The game now autosaves before closing, if autosave is on. (Thank you to thepaperpilot for this!)
 - More Anti-NaN safety.
+- Fixed challenges glowing from countsAs.
 - canReset now works properly for non-custom layers.
 - Fixed baseAmount being set to 0 even when a layer resets nothing.
 - Fixed centering on tooltips.
