@@ -9186,10 +9186,13 @@ addLayer("a", {
                                 if (hasUpgrade("a", 31))        doThese.push(304)
                                 if (hasUpgrade("a", 32))        doThese.push(204)
                                 if (hasUpgrade("a", 33))        doThese.push(104)
+
+                                let addPer = 1
+                                if (hasMilestone("d", 3)) addPer = 10
                                 for (i in doThese) {
                                         id = doThese[i]
                                         if (gridData[id].gems.lt(1e3)) {
-                                                gridData[id].gems = gridData[id].gems.plus(1)
+                                                gridData[id].gems = gridData[id].gems.plus(addPer)
                                         }
                                 }
                         }
@@ -11099,6 +11102,8 @@ addLayer("a", {
                         },
                         base(){
                                 let ret = player.l.points.max(10).log10()
+
+                                if (hasMilestone("d", 3)) ret = ret.times(Math.log(10)/Math.log(9))
                                 
                                 return ret
                         },
@@ -11115,6 +11120,7 @@ addLayer("a", {
                                 let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 13)) + " Protein</b><br>"
                                 let eformula = "log10(Lives)^x<br>" + format(tmp.a.buyables[13].base) + "^x"
+                                if (hasMilestone("d", 3)) eformula = eformula.replace("log10", "log9")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -11922,7 +11928,7 @@ addLayer("d", {
                 let init = pts.div(4.4e144).max(1).log10()
                 if (init.lt(25)) return new Decimal(0)
 
-                return init.sqrt().sub(4).pow(2)
+                return init.sqrt().div(2).sub(1.5).pow(2)
         },
         getGainMult(){ // dna gain dnagain dgain d gain
                 let ret = new Decimal(1)
@@ -11932,7 +11938,7 @@ addLayer("d", {
         getNextAt(){
                 let gain = tmp.d.getResetGain
                 let reqInit = gain.plus(1).div(tmp.d.getGainMult).max(1)
-                let v1 = reqInit.sqrt().plus(4).pow(2).pow10().times(4.4e144)
+                let v1 = reqInit.sqrt().plus(1.5).times(2).pow(2).pow10().times(4.4e144)
                 return v1
         },
         canReset(){
@@ -12029,7 +12035,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 DNA reset"
+                                return "Requires: 2 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -12049,6 +12055,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 2)
+                3: {
+                        requirementDescription(){
+                                return "Requires: 3 DNA resets"
+                        },
+                        requirement(){
+                                return new Decimal(3)
+                        },
+                        done(){
+                                return tmp.d.milestones[3].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA's log10 becomes log9 and you gain 10 passive gems at once."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 3)
         },
         tabFormat: {
                 "Upgrades": {

@@ -12,19 +12,22 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.024",
+	num: "1.025",
 	name: "Coup de Grâce",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 2 DNA OR the last save in the bank<br><br>
+		- 3 DNA OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.025</h3><br>
+		- Added a DNA milestone.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.024</h3><br>
 		- Added a DNA milestone.<br>
 		- Added a custom save.<br>
