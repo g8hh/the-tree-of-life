@@ -46,7 +46,7 @@ function getPointGen() {
                 let base = layers.l.grid.getGemEffect(304)
                                         gain = gain.pow(base.pow(getBuyableAmount("mu", 32)))
                 let base2= layers.l.grid.getGemEffect(504)
-                                        gain = gain.pow(base.pow(getBuyableAmount("a", 22)))
+                                        gain = gain.pow(base2.pow(getBuyableAmount("a", 22)))
         }
         if (hasMilestone("a", 19))      gain = gain.pow(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        gain = gain.pow(Decimal.pow(3, player.a.upgrades.length))
@@ -6702,6 +6702,7 @@ addLayer("l", {
                 }
                 if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
                                                 ret = ret.times(tmp.d.effect[0] || 1)
+                if (hasMilestone("d", 4))       ret = ret.times(tmp.a.buyables[13].effect)
 
                 return ret.max(1)
         },
@@ -9186,6 +9187,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 31))        doThese.push(304)
                                 if (hasUpgrade("a", 32))        doThese.push(204)
                                 if (hasUpgrade("a", 33))        doThese.push(104)
+                                if (hasMilestone("d", 4))       doThese.push(405)
 
                                 let addPer = 1
                                 if (hasMilestone("d", 3)) addPer = 10
@@ -9247,6 +9249,9 @@ addLayer("a", {
                                         if ((hasMilestone("d", 1) || hasUpgrade("a", 53)) && tmp.a.buyables[23].canBuy) {
                                                 layers.a.buyables[23].buy()
                                         } 
+                                        if (hasMilestone("d", 4) && tmp.a.buyables[31].canBuy){
+                                                layers.a.buyables[31].buy()
+                                        }
                                 }
                         } else data2.passiveTime = 0
 
@@ -12077,6 +12082,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 3)
+                4: {
+                        requirementDescription(){
+                                return "Requires: 4 DNA resets"
+                        },
+                        requirement(){
+                                return new Decimal(4)
+                        },
+                        done(){
+                                return tmp.d.milestones[4].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA effects Life gain, gain C45 gems passively, and autobuy ncRNA."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -12112,12 +12139,11 @@ addLayer("d", {
                                         if (player.tab != "d") return ""
                                         if (player.subtabs.d.mainTabs != "Info") return ""
 
-                                        let a = "Initial Amino Acid gain: (cbrt(log2(Lives)-1368)-7)<sup>2</sup>"
-                                        let b = "Amino resets (in order) Life content, N → ΔN levels, "
-                                        let c = " the last two rows of Phosphorus and mu upgrades"
-                                        let d = "and finally does a Life reset."
+                                        let a = "Initial DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>2</sup>"
+                                        let b = "DNA resets (in order) Amino Acid content, Life content,"
+                                        let c = " the last two rows of Phosphorus and mu upgrades."
 
-                                        let part1 = a + br2 + b + br + c + br + d
+                                        let part1 = a + br2 + b + br + c
 
                                         return part1
                                 }],

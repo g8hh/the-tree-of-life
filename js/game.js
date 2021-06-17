@@ -77,7 +77,7 @@ function shouldNotify(layer){
 		}
 	}
 	if (player[layer].activeChallenge && canCompleteChallenge(layer, player[layer].activeChallenge)) {
-		return true
+		if (!inChallenge("l", 12) || layers.l.grid.getGemEffect(205).eq(0)) return true
 	}
 
 	if (tmp[layer].shouldNotify) return true
