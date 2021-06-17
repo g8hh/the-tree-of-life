@@ -44,6 +44,8 @@ Features:
 
 - marked: **optional** Adds a mark to the corner of the clickable. If it's "true" it will be a star, but it can also be an image URL.
 
+- tooltip: **optional**. Adds a tooltip to this clickable, appears when it is hovered over. Can use basic HTML. Default is no tooltip. If this returns an empty value, that also disables the tooltip.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
 - id: **assigned automagically**. It's the "key" which the clickable was stored under, for convenient access. The clickable in the example's id is 11.
@@ -55,3 +57,7 @@ You can also use these features on the clickables object to add a button above a
 - masterButtonText: **optional**. Text to display on the Master Button.
 
 - showMasterButton(): **optional**. A function determining whether or not to show the button, if masterButtonPress is defined. Defaults to true if absent.
+
+
+
+- branches: **optional**, This is primarially useful for clickable trees. An array of clickable ids. A line will appear from this clickable to all of the clickables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the clickable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.

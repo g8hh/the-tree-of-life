@@ -65,4 +65,6 @@ Features:
                   
 - getEffect(data, id): **optional**. A function that calculates and returns a gridable's effect, based on its position and data. (Whatever that means for a gridable)
 
+- getTooltip(data, id): **optional**. Adds a tooltip to the gridables, appears when they hovered over. Can use basic HTML. Default is no tooltip. If this returns an empty value, that also disables the tooltip.
+
 - layer: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.

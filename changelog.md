@@ -1,5 +1,39 @@
 # The Modding Tree changelog:
 
+# v2.6.4.2 - 6/17/21
+- Fixed a bug with the endgame screen.
+- Fixed hotkey-related crash.
+- Fixed resetting not working correctly.
+
+# v2.6.4 - 6/17/21
+- The game now autosaves before closing, if autosave is on. (Thank you to thepaperpilot for this!)
+- More Anti-NaN safety.
+- Fixed challenges glowing from countsAs.
+- Improved tooltip centering (thanks to Scarlettt!)
+- canReset now works properly for non-custom layers.
+- Fixed baseAmount being set to 0 even when a layer resets nothing.
+- Fixed centering on tooltips.
+- Changed some default values on startup to prevent potential issues.
+- Cleaned up resetting.
+
+# v2.6.3 - 6/11/21
+- Added better support for using multiple layer files and similar. See modFiles in modInfo.
+- The demo now has each layer in its own file as well.
+
+# v2.6.2.2 - 6/10/21
+- Fixed an error message regarding popup.css.
+
+# v2.6.2.1 - 6/10/21
+- Fixed a visual bug with milestones.
+
+## v2.6.2 - 6/10/21
+- Broke up style.css into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
+- Added buyable and clickable trees.
+- Added optional tooltips to upgrades, buyables, clickables, milestones, and gridables.
+- Fixed the passiveGeneration display.
+- Fixed "marked" feature.
+- doReset now will function on non-numeric rows besides "side".
+
 ## v2.6.1 - 6/7/21
 - Added global background style to mod.js.
 - Tree branches can have custom line widths.

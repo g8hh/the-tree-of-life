@@ -34,16 +34,24 @@ function drawTree() {
 					drawTreeBranch(layer, tmp[layer].branches[branch])
 				}
 		}
-		for(id in layers[layer].upgrades) {
-			if (tmp[layer].upgrades[id].branches) {
-				for (branch in tmp[layer].upgrades[id].branches)
-				{
-					drawTreeBranch(id, tmp[layer].upgrades[id].branches[branch], "upgrade-" + layer + "-")
-				}
+		drawComponentBranches(layer, tmp[layer].upgrades, "upgrade-")
+		drawComponentBranches(layer, tmp[layer].buyables, "buyable-")
+		drawComponentBranches(layer, tmp[layer].clickables, "clickable-")
 
+	}
+}
+
+function drawComponentBranches(layer, data, prefix) {
+	for(id in data) {
+		if (data[id].branches) {
+			for (branch in data[id].branches)
+			{
+				drawTreeBranch(id, data[id].branches[branch], prefix + layer + "-")
 			}
+
 		}
 	}
+
 }
 
 function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly

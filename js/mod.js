@@ -3,16 +3,16 @@ let modInfo = {
 	id: "tree_of_life",
 	author: "pg132",
 	pointsName: "Life Points",
+	modFiles: ["layers.js", "tree.js"],
 	discordName: "",
 	discordLink: "",
 	initialStartPoints: new Decimal (1), // Used for hard resets and new players
-	
 	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.025",
+	num: "1.025.1",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.025.1</h3><br>
+		- Marged v2.6.4.3 of TMT.<br>
+		- Default font is now Inconsolata.<br>
+		- Fixed some things being 0 cause division by zero.<br>
 	<br><h3 style='color: #CC0000'>v1.025</h3><br>
 		- Added a DNA milestone.<br>
 		- Added a custom save.<br>

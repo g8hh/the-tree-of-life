@@ -439,7 +439,7 @@ var qForClear = false
 
 document.onkeydown = function(e) {
 	if (player === undefined) return;
-	if (gameEnded && !player.keepGoing) return;
+	if (tmp.gameEnded && !player.keepGoing) return;
 	if (onFocused) return
 	let key = e.key
 	if (controlDown) key = "Control+" + key.toUpperCase()
