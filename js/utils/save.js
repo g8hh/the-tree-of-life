@@ -243,13 +243,13 @@ function NaNcheck(data) {
 		}
 		else if (data[item] !== data[item] || checkDecimalNaN(data[item])) {
 			if (!NaNalert) {
-				confirm("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				clearInterval(interval);
 				NaNalert = true;
+				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				return
 			}
 		}
-		else if (data[item] instanceof Decimal) { // Convert to Decimal
+		else if (data[item] instanceof Decimal) {
 		}
 		else if ((!!data[item]) && (data[item].constructor === Object)) {
 			NaNcheck(data[item]);
@@ -313,3 +313,9 @@ var saveInterval = setInterval(function () {
 	if (options.autosave)
 		save();
 }, 5000);
+
+window.onbeforeunload = () => {
+    if (player.autosave) {
+        save();
+    }
+};

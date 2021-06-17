@@ -4,7 +4,7 @@ var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.3",
+	tmtNum: "2.6.4",
 	tmtName: "Fixed Reality"
 }
 
@@ -145,29 +145,14 @@ function layerDataReset(layer, keep = []) {
 		if (player[layer][keep[thing]] !== undefined)
 			storedData[keep[thing]] = player[layer][keep[thing]]
 	}
-	Vue.set(player[layer], "buyables", getStartBuyables(layer))
-	Vue.set(player[layer], "clickables", getStartClickables(layer))
-	Vue.set(player[layer], "challenges", getStartChallenges(layer))
 
 	layOver(player[layer], getStartLayerData(layer))
-	player[layer].upgrades = []
-	player[layer].milestones = []
-	player[layer].achievements = []
-	player[layer].challenges = getStartChallenges(layer)
-	resetBuyables(layer)
 
-	if (layers[layer].clickables && !player[layer].clickables) 
-		player[layer].clickables = getStartClickables(layer)
 	for (thing in storedData) {
 		player[layer][thing] =storedData[thing]
 	}
 }
 
-function resetBuyables(layer){
-	if (layers[layer].buyables) 
-		player[layer].buyables = getStartBuyables(layer)
-	player[layer].spentOnBuyables = decimalZero
-}
 
 
 function addPoints(layer, gain) {
@@ -184,15 +169,16 @@ function doReset(layer, force=false) {
 	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
 	if (!force) {
+		
+		if (tmp[layer].canReset === false) return;
+		
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
 		let gain = tmp[layer].resetGain
 		if (tmp[layer].type=="static") {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
 			gain =(tmp[layer].canBuyMax ? gain : 1)
 		} 
-		if (tmp[layer].type=="custom") {
-			if (!tmp[layer].canReset) return;
-		} 
+
 
 		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
