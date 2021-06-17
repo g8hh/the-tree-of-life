@@ -3,7 +3,7 @@ var needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.4.2",
+	tmtNum: "2.6.4.3",
 	tmtName: "Fixed Reality"
 }
 
@@ -128,7 +128,6 @@ function canReset(layer)
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
 		if(layers[lr].doReset) {
-
 			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
 		}
@@ -145,7 +144,15 @@ function layerDataReset(layer, keep = []) {
 			storedData[keep[thing]] = player[layer][keep[thing]]
 	}
 
+	Vue.set(player[layer], "buyables", getStartBuyables(layer))
+	Vue.set(player[layer], "clickables", getStartClickables(layer))
+	Vue.set(player[layer], "challenges", getStartChallenges(layer))
+	Vue.set(player[layer], "grid", getStartGrid(layer))
+
 	layOver(player[layer], getStartLayerData(layer))
+	player[layer].upgrades = []
+	player[layer].milestones = []
+	player[layer].achievements = []
 
 	for (thing in storedData) {
 		player[layer][thing] =storedData[thing]

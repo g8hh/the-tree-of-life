@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.6.4.2",
+	num: "2.6.4.3",
 	name: "Fixed Reality",
 }
 

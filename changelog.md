@@ -3,6 +3,7 @@
 # v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
 - Fixed hotkey-related crash.
+- Fixed resetting not working correctly.
 
 # v2.6.4 - 6/17/21
 - The game now autosaves before closing, if autosave is on. (Thank you to thepaperpilot for this!)
