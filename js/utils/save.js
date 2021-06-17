@@ -308,7 +308,7 @@ function versionCheck() {
 var saveInterval = setInterval(function () {
 	if (player === undefined)
 		return;
-	if (gameEnded && !player.keepGoing)
+	if (tmp.gameEnded && !player.keepGoing)
 		return;
 	if (options.autosave)
 		save();

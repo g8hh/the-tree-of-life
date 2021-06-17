@@ -1,10 +1,9 @@
 var player;
 var needCanvasUpdate = true;
-var gameEnded = false;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.4",
+	tmtNum: "2.6.4.1",
 	tmtName: "Fixed Reality"
 }
 
@@ -312,15 +311,15 @@ function autobuyUpgrades(layer){
 }
 
 function gameLoop(diff) {
-	if (isEndgame() || gameEnded){
-		gameEnded = 1
+	if (isEndgame() || tmp.gameEnded){
+		tmp.gameEnded = true
 		clearParticles()
 	}
 
 	if (isNaN(diff) || diff < 0) diff = 0
-	if (gameEnded && !player.keepGoing) {
+	if (tmp.gameEnded && !player.keepGoing) {
 		diff = 0
-		//player.tab = "gameEnded"
+		//player.tab = "tmp.gameEnded"
 		clearParticles()
 	}
 
@@ -389,7 +388,7 @@ var ticking = false
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
 	if (ticking) return;
-	if (gameEnded&&!player.keepGoing) return;
+	if (tmp.gameEnded&&!player.keepGoing) return;
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3

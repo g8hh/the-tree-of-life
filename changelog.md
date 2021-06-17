@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.6.4.1 - 6/17/21
+- Fixed a bug with the endgame screen.
+
 # v2.6.4 - 6/17/21
 - The game now autosaves before closing, if autosave is on. (Thank you to thepaperpilot for this!)
 - More Anti-NaN safety.
