@@ -305,9 +305,9 @@ ctrlDown = false
 
 document.onkeydown = function (e) {
 	if (player === undefined) return;
-	if (gameEnded && !player.keepGoing) return;
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey
+	if (tmp.gameEnded && !player.keepGoing) return;
 	let key = e.key
 	if (ctrlDown) key = "ctrl+" + key
 	if (onFocused) return
