@@ -6701,7 +6701,7 @@ addLayer("l", {
                                                 ret = ret.times(base2.pow(getBuyableAmount("a", 21)))
                 }
                 if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
-                                                ret = ret.times(tmp.d.effect[0])
+                                                ret = ret.times(tmp.d.effect[0] || 1)
 
                 return ret.max(1)
         },
@@ -9314,7 +9314,7 @@ addLayer("a", {
                         let ret = player.a.points.plus(10).log10()
 
                         if (player.hardMode)            ret = ret.div(5)
-                                                        ret = ret.times(tmp.d.effect[0])
+                                                        ret = ret.times(tmp.d.effect[0] || 1)
 
                                                         ret = ret.times(tmp.a.buyables[13].effect)
                                                         ret = ret.times(tmp.a.buyables[21].effect)
@@ -11958,7 +11958,7 @@ addLayer("d", {
                 let eff = tmp.d.effect
                 let start = " multiplying Life and Protein gain by " 
                 let end = "."
-                let ret = start + format(eff[0]) + " and Amino Acid gain by " + format(eff[1]) + end
+                let ret = start + format(eff[0] || 1) + " and Amino Acid gain by " + format(eff[1] || 1) + end
                 return ret
         },
         update(diff){
