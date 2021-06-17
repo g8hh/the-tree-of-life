@@ -9188,6 +9188,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 32))        doThese.push(204)
                                 if (hasUpgrade("a", 33))        doThese.push(104)
                                 if (hasMilestone("d", 4))       doThese.push(405)
+                                if (hasMilestone("d", 5))       doThese.push(305)
 
                                 let addPer = 1
                                 if (hasMilestone("d", 3)) addPer = 10
@@ -12104,6 +12105,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 4)
+                5: {
+                        requirementDescription(){
+                                return "Requires: 5 DNA resets"
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.d.milestones[5].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Keep Amino Acid resets and gain C35 gems passively."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 5)
         },
         tabFormat: {
                 "Upgrades": {
@@ -12195,7 +12218,7 @@ addLayer("d", {
                                 data1.upgrades = data1.upgrades.slice(0, aKeptUpgrades)
                         }
 
-                        data1.times = 0
+                        if (!hasMilestone("d", 5)) data1.times = 0
                 }
 
                 data1.points = new Decimal(0)
