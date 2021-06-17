@@ -6703,7 +6703,7 @@ addLayer("l", {
                 if (hasMilestone("a", 21))      ret = ret.times(player.a.protein.points.max(1).min("1e2000"))
                                                 ret = ret.times(tmp.d.effect[0])
 
-                return ret
+                return ret.max(1)
         },
         getNextAt(){
                 let gain = tmp.l.getResetGain
@@ -9247,12 +9247,16 @@ addLayer("a", {
                                 }
                         } else data2.passiveTime = 0
 
-                        if (hasMilestone("a", 32)) {
+                        if (hasMilestone("a", 32) || hasMilestone("d", 2)) {
                                 let init = tmp.a.protein.getAllOtherGain
                                 let exp = tmp.a.protein.mRNAtRNABoostExp
-                                let mult = .001
-                                if (hasMilestone("a", 39)) mult = .05
-                                data2.points = data2.points.plus(init.times(mult).pow(exp))
+                                let timemult = Math.pow(10, -6)
+                                if (hasMilestone("a", 32)) timemult = .001
+                                if (hasMilestone("a", 39)) timemult = .05
+                                let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
+                                let mRNAFactor = Decimal.pow(tmp.a.buyables[12].baseCost, tmp.a.buyables[12].base.log(10))
+                                let mult = mRNAFactor.times(tRNAFactor).pow(-1).times(timemult)
+                                data2.points = data2.points.plus(init.times(mult).pow(exp).times(diff))
                         }
                 }
         },
@@ -9710,7 +9714,7 @@ addLayer("a", {
                                 let a = "Autobuy crRNA and you can buy max all Protein buyables"
                                 return a
                         },
-                        cost:() => new Decimal("3e63"),
+                        cost:() => new Decimal("3e68"),
                         unlocked(){
                                 return hasUpgrade("a", 52)
                         }, // hasUpgrade("a", 53)
@@ -10474,7 +10478,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Add .01 to tRNA base and autobuy rRNA"
+                                let a = "Reward: Add .001 to tRNA base and autobuy rRNA"
                                 let b = ""
                                 return a + b
                         },
@@ -11549,6 +11553,21 @@ addLayer("a", {
                         unlocked(){
                                 return true
                         },
+                        shouldNotify(){
+                                let x = ["11", "12", "13", "14", "15", 
+                                         "21", "22", "23", "24", "25", 
+                                         "31", "32", "33", "34", "35", 
+                                         "41", "42", "43", "44", "45", 
+                                         "51", "52", "53", "54", "55", 
+                                         "61", "62", "63", "64", "65",]
+                                for (i in x){
+                                        id = x[i]
+                                        if (hasUpgrade("a", id)) continue
+                                        if (!tmp.a.upgrades[id].unlocked) continue
+                                        if (canAffordUpgrade("a", id)) return true
+                                }
+                                return false
+                        },
                 },
                 "Milestones": {
                         content: ["main-display",
@@ -11570,14 +11589,28 @@ addLayer("a", {
                         content: ["main-display",
                                 ["secondary-display", "protein"],
                                 ["display-text", function(){
-                                        if (!hasMilestone("a", 31)) { // 160e3
+                                        if (player.a.protein.points.lt(1e100)) { 
                                                 return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
+                                        }
+                                        if (!hasMilestone("a", 32)) {// 175e3
+                                                let init = tmp.a.protein.getAllOtherGain
+                                                let exp = tmp.a.protein.mRNAtRNABoostExp
+                                                let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
+                                                let mRNAFactor = Decimal.pow(tmp.a.buyables[12].baseCost, tmp.a.buyables[12].base.log(10))
+                                                let mult = mRNAFactor.times(tRNAFactor).pow(-1).times(.001)
+                                                let start = "For buyables to take 1ms to be affordable, you would have "
+                                                return start + format(init.times(mult).pow(exp)) + " protein"
                                         }
                                         let boostExp = tmp.a.protein.mRNAtRNABoostExp
                                         let time = player.a.protein.points.root(boostExp).div(tmp.a.protein.getAllOtherGain)
                                         let base1 = tmp.a.buyables[11].base.pow(Math.log(50)/Math.log(25)) 
                                         let base2 = tmp.a.buyables[12].base.pow(Math.log(50)/Math.log(100))
                                         let oomps = Decimal.pow(base1.times(base2), time.pow(-1).div(2)).log10()
+                                        if (!hasMilestone("a", 39)) {
+                                                oomps = oomps.div(50) // because its bought 50x less often
+                                                oomps = oomps.times(4.129646562409412/2)
+                                                // Math.log(50)/Math.log(5)+Math.log(50)/Math.log(10)
+                                        }
                                         if (!shiftDown || !tmp.a.buyables[13].unlocked || player.a.protein.points.lt(10)) {
                                                 let a = "Current time to buy a buyable is approximately " + formatTime(time)
                                                 // Math.log(10*5)/(2*Math.log(5))
@@ -11746,7 +11779,7 @@ addLayer("a", {
 
                                         if (!hasMilestone("a", 32)) return part2 + br2 + i + br + j
                                         
-                                        let k1 = "<sup>*3</sup>If you are gainging X protein/s from sources other than tRNA and mRNA,"
+                                        let k1 = "<sup>*3</sup>If you are gaining X protein/s from sources other than tRNA and mRNA,"
                                         let k2 = "and your mRNA and tRNA net ^Y protein gain"
                                         let k3 = "then you get an additional (X/1000)<sup>Y</sup> protein per second."
                                         let k = k1 + br + k2 + br + k3
@@ -11847,10 +11880,8 @@ addLayer("a", {
                 }
 
                 // 3 Phosphorus content
-                if (!false) {
+                if (!hasMilestone("d", 2)) {
                         // 2 rows of upgrades
-                        player.p.best_over_amino = new Decimal(0)
-
                         let pUpgRem = [41, 42, 43, 44, 45, 
                                        51, 52, 53, 54, 55]
                         
@@ -11858,6 +11889,7 @@ addLayer("a", {
                                 data3.upgrades = filterOut(data3.upgrades, pUpgRem)
                         }
                 }
+                player.p.best_over_amino = new Decimal(0)
         },
 })
 
@@ -12012,7 +12044,7 @@ addLayer("d", {
                                 if (player.tab != "d") return ""
                                 if (player.subtabs.d.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Each reset keeps two Amino Acid milestones [not yet]."
+                                let a = "Reward: Per reset keep three Amino Acid milestones, keep Phosphorus upgrades, and mRNA and tRNA production boost is additionally treated as you can buy them in 1µs."
                                 let b = ""
                                 return a + b
                         },
@@ -12089,6 +12121,7 @@ addLayer("d", {
                 // 1 Amino Acid content
                 if (!false) {
                         let aKeptMilestones = 0
+                        if (hasMilestone("d", 2)) aKeptMilestones += 3 * player.d.times
                         if (!false){
                                 data1.milestones = data1.milestones.slice(0, aKeptMilestones)
                         }
@@ -12198,10 +12231,8 @@ addLayer("d", {
                 data3.buyables[33] = new Decimal(0)
 
                 // 4 Phosphorus content
-                if (!false) {
+                if (!hasMilestone("d", 2)) {
                         // 2 rows of upgrades
-                        player.p.best_over_amino = new Decimal(0)
-
                         let pUpgRem = [41, 42, 43, 44, 45, 
                                        51, 52, 53, 54, 55]
                         
@@ -12209,6 +12240,8 @@ addLayer("d", {
                                 data4.upgrades = filterOut(data4.upgrades, pUpgRem)
                         }
                 }
+
+                player.p.best_over_amino = new Decimal(0)
 
                 resetPreLifeCurrencies()
         },
@@ -12461,7 +12494,7 @@ addLayer("mini", {
                         data.unlocked = true
                 }
 
-                let allABContent = hasMilestone("l", 1)
+                let allABContent = hasMilestone("l", 1) || hasMilestone("d", 1)
                 
                 if (hasUpgrade("h", 51) || allABContent) {
                         let mult = 1
@@ -12609,7 +12642,7 @@ addLayer("mini", {
                                 for (i = 0; i < list4.length; i++){
                                         let id = list4[i]
                                         if (id == 201 && !(allABContent || hasMilestone("p", 8))) continue
-                                        let canBuyFirst = hasMilestone("l", 2) || ((allABContent || hasMilestone("p", 8)) && id < 240)
+                                        let canBuyFirst = hasMilestone("l", 2) || allABContent || (hasMilestone("p", 8) && id < 240)
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!canBuyFirst && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
