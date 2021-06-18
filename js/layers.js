@@ -9697,7 +9697,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XX"
                         },
                         description(){
-                                let a = "crRNA levels squred multiply protein gain"
+                                let a = "crRNA levels squared multiply protein gain"
                                 return a
                         },
                         cost:() => new Decimal("1e263e3"),
