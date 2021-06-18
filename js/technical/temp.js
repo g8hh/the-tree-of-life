@@ -138,7 +138,7 @@ function updateTempData(layerData, tmpData, funcsData, useThis, noError = false)
 			else value = layerData[item]()
 			if (value !== value || checkDecimalNaN(value)){
 				if (!NaNalert && !noError) {
-					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
+					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know with a screenshot of the console and the save! You can refresh the page, and you will be un-NaNed.")
 					console.log(value, layerData, funcsData, tmpData, useThis)
 					clearInterval(interval);
 					NaNalert = true;
@@ -150,19 +150,16 @@ function updateTempData(layerData, tmpData, funcsData, useThis, noError = false)
 	}	
 }
 
-function updateChallengeTemp(layer)
-{
+function updateChallengeTemp(layer){
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
 }
 
 
-function updateBuyableTemp(layer)
-{
+function updateBuyableTemp(layer){
 	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables)
 }
 
-function updateClickableTemp(layer)
-{
+function updateClickableTemp(layer){
 	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
 }
 

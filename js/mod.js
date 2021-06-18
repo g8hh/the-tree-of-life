@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.025.4",
+	num: "1.026",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,15 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.026</h3><br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
+		- Hardcapped gems at 10,000.<br>
+		- Added the ultimate effect to DNA milestone 3.<br>
+		- Added four DNA milestones.<br>
+		- Improved various wordings.<br>
+		- Note: cotent includes anything that can or does changes how one plays.<br> 
+		- Improved one of the error displays error message.<br>
 	<br><h3 style='color: #CC0000'>v1.025.4</h3><br>
 		- Added a DNA milestone.<br>
 		- Reduced the DNA boost to Amino Acid gain.<br>

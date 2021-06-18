@@ -391,6 +391,20 @@ PROGRESSION_MILESTONES = {
         285: () => player.a.protein.points.gte("1e5e7"),
         286: () => player.a.protein.points.gte("1e1e8"),
         287: () => player.a.protein.points.gte("1e2e8"),
+        288: () => player.a.protein.points.gte("1e5e8"),
+        289: () => player.a.protein.points.gte("1e1e9"),
+        290: () => player.a.protein.points.gte("1e2e9"),
+        291: () => player.a.protein.points.gte("1e5e9"),
+        292: () => player.a.protein.points.gte("1e1e10"),
+        293: () => player.a.protein.points.gte("1e2e10"),
+        294: () => player.a.protein.points.gte("1e5e10"),
+        295: () => player.d.points.gte(1),
+        296: () => player.d.points.gte(3),
+        297: () => player.d.points.gte(5),
+        298: () => player.d.points.gte(17),
+        299: () => player.d.points.gte(257),
+        300: () => player.d.points.gte(65537),
+        301: () => player.d.points.gte(4294967297),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -681,6 +695,20 @@ PROGRESSION_MILESTONES_TEXT = {
         285: "1e50,000,000 Protein",
         286: "1e100,000,000 Protein",
         287: "1e200,000,000 Protein",
+        288: "1e500,000,000 Protein",
+        289: "1e1e9 Protein",
+        290: "1e2e9 Protein",
+        291: "1e5e9 Protein",
+        292: "1e1e10 Protein",
+        293: "1e2e10 Protein",
+        294: "1e5e10 Protein",
+        295: "1 DNA",
+        296: "3 DNA",
+        297: "5 DNA",
+        298: "17 DNA",
+        299: "257 DNA",
+        300: "65,537 DNA",
+        301: "4,294,967,297 DNA",
 }
 
 
