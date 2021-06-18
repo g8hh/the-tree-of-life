@@ -9135,9 +9135,9 @@ addLayer("a", {
                 if (hasMilestone("d", 1)) buyFactor = 20
 
                 data.autoBuyableTime += diff * buyFactor
-                if (false) {
-                        if (data.passivetime > 5) {
-                                data.passivetime += -5
+                if (hasMilestone("d", 5)) {
+                        if (data.passivetime > 1) {
+                                data.passivetime += -1
                                 data.times ++
                         } 
                         if (data.passivetime > 10) data.passivetime = 10
@@ -11957,7 +11957,7 @@ addLayer("d", {
 
                 let ret1 = amt.plus(1).pow(exp)
 
-                return [ret1, amt.plus(1).pow(2)]
+                return [ret1, amt.times(3).plus(1)]
         },
         effectDescription(){
                 if (player.tab != "d") return ""
@@ -12122,7 +12122,7 @@ addLayer("d", {
                                 if (player.tab != "d") return ""
                                 if (player.subtabs.d.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Keep Amino Acid resets and gain C35 gems passively."
+                                let a = "Reward: Keep Amino Acid resets, gain C35 gems passively, and an Amino Acid reset per second."
                                 let b = ""
                                 return a + b
                         },
