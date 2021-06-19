@@ -57,11 +57,19 @@ function getPointGen() {
         if (hasUpgrade("a", 35))        gain = gain.pow(player.a.protein.points.max(10).log10())
         if (hasMilestone("a", 24))      gain = gain.pow(tmp.a.milestones[24].effect)
                                         gain = gain.pow(tmp.a.buyables[22].effect)
+        if (hasUpgrade("d", 12)) {
+                let ncRNA = getBuyableAmount("a", 31)
+                let exp = ncRNA.times(player.d.upgrades.length)
+                                        gain = gain.pow(ncRNA.pow(exp))
+        }
 
         if (inChallenge("l", 11))       gain = dilate(gain, tmp.l.challenges[11].challengeEffect)
         if (inChallenge("l", 12))       {
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
                                         gain = dilate(gain, Decimal.pow(.665, Math.sqrt(c5depth)))
+                let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
+                let c6Layers = (86+(tmp.l.challenges[12].getChallengeDepths[2] || 0)) * c6depth
+                                        gain = dilate(gain, Decimal.pow(.96, c6Layers))
         }
 
 	return gain
@@ -122,6 +130,8 @@ var GEM_EFFECT_DESCRIPTIONS = {
         503: "Protein per Amino Acid upgrade<br>log10(10+x<sup>.5</sup>)",
         504: "Point gain per siRNA<br>log10(10+x)",
         505: "Life gain per rRNA<br>log100(100+x)",
+        106: "Add to shRNA base<br>cbrt(x)/1.1",
+        206: "Multiply DNA gain<br>log10(10+x)<sup>2</sup>"
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -150,6 +160,8 @@ var GEM_EFFECT_FORMULAS = {
         503: (x) => x.sqrt().plus(10).log10(),
         504: (x) => x.plus(10).log10(),
         505: (x) => x.plus(100).log(100),
+        106: (x) => x.cbrt().div(1.1),
+        206: (x) => x.plus(10).log10().pow(2),
 }
 
 function nCk(n, k){
@@ -8442,6 +8454,7 @@ addLayer("l", {
                                 let ret = new Decimal(1)
                                 
                                 if (hasUpgrade("a", 41)) ret = ret.times(3)
+                                if (hasMilestone("d", 11)) ret = ret.times(10)
 
                                 return ret
                         },
@@ -8532,11 +8545,13 @@ addLayer("l", {
         },
         grid: {
                 rows(){
+                        if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
                 cols(){
+                        if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
@@ -8550,7 +8565,7 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
                 },
                 getCanClick(data, id) {
-                        let maxAllowed = 5 // manually change this
+                        let maxAllowed = 6 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
@@ -8712,7 +8727,7 @@ addLayer("l", {
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                         let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^.665 per sqrt(depth)"
-                                        let c6 = "Challenge 6: N → ΔP levels in effect formula are raised ^.7 [tbd]"
+                                        let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^.96"
                                         let c7 = "Challenge 7: You have 5 [tbd] more tokens for prestige purposes"
                                         let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
@@ -9204,6 +9219,8 @@ addLayer("a", {
                                 if (hasMilestone("d", 7))       doThese.push(105)
                                 if (hasMilestone("d", 8))       doThese.push(501)
                                 if (hasMilestone("d", 9))       doThese.push(502)
+                                if (hasMilestone("d", 10))      doThese.push(503)
+                                if (hasMilestone("d", 11))      doThese.push(504)
 
                                 let addPer = 1
                                 if (hasMilestone("d", 3)) addPer = 10
@@ -11133,7 +11150,8 @@ addLayer("a", {
                                 if (hasMilestone("d", 7)) ret = ret.times(Math.log(8)/Math.log(7))
                                 if (hasMilestone("d", 8)) ret = ret.times(Math.log(7)/Math.log(6))
                                 if (hasMilestone("d", 9)) ret = ret.times(Math.log(6)/Math.log(5))
-
+                                if (hasMilestone("d", 10)) ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("d", 11)) ret = ret.times(Math.log(4)/Math.log(3))
                                 
                                 return ret
                         },
@@ -11155,6 +11173,8 @@ addLayer("a", {
                                 if (hasMilestone("d", 7)) eformula = eformula.replace("log8", "log7")
                                 if (hasMilestone("d", 8)) eformula = eformula.replace("log7", "log6")
                                 if (hasMilestone("d", 9)) eformula = eformula.replace("log6", "log5")
+                                if (hasMilestone("d", 10)) eformula = eformula.replace("log5", "log4")
+                                if (hasMilestone("d", 11)) eformula = eformula.replace("log4", "log3")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -11544,6 +11564,8 @@ addLayer("a", {
                         },
                         base(){
                                 let ret = new Decimal(10)
+
+                                ret = ret.plus(layers.l.grid.getGemEffect(106))
                                 
                                 return ret
                         },
@@ -11967,6 +11989,9 @@ addLayer("d", {
         getGainMult(){ // dna gain dnagain dgain d gain
                 let ret = new Decimal(1)
 
+                ret = ret.times(layers.l.grid.getGemEffect(206))
+                if (hasUpgrade("d", 12)) ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
+
                 return ret
         },
         getNextAt(){
@@ -11981,7 +12006,7 @@ addLayer("d", {
         effect(){
                 let amt = player.d.best
 
-                let exp = amt.cbrt().times(2).min(20)
+                let exp = amt.cbrt().times(2).min(10)
 
                 let ret1 = amt.plus(1).pow(exp)
 
@@ -12042,6 +12067,19 @@ addLayer("d", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("d", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA II"
+                        },
+                        description(){
+                                let a = "Per upgrade per ncRNA exponentiate point gain to the number of ncRNA's and per upgrade double DNA gain"
+                                return a
+                        },
+                        cost:() => new Decimal(30),
+                        unlocked(){
+                                return hasMilestone("d", 10)
+                        }, // hasUpgrade("d", 12)
                 },
         },
         milestones: {
@@ -12243,6 +12281,50 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 9)
+                10: {
+                        requirementDescription(){
+                                return "Requires: 20 DNA resets"
+                        },
+                        requirement(){
+                                return new Decimal(20)
+                        },
+                        done(){
+                                return tmp.d.milestones[10].requirement.lte(player.d.times)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA's log5 becomes log4, gain C53 gems passively, and unlock a new set of challenges."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 10)
+                11: {
+                        requirementDescription(){
+                                return "Requires: 100 DNA"
+                        },
+                        requirement(){
+                                return new Decimal(100)
+                        },
+                        done(){
+                                return tmp.d.milestones[11].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA's log4 becomes log3, gain C54 gems passively, and gain 10x gems."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 11)
         },
         tabFormat: {
                 "Upgrades": {

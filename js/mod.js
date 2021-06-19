@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.027</h3><br>
+		- Added a DNA upgrade.<br>
+		- Added 2 DNA milestones.<br>
+		- Added C16 and C26 gem effects.<br>
+		- Added challenge 6.<br>
+		- Added a custom save.<br>
+		- Fixed a bug with large times.<br>
 	<br><h3 style='color: #CC0000'>v1.026.1</h3><br>
 		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.026</h3><br>
