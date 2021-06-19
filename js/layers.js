@@ -68,7 +68,8 @@ function getPointGen() {
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
                                         gain = dilate(gain, Decimal.pow(.665, Math.sqrt(c5depth)))
                 let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
-                let c6Layers = (86+(tmp.l.challenges[12].getChallengeDepths[2] || 0)) * c6depth
+                let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                let c6Layers = (86 + c2depth) * c6depth
                                         gain = dilate(gain, Decimal.pow(.96, c6Layers))
         }
 
@@ -131,7 +132,9 @@ var GEM_EFFECT_DESCRIPTIONS = {
         504: "Point gain per siRNA<br>log10(10+x)",
         505: "Life gain per rRNA<br>log100(100+x)",
         106: "Add to shRNA base<br>cbrt(x)/1.1",
-        206: "Multiply DNA gain<br>log10(10+x)<sup>2</sup>"
+        206: "Multiply DNA gain<br>log10(10+x)<sup>2</sup>",
+        306: "Passive DNA gain<br>x/11%/s",
+        406: "Protein gain per DNA milestone<br>1+x"
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -162,6 +165,8 @@ var GEM_EFFECT_FORMULAS = {
         505: (x) => x.plus(100).log(100),
         106: (x) => x.cbrt().div(1.1),
         206: (x) => x.plus(10).log10().pow(2),
+        306: (x) => x.div(1100),
+        406: (x) => x.plus(1),
 }
 
 function nCk(n, k){
@@ -8495,11 +8500,14 @@ addLayer("l", {
                                 let b = "Goal: e1.80e308 Points" + br
 
                                 let data2 = player.l.grid[player.l.activeChallengeID]
-                                let c = "Upon Completion: +" + formatWhole(data.reward) + " C"
-                                c += (data2.hundreds*10 + data2.units) + " Gems"
-                                c += "<br>Next at " + format(tmp.l.challenges[12].nextAt)
+                                let c = ""
+                                if (inChallenge("l", 12) || !hasMilestone("a", 13)) {
+                                        c = "Upon Completion: +" + formatWhole(data.reward) + " C"
+                                        c += (data2.hundreds*10 + data2.units) + " Gems"
+                                        c += "<br>Next at " + format(tmp.l.challenges[12].nextAt)
+                                }
 
-                                let d = "Effects: Toggle below to see"
+                                let d = "Rewards: Toggle below to see"
                                 return a + b + c + br + d
                         },
                         unlocked(){
@@ -8615,7 +8623,7 @@ addLayer("l", {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "/100"
                         }
-                        if (id == 205) {
+                        if (id == 205 || id == 306) {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "%"
                         }
@@ -9221,6 +9229,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 9))       doThese.push(502)
                                 if (hasMilestone("d", 10))      doThese.push(503)
                                 if (hasMilestone("d", 11))      doThese.push(504)
+                                if (hasMilestone("d", 12))      doThese.push(505)
 
                                 let addPer = 1
                                 if (hasMilestone("d", 3)) addPer = 10
@@ -9288,6 +9297,9 @@ addLayer("a", {
                                         }
                                         if (hasMilestone("d", 6) && tmp.a.buyables[32].canBuy){
                                                 layers.a.buyables[32].buy()
+                                        }
+                                        if (hasMilestone("d", 12) && tmp.a.buyables[13].canBuy){
+                                                layers.a.buyables[13].buy()
                                         }
                                 }
                         } else data2.passiveTime = 0
@@ -9377,6 +9389,7 @@ addLayer("a", {
                         if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
                         if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(1e25).max(1))
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
+                                                        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
 
@@ -11152,6 +11165,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 9)) ret = ret.times(Math.log(6)/Math.log(5))
                                 if (hasMilestone("d", 10)) ret = ret.times(Math.log(5)/Math.log(4))
                                 if (hasMilestone("d", 11)) ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("d", 12)) ret = ret.times(Math.log(3))
                                 
                                 return ret
                         },
@@ -11175,6 +11189,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 9)) eformula = eformula.replace("log6", "log5")
                                 if (hasMilestone("d", 10)) eformula = eformula.replace("log5", "log4")
                                 if (hasMilestone("d", 11)) eformula = eformula.replace("log4", "log3")
+                                if (hasMilestone("d", 12)) eformula = eformula.replace("log3", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -11739,8 +11754,8 @@ addLayer("a", {
                                         j1 += " meaning a 2x boost to protein gain nets " + format(Decimal.pow(2, boostExp)) + " more total protein"
                                         let j2 = ""
 
-                                        let idsCheck = [13, 21, 22, 23, 31, 32]
-                                        let boost = " boost to protein production."
+                                        let idsCheck = [13, 21, 22, 23, 31, 32, 33]
+                                        let boost = " boost to protein gain."
                                         let doEndingFormula = function(v){
                                                 return makeRed(format(v)) + "/" + makeRed(format(v.pow(boostExp))) + boost
                                         }
@@ -11748,7 +11763,7 @@ addLayer("a", {
                                         for (idCard in idsCheck) {
                                                 id = idsCheck[idCard]
                                                 boostPer[id] = new Decimal(1)
-                                                if (!tmp.a.buyables[id].unlocked || id == 22) continue
+                                                if (!tmp.a.buyables[id].unlocked || id == 22 || id == 33) continue
                                                 boostPer[id] = boostPer[id].times(tmp.a.buyables[id].base)
                                                 j2 += "<br>Each "
                                                 j2 += tmp.a.buyables[id].title + " primarily gives a "
@@ -11827,6 +11842,18 @@ addLayer("a", {
                                                 let end = base.pow(getBuyableAmount("a", 32))
                                                 j += br + "Due to snRNA the next siRNA gives a " + doEndingFormula(end)
                                                 boostPer[22] = boostPer[22].times(end)
+                                        }
+                                        if (true){
+                                                let base23 = tmp.a.buyables[23].base
+                                                let logBase = 10
+                                                if (hasMilestone("a", 36)) logBase = Math.E
+                                                if (hasMilestone("a", 37)) logBase = 2
+                                                let logGain = tmp.a.buyables[33].base.log(logBase)
+                                                let logGain10 = tmp.a.buyables[33].base.log(10)
+                                                let gainPer = logGain.div(base23).plus(1)
+                                                let end = gainPer.pow(getBuyableAmount("a", 23)).times(logGain10.div(player.a.points.max(10).log10()).plus(1))
+                                                j += br + "Amino Acid gain from the next shRNA gives a " + doEndingFormula(end)
+                                                boostPer[33] = boostPer[33].times(end)
                                         }
 
 
@@ -12025,6 +12052,10 @@ addLayer("d", {
                 
                 if (data.points.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
+
+                let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
+                data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
+                data.total  =  data.total.plus(tmp.d.getResetGain.times(gainPercentage))
 
                 data.time += diff
         },
@@ -12325,6 +12356,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 11)
+                12: {
+                        requirementDescription(){
+                                return "Requires: 2,000 DNA"
+                        },
+                        requirement(){
+                                return new Decimal(2e3)
+                        },
+                        done(){
+                                return tmp.d.milestones[12].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA's log3 becomes ln, gain C55 gems passively, keep gems, and autobuy miRNA."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -12447,7 +12500,7 @@ addLayer("d", {
                         data2.buyables[33] = new Decimal(0)
 
                         //gems
-                        if (!false) {
+                        if (!hasMilestone("d", 12)) {
                                 let x = ["101", "102", "103", "104", "105", "106", "107", "108", 
                                         "201", "202", "203", "204", "205", "206", "207", "208", 
                                         "301", "302", "303", "304", "305", "306", "307", "308", 

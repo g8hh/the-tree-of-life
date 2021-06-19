@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.026.1",
+	num: "1.028",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.028</h3><br>
+		- Added a DNA milestone.<br>
+		- Added C36 and C46 gem effects.<br>
+		- Added a display for shRNA's boost to Amino Acid which in turn boosts protein.<br>
+		- Removed some of Customizable's displays after A:m13.<br>
 	<br><h3 style='color: #CC0000'>v1.027</h3><br>
 		- Added a DNA upgrade.<br>
 		- Added 2 DNA milestones.<br>
