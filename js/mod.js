@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.029",
+	num: "1.030",
 	name: "Coup de Grâce",
 }
 
@@ -25,6 +25,15 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.030</h3><br>
+		- Added a DNA upgrade.<br>
+		- Added a DNA milestone.<br>
+		- Cleaned up the point gain function.<br>
+		- Added a row of achievements.<br>
+		- Added a custom save.<br>
+		- Fixed a bug with deactivated layers giving milestones.<br>
+		- Added C56, C61, C62, C63, and C64.<br>
+		- Nerfed C6 with more than one C6 depth.<br>
 	<br><h3 style='color: #CC0000'>v1.029</h3><br>
 		- Added a DNA milestone.<br>
 		- Added four Life challenges.<br>

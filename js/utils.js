@@ -367,6 +367,7 @@ function toNumber(x) {
 }
 
 function updateMilestones(layer) {
+	if (tmp[layer].deactivated) return 
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)

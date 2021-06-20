@@ -59,8 +59,9 @@ function getAchStuffFromNumber(n){
         let done = function(){
                 return hasAchievement("ach", getColRowCode(n)) || PROGRESSION_MILESTONES[n]() 
         }
+        let startStr = n > 301 && n < 309 ? "Complete " : "Get "
         let tooltip = function(){
-                return "Get " + PROGRESSION_MILESTONES_TEXT[n]
+                return startStr + PROGRESSION_MILESTONES_TEXT[n]
         }
         let unlocked 
         if (n <= 56) {
@@ -405,6 +406,13 @@ PROGRESSION_MILESTONES = {
         299: () => player.d.points.gte(257),
         300: () => player.d.points.gte(65537),
         301: () => player.d.points.gte(4294967297),
+        302: () => hasChallenge("l", 21),
+        303: () => hasChallenge("l", 22),
+        304: () => hasChallenge("l", 31),
+        305: () => hasChallenge("l", 32),
+        306: () => hasChallenge("l", 41),
+        307: () => hasChallenge("l", 42),
+        308: () => hasChallenge("l", 51),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -709,6 +717,13 @@ PROGRESSION_MILESTONES_TEXT = {
         299: "257 DNA",
         300: "65,537 DNA",
         301: "4,294,967,297 DNA",
+        302: "Anti-Hydrogen",
+        303: "Anti-Minigame",
+        304: "Anti-Carbon",
+        305: "Anti-Oxygen",
+        306: "Anti-Nitrogen",
+        307: "Anti-tell me to fix this later",
+        308: "Anti-tell me to fix this later",
 }
 
 
