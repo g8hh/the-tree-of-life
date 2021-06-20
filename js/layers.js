@@ -1,5 +1,9 @@
 function getPointGen() {
 	let gain = new Decimal(.1)
+        
+        if (hasChallenge("l", 21))      gain = gain.plus(1.9)
+        
+
         if (hasUpgrade("h", 11))        gain = gain.times(tmp.h.upgrades[11].effect)
         if (hasUpgrade("h", 22))        gain = gain.times(tmp.h.upgrades[22].effect)
         if (hasUpgrade("h", 34))        gain = gain.times(tmp.h.upgrades[13].effect)
@@ -10,6 +14,7 @@ function getPointGen() {
                                         gain = gain.times(tmp.n.effect)
                                         gain = gain.times(tmp.l.effect)
         if (hasUpgrade("mu", 44))       gain = gain.times(player.o.points.max(1))
+
 
         if (hasUpgrade("h", 25))        gain = gain.pow(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        gain = gain.pow(tmp.o.upgrades[13].effect)
@@ -184,6 +189,13 @@ var binomials = [
         [1,7,21,35,35,21,7,1],
         [1,8,28,56,70,56,28,8,1],
 ];
+
+function getDescriptionFromKey(id){
+        let d = id.description
+        
+        if (isFunction(d)) return d()
+        return d
+}
 
 // step 2: a function that builds out the LUT if it needs to.
 function binomial(n,k) {
@@ -436,7 +448,10 @@ addLayer("h", {
         hotkeys: [
                 {key: "shift+H", description: "Shift+H: Go to Hydrogen", onPress(){
                                 showTab("h")
-                        }
+                        },
+                        unlocked(){
+                                return tmp.h.layerShown
+                        },
                 },
                 {key: "Control+C", description: "Control+C: Go to changelog", onPress(){
                                 showTab("changelog-tab")
@@ -504,7 +519,7 @@ addLayer("h", {
                         }
                 },
         ],
-        layerShown(){return true},
+        layerShown(){return !tmp.h.deactivated},
         prestigeButtonText(){
                 return "hello"
         },
@@ -1609,6 +1624,9 @@ addLayer("h", {
                 },
         },
         doReset(layer){},
+        deactivated(){
+                return inChallenge("l", 21) || hasChallenge("l", 21)
+        },
 })
 
 addLayer("c", {
@@ -1733,14 +1751,8 @@ addLayer("c", {
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [
-                {key: "shift+C", description: "Shift+C: Go to Carbon", onPress(){
-                                if (!tmp.c.layerShown) return
-                                showTab("c")
-                        }
-                },
-        ],
-        layerShown(){return hasUpgrade("h", 55) || tmp.n.layerShown},
+        hotkeys: [],
+        layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.c.deactivated},
         prestigeButtonText(){
                 return "hello"
         },
@@ -2082,6 +2094,9 @@ addLayer("c", {
                 },
         },
         doReset(layer){},
+        deactivated(){
+                return inChallenge("l", 31) || hasChallenge("l", 31)
+        },
 })
 
 addLayer("o", {
@@ -2218,10 +2233,13 @@ addLayer("o", {
                 {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
                                 if (!tmp.o.layerShown) return
                                 showTab("o")
-                        }
+                        },
+                        unlocked(){
+                                return tmp.o.layerShown
+                        },
                 },
         ],
-        layerShown(){return hasUpgrade("h", 55) || tmp.n.layerShown},
+        layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.o.deactivated},
         prestigeButtonText(){
                 return "hello"
         },
@@ -2571,6 +2589,9 @@ addLayer("o", {
                 },
         },
         doReset(layer){},
+        deactivated(){
+                return inChallenge("l", 32) || hasChallenge("l", 32)
+        },
 })
 
 addLayer("n", {
@@ -3636,7 +3657,7 @@ addLayer("n", {
                                 return a
                         },
                         unlocked(){
-                                return hasChallenge("n", 11)
+                                return hasChallenge("n", 11) || tmp.l.layerShown
                         },
                         countsAs: [],
                 }, // inChallenge("n", 12)
@@ -3664,7 +3685,7 @@ addLayer("n", {
                                 return Decimal.sqrt(comps)
                         },
                         unlocked(){
-                                return hasChallenge("n", 12)
+                                return hasChallenge("n", 12) || tmp.l.layerShown
                         },
                         countsAs: [11],
                 }, // inChallenge("n", 21)
@@ -3692,7 +3713,7 @@ addLayer("n", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("n", 31)
+                                return hasUpgrade("n", 31) || tmp.l.layerShown
                         },
                         countsAs: [12],
                 }, // inChallenge("n", 22)
@@ -3715,7 +3736,7 @@ addLayer("n", {
                                 return a
                         },
                         unlocked(){
-                                return hasChallenge("n", 22)
+                                return hasChallenge("n", 22) || tmp.l.layerShown
                         },
                         countsAs: [11, 21],
                 }, // inChallenge("n", 31) hasChallenge("n", 31)
@@ -3747,7 +3768,7 @@ addLayer("n", {
                                 return ret
                         },
                         unlocked(){
-                                return hasChallenge("n", 31)
+                                return hasChallenge("n", 31) || tmp.l.layerShown
                         },
                         countsAs: [12, 22],
                 }, // inChallenge("n", 32) hasChallenge("n", 32)
@@ -3778,7 +3799,7 @@ addLayer("n", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("mini", 72)
+                                return hasUpgrade("mini", 72) || tmp.l.layerShown
                         },
                         countsAs: [11, 21, 31],
                 }, // inChallenge("n", 41) hasChallenge("n", 41)
@@ -3801,7 +3822,7 @@ addLayer("n", {
                                 return a
                         },
                         unlocked(){
-                                return hasUpgrade("mini", 73)
+                                return hasUpgrade("mini", 73) || tmp.l.layerShown
                         },
                         countsAs: [12, 22, 32],
                 }, // inChallenge("n", 42) hasChallenge("n", 42)
@@ -8310,6 +8331,7 @@ addLayer("l", {
                                 let ret = new Decimal(20)
 
                                 if (hasMilestone("a", 17)) ret = ret.plus(player.a.milestones.length)
+                                if (hasChallenge("l", 31)) ret = ret.plus(tmp.l.challenges[31].reward)
 
                                 return ret
                         },
@@ -8412,7 +8434,7 @@ addLayer("l", {
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
 
-                                if (inChallenge("l", 12)) eff = 111
+                                if (player.l.activeChallenge != 11) eff = 111
                                 if (eff > 91) eff = eff * 1.5 - 45.5
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
@@ -8424,6 +8446,9 @@ addLayer("l", {
                                         let v = Math.floor(35*Math.sqrt(depth)) //.035
                                         init = init.sub(v/1000)
                                 }
+                                if (inChallenge("l", 22)) init = init.sub(.02)
+                                if (inChallenge("l", 31)) init = init.sub(.04)
+                                if (inChallenge("l", 32)) init = init.sub(.06)
 
                                 return init
                         },
@@ -8533,6 +8558,156 @@ addLayer("l", {
                                         (h >= 8) + (h >= 8) + (u >= 8),]
                         },
                 }, // inChallenge("l", 12)
+                21: {
+                        name: "Anti-Hydrogen", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let nz = tmp.l.getNonZeroGemCount
+                                let base = player.a.points.max(10).log10()
+                                let ret = base.pow(nz).pow(comps || 1)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 140.4e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[21].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions and all hydrogen content is disabled"
+                                let b = "Goal: e1e140,400 Points"
+                                let c = "Reward: Per anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
+                                c += " and add 1.9 to base point gain but disable hydrogen content"
+                                let d = "Currently: " + format(tmp.l.challenges[21].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasMilestone("d", 13)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 21)
+                22: {
+                        name: "Anti-Minigame", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = player.d.points.max(10).log10()
+                                let ret = base.pow(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 145.1e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[22].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, all minigame content is disabled, and subtract .02 from the Dilation exponent"
+                                let b = "Goal: e1e145,100 Points"
+                                let c = "Reward: Per anti- challenge log10(DNA) multiplies DNA gain but disable minigame content"
+                                let d = "Currently: " + format(tmp.l.challenges[22].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 21)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 22) hasChallenge("l", 22)
+                31: {
+                        name: "Anti-Carbon", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(117)
+                                let ret = base.times(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 149.1e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[31].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, all carbon content is disabled, and subtract .04 from the Dilation exponent"
+                                let b = "Goal: e1e149,100 Points"
+                                let c = "Reward: Per anti- challenge<br> add 117 to 𝛾 → ∂𝛾's exponential divider but disable carbon content"
+                                let d = "Currently: " + format(tmp.l.challenges[31].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 22)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 31) hasChallenge("l", 31)
+                32: {
+                        name: "Anti-Oxygen", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(.5)
+                                let ret = base.times(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 151.5e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[32].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, all oxygen content is disabled, and subtract .06 from the Dilation exponent"
+                                let b = "Goal: e1e151,500 Points"
+                                let c = "Reward: Per anti- challenge<br> add .5 to DNA gain exponent but disable oxygen content"
+                                let d = "Currently: " + format(tmp.l.challenges[32].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 31)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 32) hasChallenge("l", 32)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -8651,10 +8826,11 @@ addLayer("l", {
                         content: ["main-display",
                                   ["prestige-button", ""],
                                   "blank", 
-                                  ["challenges", [1,2,3,4,5,6,7]],
+                                  ["challenges", [1]],
                                   "blank",
                                   "grid",
                                   ["clickables", [1]],
+                                  ["challenges", [2,3]],
                                 ],
                         unlocked(){
                                 return true
@@ -9105,6 +9281,7 @@ addLayer("a", {
                 if (hasUpgrade("a", 63))        ret = ret.times(player.a.protein.points.max(10).log10())
                                                 ret = ret.times(tmp.a.buyables[33].effect)
                                                 ret = ret.times(tmp.d.effect[1] || 1)
+                if (hasChallenge("l", 21))      ret = ret.times(tmp.l.challenges[21].reward)
 
                 return ret
         },
@@ -9191,8 +9368,8 @@ addLayer("a", {
                                         data.points = data.points.plus(tmp.a.getResetGain.times(gainportion).times(diff))
                                         data.total = data.total.plus(tmp.a.getResetGain.times(gainportion).times(diff))
                                 } else {
-                                        let newGain = tmp.a.getResetGain.times(100).sub(data.points)
-                                        data.points = tmp.a.getResetGain.times(100)
+                                        let newGain = tmp.a.getResetGain.times(100).sub(data.points).max(0)
+                                        data.points = tmp.a.getResetGain.times(100).max(data.points)
                                         data.total = data.total.plus(newGain)
                                 }
                         }
@@ -9330,11 +9507,6 @@ addLayer("a", {
                 return a + b
         },
         hotkeys: [
-                {key: "shift+A", description: "Shift+A: Go to Amino Acid", onPress(){
-                                if (!tmp.a.layerShown) return
-                                showTab("a")
-                        }
-                },
                 {key: "a", description: "A: Reset for Amino Acid", onPress(){
                                 if (canReset("a")) doReset("a")
                         }
@@ -11166,6 +11338,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 10)) ret = ret.times(Math.log(5)/Math.log(4))
                                 if (hasMilestone("d", 11)) ret = ret.times(Math.log(4)/Math.log(3))
                                 if (hasMilestone("d", 12)) ret = ret.times(Math.log(3))
+                                if (hasMilestone("d", 13)) ret = ret.div(Math.log(2))
                                 
                                 return ret
                         },
@@ -11190,6 +11363,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 10)) eformula = eformula.replace("log5", "log4")
                                 if (hasMilestone("d", 11)) eformula = eformula.replace("log4", "log3")
                                 if (hasMilestone("d", 12)) eformula = eformula.replace("log3", "ln")
+                                if (hasMilestone("d", 13)) eformula = eformula.replace("ln", "log2")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12011,20 +12185,28 @@ addLayer("d", {
                 let init = pts.div(4.4e144).max(1).log10()
                 if (init.lt(25)) return new Decimal(0)
 
-                return init.sqrt().div(2).sub(1.5).pow(2)
+                return init.sqrt().div(2).sub(1.5).pow(tmp.d.getGainExp)
         },
         getGainMult(){ // dna gain dnagain dgain d gain
                 let ret = new Decimal(1)
 
-                ret = ret.times(layers.l.grid.getGemEffect(206))
-                if (hasUpgrade("d", 12)) ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
+                                                ret = ret.times(layers.l.grid.getGemEffect(206))
+                if (hasUpgrade("d", 12))        ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
+                if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
+
+                return ret
+        },
+        getGainExp(){
+                let ret = new Decimal(2)
+
+                if (hasChallenge("l", 32))      ret = ret.plus(tmp.l.challenges[32].reward)
 
                 return ret
         },
         getNextAt(){
                 let gain = tmp.d.getResetGain
                 let reqInit = gain.plus(1).div(tmp.d.getGainMult).max(1)
-                let v1 = reqInit.sqrt().plus(1.5).times(2).pow(2).pow10().times(4.4e144)
+                let v1 = reqInit.root(tmp.d.getGainExp).plus(1.5).times(2).pow(2).pow10().times(4.4e144)
                 return v1
         },
         canReset(){
@@ -12072,11 +12254,6 @@ addLayer("d", {
                 return a + b
         },
         hotkeys: [
-                {key: "shift+D", description: "Shift+D: Go to DNA", onPress(){
-                                if (!tmp.a.layerShown) return
-                                showTab("d")
-                        }
-                },
                 {key: "d", description: "D: Reset for DNA", onPress(){
                                 if (canReset("d")) doReset("d")
                         }
@@ -12378,6 +12555,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 12)
+                13: {
+                        requirementDescription(){
+                                return "Requires: 10,000 C46 Gems"
+                        },
+                        requirement(){
+                                return new Decimal(1e4)
+                        },
+                        done(){
+                                return tmp.d.milestones[13].requirement.lte(player.l.grid[406].gems)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: miRNA's ln becomes log2 and unlock new Life Challenges whose completions never get removed."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -12413,7 +12612,9 @@ addLayer("d", {
                                         if (player.tab != "d") return ""
                                         if (player.subtabs.d.mainTabs != "Info") return ""
 
-                                        let a = "Initial DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>2</sup>"
+                                        let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>2</sup>"
+                                        let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>" + format(tmp.d.getGainExp) + "</sup>"
+                                        let a = a1 + br + a2
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
                                         let c = " the last two rows of Phosphorus and mu upgrades."
 
@@ -13038,15 +13239,29 @@ addLayer("mini", {
                         onPress(){
                                 if (!tmp.mini.layerShown) return
                                 player.tab = "mini"
-                        }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown
+                        },
                 },
-                {key: "shift+A", description: "Shift+A: Go to A", 
+                {
+                        key: "shift+A", 
+                        description() {
+                                return player.a.unlocked ? "Shift+A: Go to Amino Acid" : "Shift+A: Go to A"
+                        }, 
                         onPress(){
-                                if (!tmp.mini.layerShown) return
-                                if (!tmp.mini.tabFormat.A.unlocked) return 
-                                player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "A"
-                        }
+                                if (!player.a.unlocked) {
+                                        if (!tmp.mini.layerShown) return
+                                        if (!tmp.mini.tabFormat.A.unlocked) return 
+                                        player.tab = "mini"
+                                        player.subtabs.mini.mainTabs = "A"
+                                } else {
+                                        showTab("a")
+                                }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown || tmp.a.layerShown
+                        },
                 },
                 {key: "shift+B", description: "Shift+B: Go to B", 
                         onPress(){
@@ -13054,26 +13269,51 @@ addLayer("mini", {
                                 if (!tmp.mini.tabFormat.B.unlocked) return 
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "B"
-                        }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown
+                        },
                 },
-                {key: "shift+C", description: "Shift+C: Go to C", 
+                {
+                        key: "shift+C", 
+                        description() {
+                                return !hasMilestone("tokens", 23) ? "Shift+C: Go to Carbon" : "Shift+C: Go to C"
+                        }, 
                         onPress(){
-                                if (!tmp.mini.layerShown) return
-                                if (!tmp.mini.tabFormat.C.unlocked) return 
-                                player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "C"
-                        }
+                                if (!hasMilestone("tokens", 23)) {
+                                        if (!tmp.mini.layerShown) return
+                                        if (!tmp.mini.tabFormat.C.unlocked) return 
+                                        player.tab = "mini"
+                                        player.subtabs.mini.mainTabs = "C"
+                                } else {
+                                        showTab("c")
+                                }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown || tmp.c.layerShown
+                        },
                 },
-                {key: "shift+D", description: "Shift+D: Go to D", 
+                {
+                        key: "shift+D", 
+                        description() {
+                                return player.d.unlocked ? "Shift+D: Go to DNA" : "Shift+D: Go to D"
+                        }, 
                         onPress(){
-                                if (!tmp.mini.layerShown) return
-                                if (!tmp.mini.tabFormat.D.unlocked) return 
-                                player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "D"
-                        }
+                                if (!player.d.unlocked) {
+                                        if (!tmp.mini.layerShown) return
+                                        if (!tmp.mini.tabFormat.D.unlocked) return 
+                                        player.tab = "mini"
+                                        player.subtabs.mini.mainTabs = "D"
+                                } else {
+                                        showTab("d")
+                                }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown || tmp.d.layerShown
+                        },
                 },
                 ],
-        layerShown(){return hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown},
+        layerShown(){return (hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown) && !tmp.mini.deactivated},
         prestigeButtonText(){
                 return ""
         },
@@ -19116,6 +19356,9 @@ addLayer("mini", {
                 let bpts = data.b_points
                 bpts.points = new Decimal(0)
                 bpts.best = new Decimal(0)
+        },
+        deactivated(){
+                return inChallenge("l", 22) || hasChallenge("l", 22)
         },
 })
 
