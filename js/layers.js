@@ -4211,6 +4211,7 @@ addLayer("p", {
                 return ret
         },
         getBaseGain(){
+                if (hasChallenge("l", 41) || inChallenge("l", 41)) return new Decimal(1)
                 let pts = player.n.points.div(1.3)
                 if (pts.lt(10)) return new Decimal(0)
 
@@ -6744,7 +6745,9 @@ addLayer("l", {
                 let init = pts.max(10).log(10).log(2)
                 if (init.lt(1024)) return new Decimal(0)
 
-                return init.log(2).sub(tmp.l.getBaseSubAmount).pow(tmp.l.getGainExp)
+                if (!hasChallenge("l", 51)) init = init.log(2)
+
+                return init.sub(tmp.l.getBaseSubAmount).pow(tmp.l.getGainExp)
         },
         getGainExp(){
                 let ret = new Decimal(.5)
@@ -6813,6 +6816,7 @@ addLayer("l", {
                 return tmp.l.getResetGain.gt(0)
         },
         effect(){
+                if (inChallenge("l", 51) || hasChallenge("l", 51)) return new Decimal(1)
                 let amt = player.l.best
 
                 if (amt.gt(1e5)) amt = amt.log10().times(4).sub(10).pow(5)
@@ -8499,6 +8503,7 @@ addLayer("l", {
                                 if (inChallenge("l", 32)) init = init.sub(.06)
                                 if (inChallenge("l", 41)) init = init.sub(.08)
                                 if (inChallenge("l", 42)) init = init.sub(.1)
+                                if (inChallenge("l", 51)) init = init.sub(.12)
 
                                 return init
                         },
@@ -8814,7 +8819,7 @@ addLayer("l", {
                         goal: () => Decimal.pow(10, Decimal.pow(10, 256.3e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
-                                return player.points.gt(tmp.l.challenges[41].goal)
+                                return player.points.gt(tmp.l.challenges[42].goal)
                         },
                         completionLimit: 1,
                         fullDisplay(){
@@ -8833,6 +8838,42 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 42) hasChallenge("l", 42)
+                51: {
+                        name: "Anti-Omega", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(.01)
+                                let ret = base.times(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 267.3e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[51].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, nullify Life effect, and subtract .12 from the Dilation exponent"
+                                let b = "Goal: e1e267,300 Points"
+                                let c = "Reward: Remove a log2 from the Life gain formula but nullify Life effect"
+
+                                return a + br + b + br + c 
+                        },
+                        unlocked(){
+                                return hasUpgrade("d", 21)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 51) hasChallenge("l", 51)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -8958,7 +8999,7 @@ addLayer("l", {
                                   "blank",
                                   "grid",
                                   ["clickables", [1]],
-                                  ["challenges", [2,3,4]],
+                                  ["challenges", [2,3,4,5]],
                                 ],
                         unlocked(){
                                 return true
@@ -9022,6 +9063,7 @@ addLayer("l", {
                                         let h = "Current base gain is " + format(tmp.l.getBaseGain)
                                         h += " and gain exp is " + formExp
                                         let i = "Current gain formula is (log2(log2(log10(Life Points)))"
+                                        if (hasChallenge("l", 51)) i = "Current gain formula is (log2(log10(Life Points))"
                                         if (tmp.l.getBaseSubAmount.gt(0)) i += "-" + format(tmp.l.getBaseSubAmount)
                                         else i += "+" + format(tmp.l.getBaseSubAmount.times(-1))
                                         i += ")<sup>" + formExp + "</sup>"
@@ -11757,6 +11799,7 @@ addLayer("a", {
                                 let ret = pts.log10()
 
                                 if (hasUpgrade("d", 14)) ret = ret.times(Math.log(10))
+                                if (hasUpgrade("d", 21)) ret = ret.div(Math.log(2))
                                 
                                 return ret.max(1)
                         },
@@ -11776,6 +11819,7 @@ addLayer("a", {
                                 let eformula = "log10(log10(Points))^x<br>" + format(tmp.a.buyables[31].base) + "^x"
                                 if (hasUpgrade("d", 14)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("d", 15)) eformula = eformula.replace("log10", "ln")
+                                if (hasUpgrade("d", 21)) eformula = eformula.replace("ln", "log2")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12023,11 +12067,20 @@ addLayer("a", {
                                         let mid = format(cost.div(player.a.protein.points)) + " more than what you have, and is estimated to take "
                                         // = OoM/s now / ln(10) * boostExp * (10^(Oom Needed/boost exp)-1) 
                                         // last term is from integral
-                                        let flat = oomps.pow(-1).div(Math.log(10)).times(boostExp)
                                         let oomNeeded = cost.div(player.a.protein.points).log10()
-                                        let scaling = oomNeeded.div(boostExp).pow10().sub(1).max(0)
-                                        let end = formatTime(flat.times(scaling)) 
-                                        return init + mid + end
+                                        if (time.gt(.05)) {
+                                                let flat = oomps.pow(-1).div(Math.log(10)).times(boostExp)
+                                                let scaling = oomNeeded.div(boostExp).pow10().sub(1).max(0)
+                                                let end = formatTime(flat.times(scaling)) 
+                                                return init + mid + end
+                                        } else {
+                                                let increasePS1 = Decimal.pow(50, boostExp.pow(-1).div(2)) 
+                                                // sqrt(50)**(1/boostexp) = what it should be assuming no other gains in a tick
+                                                let increasePS = increasePS1.div(time).div(20)
+                                                // this tells us how much we are gaining per second compared to no other gain
+                                                let timeNeeded = oomNeeded.div(increasePS.log10()).div(boostExp).max(0)
+                                                return init + mid + formatTime(timeNeeded)
+                                        }
                                 }],
                                 "blank",
                                 ["buyables", [1,2,3]],
@@ -12486,6 +12539,19 @@ addLayer("d", {
                         unlocked(){
                                 return hasUpgrade("d", 14)
                         }, // hasUpgrade("d", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA VI"
+                        },
+                        description(){
+                                let a = "ncRNA's outer ln becomes log2 and unlock anti-omega"
+                                return a
+                        },
+                        cost:() => new Decimal(5e27),
+                        unlocked(){
+                                return hasUpgrade("d", 15)
+                        }, // hasUpgrade("d", 21)
                 },
         },
         milestones: {

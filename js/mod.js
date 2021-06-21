@@ -12,20 +12,27 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.031",
+	num: "1.031.1",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 5e25 DNA on reset OR the last save in the bank<br><br>
+		- 1e30 DNA on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.031</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.031.1</h3><br>
+		- Added a DNA upgrade.<br>
+		- Added a life challenge.<br>
+		- Fixed a bug with l42's goal.<br>
+		- Added a display for next protein buyable.<br>
+		- Fixed a bug with anti-nitrogen zeroing your Phosphorus gain.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.031</h3><br>
 		- Added two DNA upgrades.<br>
 		- Added two rows of achievements.<br>
 		- Added C56 and C66 gem effects.<br>
@@ -66,7 +73,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added the ultimate effect to DNA milestone 3.<br>
 		- Added four DNA milestones.<br>
 		- Improved various wordings.<br>
-		- Note: cotent includes anything that can or does changes how one plays.<br> 
+		- Note: cotent includes anything that can or does changes how one plays.<br>
 		- Improved one of the error displays error message.<br>
 	<br><h3 style='color: #CC0000'>v1.025.4</h3><br>
 		- Added a DNA milestone.<br>
@@ -165,7 +172,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	<br><h3 style='color: #CC0000'>v1.013.1</h3><br>
 		- Added a save to the bank.<br>
 	<br><h3 style='color: #CC0000'>v1.013</h3><br>
-		- Added ten Amino Acid milestones.<br> 
+		- Added ten Amino Acid milestones.<br>
 	<br><h3 style='color: #CC0000'>v1.012</h3><br>
 		- Properly added the rest of the achievement row.<br>
 		- Fixed a bug where having 0 E Points caused you to not have D Point production.<br>
@@ -193,16 +200,16 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a new Life milestones.<br>
 		- Fixed milestone titles.<br>
 		- Addded a save to the bank.<br>
-	<br><h3 style='color: #CC0000'>v1.008.6</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008.6</h3><br>
 		- A couple small balance changes.<br>
 		- Fixed some bugs with tokens being zero.<br>
-	<br><h3 style='color: #CC0000'>v1.008.5</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008.5</h3><br>
 		- Made some checks to only run format when necessary.<br>
 		- Gave C22 Gems an effect.<br>
 		- Added a row of achievements.<br>
 		- Added a save to the bank.<br>
 		- Note: I haven't gotten to a C13 gem, but I am close so it should be possible.<br>
-	<br><h3 style='color: #CC0000'>v1.008.4</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008.4</h3><br>
 		- Allowed C22 to be completeable.<br>
 		- Implemented C21 reward.<br>
 		- Next up is C22 reward.<br>
@@ -210,30 +217,30 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added two Life milestones.<br>
 		- Made C12 and C21 completeable.<br>
 		- Gave C21 a tentative effect [not implement though].<br>
-	<br><h3 style='color: #CC0000'>v1.008.2</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008.2</h3><br>
 		- Merged v2.6 of TMT.<br>
-	<br><h3 style='color: #CC0000'>v1.008.1</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008.1</h3><br>
 		- Implemented challenge 2.<br>
 		- Made the first 2x2 square possible.<br>
-	<br><h3 style='color: #CC0000'>v1.008</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.008</h3><br>
 		- Info tab improvement in Life.<br>
 		- Added my first grid!<br>
 		- Added another Life challenge.<br>
 		- Improved minigame highlighting.<br>
-	<br><h3 style='color: #CC0000'>v1.007</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.007</h3><br>
 		- Added a save to the bank.<br>
 		- Dilation is now fully completeable.<br>
 		- Added three Phosphorus upgrades.<br>
 		- Added nine Life milestones.<br>
 		- Added two Life buyables.<br>
 		- Added a display for current Life gain formula.<br>
-	<br><h3 style='color: #CC0000'>v1.006</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.006</h3><br>
 		- Added a Life milestone.<br>
 		- Added two Phosphorus upgrades.<br>
-	<br><h3 style='color: #CC0000'>v1.005.1</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.005.1</h3><br>
 		- Added a Life buyable.<br>
 		- Added a Phosphorus upgrade.<br>
-	<br><h3 style='color: #CC0000'>v1.004</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.004</h3><br>
 		- Added four Phosphorus upgrades.<br>
 		- Added nine µ upgrades.<br>
 		- Added five Life milestones.<br>
@@ -244,21 +251,21 @@ let changelog = `<h1>Changelog:</h1><br>
 		- The 2.7e12 Life milestone now has an effect.<br>
 		- Added a base gain/gain exp display in info tab (for Life) after they are relavent.<br>
 		- Made the mspt display red when over 50 mspt.<br>
-	<br><h3 style='color: #CC0000'>v1.003</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.003</h3><br>
 		- Added a µ upgrade.<br>
 		- Added a Life milestone.<br>
 		- Added a custom save.<br>
 		- Small spelling fixes.<br>
 		- Added an explanation for how dilation works [go play AD y'all].<br>
-	<br><h3 style='color: #CC0000'>v1.002</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.002</h3><br>
 		- Added two Life milestones.<br>
 		- Added a Life buyable.<br>
-	<br><h3 style='color: #CC0000'>v1.001.2</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.001.2</h3><br>
 		- Added a Life milestone.<br>
 		- Next up is a Life buyable.<br>
-	<br><h3 style='color: #CC0000'>v1.001.1</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.001.1</h3><br>
 		- Added two rows of achievements.<br>
-	<br><h3 style='color: #CC0000'>v1.001</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.001</h3><br>
 		- Added 2 µ buyables.<br>
 		- Added 14 Life milestones.<br>
 		- Added a Life challenge.<br>
@@ -279,7 +286,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added an E Point buyable.<br>
 		- Added three Phosphorus upgrades.<br>
 		- Added a save to the bank.<br>
-	<br><h3 style='color: #CC0000'>v0.062</h3><br> 4upg 2 mileston buyable
+	<br><h3 style='color: #CC0000'>v0.062</h3><br>
 		- Added µ (new layer).<br>
 		- Added two rows of achievements.<br>
 		- Added a save to the bank.<br>
@@ -414,7 +421,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	<br><h3 style='color: #CC0000'>v0.042</h3><br>
 		- Added 3 D Point upgrades.<br>
 		- Added a D Point buyable.<br>
-	<br><h3 style='color: #CC0000'>v0.041</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.041</h3><br>
 		- Added 4 D Point upgrades.<br>
 		- Added 4 D Point buyables.<br>
 		- Changed formatting slightly from ee9 to ee10.<br>
@@ -429,24 +436,24 @@ let changelog = `<h1>Changelog:</h1><br>
 	<br><h3 style='color: #CC0000'>v0.038</h3><br>
 		- Fixed up the nitrogen challenge display.<br>
 		- Added a challenge and gave Fourteen a reward.<br>
-	<br><h3 style='color: #CC0000'>v0.037</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.037</h3><br>
 		- Added two nitrogen challenges.<br>
 		- Added two nitrogen milestones.<br>
 		- Added two nitrogen upgrades.<br>
 		- Fixed a mini-bug in break_eternity.js<br>
-	<br><h3 style='color: #CC0000'>v0.036</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.036</h3><br>
 		- Added three nitrogen challenges.<br>
 		- Hard mode resets more stuff during nitrogen challenges, and might make some of them unplayable, hmu.<br>
 		- Added two nitrogen milestones.<br>
 		- Added a row of achievements.<br>
-	<br><h3 style='color: #CC0000'>v0.035</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.035</h3><br>
 		- Added two nitrogen upgrades.<br>
 		- Added two oxygen upgrades.<br>
 		- Added a carbon upgrade.<br>
-	<br><h3 style='color: #CC0000'>v0.034</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.034</h3><br>
 		- Added two nitrogen upgrades.<br>
 		- Added six nitrogen milestones.<br>
-	<br><h3 style='color: #CC0000'>v0.033</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.033</h3><br>
 		- Made the autobuy token autobuyer work as intended.<br>
 		- Fixed a lot of display issues with things now being down.<br>
 		- Added a nitrogen upgrade.<br>
@@ -457,7 +464,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added three nitrogen milestones.<br>
 		- Gave nitrogen an effect.<br>
 		- Made token milestones hidden until the previous was unlocked.<br>
-	<br><h3 style='color: #CC0000'>v0.031</h3><br> 
+	<br><h3 style='color: #CC0000'>v0.031</h3><br>
 		- Made achievements not disappear after nitrogen resetting.<br>
 		- Added a nitrogen milestone<br>.
 		- Gave nitrogen an effect.<br>
