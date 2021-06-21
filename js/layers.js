@@ -110,6 +110,12 @@ function getPointDilationExponent(){
         return exp
 }
 
+function getFullEffectDescription(layer){
+        let str = run(layers[layer].effectDescription, layers[layer])
+        if (str != "") return ", " + str
+        return str
+}
+
 var br = "<br>"
 var br2= br + br
 
@@ -193,7 +199,7 @@ var GEM_EFFECT_FORMULAS = {
         304: (x) => x.pow(.8).plus(10).log10(),
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02, x).min(10),
+        403: (x) => Decimal.pow(1.02, x).min(hasChallenge("l", 52) ? 1e100 : 10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor().min(8),
         105: (x) => x.plus(10).log10(),
         205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
@@ -2714,7 +2720,9 @@ addLayer("n", {
                 }
                 if (hasUpgrade("n", 41))        x = x.times(player.mini.e_points.points.max(10).log10())
                 if (hasUpgrade("n", 53))        x = x.times(Decimal.pow(1.01, player.mini.buyables[211]))
+                if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
                                                 x = x.times(player.p.points.plus(1))
+                }
                 if (hasUpgrade("p", 14))        x = x.times(tmp.p.upgrades[14].effect)
                                                 x = x.times(tmp.l.effect)
 
@@ -4274,6 +4282,7 @@ addLayer("p", {
                 return x
         },
         effect(){
+                if (inChallenge("l", 52) || hasChallenge("l", 52)) return new Decimal(1)
                 let amt = player.p.total
 
                 let exp2 = new Decimal(3)
@@ -4288,7 +4297,7 @@ addLayer("p", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "p") return ""
+                if (player.tab != "p" || inChallenge("l", 52) || hasChallenge("l", 52)) return ""
                 if (shiftDown) {
                         let a = "effect formula: 10^(log10(x+1)^3)"
                         if (hasMilestone("p", 4)) a = a.replace("3", "3.1")
@@ -6826,7 +6835,7 @@ addLayer("l", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "l") return ""
+                if (player.tab != "l" || inChallenge("l", 51) || hasChallenge("l", 51)) return ""
                 let eff = tmp.l.effect
                 let start = " multiplying all prior currencies by " 
                 let end = "."
@@ -8504,6 +8513,7 @@ addLayer("l", {
                                 if (inChallenge("l", 41)) init = init.sub(.08)
                                 if (inChallenge("l", 42)) init = init.sub(.1)
                                 if (inChallenge("l", 51)) init = init.sub(.12)
+                                if (inChallenge("l", 52)) init = init.sub(.14)
 
                                 return init
                         },
@@ -8839,20 +8849,7 @@ addLayer("l", {
                         countsAs: [11],
                 }, // inChallenge("l", 42) hasChallenge("l", 42)
                 51: {
-                        name: "Anti-Omega", 
-                        reward(){
-                                let data = player.l.challenges
-                                let comps = 0
-                                let keys = Object.keys(player.l.challenges)
-                                for (i in keys){
-                                        id = keys[i]
-                                        if (id == 11 || id == 12) continue
-                                        comps += data[id]
-                                }
-                                let base = new Decimal(.01)
-                                let ret = base.times(comps)
-                                return ret
-                        },
+                        name: "Anti-Omega",
                         goal: () => Decimal.pow(10, Decimal.pow(10, 267.3e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
@@ -8874,6 +8871,43 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 51) hasChallenge("l", 51)
+                52: {
+                        name: "Anti-Psi", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(1)
+                                let ret = base.times(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 266e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[52].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, nullify Phosphorus effect, and subtract .14 from the Dilation exponent"
+                                let b = "Goal: e1e266,000 Points"
+                                let c = "Reward: Uncap C43 effect, and per anti- challenge you have one less token for prestige purposes, but nullify Phosphorus effect"
+                                let d = "Currently: -" + format(tmp.l.challenges[52].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 51)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 52) hasChallenge("l", 52)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -13066,7 +13100,7 @@ addLayer("d", {
 })
 
 addLayer("ach", {
-        name: "Goals",
+        name: "Achievements",
         symbol: "⭑", 
         position: 1,
         startData() { return {
@@ -13085,7 +13119,7 @@ addLayer("ach", {
         color: "#FFC746",
         branches: [],
         requires: new Decimal(0),
-        resource: "Goals",
+        resource: "Achievements",
         baseResource: "points",
         baseAmount() {return new Decimal(0)},
         type: "custom",
@@ -19723,6 +19757,7 @@ addLayer("tokens", {
                 if (hasUpgrade("p", 41))        a += 1
                                                 a += layers.l.grid.getGemEffect(303).toNumber()
                 if (hasMilestone("l", 41))      a += 1
+                if (hasChallenge("l", 52))      a += tmp.l.challenges[52].reward.toNumber()
                 
                 return a
         },
@@ -19741,7 +19776,7 @@ addLayer("tokens", {
                 getid = Math.floor(getid)
 
                 if (getid >= len) {
-                        let diff = 10 + getid - len
+                        let diff = 3 + getid - len
                         return new Decimal(diff + "pt10")
                 }
                 return Decimal.pow(10, log_costs[getid]).times(Decimal.pow(10, add))
@@ -19847,7 +19882,8 @@ addLayer("tokens", {
                 return "Reset for a token (" + formatWhole(player.tokens.total.plus(1)) + ")<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
         },
         canReset(){ // tokens canReset
-                return tmp.tokens.getResetGain.gt(0) && hasUpgrade("h", 55) && (!inChallenge("n", 31) || player.tokens.total.lt(50))
+                if (tmp.tokens.getResetGain.eq(0)) return false
+                return (hasUpgrade("h", 55) || hasChallenge("l", 21)) && (!inChallenge("n", 31) || player.tokens.total.lt(50))
         },
         doReset(layer){
                 if (layer != "tokens") return
