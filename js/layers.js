@@ -199,7 +199,7 @@ var GEM_EFFECT_FORMULAS = {
         304: (x) => x.pow(.8).plus(10).log10(),
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02, x).min(hasChallenge("l", 52) ? 1e100 : 10),
+        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) ? 0.005 : 0), x).min(hasChallenge("l", 52) ? 1e100 : 10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor().min(8),
         105: (x) => x.plus(10).log10(),
         205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
@@ -2789,7 +2789,7 @@ addLayer("n", {
                         }
                 }
 
-                if (hasUpgrade("p", 11)) {
+                if (hasUpgrade("p", 11) && !hasUpgrade("d", 21)) {
                         let m = .5
                         data.points = data.points.plus(diff * m)
                         data.total = data.total.plus(diff * m)
@@ -5226,6 +5226,7 @@ addLayer("mu", {
                 times: 0,
                 autotimes: 0,
                 passivetime: 0,
+                bestNdM: new Decimal(0),
         }},
         color: "#8200B0",
         branches: [],
@@ -5255,6 +5256,7 @@ addLayer("mu", {
                 if (hasUpgrade("d", 11) && !inChallenge("l", 12)){
                                                 rem = rem.plus(.05)
                 }       
+                if (hasMilestone("d", 15))      rem = rem.plus(.01)
                 
                 if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
                 if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
@@ -5309,6 +5311,11 @@ addLayer("mu", {
                 if (hasUpgrade("mu", 35) && canReset("mu") && data.unlocked) doReset("mu")
 
                 data.time += diff
+                data.bestNdM = data.bestNdM.max(getBuyableAmount("mu", 31))
+
+                if (hasUpgrade("d", 22) && !inChallenge("l", 11) && player.l.time > 1) {
+                        player.mu.buyables[31] = player.mu.buyables[31].max(data.bestNdM)
+                }
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -6427,8 +6434,14 @@ addLayer("mu", {
                                 player.mu.buyables[31] = player.mu.buyables[31].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(tmp.mu.buyables[31].cost)
                                 doReset("mu", true)
+                                if (hasMilestone("d", 15)) {
+                                        let x = player.mu.buyables[31].toNumber()
+                                        y = Math.ceil(x/20) * 20
+                                        player.mu.buyables[31] = new Decimal(y)
+                                }
                         },
                         base(){
+                                if (hasChallenge("l", 61)) return tmp.l.challenges[61].reward
                                 let ret = player.n.points.max(10).log10()
                                 
                                 return ret
@@ -6446,6 +6459,7 @@ addLayer("mu", {
                                 let eff2 = format(tmp.mu.buyables[31].effect) + " to Phosphorus</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 31)) + " µ</b><br>"
                                 let eformula = "log10(Nitrogen)^x<br>" + format(tmp.mu.buyables[31].base) + "^x"
+                                if (hasChallenge("l", 61)) eformula = eformula.slice(21,)
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8514,6 +8528,8 @@ addLayer("l", {
                                 if (inChallenge("l", 42)) init = init.sub(.1)
                                 if (inChallenge("l", 51)) init = init.sub(.12)
                                 if (inChallenge("l", 52)) init = init.sub(.14)
+                                if (inChallenge("l", 61)) init = init.sub(.16)
+                                if (inChallenge("l", 62)) init = init.sub(.18)
 
                                 return init
                         },
@@ -8862,7 +8878,7 @@ addLayer("l", {
 
                                 let a = "Dilation at 110 completions, nullify Life effect, and subtract .12 from the Dilation exponent"
                                 let b = "Goal: e1e267,300 Points"
-                                let c = "Reward: Remove a log2 from the Life gain formula but nullify Life effect"
+                                let c = "Reward: Remove a log2 from the Life gain formula and add .005 to C43's base but nullify Life effect"
 
                                 return a + br + b + br + c 
                         },
@@ -8908,6 +8924,80 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 52) hasChallenge("l", 52)
+                61: {
+                        name: "Anti-Chi", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(.1)
+                                let ret = base.times(comps).plus(1)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 274e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[61].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions and subtract .16 from the Dilation exponent"
+                                let b = "Goal: e1e274,000 Points"
+                                let c = "Reward: N → Δµ base is 1 + anti- completions/10 and N → Δµ effects Protein gain"
+                                let d = "Currently: " + format(tmp.l.challenges[61].reward)
+
+                                return a + br + b + br + c 
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 52)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 61) hasChallenge("l", 61)
+                62: {
+                        name: "Anti-Phi", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(.1)
+                                let ret = base.times(comps).plus(1)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 423e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[62].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions and subtract .18 from the Dilation exponent"
+                                let b = "Goal: e1e423,000 Points"
+                                let c = "Reward: Unlock the next set of challenges [not yet]"
+                                let d = "Currently: " + format(tmp.l.challenges[61].reward)
+
+                                return a + br + b + br + c 
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 61)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 62) hasChallenge("l", 62)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -9033,7 +9123,7 @@ addLayer("l", {
                                   "blank",
                                   "grid",
                                   ["clickables", [1]],
-                                  ["challenges", [2,3,4,5]],
+                                  ["challenges", [2,3,4,5,6,7,8]],
                                 ],
                         unlocked(){
                                 return true
@@ -9141,6 +9231,7 @@ addLayer("l", {
         },
         doReset(layer){
                 if (layer != "a" && layer != "l") return 
+                player.l.time = 0
 
                 //this does a L reset
 
@@ -9770,6 +9861,7 @@ addLayer("a", {
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
                                                         ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
+                        if (hasChallenge("l", 61))      ret = ret.times(tmp.mu.buyables[31].effect)
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
 
@@ -11829,6 +11921,7 @@ addLayer("a", {
                                 let pts = player.points.max(10).log10()
 
                                 if (hasUpgrade("d", 15)) pts = pts.times(Math.log(10))
+                                if (hasUpgrade("d", 22)) pts = pts.div(Math.log(2))
 
                                 let ret = pts.log10()
 
@@ -11854,6 +11947,7 @@ addLayer("a", {
                                 if (hasUpgrade("d", 14)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("d", 15)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("d", 21)) eformula = eformula.replace("ln", "log2")
+                                if (hasUpgrade("d", 22)) eformula = eformula.replace("ln", "log2")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12433,6 +12527,7 @@ addLayer("d", {
                 }       
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
                                                 ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)))
+                if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
 
                 return ret
         },
@@ -12476,8 +12571,14 @@ addLayer("d", {
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
-                data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
                 data.total  =  data.total.plus(tmp.d.getResetGain.times(gainPercentage))
+                if (!hasUpgrade("d", 23)) {
+                        data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
+                } else {
+                        rem = Decimal.sub(10, data.points.div(tmp.d.getResetGain)).div(1.21)
+                        if (rem.gt(diff)) data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
+                        else data.points = data.points.max(tmp.d.getResetGain.times(10))
+                }
 
                 data.time += diff
                 data.passiveTime += layers.l.grid.getGemEffect(606).toNumber() * diff
@@ -12579,13 +12680,39 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA VI"
                         },
                         description(){
-                                let a = "ncRNA's outer ln becomes log2 and unlock anti-omega"
+                                let a = "ncRNA's outer ln becomes log2 and unlock anti-omega but Phosphorus I no longer produces Nitrogen"
                                 return a
                         },
                         cost:() => new Decimal(5e27),
                         unlocked(){
                                 return hasUpgrade("d", 15)
                         }, // hasUpgrade("d", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA VII"
+                        },
+                        description(){
+                                let a = "ncRNA's inner ln becomes log2 and when not in a life challenge after one second regain your best N → Δµ amount"
+                                return a
+                        },
+                        cost:() => new Decimal(5e34),
+                        unlocked(){
+                                return hasUpgrade("d", 21)
+                        }, // hasUpgrade("d", 22)
+                },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA VIII"
+                        },
+                        description(){
+                                let a = "log10(Lives) multiplies DNA gain but you can only have 10x of your DNA gained on reset"
+                                return a
+                        },
+                        cost:() => new Decimal(2e36),
+                        unlocked(){
+                                return hasUpgrade("d", 22)
+                        }, // hasUpgrade("d", 23)
                 },
         },
         milestones: {
@@ -12897,6 +13024,28 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 14)
+                15: {
+                        requirementDescription(){
+                                return "Requires: 18,100 C64 Gems"
+                        },
+                        requirement(){
+                                return new Decimal(18100)
+                        },
+                        done(){
+                                return tmp.d.milestones[15].requirement.lte(getBuyableAmount("mu", 31))
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Subtract .01 from the µ cost exponent and N → Δµ levels are rounded up to a multiple of 20 when bought."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 15)
         },
         tabFormat: {
                 "Upgrades": {

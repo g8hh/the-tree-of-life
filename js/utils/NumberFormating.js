@@ -71,7 +71,7 @@ function format(decimal, precision = 2, small) {
                 return val.replace(/([^(?:e|F)]*)$/, '-$1') 
         } 
         else    
-                return format(decimal, precision) + "⁻¹"        
+                return format(decimal, precision) + "<sup>-1</sup>"        
 
 }
 

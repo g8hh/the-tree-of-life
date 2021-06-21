@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.032",
+	num: "1.033",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.032</h3><br>
+		- Gave anti-omega another effect.<br>
+		- Added two Life challenges.<br>
+		- Added two DNA upgrade.<br>
+		- Added a DNA milestone.<br>
+		- Added a custom save.<br>
+		- Made formatting numbers << 1 better.<br>
 	<br><h3 style='color: #CC0000'>v1.032</h3><br>
 		- Improved the display of effects (Life and Phosphorus).<br>
 		- Added a Life challenge.<br>
