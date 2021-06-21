@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.030",
-	name: "Coup de Grâce",
+	num: "1.031",
+	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
-		- 8e9 DNA on reset OR the last save in the bank<br><br>
+		- 5e25 DNA on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases <br>
 		- B will be each content patch<br>
 		- C will be small patches without content<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.031</h3><br> 
+		- Added two DNA upgrades.<br>
+		- Added two rows of achievements.<br>
+		- Added C56 and C66 gem effects.<br>
+		- Added a custom save.<br>
+		- Added a Life challenge.<br>
 	<br><h3 style='color: #CC0000'>v1.030</h3><br>
 		- Added a DNA upgrade.<br>
 		- Added a DNA milestone.<br>
@@ -220,7 +226,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added three Phosphorus upgrades.<br>
 		- Added nine Life milestones.<br>
 		- Added two Life buyables.<br>
-		- Added a display for current life gain formula.<br>
+		- Added a display for current Life gain formula.<br>
 	<br><h3 style='color: #CC0000'>v1.006</h3><br> 
 		- Added a Life milestone.<br>
 		- Added two Phosphorus upgrades.<br>
@@ -246,7 +252,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added an explanation for how dilation works [go play AD y'all].<br>
 	<br><h3 style='color: #CC0000'>v1.002</h3><br> 
 		- Added two Life milestones.<br>
-		- Added a life buyable.<br>
+		- Added a Life buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.001.2</h3><br> 
 		- Added a Life milestone.<br>
 		- Next up is a Life buyable.<br>
