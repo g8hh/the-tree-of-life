@@ -44,32 +44,34 @@ function getPointExponentiation(){
         if (hasUpgrade("mu", 51))       exp = exp.times(player.l.points.max(10).log10())
         if (hasMilestone("l", 31)) {
                 let l31exp = new Decimal(player.l.challenges[11]).sub(100).max(0)
-                let base = 100
-                if (hasMilestone("l", 32)) base *= 10
-                if (hasMilestone("l", 34)) base *= 10
-                                        exp = exp.times(Decimal.pow(base, l31exp))
+                let l31base = 100
+                if (hasMilestone("l", 32)) l31base *= 10
+                if (hasMilestone("l", 34)) l31base *= 10
+                                        exp = exp.times(Decimal.pow(l31base, l31exp))
         }
         if (hasMilestone("l", 33)) {
-                let base = new Decimal(player.l.challenges[11]).div(100).max(1)
+                let l33base = new Decimal(player.l.challenges[11]).div(100).max(1)
                 let l33exp = player.mu.buyables[33]
-                                        exp = exp.times(Decimal.pow(base, l33exp))
+                                        exp = exp.times(Decimal.pow(l33base, l33exp))
         }
                                         exp = exp.times(layers.l.grid.getGemEffect(102))
         if (hasMilestone("l", 36))      exp = exp.times(1.1)
         if (true) {
-                let base = layers.l.grid.getGemEffect(301)
-                                        exp = exp.times(base.pow(tmp.l.getNonZeroGemCount))
+                let c31base = layers.l.grid.getGemEffect(301)
+                                        exp = exp.times(c31base.pow(tmp.l.getNonZeroGemCount))
         }
         if (hasMilestone("a", 18))      exp = exp.times(Decimal.pow(3, getBuyableAmount("l", 23)))
         if (true) {
-                let base = layers.l.grid.getGemEffect(304)
-                                        exp = exp.times(base.pow(getBuyableAmount("mu", 32)))
-                let base2= layers.l.grid.getGemEffect(504)
-                                        exp = exp.times(base2.pow(getBuyableAmount("a", 22)))
-                let base3= layers.l.grid.getGemEffect(604)
-                                        exp = exp.times(base3.pow(getBuyableAmount("a", 33)))
-                let base4= layers.l.grid.getGemEffect(605)
-                                        exp = exp.times(base4.pow(getBuyableAmount("l", 11)))
+                let c34base = layers.l.grid.getGemEffect(304)
+                                        exp = exp.times(c34base.pow(getBuyableAmount("mu", 32)))
+                let c54base = layers.l.grid.getGemEffect(504)
+                                        exp = exp.times(c54base.pow(getBuyableAmount("a", 22)))
+                let c64base = layers.l.grid.getGemEffect(604)
+                                        exp = exp.times(c64base.pow(getBuyableAmount("a", 33)))
+                let c65base = layers.l.grid.getGemEffect(605)
+                                        exp = exp.times(c65base.pow(getBuyableAmount("l", 11)))
+                let c17base = layers.l.grid.getGemEffect(107)
+                                        exp = exp.times(c17base.pow(getBuyableAmount("a", 32)))
         }
         if (hasMilestone("a", 19))      exp = exp.times(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        exp = exp.times(Decimal.pow(3, player.a.upgrades.length))
@@ -103,8 +105,11 @@ function getPointDilationExponent(){
                                         exp = exp.times(Decimal.pow(.665, Math.sqrt(c5depth)))
                 let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
                 let c6Layers = (86 + c2depth) * c6depth ** .125
-                                        exp = exp.times(Decimal.pow(.96, c6Layers))
+                let c6Base = .96
+                c6Base -= .023 * c7depth ** .5
+                                        exp = exp.times(Decimal.pow(c6Base, c6Layers))
         }
         
         return exp
@@ -182,6 +187,10 @@ var GEM_EFFECT_DESCRIPTIONS = {
         604: "Point gain per shRNA<br>1+x",
         605: "Point gain per α → ∂α<br>(1+x)^<wbr>log2(10+x)/4",
         606: "DNA resets per second<br>cbrt(x)/11",
+        107: "Point gain per snRNA<br>1+x",
+        207: "Remove a log2 from α → ∂α<br>x > 1330",
+        307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
+        407: "\"Universe\" is universal<br>x>1330",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -221,6 +230,10 @@ var GEM_EFFECT_FORMULAS = {
         604: (x) => x.plus(1),
         605: (x) => x.plus(1).pow(x.plus(10).log(16)),
         606: (x) => x.cbrt().div(11),
+        107: (x) => x.plus(1),
+        207: (x) => x.gt(1330),
+        307: (x) => x.plus(1),
+        407: (x) => x.gt(1330),
 }
 
 function nCk(n, k){
@@ -4276,6 +4289,7 @@ addLayer("p", {
                                                 x = x.times(tmp.mu.buyables[31].effect)
                                                 
                                                 x = x.pow(layers.l.grid.getGemEffect(403))
+                if (hasChallenge("l", 71))      x = x.pow(tmp.l.challenges[71].reward)
 
                                                 x = x.times(player.p.points.max(1).pow(tmp.mu.effect))
 
@@ -5250,6 +5264,9 @@ addLayer("mu", {
                 if (inChallenge("l", 12))       {
                         let depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                                                 rem = rem.sub(.01 * depth)
+                        if (hasMilestone("d", 16)) {
+                                                rem = rem.plus(.05)
+                        }
                 }
                 if (hasMilestone("a", 5))       rem = rem.plus(.01)
                 if (hasMilestone("a", 7))       rem = rem.plus(.01)
@@ -5267,6 +5284,7 @@ addLayer("mu", {
         },
         gainExp: new Decimal(1),
         effect(){
+                if (inChallenge("l", 71) || hasChallenge("l", 71)) return new Decimal(0)
                 let amt = player.mu.points
 
                 if (amt.gt(400)) amt = amt.sqrt().times(20)
@@ -5284,6 +5302,7 @@ addLayer("mu", {
         },
         effectDescription(){
                 if (player.tab != "mu") return ""
+                if (inChallenge("l", 71) || hasChallenge("l", 71)) return ""
                 let eff = tmp.mu.effect
                 if (shiftDown) {
                         let a = "effect formula: .01*x"
@@ -6076,7 +6095,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6085,7 +6104,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 12: {
@@ -6150,7 +6169,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6159,7 +6178,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 13: {
@@ -6214,7 +6233,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6223,7 +6242,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 21: {
@@ -6275,7 +6294,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6284,7 +6303,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 22: {
@@ -6338,7 +6357,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6347,7 +6366,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 23: {
@@ -6398,7 +6417,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6407,7 +6426,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 31: {
@@ -6436,7 +6455,9 @@ addLayer("mu", {
                                 doReset("mu", true)
                                 if (hasMilestone("d", 15)) {
                                         let x = player.mu.buyables[31].toNumber()
-                                        y = Math.ceil(x/20) * 20
+                                        let diff = 20
+                                        if (hasMilestone("d", 16)) diff = 100
+                                        y = Math.ceil(x/100) * 100
                                         player.mu.buyables[31] = new Decimal(y)
                                 }
                         },
@@ -6468,7 +6489,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6477,7 +6498,7 @@ addLayer("mu", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 32: {
@@ -6561,7 +6582,7 @@ addLayer("mu", {
                                         let end = "Shift to see details"
                                         if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation "
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6570,9 +6591,9 @@ addLayer("mu", {
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost + "<br>"
+                                let end = allEff + allCost + br
                                 if (!hasMilestone("l", 14)) end += "Note: Can only buy while in Dilation<br>"
-                                return "<br>" + end + "Effect is hardcapped at .5"
+                                return br + end + "Effect is hardcapped at .5"
                         },
                 },
                 33: {
@@ -6612,7 +6633,7 @@ addLayer("mu", {
                         },
                         effect(){
                                 let ret = tmp.mu.buyables[33].base.pow(player.mu.buyables[33])
-                                if (inChallenge("l", 11)) {
+                                if (inChallenge("l", 11) && !hasMilestone("d", 17)) {
                                         if (hasMilestone("l", 23) && ret.gt(1e12)) {
                                                 return ret.log10().sub(2).pow(12)
                                         }
@@ -6638,7 +6659,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -6649,7 +6670,8 @@ addLayer("mu", {
                                 let end = allEff + allCost
                                 let ending = "<br>Note: if you are in Dilation then the effect is capped at 1e12"
                                 if (hasMilestone("l", 23)) ending += "<br>x → (log10(x)-2)<sup>12</sup>"
-                                return "<br>" + end + ending
+                                if (hasMilestone("d", 17)) return br + end
+                                return br + end + ending
                         },
                 },
         },
@@ -6939,7 +6961,9 @@ addLayer("l", {
                         }
                 }
 
-                if (hasMilestone("l", 21) && !inChallenge("l", 11) && data.time > 1) {
+                let universalAllowed = !inChallenge("l", 11) || layers.l.grid.getGemEffect(407)
+
+                if (hasMilestone("l", 21) && universalAllowed && data.time > 1) {
                         let str = "ee40"
                         if (hasMilestone("l", 22))      str = "ee43"
                         if (hasUpgrade("p", 41))        str = "ee45"
@@ -7883,7 +7907,9 @@ addLayer("l", {
                         base(){
                                 let logBase = tmp.l.buyables[11].getLogBase
 
-                                let ret = player.points.max(10).log(logBase).max(10).log(logBase).max(10).log(logBase)
+                                let ret = player.points.max(10).log(logBase).max(10).log(logBase)
+                                
+                                if (!layers.l.grid.getGemEffect(207)) ret = ret.max(10).log(logBase)
                                 
                                 return ret
                         },
@@ -7900,6 +7926,7 @@ addLayer("l", {
                                 let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 11)) + " Lives</b><br>"
                                 let eformula = "logINS(logINS(logINS(Points)))^x<br>" + format(tmp.l.buyables[11].base) + "^x"
+                                if (layers.l.grid.getGemEffect(207)) eformula = eformula.replace("logINS(Points)", "Points")
                                 let f = "log" + formatWhole(tmp.l.buyables[11].getLogBase)
                                 if (f == "log2.72") f = "ln"
                                 eformula = eformula.replaceAll("logINS", f)
@@ -7912,7 +7939,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -7921,7 +7948,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 12: {
@@ -7986,7 +8013,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -7995,7 +8022,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 13: {
@@ -8051,7 +8078,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8060,7 +8087,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 21: {
@@ -8097,6 +8124,8 @@ addLayer("l", {
                                 if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
                                 if (hasMilestone("a", 13)) ret = ret.times(Math.log(3))
                                 if (hasMilestone("a", 14)) ret = ret.div(Math.log(2))
+
+                                if (hasChallenge("l", 72)) ret = player.tokens.total.max(1)
                                 
                                 return ret
                         },
@@ -8120,6 +8149,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 42)) eformula = eformula.replace("log4", "log3")
                                 if (hasMilestone("a", 13)) eformula = eformula.replace("log3", "ln")
                                 if (hasMilestone("a", 14)) eformula = eformula.replace("ln", "log2")
+                                if (hasChallenge("l", 72)) eformula = eformula.replace("log2(tokens)", "tokens")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8128,7 +8158,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8137,7 +8167,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 22: {
@@ -8190,7 +8220,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8199,7 +8229,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 23: {
@@ -8230,6 +8260,7 @@ addLayer("l", {
 
                                 ret = ret.plus(layers.l.grid.getGemEffect(302))
                                 if (hasMilestone("a", 15)) ret = ret.plus(.25)
+                                if (hasChallenge("l", 72)) ret = ret.plus(tmp.l.challenges[41].reward)
                                 
                                 return ret
                         },
@@ -8254,7 +8285,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8263,7 +8294,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 31: {
@@ -8320,7 +8351,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8329,7 +8360,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 32: {
@@ -8381,7 +8412,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8390,7 +8421,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 33: {
@@ -8446,7 +8477,7 @@ addLayer("l", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -8455,7 +8486,7 @@ addLayer("l", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
         },
@@ -8530,6 +8561,8 @@ addLayer("l", {
                                 if (inChallenge("l", 52)) init = init.sub(.14)
                                 if (inChallenge("l", 61)) init = init.sub(.16)
                                 if (inChallenge("l", 62)) init = init.sub(.18)
+                                if (inChallenge("l", 71)) init = init.sub(.2)
+                                if (inChallenge("l", 72)) init = init.sub(.22)
 
                                 return init
                         },
@@ -8962,20 +8995,7 @@ addLayer("l", {
                         countsAs: [11],
                 }, // inChallenge("l", 61) hasChallenge("l", 61)
                 62: {
-                        name: "Anti-Phi", 
-                        reward(){
-                                let data = player.l.challenges
-                                let comps = 0
-                                let keys = Object.keys(player.l.challenges)
-                                for (i in keys){
-                                        id = keys[i]
-                                        if (id == 11 || id == 12) continue
-                                        comps += data[id]
-                                }
-                                let base = new Decimal(.1)
-                                let ret = base.times(comps).plus(1)
-                                return ret
-                        },
+                        name: "Anti-Phi",
                         goal: () => Decimal.pow(10, Decimal.pow(10, 423e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
@@ -8988,8 +9008,7 @@ addLayer("l", {
 
                                 let a = "Dilation at 110 completions and subtract .18 from the Dilation exponent"
                                 let b = "Goal: e1e423,000 Points"
-                                let c = "Reward: Unlock the next set of challenges [not yet]"
-                                let d = "Currently: " + format(tmp.l.challenges[61].reward)
+                                let c = "Reward: Unlock the next set of challenges"
 
                                 return a + br + b + br + c 
                         },
@@ -8998,6 +9017,79 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 62) hasChallenge("l", 62)
+                71: {
+                        name: "Anti-Upsilon", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = getBuyableAmount("a", 13).max(10).log10()
+                                let ret = base.pow(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 579200)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[71].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions, subtract .2 from the Dilation exponent, and nullify µ effect"
+                                let b = "Goal: e1e579,200 Points"
+                                let c = "Reward: Per anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
+                                let d = "Currently: " + format(tmp.l.challenges[71].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasMilestone("d", 18)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 71) hasChallenge("l", 71)
+                72: {
+                        name: "Anti-Tau", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = getBuyableAmount("a", 13).max(10).log10()
+                                let ret = base.pow(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 641300)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                return player.points.gt(tmp.l.challenges[71].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Dilation at 110 completions and subtract .22 from the Dilation exponent"
+                                let b = "Goal: e1e641,300 Points"
+                                let c = "Reward: β → ∂α's log2 is removed and Anti-Nitrogen effects β → ∂𝛾"
+
+                                return a + br + b + br + c
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 71)
+                        },
+                        countsAs: [11],
+                }, // inChallenge("l", 72) hasChallenge("l", 72)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -9018,12 +9110,14 @@ addLayer("l", {
         },
         grid: {
                 rows(){
+                        if (hasChallenge("l", 62)) return 7
                         if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
                         return 3
                 },
                 cols(){
+                        if (hasChallenge("l", 62)) return 7
                         if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
                         if (hasMilestone("a", 13)) return 4
@@ -9038,7 +9132,7 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
                 },
                 getCanClick(data, id) {
-                        let maxAllowed = 6 // manually change this
+                        let maxAllowed = 7 // manually change this
                         if (data.units > maxAllowed) return false
                         if (data.hundreds > maxAllowed) return false
                         if (data.units > 1) {
@@ -9099,7 +9193,7 @@ addLayer("l", {
                         if (id == 303 || id == 404) {
                                 return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(id))
                         }
-                        if (id == 603) {
+                        if (id == 603 || id == 207 || id == 407) {
                                 return "Currently:<br>" + layers.l.grid.getGemEffect(id)
                         }
                         return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
@@ -9206,7 +9300,7 @@ addLayer("l", {
                                         let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^.665 per sqrt(depth)"
                                         let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^.96 per depth<sup>1/8</sup>"
-                                        let c7 = "Challenge 7: You have 5 [tbd] more tokens for prestige purposes"
+                                        let c7 = "Challenge 7: Challenge 6 base is reduced by .023*sqrt(depth)"
                                         let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
@@ -9866,6 +9960,8 @@ addLayer("a", {
                                                         ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
                         if (hasChallenge("l", 61))      ret = ret.times(tmp.mu.buyables[31].effect)
+                                                        ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
+                        if (hasMilestone("d", 18))      ret = ret.times(player.d.points.max(1).pow(tmp.l.getNonZeroGemCount))
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
 
@@ -11510,7 +11606,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11520,7 +11616,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 12: {
@@ -11591,7 +11687,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11601,7 +11697,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 13: {
@@ -11676,7 +11772,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11685,7 +11781,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 21: {
@@ -11741,7 +11837,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11750,7 +11846,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 22: {
@@ -11811,7 +11907,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end + "<br><br>Note: hardcapped at 1e125 in Customizable"
+                                        return br + start + end + "<br><br>Note: hardcapped at 1e125 in Customizable"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11820,7 +11916,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 23: {
@@ -11882,7 +11978,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end 
+                                        return br + start + end 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11891,7 +11987,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 31: {
@@ -11960,7 +12056,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end 
+                                        return br + start + end 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11969,7 +12065,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 32: {
@@ -12026,7 +12122,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end 
+                                        return br + start + end 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12035,7 +12131,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 33: {
@@ -12094,7 +12190,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end 
+                                        return br + start + end 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12103,7 +12199,7 @@ addLayer("a", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
         },
@@ -12532,6 +12628,7 @@ addLayer("d", {
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
                                                 ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)))
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
+                if (hasMilestone("d", 18))      ret = ret.times(Decimal.pow(2, player.d.milestones.length))
 
                 return ret
         },
@@ -13030,7 +13127,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 18,100 C64 Gems"
+                                return "Requires: 18,100 N → Δµ"
                         },
                         requirement(){
                                 return new Decimal(18100)
@@ -13050,6 +13147,72 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 15)
+                16: {
+                        requirementDescription(){
+                                return "Requires: 8e48 DNA"
+                        },
+                        requirement(){
+                                return new Decimal(8e48)
+                        },
+                        done(){
+                                return tmp.d.milestones[16].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Subtract .05 from the µ cost exponent while in Customizable and N → Δµ levels are rounded up to a multiple of 100 when bought."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 16)
+                17: {
+                        requirementDescription(){
+                                return "Requires: 1.3e49 DNA"
+                        },
+                        requirement(){
+                                return new Decimal(1.3e49)
+                        },
+                        done(){
+                                return tmp.d.milestones[17].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: N → ΔN effect is no longer softcapped in dilation."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 17)
+                18: {
+                        requirementDescription(){
+                                return "Requires: 2.3e49 DNA"
+                        },
+                        requirement(){
+                                return new Decimal(2.3e49)
+                        },
+                        done(){
+                                return tmp.d.milestones[18].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per milestone double DNA gain, per non-zero gem multiply Protein gain by DNA, and unlock a challenge."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 18)
         },
         tabFormat: {
                 "Upgrades": {
@@ -14251,7 +14414,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14260,7 +14423,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 12: {
@@ -14308,7 +14471,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14317,7 +14480,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 13: {
@@ -14365,7 +14528,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14374,7 +14537,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 21: {
@@ -14433,7 +14596,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14442,7 +14605,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 23: {
@@ -14491,7 +14654,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14500,7 +14663,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 61: {
@@ -14549,7 +14712,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14558,7 +14721,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 62: {
@@ -14607,7 +14770,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14616,7 +14779,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 63: {
@@ -14663,7 +14826,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14672,7 +14835,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 22: {
@@ -14727,7 +14890,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14736,7 +14899,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 32: {
@@ -14783,7 +14946,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14792,7 +14955,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 33: {
@@ -14839,7 +15002,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14848,7 +15011,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 41: {
@@ -14895,7 +15058,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14904,7 +15067,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 42: {
@@ -14951,7 +15114,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -14960,7 +15123,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 43: {
@@ -15007,7 +15170,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15016,7 +15179,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 51: {
@@ -15063,7 +15226,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15072,7 +15235,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 52: {
@@ -15124,7 +15287,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15133,7 +15296,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 53: {
@@ -15180,7 +15343,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15189,7 +15352,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 71: {
@@ -15231,7 +15394,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
                                 let comp1 = "(x+1)"
                                 if (hasUpgrade("mini", 25)) comp1 = "x"
@@ -15246,7 +15409,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allCost + "<br>You can only have 15 slots"
-                                return "<br>" + end 
+                                return br + end 
                         },
                 },
                 72: {
@@ -15289,7 +15452,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 72)) + " C Points</b><br>"
                                 let init = "log10(C Points)<sup>x</sup>"
                                 if (hasUpgrade("tokens", 91)) init = "ln(C Points)<sup>x</sup>"
-                                let eformula = init + "<br>" + format(getBuyableBase("mini", 72)) + "^x"
+                                let eformula = init + br + format(getBuyableBase("mini", 72)) + "^x"
                                 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -15298,7 +15461,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15307,7 +15470,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 73: {
@@ -15355,7 +15518,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15364,7 +15527,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 81: {
@@ -15418,7 +15581,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15427,7 +15590,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 82: {
@@ -15481,7 +15644,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15490,7 +15653,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 83: {
@@ -15545,7 +15708,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15554,7 +15717,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 91: {
@@ -15606,7 +15769,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15615,7 +15778,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 92: {
@@ -15670,7 +15833,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15679,7 +15842,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 93: {
@@ -15739,7 +15902,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15748,7 +15911,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 101: {
@@ -15799,7 +15962,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15808,7 +15971,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 102: {
@@ -15864,7 +16027,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15873,7 +16036,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 103: {
@@ -15924,7 +16087,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15933,7 +16096,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 111: {
@@ -15984,7 +16147,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -15993,7 +16156,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 112: {
@@ -16047,7 +16210,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16056,7 +16219,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 113: {
@@ -16110,7 +16273,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16119,7 +16282,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 121: {
@@ -16181,7 +16344,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16190,7 +16353,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 122: {
@@ -16244,7 +16407,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16253,7 +16416,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 123: {
@@ -16305,7 +16468,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16314,7 +16477,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 131: {
@@ -16371,7 +16534,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16380,7 +16543,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 132: {
@@ -16434,7 +16597,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16443,7 +16606,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 133: {
@@ -16495,7 +16658,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16504,7 +16667,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 151: {
@@ -16556,7 +16719,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16565,7 +16728,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 152: {
@@ -16617,7 +16780,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16626,7 +16789,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 153: {
@@ -16678,7 +16841,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16687,7 +16850,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 161: {
@@ -16739,7 +16902,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16748,7 +16911,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 162: {
@@ -16800,7 +16963,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16809,7 +16972,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 163: {
@@ -16861,7 +17024,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16870,7 +17033,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 171: {
@@ -16922,7 +17085,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16931,7 +17094,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 172: {
@@ -16983,7 +17146,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16992,7 +17155,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 173: {
@@ -17044,7 +17207,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17053,7 +17216,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 181: {
@@ -17105,7 +17268,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17114,7 +17277,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 182: {
@@ -17166,7 +17329,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17175,7 +17338,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 }, 
                 183: {
@@ -17227,7 +17390,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17236,7 +17399,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 }, 
                 201: {
@@ -17273,7 +17436,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17284,7 +17447,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 202: {
@@ -17339,7 +17502,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17348,7 +17511,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 203: {
@@ -17400,7 +17563,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17409,7 +17572,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 211: {
@@ -17475,7 +17638,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17484,7 +17647,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 212: {
@@ -17536,7 +17699,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17545,7 +17708,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 213: {
@@ -17605,7 +17768,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17614,7 +17777,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 221: {
@@ -17664,7 +17827,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17673,7 +17836,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 222: {
@@ -17723,7 +17886,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17732,7 +17895,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 223: {
@@ -17793,7 +17956,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17802,7 +17965,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 231: {
@@ -17864,7 +18027,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17873,7 +18036,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 232: {
@@ -17926,7 +18089,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17935,7 +18098,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         }, 
                 },
                 233: {
@@ -17985,7 +18148,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17994,7 +18157,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         }, 
                 },
                 241: {
@@ -18044,7 +18207,7 @@ addLayer("mini", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = amt + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -18053,7 +18216,7 @@ addLayer("mini", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         }, 
                 },
         },
@@ -18494,7 +18657,7 @@ addLayer("mini", {
                                 let now = player.time
                                 let rem = (now - last)/1000
                                 let req = tmp.mini.clickables[41].timeRequired
-                                let a = "Time until next spin: " + formatTime(Math.max(0, req-rem)) + "<br>"
+                                let a = "Time until next spin: " + formatTime(Math.max(0, req-rem)) + br
                                 return a
                         },
                         unlocked(){
@@ -19345,14 +19508,14 @@ addLayer("mini", {
                                                 let c = ""
 
                                                 if (shiftDown) {
-                                                        c += "<br>"
+                                                        c += br
                                                         c += redx + "=" + format(data.getEffectiveFuel) + "  "
-                                                        c += redy + "=" + format(data.getEffectiveFuelAux) + "<br>"
+                                                        c += redy + "=" + format(data.getEffectiveFuelAux) + br
                                                         c += redx + " is fuel/10, but every time " + redx
                                                         c += " gets " + format(tmp.mini.d_points.getEffectiveFuelLogBase, 4)
                                                         c += " times larger, it is square rooted"
                                                         b3 = b3.replace("cbrt()/100", redy)
-                                                        c += "<br>" + redy + " = cbrt(" + redx + ")/100, softcapped at 10,000: "
+                                                        c += br + redy + " = cbrt(" + redx + ")/100, softcapped at 10,000: "
                                                         c += redy + "↦(6+log10(" + redy + "))<sup>4</sup>"
                                                 }
                                                 b3 = b3.replace("()","(" + redx + ")")
@@ -20226,7 +20389,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20235,7 +20398,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 12: {
@@ -20281,7 +20444,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20290,7 +20453,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 13: { 
@@ -20331,7 +20494,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20340,7 +20503,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 21: { 
@@ -20381,7 +20544,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20390,7 +20553,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 22: {
@@ -20439,7 +20602,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20448,7 +20611,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 23: {
@@ -20492,7 +20655,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20501,7 +20664,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 31: {
@@ -20549,7 +20712,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20558,7 +20721,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 32: {
@@ -20600,7 +20763,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20609,7 +20772,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 33: { 
@@ -20653,7 +20816,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20662,7 +20825,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 41: {
@@ -20712,7 +20875,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20721,7 +20884,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 42: {
@@ -20762,7 +20925,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20771,7 +20934,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 43: {
@@ -20812,7 +20975,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20821,7 +20984,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 51: {
@@ -20862,7 +21025,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20871,7 +21034,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 52: {
@@ -20915,7 +21078,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20924,7 +21087,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 53: {
@@ -20968,7 +21131,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -20977,7 +21140,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 61: {
@@ -21020,7 +21183,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21029,7 +21192,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 62: {
@@ -21072,7 +21235,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21081,7 +21244,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 63: {
@@ -21125,7 +21288,7 @@ addLayer("tokens", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return "<br>" + start + end
+                                        return br + start + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21134,7 +21297,7 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return "<br>" + end
+                                return br + end
                         },
                 },
                 71: {
