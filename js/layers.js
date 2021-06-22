@@ -8815,9 +8815,9 @@ addLayer("l", {
                                 if (player.tab != "l") return 
                                 if (player.subtabs.l.mainTabs != "Challenges") return ""
 
-                                let a = "Dilation at 110 completions, all nitrogen content is disabled, and subtract .08 from the Dilation exponent"
+                                let a = "Dilation at 110 completions, all nitrogen content is disabled<sup>*</sup>, and subtract .08 from the Dilation exponent"
                                 let b = "Goal: e1e204,700 Points"
-                                let c = "Reward: Per anti- challenge<br> add .2 to 𝛾 → ∂𝛾's base but disable nitrogen content"
+                                let c = "Reward: Per anti- challenge<br> add .2 to 𝛾 → ∂𝛾's base but disable nitrogen content<sup>*</sup>"
                                 let d = "Currently: " + format(tmp.l.challenges[41].reward)
 
                                 return a + br + b + br + c + br + d
@@ -9201,7 +9201,7 @@ addLayer("l", {
                                         let o = "So in effect you are in challenges 2/3/4/5 a total of 10/3/3/1 times."
                                         let step3 = step2 + br2 + j + br + k + br + l + br + m + br + n + br + o
 
-                                        let c2 = "Challenge 2: Add .01 to µ cost exponent"
+                                        let c2 = "Challenge 2: Add .01 to µ cost exponent per depth"
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                         let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^.665 per sqrt(depth)"
@@ -9210,12 +9210,16 @@ addLayer("l", {
                                         let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
-                                        let p = "Note: All above descriptions are per depth/time you are in the challenge<br>unless otherwise stated."
+                                        let p = "Note: Depths is the number of times you are in the given challenge."
                                         let q = "Note 2: Gems above 10,000 are hardcapped and<br>above 1,000 are softcapped x → (7+log10(x))<sup>3</sup>"
 
                                         let step4 = step3 + br2 + challs + br2 + p + br + q
 
-                                        return step4
+                                        if (!hasChallenge("l", 41)) return step4
+
+                                        let r = "<sup>*</sup>Base Phosphorus gain is set to 1 so you can still gain Phosphorus"
+
+                                        return step4 + br2 + r
                                 }],
                                 ],
                         unlocked(){
