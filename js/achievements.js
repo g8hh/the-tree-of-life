@@ -59,7 +59,10 @@ function getAchStuffFromNumber(n){
         let done = function(){
                 return hasAchievement("ach", getColRowCode(n)) || PROGRESSION_MILESTONES[n]() 
         }
-        let startStr = n > 301 && n < 309 ? "Complete " : "Get "
+        let isChall = false
+        if (n > 301 && n < 309) isChall = true
+        if (n > 323 && n < 330) isChall = true
+        let startStr = isChall ? "Complete " : "Get "
         let tooltip = function(){
                 return startStr + PROGRESSION_MILESTONES_TEXT[n]
         }
@@ -427,6 +430,13 @@ PROGRESSION_MILESTONES = {
         320: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 6))),
         321: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 7))),
         322: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 8))),
+        323: () => hasChallenge("l", 52),
+        324: () => hasChallenge("l", 61),
+        325: () => hasChallenge("l", 62),
+        326: () => hasChallenge("l", 71),
+        327: () => hasChallenge("l", 72),
+        328: () => hasChallenge("l", 81),
+        329: () => hasChallenge("l", 82),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -736,8 +746,8 @@ PROGRESSION_MILESTONES_TEXT = {
         304: "Anti-Carbon",
         305: "Anti-Oxygen",
         306: "Anti-Nitrogen",
-        307: "Anti-Inflamitory",
-        308: "Anti-tell me to fix this later",
+        307: "Anti-Inflammatory",
+        308: "Anti-Omega",
         309: "a C16 Gem",
         310: "a C26 Gem",
         311: "a C36 Gem",
@@ -752,6 +762,13 @@ PROGRESSION_MILESTONES_TEXT = {
         320: "1.84e19 DNA",
         321: "3.40e38 DNA",
         322: "1.16e77 DNA",
+        323: "Anti-Psi",
+        324: "Anti-Chi",
+        325: "Anti-Phi",
+        326: "Anti-Upsilon",
+        327: "Anti-Tau",
+        328: "Anti-Sigma",
+        329: "Anti-Rho",
 }
 
 

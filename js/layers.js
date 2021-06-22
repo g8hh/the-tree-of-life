@@ -8861,7 +8861,7 @@ addLayer("l", {
                         countsAs: [11],
                 }, // inChallenge("l", 41) hasChallenge("l", 41)
                 42: {
-                        name: "Anti-Inflamitory", 
+                        name: "Anti-Inflammatory", 
                         reward(){
                                 let data = player.l.challenges
                                 let comps = 0

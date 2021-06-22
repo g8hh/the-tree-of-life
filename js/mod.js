@@ -12,20 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.034",
+	num: "1.034.1",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<br><h2 style='color: #CCCC00'>Endgame</h2><br>
+	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
 		- 8e61 on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
-		- A will be big releases <br>
-		- B will be each content patch<br>
-		- C will be small patches without content<br><br><br>
+		- A will be big releases.<br>
+		- B will be each content patch.<br>
+		- C will be small patches without content.<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.034</h3><br> 
+	<br><h3 style='color: #CC0000'>v1.034.1</h3><br>
+		- Added a row of achievements.<br>
+		- Fixed some spelling issues.<br>
+	<br><h3 style='color: #CC0000'>v1.034</h3><br>
 		- Added two Life challenges.<br>
 		- Implemented challenge 7.<br>
 		- Fixed wording of DNA milestone 15.<br>
