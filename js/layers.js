@@ -8563,6 +8563,7 @@ addLayer("l", {
                                 if (inChallenge("l", 62)) init = init.sub(.18)
                                 if (inChallenge("l", 71)) init = init.sub(.2)
                                 if (inChallenge("l", 72)) init = init.sub(.22)
+                                if (inChallenge("l", 81)) init = init.sub(.24)
 
                                 return init
                         },
@@ -9072,7 +9073,7 @@ addLayer("l", {
                         goal: () => Decimal.pow(10, Decimal.pow(10, 641300)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
-                                return player.points.gt(tmp.l.challenges[71].goal)
+                                return player.points.gt(tmp.l.challenges[72].goal)
                         },
                         completionLimit: 1,
                         fullDisplay(){
@@ -9090,6 +9091,7 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 72) hasChallenge("l", 72)
+                
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
