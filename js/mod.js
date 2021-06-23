@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.034.1",
+	num: "1.035",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,16 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.035</h3><br>
+		- Say in #pg-trees that "I know" if you see this, but don't explain yourself.<br>
+		- Added two Life challenges.<br>
+		- Added a DNA upgrade.<br>
+		- Added four DNA milestones.<br>
+		- Added C57, C67, C71, C72, C73, C74, C75, C76, and C77 gems.<br>
+		- Made autobuying of Life buyables better eventually.<br>
+		- Changed C7 for >1 depth.<br>
+		- Added a custom save.<br>
+		- Renamed other custom saves.<br>
 	<br><h3 style='color: #CC0000'>v1.034.1</h3><br>
 		- Added a row of achievements.<br>
 		- Fixed some spelling issues.<br>
