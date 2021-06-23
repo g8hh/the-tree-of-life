@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.035",
+	num: "1.036",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 8e61 on reset OR the last save in the bank<br><br>
+		- C83 gems OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.036</h3><br>
+		- Added 6 DNA milestones.<br>
+		- Added C18, C28, C38, C48, C58, C68, C81, C78, C82, and C83 gems.<br>
+		- Added a display for Dilation effect.<br>
+		- Implemented challenge 8.<br>
+		- Note: C84 is made intentionally harder to prevent progression past intention.<br>
 	<br><h3 style='color: #CC0000'>v1.035</h3><br>
 		- Say in #pg-trees that "I know" if you see this, but don't explain yourself.<br>
 		- Added two Life challenges.<br>
@@ -730,7 +736,10 @@ var displayThings = [
 
 		let msptFinal = " ms/tick = " + p1 + formatWhole(val) + p2
 		return saveFinal + msptFinal
-	}
+	}, 
+	function(){
+		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+	},
 ]
 
 // Determines when the game "ends"

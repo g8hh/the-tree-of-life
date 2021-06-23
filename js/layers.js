@@ -74,6 +74,10 @@ function getPointExponentiation(){
                                         exp = exp.times(c17base.pow(getBuyableAmount("a", 32)))
                 let c73base = layers.l.grid.getGemEffect(703)
                                         exp = exp.times(c73base.pow(getBuyableAmount("a", 21)))
+                let c18base = layers.l.grid.getGemEffect(108)
+                                        exp = exp.times(c18base.pow(getBuyableAmount("l", 33).pow(1.8)))
+                let c38base = layers.l.grid.getGemEffect(308)
+                                        exp = exp.times(c38base.pow(getBuyableAmount("l", 21)))
         }
         if (hasMilestone("a", 19))      exp = exp.times(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        exp = exp.times(Decimal.pow(3, player.a.upgrades.length))
@@ -94,6 +98,7 @@ function getPointExponentiation(){
                 let d13exp = miRNA.times(player.d.upgrades.length)
                                         exp = exp.times(miRNA.pow(d13exp))
         }
+        if (hasMilestone("d", 27))      exp = exp.times(tmp.d.milestones[27].effect)
         
         return exp
 }
@@ -103,8 +108,9 @@ function getPointDilationExponent(){
 
         if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
         if (inChallenge("l", 12))       {
+                let portion = new Decimal(1)
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
-                                        exp = exp.times(Decimal.pow(.665, Math.sqrt(c5depth)))
+                                        portion = portion.times(Decimal.pow(.665, Math.sqrt(c5depth)))
                 let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                 let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
@@ -113,7 +119,17 @@ function getPointDilationExponent(){
                 let c7Base = .023
                 c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
-                                        exp = exp.times(Decimal.pow(c6Base, c6Layers))
+                                        portion = portion.times(Decimal.pow(c6Base, c6Layers))
+
+                let challId = player.l.activeChallengeID
+                if (challId > 801) portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
+                if (challId > 803) portion = portion.div(1000)
+
+                if (hasMilestone("d", 24)) portion = portion.pow(.94)
+                let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
+                c58base = layers.l.grid.getGemEffect(508)
+                portion = portion.pow(c58base.pow(c58exp))
+                exp = exp.times(portion)
         }
         
         return exp
@@ -204,6 +220,16 @@ var GEM_EFFECT_DESCRIPTIONS = {
         705: "Add .0001 to tRNA base<br>x>1330",
         706: "Subtract from Challenge 7 effect<br>cbrt(x)/2200",
         707: "Add .004 to Dilation effect<br>x>1330",
+        108: "Point gain per 𝛾 → ∂𝛾<sup>1.8</sup><br>1+x",
+        208: "mRNA base per non-zero gem in this column<br>x/2662000",
+        308: "Point gain per β → ∂α<br>1+x^<wbr>log10(DNA)/100",
+        408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
+        508: "Customizable effect per non-0 gem-53<br>^1-cbrt(x)/97",
+        608: "All µ cost reductions always work<br>x>1330",
+        708: "Reduce µ cost exponent<br>x/26620",
+        801: "Add to shRNA base per shRNA<br>x/13310",
+        802: "Autobuy tokens<br>x>1330",
+        803: "Autobuy Radio Waves<br>x>1330",
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -256,6 +282,16 @@ var GEM_EFFECT_FORMULAS = {
         705: (x) => x.gt(1330),
         706: (x) => x.cbrt().div(2200),
         707: (x) => x.gt(1330),
+        108: (x) => x.plus(1),
+        208: (x) => x.div(2662000),
+        308: (x) => x.plus(1).pow(player.d.points.max(1).log10().div(100)),
+        408: (x) => x.gt(1330),
+        508: (x) => Decimal.sub(1,x.cbrt().div(97)),
+        608: (x) => x.gt(1330),
+        708: (x) => x.div(26620),
+        801: (x) => x.div(13310),
+        802: (x) => x.gt(1330),
+        803: (x) => x.gt(1330),
 }
 
 function nCk(n, k){
@@ -5285,19 +5321,20 @@ addLayer("mu", {
                 let rem = new Decimal(0)
                                                 rem = rem.plus(tmp.mu.buyables[32].effect)
                 if (hasUpgrade("mu", 43))       rem = rem.plus(.01)
-                if (inChallenge("l", 12))       {
+                if (inChallenge("l", 12)) {
                         let depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                                                 rem = rem.sub(.01 * depth)
-                        if (hasMilestone("d", 16)) {
+                }
+                if (hasMilestone("d", 16) && (inChallenge("l", 12) || layers.l.grid.getGemEffect(608))) {
                                                 rem = rem.plus(.05)
-                        }
                 }
                 if (hasMilestone("a", 5))       rem = rem.plus(.01)
                 if (hasMilestone("a", 7))       rem = rem.plus(.01)
-                if (hasUpgrade("d", 11) && !inChallenge("l", 12)){
+                if (hasUpgrade("d", 11) && (!inChallenge("l", 12) || layers.l.grid.getGemEffect(608))) {
                                                 rem = rem.plus(.05)
                 }       
                 if (hasMilestone("d", 15))      rem = rem.plus(.01)
+                                                rem = rem.plus(layers.l.grid.getGemEffect(708))
                 
                 if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
                 if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
@@ -6481,6 +6518,7 @@ addLayer("mu", {
                                         let x = player.mu.buyables[31].toNumber()
                                         let diff = 20
                                         if (hasMilestone("d", 16)) diff = 100
+                                        if (hasMilestone("d", 28)) diff *= 20
                                         diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                         diff = Math.floor(diff)
@@ -8860,15 +8898,22 @@ addLayer("l", {
 
                                 let h = data.hundreds
                                 let u = data.units
+                                let d8 = (h >= 8) + (h >= 8) + (u >= 8)
+                                let d3 = (h >= 3) + (h >= 3) + (u >= 3)
+                                let d4 = (h >= 4) + (h >= 4) + (u >= 4)
+                                let d5 = (h >= 5) + (h >= 5) + (u >= 5)
+                                let d6 = (h >= 6) + (h >= 6) + (u >= 6)
+                                let d7 = (h >= 7) + (h >= 7) + (u >= 7)
+                                let d8Eff = d8 == 0 ? 1 : (3.3 + d8*.5)
                                 return [0, 
                                         0, 
-                                        2*h+u-3, 
-                                        (h >= 3) + (h >= 3) + (u >= 3),
-                                        (h >= 4) + (h >= 4) + (u >= 4),
-                                        (h >= 5) + (h >= 5) + (u >= 5),
-                                        (h >= 6) + (h >= 6) + (u >= 6),
-                                        (h >= 7) + (h >= 7) + (u >= 7),
-                                        (h >= 8) + (h >= 8) + (u >= 8),]
+                                        (2*h+u-3) * (d8 == 0 ? 1 : (.5 + d8/2)), 
+                                        d3*d8Eff,
+                                        d4*d8Eff,
+                                        d5*d8Eff,
+                                        d6*d8Eff,
+                                        d7*d8Eff,
+                                        d8]
                         },
                 }, // inChallenge("l", 12)
                 21: {
@@ -9354,6 +9399,7 @@ addLayer("l", {
         },
         grid: {
                 rows(){
+                        if (hasMilestone("d", 23)) return 8
                         if (hasChallenge("l", 62)) return 7
                         if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
@@ -9361,6 +9407,7 @@ addLayer("l", {
                         return 3
                 },
                 cols(){
+                        if (hasMilestone("d", 23)) return 8
                         if (hasChallenge("l", 62)) return 7
                         if (hasMilestone("d", 10)) return 6
                         if (hasUpgrade("a", 33) || tmp.d.layerShown) return 5
@@ -9376,15 +9423,8 @@ addLayer("l", {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
                 },
                 getCanClick(data, id) {
-                        let maxAllowed = 7 // manually change this
-                        if (data.units > maxAllowed) return false
-                        if (data.hundreds > maxAllowed) return false
-                        if (data.units > 1) {
-                                if (player.l.grid[id-1].gems.eq(0)) return false
-                        }
-                        if (data.hundreds > 1) {
-                                if (player.l.grid[id-100].gems.eq(0)) return false
-                        }
+                        if (data.units > 1 && player.l.grid[id-1].gems.eq(0)) return false
+                        if (data.hundreds > 1 && player.l.grid[id-100].gems.eq(0)) return false
                         return true
                 },
                 onClick(data, id) {
@@ -9422,7 +9462,7 @@ addLayer("l", {
                         if (x == 1) {
                                 return GEM_EFFECT_DESCRIPTIONS[id]
                         }
-                        if (id == 203) {
+                        if (id == 203 || id == 208) {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "/100"
                         }
@@ -9437,7 +9477,7 @@ addLayer("l", {
                         if (id == 303 || id == 404) {
                                 return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(id))
                         }
-                        if ([603, 207, 407, 507, 701, 705, 707].includes(id)) {
+                        if ([603, 207, 407, 507, 701, 705, 707, 408, 608, 802, 803].includes(id)) {
                                 return "Currently:<br>" + layers.l.grid.getGemEffect(id)
                         }
                         return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
@@ -9545,13 +9585,15 @@ addLayer("l", {
                                         let c5 = "Challenge 5: Dilate Point gain ^.665 per sqrt(depth)"
                                         let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^.96 per depth<sup>1/8</sup>"
                                         let c7 = "Challenge 7: Challenge 6 base is reduced by .023*depth<sup>.56</sup>"
-                                        let c8 = "Challenge 8: Dilate Phosphorus gain ^[tbd]"
+                                        let c8 = "Challenge 8: Challenge 3 to 7 depths are 3.3 + depths/2 times more and<br>challenge 2 is .5 + depths/2 times more"
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
                                         let p = "Note: Depths is the number of times you are in the given challenge."
                                         let q = "Note 2: Gems above 10,000 are hardcapped and<br>above 1,000 are softcapped x → (7+log10(x))<sup>3</sup>"
-
+                                        
                                         let step4 = step3 + br2 + challs + br2 + p + br + q
+
+                                        if (hasMilestone("d", 23)) step4 += br + "Note 3: In challenges to the right of C81, point gain is dilated to<br>200^[steps to the right]<sup>.57</sup>"
 
                                         if (!hasChallenge("l", 41)) return step4
 
@@ -11830,6 +11872,8 @@ addLayer("a", {
                                 if (layers.l.grid.getGemEffect(705)) ret = ret.plus(.0001)
                                 if (hasMilestone("d", 21)) ret = ret.plus(.0001)
                                 if (hasMilestone("d", 22)) ret = ret.plus(.0001)
+                                if (hasMilestone("d", 25)) ret = ret.plus(.0003)
+                                if (hasMilestone("d", 26)) ret = ret.plus(.0003)
                                 
                                 return ret
                         },
@@ -11911,6 +11955,8 @@ addLayer("a", {
                                 if (hasMilestone("a", 27)) ret = ret.plus(.001)
                                 if (hasUpgrade("a", 44))   ret = ret.plus(.001)
                                 if (hasMilestone("a", 35)) ret = ret.plus(.001)
+                                let lvls = Math.max(0, tmp.l.getNonZeroGemCount - 49)
+                                ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
                                 
                                 return ret
                         },
@@ -12413,6 +12459,7 @@ addLayer("a", {
                                 let ret = new Decimal(10)
 
                                 ret = ret.plus(layers.l.grid.getGemEffect(106))
+                                ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
                                 
                                 return ret
                         },
@@ -12850,6 +12897,7 @@ addLayer("d", {
         getBaseGain(){
                 let pts = player.a.points
                 let init = pts.div(4.4e144).max(1).log10()
+                if (layers.l.grid.getGemEffect(408)) init = init.plus(144.6434526764861874) 
                 if (init.lt(25)) return new Decimal(0)
 
                 let v1 = init.sqrt()
@@ -13570,6 +13618,141 @@ addLayer("d", {
                                 return a + b
                         },
                 }, // hasMilestone("d", 22)
+                23: {
+                        requirementDescription(){
+                                return "Requires: 54,321 C77 Gems"
+                        },
+                        requirement(){
+                                return new Decimal("54321")
+                        },
+                        done(){
+                                return tmp.d.milestones[23].requirement.lte(player.l.grid[707].gems)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock the next set of challenges."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 23)
+                24: {
+                        requirementDescription(){
+                                return "Requires: e1e9 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("e1e9")
+                        },
+                        done(){
+                                return tmp.d.milestones[24].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Dilation effect from Customizable is raised ^.94."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 24)
+                25: {
+                        requirementDescription(){
+                                return "Requires: e2e9 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("e2e9")
+                        },
+                        done(){
+                                return tmp.d.milestones[25].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Add .0003 to tRNA's base."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 25)
+                26: {
+                        requirementDescription(){
+                                return "Requires: e3e9 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("e3e9")
+                        },
+                        done(){
+                                return tmp.d.milestones[26].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },      
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Add .0003 to tRNA's base."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 26)
+                27: {
+                        requirementDescription(){
+                                return "Requires: e4.8e9 Protein"
+                        },
+                        requirement(){
+                                return new Decimal("e4.8e9")
+                        },
+                        done(){
+                                return tmp.d.milestones[27].requirement.lte(player.a.protein.points)
+                        },
+                        unlocked(){
+                                return true
+                        },   
+                        effect(){
+                                return Decimal.pow(2, getBuyableAmount("mu", 31).pow(1.41))
+                        },
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per N → Δµ<sup>1.41</sup> square point gain."
+                                let b = br + "Currently: " + format(tmp.d.milestones[27].effect)
+                                return a + b
+                        },
+                }, // hasMilestone("d", 27)
+                28: {
+                        requirementDescription(){
+                                return "Requires: 4e153 DNA"
+                        },
+                        requirement(){
+                                return new Decimal("4e153")
+                        },
+                        done(){
+                                return tmp.d.milestones[28].requirement.lte(player.d.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "d") return ""
+                                if (player.subtabs.d.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: N → Δµ rounding is 20x more."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("d", 28)
         },
         tabFormat: {
                 "Upgrades": {
@@ -13609,6 +13792,8 @@ addLayer("d", {
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2" + char + format(tmp.d.getBaseGainAddition)
                                         a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
+                                        if (layers.l.grid.getGemEffect(701)) a2 = a2.replace("/2", "")
+                                        if (layers.l.grid.getGemEffect(408)) a2 = a2.replace("/4.4e144", "")
                                         let a = a1 + br + a2
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
                                         let c = " the last two rows of Phosphorus and mu upgrades."
@@ -14198,8 +14383,14 @@ addLayer("mini", {
                 if ((player.tokens.autobuytokens || player.dev.autobuytokens) && hasMilestone("n", 4)) {
                         if (canReset("tokens")) doReset("tokens")
                 }
+                if (layers.l.grid.getGemEffect(802)) {
+                        if (canReset("tokens")) doReset("tokens")
+                }
 
                 if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
+                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
+                }
+                if (layers.l.grid.getGemEffect(803)) {
                         if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
                 }
 
