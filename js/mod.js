@@ -12,19 +12,29 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.036",
+	num: "1.037",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- C83 gems OR the last save in the bank<br><br>
+		- 1e449 DNA OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.037</h3><br>
+		- Added an Easter Egg.<br>
+		- Hint 1: It has to do with a game I like.<br>
+		- Hint 2: It has to do with a number whose largest prime factor is 23.<br>
+		- Note: Don't tell me unless BOTH hints are satisfied and you know why.<br>
+		- Added two custom saves.<br>
+		- Added five DNA upgrades.<br>
+		- Added C84, C85, C86, C87, and C88 gems.<br>
+		- Made N → Δµ's formula display accurate.<br>
+		- Next up is a new layer, probably Cells.<br>
 	<br><h3 style='color: #CC0000'>v1.036</h3><br>
 		- Added 6 DNA milestones.<br>
 		- Added C18, C28, C38, C48, C58, C68, C81, C78, C82, and C83 gems.<br>
