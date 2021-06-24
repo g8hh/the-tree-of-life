@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.037.1</h3><br>
+		- Added five rows of achievements.<br>
+		- Made the achievement clickables displays for shift always active.<br>
+		- Made it a bit clearer how to use the save bank.<br>
+		- Changed the background color of acitve life challenge.<br>
+		- Changed the background color when you have maxed out given gem effect.<br>
 	<br><h3 style='color: #CC0000'>v1.037</h3><br>
 		- Added an Easter Egg.<br>
 		- Hint 1: It has to do with a game I like.<br>

@@ -168,7 +168,7 @@ var systemComponents = {
 
 	<span v-if="player.showBuiltInSaves">
 		<h2 style='color: #00FF99'>Built in saves</h2><br>
-		You need to import the string with <i>capitalization</i> correct and no trailing spaces.<br>
+		To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
 		<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
 		<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
 	</span>

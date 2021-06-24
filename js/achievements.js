@@ -56,8 +56,9 @@ function getNumberNameLT100(n){
 
 function getAchStuffFromNumber(n){
         let name = getNumberName(n)
+        let id = getColRowCode(n)
         let done = function(){
-                return hasAchievement("ach", getColRowCode(n)) || PROGRESSION_MILESTONES[n]() 
+                return hasAchievement("ach", id) || PROGRESSION_MILESTONES[n]() 
         }
         let isChall = false
         if (n > 301 && n < 309) isChall = true
@@ -65,6 +66,20 @@ function getAchStuffFromNumber(n){
         let startStr = isChall ? "Complete " : "Get "
         let tooltip = function(){
                 return startStr + PROGRESSION_MILESTONES_TEXT[n]
+        }
+        let style = function(){
+                let tens = id - id % 10
+                for (i = 1; i <= 7; i++){
+                        if (!hasAchievement("ach", tens + i)) return {}
+                }
+                
+                let a = Math.sin(tens/35 + 0) 
+                let b = Math.sin(tens/35 + 1.5)
+                let c = Math.sin(tens/35 + 3)
+                a = convertToB16(Math.floor(a*128) + 128)
+                b = convertToB16(Math.floor(b*128) + 128)
+                c = convertToB16(Math.floor(c*128) + 128)
+                return {"background-color": "#" + String(a) + String(b) + String(c)}
         }
         let unlocked 
         if (n <= 56) {
@@ -83,7 +98,7 @@ function getAchStuffFromNumber(n){
                         return hasUpgrade("m", 23) || hasUnlockedPast("m")
                 }
         } 
-        return {name: name, done: done, tooltip: tooltip, unlocked: unlocked}
+        return {name: name, done: done, tooltip: tooltip, unlocked: unlocked, style: style}
 }
 
 function getFirstNAchData(n){
@@ -437,6 +452,41 @@ PROGRESSION_MILESTONES = {
         327: () => hasChallenge("l", 72),
         328: () => hasChallenge("l", 81),
         329: () => hasChallenge("l", 82),
+        330: () => player.l.grid[107].gems.gt(0),
+        331: () => player.l.grid[207].gems.gt(0),
+        332: () => player.l.grid[307].gems.gt(0),
+        333: () => player.l.grid[407].gems.gt(0),
+        334: () => player.l.grid[507].gems.gt(0),
+        335: () => player.l.grid[607].gems.gt(0),
+        336: () => player.l.grid[701].gems.gt(0),
+        337: () => player.l.grid[702].gems.gt(0),
+        338: () => player.l.grid[703].gems.gt(0),
+        339: () => player.l.grid[704].gems.gt(0),
+        340: () => player.l.grid[705].gems.gt(0),
+        341: () => player.l.grid[706].gems.gt(0),
+        342: () => player.l.grid[707].gems.gt(0),
+        343: () => player.l.grid[108].gems.gt(0),
+        344: () => player.l.grid[208].gems.gt(0),
+        345: () => player.l.grid[308].gems.gt(0),
+        346: () => player.l.grid[408].gems.gt(0),
+        347: () => player.l.grid[508].gems.gt(0),
+        348: () => player.l.grid[608].gems.gt(0),
+        349: () => player.l.grid[708].gems.gt(0),
+        350: () => player.l.grid[801].gems.gt(0),
+        351: () => player.l.grid[802].gems.gt(0),
+        352: () => player.l.grid[803].gems.gt(0),
+        353: () => player.l.grid[804].gems.gt(0),
+        354: () => player.l.grid[805].gems.gt(0),
+        355: () => player.l.grid[806].gems.gt(0),
+        356: () => player.l.grid[807].gems.gt(0),
+        357: () => player.l.grid[808].gems.gt(0),
+        358: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 9))),
+        359: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 10))),
+        360: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 11))),
+        361: () => player.a.protein.points.gte("1e1e11"),
+        362: () => player.a.protein.points.gte("1e2e11"),
+        363: () => player.a.protein.points.gte("1e5e11"),
+        364: () => player.a.protein.points.gte("1e1e12"),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -769,6 +819,41 @@ PROGRESSION_MILESTONES_TEXT = {
         327: "Anti-Tau",
         328: "Anti-Sigma",
         329: "Anti-Rho",
+        330: "a C17 Gem",
+        331: "a C27 Gem",
+        332: "a C37 Gem",
+        333: "a C47 Gem",
+        334: "a C57 Gem",
+        335: "a C67 Gem",
+        336: "a C71 Gem",
+        337: "a C72 Gem",
+        338: "a C73 Gem",
+        339: "a C74 Gem",
+        340: "a C75 Gem",
+        341: "a C76 Gem",
+        342: "a C77 Gem",
+        343: "a C18 Gem",
+        344: "a C28 Gem",
+        345: "a C38 Gem",
+        346: "a C48 Gem",
+        347: "a C58 Gem",
+        348: "a C68 Gem",
+        349: "a C78 Gem",
+        350: "a C81 Gem",
+        351: "a C82 Gem",
+        352: "a C83 Gem",
+        353: "a C84 Gem",
+        354: "a C85 Gem",
+        355: "a C86 Gem",
+        356: "a C87 Gem",
+        357: "a C88 Gem",
+        358: "1.34e154 DNA",
+        359: "1.80e308 DNA",
+        360: "3.23e616 DNA",
+        361: "1e1e11 Protein",
+        362: "1e2e11 Protein",
+        363: "1e5e11 Protein",
+        364: "1e1e12 Protein",
 }
 
 
