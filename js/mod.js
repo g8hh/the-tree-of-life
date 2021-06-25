@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.038.1",
+	num: "1.039",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.039</h3><br>
+		- Added two Cell milestones.<br>
+		- Added two custom saves.<br>
+		- Changed Cell milestone 1 permanently to actually be permanent.<br>
 	<br><h3 style='color: #CC0000'>v1.038.1</h3><br>
 		- Redid hotkey setup.<br>
 		- Hotkeys are now organized by function, with headings.<br>

@@ -148,7 +148,7 @@ function getFullEffectDescription(layer){
 }
 
 function getResetGemIDs(){
-        if (!hasMilestone("cells", 1)) return            (
+        if (!player.cells.milestone1Ever) return            (
                            ["101", "102", "103", "104", "105", "106", "107", "108", 
                             "201", "202", "203", "204", "205", "206", "207", "208", 
                             "301", "302", "303", "304", "305", "306", "307", "308", 
@@ -157,7 +157,7 @@ function getResetGemIDs(){
                             "601", "602", "603", "604", "605", "606", "607", "608", 
                             "701", "702", "703", "704", "705", "706", "707", "708", 
                             "801", "802", "803", "804", "805", "806", "807", "808"])
-        return                          [                                   "106", "107", "108", 
+        let ret =                       [                                   "106", "107", "108", 
                                                                             "206", "207", "208", 
                                                                             "306", "307", "308", 
                                                                             "406", "407", "408", 
@@ -165,6 +165,8 @@ function getResetGemIDs(){
                                          "601", "602", "603", "604", "605", "606", "607", "608", 
                                          "701", "702", "703", "704", "705", "706", "707", "708", 
                                          "801", "802", "803", "804", "805", "806", "807", "808"]
+        ret = ret.slice(player.cells.milestone2Best)
+        return ret
 }
 
 var br = "<br>"
@@ -237,7 +239,7 @@ var GEM_EFFECT_DESCRIPTIONS = {
         207: "Remove a log2 from α → ∂α<br>x > 1330",
         307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
         407: "\"Universe\" is universal<br>x>1330",
-        507: "Bulk up to 1,000 Life buyables<br>x>1330",
+        507: "Bulk 50x Life buyables<br>x>1330",
         607: "DNA gain per non-0 gem<br>log10(10+x)",
         701: "Remove the /2 in the DNA gain formula<br>x>1330",
         702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
@@ -247,7 +249,7 @@ var GEM_EFFECT_DESCRIPTIONS = {
         706: "Subtract from Challenge 7 effect<br>cbrt(x)/2200",
         707: "Add .004 to Dilation effect<br>x>1330",
         108: "Point gain per 𝛾 → ∂𝛾<sup>1.8</sup><br>1+x",
-        208: "mRNA base per non-zero gem in this column<br>x/2662000",
+        208: "mRNA base per non-zero gem-49 (maxed at 8)<br>x/2662000",
         308: "Point gain per β → ∂α<br>1+x^<wbr>log10(DNA)/100",
         408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
         508: "Customizable effect per non-0 gem-53<br>^1-cbrt(x)/97",
@@ -9204,6 +9206,9 @@ addLayer("l", {
                                         comps += data[id]
                                 }
                                 let base = getBuyableAmount("a", 13).max(10).log10()
+
+                                if (hasMilestone("cells", 3)) base = base.times(Math.log(10)/Math.log(9))
+
                                 let ret = base.pow(comps)
                                 return ret
                         },
@@ -9221,6 +9226,8 @@ addLayer("l", {
                                 let b = "Goal: e1e579,200 Points"
                                 let c = "Reward: Per anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
                                 let d = "Currently: " + format(tmp.l.challenges[71].reward)
+
+                                if (hasMilestone("cells", 3)) c = c.replace("log10", "log9")
 
                                 return a + br + b + br + c + br + d
                         },
@@ -9471,6 +9478,7 @@ addLayer("l", {
                                 return player.l.challenges[11] >= 30 || player.a.unlocked
                         },
                         shouldNotify(){
+                                if (hasMilestone("a", 5) && data.autobuylbuys || hasMilestone("d", 1)) return false
                                 x = [11, 12, 13, 21, 22,
                                      23, 31, 32, 33]
                                 for (i in x) {
@@ -12775,7 +12783,7 @@ addLayer("a", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !hasMilestone("cells", 1)) data1.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data1.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data1.times = 0
@@ -13922,7 +13930,7 @@ addLayer("d", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !hasMilestone("cells", 1)) data2.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data2.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data2.times = 0
@@ -13986,6 +13994,8 @@ addLayer("cells", {
                 time: 0,
                 times: 0,
                 passiveTime: 0,
+                milestone1Ever: false,
+                milestone2Best: 0,
         }},
         color: "#99E21D",
         branches: [],
@@ -14051,6 +14061,8 @@ addLayer("cells", {
                 if (data.points.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
+                if (data.milestone2Best != 0) data.milestone2Best = Math.max(data.milestone2Best, data.times)
+
                 data.time += diff
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
@@ -14107,6 +14119,9 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         },  
+                        onComplete(){
+                                player.cells.milestone1Ever = true
+                        },
                         effectDescription(){
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
@@ -14116,6 +14131,53 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 1)
+                2: {
+                        requirementDescription(){
+                                return "Requires: 2 Cell resets"
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.cells.milestones[2].requirement.lte(player.cells.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                if (player.cells.milestone2Best == 0) player.cells.milestone2Best = 2
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per reset permanently keep another gem and keep Life reset times."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 2)
+                3: {
+                        requirementDescription(){
+                                return "Requires: 3 Cell resets"
+                        },
+                        requirement(){
+                                return new Decimal(3)
+                        },
+                        done(){
+                                return tmp.cells.milestones[3].requirement.lte(player.cells.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per reset keep a DNA reset and Anti-Upsilon's log10 becomes log9."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 3)
         },
         tabFormat: {
                 "Upgrades": {
@@ -14200,8 +14262,13 @@ addLayer("cells", {
                                 data1.upgrades = data1.upgrades.slice(0, dKeptUpgrades)
                         }
 
-                        if (!false) data1.times = 0
+                        let dKeptTimes = 0
+                        if (hasMilestone("cells", 3)) dKeptTimes += player.cells.times
+
+                        if (!false) data1.times = Math.min(data1.times, dKeptTimes)
                 }
+                console.log(player.d.times)
+                console.log(hasMilestone("d", 2))
 
                 data1.points = new Decimal(0)
                 data1.best = new Decimal(0)
@@ -14233,6 +14300,7 @@ addLayer("cells", {
 
                         if (!hasMilestone("d", 5)) data2.times = 0
                 }
+                console.log(data2.milestones)
 
                 data2.points = new Decimal(0)
                 data2.best = new Decimal(0)
@@ -14282,7 +14350,7 @@ addLayer("cells", {
                         }
 
                         //reset times
-                        if (!hasMilestone("a", 9)) data3.times = 0
+                        if (!hasMilestone("a", 9) && !hasMilestone("cells", 2)) data3.times = 0
                 }
 
                 data3.points = new Decimal(0)
