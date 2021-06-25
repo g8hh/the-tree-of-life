@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.037",
+	num: "1.038",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,11 +25,21 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.038</h3><br>
+		- Added a DNA upgrade.<br>
+		- Added a new layer, Cells!<br>
+		- Added a Cell milestone.<br>
+		- Added a Cell upgrade.<br>
+		- Made Anti-Omega properly reduce Life requiremenet.<br>
+		- Darkened the background color of maxed life challenges.<br>
+		- Made the text highlight red of maxed, selected life challenges.<br>
+		- Made DNA current formula not display -- when it should display -.<br>
+		- Added two custom saves.<br>
 	<br><h3 style='color: #CC0000'>v1.037.1</h3><br>
 		- Added five rows of achievements.<br>
 		- Made the achievement clickables displays for shift always active.<br>
 		- Made it a bit clearer how to use the save bank.<br>
-		- Changed the background color of acitve life challenge.<br>
+		- Changed the background color of active life challenge.<br>
 		- Changed the background color when you have maxed out given gem effect.<br>
 	<br><h3 style='color: #CC0000'>v1.037</h3><br>
 		- Added an Easter Egg.<br>
