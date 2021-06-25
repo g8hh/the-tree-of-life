@@ -12,19 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.038",
+	num: "1.038.1",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 1e449 DNA OR the last save in the bank<br><br>
+		- 2 Cells DNA OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.038.1</h3><br>
+		- Redid hotkey setup.<br>
+		- Hotkeys are now organized by function, with headings.<br>
+		- Please do not go past endgame and if you do, import a save from the bank upon the new update!<br>
 	<br><h3 style='color: #CC0000'>v1.038</h3><br>
 		- Added a DNA upgrade.<br>
 		- Added a new layer, Cells!<br>

@@ -601,80 +601,6 @@ addLayer("h", {
                 data.time += diff
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [
-                {key: "shift+H", description: "Shift+H: Go to Hydrogen", onPress(){
-                                showTab("h")
-                        },
-                        unlocked(){
-                                return tmp.h.layerShown
-                        },
-                },
-                {key: "Control+C", description: "Control+C: Go to changelog", onPress(){
-                                showTab("changelog-tab")
-                        }
-                },
-                {key: ",", description: ",: Move one tab to the left", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                player.subtabs[l].mainTabs = getNextLeftTab(l)
-                        }
-                },
-                {key: ".", description: ".: Move one tab to the right", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                player.subtabs[l].mainTabs = getNextRightTab(l)
-                        }
-                },
-                {key: "ArrowRight", description: "Right Arrow: Move one tab to the right", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                if (!player.arrowHotkeys) return
-                                player.subtabs[l].mainTabs = getNextRightTab(l)
-                        }
-                },
-                {key: "ArrowLeft", description: "Left Arrow: Move one tab to the left", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                if (!player.arrowHotkeys) return
-                                player.subtabs[l].mainTabs = getNextLeftTab(l)
-                        }
-                },
-                {key: "shift+<", description: "Shift+,: Move all the way to the left", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                k = getUnlockedSubtabs(l)
-                                player.subtabs[l].mainTabs = k[0]
-                        }
-                },
-                {key: "shift+>", description: "Shift+.: Move all the way to the right", 
-                        onPress(){
-                                let l = player.tab
-                                if (layers[l] == undefined) return
-                                k = getUnlockedSubtabs(l)
-                                player.subtabs[l].mainTabs = k[k.length-1]
-                        }
-                },
-                {key: "Control+S", description: "Control+S: Save", 
-                        onPress(){
-                                save()
-                        }
-                },
-                {key: "shift+Control+S", description: "Shift+Control+S: Save", 
-                        onPress(){
-                                save()
-                        }
-                },
-                {key: "shift+!", description: "Shift+1: Go to achievements", 
-                        onPress(){
-                                player.tab = "ach"
-                        }
-                },
-        ],
         layerShown(){return !tmp.h.deactivated},
         prestigeButtonText(){
                 return "hello"
@@ -1907,7 +1833,6 @@ addLayer("c", {
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [],
         layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.c.deactivated},
         prestigeButtonText(){
                 return "hello"
@@ -2385,16 +2310,6 @@ addLayer("o", {
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [
-                {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
-                                if (!tmp.o.layerShown) return
-                                showTab("o")
-                        },
-                        unlocked(){
-                                return tmp.o.layerShown
-                        },
-                },
-        ],
         layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.o.deactivated},
         prestigeButtonText(){
                 return "hello"
@@ -2910,17 +2825,6 @@ addLayer("n", {
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [
-                {key: "shift+N", description: "Shift+N: Go to Nitrogen", onPress(){
-                                if (!tmp.n.layerShown) return
-                                showTab("n")
-                        }
-                },
-                {key: "n", description: "N: Reset for Nitrogen", onPress(){
-                                if (canReset("n")) doReset("n")
-                        }
-                },
-        ],
         layerShown(){return (hasUpgrade("mini", 45) || player.n.best.gt(0) || player.p.best.gt(0)) && !tmp.n.deactivated},
         prestigeButtonText(){
                 if (player.tab != "n") return ""
@@ -4466,17 +4370,6 @@ addLayer("p", {
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
-        hotkeys: [
-                {key: "shift+P", description: "Shift+P: Go to Phosphorus", onPress(){
-                                if (!tmp.p.layerShown) return
-                                showTab("p")
-                        }
-                },
-                {key: "p", description: "P: Reset for Phosphorus", onPress(){
-                                if (canReset("p")) doReset("p")
-                        }
-                },
-        ],
         layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown},
         prestigeButtonText(){
                 if (player.tab != "p") return ""
@@ -5461,17 +5354,6 @@ addLayer("mu", {
         canBuyMax(){
                 return hasUpgrade("mu", 22) || hasMilestone("d", 1)
         },
-        hotkeys: [
-                {key: "shift+M", description: "Shift+M: Go to µ", onPress(){
-                                if (!tmp.mu.layerShown) return
-                                showTab("mu")
-                        }
-                },
-                {key: "m", description: "M: Reset for µ", onPress(){
-                                if (canReset("mu")) doReset("mu")
-                        }
-                },
-        ],
         layerShown(){return hasUpgrade("p", 25) || tmp.a.layerShown},
         upgrades: {
                 rows: 10,
@@ -7156,17 +7038,6 @@ addLayer("l", {
 
                 return a + b
         },
-        hotkeys: [
-                {key: "shift+L", description: "Shift+L: Go to Lives", onPress(){
-                                if (!tmp.l.layerShown) return
-                                showTab("l")
-                        }
-                },
-                {key: "l", description: "L: Reset for Lives", onPress(){
-                                if (canReset("l")) doReset("l")
-                        }
-                },
-        ],
         layerShown(){return player.l.unlocked},
         upgrades: {
                 rows: 10,
@@ -10263,12 +10134,6 @@ addLayer("a", {
 
                 return a + b
         },
-        hotkeys: [
-                {key: "a", description: "A: Reset for Amino Acid", onPress(){
-                                if (canReset("a")) doReset("a")
-                        }
-                },
-        ],
         layerShown(){return player.a.unlocked},
         protein: {
                 getAUpgBase(){
@@ -12280,7 +12145,7 @@ addLayer("a", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end + "<br>" + (hasUpgrade("d", 24) ? "" : "<br>Note: hardcapped at 1e125 in Customizable")
+                                        return br + start + end + br + (hasUpgrade("d", 24) ? "" : "<br>Note: hardcapped at 1e125 in Customizable")
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13087,12 +12952,6 @@ addLayer("d", {
 
                 return a + b
         },
-        hotkeys: [
-                {key: "d", description: "D: Reset for DNA", onPress(){
-                                if (canReset("d")) doReset("d")
-                        }
-                },
-        ],
         layerShown(){return player.d.best.gt(0) || hasUpgrade("a", 65) || tmp.cells.layerShown},
         upgrades: {
                 rows: 10,
@@ -14211,12 +14070,6 @@ addLayer("cells", {
 
                 return a + b
         },
-        hotkeys: [
-                {key: "c", description: "C: Reset for Cells", onPress(){
-                                if (canReset("cells")) doReset("cells")
-                        }
-                },
-        ],
         layerShown(){return hasUpgrade("d", 35) || player.cells.unlocked},
         upgrades: {
                 rows: 10,
@@ -14493,9 +14346,140 @@ addLayer("ach", {
         row: "side",
         hotkeys: [
                 {
+                        key: "THIS SHOULD NOT BE POSSIBLE",
+                        description: makeBlue("<b>Generally applicable</b>:"),
+                        onPress(){
+                                console.log("oops something went really badly wrong")
+                        },
+                },
+                {key: "Control+C", description: "Control+C: Go to changelog", onPress(){
+                                showTab("changelog-tab")
+                        }
+                },
+                {key: ",", description: ",: Move one tab to the left", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                player.subtabs[l].mainTabs = getNextLeftTab(l)
+                        }
+                },
+                {key: ".", description: ".: Move one tab to the right", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                player.subtabs[l].mainTabs = getNextRightTab(l)
+                        }
+                },
+                {key: "ArrowLeft", description: "Left Arrow: Move one tab to the left", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                if (!player.arrowHotkeys) return
+                                player.subtabs[l].mainTabs = getNextLeftTab(l)
+                        }
+                },
+                {key: "ArrowRight", description: "Right Arrow: Move one tab to the right", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                if (!player.arrowHotkeys) return
+                                player.subtabs[l].mainTabs = getNextRightTab(l)
+                        }
+                },
+                {key: "shift+<", description: "Shift+,: Move all the way to the left", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                k = getUnlockedSubtabs(l)
+                                player.subtabs[l].mainTabs = k[0]
+                        }
+                },
+                {key: "shift+>", description: "Shift+.: Move all the way to the right", 
+                        onPress(){
+                                let l = player.tab
+                                if (layers[l] == undefined) return
+                                k = getUnlockedSubtabs(l)
+                                player.subtabs[l].mainTabs = k[k.length-1]
+                        }
+                },
+                {key: "Control+S", description: "Control+S: Save", 
+                        onPress(){
+                                save()
+                        }
+                },
+                {key: "shift+Control+S", description: "Shift+Control+S: Save", 
+                        onPress(){
+                                save()
+                        }
+                },
+                {
+                        key: "THIS SHOULD NOT BE POSSIBLE2",
+                        description: br + makeBlue("<b>Jump to locations</b>:"),
+                        onPress(){
+                                console.log("oops something went really badly wrong")
+                        },
+                },
+                {key: "shift+!", description: "Shift+1: Go to achievements", 
+                        onPress(){
+                                player.tab = "ach"
+                        }
+                },
+                {
+                        key: "shift+@", 
+                        description: "Shift+2: Go to minigames", 
+                        onPress(){
+                                if (!tmp.mini.layerShown) return
+                                player.tab = "mini"
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown
+                        },
+                },
+                
+                {key: "shift+#", description: "Shift+3: Go to tokens", 
+                        onPress(){
+                                if (!tmp.tokens.layerShown) return
+                                player.tab = "tokens"
+                        },
+                        unlocked(){
+                                return tmp.tokens.layerShown
+                        },
+                },
+                {
+                        key: "shift+A", 
+                        description() {
+                                return player.a.unlocked ? "Shift+A: Go to Amino Acid" : "Shift+A: Go to A"
+                        }, 
+                        onPress(){
+                                if (!player.a.unlocked) {
+                                        if (!tmp.mini.layerShown) return
+                                        if (!tmp.mini.tabFormat.A.unlocked) return 
+                                        player.tab = "mini"
+                                        player.subtabs.mini.mainTabs = "A"
+                                } else {
+                                        showTab("a")
+                                }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown || tmp.a.layerShown
+                        },
+                },
+                {key: "shift+B", description: "Shift+B: Go to B", 
+                        onPress(){
+                                if (!tmp.mini.layerShown) return
+                                if (!tmp.mini.tabFormat.B.unlocked) return 
+                                player.tab = "mini"
+                                player.subtabs.mini.mainTabs = "B"
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown
+                        },
+                },
+                {
                         key: "shift+C", 
                         description() {
-                                return player.cells.unlocked ? "Shift+C: Go to Cells" : (!hasMilestone("tokens", 23) ? "Shift+C: Go to Carbon" : "Shift+C: Go to C")
+                                if (player.cells.unlocked) return "Shift+C: Go to Cells"
+                                return !hasMilestone("tokens", 23) ? "Shift+C: Go to Carbon" : "Shift+C: Go to C"
                         }, 
                         onPress(){
                                 if (player.cells.unlocked) {
@@ -14513,7 +14497,159 @@ addLayer("ach", {
                                 return tmp.mini.layerShown || tmp.c.layerShown || tmp.cells.layerShown
                         },
                 },
-                ],
+                {
+                        key: "shift+D", 
+                        description() {
+                                return player.d.unlocked ? "Shift+D: Go to DNA" : "Shift+D: Go to D"
+                        }, 
+                        onPress(){
+                                if (!player.d.unlocked) {
+                                        if (!tmp.mini.layerShown) return
+                                        if (!tmp.mini.tabFormat.D.unlocked) return 
+                                        player.tab = "mini"
+                                        player.subtabs.mini.mainTabs = "D"
+                                } else {
+                                        showTab("d")
+                                }
+                        },
+                        unlocked(){
+                                return tmp.mini.layerShown || tmp.d.layerShown
+                        },
+                },
+                {key: "shift+H", description: "Shift+H: Go to Hydrogen", onPress(){
+                                showTab("h")
+                        },
+                        unlocked(){
+                                return tmp.h.layerShown
+                        },
+                },
+                {key: "shift+L", description: "Shift+L: Go to Lives", onPress(){
+                                if (!tmp.l.layerShown) return
+                                showTab("l")
+                        },
+                        unlocked(){
+                                return tmp.l.layerShown
+                        },
+                },
+                {key: "shift+M", description: "Shift+M: Go to µ", onPress(){
+                                if (!tmp.mu.layerShown) return
+                                showTab("mu")
+                        },
+                        unlocked(){
+                                return tmp.mu.layerShown
+                        },
+                },
+                {key: "shift+N", description: "Shift+N: Go to Nitrogen", onPress(){
+                                if (!tmp.n.layerShown) return
+                                showTab("n")
+                        },
+                        unlocked(){
+                                return tmp.n.layerShown
+                        },
+                },
+                {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
+                                if (!tmp.o.layerShown) return
+                                showTab("o")
+                        },
+                        unlocked(){
+                                return tmp.o.layerShown
+                        },
+                },
+                {key: "shift+P", description: "Shift+P: Go to Phosphorus", onPress(){
+                                if (!tmp.p.layerShown) return
+                                showTab("p")
+                        },
+                        unlocked(){
+                                return tmp.p.layerShown
+                        },
+                },
+
+                
+                {
+                        key: "THIS SHOULD NOT BE POSSIBLE3",
+                        description: br + makeBlue("<b>Prestige</b>:"),
+                        onPress(){
+                                console.log("oops something went really badly wrong")
+                        },
+                },
+                {key: "a", description: "A: Reset for Amino Acid", onPress(){
+                                if (canReset("a")) doReset("a")
+                        },
+                        unlocked(){
+                                return tmp.a.layerShown
+                        },
+                },
+                {key: "c", description: "C: Reset for Cells", onPress(){
+                                if (canReset("cells")) doReset("cells")
+                        },
+                        unlocked(){
+                                return tmp.cells.layerShown
+                        },
+                },
+                {key: "d", description: "D: Reset for DNA", onPress(){
+                                if (canReset("d")) doReset("d")
+                        },
+                        unlocked(){
+                                return tmp.d.layerShown
+                        },
+                },
+                {key: "l", description: "L: Reset for Lives", onPress(){
+                                if (canReset("l")) doReset("l")
+                        },
+                        unlocked(){
+                                return tmp.l.layerShown
+                        },
+                },
+                {key: "m", description: "M: Reset for µ", onPress(){
+                                if (canReset("mu")) doReset("mu")
+                        },
+                        unlocked(){
+                                return tmp.mu.layerShown
+                        },
+                },
+                {key: "n", description: "N: Reset for Nitrogen", onPress(){
+                                if (canReset("n")) doReset("n")
+                        },
+                        unlocked(){
+                                return tmp.n.layerShown
+                        },
+                },
+                {key: "p", description: "P: Reset for Phosphorus", onPress(){
+                                if (canReset("p")) doReset("p")
+                        },
+                        unlocked(){
+                                return tmp.p.layerShown
+                        },
+                },
+                {key: "t", description: "T: Reset for tokens", 
+                        onPress(){
+                                if (!tmp.tokens.layerShown) return
+                                if (canReset("tokens")) doReset("tokens")
+                        },
+                        unlocked(){
+                                return tmp.tokens.layerShown
+                        },
+                },
+                {
+                        key: "THIS SHOULD NOT BE POSSIBLE4",
+                        description: br + makeBlue("<b>Other</b>:"),
+                        onPress(){
+                                console.log("oops something went really badly wrong")
+                        },
+                },
+                {key: "s", description: "S: Sell token buyables (only if on said tab)", 
+                        onPress(){
+                                if (player.tab == "tokens") {
+                                        if (["Flat", "Scaling"].includes(player.subtabs.tokens.mainTabs)) {
+                                                layers.tokens.buyables[71].buy()
+                                        }
+                                        if (["Coins"].includes(player.subtabs.tokens.mainTabs)) {
+                                                layers.tokens.buyables[81].buy()
+                                        }
+                                }
+                        }
+                },
+        ],
         layerShown(){return true},
         prestigeButtonText(){
                 return ""
@@ -14938,65 +15074,6 @@ addLayer("mini", {
                 }
         },
         row: "side",
-        hotkeys: [{key: "shift+@", description: "Shift+2: Go to minigames", 
-                        onPress(){
-                                if (!tmp.mini.layerShown) return
-                                player.tab = "mini"
-                        },
-                        unlocked(){
-                                return tmp.mini.layerShown
-                        },
-                },
-                {
-                        key: "shift+A", 
-                        description() {
-                                return player.a.unlocked ? "Shift+A: Go to Amino Acid" : "Shift+A: Go to A"
-                        }, 
-                        onPress(){
-                                if (!player.a.unlocked) {
-                                        if (!tmp.mini.layerShown) return
-                                        if (!tmp.mini.tabFormat.A.unlocked) return 
-                                        player.tab = "mini"
-                                        player.subtabs.mini.mainTabs = "A"
-                                } else {
-                                        showTab("a")
-                                }
-                        },
-                        unlocked(){
-                                return tmp.mini.layerShown || tmp.a.layerShown
-                        },
-                },
-                {key: "shift+B", description: "Shift+B: Go to B", 
-                        onPress(){
-                                if (!tmp.mini.layerShown) return
-                                if (!tmp.mini.tabFormat.B.unlocked) return 
-                                player.tab = "mini"
-                                player.subtabs.mini.mainTabs = "B"
-                        },
-                        unlocked(){
-                                return tmp.mini.layerShown
-                        },
-                },
-                {
-                        key: "shift+D", 
-                        description() {
-                                return player.d.unlocked ? "Shift+D: Go to DNA" : "Shift+D: Go to D"
-                        }, 
-                        onPress(){
-                                if (!player.d.unlocked) {
-                                        if (!tmp.mini.layerShown) return
-                                        if (!tmp.mini.tabFormat.D.unlocked) return 
-                                        player.tab = "mini"
-                                        player.subtabs.mini.mainTabs = "D"
-                                } else {
-                                        showTab("d")
-                                }
-                        },
-                        unlocked(){
-                                return tmp.mini.layerShown || tmp.d.layerShown
-                        },
-                },
-                ],
         layerShown(){return (hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown) && !tmp.mini.deactivated},
         prestigeButtonText(){
                 return ""
@@ -21212,31 +21289,6 @@ addLayer("tokens", {
                 },
         },
         row: "side",
-        hotkeys: [{key: "shift+#", description: "Shift+3: Go to tokens", 
-                        onPress(){
-                                if (!tmp.tokens.layerShown) return
-                                player.tab = "tokens"
-                        }
-                },
-                {key: "t", description: "T: Reset for tokens", 
-                        onPress(){
-                                if (!tmp.tokens.layerShown) return
-                                if (canReset("tokens")) doReset("tokens")
-                        }
-                },
-                {key: "s", description: "S: Sell token buyables (only if on said tab)", 
-                        onPress(){
-                                if (player.tab == "tokens") {
-                                        if (["Flat", "Scaling"].includes(player.subtabs.tokens.mainTabs)) {
-                                                layers.tokens.buyables[71].buy()
-                                        }
-                                        if (["Coins"].includes(player.subtabs.tokens.mainTabs)) {
-                                                layers.tokens.buyables[81].buy()
-                                        }
-                                }
-                        }
-                },
-                ],
         layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown},
         prestigeButtonText(){
                 if (player.tab != "tokens") return ""
