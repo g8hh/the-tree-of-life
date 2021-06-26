@@ -11,7 +11,7 @@ function getPointGen() {
 }
 
 function getPointMultiplier(){
-        gain = new Decimal(1)
+        gain = decimalOne
 
         if (hasUpgrade("h", 11))        gain = gain.times(tmp.h.upgrades[11].effect)
         if (hasUpgrade("h", 22))        gain = gain.times(tmp.h.upgrades[22].effect)
@@ -28,7 +28,7 @@ function getPointMultiplier(){
 }
 
 function getPointExponentiation(){
-        let exp = new Decimal(1)
+        let exp = decimalOne
         
         if (hasUpgrade("h", 25))        exp = exp.times(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        exp = exp.times(tmp.o.upgrades[13].effect)
@@ -109,11 +109,11 @@ function getPointExponentiation(){
 }
 
 function getPointDilationExponent(){
-        let exp = new Decimal(1)
+        let exp = decimalOne
 
         if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
         if (inChallenge("l", 12))       {
-                let portion = new Decimal(1)
+                let portion = decimalOne
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
                                         portion = portion.times(Decimal.pow(.665, Math.sqrt(c5depth)))
                 let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
@@ -139,6 +139,10 @@ function getPointDilationExponent(){
         if (hasUpgrade("cells", 11))   exp = exp.times(tmp.cells.upgrades[11].effect)
         
         return exp
+}
+
+function getDilationExponent(){
+        return getPointDilationExponent()
 }
 
 function getFullEffectDescription(layer){
@@ -561,7 +565,7 @@ addLayer("h", {
                 return ret
         },
         getGainMult(){//hydrogen gain h gain hgain
-                let x = new Decimal(1)
+                let x = decimalOne
 
                 if (hasUpgrade("h", 13))        x = x.times(tmp.h.upgrades[13].effect)
                 if (hasUpgrade("h", 22))        x = x.times(tmp.h.upgrades[22].effect)
@@ -632,7 +636,7 @@ addLayer("h", {
                         return new Decimal(.01)
                 },
                 getGainMult(){
-                        let x = new Decimal(1)
+                        let x = decimalOne
 
                         if (hasUpgrade("h", 23))        x = x.times(tmp.h.upgrades[23].effect)
                         if (hasUpgrade("h", 41))        x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
@@ -663,7 +667,7 @@ addLayer("h", {
                         return new Decimal(.01)
                 },
                 getGainMult(){
-                        let x = new Decimal(1)
+                        let x = decimalOne
 
                         if (hasUpgrade("h", 42))        x = x.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
                                                         x = x.times(tmp.mini.buyables[11].effect)
@@ -820,8 +824,8 @@ addLayer("h", {
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e5) : new Decimal(1)
-                                return hasUpgrade("h", 31) ? new Decimal(15e5) : new Decimal(1)
+                                if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(5e5) : decimalOne
+                                return hasUpgrade("h", 31) ? new Decimal(15e5) : decimalOne
                         },
                         unlocked(){
                                 return  hasMilestone("tokens", 2) || hasUpgrade("h", 15) && (!hasUpgrade("h", 31) || hasUpgrade("h", 35) || hasUpgrade("h", 25))
@@ -965,8 +969,8 @@ addLayer("h", {
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
-                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(3e5) : new Decimal(1)
-                                return hasUpgrade("h", 21) ? new Decimal(950e3) : new Decimal(1)
+                                if (!player.hardMode) return hasUpgrade("h", 21) ? new Decimal(3e5) : decimalOne
+                                return hasUpgrade("h", 21) ? new Decimal(950e3) : decimalOne
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 15) && (!hasUpgrade("h", 21) || hasUpgrade("h", 25) || hasUpgrade("h", 35))
@@ -1086,7 +1090,7 @@ addLayer("h", {
                                 return player.hardMode ? new Decimal(5.5e9) : new Decimal(2e9)
                         },
                         effect(){
-                                let a = new Decimal(1)
+                                let a = decimalOne
 
                                 a = a.plus(tmp.mini.buyables[21].effect)
                                 
@@ -1798,7 +1802,7 @@ addLayer("c", {
                 return ret.max(.00001)
         },
         getGainMult(){ //carbon gain mult
-                let x = new Decimal(1)
+                let x = decimalOne
 
                 if (hasUpgrade("c", 14))        x = x.times(tmp.c.upgrades[14].effect)
                 if (hasUpgrade("c", 15))        x = x.times(tmp.h.upgrades[25].effect)
@@ -2275,8 +2279,8 @@ addLayer("o", {
                 return ret.max(.00001)
         }, //oxygen gain o gain ogain oxygengain 
         getGainMult(){
-                if (inChallenge("n", 42)) return new Decimal(1)
-                let x = new Decimal(1)
+                if (inChallenge("n", 42)) return decimalOne
+                let x = decimalOne
 
                 if (hasUpgrade("o", 12))        x = x.times(tmp.o.upgrades[12].effect)
                 if (hasUpgrade("o", 14))        x = x.times(tmp.o.upgrades[14].effect)
@@ -2714,16 +2718,16 @@ addLayer("n", {
         },
         getBaseGain(){
                 let pts = player.points
-                if (player.points.lt(10)) return new Decimal(0)
+                if (player.points.lt(10)) return decimalZero
 
                 let init = pts.log10().div(105)
                 let exp = tmp.n.getGainExp
 
-                if (init.lt(1)) return new Decimal(0)
+                if (init.lt(1)) return decimalZero
 
                 let base = init.log(2).sub(19).max(0).pow(exp)
 
-                if (base.lt(1)) base = new Decimal(0)
+                if (base.lt(1)) base = decimalZero
 
                 return base
         },
@@ -2737,7 +2741,7 @@ addLayer("n", {
                 return v5
         },
         getGainMult(){//nitrogen gain
-                let x = new Decimal(1)
+                let x = decimalOne
 
                 if (hasUpgrade("n", 24))        x = x.times(tmp.n.upgrades[24].effect)
                 if (hasUpgrade("mini", 73))     x = x.times(tmp.mini.d_points.getEffectiveFuelAux.max(1))
@@ -2864,7 +2868,7 @@ addLayer("n", {
                                 }
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("n", 11)
@@ -2877,7 +2881,7 @@ addLayer("n", {
                                 let a = "A Point gain is raised ^ 1.02"
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("n", 12)
@@ -2890,7 +2894,7 @@ addLayer("n", {
                                 let a = "B Point gain is raised ^ 1.02"
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("n", 13)
@@ -2903,7 +2907,7 @@ addLayer("n", {
                                 let a = "Add .001 to Cubic base"
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("n", 14)
@@ -2916,7 +2920,7 @@ addLayer("n", {
                                 let a = "Add .001 to Polynomial base"
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("n", 15)
@@ -3076,7 +3080,7 @@ addLayer("n", {
                                 return a + br + b
                         },
                         effect(){ // red e rede
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 ret = ret.plus(tmp.mini.buyables[232].effect)
                                 if (hasMilestone("mu", 3)) ret = ret.plus(getBuyableAmount("mini", 231).div(100))
@@ -3299,7 +3303,7 @@ addLayer("n", {
                                 return "Requires: 1 Nitrogen reset"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.n.milestones[1].requirement.lte(player.n.times)
@@ -3308,7 +3312,7 @@ addLayer("n", {
                                 return true
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Token resets keep Hydrogen upgrades, the A and B buyable autobuyer bulks 5x, and per milestone squared multiply C Point gain by 10."
@@ -3329,7 +3333,7 @@ addLayer("n", {
                                 return hasMilestone("n", 1)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: You can bulk 5x C buyables, 4x A and B buyables, gain 10x coins, and keep a token milestone per Nitrogen reset."
@@ -3350,7 +3354,7 @@ addLayer("n", {
                                 return hasMilestone("n", 2)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep Corn and Deuterium VIII, Corn interval is at most 5, and gain 100x A, B, and C Points."
@@ -3371,7 +3375,7 @@ addLayer("n", {
                                 return hasMilestone("n", 3)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         toggles:() => [["tokens", "autobuytokens"]],
                         effectDescription(){
@@ -3393,7 +3397,7 @@ addLayer("n", {
                                 return hasMilestone("n", 4)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep Cookie and here..., coin upgrades are always possible to buy, and tokens do not reset Oxygen upgrades."
@@ -3414,7 +3418,7 @@ addLayer("n", {
                                 return hasMilestone("n", 5)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep Carbon and Oxygen upgrades unlocked and tokens do not reset Carbon upgrades."
@@ -3435,7 +3439,7 @@ addLayer("n", {
                                 return hasMilestone("n", 6)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         toggles:() => [["tokens", "autobuyradio"]],
                         effectDescription(){
@@ -3457,7 +3461,7 @@ addLayer("n", {
                                 return hasMilestone("n", 7)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Gain 20x coins, keep Egg is here., and you can autobuyer the first level of C buyables."
@@ -3478,7 +3482,7 @@ addLayer("n", {
                                 return hasMilestone("n", 8)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep coin upgrades."
@@ -3499,7 +3503,7 @@ addLayer("n", {
                                 return hasMilestone("n", 9)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep all Oxygen and Carbon upgrades upon Nitrogen reset."
@@ -3521,7 +3525,7 @@ addLayer("n", {
                                 return hasMilestone("n", 10)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Token resets don't reset anything."
@@ -3543,7 +3547,7 @@ addLayer("n", {
                                 return hasMilestone("n", 11)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Start with 50 tokens."
@@ -3565,7 +3569,7 @@ addLayer("n", {
                                 return hasMilestone("n", 12)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
@@ -3587,7 +3591,7 @@ addLayer("n", {
                                 return hasMilestone("n", 13)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock Nitrogen challenges, which only keep content from before tokens and C Point gain 5's log10 becomes ln."
@@ -3609,7 +3613,7 @@ addLayer("n", {
                                 return hasMilestone("n", 14)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Raise Nitrogen IX to the number of N challenge completions."
@@ -3631,7 +3635,7 @@ addLayer("n", {
                                 return hasMilestone("n", 15)
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: C Point gain 10 amount multiplies its base."
@@ -4040,24 +4044,24 @@ addLayer("n", {
                 
                 if (!false) {
                         data1.a_points = {
-                                points: new Decimal(0), // 1
-                                best: new Decimal(0), //1 cont
+                                points: decimalZero, // 1
+                                best: decimalZero, //1 cont
                                 extras: { // 1 cont
-                                        11: new Decimal(1),
-                                        12: new Decimal(0),
-                                        13: new Decimal(0),
-                                        21: new Decimal(0),
-                                        23: new Decimal(0),
-                                        61: new Decimal(0),
-                                        62: new Decimal(0),
-                                        63: new Decimal(0),
+                                        11: decimalOne,
+                                        12: decimalZero,
+                                        13: decimalZero,
+                                        21: decimalZero,
+                                        23: decimalZero,
+                                        61: decimalZero,
+                                        62: decimalZero,
+                                        63: decimalZero,
                                 }
                         }
                         let list1 = ["11", "12", "13", "21", 
                                      "22", "23", "61", 
                                      "62", "63"]
                         for (i = 0; i < list1.length; i++){
-                                data1.buyables[list1[i]] = new Decimal(0)
+                                data1.buyables[list1[i]] = decimalZero
                         }// 1a
                 }
 
@@ -4066,22 +4070,22 @@ addLayer("n", {
                 // 2: B point stuff
                 if (!false) {
                         data1.b_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                         } // 2
                         let list2 = ["31", "32", 
                                      "33", "41", "42", "43", 
                                      "51", "52", "53"]
                         for (i = 0; i < list2.length; i++){
-                                data1.buyables[list2[i]] = new Decimal(0)
+                                data1.buyables[list2[i]] = decimalZero
                         } //2a
                 }
 
                 // 3: C point stuff
                 if (!false) {
                         data1.c_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                                 lastRoll: [],
                                 lastRollTime: data1.c_points.lastRollTime,
                                 displayCharacters: data1.c_points.displayCharacters,
@@ -4090,7 +4094,7 @@ addLayer("n", {
                                      "83", "91", "92", "93", "101", 
                                      "102", "103", "111", "112", "113"]
                         for (i = 0; i < list3.length; i++){
-                                data1.buyables[list3[i]] = new Decimal(0)
+                                data1.buyables[list3[i]] = decimalZero
                         } //3a
                         
                         let rem = [11, 12, 13, 14, 15, 
@@ -4106,7 +4110,7 @@ addLayer("n", {
 
                 // 4: Tokens
                 if (!false){
-                        let starting = new Decimal(0)
+                        let starting = decimalZero
                         if (hasMilestone("n", 12) && !inChallenge) starting = new Decimal(50)
                         data2.total = starting
                         data2.points = starting
@@ -4116,12 +4120,12 @@ addLayer("n", {
                                      "42", "43", "51", "52", "53", 
                                      "61", "62", "63"]
                         for (i = 0; i < list4.length; i++){
-                                data2.buyables[list4[i]] = new Decimal(0)
-                                data2.best_buyables[list4[i]] = new Decimal(0)
+                                data2.buyables[list4[i]] = decimalZero
+                                data2.best_buyables[list4[i]] = decimalZero
                         } //4a
                         
-                        data2.coins.points = new Decimal(0)
-                        data2.coins.best = new Decimal(0)
+                        data2.coins.points = decimalZero
+                        data2.coins.best = decimalZero
                         
                         let keep0 = []
                         if (hasMilestone("n", 5)) keep0.push(95)
@@ -4142,8 +4146,8 @@ addLayer("n", {
                                 if (hasUpgrade("n", 22)) rem = filterOut(rem, [11, 12, 13, 14, 15])
                                 player.c.upgrades = filterOut(player.c.upgrades, rem)
                         }
-                        player.c.points = new Decimal(0)
-                        player.c.best = new Decimal(0)
+                        player.c.points = decimalZero
+                        player.c.best = decimalZero
                 }
 
                 // 6: O
@@ -4154,8 +4158,8 @@ addLayer("n", {
                                 if (hasUpgrade("n", 22)) rem = filterOut(rem, [11, 12, 13, 14, 15])
                                 player.o.upgrades = filterOut(player.o.upgrades, rem)
                         }
-                        player.o.points = new Decimal(0)
-                        player.o.best = new Decimal(0)
+                        player.o.points = decimalZero
+                        player.o.best = decimalZero
                 }
 
                 // 7: H
@@ -4178,12 +4182,12 @@ addLayer("n", {
 
 
                         player.h.upgrades = filterOut(player.h.upgrades, remove)
-                        player.h.points = new Decimal(0)
-                        player.h.best = new Decimal(0)
-                        player.h.atomic_hydrogen.points = new Decimal(0)
-                        player.h.atomic_hydrogen.best = new Decimal(0)
-                        player.h.deuterium.points = new Decimal(0)
-                        player.h.deuterium.best = new Decimal(0)
+                        player.h.points = decimalZero
+                        player.h.best = decimalZero
+                        player.h.atomic_hydrogen.points = decimalZero
+                        player.h.atomic_hydrogen.best = decimalZero
+                        player.h.deuterium.points = decimalZero
+                        player.h.deuterium.best = decimalZero
                 }
         },
         deactivated(){
@@ -4197,16 +4201,16 @@ addLayer("p", {
         position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
-                best_over_amino: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+                best_over_amino: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
                 autotimes: 0,
                 passivetime: 0,
-                currentGainPerSec: new Decimal(0),
+                currentGainPerSec: decimalZero,
         }},
         color: "#466BA2",
         branches: [],
@@ -4237,18 +4241,18 @@ addLayer("p", {
                 return ret
         },
         getBaseGain(){
-                if (hasChallenge("l", 41) || inChallenge("l", 41)) return new Decimal(1)
+                if (hasChallenge("l", 41) || inChallenge("l", 41)) return decimalOne
                 let pts = player.n.points.div(1.3)
-                if (pts.lt(10)) return new Decimal(0)
+                if (pts.lt(10)) return decimalZero
 
                 let init = pts.log10().sub(2027)
                 let exp = tmp.p.getGainExp
 
-                if (init.lt(0)) return new Decimal(0)
+                if (init.lt(0)) return decimalZero
 
                 let base = init.root(7).sub(1)
 
-                if (base.lt(1)) base = new Decimal(0)
+                if (base.lt(1)) base = decimalZero
 
                 return base.pow(exp)
         },
@@ -4264,7 +4268,7 @@ addLayer("p", {
                 return v3
         },
         getGainMult(){//phosphorus gain pgain rusgain
-                let x = new Decimal(1)
+                let x = decimalOne
 
                 if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
                 if (hasUpgrade("p", 24))        x = x.times(tmp.p.upgrades[24].effect)
@@ -4274,7 +4278,7 @@ addLayer("p", {
                 return x
         },
         getPassiveGainMult(){
-                let x = new Decimal(1)
+                let x = decimalOne
 
                 if (hasMilestone("p", 2))       x = x.times(tmp.p.milestones[2].effect)
                 if (hasUpgrade("mu", 11))       x = x.times(tmp.n.upgrades[35].effect)
@@ -4305,7 +4309,7 @@ addLayer("p", {
                 return x
         },
         effect(){
-                if (inChallenge("l", 52) || hasChallenge("l", 52)) return new Decimal(1)
+                if (inChallenge("l", 52) || hasChallenge("l", 52)) return decimalOne
                 let amt = player.p.total
 
                 let exp2 = new Decimal(3)
@@ -4771,7 +4775,7 @@ addLayer("p", {
                                 return "Requires: 1 Phosphorus reset"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.p.milestones[1].requirement.lte(player.p.times)
@@ -4780,7 +4784,7 @@ addLayer("p", {
                                 return true
                         },
                         effect(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep one Nitrogen milestone per reset, you have one less token for prestige purposes, and bulk 5x D buyables."
@@ -5031,9 +5035,9 @@ addLayer("p", {
                         if (!hasMilestone("p", 5)) player.n.times = 0
                         player.n.time = 0
                         player.n.passivetime = 0
-                        player.n.best = new Decimal(0)
-                        player.n.points = new Decimal(0)
-                        player.n.total = new Decimal(0)
+                        player.n.best = decimalZero
+                        player.n.points = decimalZero
+                        player.n.total = decimalZero
 
                         let remupg = [11, 12, 13, 14, 15, 
                                       21, 22, 23, 24, 25, 
@@ -5066,24 +5070,24 @@ addLayer("p", {
                 // 1: A point stuff
                 if (!false) {
                         data1.a_points = {
-                                points: new Decimal(0), // 1
-                                best: new Decimal(0), //1 cont
+                                points: decimalZero, // 1
+                                best: decimalZero, //1 cont
                                 extras: { // 1 cont
-                                        11: new Decimal(1),
-                                        12: new Decimal(0),
-                                        13: new Decimal(0),
-                                        21: new Decimal(0),
-                                        23: new Decimal(0),
-                                        61: new Decimal(0),
-                                        62: new Decimal(0),
-                                        63: new Decimal(0),
+                                        11: decimalOne,
+                                        12: decimalZero,
+                                        13: decimalZero,
+                                        21: decimalZero,
+                                        23: decimalZero,
+                                        61: decimalZero,
+                                        62: decimalZero,
+                                        63: decimalZero,
                                 }
                         }
                         let list1 = ["11", "12", "13", "21", 
                                      "22", "23", "61", 
                                      "62", "63"]
                         for (i = 0; i < list1.length; i++){
-                                data1.buyables[list1[i]] = new Decimal(0)
+                                data1.buyables[list1[i]] = decimalZero
                         }// 1a
                 }
 
@@ -5092,22 +5096,22 @@ addLayer("p", {
                 // 2: B point stuff
                 if (!false) {
                         data1.b_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                         } // 2
                         let list2 = ["31", "32", 
                                      "33", "41", "42", "43", 
                                      "51", "52", "53"]
                         for (i = 0; i < list2.length; i++){
-                                data1.buyables[list2[i]] = new Decimal(0)
+                                data1.buyables[list2[i]] = decimalZero
                         } //2a
                 }
 
                 // 3: C point stuff
                 if (!false) {
                         data1.c_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                                 lastRoll: [],
                                 lastRollTime: data1.c_points.lastRollTime,
                                 displayCharacters: data1.c_points.displayCharacters,
@@ -5116,7 +5120,7 @@ addLayer("p", {
                                      "83", "91", "92", "93", "101", 
                                      "102", "103", "111", "112", "113"]
                         for (i = 0; i < list3.length; i++){
-                                data1.buyables[list3[i]] = new Decimal(0)
+                                data1.buyables[list3[i]] = decimalZero
                         } //3a
                         let rem = [11, 12, 13, 14, 15, 
                                    21, 22, 23, 24, 25, 
@@ -5131,7 +5135,7 @@ addLayer("p", {
 
                 // 4: Tokens
                 if (!false){
-                        let starting = new Decimal(0)
+                        let starting = decimalZero
                         if (!player.hardMode) starting = new Decimal(50)
                         data2.total = starting
                         data2.points = starting
@@ -5140,19 +5144,19 @@ addLayer("p", {
                                      "42", "43", "51", "52", "53", 
                                      "61", "62", "63"]
                         for (i = 0; i < list4.length; i++){
-                                data2.buyables[list4[i]] = new Decimal(0)
-                                data2.best_buyables[list4[i]] = new Decimal(0)
+                                data2.buyables[list4[i]] = decimalZero
+                                data2.best_buyables[list4[i]] = decimalZero
                         } //4a
 
                         //4b
-                        data2.coins.points = new Decimal(0)
-                        data2.coins.best = new Decimal(0)
+                        data2.coins.points = decimalZero
+                        data2.coins.best = decimalZero
                 }
 
                 // 5: C
                 if (!false) {
-                        player.c.points = new Decimal(0)
-                        player.c.best = new Decimal(0)
+                        player.c.points = decimalZero
+                        player.c.best = decimalZero
                         if (!hasMilestone("p", 6)) {
                                 let remC = [31, 32, 33, 34, 35]
                                 player.c.upgrades = filterOut(player.c.upgrades, remC)
@@ -5161,8 +5165,8 @@ addLayer("p", {
 
                 // 6: O
                 if (!false) {
-                        player.o.points = new Decimal(0)
-                        player.o.best = new Decimal(0)
+                        player.o.points = decimalZero
+                        player.o.best = decimalZero
                         if (!hasMilestone("p", 6)) {
                                 let remO = [31, 32, 33, 34, 35]
                                 player.o.upgrades = filterOut(player.o.upgrades, remO)
@@ -5171,12 +5175,12 @@ addLayer("p", {
 
                 // 7: H
                 if (!false) {
-                        player.h.points = new Decimal(0)
-                        player.h.best = new Decimal(0)
-                        player.h.atomic_hydrogen.points = new Decimal(0)
-                        player.h.atomic_hydrogen.best = new Decimal(0)
-                        player.h.deuterium.points = new Decimal(0)
-                        player.h.deuterium.best = new Decimal(0)
+                        player.h.points = decimalZero
+                        player.h.best = decimalZero
+                        player.h.atomic_hydrogen.points = decimalZero
+                        player.h.atomic_hydrogen.best = decimalZero
+                        player.h.deuterium.points = decimalZero
+                        player.h.deuterium.best = decimalZero
                 }
 
                 // 8: D Points
@@ -5189,9 +5193,9 @@ addLayer("p", {
                         data1.upgrades = filterOut(data1.upgrades, remove)
                         
                         data1.d_points = { 
-                                points: new Decimal(0),
-                                best: new Decimal(0),
-                                fuel: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
+                                fuel: decimalZero,
                                 fuelTimer1: data1.d_points.fuelTimer1,
                                 fuelTimer2: data1.d_points.fuelTimer2,
                         }
@@ -5200,21 +5204,21 @@ addLayer("p", {
                                      "163", "171", "172", "173", "181", 
                                      "182", "183", ]
                         for (i = 0; i < list4.length; i++){
-                                data1.buyables[list4[i]] = new Decimal(0)
+                                data1.buyables[list4[i]] = decimalZero
                         } // reset buyables
                 }
 
                 // 9: E Points
                 if (!false) {
                         data1.e_points = { 
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                         }
                         let list4 = ["201", "202", "203", "211",
                                      "212", "213", "221", "222",
                                      "223", "231", "232", "233"]
                         for (i = 0; i < list4.length; i++){
-                                data1.buyables[list4[i]] = new Decimal(0)
+                                data1.buyables[list4[i]] = decimalZero
                         } // reset buyables
                 }
 
@@ -5228,15 +5232,15 @@ addLayer("mu", {
         position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
                 autotimes: 0,
                 passivetime: 0,
-                bestNdM: new Decimal(0),
+                bestNdM: decimalZero,
         }},
         color: "#8200B0",
         branches: [],
@@ -5251,10 +5255,10 @@ addLayer("mu", {
                 return ret
         },
         gainMult(){
-                return new Decimal(1)
+                return decimalOne
         },
         exponent(){
-                let rem = new Decimal(0)
+                let rem = decimalZero
                                                 rem = rem.plus(tmp.mu.buyables[32].effect)
                 if (hasUpgrade("mu", 43))       rem = rem.plus(.01)
                 if (inChallenge("l", 12)) {
@@ -5279,9 +5283,9 @@ addLayer("mu", {
                 if (hasMilestone("mu", 6))      return new Decimal(1.96).sub(rem)
                                                 return new Decimal(2.00).sub(rem)
         },
-        gainExp: new Decimal(1),
+        gainExp: decimalOne,
         effect(){
-                if (inChallenge("l", 71) || hasChallenge("l", 71)) return new Decimal(0)
+                if (inChallenge("l", 71) || hasChallenge("l", 71)) return decimalZero
                 let amt = player.mu.points
 
                 if (amt.gt(400)) amt = amt.sqrt().times(20)
@@ -5459,7 +5463,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5479,7 +5483,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5499,7 +5503,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5519,7 +5523,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5539,7 +5543,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5559,7 +5563,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5579,7 +5583,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5599,7 +5603,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         effect(){
@@ -5627,7 +5631,7 @@ addLayer("mu", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
                         onPurchase(){
-                                player.mu.points = new Decimal(0)
+                                player.mu.points = decimalZero
                                 doReset("mu", true)
                         },
                         unlocked(){
@@ -5797,7 +5801,7 @@ addLayer("mu", {
                                 return "Requires: 1 µ"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.mu.milestones[1].requirement.lte(player.mu.points)
@@ -6126,7 +6130,7 @@ addLayer("mu", {
                                 return ret
                         },
                         baseExtra(){
-                                let ret = new Decimal(0)
+                                let ret = decimalZero
 
                                 ret = ret.plus(tmp.mu.buyables[22].effect)
                                 
@@ -6378,7 +6382,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
                                 
                                 return ret
                         },
@@ -6506,12 +6510,12 @@ addLayer("mu", {
                                 return tmp.mu.buyables[32].initialCost.times(Decimal.pow(tmp.mu.buyables[32].costBase, amt))
                         },
                         getMaxAfford(){
-                                if (player.mu.points.lt(1)) return new Decimal(0)
+                                if (player.mu.points.lt(1)) return decimalZero
                                 return player.mu.points.div(tmp.mu.buyables[32].initialCost).log(tmp.mu.buyables[32].costBase).floor().plus(1).max(0)
                         },
                         getMaxBulk(){
                                 if (hasMilestone("d", 3) || hasUpgrade("cells", 11)) return new Decimal(Infinity)
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 if (hasMilestone("l", 27)) ret = ret.times(5)
                                 if (hasMilestone("l", 30)) ret = ret.times(5)
@@ -6604,13 +6608,13 @@ addLayer("mu", {
                                 return player.l.challenges[11] >= 20 || player.a.unlocked
                         },
                         getMaxAfford(){
-                                if (player.l.points.lt(1e4)) return new Decimal(0)
+                                if (player.l.points.lt(1e4)) return decimalZero
                                 return player.l.points.div(1e4).log(3).root(1.3).floor().plus(1).max(0)
                         },
                         canAfford:() => player.l.points.gte(tmp.mu.buyables[33].cost),
                         getMaxBulk(){
                                 if (hasMilestone("d", 3) || hasUpgrade("cells", 11)) return new Decimal(Infinity)
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         buy(){
                                 if (!this.canAfford()) return 
@@ -6740,10 +6744,10 @@ addLayer("mu", {
         },
         doReset(layer){
                 if (layer != "mu") return 
-                player.p.points = new Decimal(0)
-                player.p.total = new Decimal(0)
-                player.p.best = new Decimal(0)
-                player.p.currentGainPerSec = new Decimal(0)
+                player.p.points = decimalZero
+                player.p.total = decimalZero
+                player.p.best = decimalZero
+                player.p.currentGainPerSec = decimalZero
                 player.mu.time = 0
         },
 })
@@ -6754,9 +6758,9 @@ addLayer("l", {
         position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -6786,8 +6790,8 @@ addLayer("l", {
         getBaseGain(){
                 let pts = player.points
                 let init = pts.max(10).log(10).log(2)
-                if (init.lt(10)) return new Decimal(0)
-                if (init.lt(1024) && !hasChallenge("l", 51)) return new Decimal(0)
+                if (init.lt(10)) return decimalZero
+                if (init.lt(1024) && !hasChallenge("l", 51)) return decimalZero
 
                 if (!hasChallenge("l", 51)) init = init.log(2)
 
@@ -6801,7 +6805,7 @@ addLayer("l", {
                 return ret
         },
         getGainMult(){ //life gain lifegain lgain l gain
-                let ret = new Decimal(1)
+                let ret = decimalOne
 
                                                 ret = ret.times(tmp.l.challenges[11].rewardEffect)
                 if (hasMilestone("l", 14))      ret = ret.times(Decimal.pow(1.25, player.mu.buyables[32]))
@@ -6865,7 +6869,7 @@ addLayer("l", {
                 return tmp.l.getResetGain.gt(0)
         },
         effect(){
-                if (inChallenge("l", 51) || hasChallenge("l", 51)) return new Decimal(1)
+                if (inChallenge("l", 51) || hasChallenge("l", 51)) return decimalOne
                 let amt = player.l.best
 
                 if (amt.gt(1e5)) amt = amt.log10().times(4).sub(10).pow(5)
@@ -7067,7 +7071,7 @@ addLayer("l", {
                                 return "Requires: 1 Life"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.l.milestones[1].requirement.lte(player.l.points)
@@ -7873,7 +7877,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 7e11
                                 let base = 4
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[11].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -7976,7 +7980,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 1e16
                                 let base = 5
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[12].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8073,7 +8077,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 1e21
                                 let base = 10
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[13].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8103,7 +8107,7 @@ addLayer("l", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 ret = ret.plus(layers.l.grid.getGemEffect(202))
                                 if (hasMilestone("a", 14)) ret = ret.plus(.05)
@@ -8158,7 +8162,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 2.4e26
                                 let base = 2
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[21].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8257,7 +8261,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 3e34
                                 let base = 30
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[22].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8338,7 +8342,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 4e53
                                 let base = 200
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[23].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8422,7 +8426,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 7e84
                                 let base = 158
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[31].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8507,7 +8511,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 1e166
                                 let base = 1600
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[32].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8587,7 +8591,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 3e281
                                 let base = 2e16
-                                if (pts.lt(init)) return new Decimal(0)
+                                if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[33].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8617,7 +8621,7 @@ addLayer("l", {
                                 }
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 if (hasMilestone("a", 4)) ret = ret.plus(.005 * player.a.milestones.length)
                                 if (hasChallenge("l", 41)) ret = ret.plus(tmp.l.challenges[41].reward)
@@ -8713,7 +8717,7 @@ addLayer("l", {
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
 
-                                let init = new Decimal(1).sub(eff/1000)
+                                let init = decimalOne.sub(eff/1000)
 
                                 if (inChallenge("l", 12)) {
                                         let depth = tmp.l.challenges[12].getChallengeDepths[4] || 0
@@ -8768,7 +8772,7 @@ addLayer("l", {
                                 return player.points.max(10).log10().max(10).log(2).sub(960).max(49).sqrt().sub(7)
                         },
                         gemGainMult(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
                                 
                                 if (hasUpgrade("a", 41)) ret = ret.times(3)
                                 if (hasMilestone("d", 11)) ret = ret.times(10)
@@ -8778,7 +8782,7 @@ addLayer("l", {
                         },
                         reward(){
                                 let data = tmp.l.challenges[12]
-                                if (data.baseReward.lt(1)) return new Decimal(0)
+                                if (data.baseReward.lt(1)) return decimalZero
                                 return data.baseReward.times(data.gemGainMult).floor()
                         },
                         nextAt(){
@@ -9111,7 +9115,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(1)
+                                let base = decimalOne
                                 let ret = base.times(comps)
                                 return ret
                         },
@@ -9365,7 +9369,7 @@ addLayer("l", {
                 maxRows: 8,
                 maxCols: 8,
                 getStartData(id) {
-                        return {active: id == 101, gems: new Decimal(0), units: id % 100, hundreds: (id-id%100)/100}
+                        return {active: id == 101, gems: decimalZero, units: id % 100, hundreds: (id-id%100)/100}
                 },
                 getUnlocked(id) {
                         return player.l.challenges[11] >= 110 || player.a.unlocked
@@ -9435,7 +9439,7 @@ addLayer("l", {
                         return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
                 }, // layers.l.grid.getGemEffect(id)
                 getGemEffect(id) {
-                        if (GEM_EFFECT_FORMULAS[id] == undefined) return new Decimal(0)
+                        if (GEM_EFFECT_FORMULAS[id] == undefined) return decimalZero
                         let g = player.l.grid[id].gems.floor()
                         if (g.gt(1e3)) g = g.min(1e4).log10().plus(7).pow(3)
                         return GEM_EFFECT_FORMULAS[id](g)
@@ -9620,17 +9624,17 @@ addLayer("l", {
                         data1.unlocked = false
                 }
 
-                data1.points = new Decimal(0)
-                data1.best = new Decimal(0)
-                data1.total = new Decimal(0)
-                data1.buyables[11] = new Decimal(0)
-                data1.buyables[12] = new Decimal(0)
-                data1.buyables[13] = new Decimal(0)
-                data1.buyables[21] = new Decimal(0)
-                data1.buyables[22] = new Decimal(0)
-                data1.buyables[23] = new Decimal(0)
-                data1.buyables[31] = new Decimal(0) // buyables
-                data1.buyables[32] = new Decimal(0)
+                data1.points = decimalZero
+                data1.best = decimalZero
+                data1.total = decimalZero
+                data1.buyables[11] = decimalZero
+                data1.buyables[12] = decimalZero
+                data1.buyables[13] = decimalZero
+                data1.buyables[21] = decimalZero
+                data1.buyables[22] = decimalZero
+                data1.buyables[23] = decimalZero
+                data1.buyables[31] = decimalZero // buyables
+                data1.buyables[32] = decimalZero
 
                 // 2 Phosphorus content
                 if (!hasMilestone("d", 1)) {
@@ -9653,11 +9657,11 @@ addLayer("l", {
                         data2.unlocked = false
                 }
 
-                data2.currentGainPerSec = new Decimal(0)
-                data2.points = new Decimal(0)
-                data2.best = new Decimal(0)
-                data2.total = new Decimal(0)
-                //data2.best_over_amino = new Decimal(0)
+                data2.currentGainPerSec = decimalZero
+                data2.points = decimalZero
+                data2.best = decimalZero
+                data2.total = decimalZero
+                //data2.best_over_amino = decimalZero
 
                 // 3: Nitrogen conent
                 if (!hasMilestone("d", 1)) {
@@ -9691,9 +9695,9 @@ addLayer("l", {
                         data3.unlocked = false
                 }
 
-                data3.points = new Decimal(0)
-                data3.best = new Decimal(0)
-                data3.total = new Decimal(0)
+                data3.points = decimalZero
+                data3.best = decimalZero
+                data3.total = decimalZero
 
                 // 4 Oxygen content
                 if (!player.a.everA3) {
@@ -9707,9 +9711,9 @@ addLayer("l", {
                         data4.unlocked = false
                 }
                 
-                data4.points = new Decimal(0)
-                data4.best = new Decimal(0)
-                data4.total = new Decimal(0)
+                data4.points = decimalZero
+                data4.best = decimalZero
+                data4.total = decimalZero
 
                 // 5 Carbon content
                 if (!player.a.everA3) {
@@ -9722,21 +9726,21 @@ addLayer("l", {
                         data5.unlocked = false
                 }
 
-                data5.points = new Decimal(0)
-                data5.best = new Decimal(0)
-                data5.total = new Decimal(0)
+                data5.points = decimalZero
+                data5.best = decimalZero
+                data5.total = decimalZero
 
                 // 6 minigame content
                 if (!player.a.everA3) {
                         if (!false) { //6a
-                                data6.a_points.extras[11] = new Decimal(0)
-                                data6.a_points.extras[12] = new Decimal(0)
-                                data6.a_points.extras[13] = new Decimal(0)
-                                data6.a_points.extras[21] = new Decimal(0)
-                                data6.a_points.extras[23] = new Decimal(0)
-                                data6.a_points.extras[61] = new Decimal(0)
-                                data6.a_points.extras[62] = new Decimal(0)
-                                data6.a_points.extras[63] = new Decimal(0)
+                                data6.a_points.extras[11] = decimalZero
+                                data6.a_points.extras[12] = decimalZero
+                                data6.a_points.extras[13] = decimalZero
+                                data6.a_points.extras[21] = decimalZero
+                                data6.a_points.extras[23] = decimalZero
+                                data6.a_points.extras[61] = decimalZero
+                                data6.a_points.extras[62] = decimalZero
+                                data6.a_points.extras[63] = decimalZero
                         }
 
                         if (!false) {} //6b
@@ -9783,21 +9787,21 @@ addLayer("l", {
 
                 for (i in resetBuyableIds){
                         x = resetBuyableIds[i]
-                        data6.buyables[x] = new Decimal(0)
+                        data6.buyables[x] = decimalZero
                 }
                 
-                data6.a_points.points = new Decimal(0)
-                data6.a_points.best = new Decimal(0)
-                data6.b_points.points = new Decimal(0)
-                data6.b_points.best = new Decimal(0)
-                data6.c_points.points = new Decimal(0)
-                data6.c_points.best = new Decimal(0)
+                data6.a_points.points = decimalZero
+                data6.a_points.best = decimalZero
+                data6.b_points.points = decimalZero
+                data6.b_points.best = decimalZero
+                data6.c_points.points = decimalZero
+                data6.c_points.best = decimalZero
                 data6.c_points.lastRoll = []
-                data6.d_points.points = new Decimal(0)
-                data6.d_points.best = new Decimal(0)
+                data6.d_points.points = decimalZero
+                data6.d_points.best = decimalZero
                 data6.d_points.fuel = new Decimal(hasMilestone("l", 5) ? 1 : 0)
-                data6.e_points.points = new Decimal(0)
-                data6.e_points.best = new Decimal(0)
+                data6.e_points.points = decimalZero
+                data6.e_points.best = decimalZero
 
                 // 7 token content
                 if (!hasUpgrade("p", 52) && !hasMilestone("a", 1) && !player.a.everA3) {
@@ -9814,8 +9818,8 @@ addLayer("l", {
 
                         for (let i = 0; i < 18; i ++){
                                 x = resetKeys[i]
-                                data7.buyables[x] = new Decimal(0)
-                                data7.best_buyables[x] = new Decimal(0)
+                                data7.buyables[x] = decimalZero
+                                data7.best_buyables[x] = decimalZero
                         }
 
                         if (!hasMilestone("l", 3)) { // 7a
@@ -9829,22 +9833,22 @@ addLayer("l", {
                                 }
                         }
 
-                        data7.coins.points = new Decimal(0)
-                        data7.coins.best = new Decimal(0)
-                        data7.points = new Decimal(0)
-                        data7.best = new Decimal(0)
-                        data7.total = new Decimal(0)
+                        data7.coins.points = decimalZero
+                        data7.coins.best = decimalZero
+                        data7.points = decimalZero
+                        data7.best = decimalZero
+                        data7.total = decimalZero
                 }
 
                 // 8 Hydrogen content
                 if (!player.a.everA3) {
-                        data8.points = new Decimal(0)
-                        data8.best = new Decimal(0)
-                        data8.total = new Decimal(0)
-                        data8.atomic_hydrogen.points = new Decimal(0)
-                        data8.atomic_hydrogen.best = new Decimal(0)
-                        data8.deuterium.points = new Decimal(0)
-                        data8.deuterium.best = new Decimal(0)
+                        data8.points = decimalZero
+                        data8.best = decimalZero
+                        data8.total = decimalZero
+                        data8.atomic_hydrogen.points = decimalZero
+                        data8.atomic_hydrogen.best = decimalZero
+                        data8.deuterium.points = decimalZero
+                        data8.deuterium.best = decimalZero
                         
 
                         let hUpgRem = [11, 12, 13, 14, 15, 
@@ -9869,9 +9873,9 @@ addLayer("a", {
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -9879,9 +9883,9 @@ addLayer("a", {
                 passivetime: 0,
                 gemPassiveTime: 0,
                 protein: {
-                        best: new Decimal(0),
-                        total: new Decimal(0),
-                        points: new Decimal(0),
+                        best: decimalZero,
+                        total: decimalZero,
+                        points: decimalZero,
                         passiveTime: 0,
                 },
                 everA3: false,
@@ -9899,7 +9903,7 @@ addLayer("a", {
         getBaseGain(){
                 let pts = player.l.points
                 let init = pts.max(10).log(2).sub(1368)
-                if (init.lt(512)) return new Decimal(0)
+                if (init.lt(512)) return decimalZero
 
                 return init.cbrt().sub(7).pow(tmp.a.getGainExp)
         },
@@ -9911,7 +9915,7 @@ addLayer("a", {
                 return ret
         },
         getGainMult(){ //amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
-                let ret = new Decimal(1)
+                let ret = decimalOne
 
                 if (hasUpgrade("a", 25))        ret = ret.times(getBuyableAmount("a", 13).max(1))
                                                 ret = ret.times(layers.l.grid.getGemEffect(305))
@@ -10160,7 +10164,7 @@ addLayer("a", {
         layerShown(){return player.a.unlocked},
         protein: {
                 getAUpgBase(){
-                        let aUpgBase = new Decimal(1)
+                        let aUpgBase = decimalOne
                         
                         if (hasUpgrade("a", 14))        aUpgBase = aUpgBase.times(2)
                         if (hasUpgrade("a", 32))        aUpgBase = aUpgBase.times(2)
@@ -10169,7 +10173,7 @@ addLayer("a", {
                         return aUpgBase
                 },
                 getAMilestoneBase(){
-                        let base = new Decimal(1)
+                        let base = decimalOne
                         
                         if (hasMilestone("a", 22)) base = base.times(1 + player.a.milestones.length/100)
                         if (hasMilestone("a", 33)) base = base.times(2)
@@ -10699,7 +10703,7 @@ addLayer("a", {
                                 return "Requires: 1 Amino Acid reset"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.a.milestones[1].requirement.lte(player.a.times)
@@ -11795,7 +11799,7 @@ addLayer("a", {
                                 return baseCost.times(Decimal.pow(5, amt))
                         },
                         baseCost(){
-                                if (hasMilestone("a", 31)) return new Decimal(1)
+                                if (hasMilestone("a", 31)) return decimalOne
                                 let ret = new Decimal(200)
                                 
                                 ret = ret.div(layers.l.grid.getGemEffect(405))
@@ -11807,7 +11811,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.eq(0)) return new Decimal(0)
+                                if (pts.eq(0)) return decimalZero
                                 return pts.div(tmp.a.buyables[11].baseCost).log(5).plus(1).floor().max(0)
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[11].cost),
@@ -11891,7 +11895,7 @@ addLayer("a", {
                                 return baseCost.times(Decimal.pow(10, amt))
                         },
                         baseCost(){
-                                if (hasMilestone("a", 31)) return new Decimal(1)
+                                if (hasMilestone("a", 31)) return decimalOne
                                 let ret = new Decimal(500)
                                 
                                 ret = ret.div(layers.l.grid.getGemEffect(501))
@@ -11903,7 +11907,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.eq(0)) return new Decimal(0)
+                                if (pts.eq(0)) return decimalZero
                                 return pts.div(tmp.a.buyables[12].baseCost).log(10).plus(1).floor().max(0)
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[12].cost),
@@ -11978,7 +11982,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e1450")) return new Decimal(0)
+                                if (pts.lt("1e1450")) return decimalZero
                                 return pts.div("1e1450").log("1e500").root(2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[13].cost),
@@ -12062,7 +12066,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e7350")) return new Decimal(0)
+                                if (pts.lt("1e7350")) return decimalZero
                                 return pts.div("1e7350").log("1e200").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[21].cost),
@@ -12127,7 +12131,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e35000")) return new Decimal(0)
+                                if (pts.lt("1e35000")) return decimalZero
                                 return pts.div("1e35000").log("1e100").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[22].cost),
@@ -12197,7 +12201,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e257000")) return new Decimal(0)
+                                if (pts.lt("1e257000")) return decimalZero
                                 return pts.div("1e257000").log("1e2000").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[23].cost),
@@ -12268,7 +12272,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e702000")) return new Decimal(0)
+                                if (pts.lt("1e702000")) return decimalZero
                                 return pts.div("1e702000").log("1e6000").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[31].cost),
@@ -12346,7 +12350,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e1012000")) return new Decimal(0)
+                                if (pts.lt("1e1012000")) return decimalZero
                                 return pts.div("1e1012000").log("1e5000").root(1.1).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[32].cost),
@@ -12414,7 +12418,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e9484000")) return new Decimal(0)
+                                if (pts.lt("1e9484000")) return decimalZero
                                 return pts.div("1e9484000").log("1e7000").root(2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[33].cost),
@@ -12624,7 +12628,7 @@ addLayer("a", {
                                         let boostPer = {}
                                         for (idCard in idsCheck) {
                                                 id = idsCheck[idCard]
-                                                boostPer[id] = new Decimal(1)
+                                                boostPer[id] = decimalOne
                                                 if (!tmp.a.buyables[id].unlocked || id == 22 || id == 33) continue
                                                 boostPer[id] = boostPer[id].times(tmp.a.buyables[id].base)
                                                 j2 += "<br>Each "
@@ -12638,14 +12642,14 @@ addLayer("a", {
                                                 j += "<br>Each upgrade gives a " + doEndingFormula(tmp.a.protein.getAUpgBase)
                                         }
                                         if (hasUpgrade("a", 13)) {
-                                                let a13 = new Decimal(1)
+                                                let a13 = decimalOne
                                                 if (getBuyableAmount("a", 11).gt(0)) a13 = a13.plus(getBuyableAmount("a", 11).pow(-1))
                                                 if (getBuyableAmount("a", 11).lt(1e3)) {
                                                         j += "<br>Amino Acid III makes the next tRNA give a " + doEndingFormula(a13) 
                                                 }
                                         }
                                         if (hasUpgrade("a", 15)) {
-                                                let a15 = new Decimal(1)
+                                                let a15 = decimalOne
                                                 if (getBuyableAmount("a", 12).gt(0)) a15 = a15.plus(getBuyableAmount("a", 12).pow(-1))
                                                 if (getBuyableAmount("a", 12).lt(1e3)) {
                                                         j += "<br>Amino Acid V makes the next mRNA give a " + doEndingFormula(a15) 
@@ -12663,7 +12667,7 @@ addLayer("a", {
                                                 j += "<br>The next non-0 gem amount gives a " + doEndingFormula(abuy21.pow(getBuyableAmount("a", 21))) 
                                         }
                                         if (hasUpgrade("a", 42)) {
-                                                let a42 = new Decimal(1)
+                                                let a42 = decimalOne
                                                 if (getBuyableAmount("a", 22).gt(0)) a42 = a42.plus(getBuyableAmount("a", 22).pow(-1))
                                                 if (getBuyableAmount("a", 22).lt(1e3)) {
                                                         j += "<br>Amino Acid XVII makes the next siRNA give a " + doEndingFormula(a42) 
@@ -12671,7 +12675,7 @@ addLayer("a", {
                                                 boostPer[22] = boostPer[22].times(a42)
                                         }
                                         if (hasMilestone("a", 28)) {
-                                                let m28 = new Decimal(1)
+                                                let m28 = decimalOne
                                                 if (getBuyableAmount("a", 21).gt(0)) m28 = m28.plus(getBuyableAmount("a", 21).pow(-1))
                                                 if (getBuyableAmount("a", 21).lt(1e3)) {
                                                         j += "<br>Amino Milestone 28 makes the next siRNA give a " + doEndingFormula(m28)
@@ -12772,7 +12776,7 @@ addLayer("a", {
                                 data1.milestones = data1.milestones.slice(0, lKeptMilestones)
                         }
 
-                        let startingBuyableAmount = new Decimal(0)
+                        let startingBuyableAmount = decimalZero
                         if (hasMilestone("cells", 1)) startingBuyableAmount = new Decimal(500)
 
                         data1.buyables[11] = startingBuyableAmount
@@ -12788,7 +12792,7 @@ addLayer("a", {
                         //gems
                         if (!hasUpgrade("a", 31)) {
                                 let x = getResetGemIDs()
-                                let keepGems = new Decimal(0)
+                                let keepGems = decimalZero
                                 if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
 
                                 let gData = player.l.grid
@@ -12810,14 +12814,14 @@ addLayer("a", {
                         if (!hasMilestone("a", 9)) data1.times = 0
                 }
 
-                data1.points = new Decimal(0)
-                data1.best = new Decimal(0)
-                data1.total = new Decimal(0)
+                data1.points = decimalZero
+                data1.best = decimalZero
+                data1.total = decimalZero
 
                 // 2 Mu content
                 if (!false) { 
                         // 2 rows of upgrades
-                        data2.buyables[33] = new Decimal(0)
+                        data2.buyables[33] = decimalZero
 
                         let muUpgRem = [41, 42, 43, 44, 45, 
                                         51, 52, 53, 54, 55]
@@ -12837,7 +12841,7 @@ addLayer("a", {
                                 data3.upgrades = filterOut(data3.upgrades, pUpgRem)
                         }
                 }
-                player.p.best_over_amino = new Decimal(0)
+                player.p.best_over_amino = decimalZero
         },
 })
 
@@ -12847,9 +12851,9 @@ addLayer("d", {
         position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -12869,7 +12873,7 @@ addLayer("d", {
                 let pts = player.a.points
                 let init = pts.div(4.4e144).max(1).log10()
                 if (layers.l.grid.getGemEffect(408)) init = init.plus(144.6434526764861874) 
-                if (init.lt(25)) return new Decimal(0)
+                if (init.lt(25)) return decimalZero
 
                 let v1 = init.sqrt()
                 if (!layers.l.grid.getGemEffect(701)) v1 = v1.div(2)
@@ -12884,7 +12888,7 @@ addLayer("d", {
                 return ret
         },
         getGainMult(){ // dna gain dnagain dgain d gain
-                let ret = new Decimal(1)
+                let ret = decimalOne
 
                                                 ret = ret.times(layers.l.grid.getGemEffect(206))
                 if (hasUpgrade("d", 12)) {
@@ -12993,7 +12997,7 @@ addLayer("d", {
                                 let a = "<bdi style='font-size: 80%'>The 1 Life reset milestone is always maxed, subtract .05 from µ cost exponent while not in Customizable, and add 100% to C25 effect</bdi>"
                                 return a
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("d", 11)
@@ -13187,7 +13191,7 @@ addLayer("d", {
                                 return "Requires: 1 DNA reset"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.d.milestones[1].requirement.lte(player.d.times)
@@ -13885,15 +13889,15 @@ addLayer("d", {
                                 data1.milestones = data1.milestones.slice(0, aKeptMilestones)
                         }
 
-                        data1.buyables[11] = new Decimal(0)
-                        data1.buyables[12] = new Decimal(0)
-                        data1.buyables[13] = new Decimal(0)
-                        data1.buyables[21] = new Decimal(0)
-                        data1.buyables[22] = new Decimal(0)
-                        data1.buyables[23] = new Decimal(0)
-                        data1.buyables[31] = new Decimal(0)
-                        data1.buyables[32] = new Decimal(0)
-                        data1.buyables[33] = new Decimal(0)
+                        data1.buyables[11] = decimalZero
+                        data1.buyables[12] = decimalZero
+                        data1.buyables[13] = decimalZero
+                        data1.buyables[21] = decimalZero
+                        data1.buyables[22] = decimalZero
+                        data1.buyables[23] = decimalZero
+                        data1.buyables[31] = decimalZero
+                        data1.buyables[32] = decimalZero
+                        data1.buyables[33] = decimalZero
 
                         let aKeptUpgrades = 0
                         if (hasMilestone("d", 7)) aKeptUpgrades += player.d.times * 2
@@ -13905,12 +13909,12 @@ addLayer("d", {
                         if (!hasMilestone("d", 5)) data1.times = 0
                 }
 
-                data1.points = new Decimal(0)
-                data1.best = new Decimal(0)
-                data1.total = new Decimal(0)
-                data1.protein.best = new Decimal(0)
-                data1.protein.total = new Decimal(0)
-                data1.protein.points = new Decimal(0)
+                data1.points = decimalZero
+                data1.best = decimalZero
+                data1.total = decimalZero
+                data1.protein.best = decimalZero
+                data1.protein.total = decimalZero
+                data1.protein.points = decimalZero
 
 
                 // 2 Life content
@@ -13922,7 +13926,7 @@ addLayer("d", {
                                 data2.milestones = data2.milestones.slice(0, lKeptMilestones)
                         }
 
-                        let startingBuyableAmount = new Decimal(0)
+                        let startingBuyableAmount = decimalZero
                         if (hasMilestone("cells", 1)) startingBuyableAmount = new Decimal(500)
 
                         data2.buyables[11] = startingBuyableAmount
@@ -13938,7 +13942,7 @@ addLayer("d", {
                         //gems
                         if (!hasMilestone("d", 12)) {
                                 let x = getResetGemIDs()
-                                let keepGems = new Decimal(0)
+                                let keepGems = decimalZero
                                 if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
 
                                 let gData = player.l.grid
@@ -13960,15 +13964,15 @@ addLayer("d", {
                         if (!hasMilestone("a", 9)) data2.times = 0
                 }
 
-                data2.points = new Decimal(0)
-                data2.best = new Decimal(0)
-                data2.total = new Decimal(0)
+                data2.points = decimalZero
+                data2.best = decimalZero
+                data2.total = decimalZero
 
                 // 3 Mu content
                 if (!false) { 
                         // 2 rows of upgrades
-                        data3.buyables[32] = new Decimal(0)
-                        data3.buyables[33] = new Decimal(0)
+                        data3.buyables[32] = decimalZero
+                        data3.buyables[33] = decimalZero
 
                         let muUpgRem = [41, 42, 43, 44, 45, 
                                         51, 52, 53, 54, 55]
@@ -13978,15 +13982,15 @@ addLayer("d", {
                         }
                 }
 
-                data3.buyables[11] = new Decimal(0)
-                data3.buyables[12] = new Decimal(0)
-                data3.buyables[13] = new Decimal(0)
-                data3.buyables[21] = new Decimal(0)
-                data3.buyables[22] = new Decimal(0)
-                data3.buyables[23] = new Decimal(0)
-                data3.buyables[31] = new Decimal(0) // buyables
-                data3.buyables[32] = new Decimal(0)
-                data3.buyables[33] = new Decimal(0)
+                data3.buyables[11] = decimalZero
+                data3.buyables[12] = decimalZero
+                data3.buyables[13] = decimalZero
+                data3.buyables[21] = decimalZero
+                data3.buyables[22] = decimalZero
+                data3.buyables[23] = decimalZero
+                data3.buyables[31] = decimalZero // buyables
+                data3.buyables[32] = decimalZero
+                data3.buyables[33] = decimalZero
 
                 // 4 Phosphorus content
                 if (!hasMilestone("d", 2)) {
@@ -13999,7 +14003,7 @@ addLayer("d", {
                         }
                 }
 
-                player.p.best_over_amino = new Decimal(0)
+                player.p.best_over_amino = decimalZero
 
                 resetPreLifeCurrencies()
         },
@@ -14011,9 +14015,9 @@ addLayer("cells", {
         position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -14034,12 +14038,12 @@ addLayer("cells", {
         getBaseGain(){
                 let pts = player.d.points
                 let init = pts.div("1e582").max(1)
-                if (init.lt(1e100)) return new Decimal(0)
+                if (init.lt(1e100)) return decimalZero
 
                 return init.pow(tmp.cells.getGainExp).sub(1).max(0)
         },
         getGainMult(){ // c gain cellsgain cgain cells gain cellgain cell gain
-                let ret = new Decimal(1)
+                let ret = decimalOne
 
                 return ret.max(1)
         },
@@ -14117,7 +14121,7 @@ addLayer("cells", {
                                 let exp = Math.min(max, player.cells.times)
                                 return Decimal.pow(1.02, exp)
                         },
-                        cost:() => new Decimal(1),
+                        cost:() => decimalOne,
                         unlocked(){
                                 return true
                         }, // hasUpgrade("cells", 11)
@@ -14129,7 +14133,7 @@ addLayer("cells", {
                                 return "Requires: 1 Cell reset"
                         },
                         requirement(){
-                                return new Decimal(1)
+                                return decimalOne
                         },
                         done(){
                                 return tmp.cells.milestones[1].requirement.lte(player.cells.times)
@@ -14359,9 +14363,9 @@ addLayer("cells", {
                         if (!false) data1.times = Math.min(data1.times, dKeptTimes)
                 }
 
-                data1.points = new Decimal(0)
-                data1.best = new Decimal(0)
-                data1.total = new Decimal(0)
+                data1.points = decimalZero
+                data1.best = decimalZero
+                data1.total = decimalZero
 
                 // 2 Amino Acid content
                 if (!false) {
@@ -14372,15 +14376,15 @@ addLayer("cells", {
                                 data2.milestones = data2.milestones.slice(0, aKeptMilestones)
                         }
 
-                        data2.buyables[11] = new Decimal(0)
-                        data2.buyables[12] = new Decimal(0)
-                        data2.buyables[13] = new Decimal(0)
-                        data2.buyables[21] = new Decimal(0)
-                        data2.buyables[22] = new Decimal(0)
-                        data2.buyables[23] = new Decimal(0)
-                        data2.buyables[31] = new Decimal(0)
-                        data2.buyables[32] = new Decimal(0)
-                        data2.buyables[33] = new Decimal(0)
+                        data2.buyables[11] = decimalZero
+                        data2.buyables[12] = decimalZero
+                        data2.buyables[13] = decimalZero
+                        data2.buyables[21] = decimalZero
+                        data2.buyables[22] = decimalZero
+                        data2.buyables[23] = decimalZero
+                        data2.buyables[31] = decimalZero
+                        data2.buyables[32] = decimalZero
+                        data2.buyables[33] = decimalZero
 
                         let aKeptUpgrades = 0
                         if (hasMilestone("d", 7)) aKeptUpgrades += player.d.times * 2
@@ -14392,12 +14396,12 @@ addLayer("cells", {
                         if (!hasMilestone("d", 5)) data2.times = 0
                 }
 
-                data2.points = new Decimal(0)
-                data2.best = new Decimal(0)
-                data2.total = new Decimal(0)
-                data2.protein.best = new Decimal(0)
-                data2.protein.total = new Decimal(0)
-                data2.protein.points = new Decimal(0)
+                data2.points = decimalZero
+                data2.best = decimalZero
+                data2.total = decimalZero
+                data2.protein.best = decimalZero
+                data2.protein.total = decimalZero
+                data2.protein.points = decimalZero
 
 
                 // 3 Life content
@@ -14409,7 +14413,7 @@ addLayer("cells", {
                                 data3.milestones = data3.milestones.slice(0, lKeptMilestones)
                         }
 
-                        let startingBuyableAmount = new Decimal(0)
+                        let startingBuyableAmount = decimalZero
                         if (hasMilestone("cells", 1)) startingBuyableAmount = new Decimal(500)
 
                         data3.buyables[11] = startingBuyableAmount
@@ -14430,7 +14434,7 @@ addLayer("cells", {
 
                                 for (i in x) {
                                         id = x[i]
-                                        let thisKeep = new Decimal(0)
+                                        let thisKeep = decimalZero
                                         if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
                                                 thisKeep = thisKeep.max(1000)
                                         }
@@ -14442,21 +14446,21 @@ addLayer("cells", {
                         if (!hasMilestone("a", 9) && !hasMilestone("cells", 2)) data3.times = 0
                 }
 
-                data3.points = new Decimal(0)
-                data3.best = new Decimal(0)
-                data3.total = new Decimal(0)
+                data3.points = decimalZero
+                data3.best = decimalZero
+                data3.total = decimalZero
 
-                player.mu.buyables[11] = new Decimal(0)
-                player.mu.buyables[12] = new Decimal(0)
-                player.mu.buyables[13] = new Decimal(0)
-                player.mu.buyables[21] = new Decimal(0)
-                player.mu.buyables[22] = new Decimal(0)
-                player.mu.buyables[23] = new Decimal(0)
-                player.mu.buyables[31] = new Decimal(0) // buyables
-                player.mu.buyables[32] = new Decimal(0)
-                player.mu.buyables[33] = new Decimal(0)
+                player.mu.buyables[11] = decimalZero
+                player.mu.buyables[12] = decimalZero
+                player.mu.buyables[13] = decimalZero
+                player.mu.buyables[21] = decimalZero
+                player.mu.buyables[22] = decimalZero
+                player.mu.buyables[23] = decimalZero
+                player.mu.buyables[31] = decimalZero // buyables
+                player.mu.buyables[32] = decimalZero
+                player.mu.buyables[33] = decimalZero
 
-                player.p.best_over_amino = new Decimal(0)
+                player.p.best_over_amino = decimalZero
 
                 resetPreLifeCurrencies()
         },
@@ -14468,9 +14472,9 @@ addLayer("ach", {
         position: 1,
         startData() { return {
                 unlocked: true,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -14481,16 +14485,16 @@ addLayer("ach", {
         }},
         color: "#FFC746",
         branches: [],
-        requires: new Decimal(0),
+        requires: decimalZero,
         resource: "Achievements",
         baseResource: "points",
-        baseAmount() {return new Decimal(0)},
+        baseAmount() {return decimalZero},
         type: "custom",
         getResetGain() {
-                return new Decimal(0)
+                return decimalZero
         },
         getNextAt(){
-                return new Decimal(0)
+                return decimalZero
         },
         update(diff){
                 let data = player.ach
@@ -14934,47 +14938,47 @@ addLayer("mini", {
                 time: 0,
                 autotime: 0,
                 a_points: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                         extras: {
-                                11: new Decimal(1),
-                                12: new Decimal(0),
-                                13: new Decimal(0),
-                                21: new Decimal(0),
-                                23: new Decimal(0),
-                                61: new Decimal(0),
-                                62: new Decimal(0),
-                                63: new Decimal(0),
+                                11: decimalOne,
+                                12: decimalZero,
+                                13: decimalZero,
+                                21: decimalZero,
+                                23: decimalZero,
+                                61: decimalZero,
+                                62: decimalZero,
+                                63: decimalZero,
                         }
                 },
                 b_points: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
                 c_points: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                         lastRoll: [],
                         lastRollTime: new Date().getTime(),
                         displayCharacters: true,
                 },
                 d_points: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
-                        fuel: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
+                        fuel: decimalZero,
                         fuelTimer1: 0,
                         fuelTimer2: 0,
                 },
                 e_points: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
                 autobuytokens: false,
                 autobuyradio: false,
         }},
         color: "#7D5D58",
         branches: [],
-        requires: new Decimal(0),
+        requires: decimalZero,
         resource: "Minigames completed",
         tooltip(){
                 let tab = player.subtabs.mini.mainTabs
@@ -14987,13 +14991,13 @@ addLayer("mini", {
                 return ""
         },
         baseResource: "points",
-        baseAmount() {return new Decimal(0)},
+        baseAmount() {return decimalZero},
         type: "custom",
         getResetGain() {
-                return new Decimal(0)
+                return decimalZero
         },
         getNextAt(){
-                return new Decimal(0)
+                return decimalZero
         },
         update(diff){
                 let data = player.mini
@@ -15010,7 +15014,7 @@ addLayer("mini", {
                 if (hasUpgrade("h", 51) || player.subtabs.mini.mainTabs == "A" && tmp.mini.tabFormat.A.unlocked) {
                         //update A minigame
                         let extras = apts.extras
-                        if (extras[11].lt(1)) extras[11] = new Decimal(1)
+                        if (extras[11].lt(1)) extras[11] = decimalOne
                         let lvls = player.mini.buyables
                         let order = [11,12,13  ,23,63,62  ,61,21,11]
                         let exp = tmp.mini.a_points.getColorGainExp
@@ -15039,7 +15043,7 @@ addLayer("mini", {
                                 let list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
                                 if (allABContent || hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
                                 
-                                let max = new Decimal(1) // a and b 
+                                let max = decimalOne // a and b 
                                 if (allABContent || hasMilestone("tokens", 3))          max = max.times(10)
                                 if (allABContent || hasMilestone("tokens", 13))         max = max.times(5)
                                 if (allABContent || hasMilestone("n", 1))               max = max.times(5)
@@ -15076,7 +15080,7 @@ addLayer("mini", {
                                         }
                                 }
 
-                                let bulk = new Decimal(1) // c
+                                let bulk = decimalOne // c
                                 if (allABContent || hasUpgrade("mini", 41))     bulk = bulk.times(5)
                                 if (allABContent || hasUpgrade("mini", 44))     bulk = bulk.times(2)
                                 if (allABContent || hasMilestone("n", 2))       bulk = bulk.times(5)
@@ -15119,7 +15123,7 @@ addLayer("mini", {
                                                  182, 183].concat(list3)
                                 }
 
-                                let bulk2 = new Decimal(1) // d
+                                let bulk2 = decimalOne // d
                                 if (allABContent || hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
                                 if (allABContent || hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
                                 if (allABContent || hasUpgrade("mini", 85))     bulk2 = bulk2.times(5)
@@ -15153,7 +15157,7 @@ addLayer("mini", {
                                                  232, 233, 241]
                                 }
 
-                                let bulk3 = new Decimal(1) // e
+                                let bulk3 = decimalOne // e
                                 if (allABContent || hasMilestone("n", 17))      bulk3 = bulk3.times(5)
                                 if (allABContent || hasUpgrade("o", 33)) {
                                         if (hasUpgrade("o", 31))                bulk3 = bulk3.times(2)
@@ -15261,7 +15265,7 @@ addLayer("mini", {
         },
         a_points: {
                 getGainMult(){ // apoint gain a point gain apt gain a pt gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         if (player.dev.aPointMult != undefined) ret = ret.times(player.dev.aPointMult)
 
@@ -15279,12 +15283,12 @@ addLayer("mini", {
                         return ret
                 },
                 getResetGain(){
-                        if (inChallenge("n", 41)) return new Decimal(0)
+                        if (inChallenge("n", 41)) return decimalZero
                         let apts = player.mini.a_points
                         let extras = apts.extras
                         let lvls = player.mini.buyables
                         let order = [11,12,13  ,23,63,62  ,61,21]
-                        let a = new Decimal(1)
+                        let a = decimalOne
                         for (i = 0; i < 8; i++){
                                 a = a.times(extras[order[i]].plus(1))
                         }
@@ -15312,7 +15316,7 @@ addLayer("mini", {
                         return exp
                 },
                 colorGainMult(){ // color gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         ret = ret.times(tmp.tokens.buyables[33].effect)
                         ret = ret.times(tmp.n.effect)
@@ -15327,7 +15331,7 @@ addLayer("mini", {
         },
         b_points: {
                 getResetGain(){ // bpoint gain b point gain b pt gain bpt gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         if (player.dev.bPointMult != undefined) ret = ret.times(player.dev.bPointMult)
 
@@ -15359,7 +15363,7 @@ addLayer("mini", {
         },
         c_points: {
                 getGainMult(){ // cpoint gain c point gain cpt gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         if (player.dev.cPointMult != undefined) ret = ret.times(player.dev.cPointMult)
 
@@ -15413,7 +15417,7 @@ addLayer("mini", {
                         return ret
                 },
                 getGainMult(){ // dpoint gain d point gain dpt gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         if (player.dev.dPointMult != undefined) ret = ret.times(player.dev.dPointMult)
 
@@ -15481,20 +15485,20 @@ addLayer("mini", {
                         return ret
                 },      
                 getLin(){
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
                         
                         ret = ret.plus(tmp.mini.buyables[121].effect)
 
                         return ret
                 },
                 getQuad(){
-                        let ret = new Decimal(0)
+                        let ret = decimalZero
                         if (hasUpgrade("mini", 53))     ret = ret.plus(.01)
                                                         ret = ret.plus(tmp.mini.buyables[131].effect)
                         return ret
                 },
                 getExp1(){
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         ret = ret.plus(tmp.mini.buyables[132].effect)
 
@@ -15539,7 +15543,7 @@ addLayer("mini", {
         },
         e_points: {
                 getGainMult(){ // epoint gain e point gain ept gain e pt gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         if (player.dev.ePointMult != undefined) ret = ret.times(player.dev.ePointMult)
 
@@ -15596,8 +15600,8 @@ addLayer("mini", {
                                 return a.times(x).plus(b).times(x).plus(c).times(x).plus(d)
                         }
 
-                        if (iter <= 5) return recurse(f, new Decimal(0), iter)
-                        let init = recurse(f, new Decimal(0), 5)
+                        if (iter <= 5) return recurse(f, decimalZero, iter)
+                        let init = recurse(f, decimalZero, 5)
                         //assume only a and iterations matter
                         let rem = iter - 5
                         let levelsOfA = Decimal.pow(3, rem).sub(1).div(2)
@@ -15613,7 +15617,7 @@ addLayer("mini", {
                         return ret
                 },
                 getA(){
-                        let ret = new Decimal(0)
+                        let ret = decimalZero
 
                         if (hasUpgrade("n", 42)) ret = ret.plus(.1)
                         if (hasUpgrade("n", 43)) ret = ret.plus(.1)
@@ -15626,7 +15630,7 @@ addLayer("mini", {
                         return ret
                 },
                 getB(){
-                        let ret = new Decimal(0)
+                        let ret = decimalZero
 
                         ret = ret.plus(tmp.mini.buyables[211].effect)
                         if (hasMilestone("mu", 5)) ret = ret.times(player.mu.points.max(1).pow(10))
@@ -15634,7 +15638,7 @@ addLayer("mini", {
                         return ret
                 },
                 getC(){
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         ret = ret.plus(tmp.mini.buyables[203].effect)
 
@@ -15643,7 +15647,7 @@ addLayer("mini", {
                         return ret
                 },
                 getD(){
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         ret = ret.plus(tmp.mini.buyables[202].effect)
 
@@ -15674,11 +15678,11 @@ addLayer("mini", {
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = new Decimal(2)
                                 ret = ret.plus(tmp.mini.buyables[23].effect)
                                 return ret
@@ -15731,11 +15735,11 @@ addLayer("mini", {
                                 let base = 1e9
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = new Decimal(2)
                                 ret = ret.plus(tmp.mini.buyables[23].effect)
                                 return ret
@@ -15788,11 +15792,11 @@ addLayer("mini", {
                                 let base = 1e6
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = new Decimal(2)
                                 ret = ret.plus(tmp.mini.buyables[23].effect)
                                 return ret
@@ -15845,11 +15849,11 @@ addLayer("mini", {
                                 let base = 1e30
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         initBase(){
-                                if (inChallenge("n", 11)) return new Decimal(0)
+                                if (inChallenge("n", 11)) return decimalZero
                                 return new Decimal(2)
                         },
                         base(){
@@ -15913,12 +15917,12 @@ addLayer("mini", {
                                 let base = 1e11
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(0)
-                                let ret = new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalZero
+                                let ret = decimalOne
                                 if (hasUpgrade("h", 64)) ret = ret.times(player.mini.buyables[23].max(1).log10().max(1))
                                 return ret
                         },
@@ -15971,11 +15975,11 @@ addLayer("mini", {
                                 let base = 1e10
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = new Decimal(3)
                                 if (hasUpgrade("h", 52)) ret = ret.plus(1)
                                 ret = ret.plus(tmp.mini.buyables[52].effect)
@@ -16029,11 +16033,11 @@ addLayer("mini", {
                                 let base = 2000
                                 let exp = 1.15
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = player.mini.a_points.points.plus(10).ln()
                                 if (hasUpgrade("c", 14)) ret = ret.div(Math.log(2))
                                 return ret
@@ -16087,11 +16091,11 @@ addLayer("mini", {
                                 let base = 1e8
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(1)
+                                if (inChallenge("n", 11)) return decimalOne
                                 let ret = new Decimal(2)
                                 return ret
                         },
@@ -16151,7 +16155,7 @@ addLayer("mini", {
                                 let base = 20
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16207,7 +16211,7 @@ addLayer("mini", {
                                 let base = 5e5
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16263,7 +16267,7 @@ addLayer("mini", {
                                 let base = 100
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16319,7 +16323,7 @@ addLayer("mini", {
                                 let base = 10
                                 let exp = 1.5
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16375,7 +16379,7 @@ addLayer("mini", {
                                 let base = 2e10
                                 let exp = 1.35
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16431,7 +16435,7 @@ addLayer("mini", {
                                 let base = 1e15
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16487,7 +16491,7 @@ addLayer("mini", {
                                 let base = 1e8
                                 let exp = 1.3
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16543,7 +16547,7 @@ addLayer("mini", {
                                 let base = 1e4
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16604,7 +16608,7 @@ addLayer("mini", {
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
                         },
                         unlocked(){
@@ -16717,7 +16721,7 @@ addLayer("mini", {
                                 let base = 100
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -16778,7 +16782,7 @@ addLayer("mini", {
                                 let base = 200
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -16835,14 +16839,14 @@ addLayer("mini", {
                                 let base = 1e5
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 73).gt(28)
                         },
                         base(){
-                                if (inChallenge("n", 11)) return new Decimal(0)
+                                if (inChallenge("n", 11)) return decimalZero
                                 let ret = new Decimal(.1)
                                 if (hasUpgrade("mini", 21)) ret = ret.plus(.1)
                                 if (hasUpgrade("mini", 24)) ret = ret.plus(.05)
@@ -16898,7 +16902,7 @@ addLayer("mini", {
                                 let base = 1e4
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -16961,7 +16965,7 @@ addLayer("mini", {
                                 let base = 1e10
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17025,14 +17029,14 @@ addLayer("mini", {
                                 let base = 1e8
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 73).gt(300)
                         },
                         base(){
-                                if (inChallenge("n", 22)) return new Decimal(0)
+                                if (inChallenge("n", 22)) return decimalZero
                                 let amt = player.mini.buyables[91]
                                 let ret = amt.div(100).plus(1.2).ln()
                                 
@@ -17086,14 +17090,14 @@ addLayer("mini", {
                                 let base = 1e50
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 83).gt(50)
                         },
                         base(){
-                                if (inChallenge("n", 32)) return new Decimal(1)
+                                if (inChallenge("n", 32)) return decimalOne
                                 let ret = player.points.max(10).log10()
 
                                 if (hasMilestone("n", 14)) ret = ret.times(Math.log(10))
@@ -17150,14 +17154,14 @@ addLayer("mini", {
                                 let base = 1e6
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 92).gt(30)
                         },
                         base(){
-                                if (inChallenge("n", 21)) return new Decimal(1)
+                                if (inChallenge("n", 21)) return decimalOne
                                 let init = player.mini.a_points.points.max(10).log10()
                                 if (hasUpgrade("tokens", 94)) init = init.times(Math.log(10))
                                 
@@ -17219,7 +17223,7 @@ addLayer("mini", {
                                 let base = 100
                                 let exp = 1.4
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17279,7 +17283,7 @@ addLayer("mini", {
                                 let base = 1e23
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17344,7 +17348,7 @@ addLayer("mini", {
                                 let base = 20
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17404,7 +17408,7 @@ addLayer("mini", {
                                 let base = 1e11
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17464,7 +17468,7 @@ addLayer("mini", {
                                 let base = 1e100
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17527,7 +17531,7 @@ addLayer("mini", {
                                 let base = Decimal.pow(2, 1024)
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17591,14 +17595,14 @@ addLayer("mini", {
                                 let base = 1.2
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return player.mini.d_points.best.gt(100)
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 if (hasUpgrade("mini", 61)) {
                                         let base = player.mini.buyables[121].max(8).log(8)
@@ -17662,7 +17666,7 @@ addLayer("mini", {
                                 let base = 3
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17725,7 +17729,7 @@ addLayer("mini", {
                                 let base = 5
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17786,7 +17790,7 @@ addLayer("mini", {
                                 let base = 10
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17852,7 +17856,7 @@ addLayer("mini", {
                                 let base = 1e38
                                 let exp = 1.4
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17915,7 +17919,7 @@ addLayer("mini", {
                                 let base = 1e8
                                 let exp = 1.5
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -17976,7 +17980,7 @@ addLayer("mini", {
                                 let base = 20
                                 let exp = 1.3
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18037,7 +18041,7 @@ addLayer("mini", {
                                 let base = 1000
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18098,7 +18102,7 @@ addLayer("mini", {
                                 let base = 1e10
                                 let exp = 1.3
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18159,7 +18163,7 @@ addLayer("mini", {
                                 let base = 1e20
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18220,7 +18224,7 @@ addLayer("mini", {
                                 let base = 100
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18281,7 +18285,7 @@ addLayer("mini", {
                                 let base = 1e24
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18342,7 +18346,7 @@ addLayer("mini", {
                                 let base = 1e30
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18403,7 +18407,7 @@ addLayer("mini", {
                                 let base = 1e20
                                 let exp = 1.4
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18464,7 +18468,7 @@ addLayer("mini", {
                                 let base = 1e30
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18525,7 +18529,7 @@ addLayer("mini", {
                                 let base = 1e35
                                 let exp = 1.3
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18586,7 +18590,7 @@ addLayer("mini", {
                                 let base = 1e19
                                 let exp = 1.1
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18647,7 +18651,7 @@ addLayer("mini", {
                                 let base = 265358
                                 let exp = 2
                                 let pts = player.mini.d_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18755,14 +18759,14 @@ addLayer("mini", {
                                 let base = 1.5
                                 let exp = 1.1
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 201).gte(1)
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 ret = ret.plus(tmp.mini.buyables[221].effect.times(player.mini.buyables[202]))
 
@@ -18819,14 +18823,14 @@ addLayer("mini", {
                                 let base = 2
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
                                 return getBuyableAmount("mini", 202).gte(3)
                         },
                         base(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 ret = ret.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
 
@@ -18880,7 +18884,7 @@ addLayer("mini", {
                                 let base = 4
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -18897,7 +18901,7 @@ addLayer("mini", {
                                 let ret = tmp.mini.buyables[211].baseInit
 
                                 if (hasUpgrade("n", 43)) {
-                                        let exp = new Decimal(1)
+                                        let exp = decimalOne
                                         if (hasUpgrade("c", 34)) exp = exp.times(2)
                                         ret = ret.times(player.mini.buyables[211].max(1).ln().max(1).pow(exp))
                                 }
@@ -18955,7 +18959,7 @@ addLayer("mini", {
                                 let base = 7
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19016,7 +19020,7 @@ addLayer("mini", {
                                 let base = 5
                                 let exp = 1.1
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19085,7 +19089,7 @@ addLayer("mini", {
                                 let base = 30
                                 let exp = 1.3
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19144,7 +19148,7 @@ addLayer("mini", {
                                 let base = 3
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19203,7 +19207,7 @@ addLayer("mini", {
                                 let base = 8
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19273,7 +19277,7 @@ addLayer("mini", {
                                 let base = 8
                                 let exp = 1.1
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19287,7 +19291,7 @@ addLayer("mini", {
                                 return ret
                         },
                         levelExp(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
 
                                 if (hasUpgrade("c", 33)) ret = ret.times(2)
 
@@ -19344,7 +19348,7 @@ addLayer("mini", {
                                 let base = 6
                                 let exp = 1.3
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19406,7 +19410,7 @@ addLayer("mini", {
                                 let base = 100
                                 let exp = 1.3
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -19465,7 +19469,7 @@ addLayer("mini", {
                                 let base = 1e5
                                 let exp = 1.1
                                 let pts = player.mini.e_points.points
-                                if (pts.lt(div)) return new Decimal(0)
+                                if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
@@ -21265,26 +21269,26 @@ addLayer("mini", {
                 //section 1: buyables
                 let resetBuyables = [11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43, 51, 52, 53, 61, 62, 63]
                 for (let j = 0; j < resetBuyables.length; j++) {
-                        data.buyables[resetBuyables[j]] = new Decimal(0)
+                        data.buyables[resetBuyables[j]] = decimalZero
                 }
 
                 // section 2: A point stuff
                 let apts = data.a_points
-                apts.points = new Decimal(0)
-                apts.best = new Decimal(0)
-                apts.extras[11] = new Decimal(0)
-                apts.extras[12] = new Decimal(0)
-                apts.extras[13] = new Decimal(0)
-                apts.extras[21] = new Decimal(0)
-                apts.extras[23] = new Decimal(0)
-                apts.extras[61] = new Decimal(0)
-                apts.extras[62] = new Decimal(0)
-                apts.extras[63] = new Decimal(0)
+                apts.points = decimalZero
+                apts.best = decimalZero
+                apts.extras[11] = decimalZero
+                apts.extras[12] = decimalZero
+                apts.extras[13] = decimalZero
+                apts.extras[21] = decimalZero
+                apts.extras[23] = decimalZero
+                apts.extras[61] = decimalZero
+                apts.extras[62] = decimalZero
+                apts.extras[63] = decimalZero
 
                 // section 3: B point stuff
                 let bpts = data.b_points
-                bpts.points = new Decimal(0)
-                bpts.best = new Decimal(0)
+                bpts.points = decimalZero
+                bpts.best = decimalZero
         },
         deactivated(){
                 return inChallenge("l", 22) || hasChallenge("l", 22)
@@ -21300,33 +21304,33 @@ addLayer("tokens", {
                 unlocked: false,
                 abtime: 0,
                 time: 0,
-                best_over_all_time: new Decimal(0),
+                best_over_all_time: decimalZero,
                 autotime: 0,
-                points: new Decimal(0),
-                total: new Decimal(0),
+                points: decimalZero,
+                total: decimalZero,
                 best_buyables: {
-                        11: new Decimal(0),
-                        12: new Decimal(0),
-                        13: new Decimal(0),
-                        21: new Decimal(0),
-                        22: new Decimal(0),
-                        23: new Decimal(0),
-                        31: new Decimal(0),
-                        32: new Decimal(0),
-                        33: new Decimal(0),
-                        41: new Decimal(0),
-                        42: new Decimal(0),
-                        43: new Decimal(0),
-                        51: new Decimal(0),
-                        52: new Decimal(0),
-                        53: new Decimal(0),
-                        61: new Decimal(0),
-                        62: new Decimal(0),
-                        63: new Decimal(0),
+                        11: decimalZero,
+                        12: decimalZero,
+                        13: decimalZero,
+                        21: decimalZero,
+                        22: decimalZero,
+                        23: decimalZero,
+                        31: decimalZero,
+                        32: decimalZero,
+                        33: decimalZero,
+                        41: decimalZero,
+                        42: decimalZero,
+                        43: decimalZero,
+                        51: decimalZero,
+                        52: decimalZero,
+                        53: decimalZero,
+                        61: decimalZero,
+                        62: decimalZero,
+                        63: decimalZero,
                 },
                 coins: {
-                        points: new Decimal(0),
-                        best: new Decimal(0)
+                        points: decimalZero,
+                        best: decimalZero
                 }
         }},
         color: "#7DC71C",
@@ -21337,8 +21341,8 @@ addLayer("tokens", {
         baseAmount() {return player.points.floor()}, 
         type: "custom",
         getResetGain() {
-                if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return new Decimal(1)
-                return new Decimal(0)
+                if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return decimalOne
+                return decimalZero
         },
         shouldNotify(){
                 if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) return true
@@ -21396,7 +21400,7 @@ addLayer("tokens", {
                          "42", "43", "51", "52", "53", 
                          "61", "62", "63"]
                 bb = data.best_buyables
-                let maxever = new Decimal(0)
+                let maxever = decimalZero
                 for (i = 0; i < a.length; i++){
                         id = a[i]
                         bb[id] = bb[id].max(data.buyables[id])
@@ -21434,7 +21438,7 @@ addLayer("tokens", {
         },
         coins: {
                 getGainMult(){ //coin gain coins gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
 
                         
                         if (player.hardMode)            ret = ret.div(3)
@@ -21487,37 +21491,37 @@ addLayer("tokens", {
                 let data1 = player.mini
                 if (!false) {
                         data1.a_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                                 extras: {
-                                        11: new Decimal(1),
-                                        12: new Decimal(0),
-                                        13: new Decimal(0),
-                                        21: new Decimal(0),
-                                        23: new Decimal(0),
-                                        61: new Decimal(0),
-                                        62: new Decimal(0),
-                                        63: new Decimal(0),
+                                        11: decimalOne,
+                                        12: decimalZero,
+                                        13: decimalZero,
+                                        21: decimalZero,
+                                        23: decimalZero,
+                                        61: decimalZero,
+                                        62: decimalZero,
+                                        63: decimalZero,
                                 }
                         }
                         let list1 = ["11", "12", "13", "21", 
                                      "22", "23", "61", 
                                      "62", "63"]
                         for (i = 0; i < list1.length; i++){
-                                data1.buyables[list1[i]] = new Decimal(0)
+                                data1.buyables[list1[i]] = decimalZero
                         }
                 }
                 // 2: B point stuff
                 if (!false) {
                         data1.b_points = {
-                                points: new Decimal(0),
-                                best: new Decimal(0),
+                                points: decimalZero,
+                                best: decimalZero,
                         }
                         let list2 = ["31", "32", 
                                      "33", "41", "42", "43", 
                                      "51", "52", "53"]
                         for (i = 0; i < list1.length; i++){
-                                data1.buyables[list2[i]] = new Decimal(0)
+                                data1.buyables[list2[i]] = decimalZero
                         }
                 }
 
@@ -21528,8 +21532,8 @@ addLayer("tokens", {
                         if (!hasMilestone("tokens", 11) && !hasMilestone("n", 6)) {
                                 player.c.upgrades = filterOut(player.c.upgrades, [11, 12, 13, 14, 15])
                         }
-                        player.c.points = new Decimal(0)
-                        player.c.best = new Decimal(0)
+                        player.c.points = decimalZero
+                        player.c.best = decimalZero
                 }
 
                 // 4: O
@@ -21537,8 +21541,8 @@ addLayer("tokens", {
                         if (!hasMilestone("tokens", 11) && !hasMilestone("n", 5)) {
                                 player.o.upgrades = filterOut(player.o.upgrades, [11, 12, 13, 14, 15])
                         }
-                        player.o.points = new Decimal(0)
-                        player.o.best = new Decimal(0)
+                        player.o.points = decimalZero
+                        player.o.best = decimalZero
                 }
 
                 // 5: H
@@ -21557,12 +21561,12 @@ addLayer("tokens", {
                         if (hasMilestone("tokens", 2)) remove = filterOut(remove, [51, 52])
 
                         if (!hasMilestone("n", 1)) player.h.upgrades = filterOut(player.h.upgrades, remove)
-                        player.h.points = new Decimal(0)
-                        player.h.best = new Decimal(0)
-                        player.h.atomic_hydrogen.points = new Decimal(0)
-                        player.h.atomic_hydrogen.best = new Decimal(0)
-                        player.h.deuterium.points = new Decimal(0)
-                        player.h.deuterium.best = new Decimal(0)
+                        player.h.points = decimalZero
+                        player.h.best = decimalZero
+                        player.h.atomic_hydrogen.points = decimalZero
+                        player.h.atomic_hydrogen.best = decimalZero
+                        player.h.deuterium.points = decimalZero
+                        player.h.deuterium.best = decimalZero
                 }
 
         },
@@ -22583,7 +22587,7 @@ addLayer("tokens", {
                                      "61", "62", "63"]
                                 for (i in x){
                                         id = x[i]
-                                        player.tokens.buyables[id] = new Decimal(0)
+                                        player.tokens.buyables[id] = decimalZero
                                 }
                         },
                         style(){
