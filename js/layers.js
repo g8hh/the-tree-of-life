@@ -384,26 +384,26 @@ function resetPreLifeCurrencies(){
         let data6 = player.mini
         let data8 = player.h
 
-        data1.points = new Decimal(0)
-        data1.best = new Decimal(0)
-        data1.total = new Decimal(0)
+        data1.points = decimalZero
+        data1.best = decimalZero
+        data1.total = decimalZero
 
-        data2.currentGainPerSec = new Decimal(0)
-        data2.points = new Decimal(0)
-        data2.best = new Decimal(0)
-        data2.total = new Decimal(0)
+        data2.currentGainPerSec = decimalZero
+        data2.points = decimalZero
+        data2.best = decimalZero
+        data2.total = decimalZero
 
-        data3.points = new Decimal(0)
-        data3.best = new Decimal(0)
-        data3.total = new Decimal(0)
+        data3.points = decimalZero
+        data3.best = decimalZero
+        data3.total = decimalZero
         
-        data4.points = new Decimal(0)
-        data4.best = new Decimal(0)
-        data4.total = new Decimal(0)
+        data4.points = decimalZero
+        data4.best = decimalZero
+        data4.total = decimalZero
 
-        data5.points = new Decimal(0)
-        data5.best = new Decimal(0)
-        data5.total = new Decimal(0)
+        data5.points = decimalZero
+        data5.best = decimalZero
+        data5.total = decimalZero
 
         let resetBuyableIds = [11, 12, 13, 21, 23, 
                                 61, 62, 63, 31, 32, 
@@ -423,29 +423,29 @@ function resetPreLifeCurrencies(){
 
         for (i in resetBuyableIds){
                 x = resetBuyableIds[i]
-                data6.buyables[x] = new Decimal(0)
+                data6.buyables[x] = decimalZero
         }
         
-        data6.a_points.points = new Decimal(0)
-        data6.a_points.best = new Decimal(0)
-        data6.b_points.points = new Decimal(0)
-        data6.b_points.best = new Decimal(0)
-        data6.c_points.points = new Decimal(0)
-        data6.c_points.best = new Decimal(0)
+        data6.a_points.points = decimalZero
+        data6.a_points.best = decimalZero
+        data6.b_points.points = decimalZero
+        data6.b_points.best = decimalZero
+        data6.c_points.points = decimalZero
+        data6.c_points.best = decimalZero
         data6.c_points.lastRoll = []
-        data6.d_points.points = new Decimal(0)
-        data6.d_points.best = new Decimal(0)
+        data6.d_points.points = decimalZero
+        data6.d_points.best = decimalZero
         data6.d_points.fuel = new Decimal(hasMilestone("l", 5) ? 1 : 0)
-        data6.e_points.points = new Decimal(0)
-        data6.e_points.best = new Decimal(0)
+        data6.e_points.points = decimalZero
+        data6.e_points.best = decimalZero
 
-        data8.points = new Decimal(0)
-        data8.best = new Decimal(0)
-        data8.total = new Decimal(0)
-        data8.atomic_hydrogen.points = new Decimal(0)
-        data8.atomic_hydrogen.best = new Decimal(0)
-        data8.deuterium.points = new Decimal(0)
-        data8.deuterium.best = new Decimal(0)
+        data8.points = decimalZero
+        data8.best = decimalZero
+        data8.total = decimalZero
+        data8.atomic_hydrogen.points = decimalZero
+        data8.atomic_hydrogen.best = decimalZero
+        data8.deuterium.points = decimalZero
+        data8.deuterium.best = decimalZero
 }
 
 /*
@@ -486,7 +486,7 @@ function filterOut(list, out){
 }
 
 function sumValsExp(exp){
-        a = new Decimal(0)
+        a = decimalZero
         b = 0
         while (a.lte(player.tokens.total) && b < 100){
                 a = a.plus(Decimal.pow(b,exp).floor())
@@ -496,7 +496,7 @@ function sumValsExp(exp){
 }
 
 function sumValsExp2(exp){
-        a = new Decimal(0)
+        a = decimalZero
         b = 0
         while (a.lte(player.tokens.total) && b < 100){
                 a = a.plus(Decimal.pow(b,exp).round())
@@ -511,24 +511,24 @@ addLayer("h", {
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
                 autotimes: 0,
                 deuterium: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
                 atomic_hydrogen: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
         }},
         color: "#646400",
         branches: [],
-        requires: new Decimal(0), // Can be a function that takes requirement increases into account
+        requires: decimalZero, // Can be a function that takes requirement increases into account
         resource: "Hydrogen", // Name of prestige currency
         baseResource: "Life Points", // Name of resource prestige is based on
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
@@ -548,7 +548,7 @@ addLayer("h", {
                 return ret
         },
         getNextAt(){
-                return new Decimal(0)
+                return decimalZero
         },
         getLossRate() { //hydrogen loss
                 let ret = new Decimal(.01)
@@ -1723,19 +1723,19 @@ addLayer("c", {
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
                 autotimes: 0,
                 methane: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
                 graphite: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
         }},
         color: "#3C9009",
@@ -1746,7 +1746,7 @@ addLayer("c", {
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getResetGain() {
-                if (!hasUpgrade("c", 11)) return new Decimal(0)
+                if (!hasUpgrade("c", 11)) return decimalZero
                 let base = tmp.c.getBaseGain
 
                 let mult = tmp.c.getGainMult
@@ -1777,17 +1777,17 @@ addLayer("c", {
         },
         getBaseGain(){
                 let pts = player.points
-                if (player.points.lt(2)) return new Decimal(0)
+                if (player.points.lt(2)) return decimalZero
                 let base = player.points.log(2).div(256).sub(3).max(0)
                 
                 if (hasUpgrade("tokens", 22)) base = base.pow(2)
 
-                if (base.lt(1)) base = new Decimal(0)
+                if (base.lt(1)) base = decimalZero
 
                 return base
         },
         getNextAt(){
-                return new Decimal(0) //this doesnt matter
+                return decimalZero //this doesnt matter
         },
         getLossRate() { //carbon loss
                 let ret = new Decimal(.01)
@@ -2192,19 +2192,19 @@ addLayer("o", {
         position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
                 autotimes: 0,
                 atomic_oxygen: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
                 ozone: {
-                        points: new Decimal(0),
-                        best: new Decimal(0),
+                        points: decimalZero,
+                        best: decimalZero,
                 },
         }},
         color: "#58E3F1",
@@ -2215,7 +2215,7 @@ addLayer("o", {
         baseAmount() {return player.points.floor()}, // Get the current amount of baseResource
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getResetGain() {
-                if (!hasUpgrade("o", 11)) return new Decimal(0)
+                if (!hasUpgrade("o", 11)) return decimalZero
                 let base = tmp.o.getBaseGain
 
                 let mult = tmp.o.getGainMult
@@ -2246,7 +2246,7 @@ addLayer("o", {
         },
         getBaseGain(){
                 let pts = player.points
-                if (player.points.lt(2)) return new Decimal(0)
+                if (player.points.lt(2)) return decimalZero
                 let init = player.points.max(4).log(2).log(2)
                 let base 
                 if (hasUpgrade("h", 74)){
@@ -2259,12 +2259,12 @@ addLayer("o", {
                 if (hasMilestone("tokens", 17)) base = base.pow(3)
                 if (hasUpgrade("h", 74))        base = base.pow(2)
 
-                if (base.lt(1)) base = new Decimal(0)
+                if (base.lt(1)) base = decimalZero
 
                 return base
         },
         getNextAt(){
-                return new Decimal(0) //this doesnt matter
+                return decimalZero //this doesnt matter
         },
         getLossRate() { //oxygen loss
                 let ret = new Decimal(.01)
@@ -2677,9 +2677,9 @@ addLayer("n", {
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
                 unlocked: false,
-		points: new Decimal(0),
-                best: new Decimal(0),
-                total: new Decimal(0),
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
                 abtime: 0,
                 time: 0,
                 times: 0,
@@ -5329,7 +5329,7 @@ addLayer("mu", {
                 data.time += diff
                 data.bestNdM = data.bestNdM.max(getBuyableAmount("mu", 31))
 
-                if (hasUpgrade("d", 22) && !hasMilestone("d", 15) && !inChallenge("l", 11) && player.l.time > 1) {
+                if (hasUpgrade("d", 22) && !hasMilestone("d", 15) && !inChallenge("l", 11) && player.l.time > 1 && !player.cells.unlocked) {
                         player.mu.buyables[31] = player.mu.buyables[31].max(data.bestNdM)
                 }
         },
@@ -6446,6 +6446,7 @@ addLayer("mu", {
                                         let diff = 20
                                         if (hasMilestone("d", 16)) diff = 100
                                         if (hasMilestone("d", 28)) diff *= 20
+                                        if (hasMilestone("cells", 4)) diff *= 10
                                         diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                         diff = Math.floor(diff)
@@ -7016,7 +7017,6 @@ addLayer("l", {
                                         data.total = data.total.plus(ng)
                                 } else {
                                         let ng = tmp.l.getResetGain.times(totalLeft.times(div-1).plus(diff))
-                                        console.log(totalLeft.toString())
                                         data.points = data.points.plus(ng)
                                         data.total = data.total.plus(ng)
                                 }
@@ -9210,7 +9210,9 @@ addLayer("l", {
                                 }
                                 let base = getBuyableAmount("a", 13).max(10).log10()
 
-                                if (hasMilestone("cells", 3)) base = base.times(Math.log(10)/Math.log(9))
+                                if (hasMilestone("cells", 3)) base = base.times(Math.log(10)/Math.log(7))
+                                if (hasMilestone("cells", 4)) base = base.times(Math.log(7)/Math.log(5))
+                                if (hasMilestone("cells", 5)) base = base.times(Math.log(5))
 
                                 let ret = base.pow(comps)
                                 return ret
@@ -9230,7 +9232,9 @@ addLayer("l", {
                                 let c = "Reward: Per anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
                                 let d = "Currently: " + format(tmp.l.challenges[71].reward)
 
-                                if (hasMilestone("cells", 3)) c = c.replace("log10", "log9")
+                                if (hasMilestone("cells", 3)) c = c.replace("log10", "log7")
+                                if (hasMilestone("cells", 4)) c = c.replace("log7", "log5")
+                                if (hasMilestone("cells", 5)) c = c.replace("log5", "ln")
 
                                 return a + br + b + br + c + br + d
                         },
@@ -10216,7 +10220,9 @@ addLayer("a", {
                 mRNAtRNAGainPer(){
                         let a = tmp.a.buyables[11].base
                         let b = tmp.a.buyables[12].base
-                        return a.log(5).plus(b.log(10))
+                        let ret = a.log(5).plus(b.log(10))
+                        if (ret.gt(1)) console.log(a.toString(), b.toString())
+                        return ret
                 },
                 mRNAtRNABoostExp(){
                         //1/(1-(Math.log(2.205)/Math.log(5)+Math.log(3.204)/Math.log(10)))
@@ -11837,6 +11843,9 @@ addLayer("a", {
                                 if (hasUpgrade("d", 32)) ret = ret.plus(.0004)
                                 if (layers.l.grid.getGemEffect(808)) ret = ret.plus(.0006)
                                 if (hasUpgrade("d", 35)) ret = ret.plus(.001)
+                                if (hasMilestone("cells", 6) && tmp.cells.milestones[6].effect.lt(1)) {
+                                        ret = ret.plus(tmp.cells.milestones[6].effect)
+                                }
                                 
                                 return ret
                         },
@@ -12523,7 +12532,7 @@ addLayer("a", {
                                                 return start + format(init.times(mult).pow(exp)) + " protein"
                                         }
                                         let boostExp = tmp.a.protein.mRNAtRNABoostExp
-                                        let time = player.a.protein.points.root(boostExp).div(tmp.a.protein.getAllOtherGain)
+                                        let time = player.a.protein.points.root(boostExp).div(tmp.a.protein.getAllOtherGain || 1)
                                         let base1 = tmp.a.buyables[11].base.pow(Math.log(50)/Math.log(25)) 
                                         let base2 = tmp.a.buyables[12].base.pow(Math.log(50)/Math.log(100))
                                         let oomps = Decimal.pow(base1.times(base2), time.pow(-1).div(2)).log10()
@@ -13489,7 +13498,7 @@ addLayer("d", {
                                 return new Decimal(18100)
                         },
                         done(){
-                                return tmp.d.milestones[15].requirement.lte(getBuyableAmount("mu", 31))
+                                return tmp.d.milestones[15].requirement.lte(getBuyableAmount("mu", 31)) || hasMilestone("cells", 1)
                         },
                         unlocked(){
                                 return true
@@ -14135,7 +14144,7 @@ addLayer("cells", {
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, and permanently keep Dilation completions."
+                                let a = "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, permanently keep Dilation completions, and get DNA milestone 15."
                                 let b = ""
                                 return a + b
                         },
@@ -14182,11 +14191,80 @@ addLayer("cells", {
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Per reset keep a DNA reset and Anti-Upsilon's log10 becomes log9."
+                                let a = "Reward: Per reset keep a DNA reset and Anti-Upsilon's log10 becomes log7."
                                 let b = ""
                                 return a + b
                         },
                 }, // hasMilestone("cells", 3)
+                4: {
+                        requirementDescription(){
+                                return "Requires: 5 Cell resets"
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.cells.milestones[4].requirement.lte(player.cells.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: You can bulk 10x more N → Δµ and Anti-Upsilon's log7 becomes log5."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 4)
+                5: {
+                        requirementDescription(){
+                                return "Requires: 8 Cell resets"
+                        },
+                        requirement(){
+                                return new Decimal(8)
+                        },
+                        done(){
+                                return tmp.cells.milestones[5].requirement.lte(player.cells.times)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 5)
+                6: {
+                        requirementDescription(){
+                                return "Requires: 13 Cells"
+                        },
+                        requirement(){
+                                return new Decimal(13)
+                        },
+                        done(){
+                                return tmp.cells.milestones[6].requirement.lte(player.cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return new Decimal(Math.min(10, player.cells.milestones.length)).div(1e4)
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per milestone (up to 10) add .0001 to tRNA's base."
+                                let b = br + "Currently: " + format(tmp.cells.milestones[6].effect)
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 6)
         },
         tabFormat: {
                 "Upgrades": {
@@ -14269,6 +14347,7 @@ addLayer("cells", {
                         }
 
                         let dKeptUpgrades = 0
+                        if (hasMilestone("cells", 5)) dKeptUpgrades += player.cells.times
                         if (!false) {
                                 sortStrings(data1.upgrades)
                                 data1.upgrades = data1.upgrades.slice(0, dKeptUpgrades)
@@ -14346,14 +14425,12 @@ addLayer("cells", {
                         //gems
                         if (!hasMilestone("d", 12)) {
                                 let x = getResetGemIDs()
-                                let keepGems = new Decimal(0)
-                                if (hasMilestone("a", 1)) keepGems = keepGems.plus(player.a.times)
 
                                 let gData = player.l.grid
 
                                 for (i in x) {
                                         id = x[i]
-                                        let thisKeep = keepGems
+                                        let thisKeep = new Decimal(0)
                                         if (hasMilestone("a", 12) && id < 400 && (id % 100 < 4)) {
                                                 thisKeep = thisKeep.max(1000)
                                         }
@@ -14727,7 +14804,18 @@ addLayer("ach", {
                                                 layers.tokens.buyables[81].buy()
                                         }
                                 }
-                        }
+                        },
+                        unlocked(){
+                                return tmp.tokens.layerShown
+                        },
+                },
+                {key: "v", description: "V: Start Customizable", 
+                        onPress(){
+                                startChallenge("l", 12)
+                        },
+                        unlocked(){
+                                return tmp.l.challenges[12].unlocked
+                        },
                 },
         ],
         layerShown(){return true},

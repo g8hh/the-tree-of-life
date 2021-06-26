@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.039.2",
+	num: "1.040",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.040</h3><br>
+		- Added a hotkey for entering customizable (v).<br>
+		- Added three Cell milestones.<br>
+		- Added an effect to Cell milestone 1.<br>
+		- Buffed an effect of Cell milestone 3.<br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.039.2</h3><br>
 		- Fixed said row of achievements.<br>
 		- Made Amino Acid display protein amount if its unlocked.<br>

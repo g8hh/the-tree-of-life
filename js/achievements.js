@@ -90,7 +90,7 @@ function getAchStuffFromNumber(n){
         } else if (n <= 1111) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
-                        return player.tokens.total.gt(0) || tmp.n.layerShown || tmp.l.layerShown
+                        return player.tokens.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -494,6 +494,20 @@ PROGRESSION_MILESTONES = {
         369: () => player.cells.points.gte(42),
         370: () => player.cells.points.gte(132),
         371: () => player.cells.points.gte(429),
+        372: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 12))),
+        373: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 13))),
+        374: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 14))),
+        375: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 15))),
+        376: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 16))),
+        377: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 17))),
+        378: () => player.d.points.gte(Decimal.pow(2, Decimal.pow(2, 18))),
+        379: () => player.a.protein.points.gte("1e1e13"),
+        380: () => player.a.protein.points.gte("1e1e14"),
+        381: () => player.a.protein.points.gte("1e1e15"),
+        382: () => player.a.protein.points.gte("1e1e16"),
+        383: () => player.a.protein.points.gte("1e1e17"),
+        384: () => player.a.protein.points.gte("1e1e18"),
+        385: () => player.a.protein.points.gte("1e1e19"),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -868,6 +882,20 @@ PROGRESSION_MILESTONES_TEXT = {
         369: "42 Cells",
         370: "132 Cells",
         371: "429 Cells",
+        372: "1.04e1233 DNA",
+        373: "1.09e2466 DNA",
+        374: "1.19e4932 DNA",
+        375: "1.42e9864 DNA",
+        376: "2.00e19,728 DNA",
+        377: "4.01e39,456 DNA",
+        378: "1.61e78,913 DNA",
+        379: "1e1e13 Protein",
+        380: "1e1e14 Protein",
+        381: "1e1e15 Protein",
+        382: "1e1e16 Protein",
+        383: "1e1e17 Protein",
+        384: "1e1e18 Protein",
+        385: "1e1e19 Protein",
 }
 
 
