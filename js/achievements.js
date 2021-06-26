@@ -487,13 +487,13 @@ PROGRESSION_MILESTONES = {
         362: () => player.a.protein.points.gte("1e2e11"),
         363: () => player.a.protein.points.gte("1e5e11"),
         364: () => player.a.protein.points.gte("1e1e12"),
-        365: () => player.cells.gems.gte(1),
-        366: () => player.cells.gems.gte(2),
-        367: () => player.cells.gems.gte(5),
-        368: () => player.cells.gems.gte(14),
-        369: () => player.cells.gems.gte(42),
-        370: () => player.cells.gems.gte(132),
-        371: () => player.cells.gems.gte(429),
+        365: () => player.cells.points.gte(1),
+        366: () => player.cells.points.gte(2),
+        367: () => player.cells.points.gte(5),
+        368: () => player.cells.points.gte(14),
+        369: () => player.cells.points.gte(42),
+        370: () => player.cells.points.gte(132),
+        371: () => player.cells.points.gte(429),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -862,12 +862,12 @@ PROGRESSION_MILESTONES_TEXT = {
         363: "1e5e11 Protein",
         364: "1e1e12 Protein",
         365: "1 Cell",
-        366: "2 Cell",
-        367: "5 Cell",
-        368: "14 Cell",
-        369: "42 Cell",
-        370: "132 Cell",
-        371: "429 Cell",
+        366: "2 Cells",
+        367: "5 Cells",
+        368: "14 Cells",
+        369: "42 Cells",
+        370: "132 Cells",
+        371: "429 Cells",
 }
 
 

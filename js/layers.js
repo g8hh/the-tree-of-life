@@ -169,6 +169,10 @@ function getResetGemIDs(){
         return ret
 }
 
+function sortStrings(l){
+        l.sort(function(a,b){return Number(a)-Number(b)})
+}
+
 var br = "<br>"
 var br2= br + br
 
@@ -4124,9 +4128,10 @@ addLayer("n", {
                         if (hasMilestone("n", 8)) keep0.push(82)
                         if (!hasMilestone("n", 9)) data2.upgrades = filter(data2.upgrades, keep0)
                         
-                        let keep1 = []
-                        if (hasMilestone("n", 2)) keep1 = keep1.concat(data2.milestones.slice(0, player.n.times))
-                        data2.milestones = filter(data2.milestones, keep1)
+                        let tokenKeptMilestones = 0
+                        if (hasMilestone("n", 2)) tokenKeptMilestones += player.n.times
+                        sortStrings(data2.milestones)
+                        data2.milestones = data2.milestones.slice(0, tokenKeptMilestones)
                 }
 
                 // 5: C
@@ -5040,11 +5045,9 @@ addLayer("p", {
                         player.n.upgrades = filterOut(player.n.upgrades, remupg)
 
                         if (hasMilestone("p", 1)) {
-                                let keep = ["1", "2", "3", "4", "5", 
-                                            "6", "7", "8", "9", "10", 
-                                            "11", "12", "13", "14", 
-                                            "15", "16", "17", "18"].slice(0, player.p.times)
-                                player.n.milestones = filter(player.n.milestones, keep)
+                                let nKeptMilestones = player.p.times
+                                sortStrings(player.n)
+                                player.n.milestones = player.n.milestones.slice(0, nKeptMilestones)
                         }
                         if (!hasMilestone("p", 5) && !hasMilestone("l", 4)) {
                                 player.n.challenges = {
@@ -9606,6 +9609,7 @@ addLayer("l", {
                         let muKeptMilestones = 0
                         if (hasMilestone("a", 2)) muKeptMilestones += player.a.times 
                         if (!hasMilestone("l", 8)) {
+                                sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, muKeptMilestones)
                         }
 
@@ -9637,6 +9641,7 @@ addLayer("l", {
                         let pKeptMilestones = 0
                         if (hasMilestone("l", 5)) pKeptMilestones = player.l.times
                         if (!hasMilestone("a", 2)) {
+                                sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, pKeptMilestones)
                         }
 
@@ -9663,6 +9668,7 @@ addLayer("l", {
 
                         let nKeptMilestones = 0
                         if (!hasMilestone("l", 5)) {
+                                sortStrings(data3.milestones)
                                 data3.milestones = data3.milestones.slice(0, nKeptMilestones)
                         }
 
@@ -9793,6 +9799,7 @@ addLayer("l", {
                 if (!hasUpgrade("p", 52) && !hasMilestone("a", 1) && !player.a.everA3) {
                         let tokenKeptMilestones = 0 //milestones
                         if (!hasMilestone("l", 8)) {
+                                sortStrings(data7.milestones)
                                 data7.milestones = data7.milestones.slice(0, tokenKeptMilestones)
                         }
 
@@ -9927,6 +9934,10 @@ addLayer("a", {
         },
         canReset(){
                 return tmp.a.getResetGain.gt(0)
+        },
+        tooltip(){
+                if (player.a.protein.points.eq(0)) return format(player.a.points) + " Amino Acid"
+                return format(player.a.points) + " Amino Acid and " + format(player.a.protein.points) + " Protein"
         },
         effect(){
                 let amt = player.a.best
@@ -12748,6 +12759,7 @@ addLayer("a", {
                         let lKeptMilestones = 0
                         if (hasMilestone("a", 1)) lKeptMilestones += 4 * player.a.times
                         if (!false) {
+                                sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, lKeptMilestones)
                         }
 
@@ -13860,6 +13872,7 @@ addLayer("d", {
                         let aKeptMilestones = 0
                         if (hasMilestone("d", 2)) aKeptMilestones += 3 * player.d.times
                         if (!false){
+                                sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, aKeptMilestones)
                         }
 
@@ -13876,6 +13889,7 @@ addLayer("d", {
                         let aKeptUpgrades = 0
                         if (hasMilestone("d", 7)) aKeptUpgrades += player.d.times * 2
                         if (!false) {
+                                sortStrings(data1.upgrades)
                                 data1.upgrades = data1.upgrades.slice(0, aKeptUpgrades)
                         }
 
@@ -13895,6 +13909,7 @@ addLayer("d", {
                         let lKeptMilestones = 0
                         if (hasMilestone("a", 1)) lKeptMilestones += 4 * player.a.times
                         if (!false) {
+                                sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, lKeptMilestones)
                         }
 
@@ -14009,15 +14024,10 @@ addLayer("cells", {
         },
         getBaseGain(){
                 let pts = player.d.points
-                let init = pts.div("1e1072").max(1).log10() 
-                if (init.lt(100)) return new Decimal(0)
+                let init = pts.div("1e582").max(1)
+                if (init.lt(1e100)) return new Decimal(0)
 
-                return init.sqrt().plus(tmp.cells.getBaseGainAddition).pow(tmp.cells.getGainExp)
-        },
-        getBaseGainAddition(){
-                let ret = new Decimal(-9)
-
-                return ret
+                return init.pow(tmp.cells.getGainExp).sub(1).max(0)
         },
         getGainMult(){ // c gain cellsgain cgain cells gain cellgain cell gain
                 let ret = new Decimal(1)
@@ -14025,15 +14035,14 @@ addLayer("cells", {
                 return ret.max(1)
         },
         getGainExp(){
-                let ret = new Decimal(1)
+                let ret = new Decimal(1/1960)
 
                 return ret
         },
         getNextAt(){
                 let gain = tmp.cells.getResetGain
                 let reqInit = gain.plus(1).div(tmp.cells.getGainMult).max(1)
-                let v1 = reqInit.root(tmp.cells.getGainExp).sub(tmp.cells.getBaseGainAddition).pow(2).pow10().times("1e1072")
-                return v1
+                return reqInit.plus(1).root(tmp.cells.getGainExp).times("1e582")
         },
         canReset(){
                 return tmp.cells.getResetGain.gt(0)
@@ -14213,11 +14222,9 @@ addLayer("cells", {
                                         if (player.tab != "cells") return ""
                                         if (player.subtabs.cells.mainTabs != "Info") return ""
 
-                                        let a1 = "Initial Cells gain: (sqrt(log10(DNA/1e1072))-9)"
-                                        let char = tmp.cells.getBaseGainAddition.gte(0) ? "+" : "-"
-                                        let a2 = "Current Cells gain: (sqrt(log10(DNA/1e1072))" + char + format(tmp.cells.getBaseGainAddition.abs())
+                                        let a1 = "Initial Cells gain: (DNA/1e582)^(1/1,960)"
+                                        let a2 = "Current Cells gain: (DNA/1e582)^(1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
                                         a2 += ")"
-                                        if (tmp.cells.getGainExp.gt(1)) a2 += "<sup>" + format(tmp.cells.getGainExp) + "</sup>"
                                         let a = a1 + br + a2
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
                                         let c = "Note that anti- challenges are never reset."
@@ -14235,6 +14242,9 @@ addLayer("cells", {
         onPrestige(){
                 player.cells.times ++
                 player.cells.time = 0
+                if (player.cells.milestone2Best != 0) {
+                        player.cells.milestone2Best = Math.max(player.cells.milestone2Best, player.cells.times)
+                }
         },
         doReset(layer){
                 if (layer != "cells") return 
@@ -14254,11 +14264,13 @@ addLayer("cells", {
                         let dKeptMilestones = 0
                         if (hasMilestone("cells", 1)) dKeptMilestones += player.cells.times
                         if (!false) {
+                                sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, dKeptMilestones)
                         }
 
                         let dKeptUpgrades = 0
                         if (!false) {
+                                sortStrings(data1.upgrades)
                                 data1.upgrades = data1.upgrades.slice(0, dKeptUpgrades)
                         }
 
@@ -14267,8 +14279,6 @@ addLayer("cells", {
 
                         if (!false) data1.times = Math.min(data1.times, dKeptTimes)
                 }
-                console.log(player.d.times)
-                console.log(hasMilestone("d", 2))
 
                 data1.points = new Decimal(0)
                 data1.best = new Decimal(0)
@@ -14279,6 +14289,7 @@ addLayer("cells", {
                         let aKeptMilestones = 0
                         if (hasMilestone("d", 2)) aKeptMilestones += 3 * player.d.times
                         if (!false){
+                                sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, aKeptMilestones)
                         }
 
@@ -14295,12 +14306,12 @@ addLayer("cells", {
                         let aKeptUpgrades = 0
                         if (hasMilestone("d", 7)) aKeptUpgrades += player.d.times * 2
                         if (!false) {
+                                sortStrings(data2.upgrades)
                                 data2.upgrades = data2.upgrades.slice(0, aKeptUpgrades)
                         }
 
                         if (!hasMilestone("d", 5)) data2.times = 0
                 }
-                console.log(data2.milestones)
 
                 data2.points = new Decimal(0)
                 data2.best = new Decimal(0)
@@ -14315,6 +14326,7 @@ addLayer("cells", {
                         let lKeptMilestones = 0
                         if (hasMilestone("a", 1)) lKeptMilestones += 4 * player.a.times
                         if (!false) {
+                                sortStrings(data3.milestones)
                                 data3.milestones = data3.milestones.slice(0, lKeptMilestones)
                         }
 
@@ -21367,6 +21379,10 @@ addLayer("tokens", {
         canReset(){ // tokens canReset
                 if (tmp.tokens.getResetGain.eq(0)) return false
                 return (hasUpgrade("h", 55) || hasChallenge("l", 21)) && (!inChallenge("n", 31) || player.tokens.total.lt(50))
+        },
+        tooltip(){
+                let data = player.tokens
+                return formatWhole(data.points) + "/" + formatWhole(data.total) + " tokens"
         },
         doReset(layer){
                 if (layer != "tokens") return
