@@ -14301,7 +14301,8 @@ addLayer("cells", {
                 if (data.points.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                if (data.milestone2Best != 0) data.milestone2Best = Math.max(data.milestone2Best, data.times)
+                if (data.milestone2Best != 0 || hasMilestone("cells", 2)) data.milestone2Best = Math.max(data.milestone2Best, data.times)
+                if (hasMilestone("cells", 1)) data.milestone1Ever = true
 
                 data.time += diff
                 if (data.passiveTime > 1) {
