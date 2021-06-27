@@ -7870,10 +7870,17 @@ addLayer("l", {
                 11: {
                         title: "α → ∂α",
                         cost() {
-                                let amt = getBuyableAmount("l", 11)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[11].expDiv).plus(1)
-                                return new Decimal(7e11).times(Decimal.pow(4, base.pow(exp)))
+                                let init = new Decimal(7e11)
+                                let base = new Decimal(4)
+                                let id = 11
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -7881,6 +7888,7 @@ addLayer("l", {
                                 let init = 7e11
                                 let base = 4
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[11].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[11].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -7963,6 +7971,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e11*4^(x<sup>1+x/" + formatWhole(tmp.l.buyables[11].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -7973,10 +7985,17 @@ addLayer("l", {
                 12: {
                         title: "α → ∂β",
                         cost() {
-                                let amt = getBuyableAmount("l", 12)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[12].expDiv).plus(1)
-                                return new Decimal(1e16).times(Decimal.pow(5, base.pow(exp)))
+                                let init = new Decimal(1e16)
+                                let base = new Decimal(5)
+                                let id = 12
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -7984,6 +8003,7 @@ addLayer("l", {
                                 let init = 1e16
                                 let base = 5
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[12].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[12].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8060,6 +8080,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e16*5^(x<sup>1+x/" + formatWhole(tmp.l.buyables[12].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8070,10 +8094,17 @@ addLayer("l", {
                 13: {
                         title: "α → ∂𝛾",
                         cost() {
-                                let amt = getBuyableAmount("l", 13)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[13].expDiv).plus(1)
-                                return new Decimal(1e21).times(Decimal.pow(10, base.pow(exp)))
+                                let init = new Decimal(1e21)
+                                let base = new Decimal(10)
+                                let id = 13
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8081,6 +8112,7 @@ addLayer("l", {
                                 let init = 1e21
                                 let base = 10
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[13].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[13].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8145,6 +8177,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e21*10^(x<sup>1+x/" + formatWhole(tmp.l.buyables[13].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8155,10 +8191,17 @@ addLayer("l", {
                 21: {
                         title: "β → ∂α",
                         cost() {
-                                let amt = getBuyableAmount("l", 21)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[21].expDiv).plus(1)
-                                return new Decimal(2.4e26).times(Decimal.pow(2, base.pow(exp)))
+                                let init = new Decimal(2.4e26)
+                                let base = new Decimal(2)
+                                let id = 21
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8166,6 +8209,7 @@ addLayer("l", {
                                 let init = 2.4e26
                                 let base = 2
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[21].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[21].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8244,6 +8288,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2.4e26*2^(x<sup>1+x/" + formatWhole(tmp.l.buyables[21].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8254,10 +8302,17 @@ addLayer("l", {
                 22: {
                         title: "β → ∂β",
                         cost() {
-                                let amt = getBuyableAmount("l", 22)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[22].expDiv).plus(1)
-                                return new Decimal(3e34).times(Decimal.pow(30, base.pow(exp)))
+                                let init = new Decimal(3e34)
+                                let base = new Decimal(30)
+                                let id = 22
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8265,6 +8320,7 @@ addLayer("l", {
                                 let init = 3e34
                                 let base = 30
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[22].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[22].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8325,6 +8381,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e34*30^(x<sup>1+x/" + formatWhole(tmp.l.buyables[22].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8335,10 +8395,17 @@ addLayer("l", {
                 23: {
                         title: "β → ∂𝛾",
                         cost() {
-                                let amt = getBuyableAmount("l", 23)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[23].expDiv).plus(1)
-                                return new Decimal(4e53).times(Decimal.pow(200, base.pow(exp)))
+                                let init = new Decimal(4e53)
+                                let base = new Decimal(200)
+                                let id = 23
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8346,6 +8413,7 @@ addLayer("l", {
                                 let init = 4e53
                                 let base = 200
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[23].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[23].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8409,6 +8477,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "4e53*200^(x<sup>1+x/" + formatWhole(tmp.l.buyables[23].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8419,10 +8491,17 @@ addLayer("l", {
                 31: {
                         title: "𝛾 → ∂α",
                         cost() {
-                                let amt = getBuyableAmount("l", 31)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[31].expDiv).plus(1)
-                                return new Decimal(7e84).times(Decimal.pow(158, base.pow(exp)))
+                                let init = new Decimal(7e84)
+                                let base = new Decimal(158)
+                                let id = 31
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8430,6 +8509,7 @@ addLayer("l", {
                                 let init = 7e84
                                 let base = 158
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[31].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[31].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8494,6 +8574,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e84*158^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)"
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500") 
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8504,10 +8588,17 @@ addLayer("l", {
                 32: {
                         title: "𝛾 → ∂β",
                         cost() {
-                                let amt = getBuyableAmount("l", 32)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[32].expDiv).plus(1)
-                                return new Decimal(1e166).times(Decimal.pow(1600, base.pow(exp)))
+                                let init = new Decimal(1e166)
+                                let base = new Decimal(1600)
+                                let id = 32
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
@@ -8515,6 +8606,7 @@ addLayer("l", {
                                 let init = 1e166
                                 let base = 1600
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[32].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[32].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8574,6 +8666,10 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e166*1600^(x<sup>1+x/" + formatWhole(tmp.l.buyables[32].expDiv) + "</sup>)"
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500") 
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8584,17 +8680,27 @@ addLayer("l", {
                 33: {
                         title: "𝛾 → ∂𝛾",
                         cost() {
-                                let amt = getBuyableAmount("l", 33)
-                                let base = hasChallenge("l", 81) ? new Decimal(500) : amt
-                                let exp = amt.div(tmp.l.buyables[33].expDiv).plus(1)
-                                return new Decimal(3e281).times(Decimal.pow(2e16, base.pow(exp)))
+                                let init = new Decimal(3e281)
+                                let base = new Decimal(2e16)
+                                if (hasChallenge("l", 101)) base = new Decimal(2468)
+                                let id = 33
+                                let expDiv = tmp.l.buyables[id].expDiv
+                                let amt = getBuyableAmount("l", id)
+                                if (hasChallenge("l", 101)) {
+                                        return init.times(base.pow(amt.pow(2.5).div(expDiv)))
+                                }
+                                let expBase = hasChallenge("l", 81) ? new Decimal(500) : amt
+                                let exp2 = amt.div(expDiv).plus(1)
+                                return init.times(Decimal.pow(base, expBase.pow(exp2)))
                         },
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
                                 let init = 3e281
                                 let base = 2e16
+                                if (hasChallenge("l", 101)) base = 2468
                                 if (pts.lt(init)) return decimalZero
+                                if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[33].expDiv).root(2.5).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[33].expDiv).plus(1).floor()
                         },
                         expDiv() {
@@ -8658,6 +8764,11 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e281*2e16^(x<sup>1+x/" + formatWhole(tmp.l.buyables[33].expDiv) + "</sup>)" 
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
+                                if (hasChallenge("l", 101)) {
+                                        cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
+                                        cost2 = cost2.replace("</sup>)", ")")
+                                        cost2 = cost2.replace("2e16", "2468")
+                                }
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8743,6 +8854,8 @@ addLayer("l", {
                                 if (inChallenge("l", 82)) init = init.sub(.26)
 
                                 if (layers.l.grid.getGemEffect(707)) init = init.plus(.004)
+
+                                if (inChallenge("l", 101)) init = init.pow(1.2)
 
                                 return init.min(1)
                         },
@@ -9398,6 +9511,42 @@ addLayer("l", {
                         },
                         countsAs: [11, 12],
                 }, // inChallenge("l", 92) hasChallenge("l", 92)
+                101: {
+                        name: "Anti-Xi", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let ret = new Decimal(comps).pow(1.5)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 304400)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                if (player.l.activeChallengeID != 808) return false
+                                return player.points.gt(tmp.l.challenges[101].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
+                                let b = "Goal: e1e304,400 Points"
+                                let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV and 𝛾 → ∂𝛾 primary base is 2468"
+
+                                return a + br + b + br + c
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 92)
+                        },
+                        countsAs: [11, 12],
+                }, // inChallenge("l", 101) hasChallenge("l", 101)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid

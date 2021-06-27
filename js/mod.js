@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.041",
+	num: "1.042",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.042</h3><br>
+		- Added an Life challenge.<br>
+		- Spent far too long coding up its reward.<br>
+		- Added two custom saves.<br>
+		- In a previous patch made Protein (given its >0) part of the Amino Acid display.<br>
+		- Also added a total tokens display (i.e. 4/79 tokens).<br>
 	<br><h3 style='color: #CC0000'>v1.041</h3><br>
 		- Added two Life challenges.<br>
 		- Added two Cell milestones.<br>
