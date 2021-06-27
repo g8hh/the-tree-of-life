@@ -4461,6 +4461,7 @@ addLayer("p", {
                                 return a + b
                         },
                         effect(){
+                                if (inChallenge("l", 92) || hasChallenge("l", 92)) return new Decimal(1)
                                 return player.p.points.max(1).pow(tmp.mini.e_points.getMaxInterations)
                         },
                         cost:() => new Decimal(player.hardMode ? 1e12 : 2e11),
@@ -5275,6 +5276,7 @@ addLayer("mu", {
                 }       
                 if (hasMilestone("d", 15))      rem = rem.plus(.01)
                                                 rem = rem.plus(layers.l.grid.getGemEffect(708))
+                if (hasChallenge("l", 91))      rem = rem.plus(tmp.l.challenges[91].reward)
                 
                 if (hasMilestone("mu", 13))     return new Decimal(1.90).sub(rem)
                 if (hasMilestone("mu", 11))     return new Decimal(1.91).sub(rem)
@@ -5423,6 +5425,7 @@ addLayer("mu", {
                         },
                         cost:() => new Decimal(6),
                         effect(){
+                                if (inChallenge("l", 91) || hasChallenge("l", 91)) return new Decimal(1)
                                 let base = player.p.points.max(100).log10()
                                 if (hasUpgrade("mu", 22)) base = base.div(Math.log10(6))
                                 if (hasUpgrade("mu", 25)) base = base.times(Math.log(6)/Math.log(5))
@@ -8908,6 +8911,7 @@ addLayer("l", {
                                         comps += data[id]
                                 }
                                 let base = player.d.points.max(10).log10()
+                                if (hasMilestone("cells", 7)) base = base.times(Math.log2(10))
                                 let ret = base.pow(comps)
                                 return ret
                         },
@@ -8925,6 +8929,7 @@ addLayer("l", {
                                 let b = "Goal: e1e145,100 Points"
                                 let c = "Reward: Per anti- challenge log10(DNA) multiplies DNA gain but disable minigame content"
                                 let d = "Currently: " + format(tmp.l.challenges[22].reward)
+                                if (hasMilestone("cells", 7)) c = c.replace("log10", "log2")
 
                                 return a + br + b + br + c + br + d
                         },
@@ -9217,6 +9222,7 @@ addLayer("l", {
                                 if (hasMilestone("cells", 3)) base = base.times(Math.log(10)/Math.log(7))
                                 if (hasMilestone("cells", 4)) base = base.times(Math.log(7)/Math.log(5))
                                 if (hasMilestone("cells", 5)) base = base.times(Math.log(5))
+                                if (hasMilestone("cells", 7)) base = base.div(Math.log(2))
 
                                 let ret = base.pow(comps)
                                 return ret
@@ -9239,6 +9245,7 @@ addLayer("l", {
                                 if (hasMilestone("cells", 3)) c = c.replace("log10", "log7")
                                 if (hasMilestone("cells", 4)) c = c.replace("log7", "log5")
                                 if (hasMilestone("cells", 5)) c = c.replace("log5", "ln")
+                                if (hasMilestone("cells", 7)) c = c.replace("ln", "log2")
 
                                 return a + br + b + br + c + br + d
                         },
@@ -9295,19 +9302,6 @@ addLayer("l", {
                 }, // inChallenge("l", 81) hasChallenge("l", 81)
                 82: {
                         name: "Anti-Rho", 
-                        reward(){
-                                let data = player.l.challenges
-                                let comps = 0
-                                let keys = Object.keys(player.l.challenges)
-                                for (i in keys){
-                                        id = keys[i]
-                                        if (id == 11 || id == 12) continue
-                                        comps += data[id]
-                                }
-                                let base = getBuyableAmount("a", 13).max(10).log10()
-                                let ret = base.pow(comps)
-                                return ret
-                        },
                         goal: () => Decimal.pow(10, Decimal.pow(10, 1989e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
@@ -9329,6 +9323,81 @@ addLayer("l", {
                         },
                         countsAs: [11],
                 }, // inChallenge("l", 82) hasChallenge("l", 82)
+                91: {
+                        name: "Anti-Pi", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let base = new Decimal(.01)
+                                let ret = base.times(comps)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 312100)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                if (player.l.activeChallengeID != 808) return false
+                                return player.points.gt(tmp.l.challenges[91].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Requires being in C88. Customizable and nullify µ III's effect"
+                                let b = "Goal: e1e312,100 Points"
+                                let c = "Reward: Per anti- challenge subtract .01 to µ cost exponent but nullify µ III's effect"
+                                let d = "Currently: " + format(tmp.l.challenges[91].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasMilestone("cells", 8)
+                        },
+                        countsAs: [11, 12],
+                }, // inChallenge("l", 91) hasChallenge("l", 91)
+                92: {
+                        name: "Anti-Omicron", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let ret = new Decimal(comps).pow(1.5)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 328700)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                if (player.l.activeChallengeID != 808) return false
+                                return player.points.gt(tmp.l.challenges[92].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
+                                let b = "Goal: e1e328,700 Points"
+                                let c = "Reward: Raise Constant base to anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
+                                let d = "Currently: " + format(tmp.l.challenges[92].reward)
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 91)
+                        },
+                        countsAs: [11, 12],
+                }, // inChallenge("l", 92) hasChallenge("l", 92)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -9458,7 +9527,7 @@ addLayer("l", {
                                   "blank",
                                   "grid",
                                   ["clickables", [1]],
-                                  ["challenges", [2,3,4,5,6,7,8]],
+                                  ["challenges", [2,3,4,5,6,7,8,9,10]],
                                 ],
                         unlocked(){
                                 return true
@@ -14265,10 +14334,54 @@ addLayer("cells", {
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
                                 let a = "Reward: Per milestone (up to 10) add .0001 to tRNA's base."
-                                let b = br + "Currently: " + format(tmp.cells.milestones[6].effect)
+                                let b = br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                                 return a + b
                         },
                 }, // hasMilestone("cells", 6)
+                7: {
+                        requirementDescription(){
+                                return "Requires: 21 Cells"
+                        },
+                        requirement(){
+                                return new Decimal(21)
+                        },
+                        done(){
+                                return tmp.cells.milestones[7].requirement.lte(player.cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Anti-Upsilon's ln becomes log2 and Anti-Minigame's log10 becomes log2."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 7)
+                8: {
+                        requirementDescription(){
+                                return "Requires: 100 Cells"
+                        },
+                        requirement(){
+                                return new Decimal(100)
+                        },
+                        done(){
+                                return tmp.cells.milestones[8].requirement.lte(player.cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock another anti- challenge."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 8)
         },
         tabFormat: {
                 "Upgrades": {
@@ -22123,6 +22236,8 @@ addLayer("tokens", {
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(203))
                                 if (hasMilestone("a", 20))      ret = ret.plus(.002 * player.a.milestones.length)
                                 if (hasChallenge("l", 42))      ret = ret.plus(tmp.l.challenges[42].reward)
+
+                                if (hasChallenge("l", 92))      ret = ret.pow(tmp.l.challenges[92].reward)
 
                                 return ret
                         },

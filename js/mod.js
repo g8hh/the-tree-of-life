@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.040",
+	num: "1.041",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.041</h3><br>
+		- Added two Life challenges.<br>
+		- Added two Cell milestones.<br>
+		- Fixed formatting for numbers <.001 <br>
 	<br><h3 style='color: #CC0000'>v1.040</h3><br>
 		- Added a hotkey for entering customizable (v).<br>
 		- Added three Cell milestones.<br>
