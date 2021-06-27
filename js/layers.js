@@ -9463,7 +9463,7 @@ addLayer("l", {
                 },
                 getStyle(data, id){
                         if (data.active) {
-                                if (data.gems.gt(1e4)) return {"background-color": "#45860F"}
+                                if (data.gems.gte(1e4)) return {"background-color": "#45860F"}
                                 return {"background-color": "#99C53A"}
                         }
                         let x = ["#CC0033", "#D21A39", "#D93340", "#DF4D46", "#E6664D",
@@ -9471,7 +9471,7 @@ addLayer("l", {
                         let y = ["#0099FF", "#168AF8", "#2C7CF0", "#426DE9", "#575FE2",
                                  "#6D50DB", "#8342D3", "#9933CC",]
                         let valId = Math.max(data.units, data.hundreds)
-                        if (data.gems.gt(1e4)) return {"background-color": y[valId-1]}
+                        if (data.gems.gte(1e4)) return {"background-color": y[valId-1]}
                         return {"background-color": x[valId-1]}
                 },
                 getDisplay(data, id) {
