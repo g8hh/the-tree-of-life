@@ -6454,6 +6454,7 @@ addLayer("mu", {
                                         if (hasMilestone("d", 16)) diff = 100
                                         if (hasMilestone("d", 28)) diff *= 20
                                         if (hasMilestone("cells", 4)) diff *= 10
+                                        if (hasChallenge("l", 101)) diff *= 50
                                         diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                         diff = Math.floor(diff)
@@ -8856,6 +8857,7 @@ addLayer("l", {
                                 if (layers.l.grid.getGemEffect(707)) init = init.plus(.004)
 
                                 if (inChallenge("l", 101)) init = init.pow(1.2)
+                                if (inChallenge("l", 102)) init = init.pow(1.4)
 
                                 return init.min(1)
                         },
@@ -9513,18 +9515,6 @@ addLayer("l", {
                 }, // inChallenge("l", 92) hasChallenge("l", 92)
                 101: {
                         name: "Anti-Xi", 
-                        reward(){
-                                let data = player.l.challenges
-                                let comps = 0
-                                let keys = Object.keys(player.l.challenges)
-                                for (i in keys){
-                                        id = keys[i]
-                                        if (id == 11 || id == 12) continue
-                                        comps += data[id]
-                                }
-                                let ret = new Decimal(comps).pow(1.5)
-                                return ret
-                        },
                         goal: () => Decimal.pow(10, Decimal.pow(10, 304400)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
@@ -9538,7 +9528,7 @@ addLayer("l", {
 
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
                                 let b = "Goal: e1e304,400 Points"
-                                let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV and 𝛾 → ∂𝛾 primary base is 2468"
+                                let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV, 𝛾 → ∂𝛾's primary base is 2468, and bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
                         },
@@ -9547,6 +9537,42 @@ addLayer("l", {
                         },
                         countsAs: [11, 12],
                 }, // inChallenge("l", 101) hasChallenge("l", 101)
+                102: {
+                        name: "Anti-Nu", 
+                        reward(){
+                                let data = player.l.challenges
+                                let comps = 0
+                                let keys = Object.keys(player.l.challenges)
+                                for (i in keys){
+                                        id = keys[i]
+                                        if (id == 11 || id == 12) continue
+                                        comps += data[id]
+                                }
+                                let ret = new Decimal(comps).pow(1.5)
+                                return ret
+                        },
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 7481e3)),
+                        canComplete(){ 
+                                if (player.l.challenges[11] < 110) return false
+                                if (player.l.activeChallengeID != 808) return false
+                                return player.points.gt(tmp.l.challenges[102].goal)
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                if (player.tab != "l") return 
+                                if (player.subtabs.l.mainTabs != "Challenges") return ""
+
+                                let a = "Requires being in C88. Customizable and raise dilation effect ^1.4"
+                                let b = "Goal: e1e7,481,000 Points"
+                                let c = "Reward: Unlock a new feature in Cells!"
+
+                                return a + br + b + br + c
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 101)
+                        },
+                        countsAs: [11, 12],
+                }, // inChallenge("l", 102) hasChallenge("l", 102)
         },
         getNonZeroGemCount(){
                 let data = player.l.grid
@@ -14242,6 +14268,28 @@ addLayer("cells", {
                 passiveTime: 0,
                 milestone1Ever: false,
                 milestone2Best: 0,
+                timeInMinigame: 0,
+                currentMinigame: undefined,
+                total11: new Decimal(0),
+                total12: new Decimal(0),
+                total13: new Decimal(0),
+                total14: new Decimal(0),
+                mu: {
+                        points: new Decimal(0),
+                        best: new Decimal(0),
+                },
+                lambda: {
+                        points: new Decimal(0),  
+                        best: new Decimal(0),    
+                },
+                kappa: {
+                        points: new Decimal(0),  
+                        best: new Decimal(0),    
+                },
+                iota: {
+                        points: new Decimal(0),   
+                        best: new Decimal(0),   
+                },
         }},
         color: "#99E21D",
         branches: [],
@@ -14262,6 +14310,8 @@ addLayer("cells", {
         },
         getGainMult(){ // c gain cellsgain cgain cells gain cellgain cell gain
                 let ret = decimalOne
+
+                if (hasUpgrade("cells", 111)) ret = ret.times(tmp.cells.upgrades[111].effect)
 
                 return ret.max(1)
         },
@@ -14310,6 +14360,114 @@ addLayer("cells", {
                         data.times ++
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
+
+                if (data.currentMinigame != undefined) data.timeInMinigame += diff
+                if (data.timeInMinigame > layers.cells.getMinigameMaximum()) {
+                        layers.cells.exitMinigame()
+                        // do stuff for exiting
+                        data.currentMinigame = undefined
+                        if (["Iota", "Kappa", "Mu", "Lambda"].includes(player.subtabs.cells.mainTabs)) {
+                                player.subtabs.cells.mainTabs = "Upgrades"
+                        }
+                }
+                if (data.currentMinigame == 11) layers.cells.mu.update(diff)
+                if (data.currentMinigame == 12) layers.cells.lambda.update(diff)
+                if (data.currentMinigame == 13) layers.cells.kappa.update(diff)
+                if (data.currentMinigame == 14) layers.cells.iota.update(diff)
+
+                if (hasMilestone("cells", 9)) {
+                        let gain = tmp.cells.getResetGain.times(diff).div(10)
+                        data.points = data.points.plus(gain)
+                        data.total = data.total.plus(gain)
+                }
+        },
+        mu: {
+                getResetGain(){
+                        let ret = new Decimal(1)
+                        ret = ret.times(tmp.cells.buyables[111].effect)
+                        if (hasUpgrade("cells", 111)) ret = ret.times(tmp.cells.upgrades[111].effect)
+                        return ret.max(0)
+                },
+                onExit(){
+                        let data = player.cells
+                        let data2 = data.mu
+                        data2.points = new Decimal(0)
+                        data.buyables[111] = new Decimal(0)
+                },
+                update(diff){
+                        let data = player.cells
+                        let gain = tmp.cells.mu.getResetGain.times(diff)
+                        data.mu.points = data.mu.points.plus(gain)
+                        data.total11 = data.total11.plus(gain)
+                        data.mu.best = data.mu.best.max(data.mu.points)
+                },
+        },
+        lambda: {
+                getResetGain(){
+                        let ret = new Decimal(1)
+                        return ret.max(0)
+                },
+                onExit(){
+                        let data = player.cells
+                        let data2 = data.mu
+                        data2.points = new Decimal(0)
+                        data.buyables[211] = new Decimal(0)
+                },
+                update(diff){
+                        let data = player.cells
+                        let gain = tmp.cells.lambda.getResetGain.times(diff)
+                        data.lambda.points = data.lambda.points.plus(gain)
+                        data.total12 = data.total12.plus(gain)
+                        data.lambda.best = data.lambda.best.max(data.lambda.points)
+                },
+        },
+        kappa: {
+                getResetGain(){
+                        let ret = new Decimal(1)
+                        return ret.max(0)
+                },
+                onExit(){
+                        let data = player.cells
+                        let data2 = data.kappa
+                        data2.points = new Decimal(0)
+                        data.buyables[311] = new Decimal(0)
+                },
+                update(diff){
+                        let data = player.cells
+                        let gain = tmp.cells.kappa.getResetGain.times(diff)
+                        data.kappa.points = data.kappa.points.plus(gain)
+                        data.total13 = data.total13.plus(gain)
+                        data.kappa.best = data.kappa.best.max(data.kappa.points)
+                },
+        },
+        iota: {
+                getResetGain(){
+                        let ret = new Decimal(1)
+                        return ret.max(0)
+                },
+                onExit(){
+                        let data = player.cells
+                        let data2 = data.iota
+                        data2.points = new Decimal(0)
+                        data.buyables[411] = new Decimal(0)
+                },
+                update(diff){
+                        let data = player.cells
+                        let gain = tmp.cells.iota.getResetGain.times(diff)
+                        data.iota.points = data.iota.points.plus(gain)
+                        data.total14 = data.total14.plus(gain)
+                        data.iota.best = data.iota.best.max(data.iota.points)
+                },
+        },
+        exitMinigame(){
+                let data = player.cells
+                if (data.currentMinigame == 11) {
+                        layers.cells.mu.onExit()
+                }
+        },
+        getMinigameMaximum(){
+                if (player.cells.currentMinigame == undefined) return Infinity
+                return layers.cells.clickables[player.cells.currentMinigame].maxTimes()
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -14345,6 +14503,195 @@ addLayer("cells", {
                                 return true
                         }, // hasUpgrade("cells", 11)
                 },
+                111: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Mu I"
+                        },
+                        description(){
+                                let a = "log10(10+total Mu) multiplies Mu and Cell gain"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[111].effect)
+                        },    
+                        effect(){
+                                return player.cells.total11.plus(10).log10()
+                        },
+                        cost:() => new Decimal(2000),
+                        currencyLocation:() => player.cells.mu,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mu",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("cells", 111)
+                },
+                211: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lambda I"
+                        },
+                        description(){
+                                let a = "token upgrade"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[211].effect)
+                        },    
+                        effect(){
+                                new Decimal(1)
+                        },
+                        cost:() => new Decimal("1e1000"),
+                        currencyLocation:() => player.cells.lambda,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Lambda",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("cells", 211)
+                },
+                311: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa I"
+                        },
+                        description(){
+                                let a = "token upgrade"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[311].effect)
+                        },    
+                        effect(){
+                                new Decimal(1)
+                        },
+                        cost:() => new Decimal("1e1000"),
+                        currencyLocation:() => player.cells.lambda,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Kappa",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("cells", 311)
+                },
+                411: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Iota I"
+                        },
+                        description(){
+                                let a = "token upgrade"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
+                        },    
+                        effect(){
+                                new Decimal(1)
+                        },
+                        cost:() => new Decimal("1e1000"),
+                        currencyLocation:() => player.cells.lambda,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Iota",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("cells", 411)
+                },
+        },
+        clickables: {
+                rows: 10,
+                cols: 10,
+                11: {
+                        title(){
+                                return "<h3 style='color: #0033FF'>Mu</h3>"
+                        },
+                        maxTimes(){
+                                let ret = 60
+                                return ret
+                        },
+                        display(){
+                                return "Unlock the Mu minigame" + br + "Total points: " + format(player.cells.total11)
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 102)
+                        },
+                        canClick(){
+                                return player.cells.currentMinigame == undefined
+                        },
+                        onClick(){
+                                player.cells.currentMinigame = 11
+                                player.cells.timeInMinigame = 0
+                        },
+                },
+                12: {
+                        title(){
+                                return "<h3 style='color: #0033FF'>Lambda</h3>"
+                        },
+                        maxTimes(){
+                                let ret = 60
+                                return ret
+                        },
+                        display(){
+                                return "Unlock the Lambda minigame" + br + "Total points: " + format(player.cells.total12)
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 102)
+                        },
+                        canClick(){
+                                return player.cells.currentMinigame == undefined
+                        },
+                        onClick(){
+                                player.cells.currentMinigame = 12
+                                player.cells.timeInMinigame = 0
+                        },
+                },
+                13: {
+                        title(){
+                                return "<h3 style='color: #0033FF'>Kappa</h3>"
+                        },
+                        maxTimes(){
+                                let ret = 60
+                                return ret
+                        },
+                        display(){
+                                return "Unlock the Kappa minigame" + br + "Total points: " + format(player.cells.total13)
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 102)
+                        },
+                        canClick(){
+                                return player.cells.currentMinigame == undefined
+                        },
+                        onClick(){
+                                player.cells.currentMinigame = 13
+                                player.cells.timeInMinigame = 0
+                        },
+                },
+                14: {
+                        title(){
+                                return "<h3 style='color: #0033FF'>Iota</h3>"
+                        },
+                        maxTimes(){
+                                let ret = 60
+                                return ret
+                        },
+                        display(){
+                                return "Unlock the Iota minigame" + br + "Total points: " + format(player.cells.total14)
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 102)
+                        },
+                        canClick(){
+                                return player.cells.currentMinigame == undefined
+                        },
+                        onClick(){
+                                player.cells.currentMinigame = 14
+                                player.cells.timeInMinigame = 0
+                        },
+                },
+                15: {
+                        title(){
+                                return "Nullify"
+                        },
+                        display(){
+                                if (player.cells.currentMinigame == undefined) return "You are not in a minigame right now"
+                                return "Time left: " + formatTime(layers.cells.getMinigameMaximum() - player.cells.timeInMinigame)
+                        },
+                        unlocked(){
+                                return hasChallenge("l", 102)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                if (player.cells.currentMinigame) layers.cells.exitMinigame()
+                                player.cells.currentMinigame = undefined
+                                player.cells.timeInMinigame = 0
+                        }
+                },
+                
         },
         milestones: {
                 1: {
@@ -14532,6 +14879,94 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 8)
+                9: {
+                        requirementDescription(){
+                                if (player.hardMode) return "Requires: 1,000 of every minigame amount"
+                                return "Requires: 1,000 of any minigame amount"
+                        },
+                        requirement(){
+                                return new Decimal(1000)
+                        },
+                        done(){
+                                let a = 0
+                                if (tmp.cells.milestones[9].requirement.lte(player.cells.mu.best)) a += 1
+                                if (tmp.cells.milestones[9].requirement.lte(player.cells.kappa.best)) a += 1
+                                if (tmp.cells.milestones[9].requirement.lte(player.cells.lambda.best)) a += 1
+                                if (tmp.cells.milestones[9].requirement.lte(player.cells.iota.best)) a += 1
+                                return a >= (player.hardMode ? 4 : 1)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Gain 10% of your Cells on reset per second."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 9)
+        },
+        buyables: {
+                rows: 10,
+                cols: 5,
+                111: {
+                        title: "Sinusoidal (Mu)",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 111)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(1.1)
+                                let init = new Decimal(3)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canAfford:() => player.cells.mu.points.gte(tmp.cells.buyables[111].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                data.buyables[111] = data.buyables[111].plus(1)
+                                if (!false) {
+                                        data.mu.points = data.mu.points.sub(tmp.cells.buyables[111].cost)
+                                }
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 111)
+                                if (amt.eq(0)) return new Decimal(1)
+                                return amt.plus(amt.div(20).sin().times(30))
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Mu") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 111)) + " Mu</b><br>"
+                                let eformula = "x+sin(x/20)*30<br>"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "3*1.1^(1.1<sup>x</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },   
         },
         tabFormat: {
                 "Upgrades": {
@@ -14540,6 +14975,7 @@ addLayer("cells", {
                                   "blank", 
                                   ["upgrades", [1,2,3,4,5,6,7]],
                                   "blank",
+                                  ["clickables", [1]],
                                 ],
                         unlocked(){
                                 return true
@@ -14561,6 +14997,55 @@ addLayer("cells", {
                                 return true
                         },
                 },
+                "Mu": {
+                        content: ["main-display",
+                                ["secondary-display", "mu"],
+                                ["display-text", function(){
+                                        return "You are getting " + format(tmp.cells.mu.getResetGain) + " Mu per second"
+                                }],
+                                ["upgrades", [11, 12]],
+                                ["buyables", [11]],
+                                ],
+                        unlocked(){
+                                return player.cells.currentMinigame == 11
+                        },
+                },
+                "Lambda": {
+                        content: ["main-display",
+                                ["secondary-display", "lambda"],
+                                ["display-text", function(){
+                                        return "You are getting " + format(tmp.cells.lambda.getResetGain) + " Lambda per second"
+                                }],
+                                ["upgrades", [21, 22]]
+                                ],
+                        unlocked(){
+                                return player.cells.currentMinigame == 12
+                        },
+                },
+                "Kappa": {
+                        content: ["main-display",
+                                ["secondary-display", "kappa"],
+                                ["display-text", function(){
+                                        return "You are getting " + format(tmp.cells.kappa.getResetGain) + " Kappa per second"
+                                }],
+                                ["upgrades", [31, 32]]
+                                ],
+                        unlocked(){
+                                return player.cells.currentMinigame == 13
+                        },
+                },
+                "Iota": {
+                        content: ["main-display",
+                                ["secondary-display", "iota"],
+                                ["display-text", function(){
+                                        return "You are getting " + format(tmp.cells.iota.getResetGain) + " Iota per second"
+                                }],
+                                ["upgrades", [41, 42]]
+                                ],
+                        unlocked(){
+                                return player.cells.currentMinigame == 14
+                        },
+                },
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
@@ -14576,7 +15061,16 @@ addLayer("cells", {
 
                                         let part1 = a + br2 + b + br + c
 
-                                        return part1
+                                        if (!hasChallenge("l", 102)) return part1
+
+                                        let d = "Entering a minigame unlocks a tab for said minigame."
+                                        let e = "The only thing kept upon resetting a minigame is upgrades, unless otherwise stated."
+                                        let f = "Initially there is a 60 second timer for the minigame,<br>at which point your progress is reset and you are kicked out of the tab."
+                                        let g = "Your total point gain in each minigame is kept track of, and the basis of some upgrades."
+
+                                        let part3 = part1 + br2 + d + br + e + br + f + br + g
+
+                                        return part3
                                 }],
                                 ],
                         unlocked(){
