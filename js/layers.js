@@ -15078,7 +15078,7 @@ addLayer("ach", {
                 },
                 {key: "v", description: "V: Start Customizable", 
                         onPress(){
-                                startChallenge("l", 12)
+                                if (tmp.l.challenges[12].unlocked) startChallenge("l", 12)
                         },
                         unlocked(){
                                 return tmp.l.challenges[12].unlocked
