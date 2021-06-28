@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed formatting for small negative numbers.
+
 # v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
 - Fixed hotkey-related crash.
