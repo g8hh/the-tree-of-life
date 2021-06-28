@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.043",
+	num: "1.044",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,7 +26,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.042.1</h3><br>
+	<br><h3 style='color: #CC0000'>v1.044</h3><br>
+		- Fixed later Life challenges.<br>
+		- Ugh .gt(1e4) :(.<br>
+	<br><h3 style='color: #CC0000'>v1.043</h3><br>
 		- Added a Life challenge.<br>
 		- "Added" four minigames.<br>
 		- Added the displays for all the minigames.<br>

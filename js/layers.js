@@ -5421,17 +5421,22 @@ addLayer("mu", {
                                 if (hasUpgrade("mu", 25)) a = a.replace("log6", "log5")
                                 if (hasUpgrade("mu", 31)) a = a.replace("log5", "log4")
 
+                                if (hasChallenge("l", 91)) a = a.replace("µ", "µ<sup>.95</sup>")
+
                                 return a + br + b
                         },
                         cost:() => new Decimal(6),
                         effect(){
-                                if (inChallenge("l", 91) || hasChallenge("l", 91)) return new Decimal(1)
+                                if (inChallenge("l", 91)) return new Decimal(1)
                                 let base = player.p.points.max(100).log10()
                                 if (hasUpgrade("mu", 22)) base = base.div(Math.log10(6))
                                 if (hasUpgrade("mu", 25)) base = base.times(Math.log(6)/Math.log(5))
                                 if (hasUpgrade("mu", 31)) base = base.times(Math.log(5)/Math.log(4))
+
+                                let exp = new Decimal(1)
+                                if (hasChallenge("l", 91)) exp = new Decimal(.95)
                                 
-                                return base.pow(player.mu.points)
+                                return base.pow(player.mu.points.pow(exp)).min("ee1e5")
                         },
                         unlocked(){
                                 return hasUpgrade("mu", 12) || hasMilestone("l", 3)
@@ -6455,6 +6460,7 @@ addLayer("mu", {
                                         if (hasMilestone("d", 28)) diff *= 20
                                         if (hasMilestone("cells", 4)) diff *= 10
                                         if (hasChallenge("l", 101)) diff *= 50
+                                        if (hasChallenge("l", 102)) diff *= 50
                                         diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                         diff = Math.floor(diff)
@@ -9466,7 +9472,7 @@ addLayer("l", {
 
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
-                                let c = "Reward: Per anti- challenge subtract .01 to µ cost exponent but nullify µ III's effect"
+                                let c = "Reward: Per anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
                                 let d = "Currently: " + format(tmp.l.challenges[91].reward)
 
                                 return a + br + b + br + c + br + d
@@ -9490,7 +9496,7 @@ addLayer("l", {
                                 let ret = new Decimal(comps).pow(1.5)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 328700)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 397000)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -9502,7 +9508,7 @@ addLayer("l", {
                                 if (player.subtabs.l.mainTabs != "Challenges") return ""
 
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
-                                let b = "Goal: e1e328,700 Points"
+                                let b = "Goal: e1e397,000 Points"
                                 let c = "Reward: Raise Constant base to anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
                                 let d = "Currently: " + format(tmp.l.challenges[92].reward)
 
@@ -9515,7 +9521,7 @@ addLayer("l", {
                 }, // inChallenge("l", 92) hasChallenge("l", 92)
                 101: {
                         name: "Anti-Xi", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 304400)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 396600)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -9527,7 +9533,7 @@ addLayer("l", {
                                 if (player.subtabs.l.mainTabs != "Challenges") return ""
 
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
-                                let b = "Goal: e1e304,400 Points"
+                                let b = "Goal: e1e396,600 Points"
                                 let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV, 𝛾 → ∂𝛾's primary base is 2468, and bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
@@ -9551,7 +9557,7 @@ addLayer("l", {
                                 let ret = new Decimal(comps).pow(1.5)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 7481e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, 28900e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -9563,8 +9569,8 @@ addLayer("l", {
                                 if (player.subtabs.l.mainTabs != "Challenges") return ""
 
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.4"
-                                let b = "Goal: e1e7,481,000 Points"
-                                let c = "Reward: Unlock a new feature in Cells!"
+                                let b = "Goal: e1e28,900,000 Points"
+                                let c = "Reward: Unlock a new feature in Cells! Bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
                         },
@@ -9689,7 +9695,7 @@ addLayer("l", {
                         return GEM_EFFECT_FORMULAS[id](g)
                 },
                 getTitle(data, id){
-                        if (data.gems.gt(1e4) && data.active) return makeRed("<b>C" + (data.hundreds*10+data.units) + "<b>")
+                        if (data.gems.gte(1e4) && data.active) return makeRed("<b>C" + (data.hundreds*10+data.units) + "<b>")
                         return "C" + (data.hundreds*10+data.units)
                 },
         },
