@@ -14286,11 +14286,14 @@ addLayer("cells", {
                 },
                 lambda: {
                         points: new Decimal(0),  
-                        best: new Decimal(0),    
+                        best: new Decimal(0),   
+                        sacrificed: new Decimal(0), 
                 },
                 kappa: {
                         points: new Decimal(0),  
                         best: new Decimal(0),    
+                        currentBarValue: new Decimal(1),
+                        currentTime: 0,
                 },
                 iota: {
                         points: new Decimal(0),   
@@ -14318,6 +14321,9 @@ addLayer("cells", {
                 let ret = decimalOne
 
                 if (hasUpgrade("cells", 111)) ret = ret.times(tmp.cells.upgrades[111].effect)
+                if (hasUpgrade("cells", 211)) ret = ret.times(tmp.cells.upgrades[211].effect)
+                if (hasUpgrade("cells", 311)) ret = ret.times(tmp.cells.upgrades[311].effect)
+                if (hasUpgrade("cells", 411)) ret = ret.times(tmp.cells.upgrades[411].effect)
 
                 return ret.max(1)
         },
@@ -14410,14 +14416,16 @@ addLayer("cells", {
         },
         lambda: {
                 getResetGain(){
-                        let ret = new Decimal(1)
+                        let ret = player.cells.lambda.sacrificed
+                        if (hasUpgrade("cells", 211)) ret = ret.times(tmp.cells.upgrades[211].effect)
                         return ret.max(0)
                 },
                 onExit(){
                         let data = player.cells
-                        let data2 = data.mu
+                        let data2 = data.lambda
                         data2.points = new Decimal(0)
                         data.buyables[211] = new Decimal(0)
+                        data2.sacrificed = new Decimal(0)
                 },
                 update(diff){
                         let data = player.cells
@@ -14429,7 +14437,8 @@ addLayer("cells", {
         },
         kappa: {
                 getResetGain(){
-                        let ret = new Decimal(1)
+                        let ret = player.cells.kappa.currentBarValue.max(1).log10().times(50)
+                        if (hasUpgrade("cells", 311)) ret = ret.times(tmp.cells.upgrades[311].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14437,18 +14446,31 @@ addLayer("cells", {
                         let data2 = data.kappa
                         data2.points = new Decimal(0)
                         data.buyables[311] = new Decimal(0)
+                        data2.currentBarValue = new Decimal(1)
                 },
                 update(diff){
                         let data = player.cells
+                        let data2 = data.kappa
                         let gain = tmp.cells.kappa.getResetGain.times(diff)
-                        data.kappa.points = data.kappa.points.plus(gain)
+                        data2.points = data2.points.plus(gain)
                         data.total13 = data.total13.plus(gain)
-                        data.kappa.best = data.kappa.best.max(data.kappa.points)
+                        data2.best = data2.best.max(data2.points)
+
+                        data2.currentTime += diff
+
+                        if (data2.currentTime > 2) data2.currentTime = 2
+                        if (data2.currentTime > 1) {
+                                data2.currentTime += -1
+                                let rand = Math.random()
+                                let gain = Decimal.pow(1.5, rand - .4)
+                                data2.currentBarValue = data2.currentBarValue.times(gain)
+                        } 
                 },
         },
         iota: {
                 getResetGain(){
                         let ret = new Decimal(1)
+                        if (hasUpgrade("cells", 411)) ret = ret.times(tmp.cells.upgrades[411].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14469,6 +14491,48 @@ addLayer("cells", {
                 let data = player.cells
                 if (data.currentMinigame == 11) {
                         layers.cells.mu.onExit()
+                }
+                if (data.currentMinigame == 12) {
+                        layers.cells.lambda.onExit()
+                }
+                if (data.currentMinigame == 13) {
+                        layers.cells.kappa.onExit()
+                }
+                if (data.currentMinigame == 14) {
+                        layers.cells.iota.onExit()
+                }
+        },
+        bars: {
+                kappa: {
+                        direction: RIGHT,
+                        width: 600,
+                        height: 50,
+                        progress(){
+                                let amt = player.cells.kappa.currentBarValue
+                                return amt.root(5).div(amt.root(5).plus(1))
+                        },
+                        display(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Kappa") return ""
+
+                                let a = "The bar value is currently " 
+                                let b = format(player.cells.kappa.currentBarValue) 
+                                if (player.cells.kappa.best.lt(1e100)) return a + b
+                                return b
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        fillStyle(){
+                                return {
+                                        "background": "#66CCFF"
+                                }
+                        },
+                        textStyle(){
+                                return {
+                                        "color": "#990033"
+                                }
+                        },
                 }
         },
         getMinigameMaximum(){
@@ -14533,13 +14597,13 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lambda I"
                         },
                         description(){
-                                let a = "token upgrade"
+                                let a = "log10(10+total Lambda) multiplies Lambda and Cell gain"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[211].effect)
                         },    
                         effect(){
-                                new Decimal(1)
+                                return player.cells.total12.plus(10).log10()
                         },
-                        cost:() => new Decimal("1e1000"),
+                        cost:() => new Decimal(5000),
                         currencyLocation:() => player.cells.lambda,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
@@ -14552,14 +14616,14 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa I"
                         },
                         description(){
-                                let a = "token upgrade"
+                                let a = "log10(10+total Kappa) multiplies Kappa and Cell gain"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[311].effect)
                         },    
                         effect(){
-                                new Decimal(1)
+                                return player.cells.total13.plus(10).log10()
                         },
-                        cost:() => new Decimal("1e1000"),
-                        currencyLocation:() => player.cells.lambda,
+                        cost:() => new Decimal("1000"),
+                        currencyLocation:() => player.cells.kappa,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
@@ -14571,14 +14635,14 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Iota I"
                         },
                         description(){
-                                let a = "token upgrade"
+                                let a = "log10(10+total Iota) multiplies Iota and Cell gain"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
                         },    
                         effect(){
-                                new Decimal(1)
+                                return player.cells.total13.plus(10).log10()
                         },
                         cost:() => new Decimal("1e1000"),
-                        currencyLocation:() => player.cells.lambda,
+                        currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
@@ -14697,7 +14761,24 @@ addLayer("cells", {
                                 player.cells.timeInMinigame = 0
                         }
                 },
-                
+                211: {
+                        title(){
+                                return "Sacrifice"
+                        },
+                        display(){
+                                return "Sacrifice 10% of your cells<br>Currently you have sacrificed " + format(player.cells.lambda.sacrificed)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return player.cells.points.gte(10)
+                        },
+                        onClick(){
+                                player.cells.points = player.cells.points.times(.9)
+                                player.cells.lambda.sacrificed = player.cells.lambda.sacrificed.plus(player.cells.points.div(9))
+                        }
+                },
         },
         milestones: {
                 1: {
@@ -15022,7 +15103,8 @@ addLayer("cells", {
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.lambda.getResetGain) + " Lambda per second"
                                 }],
-                                ["upgrades", [21, 22]]
+                                ["upgrades", [21, 22]],
+                                ["clickables", [21]],
                                 ],
                         unlocked(){
                                 return player.cells.currentMinigame == 12
@@ -15034,7 +15116,8 @@ addLayer("cells", {
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.kappa.getResetGain) + " Kappa per second"
                                 }],
-                                ["upgrades", [31, 32]]
+                                ["bar", "kappa"],
+                                ["upgrades", [31, 32]],
                                 ],
                         unlocked(){
                                 return player.cells.currentMinigame == 13
