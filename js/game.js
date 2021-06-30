@@ -370,6 +370,7 @@ function hardReset(resetOptions) {
 }
 
 var ticking = false
+var paused = false
 var pastTickTimes = []
 
 function runInterval(){
@@ -380,16 +381,18 @@ function runInterval(){
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
 	let trueDiff = diff
-	if (player.offTime !== undefined) {
-		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
-		if (player.offTime.remain > 0) {
-			let offlineDiff = Math.max(player.offTime.remain / 10, diff)
-			player.offTime.remain -= offlineDiff
-			diff += offlineDiff
+	if (!paused) {
+		if (player.offTime !== undefined) {
+			if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
+			if (player.offTime.remain > 0) {
+				let offlineDiff = Math.max(player.offTime.remain / 10, diff)
+				player.offTime.remain -= offlineDiff
+				diff += offlineDiff
+			}
+			if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 		}
-		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
-	}
-	if (player.devSpeed) diff *= player.devSpeed
+		if (player.devSpeed) diff *= player.devSpeed
+	} else diff = 0
 	player.time = now
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
@@ -397,7 +400,7 @@ function runInterval(){
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
 	currentDelta = 0
 	updateTemp();
-	updateOomps(diff);
+	if (diff > 0) updateOomps(diff);
 	updateWidth()
 	updateTabFormats()
 	gameLoop(diff)

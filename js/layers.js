@@ -14393,11 +14393,13 @@ addLayer("cells", {
                         data.total = data.total.plus(gain)
                 }
         },
-        mu: {
+        mu: {// mu gain mgain mugain m gain
                 getResetGain(){
                         let ret = new Decimal(1)
-                        ret = ret.times(tmp.cells.buyables[111].effect)
-                        if (hasUpgrade("cells", 111)) ret = ret.times(tmp.cells.upgrades[111].effect)
+                                                        ret = ret.times(tmp.cells.buyables[111].effect)
+                        if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
+                        if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
+                        if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14414,10 +14416,11 @@ addLayer("cells", {
                         data.mu.best = data.mu.best.max(data.mu.points)
                 },
         },
-        lambda: {
+        lambda: {// lambda gain lgain lambdagain l gain
                 getResetGain(){
                         let ret = player.cells.lambda.sacrificed
-                        if (hasUpgrade("cells", 211)) ret = ret.times(tmp.cells.upgrades[211].effect)
+                        if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
+                        if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14436,9 +14439,12 @@ addLayer("cells", {
                 },
         },
         kappa: {
-                getResetGain(){
+                getResetGain(){// kappa gain kgain kappagain k gain
                         let ret = player.cells.kappa.currentBarValue.max(1).log10().times(50)
-                        if (hasUpgrade("cells", 311)) ret = ret.times(tmp.cells.upgrades[311].effect)
+                        if (hasUpgrade("cells", 311))   ret = ret.times(tmp.cells.upgrades[311].effect)
+                        if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
+                        if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
+                        if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14456,7 +14462,9 @@ addLayer("cells", {
                         data.total13 = data.total13.plus(gain)
                         data2.best = data2.best.max(data2.points)
 
-                        data2.currentTime += diff
+                        let barUpdateFactor = 1
+                        if (hasUpgrade("cells", 312)) barUpdateFactor *= 2
+                        data2.currentTime += diff * barUpdateFactor
 
                         if (data2.currentTime > 2) data2.currentTime = 2
                         if (data2.currentTime > 1) {
@@ -14468,9 +14476,13 @@ addLayer("cells", {
                 },
         },
         iota: {
-                getResetGain(){
+                getResetGain(){ // iota gain igain iotagain i gain
                         let ret = new Decimal(1)
-                        if (hasUpgrade("cells", 411)) ret = ret.times(tmp.cells.upgrades[411].effect)
+                        if (hasUpgrade("cells", 411))   ret = ret.times(tmp.cells.upgrades[411].effect)
+                        if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
+                                                        ret = ret.times(tmp.cells.buyables[411].effect)
+                                                        ret = ret.times(tmp.cells.buyables[412].effect)
+                                                        ret = ret.times(tmp.cells.buyables[413].effect)
                         return ret.max(0)
                 },
                 onExit(){
@@ -14478,6 +14490,8 @@ addLayer("cells", {
                         let data2 = data.iota
                         data2.points = new Decimal(0)
                         data.buyables[411] = new Decimal(0)
+                        data.buyables[412] = new Decimal(0)
+                        data.buyables[413] = new Decimal(0)
                 },
                 update(diff){
                         let data = player.cells
@@ -14501,6 +14515,7 @@ addLayer("cells", {
                 if (data.currentMinigame == 14) {
                         layers.cells.iota.onExit()
                 }
+                data.timeInMinigame = 0
         },
         bars: {
                 kappa: {
@@ -14611,6 +14626,25 @@ addLayer("cells", {
                                 return true
                         }, // hasUpgrade("cells", 211)
                 },
+                212: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lambda II"
+                        },
+                        description(){
+                                let a = "log100(total Lambda) multiplies Mu, Iota, and Kappa gain"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[212].effect)
+                        },    
+                        effect(){
+                                return player.cells.total12.plus(10).log10().div(2).max(1)
+                        },
+                        cost:() => new Decimal(1e8),
+                        currencyLocation:() => player.cells.lambda,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Lambda",
+                        unlocked(){
+                                return hasUpgrade("cells", 211)
+                        }, // hasUpgrade("cells", 212)
+                },
                 311: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa I"
@@ -14630,6 +14664,25 @@ addLayer("cells", {
                                 return true
                         }, // hasUpgrade("cells", 311)
                 },
+                312: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa II"
+                        },
+                        description(){
+                                let a = "1+Kappa<sup>.5</sup> multiplies Kappa gain and the bar changes twice as fast"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[312].effect)
+                        },    
+                        effect(){
+                                return player.cells.kappa.points.sqrt().plus(1)
+                        },
+                        cost:() => new Decimal(1e6),
+                        currencyLocation:() => player.cells.kappa,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Kappa",
+                        unlocked(){
+                                return hasUpgrade("cells", 311)
+                        }, // hasUpgrade("cells", 312)
+                },
                 411: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Iota I"
@@ -14639,15 +14692,34 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
                         },    
                         effect(){
-                                return player.cells.total13.plus(10).log10()
+                                return player.cells.total14.plus(10).log10()
                         },
-                        cost:() => new Decimal("1e1000"),
+                        cost:() => new Decimal(4321),
                         currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
                                 return true
                         }, // hasUpgrade("cells", 411)
+                },
+                412: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Iota II"
+                        },
+                        description(){
+                                let a = "log10(log10(total Iota)) multiplies Kappa, Mu, and Lambda gain per upgrade"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
+                        },    
+                        effect(){
+                                return player.cells.total14.max(10).log10().max(10).log10().pow(player.cells.upgrades.length)
+                        },
+                        cost:() => new Decimal(1e45),
+                        currencyLocation:() => player.cells.iota,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Iota",
+                        unlocked(){
+                                return hasUpgrade("cells", 411)
+                        }, // hasUpgrade("cells", 412)
                 },
         },
         clickables: {
@@ -15046,7 +15118,69 @@ addLayer("cells", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "3*1.1^(1.1<sup>x</sup>)" 
+                                let cost2 = "3*1.1^(x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                411: {
+                        title: "Prime (Iota)",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 411)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(2)
+                                let init = new Decimal(3)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[411].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                data.buyables[411] = data.buyables[411].plus(1)
+                                if (!false) {
+                                        data.iota.points = data.iota.points.sub(tmp.cells.buyables[411].cost)
+                                }
+                        },
+                        base(){
+                                let time = Math.floor(player.cells.timeInMinigame)
+                                let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,57,61]
+                                let maxTime = 61
+                                if (time > maxTime) console.log("oops")
+                                return new Decimal(.8 + 1.2 * primes.includes(time))
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 411)
+                                return tmp.cells.buyables[411].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Iota") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[411]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[411].effect) + " to Iota gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 411)) + " Iota</b><br>"
+                                let eformula = "(2 if time = prime, .8 otherwise)^x<br>" + format(tmp.cells.buyables[411].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "3*2^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -15054,6 +15188,124 @@ addLayer("cells", {
                                 return br + end
                         },
                 },   
+                412: {
+                        title: "Even (Iota)",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 412)
+                                let exp = amt.pow(1.2)
+                                let base = new Decimal(2)
+                                let init = new Decimal(3)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[412].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                data.buyables[412] = data.buyables[412].plus(1)
+                                if (!false) {
+                                        data.iota.points = data.iota.points.sub(tmp.cells.buyables[412].cost)
+                                }
+                        },
+                        base(){
+                                let time = Math.floor(player.cells.timeInMinigame)
+                                return new Decimal(.8 + 1.7 * (1 - time % 2))
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 412)
+                                return tmp.cells.buyables[412].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Iota") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[412]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[412].effect) + " to Iota gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 412)) + " Iota</b><br>"
+                                let eformula = "(2.5 if time = even, .8 otherwise)^x<br>" + format(tmp.cells.buyables[412].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "3*2^(x<sup>1.2</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },  
+                413: {
+                        title: "Odd (Iota)",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 413)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(4)
+                                let init = new Decimal(5)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[413].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                data.buyables[413] = data.buyables[413].plus(1)
+                                if (!false) {
+                                        data.iota.points = data.iota.points.sub(tmp.cells.buyables[413].cost)
+                                }
+                        },
+                        base(){
+                                let time = Math.floor(player.cells.timeInMinigame)
+                                return new Decimal(.8 + 1.2 * (time % 2))
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 413)
+                                return tmp.cells.buyables[413].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Iota") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[413]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[413].effect) + " to Iota gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 413)) + " Iota</b><br>"
+                                let eformula = "(2 if time = odd, .8 otherwise)^x<br>" + format(tmp.cells.buyables[413].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "5*4^(x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },  
         },
         tabFormat: {
                 "Upgrades": {
@@ -15127,9 +15379,13 @@ addLayer("cells", {
                         content: ["main-display",
                                 ["secondary-display", "iota"],
                                 ["display-text", function(){
+                                        return "You have spent " + formatTime(player.cells.timeInMinigame) + " time in Iota"
+                                }],
+                                ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.iota.getResetGain) + " Iota per second"
                                 }],
-                                ["upgrades", [41, 42]]
+                                ["upgrades", [41, 42]],
+                                ["buyables", [41]],
                                 ],
                         unlocked(){
                                 return player.cells.currentMinigame == 14
@@ -15417,6 +15673,11 @@ addLayer("ach", {
                 {key: "shift+Control+S", description: "Shift+Control+S: Save", 
                         onPress(){
                                 save()
+                        }
+                },
+                {key: " ", description: "Space: Toggle Pause", 
+                        onPress(){
+                                if (player.spaceBarPauses) paused = !paused
                         }
                 },
                 {

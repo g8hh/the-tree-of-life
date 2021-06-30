@@ -12,20 +12,29 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.045",
+	num: "1.046",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		<strike>- 2 Cells OR the last save in the bank</strike><Br>
-		- Endgame is 18 anti- challenges, keep a save there because things may change (v43).<br><br>
+		- 6.7e6 Cells on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.046</h3><br>
+		- Added a way to pause the game.<br>
+		- Can be used for speedrunning or by mobile players.<br>
+		- Added a hotkey (space) for (un)pausing the game if a toggle is on.<br>
+		- Added displays for when the game is paused.<br>
+		- Added Iota.<br>
+		- Added three Iota buyables.<br>
+		- Added two Iota upgrades, a Kappa upgrade and a Lambda upgrade.<br>
+		- Note: Endgame is about e6/e8/e12/e47.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.045</h3><br>
 		- Added Lambda.<br>
 		- Added Kappa.<br>
@@ -772,6 +781,7 @@ function addedPlayerData() { return {
 		ePointMult: undefined,
 		autobuytokens: false,
 	},
+	spaceBarPauses: false,
 }}
 
 // Display extra things at the top of the page
@@ -785,6 +795,7 @@ var displayThings = [
 		if (controlDown) list1 = list1.concat("C")
 		if (player.undulating) list1 = list1.concat("U")
 		if (!player.arrowHotkeys) list1 = list1.concat("¬A")
+		if (!player.spaceBarPauses) list1 = list1.concat("¬P")
 		
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
@@ -811,6 +822,7 @@ var displayThings = [
 		return saveFinal + msptFinal
 	}, 
 	function(){
+		if (paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 	},
 ]

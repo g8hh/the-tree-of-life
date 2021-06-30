@@ -452,6 +452,7 @@ document.onkeydown = function(e) {
 			//if (!hotkeysOff[key]) hotkeys[key].onPress()
 		}
 	}
+	if (key == " ") console.log("space")
 	if (logHotkey) console.log(key)
 	if (key == "q" && qForClear) clearInterval(interval)
 }
