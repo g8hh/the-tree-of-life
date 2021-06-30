@@ -5051,7 +5051,7 @@ addLayer("p", {
 
                         if (hasMilestone("p", 1)) {
                                 let nKeptMilestones = player.p.times
-                                sortStrings(player.n)
+                                sortStrings(player.n.milestones)
                                 player.n.milestones = player.n.milestones.slice(0, nKeptMilestones)
                         }
                         if (!hasMilestone("p", 5) && !hasMilestone("l", 4)) {

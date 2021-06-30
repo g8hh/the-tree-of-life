@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.046",
+	num: "1.046.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.046.1</h3><br>
+		- Fixed a bug with Phosphorus reset.<br>
 	<br><h3 style='color: #CC0000'>v1.046</h3><br>
 		- Added a way to pause the game.<br>
 		- Can be used for speedrunning or by mobile players.<br>
