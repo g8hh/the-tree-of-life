@@ -1,6 +1,8 @@
 # The Modding Tree changelog:
 
 - Fixed formatting for small negative numbers.
+- Fixed divide by zero when a 0-second tick occurs.
+- "deactivated" now also affects achievement/milestone unlocking.
 
 # v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
