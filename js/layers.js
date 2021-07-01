@@ -14400,6 +14400,8 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total12.pow(.1))
+
                         return ret.max(0)
                 },
                 onExit(){
@@ -14419,8 +14421,11 @@ addLayer("cells", {
         lambda: {// lambda gain lgain lambdagain l gain
                 getResetGain(){
                         let ret = player.cells.lambda.sacrificed
+
                         if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total13.pow(.1))
+
                         return ret.max(0)
                 },
                 onExit(){
@@ -14441,10 +14446,13 @@ addLayer("cells", {
         kappa: {
                 getResetGain(){// kappa gain kgain kappagain k gain
                         let ret = player.cells.kappa.currentBarValue.max(1).log10().times(50)
+
                         if (hasUpgrade("cells", 311))   ret = ret.times(tmp.cells.upgrades[311].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1))
+
                         return ret.max(0)
                 },
                 onExit(){
@@ -14606,6 +14614,22 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("cells", 111)
+                },
+                112: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Mu II"
+                        },
+                        description(){
+                                let a = "Total resource ^.1 multiplies the resource to the left"
+                                return a 
+                        },    
+                        cost:() => new Decimal(6e6),
+                        currencyLocation:() => player.cells.mu,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mu",
+                        unlocked(){
+                                return hasUpgrade("cells", 111)
+                        }, // hasUpgrade("cells", 112)
                 },
                 211: {
                         title(){
