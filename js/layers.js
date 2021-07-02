@@ -10180,6 +10180,7 @@ addLayer("a", {
                 if (layers.l.grid.getGemEffect(804)) {
                                                 ret = ret.times(tmp.tokens.buyables[31].effect)
                 }
+                if (hasMilestone("cells", 10))  ret = ret.times(player.cells.total13.max(1))
 
                 return ret
         },
@@ -14441,6 +14442,10 @@ addLayer("cells", {
                         data.lambda.points = data.lambda.points.plus(gain)
                         data.total12 = data.total12.plus(gain)
                         data.lambda.best = data.lambda.best.max(data.lambda.points)
+                        if (hasUpgrade("cells", 12)) {
+                                let add = data.points.div(100).times(diff)
+                                data.lambda.sacrificed = data.lambda.sacrificed.plus(add)
+                        }
                 },
         },
         kappa: {
@@ -14477,8 +14482,10 @@ addLayer("cells", {
                         if (data2.currentTime > 2) data2.currentTime = 2
                         if (data2.currentTime > 1) {
                                 data2.currentTime += -1
-                                let rand = Math.random()
-                                let gain = Decimal.pow(1.5, rand - .4)
+                                let rand = Math.random() - .4
+                                if (hasUpgrade("cells", 12)) rand += .1
+
+                                let gain = Decimal.pow(1.5, rand)
                                 data2.currentBarValue = data2.currentBarValue.times(gain)
                         } 
                 },
@@ -14507,6 +14514,11 @@ addLayer("cells", {
                         data.iota.points = data.iota.points.plus(gain)
                         data.total14 = data.total14.plus(gain)
                         data.iota.best = data.iota.best.max(data.iota.points)
+                        if (hasUpgrade("cells", 413)) {
+                                layers.cells.buyables[411].buy()
+                                layers.cells.buyables[412].buy()
+                                layers.cells.buyables[413].buy()
+                        }
                 },
         },
         exitMinigame(){
@@ -14595,6 +14607,19 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("cells", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells II"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Add .3 to all Iota bases, add .1 to Kappa bar exponent, and per second 1% of your cells are sacrificed without cost</bdi>"
+                                return a
+                        },  
+                        cost:() => new Decimal(5e8),
+                        unlocked(){
+                                return hasUpgrade("cells", 112)
+                        }, // hasUpgrade("cells", 12)
                 },
                 111: {
                         title(){
@@ -14744,6 +14769,22 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 411)
                         }, // hasUpgrade("cells", 412)
+                },
+                413: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Iota III"
+                        },
+                        description(){
+                                let a = "Once per tick autobuy all three buyables"
+                                return a
+                        },    
+                        cost:() => new Decimal(1e150),
+                        currencyLocation:() => player.cells.iota,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Iota",
+                        unlocked(){
+                                return hasUpgrade("cells", 412)
+                        }, // hasUpgrade("cells", 413)
                 },
         },
         clickables: {
@@ -15090,6 +15131,28 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 9)
+                10: {
+                        requirementDescription(){
+                                return "Requires: 1e100 Kappa"
+                        },
+                        requirement(){
+                                return new Decimal(1e100)
+                        },
+                        done(){
+                                return tmp.cells.milestones[10].requirement.lte(player.cells.kappa.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Total kappa multiplies DNA gain."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 10)
         },
         buyables: {
                 rows: 10,
@@ -15176,7 +15239,9 @@ addLayer("cells", {
                                 let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,57,61]
                                 let maxTime = 61
                                 if (time > maxTime) console.log("oops")
-                                return new Decimal(.8 + 1.2 * primes.includes(time))
+                                let base = .8 + 1.2 * primes.includes(time)
+                                if (hasUpgrade("cells", 12)) base += .3
+                                return new Decimal(base)
                         },
                         effect(){
                                 let amt = getBuyableAmount("cells", 411)
@@ -15235,7 +15300,9 @@ addLayer("cells", {
                         },
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
-                                return new Decimal(.8 + 1.7 * (1 - time % 2))
+                                let base = .8 + 1.7 * (1 - time % 2)
+                                if (hasUpgrade("cells", 12)) base += .3
+                                return new Decimal(base)
                         },
                         effect(){
                                 let amt = getBuyableAmount("cells", 412)
@@ -15294,7 +15361,9 @@ addLayer("cells", {
                         },
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
-                                return new Decimal(.8 + 1.2 * (time % 2))
+                                let base = .8 + 1.2 * (time % 2)
+                                if (hasUpgrade("cells", 12)) base += .3
+                                return new Decimal(base)
                         },
                         effect(){
                                 let amt = getBuyableAmount("cells", 413)

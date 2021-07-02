@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.047",
+	num: "1.048",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.048</h3><br>
+		- Added a Cell upgrade.<br>
+		- Added an Iota upgrade.<br>
+		- Added a Cell milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.047</h3><br>
 		- Added a Mu upgrade.<br>
 		- Endgame is about 2e7/e15/e23/e49.<br>
