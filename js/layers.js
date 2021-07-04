@@ -11549,7 +11549,7 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Add .001 to mRNA base you can bulk 5x N → ΔP"
+                                let a = "Reward: Add .001 to mRNA base and you can bulk 5x N → ΔP"
                                 let b = ""
                                 return a + b
                         },
@@ -14401,7 +14401,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total12.pow(.1))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total12.pow(.1).min(1e50))
 
                         return ret.max(0)
                 },
@@ -14425,7 +14425,7 @@ addLayer("cells", {
 
                         if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total13.pow(.1))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total13.pow(.1).min(1e50))
 
                         return ret.max(0)
                 },
@@ -14456,7 +14456,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1).min(1e50))
 
                         return ret.max(0)
                 },
@@ -14645,7 +14645,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Mu II"
                         },
                         description(){
-                                let a = "Total resource ^.1 multiplies the resource to the left"
+                                let a = "Total resource ^.1 multiplies the resource to the left maxed at 1e50"
                                 return a 
                         },    
                         cost:() => new Decimal(6e6),
@@ -14665,7 +14665,9 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[211].effect)
                         },    
                         effect(){
-                                return player.cells.total12.plus(10).log10()
+                                let ret = player.cells.total12.plus(10).log10()
+                                if (hasUpgrade("cells", 213)) ret = ret.times(player.cells.upgrades.length)
+                                return ret
                         },
                         cost:() => new Decimal(5000),
                         currencyLocation:() => player.cells.lambda,
@@ -14684,7 +14686,9 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[212].effect)
                         },    
                         effect(){
-                                return player.cells.total12.plus(10).log10().div(2).max(1)
+                                let ret = player.cells.total12.plus(10).log10().div(2).max(1)
+                                if (hasUpgrade("cells", 213)) ret = ret.times(player.cells.upgrades.length)
+                                return ret
                         },
                         cost:() => new Decimal(1e8),
                         currencyLocation:() => player.cells.lambda,
@@ -14693,6 +14697,22 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 211)
                         }, // hasUpgrade("cells", 212)
+                },
+                213: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lambda III"
+                        },
+                        description(){
+                                let a = "Multiply Lambda I and Lambda II effect by the number of upgrades and you bulk buy Iota buyables"
+                                return a
+                        },
+                        cost:() => new Decimal(2.9e29),
+                        currencyLocation:() => player.cells.lambda,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Lambda",
+                        unlocked(){
+                                return hasUpgrade("cells", 212)
+                        }, // hasUpgrade("cells", 213)
                 },
                 311: {
                         title(){
@@ -15225,18 +15245,28 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         },
+                        maxAfford(){
+                                let pts = player.cells.iota.points
+                                let init = new Decimal(3)
+                                let base = new Decimal(2)
+                                let exp = new Decimal(1.1) 
+                                if (pts.lt(init)) return new Decimal(0)
+                                return pts.div(init).log(base).root(exp).plus(1).floor()
+                        },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[411].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.cells
-                                data.buyables[411] = data.buyables[411].plus(1)
+                                let ma = tmp.cells.buyables[411].maxAfford
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[411]).max(0) : 1
+                                data.buyables[411] = data.buyables[411].plus(max)
                                 if (!false) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[411].cost)
                                 }
                         },
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
-                                let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,57,61]
+                                let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61]
                                 let maxTime = 61
                                 if (time > maxTime) console.log("oops")
                                 let base = .8 + 1.2 * primes.includes(time)
@@ -15289,11 +15319,21 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         },
+                        maxAfford(){
+                                let pts = player.cells.iota.points
+                                let init = new Decimal(3)
+                                let base = new Decimal(2)
+                                let exp = new Decimal(1.2) 
+                                if (pts.lt(init)) return new Decimal(0)
+                                return pts.div(init).log(base).root(exp).plus(1).floor()
+                        },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[412].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.cells
-                                data.buyables[412] = data.buyables[412].plus(1)
+                                let ma = tmp.cells.buyables[412].maxAfford
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[412]).max(0) : 1
+                                data.buyables[412] = data.buyables[412].plus(max)
                                 if (!false) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[412].cost)
                                 }
@@ -15350,11 +15390,21 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         },
+                        maxAfford(){
+                                let pts = player.cells.iota.points
+                                let init = new Decimal(5)
+                                let base = new Decimal(4)
+                                let exp = new Decimal(1.1) 
+                                if (pts.lt(init)) return new Decimal(0)
+                                return pts.div(init).log(base).root(exp).plus(1).floor()
+                        },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[413].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.cells
-                                data.buyables[413] = data.buyables[413].plus(1)
+                                let ma = tmp.cells.buyables[413].maxAfford
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[413]).max(0) : 1
+                                data.buyables[413] = data.buyables[413].plus(max)
                                 if (!false) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[413].cost)
                                 }
