@@ -14456,6 +14456,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
+                        if (hasUpgrade("cells", 313))   ret = ret.times(tmp.cells.upgrades[313].effect)
                         if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1).min(1e50))
 
                         return ret.max(0)
@@ -14477,6 +14478,7 @@ addLayer("cells", {
 
                         let barUpdateFactor = 1
                         if (hasUpgrade("cells", 312)) barUpdateFactor *= 2
+                        if (hasUpgrade("cells", 313)) barUpdateFactor *= 2
                         data2.currentTime += diff * barUpdateFactor
 
                         if (data2.currentTime > 2) data2.currentTime = 2
@@ -14751,6 +14753,25 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 311)
                         }, // hasUpgrade("cells", 312)
+                },
+                313: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa III"
+                        },
+                        description(){
+                                let a = "Cells multiply Kappa gain and the bar changes twice as fast"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[313].effect)
+                        },    
+                        effect(){
+                                return player.cells.points.max(1)
+                        },
+                        cost:() => new Decimal(1.11e111),
+                        currencyLocation:() => player.cells.kappa,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Kappa",
+                        unlocked(){
+                                return hasUpgrade("cells", 312)
+                        }, // hasUpgrade("cells", 313)
                 },
                 411: {
                         title(){

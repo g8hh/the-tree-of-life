@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.049",
+	num: "1.050",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.050</h3><br>
+		- Added a Kappa upgrade.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.049</h3><br>
 		- Added a lambda upgrade.<br>
 		- Fixed a couple of typos.<br>
