@@ -1,5 +1,5 @@
 # The Modding Tree changelog:
-
+- Fixed offline production.
 - Fixed formatting for small negative numbers.
 - Fixed divide by zero when a 0-second tick occurs.
 - "deactivated" now also affects achievement/milestone unlocking.
