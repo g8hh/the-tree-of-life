@@ -14347,6 +14347,8 @@ addLayer("cells", {
                 let base = amt.plus(9)
                 let exp = amt.cbrt().min(10)
 
+                if (hasMilestone("cells", 11)) exp = exp.plus(player.cells.upgrades.length)
+
                 let ret = base.pow(exp)
 
                 return ret
@@ -15194,6 +15196,28 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 10)
+                11: {
+                        requirementDescription(){
+                                return "Requires: 1e140 Kappa"
+                        },
+                        requirement(){
+                                return new Decimal(1e140)
+                        },
+                        done(){
+                                return tmp.cells.milestones[11].requirement.lte(player.cells.kappa.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Each upgrade adds 1 to Cell effect exponent."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 11)
         },
         buyables: {
                 rows: 10,
