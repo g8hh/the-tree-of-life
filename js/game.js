@@ -94,7 +94,8 @@ function shouldNotify(layer){
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat){
 			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
-				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor
+				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor || defaultGlow
+
 				return true
 			}
 		}

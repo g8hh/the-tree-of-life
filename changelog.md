@@ -1,9 +1,12 @@
 # The Modding Tree changelog:
+
+# v2.6.5 - 7/7/21
 - Fixed offline production.
 - Fixed formatting for small negative numbers.
 - Fixed divide by zero when a 0-second tick occurs.
 - "deactivated" now also affects achievement/milestone unlocking.
 - Locked challenges cannot be entered.
+- Fixed a bug with subtab glow colors.
 
 # v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
