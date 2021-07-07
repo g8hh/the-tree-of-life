@@ -245,7 +245,7 @@ function resetRow(row) {
 
 function startChallenge(layer, x) {
 	let enter = false
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
 		Vue.set(player[layer], "activeChallenge", null)

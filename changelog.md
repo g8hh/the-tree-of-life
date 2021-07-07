@@ -3,6 +3,7 @@
 - Fixed formatting for small negative numbers.
 - Fixed divide by zero when a 0-second tick occurs.
 - "deactivated" now also affects achievement/milestone unlocking.
+- Locked challenges cannot be entered.
 
 # v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
