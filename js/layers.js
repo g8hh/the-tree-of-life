@@ -13163,6 +13163,7 @@ addLayer("d", {
                                                 ret = ret.times(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount))
                 if (hasUpgrade("d", 35))        ret = ret.times(Decimal.pow(1.01, getBuyableAmount("a", 33)))
                                                 ret = ret.times(tmp.cells.effect)
+                if (hasUpgrade("cells", 113))   ret = ret.times(tmp.cells.upgrades[113].effect)
 
                 return ret.max(1)
         },
@@ -14400,6 +14401,7 @@ addLayer("cells", {
                 getResetGain(){
                         let ret = new Decimal(1)
                                                         ret = ret.times(tmp.cells.buyables[111].effect)
+                                                        ret = ret.times(tmp.cells.buyables[112].effect)
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
@@ -14659,6 +14661,25 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 111)
                         }, // hasUpgrade("cells", 112)
+                },
+                113: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Mu III"
+                        },
+                        description(){
+                                let a = "Unlock squeeze which is kept on reset, and per upgrade total Mu multiplies DNA gain"
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[113].effect)
+                        },    
+                        effect(){
+                                return player.cells.total11.max(1).pow(player.cells.upgrades.length)
+                        },
+                        cost:() => new Decimal(1.6e16),
+                        currencyLocation:() => player.cells.mu,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mu",
+                        unlocked(){
+                                return hasUpgrade("cells", 112)
+                        }, // hasUpgrade("cells", 113)
                 },
                 211: {
                         title(){
@@ -15271,6 +15292,66 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*1.1^(x<sup>1.1</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                112: {
+                        title: "Squeeze (Mu)",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 112)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(1e3)
+                                let init = new Decimal(1e15)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return hasUpgrade("cells", 113)
+                        },
+                        canAfford:() => player.cells.mu.points.gte(tmp.cells.buyables[112].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                data.buyables[112] = data.buyables[112].plus(1)
+                                if (!false) {
+                                        data.mu.points = data.mu.points.sub(tmp.cells.buyables[112].cost)
+                                }
+                        },
+                        base(){
+                                return player.d.points.max(10).log10()
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 112)
+                                let base = tmp.cells.buyables[112].base
+                                if (base.eq(1)) return new Decimal(1)
+                                return base.pow(amt.sub(amt.div(20).sin().times(10)))
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Mu") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[112]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[112].effect) + " to Mu gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 112)) + " Mu</b><br>"
+                                let eformula = "log10(DNA)^(x-sin(x/20)*10)<br>" + format(tmp.cells.buyables[112].base) + "^(x-sin(x/20)*10)"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e15*1e3^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 

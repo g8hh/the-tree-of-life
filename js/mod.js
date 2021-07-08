@@ -12,19 +12,22 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.051",
+	num: "1.052",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 1.4e11 Cells on reset OR the last save in the bank<br><br>
+		- 6e11 Cells on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.052</h3><br>
+		- Added a Mu upgrade.<br>
+		- Added a Mu buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.051</h3><br>
 		- Added a Cell milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.050</h3><br>
