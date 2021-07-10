@@ -2734,6 +2734,7 @@ addLayer("n", {
         getNextAt(){
                 let curr = tmp.n.getResetGain
                 let v1 = curr.plus(1).div(tmp.n.getGainMult).max(1)
+                if (hasMilestone("l", 1)) v1 = v1.root(tmp.l.milestones[1].effect)
                 let v2 = v1.root(tmp.n.getGainExp).plus(19)
                 let v3 = Decimal.pow(2, v2)
                 let v4 = v3.times(105)
@@ -8833,7 +8834,7 @@ addLayer("l", {
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
 
-                                if (player.l.activeChallenge != 11) eff = 111
+                                if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
                                 if (eff > 91) eff = eff * 1.5 - 45.5
                                 if (eff > 65) eff = eff * 2 - 65
                                 if (eff > 50) eff = eff * 2 - 50
