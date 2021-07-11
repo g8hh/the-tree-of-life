@@ -152,7 +152,7 @@ var systemComponents = {
 			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
 			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys</button></td>
 			<td><button class="opt" onclick="player.spaceBarPauses = !player.spaceBarPauses">Toggle space bar pausing</button></td>
-			<td><button class="opt" onclick="paused = !paused">Toggle pause</button></td>
+			<td><button class="opt" onclick="player.paused = !player.paused">Toggle pause</button></td>
 		</tr>
 	</table>
 	Others:

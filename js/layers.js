@@ -14480,6 +14480,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 313))   ret = ret.times(tmp.cells.upgrades[313].effect)
                         if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1).min(1e50))
                                                         ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
+                        if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect.pow(player.cells.upgrades.length))
 
                         return ret.max(0)
                 },
@@ -14531,7 +14532,7 @@ addLayer("cells", {
                         let data = player.cells
                         let data2 = data.iota
                         data2.points = new Decimal(0)
-                        data.buyables[411] = new Decimal(0)
+                        if (!hasUpgrade("cells", 414)) data.buyables[411] = new Decimal(0)
                         data.buyables[412] = new Decimal(0)
                         data.buyables[413] = new Decimal(0)
                 },
@@ -14552,11 +14553,17 @@ addLayer("cells", {
                 getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
                         if (!hasUpgrade("cells", 13)) return new Decimal(0)
                         let ret = new Decimal(1)
+
+                        if (player.hardMode)            ret = ret.times(.25)
                         
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
+                                                        ret = ret.times(tmp.cells.buyables[12].effect)
+                                                        //tmp.cells.buyables[13].effect
                         if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
                         if (hasMilestone("cells", 12))  ret = ret.times(player.cells.milestones.length)
                         if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
+                        if (hasUpgrade("cells", 414))   ret = ret.times(getBuyableAmount("cells", 411).max(10).log10())
+                        if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect)
 
                         return ret
                 },
@@ -14677,7 +14684,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells III"
                         },
                         description(){
-                                let a = "Unlock stem cells and add .1 to Kappa bar exponent<br>Requires 6e11 Cells on reset"
+                                let a = "Unlock stem cells and add .1 to Kappa bar exponent<br>Requires: 6e11 Cells on reset"
                                 return a
                         },  
                         canAfford(){
@@ -14821,7 +14828,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lambda IV"
                         },
                         description(){
-                                let a = "Unlock another Stem Cell buyable [not yet], and per upgrade multiply Stem Cell gain by 1+upgrades/100"
+                                let a = "Unlock another Stem Cell buyable, and per upgrade multiply Stem Cell gain by 1+upgrades/100"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[214].effect)
                         },
                         effect(){
@@ -14893,6 +14900,25 @@ addLayer("cells", {
                                 return hasUpgrade("cells", 312)
                         }, // hasUpgrade("cells", 313)
                 },
+                314: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa IV"
+                        },
+                        description(){
+                                let a = "log10(log10(Protein)) multiplies Stem Cell gain and Kappa gain per upgrade"
+                                return a
+                        },    
+                        effect(){
+                                return player.a.protein.points.max(10).log10().max(10).log10()
+                        },
+                        cost:() => new Decimal(1e171),
+                        currencyLocation:() => player.cells.kappa,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Kappa",
+                        unlocked(){
+                                return hasUpgrade("cells", 313)
+                        }, // hasUpgrade("cells", 314)
+                },
                 411: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Iota I"
@@ -14946,6 +14972,22 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 412)
                         }, // hasUpgrade("cells", 413)
+                },
+                414: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Iota IV"
+                        },
+                        description(){
+                                let a = "Prime is always activated, Prime levels are no longer reset, and log10(Prime levels) multiply Stem Cell gain"
+                                return a
+                        },    
+                        cost:() => new Decimal("1e446"),
+                        currencyLocation:() => player.cells.iota,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Iota",
+                        unlocked(){
+                                return player.cells.stem_cells.best.gte(1e46)
+                        }, // hasUpgrade("cells", 414)
                 },
         },
         clickables: {
@@ -15423,6 +15465,67 @@ addLayer("cells", {
                                 return br + end
                         },
                 },
+                12: {
+                        title: "Totipotent",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 12)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(1e10)
+                                let init = new Decimal(1e28)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return hasUpgrade("cells", 214)
+                        },
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[12].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                let data2 = data.stem_cells
+                                data.buyables[12] = data.buyables[12].plus(1)
+                                if (!false) {
+                                        data2.points = data2.points.sub(tmp.cells.buyables[12].cost)
+                                }
+                        },
+                        base(){
+                                let init = player.cells.stem_cells.points.max(10).log10()
+
+                                return init
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 12)
+                                return tmp.cells.buyables[12].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[12]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[12].effect) + " to Stem Cell gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 12)) + " Stem Cells</b><br>"
+                                let eformula = "log10(Stem Cells)^x<br>" + format(tmp.cells.buyables[12].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2e28*1e10^(x<sup>1.05</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
                 111: {
                         title: "Sinusoidal (Mu)",
                         cost() {
@@ -15588,7 +15691,7 @@ addLayer("cells", {
                                 let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61]
                                 let maxTime = 61
                                 if (time > maxTime) console.log("oops")
-                                let base = .8 + 1.2 * primes.includes(time)
+                                let base = .8 + 1.2 * (primes.includes(time) || hasUpgrade("cells", 414))
                                 if (hasUpgrade("cells", 12)) base += .3
                                 return new Decimal(base)
                         },
@@ -16155,7 +16258,7 @@ addLayer("ach", {
                 },
                 {key: " ", description: "Space: Toggle Pause", 
                         onPress(){
-                                if (player.spaceBarPauses) paused = !paused
+                                if (player.spaceBarPauses) player.paused = !player.paused
                         }
                 },
                 {

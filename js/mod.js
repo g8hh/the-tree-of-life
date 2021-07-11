@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.053",
+	num: "1.054",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 5e13 Cells on reset OR the last save in the bank<br><br>
+		- 1e94 Stem Cells on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.054</h3><br>
+		- Added an Iota upgrade.<br>
+		- Added a Kappa upgrade.<br>
+		- Added a Stem Cell buyable.<br>
+		- Added a custom save.<br>
+		- Made paused status keep upon reloading.<br>
 	<br><h3 style='color: #CC0000'>v1.053</h3><br>
 		- Added Stem Cells!<br>
 		- Added a Stem Cell buyable.<br>
@@ -813,6 +819,7 @@ function addedPlayerData() { return {
 		autobuytokens: false,
 	},
 	spaceBarPauses: false,
+	paused: false,
 }}
 
 // Display extra things at the top of the page
@@ -853,7 +860,7 @@ var displayThings = [
 		return saveFinal + msptFinal
 	}, 
 	function(){
-		if (paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 	},
 ]
