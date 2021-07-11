@@ -6059,9 +6059,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return hasUpgrade("mu", 21) || player.a.unlocked
                         },
-                        canAfford:() => player.mu.points.gte(tmp.mu.buyables[11].cost),
+                        canAfford:() => player.mu.points.gte(tmp.mu.buyables[11].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[11] = player.mu.buyables[11].plus(1)
@@ -6122,9 +6123,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return player.mu.best.gte(12) || player.a.unlocked
                         },
-                        canAfford:() => player.p.points.gte(tmp.mu.buyables[12].cost),
+                        canAfford:() => player.p.points.gte(tmp.mu.buyables[12].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[12] = player.mu.buyables[12].plus(1)
@@ -6195,9 +6197,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return hasMilestone("mu", 7) || player.a.unlocked
                         },
-                        canAfford:() => player.p.points.gte(tmp.mu.buyables[13].cost),
+                        canAfford:() => player.p.points.gte(tmp.mu.buyables[13].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[13] = player.mu.buyables[13].plus(1)
@@ -6258,9 +6261,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return hasMilestone("mu", 11) || player.a.unlocked
                         },
-                        canAfford:() => player.mu.points.gte(tmp.mu.buyables[21].cost),
+                        canAfford:() => player.mu.points.gte(tmp.mu.buyables[21].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[21] = player.mu.buyables[21].plus(1)
@@ -6319,9 +6323,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return player.mu.best.gte(28) || player.a.unlocked
                         },
-                        canAfford:() => player.p.points.gte(tmp.mu.buyables[22].cost),
+                        canAfford:() => player.p.points.gte(tmp.mu.buyables[22].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[22] = player.mu.buyables[22].plus(1)
@@ -6381,9 +6386,10 @@ addLayer("mu", {
                                 return ret
                         },
                         unlocked(){
+                                if (hasMilestone("cells", 13)) return false
                                 return player.mu.best.gte(33) || player.a.unlocked
                         },
-                        canAfford:() => player.p.points.gte(tmp.mu.buyables[23].cost),
+                        canAfford:() => player.p.points.gte(tmp.mu.buyables[23].cost) && !hasMilestone("cells", 13),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mu.buyables[23] = player.mu.buyables[23].plus(1)
@@ -6547,6 +6553,7 @@ addLayer("mu", {
                                 return ret
                         },
                         initialCost(){
+                                if (hasUpgrade("cells", 14)) return Decimal.pow(10, -1e9)
                                 let ret = new Decimal(1e4)
                                 
                                 ret = ret.div(tmp.mu.buyables[33].effect)
@@ -6616,13 +6623,13 @@ addLayer("mu", {
                                 return new Decimal(1e4).times(Decimal.pow(3, amt.pow(1.3)))
                         },
                         unlocked(){
-                                return player.l.challenges[11] >= 20 || player.a.unlocked
+                                return (player.l.challenges[11] >= 20 || player.a.unlocked) && !hasUpgrade("cells", 14)
                         },
                         getMaxAfford(){
                                 if (player.l.points.lt(1e4)) return decimalZero
                                 return player.l.points.div(1e4).log(3).root(1.3).floor().plus(1).max(0)
                         },
-                        canAfford:() => player.l.points.gte(tmp.mu.buyables[33].cost),
+                        canAfford:() => player.l.points.gte(tmp.mu.buyables[33].cost) && !hasUpgrade("cells", 14),
                         getMaxBulk(){
                                 if (hasMilestone("d", 3) || hasUpgrade("cells", 11)) return new Decimal(Infinity)
                                 return decimalOne
@@ -6970,6 +6977,7 @@ addLayer("l", {
                                          22, 23, 31,]
                         if (hasUpgrade("p", 51) || hasMilestone("a", 5) || hasMilestone("d", 1)) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
+                                if (hasMilestone("cells", 13) && muBuyKeys[i] < 31) continue
                                 buyBuyable("mu", muBuyKeys[i])
                         }
                 }
@@ -12335,6 +12343,8 @@ addLayer("a", {
                         },
                         base(){
                                 let ret = new Decimal(tmp.l.getNonZeroGemCount).max(1)
+
+                                if (hasMilestone("cells", 18)) ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
                                 
                                 return ret
                         },
@@ -12351,6 +12361,9 @@ addLayer("a", {
                                 let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 21)) + " Protein</b><br>"
                                 let eformula = "[Non zero gem challenges]^x<br>" + format(tmp.a.buyables[21].base) + "^x"
+                                if (hasMilestone("cells", 18)) {
+                                        eformula = eformula.replace("[Non zero gem challenges]", "64+sqrt(Omnipotent)")
+                                }
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12399,6 +12412,8 @@ addLayer("a", {
                                 }
                         },
                         base(){
+                                if (hasMilestone("cells", 19)) return player.cells.stem_cells.points.max(1)
+
                                 let ret = player.a.protein.points.max(10).log10()
 
                                 if (hasUpgrade("a", 54)) ret = ret.times(Math.log2(10))
@@ -12421,6 +12436,7 @@ addLayer("a", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 22)) + " Protein</b><br>"
                                 let eformula = "log10(Protein)^x<br>" + format(tmp.a.buyables[22].base) + "^x"
                                 if (hasUpgrade("a", 54)) eformula = eformula.replace("log10", "log2")
+                                if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(Protein)", "Stem Cells")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12540,6 +12556,7 @@ addLayer("a", {
                                 }
                         },
                         base(){
+                                if (hasMilestone("cells", 19)) return player.cells.points.max(1)
                                 let pts = player.points.max(10).log10()
 
                                 if (hasUpgrade("d", 15)) pts = pts.times(Math.log(10))
@@ -12570,6 +12587,7 @@ addLayer("a", {
                                 if (hasUpgrade("d", 15)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("d", 21)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("d", 22)) eformula = eformula.replace("ln", "log2")
+                                if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(log2(Points))", "Cells")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12775,6 +12793,7 @@ addLayer("a", {
                         content: ["main-display",
                                 ["secondary-display", "protein"],
                                 ["display-text", function(){
+                                        if (player.cells.times > 11) return ""
                                         if (player.a.protein.points.lt(1e100)) { 
                                                 return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
                                         }
@@ -13173,6 +13192,7 @@ addLayer("d", {
 
                 if (hasChallenge("l", 32))      ret = ret.plus(tmp.l.challenges[32].reward)
                 if (hasUpgrade("d", 33))        ret = ret.plus(player.d.upgrades.length)
+                if (hasMilestone("cells", 18))  ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
 
                 return ret
         },
@@ -13189,6 +13209,7 @@ addLayer("d", {
                 let amt = player.d.best
 
                 let exp = amt.cbrt().times(2).min(10)
+                if (hasUpgrade("cells", 14)) exp = exp.plus(getBuyableAmount("cells", 12))
 
                 let ret1 = amt.plus(1).pow(exp)
 
@@ -14327,17 +14348,21 @@ addLayer("cells", {
         getGainMult(){ // c gain cellsgain cgain cells gain cellgain cell gain
                 let ret = decimalOne
 
-                if (hasUpgrade("cells", 111)) ret = ret.times(tmp.cells.upgrades[111].effect)
-                if (hasUpgrade("cells", 211)) ret = ret.times(tmp.cells.upgrades[211].effect)
-                if (hasUpgrade("cells", 311)) ret = ret.times(tmp.cells.upgrades[311].effect)
-                if (hasUpgrade("cells", 411)) ret = ret.times(tmp.cells.upgrades[411].effect)
+                if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
+                if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
+                if (hasUpgrade("cells", 311))   ret = ret.times(tmp.cells.upgrades[311].effect)
+                if (hasUpgrade("cells", 411))   ret = ret.times(tmp.cells.upgrades[411].effect)
+                if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
 
-                ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
+                                                ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
 
                 return ret.max(1)
         },
         getGainExp(){
                 let ret = new Decimal(1/1960)
+
+                if (hasMilestone("cells", 14)) ret = ret.times(2)
+                if (hasMilestone("cells", 20)) ret = ret.times(49/25)
 
                 return ret
         },
@@ -14402,13 +14427,14 @@ addLayer("cells", {
                         let gain = tmp.cells.getResetGain.times(diff).div(10)
                         data.points = data.points.plus(gain)
                         data.total = data.total.plus(gain)
+                        if (hasMilestone("cells", 14)) {
+                                player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
+                        }
                 }
 
                 if (hasUpgrade("cells", 13)) {
                         layers.cells.stem_cells.update(diff)
-                }
-
-                
+                }                
         },
         mu: {// mu gain mgain mugain m gain
                 getResetGain(){
@@ -14564,6 +14590,9 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
                         if (hasUpgrade("cells", 414))   ret = ret.times(getBuyableAmount("cells", 411).max(10).log10())
                         if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect)
+                        if (hasChallenge("cells", 11))  ret = ret.times(tmp.cells.challenges[11].rewardEffect)
+                        if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
+                        if (hasMilestone("cells", 17))  ret = ret.times(player.cells.upgrades.length ** .5)
 
                         return ret
                 },
@@ -14577,6 +14606,10 @@ addLayer("cells", {
 
                         data2.points = data2.points.plus(thisGain)
                         data2.best = data2.best.max(data2.points)
+
+                        if (hasMilestone("cells", 15) && data.time > 1 && !player.cells.activeChallenge) {
+                                if (data2.best.div(data2.points).gt(1e4)) data2.points = data2.best.div(1e4)
+                        }
                 },
         },
         exitMinigame(){
@@ -14694,6 +14727,28 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 12)
                         }, // hasUpgrade("cells", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells IV"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Each totipotent adds 1 to DNA effect exponent and N → ΔP base cost is " + formatSmall(Decimal.pow(.1, 1e9)) + " but remove N → ΔN</bdi>"
+                                return a
+                        },  
+                        canAfford(){
+                                return tmp.cells.getResetGain.gte(6e11)
+                        },
+                        onPurchase(){
+                                player.mu.buyables[33] = new Decimal(0)
+                        },
+                        cost:() => new Decimal(1e99),
+                        currencyLocation:() => player.cells.stem_cells,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Stem Cells",
+                        unlocked(){
+                                return hasUpgrade("cells", 13)
+                        }, // hasUpgrade("cells", 14)
                 },
                 111: {
                         title(){
@@ -15400,6 +15455,261 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 12)
+                13: {
+                        requirementDescription(){
+                                return "Requires: 1e96 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e96)
+                        },
+                        done(){
+                                return tmp.cells.milestones[13].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                player.mu.buyables[11] = new Decimal(0)
+                                player.mu.buyables[12] = new Decimal(0)
+                                player.mu.buyables[13] = new Decimal(0)
+                                player.mu.buyables[21] = new Decimal(0)
+                                player.mu.buyables[22] = new Decimal(0)
+                                player.mu.buyables[23] = new Decimal(0)
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Sinusoidal effect is x^sqrt(milestones) but remove the first two rows of µ buyables."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 13)
+                14: {
+                        requirementDescription(){
+                                return "Requires: 1e109 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e109)
+                        },
+                        done(){
+                                return tmp.cells.milestones[14].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock Stem Cell challenges and square base Cell gain but you can only have 100% of your cells upon reset."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 14)
+                15: {
+                        requirementDescription(){
+                                return "Requires: 1 Cell challenge completion"
+                        },
+                        done(){
+                                return hasChallenge("cells", 11) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: If you are not in a Cell challenge after 1 second you gain .01% of your best Stem Cells."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 15)
+                16: {
+                        requirementDescription(){
+                                return "Requires: 5e122 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(5e122)
+                        },
+                        done(){
+                                return tmp.cells.milestones[16].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                let amt = new Decimal(player.cells.milestones.length)
+                                return amt.div(100).plus(1).pow(amt)
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per milestone multiply Stem Cell and Cell gain by 1 + milestones/100."
+                                let b = br + "Currently: " + format(tmp.cells.milestones[16].effect)
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 16)
+                17: {
+                        requirementDescription(){
+                                return "Requires: 1e138 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e138)
+                        },
+                        done(){
+                                return tmp.cells.milestones[17].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: The square root of the number of upgrades multiplies Stem Cell gain."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 17)
+                18: {
+                        requirementDescription(){
+                                return "Requires: 1e167 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e167)
+                        },
+                        done(){
+                                return tmp.cells.milestones[18].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: The square root of the number of Omnipotent levels adds to rRNA base and DNA gain exponent."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 18)
+                19: {
+                        requirementDescription(){
+                                return "Requires: 1e178 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e178)
+                        },
+                        done(){
+                                return tmp.cells.milestones[19].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: siRNA's base is Stem Cells and ncRNA's base is Cells."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 19)
+                20: {
+                        requirementDescription(){
+                                return "Requires: 1e180 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e180)
+                        },
+                        done(){
+                                return tmp.cells.milestones[20].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Remove Omnipotent base cost and Cells gain exponent is 1/500."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 20)
+                21: {
+                        requirementDescription(){
+                                return "Requires: 1e236 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal(1e236)
+                        },
+                        done(){
+                                return tmp.cells.milestones[21].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Unlock M<sub>C</sub> and Mu is always active [not yet]."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 21)
+        },
+        challenges:{
+                onEnter(){
+                        let ids = [11, 12, 13, 21, 22, 23, 31, 32, 33]
+                        for (i in ids) {
+                                let id = ids[i]
+                                player.cells.buyables[id] = decimalZero
+                        }
+                        player.cells.stem_cells.points = decimalZero
+                        updateTemp()
+                        tmp.cells.stem_cells.getResetGain = decimalZero
+                },
+                11: {
+                        name: "Primary",
+                        goal:() => Decimal.pow(10, 59),
+                        canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
+                        challengeEffect(){
+                                return decimalOne.plus(player.cells.challenges[11])
+                        },
+                        fullDisplay(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                if (player.subtabs.cells.stem_content != "Challenges") return ""
+
+                                let a = "Subtract " + formatWhole(tmp.cells.challenges[11].challengeEffect) + " from Omnipotent base"
+                                let b = "Goal: " + format(tmp.cells.challenges[11].goal) + " Stem Cells"
+                                let c = "Reward: Multiply Stem Cell gain per Cell chalenge completion"
+                                let d = "Currently: *" + format(tmp.cells.challenges[11].rewardBase) + " per challenge<br>"
+                                let e = "netting a *" + format(tmp.cells.challenges[11].rewardEffect) + " multiplier"
+                                
+                                return a + br + b + br + c + br + d + e
+                        },
+                        rewardEffect(){
+                                let comps = layerChallengeCompletions("cells")
+                                return tmp.cells.challenges[11].rewardBase.pow(comps)
+                        },
+                        rewardBase() {
+                                return new Decimal(player.cells.challenges[11]).plus(3)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onEnter(){
+                                layers.cells.challenges.onEnter()
+                        },
+                        completionLimit: 9,
+                        countsAs: [],
+                }, // inChallenge("cells", 11) hasChallenge("cells", 11)
         },
         buyables: {
                 rows: 10,
@@ -15411,6 +15721,7 @@ addLayer("cells", {
                                 let exp = amt.pow(1.05)
                                 let base = new Decimal(10)
                                 let init = new Decimal(10)
+                                if (hasMilestone("cells", 20)) init = decimalOne
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -15426,8 +15737,15 @@ addLayer("cells", {
                                         data2.points = data2.points.sub(tmp.cells.buyables[11].cost)
                                 }
                         },
+                        baseConstant(){
+                                let ret = new Decimal(9)
+
+                                if (inChallenge("cells", 11)) ret = ret.sub(tmp.cells.challenges[11].challengeEffect)
+
+                                return ret
+                        },
                         base(){
-                                let init = player.cells.points.max(10).log10().log10().plus(9)
+                                let init = player.cells.points.max(10).log10().log10().plus(tmp.cells.buyables[11].baseConstant)
 
                                 return init
                         },
@@ -15444,7 +15762,8 @@ addLayer("cells", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 11)) + " Stem Cells</b><br>"
-                                let eformula = "9+log10(log10(Cells)^x<br>" + format(tmp.cells.buyables[11].base) + "^x"
+                                let eformula = formatWhole(tmp.cells.buyables[11].baseConstant) + "+log10(log10(Cells)^x<br>" 
+                                eformula += format(tmp.cells.buyables[11].base) + "^x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -15458,6 +15777,7 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10*10^(x<sup>1.05</sup>)" 
+                                if (hasMilestone("cells", 20)) cost2 = cost2.slice(3,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -15518,7 +15838,7 @@ addLayer("cells", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "2e28*1e10^(x<sup>1.05</sup>)" 
+                                let cost2 = "2e28*1e10^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -15560,6 +15880,7 @@ addLayer("cells", {
                         effect(){
                                 let amt = getBuyableAmount("cells", 111)
                                 if (amt.eq(0)) return new Decimal(1)
+                                if (hasMilestone("cells", 13)) return amt.pow(player.cells.milestones.length ** .5)
                                 let init = amt
                                 if (hasUpgrade("cells", 114)) init = init.times(2)
                                 return init.plus(amt.div(20).sin().times(30))
@@ -15575,6 +15896,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 111)) + " Mu</b><br>"
                                 let eformula = "x+sin(x/20)*30<br>"
                                 if (hasUpgrade("cells", 114)) eformula = eformula.replace("x", "2x")
+                                if (hasMilestone("cells", 13)) eformula = "x^sqrt(Cell milestones)"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -15872,6 +16194,39 @@ addLayer("cells", {
                         },
                 },  
         },
+        microtabs: {
+                stem_content: {
+                        "Buyables": { 
+                                content: [
+                                        ["buyables", [1,2,3]],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                                shouldNotify(){
+                                        x = [11, 12, 13, 21, 22, 23, 31, 32, 33]
+                                        for (let i = 0; i < x.length; i++){
+                                                id = x[i]
+                                                if (layers.cells.buyables[id] == undefined) continue
+                                                if (!tmp.cells.buyables[id].unlocked) continue
+                                                if (getBuyableAmount("cells", id).gt(0)) continue
+                                                if (player.cells.stem_cells.points.lt(tmp.cells.buyables[id].cost)) continue
+                                                return true
+                                        }
+                                        return false
+                                },
+                        },
+                        "Challenges": { 
+                                content: [
+                                        ["display-text", "Starting a challenge resets all Stem Cell content"],
+                                        ["challenges", [1,2,3]],
+                                ],
+                                unlocked(){
+                                        return hasMilestone("cells", 14)
+                                },
+                        },
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: ["main-display",
@@ -15962,7 +16317,8 @@ addLayer("cells", {
                                 ["display-text", function(){
                                         return "Currently you are gaining " + format(tmp.cells.stem_cells.getResetGain) + " Stem Cells/s"
                                 }],
-                                ["buyables", [1]],
+                                ["microtabs", "stem_content"],
+                                
                                 ],
                         unlocked(){
                                 return hasUpgrade("cells", 13)
@@ -16013,6 +16369,7 @@ addLayer("cells", {
         },
         doReset(layer){
                 if (layer != "cells") return 
+                player.cells.time = 0
 
                 /*
                 1. DNA content
