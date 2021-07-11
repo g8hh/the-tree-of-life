@@ -12,19 +12,28 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.052.1",
+	num: "1.053",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 6e11 Cells on reset OR the last save in the bank<br><br>
+		- 5e13 Cells on reset OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.053</h3><br>
+		- Added Stem Cells!<br>
+		- Added a Stem Cell buyable.<br>
+		- Made tmp not update deactivated layers.<br>
+		- Added a custom save.<br>
+		- Added a Lambda upgrade.<br>
+		- Added a Cell upgrade.<br>
+		- Added a Mu upgrade.<br>
+		- Added a Cell milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.052.1</h3><br>
 		- Fixed a display buf with dilation challenge.<br>
 	<br><h3 style='color: #CC0000'>v1.052</h3><br>

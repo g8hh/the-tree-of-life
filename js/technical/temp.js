@@ -96,7 +96,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 function updateTemp(noError = false) {
 	if (tmp === undefined) setupTemp()
 
-	updateTempData(layers, tmp, funcs, undefined, noError)
+	updateTempData(layers, tmp, funcs, undefined, noError, true)
 
 	for (layer in layers){
 		tmp[layer].resetGain = getResetGain(layer)
@@ -123,8 +123,11 @@ function updateTemp(noError = false) {
 
 }
 
-function updateTempData(layerData, tmpData, funcsData, useThis, noError = false) {
+function updateTempData(layerData, tmpData, funcsData, useThis, noError = false, firstStep = false) {
 	for (item in funcsData){
+		if (firstStep && !noError) {
+			if (tmp[item].deactivated) continue
+		}
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
 				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis, noError)
