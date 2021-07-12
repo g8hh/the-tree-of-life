@@ -8065,6 +8065,7 @@ addLayer("l", {
                                 }
                         },
                         base(){
+                                if (hasMilestone("cells", 35)) return player.cells.lambda.best
                                 let ret = new Decimal(player.l.challenges[11]).max(1)
                                 if (hasMilestone("d", 22)) return ret
                                 
@@ -8097,6 +8098,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 31)) eformula = eformula.replace("log4", "ln")
                                 if (hasMilestone("l", 36)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("d", 22)) eformula = eformula.replace("log2(Dilation completions)", "Dilation completions")
+                                if (hasMilestone("cells", 35)) eformula = eformula.replace("Dilation completions", "Lambda")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -8279,6 +8281,8 @@ addLayer("l", {
                                 if (hasMilestone("a", 14)) ret = ret.div(Math.log(2))
 
                                 if (hasChallenge("l", 72)) ret = player.tokens.total.max(1)
+
+                                if (hasMilestone("cells", 36)) ret = Decimal.pow(2, ret)
                                 
                                 return ret
                         },
@@ -8303,6 +8307,7 @@ addLayer("l", {
                                 if (hasMilestone("a", 13)) eformula = eformula.replace("log3", "ln")
                                 if (hasMilestone("a", 14)) eformula = eformula.replace("ln", "log2")
                                 if (hasChallenge("l", 72)) eformula = eformula.replace("log2(tokens)", "tokens")
+                                if (hasMilestone("cells", 36)) eformula = eformula.replace("tokens", "(2<sup>tokens</sup>)")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12365,7 +12370,11 @@ addLayer("a", {
                         base(){
                                 let ret = new Decimal(tmp.l.getNonZeroGemCount).max(1)
 
-                                if (hasMilestone("cells", 18)) ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
+                                if (hasMilestone("cells", 18)) {
+                                        if (!hasMilestone("cells", 35)) {
+                                                ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
+                                        } else ret = ret.times(getBuyableAmount("cells", 11).max(1))
+                                }
                                 
                                 return ret
                         },
@@ -12385,6 +12394,7 @@ addLayer("a", {
                                 if (hasMilestone("cells", 18)) {
                                         eformula = eformula.replace("[Non zero gem challenges]", "64+sqrt(Omnipotent)")
                                 }
+                                if (hasMilestone("cells", 35)) eformula = eformula.replace("+sqrt(Omnipotent)", "*Omnipotent")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -14385,6 +14395,7 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 311))   ret = ret.times(tmp.cells.upgrades[311].effect)
                 if (hasUpgrade("cells", 411))   ret = ret.times(tmp.cells.upgrades[411].effect)
                 if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
+                                                ret = ret.times(tmp.cells.challenges[12].rewardEffect)
 
                                                 ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
 
@@ -14638,6 +14649,9 @@ addLayer("cells", {
                         if (hasMilestone("cells", 24))  ret = ret.times(tmp.tokens.buyables[21].effect)
                         if (hasMilestone("cells", 26))  ret = ret.times(player.tokens.total.max(1))
                         if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
+
+
+                        if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
                         return ret
                 },
@@ -15994,11 +16008,55 @@ addLayer("cells", {
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: 𝛾 → ∂α, 𝛾 → ∂β, and 𝛾 → ∂𝛾 cost bases are 10."
+                                let a = "Reward: 𝛾 → ∂α, 𝛾 → ∂β, and 𝛾 → ∂𝛾 cost bases are 2."
                                 let b = ""
                                 return a + b
                         },
                 }, // hasMilestone("cells", 34)
+                35: {
+                        requirementDescription(){
+                                return "Requires: 1e1567 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e1567")
+                        },
+                        done(){
+                                return tmp.cells.milestones[35].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Omnipotent multiplies rRNA base instead of adding its square root and α → ∂β base is best Lambda."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 35)
+                36: {
+                        requirementDescription(){
+                                return "Requires: 1e1628 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e1628")
+                        },
+                        done(){
+                                return tmp.cells.milestones[36].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: β → ∂α base is 2^tokens and tetrational token costs scale 2x slower."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 36)
         },
         challenges:{
                 onEnter(){
@@ -16048,6 +16106,43 @@ addLayer("cells", {
                         completionLimit: 10,
                         countsAs: [],
                 }, // inChallenge("cells", 11) hasChallenge("cells", 11)
+                12: {
+                        name: "Secondary",
+                        goal:() => Decimal.pow(10, 916),
+                        canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[12].goal),
+                        challengeEffect(){
+                                return new Decimal(.97).sub(player.cells.challenges[12]/100)
+                        },
+                        fullDisplay(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                if (player.subtabs.cells.stem_content != "Challenges") return ""
+
+                                let a = "Raise Stem Cell gain ^" + formatWhole(tmp.cells.challenges[12].challengeEffect)
+                                let b = "Goal: " + format(tmp.cells.challenges[12].goal) + " Stem Cells"
+                                let c = "Reward: Multiply Cell gain per Cell chalenge completion"
+                                let d = "Currently: *" + format(tmp.cells.challenges[12].rewardBase) + " per challenge<br>"
+                                let e = "netting a *" + format(tmp.cells.challenges[12].rewardEffect) + " multiplier"
+                                let f = br + "Completion count: " + player.cells.challenges[12] + "/95"
+                                
+                                return a + br + b + br + c + br + d + e + f
+                        },
+                        rewardEffect(){
+                                let comps = layerChallengeCompletions("cells")
+                                return tmp.cells.challenges[12].rewardBase.pow(comps)
+                        },
+                        rewardBase() {
+                                return new Decimal(player.cells.challenges[12]).pow(2).plus(1)
+                        },
+                        unlocked(){
+                                return player.cells.challenges[11] >= 10
+                        },
+                        onEnter(){
+                                layers.cells.challenges.onEnter()
+                        },
+                        completionLimit: 95,
+                        countsAs: [],
+                }, // inChallenge("cells", 12) hasChallenge("cells", 12)
         },
         buyables: {
                 rows: 10,
@@ -23951,8 +24046,11 @@ addLayer("tokens", {
 
                 getid = Math.floor(getid)
 
+                let tetrationalScaling = 10
+                if (hasMilestone("cells", 36)) tetrationalScaling *= 20
+
                 if (getid >= len) {
-                        let diff = 3 + (getid - len)/10
+                        let diff = 3 + (getid - len) / tetrationalScaling
                         return new Decimal(diff + "pt10")
                 }
                 return Decimal.pow(10, log_costs[getid]).times(Decimal.pow(10, add))
