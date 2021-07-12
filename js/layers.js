@@ -15883,8 +15883,9 @@ addLayer("cells", {
                                 let c = "Reward: Multiply Stem Cell gain per Cell chalenge completion"
                                 let d = "Currently: *" + format(tmp.cells.challenges[11].rewardBase) + " per challenge<br>"
                                 let e = "netting a *" + format(tmp.cells.challenges[11].rewardEffect) + " multiplier"
+                                let f = br + "Completion count: " + player.cells.challenges[11] + "/9"
                                 
-                                return a + br + b + br + c + br + d + e
+                                return a + br + b + br + c + br + d + e + f
                         },
                         rewardEffect(){
                                 let comps = layerChallengeCompletions("cells")
