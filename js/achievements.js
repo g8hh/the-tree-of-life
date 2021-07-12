@@ -550,6 +550,20 @@ PROGRESSION_MILESTONES = {
         425: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 4))),
         426: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 5))),
         427: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 6))),
+        428: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 2))),
+        429: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 3))),
+        430: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 4))),
+        431: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 5))),
+        432: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 6))),
+        433: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 7))),
+        434: () => player.cells.points.gte(Decimal.pow(10, Decimal.pow(2, 8))),
+        435: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 7))),
+        436: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 8))),
+        437: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 9))),
+        438: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 10))),
+        439: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 11))),
+        440: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 12))),
+        441: () => player.cells.stem_cells.points.gte(Decimal.pow(10, Decimal.pow(2, 13))),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -980,6 +994,20 @@ PROGRESSION_MILESTONES_TEXT = {
         425: "1e16 Stem Cells",
         426: "1e32 Stem Cells",
         427: "1e64 Stem Cells",
+        428: "1e4 Cells", 
+        429: "1e8 Cells", 
+        430: "1e16 Cells", 
+        431: "1e32 Cells", 
+        432: "1e64 Cells", 
+        433: "1e128 Cells", 
+        434: "1e256 Cells", 
+        435: "1e128 Stem Cells",
+        436: "1e256 Stem Cells",
+        437: "1e512 Stem Cells",
+        438: "1e1024 Stem Cells",
+        439: "1e2048 Stem Cells",
+        440: "1e4096 Stem Cells",
+        441: "1e8192 Stem Cells",
 }
 
 
