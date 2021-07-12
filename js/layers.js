@@ -8521,6 +8521,7 @@ addLayer("l", {
                         cost() {
                                 let init = new Decimal(7e84)
                                 let base = new Decimal(158)
+                                if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 31
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -8536,6 +8537,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 7e84
                                 let base = 158
+                                if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[31].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[31].expDiv).plus(1).floor()
@@ -8605,6 +8607,7 @@ addLayer("l", {
                                         cost2 = cost2.replace("</sup>)", ")")
                                 }
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", "2.3")
+                                if (hasMilestone("cells", 34)) cost2 = cost2.replace("158", "2")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8617,6 +8620,7 @@ addLayer("l", {
                         cost() {
                                 let init = new Decimal(1e166)
                                 let base = new Decimal(1600)
+                                if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 32
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -8632,6 +8636,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 1e166
                                 let base = 1600
+                                if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[32].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[32].expDiv).plus(1).floor()
@@ -8696,6 +8701,7 @@ addLayer("l", {
                                         cost2 = cost2.replace("</sup>)", ")")
                                 }
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", "2.3")
+                                if (hasMilestone("cells", 34)) cost2 = cost2.replace("1600", "2")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -8709,6 +8715,7 @@ addLayer("l", {
                                 let init = new Decimal(3e281)
                                 let base = new Decimal(2e16)
                                 if (hasChallenge("l", 101)) base = new Decimal(2468)
+                                if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 33
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -8725,6 +8732,7 @@ addLayer("l", {
                                 let init = 3e281
                                 let base = 2e16
                                 if (hasChallenge("l", 101)) base = 2468
+                                if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[33].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[33].expDiv).plus(1).floor()
@@ -8794,6 +8802,7 @@ addLayer("l", {
                                         cost2 = cost2.replace("2e16", "2468")
                                 }
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", "2.3")
+                                if (hasMilestone("cells", 34)) cost2 = cost2.replace("2468", "2")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -15069,15 +15078,18 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Iota IV"
                         },
                         description(){
-                                let a = "Prime is always activated, Prime levels are no longer reset, and log10(Prime levels) multiply Stem Cell gain"
+                                let a = "<bdi style='font-size: 80%'>Prime is always activated, Prime levels are no longer reset, and log10(Prime levels) multiply Stem Cell gain<br>Requires: 1e46 Stem Cells</bdi>"
                                 return a
                         },    
+                        canAfford(){
+                                return player.cells.stem_cells.best.gte(1e46)
+                        },
                         cost:() => new Decimal("1e446"),
                         currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
-                                return player.cells.stem_cells.best.gte(1e46)
+                                return hasUpgrade("cells", 413)
                         }, // hasUpgrade("cells", 414)
                 },
         },
@@ -15940,6 +15952,53 @@ addLayer("cells", {
                                 return a + b
                         },
                 }, // hasMilestone("cells", 32)
+                33: {
+                        requirementDescription(){
+                                return "Requires: 1e1249 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e1249")
+                        },
+                        done(){
+                                return tmp.cells.milestones[33].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                return tmp.l.buyables[23].effect.max(10).log10().sub(7).max(1).log10().max(0)
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: log10(log10(β → ∂𝛾)-7) adds to Omnipotent base."
+                                let b = br + "Currently: " + format(tmp.cells.milestones[33].effect)
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 33)
+                34: {
+                        requirementDescription(){
+                                return "Requires: 1e1483 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e1483")
+                        },
+                        done(){
+                                return tmp.cells.milestones[34].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: 𝛾 → ∂α, 𝛾 → ∂β, and 𝛾 → ∂𝛾 cost bases are 10."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 34)
         },
         challenges:{
                 onEnter(){
@@ -15957,7 +16016,7 @@ addLayer("cells", {
                         goal:() => Decimal.pow(10, 59),
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
                         challengeEffect(){
-                                return decimalOne.plus(player.cells.challenges[11])
+                                return decimalOne.plus(player.cells.challenges[11]).min(10)
                         },
                         fullDisplay(){
                                 if (player.tab != "cells") return ""
@@ -16019,7 +16078,8 @@ addLayer("cells", {
                         baseConstant(){
                                 let ret = new Decimal(9)
 
-                                if (inChallenge("cells", 11)) ret = ret.sub(tmp.cells.challenges[11].challengeEffect)
+                                if (inChallenge("cells", 11))   ret = ret.sub(tmp.cells.challenges[11].challengeEffect)
+                                if (hasMilestone("cells", 33))  ret = ret.plus(tmp.cells.milestones[33].effect)
 
                                 return ret
                         },
