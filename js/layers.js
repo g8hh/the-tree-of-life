@@ -14519,6 +14519,7 @@ addLayer("cells", {
                         data.mu.best = data.mu.best.max(data.mu.points)
 
                         if (hasMilestone("cells", 12)) layers.cells.buyables[111].buy()
+                        if (hasMilestone("cells", 48)) layers.cells.buyables[112].buy()
                 },
         },
         lambda: {// lambda gain lgain lambdagain l gain
@@ -16216,7 +16217,7 @@ addLayer("cells", {
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
                                 let a = "Reward: Totipotent's log4 becomes ln."
-                                let b = "" //per milestone add to primary base
+                                let b = ""
                                 return a + b
                         },
                 }, // hasMilestone("cells", 43)
@@ -16238,10 +16239,95 @@ addLayer("cells", {
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
                                 let a = "Reward: Totipotent's ln becomes log2."
-                                let b = "" //per milestone add to primary base
+                                let b = ""
                                 return a + b
                         },
                 }, // hasMilestone("cells", 44)
+                45: {
+                        requirementDescription(){
+                                return "Requires: 1e4966 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e4966")
+                        },
+                        done(){
+                                return tmp.cells.milestones[45].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Totipotent's cost base is 5e8."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 45)
+                46: {
+                        requirementDescription(){
+                                return "Requires: 1e6141 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e6141")
+                        },
+                        done(){
+                                return tmp.cells.milestones[46].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Totipotent's cost base is 3e8."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 46)
+                47: {
+                        requirementDescription(){
+                                return "Requires: 10 Secondary Challenge Completions"
+                        },
+                        done(){
+                                return player.cells.challenges[12] >= 10
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Totipotent's cost base is 1e8."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 47)
+                48: {
+                        requirementDescription(){
+                                return "Requires: 1e11,611 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e11611")
+                        },
+                        done(){
+                                return tmp.cells.milestones[48].requirement.lte(player.cells.stem_cells.points) 
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Autobuy Squeeze, you can buy max Totipotent, Protein and Iota buyables are free, and constant base is doubles per milestone."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("cells", 48)
         },
         challenges:{
                 onEnter(){
@@ -16353,7 +16439,7 @@ addLayer("cells", {
                                 return pts.div(init).log(10).root(1.05).plus(1).floor()
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[11].cost),
-                        buy(){//
+                        buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let data2 = data.stem_cells
@@ -16364,7 +16450,7 @@ addLayer("cells", {
                                 let up = hasMilestone("cells", 37) ? ma.sub(data.buyables[id]).max(0) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
-                                        data.points = data.points.sub(tmp.cells.buyables[id].cost)
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
                                 }
                         },
                         baseConstant(){
@@ -16425,19 +16511,39 @@ addLayer("cells", {
                                 let init = new Decimal(1e28)
                                 if (hasMilestone("cells", 27)) init = decimalOne
                                 if (hasMilestone("cells", 28)) base = new Decimal(1e9)
+                                if (hasMilestone("cells", 45)) base = new Decimal(5e8)
+                                if (hasMilestone("cells", 46)) base = new Decimal(3e8)
+                                if (hasMilestone("cells", 47)) base = new Decimal(1e8)
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
                                 return hasUpgrade("cells", 214)
-                        },
+                        },//
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[12].cost),
+                        maxAfford(){
+                                let init = new Decimal(10)
+                                if (hasMilestone("cells", 27)) init = decimalOne
+                                let pts = player.cells.stem_cells.points
+                                if (pts.lt(init)) return new Decimal(0)
+                                let base = new Decimal(1e10)
+                                if (hasMilestone("cells", 28)) base = new Decimal(1e9)
+                                if (hasMilestone("cells", 45)) base = new Decimal(5e8)
+                                if (hasMilestone("cells", 46)) base = new Decimal(3e8)
+                                if (hasMilestone("cells", 47)) base = new Decimal(1e8)
+                                return pts.div(init).log(base).root(1.1).plus(1).floor()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let data2 = data.stem_cells
-                                data.buyables[12] = data.buyables[12].plus(1)
+                                let id = 12
+
+                                data.buyables[id] = data.buyables[id].plus(1)
+                                let ma = tmp.cells.buyables[id].maxAfford
+                                let up = hasMilestone("cells", 48) ? ma.sub(data.buyables[id]).max(0) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
-                                        data2.points = data2.points.sub(tmp.cells.buyables[12].cost)
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
                                 }
                         },
                         base(){
@@ -16483,6 +16589,9 @@ addLayer("cells", {
                                 let cost2 = "2e28*1e10^(x<sup>1.1</sup>)" 
                                 if (hasMilestone("cells", 27)) cost2 = cost2.slice(5,)
                                 if (hasMilestone("cells", 28)) cost2 = cost2.replace("10", "9")
+                                if (hasMilestone("cells", 45)) cost2 = cost2.replace("1e9", "5e8")
+                                if (hasMilestone("cells", 46)) cost2 = cost2.replace("5e8", "3e8")
+                                if (hasMilestone("cells", 47)) cost2 = cost2.replace("3e8", "1e8")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
