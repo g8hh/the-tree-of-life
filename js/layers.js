@@ -16364,7 +16364,7 @@ addLayer("cells", {
                                 let up = hasMilestone("cells", 37) ? ma.sub(data.buyables[id]).max(0) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
-                                        data.points = data.points.sub(tmp.cells.buyables[id].cost)
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
                                 }
                         },
                         baseConstant(){
