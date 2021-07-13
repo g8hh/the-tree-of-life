@@ -1,5 +1,7 @@
 # The Modding Tree changelog:
 
+- Fixed offline production more.
+
 # v2.6.5 - 7/7/21
 - Fixed offline production.
 - Fixed formatting for small negative numbers.
