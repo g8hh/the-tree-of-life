@@ -17575,6 +17575,21 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 13)
                         },
+                        shouldNotify(){
+                                x = [11, 12, 13, 21, 22, 23, 31, 32, 33]
+                                for (let i = 0; i < x.length; i++){
+                                        id = x[i]
+                                        if (layers.cells.buyables[id] == undefined) continue
+                                        if (!tmp.cells.buyables[id].unlocked) continue
+                                        if (getBuyableAmount("cells", id).gt(0)) continue
+                                        if (player.cells.stem_cells.points.lt(tmp.cells.buyables[id].cost)) continue
+                                        return true
+                                }
+                                if (player.cells.activeChallenge != undefined) {
+                                        if (canCompleteChallenge("cells", player.cells.activeChallenge)) return true
+                                }
+                                return false
+                        },
                 },
                 "Info": {
                         content: ["main-display",
