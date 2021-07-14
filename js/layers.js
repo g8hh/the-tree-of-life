@@ -17252,7 +17252,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[411].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[411]).max(0) : 1
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[411]).max(1) : 1
                                 data.buyables[411] = data.buyables[411].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[411].cost)
@@ -17326,7 +17326,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[412].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[412]).max(0) : 1
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[412]).max(1) : 1
                                 data.buyables[412] = data.buyables[412].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[412].cost)
@@ -17398,7 +17398,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[413].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[413]).max(0) : 1
+                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[413]).max(1) : 1
                                 data.buyables[413] = data.buyables[413].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[413].cost)
