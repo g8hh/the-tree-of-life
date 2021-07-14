@@ -12,19 +12,26 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.063",
+	num: "1.064",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 1e1002 Cells OR the last save in the bank<br><br>
+		- 1e1532 Cells OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.064</h3><br>
+		- Added two Life challenges.<br>
+		- You can now complete Secondary 21 times.<br>
+		- Added three rows of achievements.<br>
+		- Added a custom save.<br>
+		- Added two Cell milestones.<br>
+		- Removed some proteins displays once they are unnecessary/unhelpful.<br>
 	<br><h3 style='color: #CC0000'>v1.063</h3><br>
 		- Added five Cell milestones.<br>
 		- You can now complete Secondary 18 times.<br>
