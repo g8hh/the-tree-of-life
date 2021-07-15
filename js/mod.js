@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.065.1",
+	num: "1.066",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,16 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.066</h3><br>
+		- Merged TMT version 2.6.5.1<br>
+		- Fixed a bug with pasuing.<br>
+		- Added a custom save.<br>
+		- Fixed a big bug with Carbon IV.<br>
+		- Cell milestone 21 is buffed.<br>
+		- Fixed cell milestone 9.<br>
+		- Added Tissues.<br>
+		- Added 25 Tissue upgrades.<br>
+		- Fixed a bunch of bugs I created while making this patch :).<br>
 	<br><h3 style='color: #CC0000'>v1.065.1</h3><br>
 		- Added a Kappa upgrade.<br>
 		- Added an Iota upgrade.<br>

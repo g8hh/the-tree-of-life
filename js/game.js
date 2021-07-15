@@ -401,9 +401,8 @@ function runInterval(){
 			}
 			if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 		}
-		if (!options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
-	}
-	if (player.devSpeed) diff *= player.devSpeed
+	} else diff = 0
+	if (player.devSpeed != undefined) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
