@@ -137,7 +137,7 @@ function getPointDilationExponent(){
                                         exp = exp.times(portion)
         }
         if (hasUpgrade("cells", 11))    exp = exp.times(tmp.cells.upgrades[11].effect)
-
+        if (hasUpgrade("cells", 315))   exp = exp.times(player.tokens.total.max(1))
         if (hasMilestone("cells", 56))  exp = exp.times(tmp.cells.milestones[56].effect)
         
         return exp
@@ -269,7 +269,7 @@ var GEM_EFFECT_DESCRIPTIONS = {
         802: "Autobuy tokens<br>x>1330",
         803: "Autobuy Radio Waves<br>x>1330",
         804: "X-Rays effects Amino Acid<br>x>1330",
-        805: "Phosphrosu gain per non-zero gem<br>1+cbrt(x)",
+        805: "Phosphorus gain per non-zero gem<br>1+cbrt(x)",
         806: "Remove snRNA's ln<br>x>1330",
         807: "Life gain per N → Δµ<br>1+x/13",
         808: "Add .0006 to tRNA's base<br>x>1330",
@@ -15206,6 +15206,19 @@ addLayer("cells", {
                                 return hasUpgrade("cells", 313)
                         }, // hasUpgrade("cells", 314)
                 },
+                315: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa V"
+                        },
+                        description(){
+                                let a = "Tokens exponentiates Infrared base and dilate point gain"
+                                return a
+                        },  
+                        cost:() => new Decimal("e1377"),
+                        unlocked(){
+                                return hasUpgrade("cells", 215)
+                        }, // hasUpgrade("cells", 315)
+                },
                 411: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Iota I"
@@ -15278,6 +15291,19 @@ addLayer("cells", {
                         unlocked(){
                                 return hasUpgrade("cells", 413)
                         }, // hasUpgrade("cells", 414)
+                },
+                415: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Iota V"
+                        },
+                        description(){
+                                let a = "Unlock Tissues [not yet] and Odd is always activated"
+                                return a
+                        },  
+                        cost:() => new Decimal("e1381"),
+                        unlocked(){
+                                return hasUpgrade("cells", 315)
+                        }, // hasUpgrade("cells", 415)
                 },
         },
         clickables: {
@@ -17407,7 +17433,7 @@ addLayer("cells", {
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
                                 if (hasMilestone("cells", 38)) time = Math.floor(player.timePlayed)
-                                let base = .8 + 1.2 * (time % 2)
+                                let base = .8 + 1.2 * ((time % 2) || hasUpgrade("cells", 415))
                                 if (hasUpgrade("cells", 12)) base += .3
                                 return new Decimal(base)
                         },
@@ -25254,6 +25280,7 @@ addLayer("tokens", {
                         base(){
                                 let ret = new Decimal(20)
                                 if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.max(1).pow(3))
+                                if (hasUpgrade("cells", 315)) ret = ret.pow(player.tokens.total.max(1))
                                 return ret
                         },
                         effect(){

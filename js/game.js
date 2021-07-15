@@ -358,7 +358,16 @@ function gameLoop(diff) {
 		if (layers[layer].milestones) updateMilestones(layer);
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
+}
 
+function setUpPGSettings(){
+	player.autosave = false
+	player.arrowHotkeys = true
+	player.forceOneTab = false
+	player.showBuiltInSaves = true
+	player.toggleKeys = false
+	player.undulating = false
+	player.spaceBarPauses = true
 }
 
 function hardReset(resetOptions) {

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.065",
+	num: "1.065.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.065.1</h3><br>
+		- Added a Kappa upgrade.<br>
+		- Added an Iota upgrade.<br>
+		- Fixed a spelling error with C85 Gems.<br>
+		- Made a pg-settings button.<br>
+		- Fixed a bug with not buying Iota buyables.<br>
+		- Made Stem now be notified when you can complete a challenge/buy a new buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.065</h3><br>
 		- Added a Mu upgrade.<br>
 		- Added a Lambda upgrade.<br>
