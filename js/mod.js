@@ -12,19 +12,25 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.066.1",
+	num: "1.067",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 1 Tissue reset OR the last save in the bank<br><br>
+		- 4 Tissue resets OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.067</h3><br>
+		- Added a custom save.<br>
+		- Added a Tissue milestone.<br>
+		- Gave M<sub>C</sub> a tooltip of Stem Cell amount.<br>
+		- Changed Tissue XXII requirement.<br>
+		- Endgame is now 4 tissue resets, please don't go past that.<br>
 	<br><h3 style='color: #CC0000'>v1.066.1</h3><br>
 		- Fixed the display of Tissue gain formula.<br>
 		- Gave Tissue milestone 1 another two effects.<br>

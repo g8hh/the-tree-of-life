@@ -14651,11 +14651,7 @@ addLayer("cells", {
                         }
                 }
 
-                if (hasUpgrade("cells", 13)) {
-                        layers.cells.stem_cells.update(diff)
-                } 
-
-                if (hasMilestone("cells", 29) || hasMilestone("t", 1)) layers.cells.buyables[11].buy()
+                if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
         },
         mu: {// mu gain mgain mugain m gain
                 getResetGain(){
@@ -14874,6 +14870,9 @@ addLayer("cells", {
                         if (hasMilestone("cells", 15) && data.time > 1 && !player.cells.activeChallenge) {
                                 if (data2.best.div(data2.points).gt(1e4)) data2.points = data2.best.div(1e4)
                         }
+
+                        if (hasMilestone("cells", 29) || hasMilestone("t", 1)) layers.cells.buyables[11].buy()
+                        if (hasMilestone("t", 2)) layers.cells.buyables[12].buy()
                 },
         },
         exitMinigame(){
@@ -17034,7 +17033,7 @@ addLayer("cells", {
                                 let id = 11
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 37) ? ma.sub(data.buyables[id]).max(0) : 1
+                                let up = hasMilestone("cells", 37) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -17128,7 +17127,7 @@ addLayer("cells", {
                                 let id = 12
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 48) ? ma.sub(data.buyables[id]).max(0) : 1
+                                let up = hasMilestone("cells", 48) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -18293,12 +18292,12 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXII"
                         },
                         description(){
-                                let a = "Multiply Cell gain exponent by 100/99<br>Requires: 1e1400 Cells"
+                                let a = "Multiply Cell gain exponent by 100/99<br>Requires: 1e1500 Cells"
                                 return a
                         },
                         cost:() => decimalOne,
                         canAfford(){
-                                return player.cells.points.gte("1e1400")
+                                return player.cells.points.gte("1e1500")
                         },
                         unlocked(){
                                 return true
@@ -18376,6 +18375,28 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 1)
+                2: {
+                        requirementDescription(){
+                                return "Requires: 2 Tissue resets"
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.t.milestones[2].requirement.lte(player.t.times)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Autobuy Totipotent and per milestone you have one less effective token for prestige purposes."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 2)
         },
         tabFormat: {
                 "Start": {
@@ -18677,7 +18698,7 @@ addLayer("mc", {
         baseAmount() {return decimalZero}, // Get the current amount of baseResource
         type: "custom",
         tooltip(){
-                return ""
+                return format(player.cells.stem_cells.points) + " Stem Cells"
         },
         getResetGain(){
                 return decimalZero
@@ -25745,6 +25766,7 @@ addLayer("tokens", {
                 if (hasChallenge("l", 52))      a += tmp.l.challenges[52].reward.toNumber()
                 if (hasUpgrade("d", 33))        a += player.d.upgrades.length
                 if (hasMilestone("cells", 25))  a += player.cells.milestones.length
+                if (hasMilestone("t", 2))       a += player.t.milestones.length
                 
                 return a
         },
