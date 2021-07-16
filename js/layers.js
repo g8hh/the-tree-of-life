@@ -9686,7 +9686,7 @@ addLayer("l", {
 
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^60"
                                 let b = "Goal: e1e2,544,000 Points"
-                                let c = "Reward: Anti-Hydrogen effects DNA, Anti-Minigame effects Cells, and Anti-Carbon effects Stem Cells"
+                                let c = "Reward: Anti-Hydrogen effects DNA and Anti-Minigame effects Cells each at most ^1.5, and Anti-Carbon effects Stem Cells over 15 Secondary completions"
 
                                 return a + br + b + br + c
                         },
@@ -13374,8 +13374,14 @@ addLayer("d", {
                 if (hasUpgrade("d", 35))        ret = ret.times(Decimal.pow(1.01, getBuyableAmount("a", 33)).min("e2e5"))
                                                 ret = ret.times(tmp.cells.effect)
                 if (hasUpgrade("cells", 113))   ret = ret.times(tmp.cells.upgrades[113].effect)
-                if (hasChallenge("l", 111))     ret = ret.times(tmp.l.challenges[21].reward)
                                                 ret = ret.times(tmp.t.effect)
+
+                                                
+                if (hasChallenge("l", 111)) {
+                        let gain = tmp.l.challenges[21].reward
+                                                ret = ret.times(gain.min(ret.sqrt()))
+                }
+                                                
 
                 return ret.max(1)
         },
@@ -14552,10 +14558,15 @@ addLayer("cells", {
                 if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
                                                 ret = ret.times(tmp.cells.challenges[12].rewardEffect)
                 if (hasMilestone("cells", 40))  ret = ret.times(player.cells.stem_cells.best.max(1).root(100))
-                if (hasChallenge("l", 111))     ret = ret.times(tmp.l.challenges[22].reward)
 
                                                 ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                                                 ret = ret.times(tmp.t.effect)
+
+
+                if (hasChallenge("l", 111)) {
+                        let gain = tmp.l.challenges[22].reward
+                                                ret = ret.times(gain.min(ret.sqrt()))
+                }
 
                 return ret.max(1)
         },
@@ -14605,6 +14616,7 @@ addLayer("cells", {
                 if (hasMilestone("cells", 1)) data.milestone1Ever = true
 
                 data.time += diff
+                if (hasMilestone("cells", 14)) data.passiveTime += diff
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
                         data.times ++
@@ -14830,7 +14842,9 @@ addLayer("cells", {
                         if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(50))
                         if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
                         if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
-                        if (hasChallenge("l", 111))     ret = ret.times(tmp.l.challenges[31].reward)
+                        if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15) {
+                                                        ret = ret.times(tmp.l.challenges[31].reward)
+                        }
                         if (hasMilestone("cells", 59))  ret = ret.times(layerChallengeCompletions("cells") ** 2)
                         if (hasUpgrade("t", 31))        ret = ret.times(3)
                         if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
@@ -15806,7 +15820,7 @@ addLayer("cells", {
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Unlock Stem Cell challenges and square base Cell gain but you can only have 100% of your cells upon reset and you can no longer Cell reset."
+                                let a = "Reward: Unlock Stem Cell challenges and gain a free Cell reset per second and square base Cell gain but you can only have 100% of your cells upon reset and you can no longer Cell reset."
                                 let b = ""
                                 return a + b
                         },
@@ -17709,6 +17723,7 @@ addLayer("cells", {
         },
         onPrestige(){
                 player.cells.times ++
+                if (hasMilestone("t", 1)) player.cells.times += 2
                 player.cells.time = 0
                 if (player.cells.milestone2Best != 0) {
                         player.cells.milestone2Best = Math.max(player.cells.milestone2Best, player.cells.times)
@@ -17925,7 +17940,7 @@ addLayer("t", {
                 return ret
         },
         effect(){
-                let amt = player.t.best
+                let amt = player.t.total
 
                 let data = tmp.t
 
@@ -18337,7 +18352,7 @@ addLayer("t", {
                                 if (player.tab != "t") return ""
                                 if (player.subtabs.t.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: get stuff."
+                                let a = "Reward: Keep all prior autobuyer content [not yet] and gain 3x Cell resets."
                                 let b = ""
                                 return a + b
                         },
@@ -18382,11 +18397,11 @@ addLayer("t", {
                                         a2 += formatWhole(tmp.t.getGainExp.pow(-1)) + ")"
                                         let a3 = "Initial Tissue effect: (Tissues+1)^1"
                                         let a4 = "Current Tissue effect: (" + format(tmp.t.effectMult) 
-                                        a4 += "Tissues+" + format(tmp.t.effectAdd) + ")^" + format(tmp.t.effectExp)
+                                        a4 += "*Tissues+" + format(tmp.t.effectAdd) + ")^" + format(tmp.t.effectExp)
                                         let a = a1 + br + a2 + br2 + a3 + br + a4
                                         let b = "Cell resets all prior content that is not permanently kept."
                                         let c = "Note that anti- challenges and gem are no longer."
-                                        let d1 = "Tissue effect effects Phosphorus, Life, Amino Acid, Protein"
+                                        let d1 = "Tissue effect effects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Mu, Lambda, Kappa, and Iota gain."
                                         let d = d1 + br + d2
 
@@ -18455,6 +18470,7 @@ addLayer("t", {
                                 let chData = data1.challenges
                                 if (cKeptChallenges < chData[11]) {
                                         chData[11] = cKeptChallenges
+                                        chData[12] = 0
                                 } else {
                                         chData[12] = Math.min(chData[12], cKeptChallenges-chData[11])
                                 }
