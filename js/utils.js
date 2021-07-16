@@ -334,8 +334,8 @@ function subtabShouldNotify(layer, family, id) {
 	if (family == "mainTabs") subtab = tmp[layer].tabFormat[id]
 	else subtab = tmp[layer].microtabs[family][id]
 
-	if (subtab.embedLayer) return tmp[subtab.embedLayer].notify
-	else return subtab.shouldNotify
+	if (subtab.embedLayer) return tmp[subtab.embedLayer].notify && tmp[subtab.embedLayer].unlocked
+	else return subtab.shouldNotify && subtab.unlocked
 }
 
 function subtabResetNotify(layer, family, id) {

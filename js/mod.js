@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.067",
+	num: "1.067.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,6 +25,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.067.1</h3><br>
+		- Minigame tab is no longer highlighted when D isn't unlocked.<br>
+		- Fixed the hotkey titles showing up with nothing in them.<br>
+		- Oxygen IV is cheaper.<br>
+		- Various spelling and small display fixes.<br>
 	<br><h3 style='color: #CC0000'>v1.067</h3><br>
 		- Added a custom save.<br>
 		- Added a Tissue milestone.<br>

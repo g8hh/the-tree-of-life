@@ -2418,7 +2418,7 @@ addLayer("o", {
                                 if (hasUpgrade("o", 14)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[14].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(2000),
+                        cost:() => new Decimal(1500),
                         effect(){
                                 let ret = player.o.points.max(1).ln().max(1)
 
@@ -17569,7 +17569,7 @@ addLayer("cells", {
                                         ["challenges", [1,2,3]],
                                 ],
                                 unlocked(){
-                                        return hasMilestone("cells", 14)
+                                        return hasMilestone("cells", 14) || player.t.unlocked
                                 },
                         },
                 },
@@ -17668,7 +17668,7 @@ addLayer("cells", {
                                 
                                 ],
                         unlocked(){
-                                return hasUpgrade("cells", 13)
+                                return hasUpgrade("cells", 13) || player.t.unlocked
                         },
                         shouldNotify(){
                                 x = [11, 12, 13, 21, 22, 23, 31, 32, 33]
@@ -18324,7 +18324,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXIV"
                         },
                         description(){
-                                let a = "Subtract .1 from Life buyables cost exponent<br>26 Secondary completions"
+                                let a = "Subtract .1 from Life buyables cost exponent<br>Requires: 26 Secondary completions"
                                 return a
                         },
                         cost:() => decimalOne,
@@ -18340,7 +18340,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXV"
                         },
                         description(){
-                                let a = "Stem Cell challenges are 10,000x easier<br>Tissue effect is at least 100"
+                                let a = "Stem Cell challenges are 10,000x easier<br>Requires: Tissue effect is at least 100"
                                 return a
                         },
                         cost:() => decimalOne,
@@ -18721,39 +18721,6 @@ addLayer("mc", {
                 return br
         },
         layerShown(){return hasMilestone("cells", 21)},
-        microtabs: {
-                stem_content: {
-                        "Buyables": { 
-                                content: [
-                                        ["buyables", [1,2,3]],
-                                ],
-                                unlocked(){
-                                        return true
-                                },
-                                shouldNotify(){
-                                        x = [11, 12, 13, 21, 22, 23, 31, 32, 33]
-                                        for (let i = 0; i < x.length; i++){
-                                                id = x[i]
-                                                if (layers.cells.buyables[id] == undefined) continue
-                                                if (!tmp.cells.buyables[id].unlocked) continue
-                                                if (getBuyableAmount("cells", id).gt(0)) continue
-                                                if (player.cells.stem_cells.points.lt(tmp.cells.buyables[id].cost)) continue
-                                                return true
-                                        }
-                                        return false
-                                },
-                        },
-                        "Challenges": { 
-                                content: [
-                                        ["display-text", "Starting a challenge resets all Stem Cell content"],
-                                        ["challenges", [1,2,3]],
-                                ],
-                                unlocked(){
-                                        return hasMilestone("cells", 14)
-                                },
-                        },
-                },
-        },
         tabFormat: {
                 "Activate": {
                         content: [
@@ -19127,6 +19094,9 @@ addLayer("ach", {
                         onPress(){
                                 console.log("oops something went really badly wrong")
                         },
+                        unlocked(){
+                                return player.n.unlocked
+                        },
                 },
                 {key: "a", description: "A: Reset for Amino Acid", onPress(){
                                 if (canReset("a")) doReset("a")
@@ -19191,6 +19161,9 @@ addLayer("ach", {
                         description: br + makeBlue("<b>Other</b>:"),
                         onPress(){
                                 console.log("oops something went really badly wrong")
+                        },
+                        unlocked(){
+                                return player.tokens.unlocked
                         },
                 },
                 {key: "s", description: "S: Sell token buyables (only if on said tab)", 
