@@ -16,6 +16,10 @@ let VERSION = {
 	name: "Advil's Auspicious Acension",
 }
 
+function isEndgame() {
+	return player.cells.challenges[12] >= 27
+}
+
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
 		- 27 Secondary completions OR the last save in the bank<br><br>
@@ -972,16 +976,6 @@ var displayThings = [
 	},
 ]
 
-// Determines when the game "ends"
-function isEndgame() {
-	return false
-}
-
-
-
-// Less important things beyond this point!
-
-// Style for the background, can be a function
 var backgroundStyle = {
 
 }
@@ -1014,14 +1008,6 @@ function hasSpelledWord(word){
 	}
 	return true
 } 
-/* 
-take 10k common words and convert into list that can be copy pasted somewhere
-then put somewhere and make function to generate random word
-then display it, figure out how much has been spelled and show that in one color
-unspelled in different 
-upon spelling of the word give reward poggers
-
-*/
 
 function getLetterFromNum(x){
 	return {
