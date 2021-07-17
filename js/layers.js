@@ -16921,7 +16921,7 @@ addLayer("cells", {
 
                                 let a = "Subtract " + formatWhole(tmp.cells.challenges[11].challengeEffect) + " from Omnipotent base"
                                 let b = "Goal: " + format(tmp.cells.challenges[11].goal) + " Stem Cells"
-                                let c = "Reward: Multiply Stem Cell gain per Cell chalenge completion"
+                                let c = "Reward: Multiply Stem Cell gain per Cell challenge completion"
                                 let d = "Currently: *" + format(tmp.cells.challenges[11].rewardBase) + " per challenge<br>"
                                 let e = "netting a *" + format(tmp.cells.challenges[11].rewardEffect) + " multiplier"
                                 let f = br + "Completion count: " + player.cells.challenges[11] + "/10"
@@ -16971,7 +16971,7 @@ addLayer("cells", {
 
                                 let a = "Raise Stem Cell gain ^" + formatWhole(tmp.cells.challenges[12].challengeEffect)
                                 let b = "Goal: " + format(tmp.cells.challenges[12].goal) + " Stem Cells"
-                                let c = "Reward: Multiply Cell gain per Cell chalenge completion"
+                                let c = "Reward: Multiply Cell gain per Cell challenge completion"
                                 let d = "Currently: *" + format(tmp.cells.challenges[12].rewardBase) + " per challenge<br>"
                                 let e = "netting a *" + format(tmp.cells.challenges[12].rewardEffect) + " multiplier"
                                 let f = br + "Completion count: " + player.cells.challenges[12] + "/95"
