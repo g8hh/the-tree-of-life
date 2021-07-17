@@ -641,6 +641,20 @@ PROGRESSION_MILESTONES = {
         516: () => player.tokens.total.gte(360),
         517: () => player.tokens.total.gte(365),
         518: () => player.tokens.total.gte(370),
+        519: () => player.t.upgrades.length >= 1,
+        520: () => player.t.upgrades.length >= 4,
+        521: () => player.t.upgrades.length >= 9,
+        523: () => player.t.upgrades.length >= 16,
+        524: () => player.t.upgrades.length >= 25,
+        525: () => player.t.upgrades.length >= 36,
+        526: () => player.t.upgrades.length >= 49,
+        527: () => player.tokens.total.gte(380),
+        528: () => player.tokens.total.gte(390),
+        529: () => player.tokens.total.gte(400),
+        530: () => player.tokens.total.gte(410),
+        531: () => player.tokens.total.gte(420),
+        532: () => player.tokens.total.gte(430),
+        533: () => player.tokens.total.gte(440),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1162,6 +1176,20 @@ PROGRESSION_MILESTONES_TEXT = {
         516: "360 Tokens",
         517: "365 Tokens",
         518: "370 Tokens",
+        519: "a Tissue upgrade",
+        520: "4 Tissue upgrades",
+        521: "9 Tissue upgrades",
+        523: "16 Tissue upgrades",
+        524: "25 Tissue upgrades",
+        525: "36 Tissue upgrades",
+        526: "49 Tissue upgrades",
+        527: "380 Tokens",
+        528: "390 Tokens",
+        529: "400 Tokens",
+        530: "410 Tokens",
+        531: "420 Tokens",
+        532: "430 Tokens",
+        533: "440 Tokens",
 }
 
 

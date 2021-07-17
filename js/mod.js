@@ -12,19 +12,29 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.069",
+	num: "1.070",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 10 Tissue resets OR the last save in the bank<br><br>
+		- 27 Secondary completions OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.070</h3><br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
+		- Added a Life challenge.<br>
+		- Added three Tissue milestones.<br>
+		- Changed Tissue gain formula.<br> 
+		- Tissue II and Tissue V now have an additional effect.<br>
+		- Tissue XXII requirement is easier.<br>
+		- Mu II effects are now at least 1.<br>
+		- Note endgame.<br>
 	<br><h3 style='color: #CC0000'>v1.069</h3><br>
 		- Endgame is 10 Tissue resets.<br>
 		- Added two custom saves.<br>
