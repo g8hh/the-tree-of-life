@@ -14972,7 +14972,7 @@ addLayer("cells", {
                         },  
                         cost:() => new Decimal(5e8),
                         unlocked(){
-                                return hasUpgrade("cells", 112)
+                                return hasUpgrade("cells", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 12)
                 },
                 13: {
@@ -14988,7 +14988,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(5.43e12),
                         unlocked(){
-                                return hasUpgrade("cells", 12)
+                                return hasUpgrade("cells", 12) || player.t.unlocked
                         }, // hasUpgrade("cells", 13)
                 },
                 14: {
@@ -15010,7 +15010,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Stem Cells",
                         unlocked(){
-                                return hasUpgrade("cells", 13)
+                                return hasUpgrade("cells", 13) || player.t.unlocked
                         }, // hasUpgrade("cells", 14)
                 },
                 111: {
@@ -15045,7 +15045,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
-                                return hasUpgrade("cells", 111)
+                                return hasUpgrade("cells", 111) || player.t.unlocked
                         }, // hasUpgrade("cells", 112)
                 },
                 113: {
@@ -15064,7 +15064,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
-                                return hasUpgrade("cells", 112)
+                                return hasUpgrade("cells", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 113)
                 },
                 114: {
@@ -15080,7 +15080,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
-                                return hasUpgrade("cells", 113)
+                                return hasUpgrade("cells", 113) || player.t.unlocked
                         }, // hasUpgrade("cells", 114)
                 },
                 115: {
@@ -15093,7 +15093,7 @@ addLayer("cells", {
                         },  
                         cost:() => new Decimal("e1253"),
                         unlocked(){
-                                return hasChallenge("l", 112)
+                                return hasChallenge("l", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 115)
                 },
                 211: {
@@ -15135,7 +15135,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
-                                return hasUpgrade("cells", 211)
+                                return hasUpgrade("cells", 211) || player.t.unlocked
                         }, // hasUpgrade("cells", 212)
                 },
                 213: {
@@ -15151,7 +15151,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
-                                return hasUpgrade("cells", 212)
+                                return hasUpgrade("cells", 212) || player.t.unlocked
                         }, // hasUpgrade("cells", 213)
                 },
                 214: {
@@ -15171,7 +15171,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
-                                return hasUpgrade("cells", 213)
+                                return hasUpgrade("cells", 213) || player.t.unlocked
                         }, // hasUpgrade("cells", 214)
                 },
                 215: {
@@ -15184,7 +15184,7 @@ addLayer("cells", {
                         },  
                         cost:() => new Decimal("e1315"),
                         unlocked(){
-                                return hasUpgrade("cells", 115)
+                                return hasUpgrade("cells", 115) || player.t.unlocked
                         }, // hasUpgrade("cells", 215)
                 },
                 311: {
@@ -15222,7 +15222,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
-                                return hasUpgrade("cells", 311)
+                                return hasUpgrade("cells", 311) || player.t.unlocked
                         }, // hasUpgrade("cells", 312)
                 },
                 313: {
@@ -15241,7 +15241,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
-                                return hasUpgrade("cells", 312)
+                                return hasUpgrade("cells", 312) || player.t.unlocked
                         }, // hasUpgrade("cells", 313)
                 },
                 314: {
@@ -15260,7 +15260,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
-                                return hasUpgrade("cells", 313)
+                                return hasUpgrade("cells", 313) || player.t.unlocked
                         }, // hasUpgrade("cells", 314)
                 },
                 315: {
@@ -15273,7 +15273,7 @@ addLayer("cells", {
                         },  
                         cost:() => new Decimal("e1377"),
                         unlocked(){
-                                return hasUpgrade("cells", 215)
+                                return hasUpgrade("cells", 215) || player.t.unlocked
                         }, // hasUpgrade("cells", 315)
                 },
                 411: {
@@ -15311,7 +15311,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
-                                return hasUpgrade("cells", 411)
+                                return hasUpgrade("cells", 411) || player.t.unlocked
                         }, // hasUpgrade("cells", 412)
                 },
                 413: {
@@ -15327,7 +15327,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
-                                return hasUpgrade("cells", 412)
+                                return hasUpgrade("cells", 412) || player.t.unlocked
                         }, // hasUpgrade("cells", 413)
                 },
                 414: {
@@ -15346,7 +15346,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
-                                return hasUpgrade("cells", 413)
+                                return hasUpgrade("cells", 413) || player.t.unlocked
                         }, // hasUpgrade("cells", 414)
                 },
                 415: {
@@ -15359,7 +15359,7 @@ addLayer("cells", {
                         },  
                         cost:() => new Decimal("e1381"),
                         unlocked(){
-                                return hasUpgrade("cells", 315)
+                                return hasUpgrade("cells", 315) || player.t.unlocked
                         }, // hasUpgrade("cells", 415)
                 },
         },
@@ -17033,7 +17033,7 @@ addLayer("cells", {
                                 let id = 11
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 37) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("cells", 37) || hasMilestone("t", 3) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -17127,7 +17127,7 @@ addLayer("cells", {
                                 let id = 12
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 48) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!false) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -18397,6 +18397,28 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 2)
+                3: {
+                        requirementDescription(){
+                                return "Requires: 5 Tissue resets"
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.t.milestones[3].requirement.lte(player.t.times)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Bulk Totipotent and Omnipotent and per milestone you have one less effective token for prestige purposes."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 3)
         },
         tabFormat: {
                 "Start": {
@@ -25740,6 +25762,7 @@ addLayer("tokens", {
                 if (hasUpgrade("d", 33))        a += player.d.upgrades.length
                 if (hasMilestone("cells", 25))  a += player.cells.milestones.length
                 if (hasMilestone("t", 2))       a += player.t.milestones.length
+                if (hasMilestone("t", 3))       a += player.t.milestones.length
                 
                 return a
         },

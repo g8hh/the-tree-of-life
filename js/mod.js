@@ -12,19 +12,23 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.067.1",
+	num: "1.068",
 	name: "Advil's Auspicious Acension",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 4 Tissue resets OR the last save in the bank<br><br>
+		- 7 Tissue resets OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.068</h3><br>
+		- Tissues now displays stuff.<br>
+		- Endgame is 7 Tissue resets.<br>
+		- Added a Tissue milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.067.1</h3><br>
 		- Minigame tab is no longer highlighted when D isn't unlocked.<br>
 		- Fixed the hotkey titles showing up with nothing in them.<br>
