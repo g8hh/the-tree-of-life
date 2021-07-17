@@ -14661,7 +14661,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total12.pow(.1).min(1e50))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total12.pow(.1).min(1e50).max(1))
                                                         ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                         if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
                         if (hasUpgrade("t", 12))        ret = ret.times(100)
@@ -14695,7 +14695,7 @@ addLayer("cells", {
 
                         if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total13.pow(.1).min(1e50))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total13.pow(.1).min(1e50).max(1))
                                                         ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                         if (hasUpgrade("t", 13))        ret = ret.times(100)
                                                         ret = ret.times(tmp.t.effect)
@@ -14732,7 +14732,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
                         if (hasUpgrade("cells", 313))   ret = ret.times(tmp.cells.upgrades[313].effect)
-                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1).min(1e50))
+                        if (hasUpgrade("cells", 112))   ret = ret.times(player.cells.total14.pow(.1).min(1e50).max(1))
                                                         ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                         if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect.pow(player.cells.upgrades.length))
                         if (hasUpgrade("t", 14))        ret = ret.times(100)
@@ -15341,7 +15341,7 @@ addLayer("cells", {
                         canAfford(){
                                 return player.cells.stem_cells.best.gte(1e46)
                         },
-                        cost:() => new Decimal("1e446"),
+                        cost:() => hasMilestone("cells", 38) ? decimalOne : new Decimal("1e446"),
                         currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
@@ -16907,7 +16907,7 @@ addLayer("cells", {
                         name: "Primary",
                         goal(){
                                 let exp = 59
-                                if (hasUpgrade("t", 55)) exp -= 4
+                                if (hasUpgrade("t", 55)) exp -= 6
                                 return Decimal.pow(10, exp)
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
@@ -16956,7 +16956,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
                                 if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
                                 if (hasChallenge("l", 112))     exp -= 4
-                                if (hasUpgrade("t", 55))        exp -= 4
+                                if (hasUpgrade("t", 55))        exp -= 6
 
                                 return Decimal.pow(10, exp)
                         },
@@ -18340,7 +18340,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXV"
                         },
                         description(){
-                                let a = "Stem Cell challenges are 10,000x easier<br>Requires: Tissue effect is at least 100"
+                                let a = "Stem Cell challenges are 1,000,000x easier<br>Requires: Tissue effect is at least 100"
                                 return a
                         },
                         cost:() => decimalOne,
@@ -18741,6 +18741,15 @@ addLayer("mc", {
         row: 1, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
                 return br
+        },
+        shouldNotify(){
+                for (id in tmp.cells.upgrades){
+                        if (isPlainObject(layers.cells.upgrades[id])){
+                                if (canAffordUpgrade("cells", id) && !hasUpgrade("cells", id) && tmp.cells.upgrades[id].unlocked){
+                                        return true
+                                }
+                        }
+                }
         },
         layerShown(){return hasMilestone("cells", 21)},
         tabFormat: {
