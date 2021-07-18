@@ -18727,7 +18727,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXVII"
                         },
                         description(){
-                                let a = "Pluripotent's log4 becomes log2 and Tissues IX becomes .12 per"
+                                let a = "Pluripotent's log4 becomes log2 and Tissues IX becomes .11 per"
                                 let b = "<br>Requires: 36 Secondary completions"
                                 if (!hasUpgrade("t", 82)) return a + b
                                 return a
