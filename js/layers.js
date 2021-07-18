@@ -13414,6 +13414,7 @@ addLayer("d", {
                 if (hasChallenge("l", 32))      ret = ret.plus(tmp.l.challenges[32].reward)
                 if (hasUpgrade("d", 33))        ret = ret.plus(player.d.upgrades.length)
                 if (hasMilestone("cells", 18))  ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
+                if (hasUpgrade("t", 74))        ret = ret.times(player.t.upgrades.length)
 
                 return ret
         },
@@ -14860,7 +14861,8 @@ addLayer("cells", {
                         
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
                                                         ret = ret.times(tmp.cells.buyables[12].effect)
-                                                        //tmp.cells.buyables[13].effect
+                                                        ret = ret.times(tmp.cells.buyables[13].effect)
+                                                        //ret = ret.times(tmp.cells.buyables[21].effect)
                         if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
                         if (hasMilestone("cells", 12))  ret = ret.times(player.cells.milestones.length)
                         if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
@@ -16976,6 +16978,7 @@ addLayer("cells", {
                                 return tmp.cells.challenges[11].rewardBase.pow(comps)
                         },
                         rewardBase() {
+                                if (hasUpgrade("t", 73))        return new Decimal(200)
                                 if (hasUpgrade("t", 65))        return new Decimal(140)
                                 if (hasUpgrade("t", 62))        return new Decimal(105)
                                 if (hasMilestone("cells", 62))  return new Decimal(63)
@@ -17226,6 +17229,78 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 45)) cost2 = cost2.replace("1e9", "5e8")
                                 if (hasMilestone("cells", 46)) cost2 = cost2.replace("5e8", "3e8")
                                 if (hasMilestone("cells", 47)) cost2 = cost2.replace("3e8", "1e8")
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                13: {
+                        title: "Pluripotent",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 13)
+                                let exp = amt.pow(1.1)
+                                let base = new Decimal(1e30)
+                                let init = new Decimal(1e100)
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return hasUpgrade("t", 72)
+                        },
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[13].cost),
+                        maxAfford(){
+                                let init = new Decimal(1e100)
+                                let pts = player.cells.stem_cells.points
+                                if (pts.lt(init)) return decimalZero
+                                let base = new Decimal(1e30)
+                                return pts.div(init).log(base).root(1.1).plus(1).floor()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                let data2 = data.stem_cells
+                                let id = 13
+
+                                let ma = tmp.cells.buyables[id].maxAfford
+                                let up = hasUpgrade("t", 73) ? ma.sub(data.buyables[id]).max(1) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
+                                if (!false) {
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let init = tmp.t.effectAmt.max(10).log10()
+
+                                return init
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 13)
+                                return tmp.cells.buyables[13].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
+                                let eformula = "log10(Tissues XXIX)^x<br>" + format(tmp.cells.buyables[13].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e100*1e30^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -18470,7 +18545,7 @@ addLayer("t", {
                                 let a = "Tissue effect is based on 100*max(best ever on reset, current on reset)"
                                 let b = "<br>Requires: 1e7 Tissue effect"
                                 if (!hasUpgrade("t", 64)) return a + b
-                                return a + "<br>Currently based on:<br>" + format(tmp.t.effectAmt) 
+                                return a + "<br>Currently based on:<br>" + formatWhole(tmp.t.effectAmt) 
                         },
                         canAfford(){
                                 return tmp.t.effect.gte(1e7)
@@ -18516,7 +18591,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXII"
                         },
                         description(){
-                                let a = "Per upgrade (up to 50) subtract 20 from the gain exponent divider"
+                                let a = "Per upgrade (up to 50) subtract 20 from the gain exponent divider and unlock Pluripotent"
                                 let b = "<br>Requires: 31 Secondary completions"
                                 if (!hasUpgrade("t", 72)) return a + b
                                 return a
@@ -18528,6 +18603,42 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 71)
                         }, // hasUpgrade("t", 72)
+                },
+                73: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXIII"
+                        },
+                        description(){
+                                let a = "Buy max Pluripotent and Primary base is 200"
+                                let b = "<br>Requires: 32 Secondary completions"
+                                if (!hasUpgrade("t", 73)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 32
+                        },
+                        cost:() => new Decimal(20),
+                        unlocked(){
+                                return hasUpgrade("t", 72)
+                        }, // hasUpgrade("t", 73)
+                },
+                74: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXIV"
+                        },
+                        description(){
+                                let a = "The number of upgrades multiplies DNA gain exponent and add .101 to Visible base"
+                                let b = "<br>Requires: 33 Secondary completions"
+                                if (!hasUpgrade("t", 73)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 33
+                        },
+                        cost:() => new Decimal(20),
+                        unlocked(){
+                                return hasUpgrade("t", 73)
+                        }, // hasUpgrade("t", 74)
                 },
         },
         milestones: {
@@ -18839,6 +18950,7 @@ addLayer("t", {
                 }
                 data1.buyables[11] = decimalZero
                 data1.buyables[12] = decimalZero
+                data1.buyables[13] = decimalZero
                 data1.stem_cells.points = decimalZero
                 data1.stem_cells.best = decimalZero
                 data1.points = decimalZero
@@ -26526,6 +26638,7 @@ addLayer("tokens", {
                                         if (hasMilestone("cells", 26))  ret = ret.plus(.002 * player.cells.milestones.length)
                                         if (hasMilestone("cells", 52))  ret = ret.plus(.015 * layerChallengeCompletions("cells"))
                                         if (hasChallenge("l", 112))     ret = ret.plus(tmp.l.challenges[42].reward)
+                                        if (hasUpgrade("t", 74))        ret = ret.plus(.101)
 
                                         return ret
                                 }
