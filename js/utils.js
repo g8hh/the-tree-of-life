@@ -429,7 +429,13 @@ document.onkeydown = function(e) {
 	if (hotkeys[key] != undefined){
 		if (player[hotkeys[key].layer].unlocked) {
 			hotkeys[key].onPress()
-			//if (!hotkeysOff[key]) hotkeys[key].onPress()
+		}
+	} else {
+		key += "ALT"
+		if (hotkeys[key] != undefined){
+			if (player[hotkeys[key].layer].unlocked) {
+				hotkeys[key].onPress()
+			}
 		}
 	}
 	if (logHotkey) console.log(key)

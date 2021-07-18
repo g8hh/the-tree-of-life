@@ -9884,16 +9884,42 @@ addLayer("l", {
                         return "C" + (data.hundreds*10+data.units)
                 },
         },
+        microtabs: {
+                challenge_content: {
+                        "Dilation": {
+                                content: [
+                                        ["challenges", [1]],
+                                        
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Selection": {
+                                content: [
+                                        "grid",
+                                        ["clickables", [1]],
+                                ],
+                                unlocked(){
+                                        return tmp.l.challenges[12].unlocked
+                                },
+                        },
+                        "Anti": {
+                                content: [
+                                        ["challenges", [2,3,4,5,6,7,8,9,10,11,12]],
+                                ],
+                                unlocked(){
+                                        return tmp.l.challenges[21].unlocked
+                                },
+                        },
+                },
+        },
         tabFormat: {
                 "Challenges": {
                         content: ["main-display",
                                   ["prestige-button", ""],
                                   "blank", 
-                                  ["challenges", [1]],
-                                  "blank",
-                                  "grid",
-                                  ["clickables", [1]],
-                                  ["challenges", [2,3,4,5,6,7,8,9,10,11,12]],
+                                  ["microtabs", "challenge_content"],
                                 ],
                         unlocked(){
                                 return true
@@ -14677,6 +14703,7 @@ addLayer("cells", {
                 }
 
                 if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
+                if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
         },
         mu: {// mu gain mgain mugain m gain
                 getResetGain(){
@@ -16951,13 +16978,17 @@ addLayer("cells", {
                 11: {
                         name: "Primary",
                         goal(){
+                                let c = player.cells.challenges[11]
                                 let exp = 59
                                 if (hasUpgrade("t", 55)) exp -= 6
+                                if (hasUpgrade("t", 75) && c >= 10) {
+                                        exp += Math.pow(c, c/5) + 655
+                                }
                                 return Decimal.pow(10, exp)
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
                         challengeEffect(){
-                                return decimalOne.plus(player.cells.challenges[11]).min(10)
+                                return decimalOne.plus(player.cells.challenges[11])
                         },
                         fullDisplay(){
                                 if (player.tab != "cells") return ""
@@ -16969,9 +17000,12 @@ addLayer("cells", {
                                 let c = "Reward: Multiply Stem Cell gain per Cell challenge completion"
                                 let d = "Currently: *" + format(tmp.cells.challenges[11].rewardBase) + " per challenge<br>"
                                 let e = "netting a *" + format(tmp.cells.challenges[11].rewardEffect) + " multiplier"
-                                let f = br + "Completion count: " + player.cells.challenges[11] + "/10"
+                                let f = br + "Completion count: " + player.cells.challenges[11] + "/" + formatWhole(tmp.cells.challenges[11].completionLimit)
                                 
                                 return a + br + b + br + c + br + d + e + f
+                        },
+                        onEnter(){
+                                if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
                         },
                         rewardEffect(){
                                 let comps = layerChallengeCompletions("cells")
@@ -16993,7 +17027,10 @@ addLayer("cells", {
                         onEnter(){
                                 layers.cells.challenges.onEnter()
                         },
-                        completionLimit: 10,
+                        completionLimit(){
+                                if (hasUpgrade("t", 75)) return 30
+                                return 10
+                        },
                         countsAs: [],
                 }, // inChallenge("cells", 11) hasChallenge("cells", 11)
                 12: {
@@ -17095,6 +17132,7 @@ addLayer("cells", {
                                 if (inChallenge("cells", 11))   ret = ret.sub(tmp.cells.challenges[11].challengeEffect)
                                 if (hasMilestone("cells", 33))  ret = ret.plus(tmp.cells.milestones[33].effect)
                                 if (hasMilestone("cells", 50))  ret = ret.plus(tmp.tokens.buyables[63].effect)
+                                if (hasMilestone("t", 7))       ret = ret.plus(getBuyableAmount("cells", 13).cbrt().times(.05))
 
                                 return ret
                         },
@@ -17116,8 +17154,8 @@ addLayer("cells", {
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 11)) + " Stem Cells</b><br>"
-                                let eformula = formatWhole(tmp.cells.buyables[11].baseConstant) + "+log10(log10(Cells)^x<br>" 
-                                eformula += format(tmp.cells.buyables[11].base) + "^x"
+                                let eformula = format(tmp.cells.buyables[11].baseConstant, 3) + "+log10(log10(Cells)^x<br>" 
+                                eformula += format(tmp.cells.buyables[11].base, 3) + "^x"
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -17272,6 +17310,9 @@ addLayer("cells", {
                         base(){
                                 let init = tmp.t.effectAmt.max(10).log10()
 
+                                if (hasUpgrade("t", 81))        init = init.times(Math.log(10)/Math.log(4))
+                                if (hasUpgrade("t", 82))        init = init.times(2)
+
                                 return init
                         },
                         effect(){
@@ -17288,6 +17329,8 @@ addLayer("cells", {
                                 let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
                                 let eformula = "log10(Tissues XXIX)^x<br>" + format(tmp.cells.buyables[13].base) + "^x"
+                                if (hasUpgrade("t", 81)) eformula = eformula.replace("log10", "log4")
+                                if (hasUpgrade("t", 82)) eformula = eformula.replace("log4", "log2")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -17698,6 +17741,7 @@ addLayer("cells", {
                         "Challenges": { 
                                 content: [
                                         ["display-text", "Starting a challenge resets all Stem Cell content"],
+                                        ["display-text", "If Omnipotent's base is less than 0, you automatically leave the challenge"],
                                         ["challenges", [1,2,3]],
                                 ],
                                 unlocked(){
@@ -18081,8 +18125,10 @@ addLayer("t", {
                 if (hasUpgrade("t", 24)) {
                         let per = .06
                         if (hasUpgrade("t", 71)) per = .1
+                        if (hasUpgrade("t", 82)) per = .11
                                                 ret = ret.plus(per * player.t.upgrades.length)
                 }
+                if (hasUpgrade("t", 81))        ret = ret.plus(.5)
 
                 return ret
         },
@@ -18629,7 +18675,7 @@ addLayer("t", {
                         description(){
                                 let a = "The number of upgrades multiplies DNA gain exponent and add .101 to Visible base"
                                 let b = "<br>Requires: 33 Secondary completions"
-                                if (!hasUpgrade("t", 73)) return a + b
+                                if (!hasUpgrade("t", 74)) return a + b
                                 return a
                         },
                         canAfford(){
@@ -18639,6 +18685,60 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 73)
                         }, // hasUpgrade("t", 74)
+                },
+                75: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXV"
+                        },
+                        description(){
+                                let a = "Primary can now be completed 30 times, but its goal gets progressively harder"
+                                let b = "<br>Requires: 34 Secondary completions"
+                                if (!hasUpgrade("t", 75)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 34
+                        },
+                        cost:() => new Decimal(20),
+                        unlocked(){
+                                return hasUpgrade("t", 74)
+                        }, // hasUpgrade("t", 75)
+                },
+                81: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXVI"
+                        },
+                        description(){
+                                let a = "Add .5 to effect exponent and Pluripotent's log10 becomes log4"
+                                let b = "<br>Requires: 35 Secondary completions"
+                                if (!hasUpgrade("t", 81)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 35
+                        },
+                        cost:() => new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("t", 75)
+                        }, // hasUpgrade("t", 81)
+                },
+                82: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXVII"
+                        },
+                        description(){
+                                let a = "Pluripotent's log4 becomes log2 and Tissues IX becomes .12 per"
+                                let b = "<br>Requires: 36 Secondary completions"
+                                if (!hasUpgrade("t", 82)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 36
+                        },
+                        cost:() => new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("t", 81)
+                        }, // hasUpgrade("t", 82)
                 },
         },
         milestones: {
@@ -18783,6 +18883,25 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 6)
+                7: {
+                        requirementDescription(){
+                                return "Requires: 11 Primary Completions"
+                        },
+                        done(){
+                                return player.cells.challenges[11] >= 11
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per cbrt(Pluripotent) add .05 to Omnipotent's base."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 7)
         },
         tabFormat: {
                 "Start": {
@@ -19498,6 +19617,14 @@ addLayer("ach", {
                                 return tmp.p.layerShown
                         },
                 },
+                {key: "shift+T", description: "Shift+T: Go to Tissues", onPress(){
+                                if (!tmp.t.layerShown) return
+                                showTab("t")
+                        },
+                        unlocked(){
+                                return tmp.t.layerShown
+                        },
+                },
 
                 
                 {
@@ -19510,11 +19637,21 @@ addLayer("ach", {
                                 return player.n.unlocked
                         },
                 },
+                
                 {key: "a", description: "A: Reset for Amino Acid", onPress(){
                                 if (canReset("a")) doReset("a")
                         },
                         unlocked(){
                                 return tmp.a.layerShown
+                        },
+                },
+                {key: "3ALT", description: "3: Reset for tokens", 
+                        onPress(){
+                                if (!tmp.tokens.layerShown) return
+                                if (canReset("tokens")) doReset("tokens")
+                        },
+                        unlocked(){
+                                return tmp.tokens.layerShown
                         },
                 },
                 {key: "c", description: "C: Reset for Cells", onPress(){
@@ -19559,13 +19696,13 @@ addLayer("ach", {
                                 return tmp.p.layerShown
                         },
                 },
-                {key: "t", description: "T: Reset for tokens", 
+                {key: "t", description: "T: Reset for Tissues", 
                         onPress(){
-                                if (!tmp.tokens.layerShown) return
-                                if (canReset("tokens")) doReset("tokens")
+                                if (!tmp.t.layerShown) return
+                                if (canReset("t")) doReset("t")
                         },
                         unlocked(){
-                                return tmp.tokens.layerShown
+                                return tmp.t.layerShown
                         },
                 },
                 {
@@ -26664,7 +26801,7 @@ addLayer("tokens", {
                                 let eformula = format(tmp.tokens.buyables[21].base, 3) + "^x"
 
                                 if (hasMilestone("cells", 24)) eff2 = eff2.replace("Deuterium", "Stem Cell")
-                                if (hasUpgrade("t", 62)) eff2 = eff2.replace("l", "ls and Cells")
+                                if (hasUpgrade("t", 62)) eff2 = eff2.replace("ll", "lls and Cells")
                                 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
