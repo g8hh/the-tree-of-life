@@ -40,7 +40,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- <i>Tokens tooltip now says if you need to respec</i>.<br>
 		- Tokens tooltip now says synced amount once you have unlocked Amino.<br>
 		- Made achievement amounts use commas.<br>
-		- Added custom save.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.070</h3><br>
 		- Added two rows of achievements.<br>
 		- Added a custom save.<br>
