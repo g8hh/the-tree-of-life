@@ -16988,14 +16988,19 @@ addLayer("cells", {
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
                         challengeEffect(){
-                                return decimalOne.plus(player.cells.challenges[11])
+                                let ret = decimalOne.plus(player.cells.challenges[11])
+
+                                if (hasUpgrade("t", 83) && ret.gt(10)) ret = ret.log10().times(10)
+
+                                return ret
                         },
                         fullDisplay(){
                                 if (player.tab != "cells") return ""
                                 if (player.subtabs.cells.mainTabs != "Stem") return ""
                                 if (player.subtabs.cells.stem_content != "Challenges") return ""
 
-                                let a = "Subtract " + formatWhole(tmp.cells.challenges[11].challengeEffect) + " from Omnipotent base"
+                                let func = hasUpgrade("t", 83) ? format : formatWhole
+                                let a = "Subtract " + func(tmp.cells.challenges[11].challengeEffect) + " from Omnipotent base"
                                 let b = "Goal: " + format(tmp.cells.challenges[11].goal) + " Stem Cells"
                                 let c = "Reward: Multiply Stem Cell gain per Cell challenge completion"
                                 let d = "Currently: *" + format(tmp.cells.challenges[11].rewardBase) + " per challenge<br>"
@@ -17281,6 +17286,7 @@ addLayer("cells", {
                                 let exp = amt.pow(1.1)
                                 let base = new Decimal(1e30)
                                 let init = new Decimal(1e100)
+                                if (hasMilestone("t", 8)) init = decimalOne
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -17289,6 +17295,7 @@ addLayer("cells", {
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[13].cost),
                         maxAfford(){
                                 let init = new Decimal(1e100)
+                                if (hasMilestone("t", 8)) init = decimalOne
                                 let pts = player.cells.stem_cells.points
                                 if (pts.lt(init)) return decimalZero
                                 let base = new Decimal(1e30)
@@ -17344,6 +17351,7 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e100*1e30^(x<sup>1.1</sup>)" 
+                                if (hasMilestone("t", 8)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -18081,6 +18089,12 @@ addLayer("t", {
         getGainMult(){ // t gain tissuegain tgain tissue gain tissuesgain tissues gain
                 let ret = decimalOne
 
+                if (hasUpgrade("t", 83)) {
+                        let base = new Decimal(player.cells.challenges[12]).max(10).log10()
+                        let exp = Math.max(0, player.cells.challenges[11] - 10)
+                                        ret = ret.times(base.pow(exp))
+                }
+
                 return ret.max(1)
         },
         getGainExp(){
@@ -18740,6 +18754,24 @@ addLayer("t", {
                                 return hasUpgrade("t", 81)
                         }, // hasUpgrade("t", 82)
                 },
+                83: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXVIII"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Per primary completion past 10 log10(Secondary completions) multiplies Tissue gain and Primary nerf is reduced x -> 10log10(x)"
+                                let b = "<br>Requires: 37 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 83)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 37
+                        },
+                        cost:() => new Decimal(200),
+                        unlocked(){
+                                return hasUpgrade("t", 82)
+                        }, // hasUpgrade("t", 83)
+                },
         },
         milestones: {
                 1: {
@@ -18902,6 +18934,28 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 7)
+                8: {
+                        requirementDescription(){
+                                return "Requires: 1e68,134 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e68134")
+                        },
+                        done(){
+                                return tmp.t.milestones[8].requirement.lte(player.cells.stem_cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Remove Pluripotent base cost, each Primary completion after 10 adds .1 to Visible base, and token cost exponent is .29."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 8)
         },
         tabFormat: {
                 "Start": {
@@ -26530,6 +26584,8 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (false)                      return x.pow(.28).floor().sub(1).max(0)
+                        if (hasMilestone("t", 8))       return x.pow(.29).floor().sub(1).max(0)
                         if (hasUpgrade("t", 65))        return x.pow(.3).floor().sub(1).max(0)
                         if (hasMilestone("t", 5))       return x.pow(.31).floor().sub(1).max(0)
                         if (hasMilestone("cells", 62))  return x.pow(.32).floor().sub(1).max(0)
@@ -26563,6 +26619,8 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (false)                      return "max(floor(x<sup>.28</sup>)-1, 0)"
+                        if (hasMilestone("t", 8))       return "max(floor(x<sup>.29</sup>)-1, 0)"
                         if (hasUpgrade("t", 65))        return "max(floor(x<sup>.3</sup>)-1, 0)"
                         if (hasMilestone("t", 5))       return "max(floor(x<sup>.31</sup>)-1, 0)"
                         if (hasMilestone("cells", 62))  return "max(floor(x<sup>.32</sup>)-1, 0)"
@@ -26776,6 +26834,7 @@ addLayer("tokens", {
                                         if (hasMilestone("cells", 52))  ret = ret.plus(.015 * layerChallengeCompletions("cells"))
                                         if (hasChallenge("l", 112))     ret = ret.plus(tmp.l.challenges[42].reward)
                                         if (hasUpgrade("t", 74))        ret = ret.plus(.101)
+                                        if (hasMilestone("t", 8))       ret = ret.plus(.1 * Math.max(0, player.cells.challenges[11]-10))
 
                                         return ret
                                 }
