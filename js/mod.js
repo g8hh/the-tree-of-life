@@ -12,12 +12,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.074",
+	num: "1.075",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("1e2434")
+	return player.cells.points.gte("1e2595")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -29,6 +29,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.075</h3><br>
+		- 13/42 is now possible.<br>
+		- Added two Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.074</h3><br>
 		- Added a custom save.<br>
 		- Added a Tissue upgrade.<br>
@@ -909,7 +914,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added some math functions.<br>
 		- Made the vueFile local.<br>`
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let winText = `Congratulations! You have reached the end of this patch! More content is to come...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
