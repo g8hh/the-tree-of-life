@@ -26524,9 +26524,9 @@ addLayer("tokens", {
                 let data = player.tokens
                 let init = formatWhole(data.points) + "/" + formatWhole(data.total) + " tokens"
                 let end = ""
-                let lrdf = player.lastRespecDisplayFormula
+                let lrdf = player.tokens.lastRespecDisplayFormula 
                 let cft = tmp.tokens.buyables.costFormulaText
-                if (lrdf != cft && typeof(cft) == "string"){
+                if (lrdf != cft && typeof(cft) == "string" && typeof(lrdf) == "string"){
                         let doIt = false 
                         if (cft == "2<sup>x</sup>") doIt = false
                         else if (lrdf == "2<sup>x</sup>") doIt = true
@@ -27726,7 +27726,7 @@ addLayer("tokens", {
                                         id = x[i]
                                         player.tokens.buyables[id] = decimalZero
                                 }
-                                player.lastRespecDisplayFormula = tmp.tokens.buyables.costFormulaText
+                                player.tokens.lastRespecDisplayFormula = tmp.tokens.buyables.costFormulaText
                         },
                         style(){
                                 return {
