@@ -18589,7 +18589,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXVIII"
                         },
                         description(){
-                                let a = "Tissue additionally effects Stem cell after Secondary nerf"
+                                let a = "Tissue additionally affects Stem cell after Secondary nerf"
                                 let b = "<br>Requires: 28 Secondary completions"
                                 if (!hasUpgrade("t", 63)) return a + b
                                 return a
