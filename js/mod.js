@@ -12,12 +12,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.077",
+	num: "1.078",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("2e3061")
+	return player.cells.points.gte("2e3205")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -29,6 +29,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.078</h3><br>
+		- 14/49 is now possible.<br>
+		- Added a Custom save.<br>
+		- Added two Tissue upgrades.<br>
+		- Fixed Deuterium X not notifying you that you need to respec tokens.<br>
+		- Made Customizable's details for changing the challenge correct.<br>
 	<br><h3 style='color: #CC0000'>v1.077</h3><br>
 		- 14/47 is now possible.<br>
 		- Added a Tissue upgrade.<br>
