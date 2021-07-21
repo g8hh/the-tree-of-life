@@ -15414,7 +15414,7 @@ addLayer("cells", {
                         },
                         description(){
                                 let a = "log10(log10(total Iota)) multiplies Kappa, Mu, and Lambda gain per upgrade"
-                                return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
+                                return a + br + "Currently: " + format(tmp.cells.upgrades[412].effect)
                         },    
                         effect(){
                                 return player.cells.total14.max(10).log10().max(10).log10().pow(player.cells.upgrades.length)
