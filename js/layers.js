@@ -5344,13 +5344,14 @@ addLayer("mu", {
                 let ret = start + effstr + end
                 return ret
         },
+        autoPrestige(){
+                return hasUpgrade("mu", 35)
+        },
         update(diff){
                 let data = player.mu
                 
                 if (tmp.mu.layerShown) data.unlocked = true
                 data.best = data.best.max(data.points)
-
-                if (hasUpgrade("mu", 35) && canReset("mu") && data.unlocked) doReset("mu")
 
                 data.time += diff
                 data.bestNdM = data.bestNdM.max(getBuyableAmount("mu", 31))
@@ -8733,6 +8734,9 @@ addLayer("l", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("t", 94)) {
+                                        return player.cells.stem_cells.points.max(1)
+                                }
                                 if (hasMilestone("cells", 39)) return tmp.tokens.buyables[22].effect
                                 let ret = player.l.buyables[11]
                                 
@@ -8751,7 +8755,8 @@ addLayer("l", {
                                 let eff2 = format(tmp.l.buyables[32].effect) + " to Life gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 32)) + " Lives</b><br>"
                                 let eformula = "(α → ∂α levels)^x<br>" + format(tmp.l.buyables[32].base) + "^x"
-                                if (hasMilestone("cells", 39)) eformula = eformula.replace("(α → ∂α levels)", "Near-ultraviolet")
+                                if (hasMilestone("cells", 39))  eformula = eformula.replace("(α → ∂α levels)", "Near-ultraviolet")
+                                if (hasUpgrade("t", 94))        eformula = eformula.replace("Near-ultraviolet", "Stem Cells")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -14663,7 +14668,13 @@ addLayer("cells", {
                 let base = amt.plus(9)
                 let exp = amt.cbrt().min(10)
 
-                if (hasMilestone("cells", 11)) exp = exp.plus(player.cells.upgrades.length)
+                if (hasMilestone("cells", 11))  exp = exp.plus(player.cells.upgrades.length)
+                if (hasUpgrade("t", 95)) {
+                        let upgs = player.t.upgrades.length
+                        let mile = player.t.milestones.length
+                        let eff = Math.min(.05 * upgs * mile, 100)
+                                                exp = exp.plus(eff)
+                }
 
                 let ret = base.pow(exp)
 
@@ -14947,7 +14958,7 @@ addLayer("cells", {
                                 let exp  = player.t.milestones.length
                                                         ret = ret.times(base.pow(exp))
                         }
-                        if (hasUpgrade("t", 92))        ret = ret.times(player.t.total.max(1).pow(Math.PI))
+                        if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
 
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -17171,7 +17182,11 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 33))  ret = ret.plus(tmp.cells.milestones[33].effect)
                                 if (hasMilestone("cells", 50))  ret = ret.plus(tmp.tokens.buyables[63].effect)
                                 if (hasMilestone("t", 7))       ret = ret.plus(getBuyableAmount("cells", 13).cbrt().times(.05))
-                                if (hasMilestone("t", 12))      ret = ret.plus(.03 * player.t.milestones.length)
+                                if (hasMilestone("t", 12)) {
+                                        let per = .03
+                                        if (hasUpgrade("t", 94)) per += .02
+                                                                ret = ret.plus(per * player.t.milestones.length)
+                                }
 
                                 return ret
                         },
@@ -18907,6 +18922,42 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 92)
                         }, // hasUpgrade("t", 93)
+                },
+                94: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XLIV"
+                        },
+                        description(){
+                                let a = "𝛾 → ∂β base is Stem Cells and add .02 to Tissue exponent per milestone but nullify Near-ultraviolet"
+                                let b = "<br>Requires: 49 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 94)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 49
+                        },
+                        cost:() => new Decimal(2000),
+                        unlocked(){
+                                return hasUpgrade("t", 93)
+                        }, // hasUpgrade("t", 94)
+                },
+                95: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XLV"
+                        },
+                        description(){
+                                let a = "Per upgrade per milestone add .05 to Cell effect formula but nullify Ultraviolet"
+                                let b = "<br>Requires: 50 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 95)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 50
+                        },
+                        cost:() => new Decimal(2000),
+                        unlocked(){
+                                return hasUpgrade("t", 94)
+                        }, // hasUpgrade("t", 95)
                 },
         },
         milestones: {
@@ -26837,6 +26888,8 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula(x){
+                        if (false)                      return x.pow(.24).floor().sub(1).max(0)
+                        if (false)                      return x.pow(.25).floor().sub(1).max(0)
                         if (hasMilestone("t", 13))      return x.pow(.26).floor().sub(1).max(0)
                         if (hasMilestone("t", 10))      return x.pow(.27).floor().sub(1).max(0)
                         if (hasMilestone("t", 9))       return x.pow(.28).floor().sub(1).max(0)
@@ -26874,6 +26927,8 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText(){
+                        if (false)                      return "max(floor(x<sup>.24</sup>)-1, 0)"
+                        if (false)                      return "max(floor(x<sup>.25</sup>)-1, 0)"
                         if (hasMilestone("t", 13))      return "max(floor(x<sup>.26</sup>)-1, 0)"
                         if (hasMilestone("t", 10))      return "max(floor(x<sup>.27</sup>)-1, 0)"
                         if (hasMilestone("t", 9))       return "max(floor(x<sup>.28</sup>)-1, 0)"
@@ -27152,6 +27207,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[22].cost)
                         },
                         base(){
+                                if (hasUpgrade("t", 94)) return decimalOne
                                 let ret = new Decimal(10)
 
                                 if (hasUpgrade("o", 23))        ret = ret.times(tmp.o.upgrades[23].effect)
@@ -27213,6 +27269,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[23].cost)
                         },
                         base(){
+                                if (hasUpgrade("t", 95)) return decimalOne
                                 let ret = new Decimal(10)
                                 if (hasUpgrade("tokens", 32))   ret = ret.times(player.tokens.total.max(1))
                                 if (hasUpgrade("c", 22))        ret = ret.times(tmp.c.upgrades[22].effect)
