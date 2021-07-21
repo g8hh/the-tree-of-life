@@ -17025,6 +17025,12 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 75) && c >= 10) {
                                         exp += Math.pow(c, c/5) + 655
                                 }
+                                if (hasUpgrade("t", 101)) {
+                                        if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
+                                        if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
+                                        if (hasChallenge("l", 112))     exp -= 4
+                                        if (hasUpgrade("t", 101))       exp -= player.cells.challenges[11]
+                                }
                                 return Decimal.pow(10, exp)
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
@@ -17089,6 +17095,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
                                 if (hasChallenge("l", 112))     exp -= 4
                                 if (hasUpgrade("t", 55))        exp -= 6
+                                if (hasUpgrade("t", 101))       exp -= player.cells.challenges[11]
 
                                 return Decimal.pow(10, exp)
                         },
@@ -18958,6 +18965,24 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 94)
                         }, // hasUpgrade("t", 95)
+                },
+                101: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XLVI"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Per primary completion Secondary is 10x easier, and everything that reduces Secondary goal also reduces Primary goal but nullify X-rays</bdi>"
+                                let b = "<br>Requires: 51 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 101)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 51
+                        },
+                        cost:() => new Decimal(1e5),
+                        unlocked(){
+                                return hasUpgrade("t", 95)
+                        }, // hasUpgrade("t", 101)
                 },
         },
         milestones: {
@@ -27323,6 +27348,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[31].cost)
                         },
                         base(){
+                                if (hasUpgrade("t", 101)) return decimalOne
                                 let ret = new Decimal(1e8)
 
                                 if (hasUpgrade("c", 21))        ret = ret.times(tmp.c.upgrades[21].effect)
