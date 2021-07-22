@@ -12,19 +12,137 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.060",
+	num: "1.077",
 	name: "Advil's Auspicious Acension",
+}
+
+function isEndgame() {
+	return player.cells.points.gte("2e3061")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 1e4951 Stem Cells on reset OR the last save in the bank<br><br>
+		- 47 Secondary completions OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.077</h3><br>
+		- 14/47 is now possible.<br>
+		- Added a Tissue upgrade.<br>
+		- Added a Tissue milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.076</h3><br>
+		- Added a custom save.<br>
+		- Added three Tissue milestones.<br>
+		- 13/45 is now possible.<br>
+	<br><h3 style='color: #CC0000'>v1.075</h3><br>
+		- 13/42 is now possible.<br>
+		- Added two Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.074</h3><br>
+		- Added a custom save.<br>
+		- Added a Tissue upgrade.<br>
+		- Added a Tissue milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.073</h3><br>
+		- Added three Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+		- 11/37 is now possible.<br>
+		- Fixed Tissue/token hotkeys.<br>
+		- Cleaned up the Life challenges tab.<br>
+	<br><h3 style='color: #CC0000'>v1.072</h3><br>
+		- Added a Cell buyable.<br>
+		- Added two Tissue uprgades.<br>
+		- You can now complete Secondary 34 times.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.071</h3><br>
+		- Added seven Tissue upgrades.<br>
+		- You can now complete Secondary 31 times.<br>
+		- <i>Tokens tooltip now says if you need to respec</i>.<br>
+		- Tokens tooltip now says synced amount once you have unlocked Amino.<br>
+		- Made achievement amounts use commas.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.070</h3><br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
+		- Added a Life challenge.<br>
+		- Added three Tissue milestones.<br>
+		- Changed Tissue gain formula.<br> 
+		- Tissue II and Tissue V now have an additional effect.<br>
+		- Tissue XXII requirement is easier.<br>
+		- Mu II effects are now at least 1.<br>
+		- Note endgame.<br>
+	<br><h3 style='color: #CC0000'>v1.069</h3><br>
+		- Endgame is 10 Tissue resets.<br>
+		- Added two custom saves.<br>
+		- Made it clearer how to import custom saves.<br>
+		- Buffed Tissue XXV.<br>
+		- Fixed some bugs with Mu II.<br>
+		- Made M<sup>C</sup> be notified and Cells not notified when applicable.<br>
+	<br><h3 style='color: #CC0000'>v1.068</h3><br>
+		- Tissues now displays stuff.<br>
+		- Endgame is 7 Tissue resets.<br>
+		- Added a Tissue milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.067.1</h3><br>
+		- Minigame tab is no longer highlighted when D isn't unlocked.<br>
+		- Fixed the hotkey titles showing up with nothing in them.<br>
+		- Oxygen IV is cheaper.<br>
+		- Various spelling and small display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.067</h3><br>
+		- Added a custom save.<br>
+		- Added a Tissue milestone.<br>
+		- Gave M<sub>C</sub> a tooltip of Stem Cell amount.<br>
+		- Changed Tissue XXII requirement.<br>
+		- Endgame is now 4 tissue resets, please don't go past that.<br>
+	<br><h3 style='color: #CC0000'>v1.066.1</h3><br>
+		- Fixed the display of Tissue gain formula.<br>
+		- Gave Tissue milestone 1 another two effects.<br>
+		- Made Tissue reset require 25 Secondary completions.<br>
+		- Gave row five upgrades a requirement.<br> 
+	<br><h3 style='color: #CC0000'>v1.066</h3><br>
+		- Merged TMT version 2.6.5.1<br>
+		- Fixed a bug with pasuing.<br>
+		- Added a custom save.<br>
+		- Fixed a big bug with Carbon IV.<br>
+		- Cell milestone 21 is buffed.<br>
+		- Fixed cell milestone 9.<br>
+		- Added Tissues.<br>
+		- Added 25 Tissue upgrades.<br>
+		- Fixed a bunch of bugs I created while making this patch :).<br>
+	<br><h3 style='color: #CC0000'>v1.065.1</h3><br>
+		- Added a Kappa upgrade.<br>
+		- Added an Iota upgrade.<br>
+		- Fixed a spelling error with C85 Gems.<br>
+		- Made a pg-settings button.<br>
+		- Fixed a bug with not buying Iota buyables.<br>
+		- Made Stem now be notified when you can complete a challenge/buy a new buyable.<br>
+	<br><h3 style='color: #CC0000'>v1.065</h3><br>
+		- Added a Mu upgrade.<br>
+		- Added a Lambda upgrade.<br>
+		- Added four Cell milestones.<br>
+		- You can now complete Secondary 25 times.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.064</h3><br>
+		- Added two Life challenges.<br>
+		- You can now complete Secondary 21 times.<br>
+		- Added three rows of achievements.<br>
+		- Added a custom save.<br>
+		- Added two Cell milestones.<br>
+		- Removed some proteins displays once they are unnecessary/unhelpful.<br>
+	<br><h3 style='color: #CC0000'>v1.063</h3><br>
+		- Added five Cell milestones.<br>
+		- You can now complete Secondary 18 times.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.062</h3><br>
+		- Added three Cell milestones.<br>
+		- Added a custom save.<br>
+		- Added eight rows of achievements.<br>
+		- You can now complete Secondary 14 times.<br>
+	<br><h3 style='color: #CC0000'>v1.061</h3><br>
+		- Added a custom save.<br> 
+		- Added four Cell milestones.<br>
 	<br><h3 style='color: #CC0000'>v1.060</h3><br>
 		- Added eight Cell milestones.<br>
 		- Added a custom save.<br>
@@ -804,7 +922,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added some math functions.<br>
 		- Made the vueFile local.<br>`
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let winText = `Congratulations! You have reached the end of this patch! More content is to come...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -893,16 +1011,6 @@ var displayThings = [
 	},
 ]
 
-// Determines when the game "ends"
-function isEndgame() {
-	return false
-}
-
-
-
-// Less important things beyond this point!
-
-// Style for the background, can be a function
 var backgroundStyle = {
 
 }
@@ -935,14 +1043,6 @@ function hasSpelledWord(word){
 	}
 	return true
 } 
-/* 
-take 10k common words and convert into list that can be copy pasted somewhere
-then put somewhere and make function to generate random word
-then display it, figure out how much has been spelled and show that in one color
-unspelled in different 
-upon spelling of the word give reward poggers
-
-*/
 
 function getLetterFromNum(x){
 	return {
