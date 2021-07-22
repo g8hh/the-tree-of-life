@@ -26,14 +26,6 @@ function getNextRightTab(layer){
 	return l[id + 1]
 }
 
-function getBuyableCost(layer, id){
-	return tmp[layer].buyables[id].cost
-}
-
-function getBuyableBase(layer, id){
-	return tmp[layer].buyables[id].base
-}
-
 function nerfBminigameBuyableAmounts(x){
 	if (x.lt(1000)) return x
 	if (hasUpgrade("h", 52)) return x
@@ -121,8 +113,7 @@ function canAffordUpgrade(layer, id) {
 	if(tmp[layer].deactivated) return false
 	if (tmp[layer].upgrades[id].canAfford === false) return false
 	let cost = tmp[layer].upgrades[id].cost
-	if (cost !== undefined) 
-		return canAffordPurchase(layer, upg, cost)
+	if (cost !== undefined) return canAffordPurchase(layer, upg, cost)
 
 	return true
 }
@@ -151,10 +142,7 @@ function canAffordPurchase(layer, thing, cost) {
 			return !(player[lr][name].lt(cost))
 		}
 		else return !(player[name].lt(cost))
-	}
-	else {
-		return !(player[layer].points.lt(cost))
-	}
+	} else return !(player[layer].points.lt(cost))
 }
 
 function buyUpgrade(layer, id) {
@@ -169,8 +157,7 @@ function buyUpg(layer, id) {
 	if (player[layer].upgrades.includes(id)) return
 	if (upg.canAfford === false) return
 	let pay = layers[layer].upgrades[id].pay
-	if (pay !== undefined)
-		run(pay, layers[layer].upgrades[id])
+	if (pay !== undefined) run(pay, layers[layer].upgrades[id])
 	else {
 		let cost = tmp[layer].upgrades[id].cost
 
@@ -196,8 +183,7 @@ function buyUpg(layer, id) {
 		}
 	}
 	player[layer].upgrades.push(id);
-	if (upg.onPurchase != undefined)
-		run(upg.onPurchase, upg)
+	if (upg.onPurchase != undefined) run(upg.onPurchase, upg)
 	needCanvasUpdate = true
 	return true
 }
@@ -277,8 +263,7 @@ function showNavTab(name, prev) {
 	var toTreeTab = name == "tree-tab"
 	console.log(name + prev)
 	if (name!== "none" && prev && !tmp[prev]?.leftTab == !tmp[name]?.leftTab) player[name].prevTab = prev
-	else if (player[name])
-		player[name].prevTab = ""
+	else if (player[name]) player[name].prevTab = ""
 	player.navTab = name
 	updateTabFormats()
 	needCanvasUpdate = true
@@ -334,8 +319,8 @@ function subtabShouldNotify(layer, family, id) {
 	if (family == "mainTabs") subtab = tmp[layer].tabFormat[id]
 	else subtab = tmp[layer].microtabs[family][id]
 
-	if (subtab.embedLayer) return tmp[subtab.embedLayer].notify
-	else return subtab.shouldNotify
+	if (subtab.embedLayer) return tmp[subtab.embedLayer].notify && tmp[subtab.embedLayer].unlocked
+	else return subtab.shouldNotify && subtab.unlocked
 }
 
 function subtabResetNotify(layer, family, id) {
@@ -367,7 +352,7 @@ function toNumber(x) {
 }
 
 function updateMilestones(layer) {
-	if (tmp[layer].deactivated) return 
+	if (tmp[layer].deactivated) return
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
@@ -379,6 +364,7 @@ function updateMilestones(layer) {
 }
 
 function updateAchievements(layer) {
+	if (tmp[layer].deactivated) return
 	for (id in layers[layer].achievements) {
 		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id)
@@ -412,12 +398,6 @@ function addTime(diff, layer) {
 	else data.timePlayed = time
 }
 
-function getKeyDesc1(key){
-	if (key == undefined) console.log(key)
-	let s = key.description
-	return s
-}
-
 function fixHotkeyCode(s){
 	if (s.length == 1) return s.toLowerCase()
 	s = replaceString(s, "Shift", "shift")
@@ -449,10 +429,15 @@ document.onkeydown = function(e) {
 	if (hotkeys[key] != undefined){
 		if (player[hotkeys[key].layer].unlocked) {
 			hotkeys[key].onPress()
-			//if (!hotkeysOff[key]) hotkeys[key].onPress()
+		}
+	} else {
+		key += "ALT"
+		if (hotkeys[key] != undefined){
+			if (player[hotkeys[key].layer].unlocked) {
+				hotkeys[key].onPress()
+			}
 		}
 	}
-	if (key == " ") console.log("space")
 	if (logHotkey) console.log(key)
 	if (key == "q" && qForClear) clearInterval(interval)
 }
@@ -528,16 +513,14 @@ function run(func, target, args = null) {
 	if (isFunction(func)) {
 		let bound = func.bind(target)
 		return bound(args)
-	}
-	else
-		return func;
+	} else return func;
 }
 
 function gridRun(layer, func, data, id) {
 	if (isFunction(layers[layer].grid[func])) {
 		let bound = layers[layer].grid[func].bind(layers[layer].grid)
 		return bound(data, id)
-	}
-	else
-		return layers[layer].grid[func];
+	} else return layers[layer].grid[func];
 }
+
+

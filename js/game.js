@@ -3,7 +3,7 @@ var needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.4.3",
+	tmtNum: "2.6.5.1",
 	tmtName: "Fixed Reality"
 }
 
@@ -70,6 +70,7 @@ function softcap(value, cap, power = 0.5) {
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){
 	for (id in tmp[layer].upgrades){
+		if (layer == "cells" && id > 100 && tmp.mc.layerShown) break
 		if (isPlainObject(layers[layer].upgrades[id])){
 			if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked){
 				return true
@@ -85,7 +86,8 @@ function shouldNotify(layer){
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat){
 			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
-				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor
+				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor || defaultGlow
+
 				return true
 			}
 		}
@@ -231,7 +233,7 @@ function resetRow(row) {
 
 function startChallenge(layer, x) {
 	let enter = false
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
 		Vue.set(player[layer], "activeChallenge", null)
@@ -358,7 +360,16 @@ function gameLoop(diff) {
 		if (layers[layer].milestones) updateMilestones(layer);
 		if (layers[layer].achievements) updateAchievements(layer)
 	}
+}
 
+function setUpPGSettings(){
+	player.autosave = false
+	player.arrowHotkeys = true
+	player.forceOneTab = false
+	player.showBuiltInSaves = true
+	player.toggleKeys = false
+	player.undulating = false
+	player.spaceBarPauses = true
 }
 
 function hardReset(resetOptions) {
@@ -391,8 +402,8 @@ function runInterval(){
 			}
 			if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 		}
-		if (player.devSpeed) diff *= player.devSpeed
 	} else diff = 0
+	if (player.devSpeed != undefined) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
