@@ -17031,6 +17031,7 @@ addLayer("cells", {
                                         if (hasChallenge("l", 112))     exp -= 4
                                         if (hasUpgrade("t", 101))       exp -= player.cells.challenges[11]
                                 }
+                                if (hasMilestone("t", 14)) exp -= 9.778151250383644 * player.t.milestones.length
                                 return Decimal.pow(10, exp)
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[11].goal),
@@ -17194,6 +17195,7 @@ addLayer("cells", {
                                         if (hasUpgrade("t", 94)) per += .02
                                                                 ret = ret.plus(per * player.t.milestones.length)
                                 }
+                                if (hasMilestone("t", 15))      ret = ret.plus(.013 * player.t.upgrades.length)
 
                                 return ret
                         },
@@ -17343,6 +17345,7 @@ addLayer("cells", {
                                 let base = new Decimal(1e30)
                                 if (hasUpgrade("t", 85))        base = new Decimal(1e28)
                                 if (hasUpgrade("t", 91))        base = new Decimal(1e27)
+                                if (hasUpgrade("t", 102))       base = new Decimal(1e25)
                                 let init = new Decimal(1e100)
                                 if (hasMilestone("t", 8)) init = decimalOne
                                 return init.times(base.pow(exp))
@@ -17359,6 +17362,7 @@ addLayer("cells", {
                                 let base = new Decimal(1e30)
                                 if (hasUpgrade("t", 85))        base = new Decimal(1e28)
                                 if (hasUpgrade("t", 91))        base = new Decimal(1e27)
+                                if (hasUpgrade("t", 102))       base = new Decimal(1e25)
                                 return pts.div(init).log(base).root(1.1).plus(1).floor()
                         },
                         buy(){
@@ -17411,9 +17415,10 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e100*1e30^(x<sup>1.1</sup>)" 
-                                if (hasMilestone("t", 8)) cost2 = cost2.slice(6,)
-                                if (hasUpgrade("t", 85)) cost2 = cost2.replace("30", "28")
-                                if (hasUpgrade("t", 91)) cost2 = cost2.replace("28", "27")
+                                if (hasMilestone("t", 8))       cost2 = cost2.slice(6,)
+                                if (hasUpgrade("t", 85))        cost2 = cost2.replace("30", "28")
+                                if (hasUpgrade("t", 91))        cost2 = cost2.replace("28", "27")
+                                if (hasUpgrade("t", 102))       cost2 = cost2.replace("27", "25")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -18984,6 +18989,24 @@ addLayer("t", {
                                 return hasUpgrade("t", 95)
                         }, // hasUpgrade("t", 101)
                 },
+                102: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XLVII"
+                        },
+                        description(){
+                                let a = "Pluripotent cost base is 1e25 but nullify Gamma Rays"
+                                let b = "<br>Requires: 52 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 102)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 52
+                        },
+                        cost:() => new Decimal(1e5),
+                        unlocked(){
+                                return hasUpgrade("t", 101)
+                        }, // hasUpgrade("t", 102)
+                },
         },
         milestones: {
                 1: {
@@ -19280,6 +19303,50 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 13)
+                14: {
+                        requirementDescription(){
+                                return "Requires: 1e138,397 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e138397")
+                        },
+                        done(){
+                                return tmp.t.milestones[14].requirement.lte(player.cells.stem_cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per milestone Primary is 6e9x easier but nullify UHF Gamma Rays."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 14)
+                15: {
+                        requirementDescription(){
+                                return "Requires: 1e144,546 Stem Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e144546")
+                        },
+                        done(){
+                                return tmp.t.milestones[15].requirement.lte(player.cells.stem_cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Per upgrade add .013 to Omnipotent's base but nullify Double exponential."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 15)
         },
         tabFormat: {
                 "Start": {
@@ -27406,6 +27473,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[32].cost)
                         },
                         base(){
+                                if (hasUpgrade("t", 102)) return decimalOne
                                 let ret = new Decimal(1e12)
                                 if (hasUpgrade("o", 22))        ret = ret.times(player.points.plus(10).log10())
                                 if (hasMilestone("tokens", 6))  ret = ret.pow(tmp.tokens.milestones[6].effect)
@@ -27457,6 +27525,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[33].cost)
                         },
                         base(){
+                                if (hasMilestone("t", 14)) return decimalOne
                                 let ret = new Decimal(10)
                                 if (hasMilestone("tokens", 3)) {
                                         ret = ret.times(tmp.tokens.milestones[3].effect)
@@ -27942,6 +28011,7 @@ addLayer("tokens", {
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[63].cost)
                         },
                         effect(){
+                                if (hasMilestone("t", 15)) return decimalZero
                                 if (hasMilestone("cells", 51)) {
                                         let div = 500
                                         return player.tokens.best_buyables[63].div(div)
