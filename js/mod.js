@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.083",
+	num: "1.084",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,6 +29,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content.<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.084</h3><br>
+		- Started adding Tokens II.<br>
 	<br><h3 style='color: #CC0000'>v1.083</h3><br>
 		- Added twelve Cell upgrades.<br>
 		- Various small rewordings.<br>
@@ -998,6 +1000,8 @@ function addedPlayerData() { return {
 	},
 	spaceBarPauses: false,
 	paused: false,
+	shiftAlias: false,
+	controlAlias: false,
 }}
 
 // Display extra things at the top of the page

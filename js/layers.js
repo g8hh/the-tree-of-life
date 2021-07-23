@@ -15301,9 +15301,15 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XVII"
                         },
                         description(){
-                                let a = "Omnipotent cost base is 9 and unlock Tokens II [not yet]"
+                                let a = "Omnipotent cost base is 9 and unlock Tokens II"
                                 return a
                         },  
+                        onPurchase(){
+                                player.tokens.buyables[11] = decimalZero
+                                player.tokens.points = player.tokens.total
+                                player.subtabs.tokens.mainTabs = "II"
+                                player.tab = "tokens"
+                        },
                         cost:() => new Decimal("9e10301"),
                         unlocked(){
                                 return hasUpgrade("cells", 41)
@@ -20895,10 +20901,10 @@ addLayer("mini", {
                         if (canReset("tokens")) doReset("tokens")
                 }
 
-                if (player.tokens.autobuyradio && hasMilestone("n", 7)) {
+                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) {
                         if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
                 }
-                if (layers.l.grid.getGemEffect(803)) {
+                if (layers.l.grid.getGemEffect(803) && !hasUpgrade("cells", 42)) {
                         if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
                 }
 
@@ -27011,6 +27017,10 @@ addLayer("tokens", {
                         62: decimalZero,
                         63: decimalZero,
                 },
+                tokens2: {
+                        total: decimalZero,
+                        points: decimalZero,
+                },
                 coins: {
                         points: decimalZero,
                         best: decimalZero
@@ -27038,7 +27048,7 @@ addLayer("tokens", {
                         id = x[i]
                         if (!tmp.tokens.buyables[id].canAfford) return false
                 }
-                return !player.tokens.autobuyradio || !hasMilestone("n", 7)
+                return !(player.tokens.autobuyradio && hasMilestone("n", 7)) && !hasUpgrade("cells", 42)
         },
         getMinusEffectiveTokens(){
                 let a = 0
@@ -28442,6 +28452,180 @@ addLayer("tokens", {
                                 return "Sell all coin upgrades<br>(Does not give coins back)"
                         },
                 },
+                101: {
+                        title: "UP QUARK",
+                        cost:() => decimalOne,
+                        canAfford:() => player.tokens.tokens2.points.gte(tmp.tokens.buyables[101].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.tokens
+                                data.buyables[101] = data.buyables[101].plus(1)
+                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return decimalZero
+                                //tmp.tokens.buyables[63].base.pow(player.tokens.buyables[63])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "II") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[101]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.tokens.buyables[101].effect, 4) + " to Omnipotent base [not yet]</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 101)) + " Token II</b><br>"
+                                let eformula = "sqrt(1+C)/(20+R)*x<br>" + format(tmp.tokens.buyables[101].base, 3) + "*x" 
+                                
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!player.shiftAlias) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                102: {
+                        title: "DOWN QUARK",
+                        cost:() => decimalOne,
+                        canAfford:() => player.tokens.tokens2.points.gte(tmp.tokens.buyables[102].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.tokens
+                                data.buyables[102] = data.buyables[102].plus(1)
+                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return decimalZero
+                                //tmp.tokens.buyables[63].base.pow(player.tokens.buyables[63])
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "II") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[102]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: +"
+                                let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to smth [not yet]</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 102)) + " Token II</b><br>"
+                                let eformula = "C/R + 12345<br>" + format(tmp.tokens.buyables[102].base, 3) + "*x" 
+                                
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!player.shiftAlias) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1"
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                191: {
+                        title: "Token II via Token",
+                        cost:() => player.tokens.buyables[191].plus(21).pow(2),
+                        canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.tokens
+                                data.buyables[191] = data.buyables[191].plus(1)
+                                data.tokens2.points = data.tokens2.points.plus(1)
+                                data.tokens2.total = data.tokens2.total.plus(1)
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "II") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[191]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
+                                let eformula = "(21+x)<sup>2</sup>"
+                                
+                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                let start = lvl + cost
+                                return br + start + allEff
+                        },
+                },
+                192: {
+                        title: "Token II via Stem Cell",
+                        cost:() => player.tokens.buyables[192].plus(20).pow10().pow(Math.log10(2)).pow10(),
+                        canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[192].cost),
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.tokens
+                                data.buyables[192] = data.buyables[192].plus(1)
+                                data.tokens2.points = data.tokens2.points.plus(1)
+                                data.tokens2.total = data.tokens2.total.plus(1)
+                        },
+                        display(){
+                                // other than softcapping fully general
+                                if (player.tab != "tokens") return ""
+                                if (player.subtabs.tokens.mainTabs != "II") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
+                                let eformula = "10^(2<sup>20+x</sup>)"
+                                
+                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                let start = lvl + cost
+                                return br + start + allEff
+                        },
+                },
+        },
+        clickables: {
+                rows: 5,
+                cols: 4,
+                11: {
+                        title: "Sell Token II buyables", 
+                        display(){
+                                return "You have a total of " + format(player.tokens.tokens2.total) + " Token II's"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                let data = player.tokens
+                                data.tokens2.points = data.tokens2.total
+                                ids = [101, 102, 111, 112, 121, 122, 131, 132]//add more
+                                for (i in ids){
+                                        data.buyales[ids[i]] = decimalZero
+                                }
+                        },
+                },
         },
         milestones: {
                 1: {
@@ -29015,7 +29199,6 @@ addLayer("tokens", {
                                 return a 
                         },
                 },  // hasMilestone("tokens", 26)
-
         },
         upgrades: {
                 rows: 10,
@@ -29686,6 +29869,26 @@ addLayer("tokens", {
                                 return canReset("tokens")
                         },
                 },
+                "II": {
+                        content: [
+                                "main-display",
+                                ["secondary-display-tokens2", "tokens2"],
+                                ["buyables", [10,11,12,19]],
+                                ["clickables", [1]],
+                                ["display-text", "<br><br><br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R)"],
+                        ],
+                        unlocked(){
+                                return hasUpgrade("cells", 42)
+                        },
+                        shouldNotify(){
+                                let x = [191, 192, 193]
+                                for (i in x){
+                                        id = x[i]
+                                        if (!tmp.tokens.buyables[id].canAfford) return false
+                                }
+                                return true
+                        },
+                },
                 "Flat": {
                         content: [
                                 "main-display",
@@ -29708,7 +29911,7 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
                                 let x = ["11", "12", "13", "21", "22", 
@@ -29744,7 +29947,7 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
                                 let x = ["11", "12", "13", "21", "22", 
