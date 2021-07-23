@@ -160,6 +160,7 @@ var systemComponents = {
 		<tr>
 			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
 			<td><button class="opt" onclick="save()">Save</button></td>
+			<td><button class="opt" onclick="player.keepGoing = false">Re-show endgame screen</button></td>
 			<td><button class="opt" onclick="player.showBuiltInSaves = true">Show built in saves</button></td>
 			<td><button class="opt" onclick="setUpPGSettings()">Make your settings the same as the dev</button></td>
 		</tr>
