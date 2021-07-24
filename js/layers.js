@@ -28622,7 +28622,7 @@ addLayer("tokens", {
                                 data.tokens2.points = data.tokens2.total
                                 ids = [101, 102, 111, 112, 121, 122, 131, 132]//add more
                                 for (i in ids){
-                                        data.buyales[ids[i]] = decimalZero
+                                        data.buyables[ids[i]] = decimalZero
                                 }
                         },
                 },
