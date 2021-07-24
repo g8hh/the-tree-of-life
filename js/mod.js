@@ -31,6 +31,11 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<br><h3 style='color: #CC0000'>v1.084</h3><br>
 		- Started adding Tokens II.<br>
+		- Made Cell upgrade 42 remove a bunch of content/hide things.<br>
+		- Added four Token buyables.<br>
+		- Added a Token clickable.<br>
+		- Added a new currency.<br>
+		- Implemented new (display) formulas for Token II.<br>
 	<br><h3 style='color: #CC0000'>v1.083</h3><br>
 		- Added twelve Cell upgrades.<br>
 		- Various small rewordings.<br>
@@ -963,6 +968,7 @@ let winText = `Congratulations! You have reached the end of this patch! More con
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything",
 					"costFormula",
 					"costFormulaID",
+					"costFormula2",
 					"getCoords",
 					"getMaxCoord",
 					"getGemEffect",]
