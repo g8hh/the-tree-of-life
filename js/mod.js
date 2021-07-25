@@ -36,6 +36,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a Token clickable.<br>
 		- Added a new currency.<br>
 		- Implemented new (display) formulas for Token II.<br>
+		- 16/71 is now possible.<br>
 	<br><h3 style='color: #CC0000'>v1.083</h3><br>
 		- Added twelve Cell upgrades.<br>
 		- Various small rewordings.<br>

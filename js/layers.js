@@ -28599,8 +28599,8 @@ addLayer("tokens", {
                 },
                 192: {
                         title: "Token II via Stem Cell",
-                        cost:() => player.tokens.buyables[192].plus(20).pow10().pow(Math.log10(2)).pow10(),
-                        canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[192].cost),
+                        cost:() => player.tokens.buyables[192].plus(33).sqrt().pow10().pow10(),
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.tokens
@@ -28615,7 +28615,7 @@ addLayer("tokens", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
-                                let eformula = "10^(2<sup>20+x</sup>)"
+                                let eformula = "10^10^((33+x)<sup>.5</sup>)"
                                 
                                 let ef1 = "<b><h2>Cost formula</h2>:<br>"
                                 let ef2 = "</b><br>"
