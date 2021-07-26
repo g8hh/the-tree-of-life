@@ -18905,7 +18905,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return true
+                                return hasMilestone("t", 6)
                         }, // hasUpgrade("t", 61)
                 },
                 62: {

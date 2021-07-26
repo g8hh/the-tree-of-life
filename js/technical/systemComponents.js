@@ -147,12 +147,12 @@ var systemComponents = {
 	Toggles:
 	<table>
 		<tr>
-			<td><button class="opt" onclick="toggleShift()">Force toggle shift</button></td>
-			<td><button class="opt" onclick="toggleControl()">Force toggle control</button></td>
-			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
-			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys</button></td>
-			<td><button class="opt" onclick="player.spaceBarPauses = !player.spaceBarPauses">Toggle space bar pausing</button></td>
-			<td><button class="opt" onclick="player.paused = !player.paused">Toggle pause</button></td>
+			<td><button class="opt" onclick="toggleShift()">Force toggle shift<span><bdi style='color:#CC0033'><br>{{shiftDown?"Down":"Up"}}</bdi></span></button></td>
+			<td><button class="opt" onclick="toggleControl()">Force toggle control<span><bdi style='color:#CC0033'><br>{{controlDown?"Down":"Up"}}</bdi></span></button></td>
+			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors<span><bdi style='color:#CC0033'><br>{{player.undulating?"On":"Off"}}</bdi></span></button></td>
+			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys<span><bdi style='color:#CC0033'><br>{{player.arrowHotkeys?"On":"Off"}}</bdi></span></button></td>
+			<td><button class="opt" onclick="player.spaceBarPauses = !player.spaceBarPauses">Toggle space bar pausing<span><bdi style='color:#CC0033'><br>{{player.spaceBarPauses?"Yes":"No"}}</bdi></span></button></td>
+			<td><button class="opt" onclick="player.paused = !player.paused">Toggle pause<span><bdi style='color:#CC0033'><br>{{player.paused?"Paused":"Running"}}</bdi></span></button></td>
 		</tr>
 	</table>
 	Others:
