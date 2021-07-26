@@ -27,7 +27,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
-		- C will be small patches without content.<br><br><br>
+		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v1.086</h3><br>	
 		- 17/76 is now possible.<br>
@@ -1022,12 +1022,13 @@ function addedPlayerData() { return {
 	controlAlias: false,
 }}
 
+function getLastSaveDisplay(a){
+	return "Last save was: " + formatTime((new Date().getTime()-player.lastSave)/1000, a) + " ago. "
+}
+
 // Display extra things at the top of the page
 var displayThings = [
 	function(){
-		let t1 = player.lastSave
-		let t2 = new Date().getTime()
-
 		list1 = []
 		if (shiftDown) list1 = list1.concat("S")
 		if (controlDown) list1 = list1.concat("C")
@@ -1039,7 +1040,7 @@ var displayThings = [
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
 		else if (player.hardMode) end += "{Hard}"
-		let saveFinal = "Last save was: " + formatTime((t2-t1)/1000) + " ago. " + end
+		let saveFinal = getLastSaveDisplay() + end
 
 		let len = pastTickTimes.length
 		if (len <= 3) return saveFinal
