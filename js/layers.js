@@ -15331,8 +15331,21 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("2e12664"),
                         unlocked(){
-                                return player.tokens.total.gt(500)
+                                return player.tokens.total.gt(500) && hasUpgrade("cells", 42)
                         }, // hasUpgrade("cells", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XIX"
+                        },
+                        description(){
+                                let a = "Tissues effect base is Tissues but Token II multiplies Tissue gain"
+                                return a
+                        },
+                        cost:() => new Decimal("1e12973"),
+                        unlocked(){
+                                return hasUpgrade("cells", 43)
+                        }, // hasUpgrade("cells", 44)
                 },
                 111: {
                         title(){
@@ -18427,8 +18440,9 @@ addLayer("t", {
                 if (hasUpgrade("t", 83)) {
                         let base = new Decimal(player.cells.challenges[12]).max(10).log10()
                         let exp = Math.max(0, player.cells.challenges[11] - 10)
-                                        ret = ret.times(base.pow(exp))
+                                                ret = ret.times(base.pow(exp))
                 }
+                if (hasUpgrade("cells", 44))    ret = ret.times(player.tokens.tokens2.total.max(1))
 
                 return ret.max(1)
         },
@@ -18454,6 +18468,7 @@ addLayer("t", {
                 return tmp.t.getResetGain.gt(0) && !false && player.cells.challenges[12] >= 25
         },
         effectAdd(){
+                if (hasUpgrade("cells", 44)) return decimalZero
                 let ret = decimalOne
                 
                 if (hasUpgrade("t", 21)) ret = ret.plus(2)
@@ -18461,6 +18476,7 @@ addLayer("t", {
                 return ret
         },
         effectMult(){
+                if (hasUpgrade("cells", 44)) return decimalOne
                 let ret = decimalOne
 
                 if (hasUpgrade("t", 22)) ret = ret.times(2)
@@ -18497,7 +18513,7 @@ addLayer("t", {
 
                 let ret = data.effectAmt.times(data.effectMult).plus(data.effectAdd).pow(data.effectExp)
 
-                return ret
+                return ret.max(1)
         },
         effectDescription(){
                 if (player.tab != "t") return ""
@@ -19841,6 +19857,7 @@ addLayer("t", {
                                         let a3 = "Initial Tissue effect: (Tissues+1)^1"
                                         let a4 = "Current Tissue effect: (" + format(tmp.t.effectMult) 
                                         a4 += "*Tissues+" + format(tmp.t.effectAdd) + ")^" + format(tmp.t.effectExp)
+                                        a4 = a4.replace("1.00*Tissues+0.00", "Tissues")
                                         let a = a1 + br + a2 + br2 + a3 + br + a4
                                         let b = "Cell resets all prior content that is not permanently kept."
                                         let c = "Note that anti- challenges and gem are no longer."
@@ -30056,9 +30073,9 @@ addLayer("tokens", {
                                 let x = [191, 192, 193]
                                 for (i in x){
                                         id = x[i]
-                                        if (!tmp.tokens.buyables[id].canAfford) return false
+                                        if (tmp.tokens.buyables[id].canAfford) return true
                                 }
-                                return true
+                                return false
                         },
                 },
                 "Flat": {
