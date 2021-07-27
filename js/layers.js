@@ -14976,6 +14976,7 @@ addLayer("cells", {
                         if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(47.19363281906435)) // log1.05(10)
                         if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
                         if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
+                        if (hasUpgrade("t", 111))       ret = ret.times(5)
 
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -15423,7 +15424,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXV"
                         },
                         description(){
-                                let a = "Remove Cell milestone 53's -44"
+                                let a = "Remove Cell milestone 53's -44 and unlock End"
                                 return a
                         },
                         cost:() => new Decimal("1e14491"),
@@ -18544,6 +18545,10 @@ addLayer("t", {
                         let amt = Math.min(50, player.t.upgrades.length)
                         ret = ret.sub(20*amt)
                 }
+                if (hasUpgrade("t", 111)) {
+                        let amt = Math.min(500, 3*player.tokens.tokens2.total.sqrt().toNumber())
+                        ret = ret.sub(amt)
+                }
 
                 ret = ret.pow(-1)
 
@@ -18640,7 +18645,7 @@ addLayer("t", {
         row: 2, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
                 if (player.tab != "t") return ""
-                if (!["Start", "Middle"].includes(player.subtabs.t.mainTabs)) return ""
+                if (!["Start", "Middle", "End"].includes(player.subtabs.t.mainTabs)) return ""
 
                 if (player.cells.challenges[12] < 25) return "You need to have 25 Secondary completions to reset"
 
@@ -19444,6 +19449,24 @@ addLayer("t", {
                                 return hasUpgrade("t", 104)
                         }, // hasUpgrade("t", 105)
                 },
+                111: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LI"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Per sqrt(Token II) Tissue gain root is 3 less (up to 500), gain 5x Stem Cells, and Token II via Stem Cell scales at half the speed</bdi>"
+                                let b = "<br>Requires: 82 Secondary completions</bdi>"
+                                if (!hasUpgrade("t", 111)) return a + b
+                                return a + "</bdi>"
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 82
+                        },
+                        cost:() => new Decimal(1e18),
+                        unlocked(){
+                                return hasUpgrade("cells", 55)
+                        }, // hasUpgrade("t", 111)
+                },
         },
         milestones: {
                 1: {
@@ -19916,6 +19939,17 @@ addLayer("t", {
                                 ],
                         unlocked(){
                                 return hasMilestone("t", 6)
+                        },
+                },
+                "End": {
+                        content: ["main-display",
+                                  ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                  ["display-text", function (){ return false ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                  "blank",
+                                  ["upgrades", [11,12,13,14,15]],
+                                ],
+                        unlocked(){
+                                return hasUpgrade("cells", 55)
                         },
                 },
                 "Milestones": {
@@ -28962,7 +28996,7 @@ addLayer("tokens", {
                 },
                 192: {
                         title: "Token II via Stem Cell",
-                        cost:() => player.tokens.buyables[192].plus(33).sqrt().pow10().pow10(),
+                        cost:() => player.tokens.buyables[192].div(1+hasUpgrade("t", 111)).plus(33).sqrt().pow10().pow10(),
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -28978,7 +29012,7 @@ addLayer("tokens", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
-                                let eformula = "10^10^((33+x)<sup>.5</sup>)"
+                                let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
                                 
                                 let ef1 = "<b><h2>Cost formula</h2>:<br>"
                                 let ef2 = "</b><br>"
