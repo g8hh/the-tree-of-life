@@ -1078,7 +1078,7 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
-	if (player.version < "1.084" && hasUpgrade("cells", 42)) {
+	if (player.version < "1.084" && player.cells.upgrades.includes(42)) {
 		player.tokens.buyables[11] = decimalZero
 		player.tokens.points = player.tokens.total
 		player.subtabs.tokens.mainTabs = "II"
