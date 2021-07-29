@@ -17366,6 +17366,7 @@ addLayer("cells", {
                                 }
                                 if (hasUpgrade("t", 122))               exp -= 150
                                 if (hasUpgrade("t", 125))               exp -= 951
+                                if (hasUpgrade("t", 133))               exp = Math.min(8500, exp)
                                 
                                 return Decimal.pow(10, exp)
                         },
@@ -17567,6 +17568,7 @@ addLayer("cells", {
                                 }
                                 if (hasMilestone("t", 15))      ret = ret.plus(.013 * player.t.upgrades.length)
                                                                 ret = ret.plus(tmp.tokens.buyables[101].effect)
+                                if (hasUpgrade("t", 133))       ret = ret.plus(player.tokens.tokens2.total.times(.002))
 
                                 return ret
                         },
@@ -18560,6 +18562,7 @@ addLayer("t", {
                                                 ret = ret.times(base.pow(exp))
                 }
                 if (hasUpgrade("cells", 44))    ret = ret.times(player.tokens.tokens2.total.max(1))
+                if (hasUpgrade("t", 131))       ret = ret.times(Decimal.pow(2, tmp.t.upgrades.endUpgradeAmount))
 
                 return ret.max(1)
         },
@@ -18586,7 +18589,7 @@ addLayer("t", {
                 return reqInit.plus(9).root(tmp.t.getGainExp).div("1e615")
         },
         canReset(){
-                return tmp.t.getResetGain.gt(0) && !false && player.cells.challenges[12] >= 25
+                return tmp.t.getResetGain.gt(0) && !hasUpgrade("t", 132) && player.cells.challenges[12] >= 25
         },
         effectAdd(){
                 if (hasUpgrade("cells", 44)) return decimalZero
@@ -18617,6 +18620,7 @@ addLayer("t", {
                         if (hasUpgrade("t", 93))        per = .16
                         if (hasUpgrade("t", 114))       per = .165
                         if (hasUpgrade("t", 115))       per = .17
+                        if (hasUpgrade("t", 133))       per = .18
                                                 ret = ret.plus(per * player.t.upgrades.length)
                 }
                 if (hasUpgrade("t", 81))        ret = ret.plus(.5)
@@ -18627,7 +18631,9 @@ addLayer("t", {
                 return ret
         },
         effectAmt(){
-                if (hasUpgrade("t", 64)) {
+                if (hasUpgrade("t", 131)) {
+                        return tmp.t.getResetGain.max(player.t.bestOnReset)
+                } else if (hasUpgrade("t", 64)) {
                         return tmp.t.getResetGain.max(player.t.bestOnReset).times(100)
                 } else {
                         return player.t.total
@@ -18664,7 +18670,8 @@ addLayer("t", {
                 if (hasUpgrade("t", 105)) {
                         let onR = tmp.t.getResetGain
                         data.bestOnReset = data.bestOnReset.max(onR)
-                        let gain = onR.div(100).times(diff)
+
+                        let gain = onR.div(hasUpgrade("t", 132) ? 1 : 100).times(diff)
                         data.points = data.points.plus(gain)
                         data.total = data.total.plus(gain)
                 }
@@ -19653,7 +19660,7 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "Primary is 1e951 times easier"
-                                let b = "<br>Requires: 92 Secondary completions</bdi>"
+                                let b = "<br>Requires: 92 Secondary completions"
                                 if (!hasUpgrade("t", 125)) return a + b
                                 return a + "</bdi>"
                         },
@@ -19664,6 +19671,50 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 124)
                         }, // hasUpgrade("t", 125)
+                },
+                131: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXI"
+                        },
+                        description(){
+                                let a = "Per upgrade in this tab double Tissue gain but Tissues XXIX is based on best/current Tissues on reset"
+                                let b = "<br>Requires: 95 Secondary completions"
+                                if (!hasUpgrade("t", 131)) return a + b
+                                return a
+                        },
+                        canAfford(){
+                                return player.cells.challenges[12] >= 95
+                        },
+                        cost:() => new Decimal(3e24),
+                        unlocked(){
+                                return hasUpgrade("t", 125)
+                        }, // hasUpgrade("t", 131)
+                },
+                132: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXII"
+                        },
+                        description(){
+                                let a = "Gain 99% of Tissue gained on reset per second but you can no longer reset for Tissues"
+                                return a
+                        },
+                        cost:() => new Decimal(2e28),
+                        unlocked(){
+                                return hasUpgrade("t", 131)
+                        }, // hasUpgrade("t", 132)
+                },
+                133: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIII"
+                        },
+                        description(){
+                                let a = "Tissues IX is .18 per, Primary goal is at most 1e8500, and per Token II add .01 to Omnipotent base"
+                                return a
+                        },
+                        cost:() => new Decimal(5e30),
+                        unlocked(){
+                                return hasUpgrade("t", 132)
+                        }, // hasUpgrade("t", 133)
                 },
         },
         milestones: {
@@ -20163,8 +20214,8 @@ addLayer("t", {
         tabFormat: {
                 "Start": {
                         content: ["main-display",
-                                  ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return false ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
                                   "blank",
                                   ["upgrades", [1,2,3,4,5]],
                                 ],
@@ -20174,8 +20225,8 @@ addLayer("t", {
                 },
                 "Middle": {
                         content: ["main-display",
-                                  ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return false ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
                                   "blank",
                                   ["upgrades", [6,7,8,9,10]],
                                 ],
@@ -20185,8 +20236,8 @@ addLayer("t", {
                 },
                 "End": {
                         content: ["main-display",
-                                  ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return false ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
                                   "blank",
                                   ["upgrades", [11,12,13,14,15]],
                                 ],
