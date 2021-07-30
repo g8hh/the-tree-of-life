@@ -12,12 +12,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.091.1",
+	num: "1.092",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("2e21242")
+	return player.cells.points.gte("2e22222")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -29,6 +29,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.092</h3><br>
+		- Added two Tissue upgrades.<br>
+		- 24/95 is now possible.<br>
 	<br><h3 style='color: #CC0000'>v1.091.1</h3><br>
 		- Added a custom save.<br>
 		- Various bug fixes.<br>

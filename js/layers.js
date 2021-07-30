@@ -14648,6 +14648,7 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 15))    ret = ret.times(tmp.cells.upgrades[15].effect)
                 if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
                 if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
+                if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
 
 
                 if (hasChallenge("l", 111)) {
@@ -14982,6 +14983,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                         if (hasUpgrade("t", 111))       ret = ret.times(5)
                         if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
+                        if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
 
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -18621,6 +18623,7 @@ addLayer("t", {
                         if (hasUpgrade("t", 114))       per = .165
                         if (hasUpgrade("t", 115))       per = .17
                         if (hasUpgrade("t", 133))       per = .18
+                        if (hasUpgrade("t", 134))       per = .19
                                                 ret = ret.plus(per * player.t.upgrades.length)
                 }
                 if (hasUpgrade("t", 81))        ret = ret.plus(.5)
@@ -19715,6 +19718,35 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 132)
                         }, // hasUpgrade("t", 133)
+                },
+                134: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIV"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Tissues IX is .19 per, Strange Quark effect coefficient is .7 more, Down Quark effect is based on best and triple its base</bdi>"
+                                return a
+                        },
+                        cost:() => new Decimal(2e32),
+                        unlocked(){
+                                return hasUpgrade("t", 133)
+                        }, // hasUpgrade("t", 134)
+                },
+                135: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXV"
+                        },
+                        description(){
+                                let a = "log10(log10(Points))<sup>.4</sup> multiplies Cell and Stem Cell gain"
+                                return a + br + "Currently: " + format(tmp.t.upgrades[135].effect)
+                        },
+                        effect(){
+                                return player.points.max(10).log10().max(10).log10().pow(.4)
+                        },
+                        cost:() => new Decimal(2e33),
+                        unlocked(){
+                                return hasUpgrade("t", 134)
+                        }, // hasUpgrade("t", 135)
                 },
         },
         milestones: {
@@ -27567,6 +27599,10 @@ addLayer("tokens", {
                         61: decimalZero,
                         62: decimalZero,
                         63: decimalZero,
+                        101: decimalZero,
+                        102: decimalZero,
+                        111: decimalZero,
+                        112: decimalZero,
                 },
                 tokens2: {
                         total: decimalZero,
@@ -27672,6 +27708,15 @@ addLayer("tokens", {
                                 bb[id] = bb[id].max(maxever)
                         }
                 }
+
+                let b = ["101", "102", "111", "112", ]
+
+                for (i = 0; i < b.length; i++){
+                        id = b[i]
+                        if (bb[id] == undefined) bb[id] = decimalZero
+                        bb[id] = bb[id].max(data.buyables[id])
+                }
+
                 data.best_over_all_time = data.best_over_all_time.max(data.total)
                 if (player.points.gte("e5000")) data.unlocked = true
 
@@ -29105,9 +29150,15 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
-                                return c.sub(r.sqrt()).times(50).plus(player.tokens.total).max(1)
+                                let ret = c.sub(r.sqrt()).times(50).plus(player.tokens.total).max(1)
+                                if (hasUpgrade("t", 134)) ret = ret.times(3)
+
+                                return ret
                         },
                         effect(){
+                                if (hasUpgrade("t", 134)) {
+                                        return tmp.tokens.buyables[102].base.pow(player.tokens.best_buyables[102])
+                                }
                                 return tmp.tokens.buyables[102].base.pow(player.tokens.buyables[102])
                         },
                         unlocked(){
@@ -29123,7 +29174,8 @@ addLayer("tokens", {
                                 let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to Stem Cell gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 102)) + " Token II</b><br>"
                                 let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
-                                
+                                if (hasUpgrade("t", 134)) eformula = "3" + eformula.slice()
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29215,11 +29267,16 @@ addLayer("tokens", {
                                 data.buyables[112] = data.buyables[112].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[112].cost)
                         },
+                        coeffecient(){
+                                let ret = new Decimal(10)
+                                if (hasUpgrade("t", 134)) ret = ret.plus(.7)
+                                return ret
+                        },
                         base(){
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
-                                return c.pow(.8).sub(r.sqrt()).max(0).times(10)
+                                return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coeffecient)
                         },
                         effect(){
                                 return tmp.tokens.buyables[112].base.times(player.tokens.buyables[112])
@@ -29239,7 +29296,9 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = format(tmp.tokens.buyables[112].effect, 4) + " to effective Tokens</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 112)) + " Token II</b><br>"
-                                let eformula = "10(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" + format(tmp.tokens.buyables[112].base, 4) + "*x" 
+                                let eformula = format(tmp.tokens.buyables[112].coeffecient)
+                                eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
+                                eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
                                 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
