@@ -29218,7 +29218,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[111].base.times(player.tokens.buyables[111].sqrt())
                         },
                         unlocked(){
-                                return true
+                                return hasUpgrade("cells", 45)
                         },
                         display(){
                                 // other than softcapping fully general
@@ -29282,7 +29282,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[112].base.times(player.tokens.buyables[112])
                         },
                         unlocked(){
-                                return true
+                                return hasUpgrade("cells", 45)
                         },
                         display(){
                                 // other than softcapping fully general
