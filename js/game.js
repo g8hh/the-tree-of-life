@@ -405,6 +405,8 @@ function runInterval(){
 	} else diff = 0
 	if (player.devSpeed != undefined) diff *= player.devSpeed
 	player.time = now
+	player.shiftAlias = shiftDown
+	player.controlAlias = controlDown
 	if (needCanvasUpdate){ resizeCanvas();
 		needCanvasUpdate = false;
 	}

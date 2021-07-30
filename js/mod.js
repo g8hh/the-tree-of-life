@@ -12,23 +12,78 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.077",
+	num: "1.087",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("2e3061")
+	return player.cells.points.gte("3e13440")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame</h2><br>
-		- 47 Secondary completions OR the last save in the bank<br><br>
+		77 Secondary completions<br>OR reaching the endgame screen<br>OR the last save in the bank<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
-		- C will be small patches without content.<br><br><br>
+		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.087</h3><br>	
+		- 17/76 is now possible.<br>
+		- Added a Cell upgrade.<br>
+		- Added two Token buyables.<br>
+	<br><h3 style='color: #CC0000'>v1.086</h3><br>	
+		- 17/76 is now possible.<br>
+		- Added a Cell upgrade.<br>
+		- Fixed Token II notification.<br>
+	<br><h3 style='color: #CC0000'>v1.085</h3><br>
+		- Added a Cell upgrade.<br>
+		- Added four Tissue milestones.<br>
+		- Added a Token buyable.<br>
+		- 17/75 is now possible.<br>
+		- Added a custom save.<br>
+		- Added a row of achievements.<br>
+	<br><h3 style='color: #CC0000'>v1.084</h3><br>
+		- Started adding Tokens II.<br>
+		- Made Cell upgrade 42 remove a bunch of content/hide things.<br>
+		- Added four Token buyables.<br>
+		- Added a Token clickable.<br>
+		- Added a new currency.<br>
+		- Implemented new (display) formulas for Token II.<br>
+		- 16/71 is now possible.<br>
+	<br><h3 style='color: #CC0000'>v1.083</h3><br>
+		- Added twelve Cell upgrades.<br>
+		- Various small rewordings.<br>
+		- Added a custom save.<br>
+		- 16/70 is now possible.<br>
+	<br><h3 style='color: #CC0000'>v1.082</h3><br>
+		- Added a Cell upgrade.<br>
+		- Added three Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+		- 15/59 is now possible.<br>
+		- Added a custom save.<br>
+		- Fixed a bug with M<sub>C</sub> getting notified for Cell upgrades.<br>
+		- Added a reshow endgame button.<br>
+	<br><h3 style='color: #CC0000'>v1.081</h3><br>
+		- 15/55 is now possible.<br>
+		- Added a Tissue upgrade.<br>
+		- Added two Tissue milestones.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.080</h3><br>
+		- 14/52 is now possible.<br>
+		- Added a Tissue upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.079</h3><br>
+		- 14/51 is now possible.<br>
+		- Added two Tissue upgrades.<br>
+		- Made µ use autoPrestige and not the manual version so its not prestige-notified.<br>
+		- Fixed a bug with t92.<br>
+	<br><h3 style='color: #CC0000'>v1.078</h3><br>
+		- 14/49 is now possible.<br>
+		- Added a Custom save.<br>
+		- Added two Tissue upgrades.<br>
+		- Fixed Deuterium X not notifying you that you need to respec tokens.<br>
+		- Made Customizable's details for changing the challenge correct.<br>
 	<br><h3 style='color: #CC0000'>v1.077</h3><br>
 		- 14/47 is now possible.<br>
 		- Added a Tissue upgrade.<br>
@@ -929,6 +984,7 @@ let winText = `Congratulations! You have reached the end of this patch! More con
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything",
 					"costFormula",
 					"costFormulaID",
+					"costFormula2",
 					"getCoords",
 					"getMaxCoord",
 					"getGemEffect",]
@@ -966,14 +1022,17 @@ function addedPlayerData() { return {
 	},
 	spaceBarPauses: false,
 	paused: false,
+	shiftAlias: false,
+	controlAlias: false,
 }}
+
+function getLastSaveDisplay(a){
+	return "Last save was: " + formatTime((new Date().getTime()-player.lastSave)/1000, a) + " ago. "
+}
 
 // Display extra things at the top of the page
 var displayThings = [
 	function(){
-		let t1 = player.lastSave
-		let t2 = new Date().getTime()
-
 		list1 = []
 		if (shiftDown) list1 = list1.concat("S")
 		if (controlDown) list1 = list1.concat("C")
@@ -985,7 +1044,7 @@ var displayThings = [
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
 		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
 		else if (player.hardMode) end += "{Hard}"
-		let saveFinal = "Last save was: " + formatTime((t2-t1)/1000) + " ago. " + end
+		let saveFinal = getLastSaveDisplay() + end
 
 		let len = pastTickTimes.length
 		if (len <= 3) return saveFinal
@@ -1023,6 +1082,12 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
+	if (player.version < "1.084" && player.cells.upgrades.includes(42)) {
+		player.tokens.buyables[11] = decimalZero
+		player.tokens.points = player.tokens.total
+		player.subtabs.tokens.mainTabs = "II"
+		player.tab = "tokens"
+	}
 }
 
 var controlDown = false
