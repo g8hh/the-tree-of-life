@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.091",
+	num: "1.091.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,6 +29,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.091.1</h3><br>
+		- Added a custom save.<br>
+		- Various bug fixes.<br>
 	<br><h3 style='color: #CC0000'>v1.091</h3><br>
 		- 22/95 is now possible.<br>
 		- Added three Tissue upgrades.<br>

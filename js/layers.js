@@ -27758,6 +27758,7 @@ addLayer("tokens", {
                                 doIt = y < x
                         }
                         if (lrdf.includes("round") && cft.includes("floor")) doIt = true
+                        if (!lrdf.includes("max") && cft.includes("max")) doIt = true
                         if (doIt) end = br + "Need Respec"
                 } 
                 if (!player.a.unlocked) return init + end
