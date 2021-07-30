@@ -144,6 +144,7 @@ function getPointDilationExponent(){
         if (hasUpgrade("t", 114))       exp = exp.times(player.t.upgrades.length)
         if (hasMilestone("t", 21))      exp = exp.times(player.t.milestones.length)
         if (hasUpgrade("t", 124))       exp = exp.times(Math.max(1, player.cells.challenges[11]) ** 2.5)
+        if (hasUpgrade("cells", 61))    exp = exp.times(Decimal.pow(1.1, player.cells.upgrades.length))
         
         return exp
 }
@@ -15440,6 +15441,19 @@ addLayer("cells", {
                                 return hasUpgrade("cells", 54)
                         }, // hasUpgrade("cells", 55)
                 },
+                61: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXVI"
+                        },
+                        description(){
+                                let a = "Raise the 3 in Down Quark's base to Token II - 20 and per upgrade dilate Point gain ^1.1"
+                                return a
+                        },
+                        cost:() => new Decimal("1e22305"),
+                        unlocked(){
+                                return player.cells.challenges[11] >= 24
+                        }, // hasUpgrade("cells", 61)
+                },
                 111: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Mu I"
@@ -17420,7 +17434,7 @@ addLayer("cells", {
                                 layers.cells.challenges.onEnter()
                         },
                         completionLimit(){
-                                if (hasUpgrade("t", 75)) return 30
+                                if (hasUpgrade("t", 75)) return 25
                                 return 10
                         },
                         countsAs: [],
@@ -19205,7 +19219,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXXV"
                         },
                         description(){
-                                let a = "Primary can now be completed 30 times, but its goal gets progressively harder"
+                                let a = "Primary can now be completed 25 times, but its goal gets progressively harder"
                                 let b = "<br>Requires: 34 Secondary completions"
                                 if (!hasUpgrade("t", 75)) return a + b
                                 return a
@@ -24088,7 +24102,7 @@ addLayer("mini", {
                                 //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coeffecient and Fuel Increase 1 base</b><br>"
+                                let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coefficient and Fuel Increase 1 base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 131)) + " D Points</b><br>"
                                 let eformula = "[upgrades]/100*x<br>" + format(getBuyableBase("mini", 131)) + "*x"
                                 if (hasUpgrade("mini", 62)) eformula = eformula.replace("]", "]^3")
@@ -29146,12 +29160,18 @@ addLayer("tokens", {
                                 data.buyables[102] = data.buyables[102].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
                         },
+                        coefficient(){
+                                let ret = new Decimal(1)
+                                if (hasUpgrade("t", 134)) ret = ret.times(3)
+                                if (hasUpgrade("cells", 61)) ret = ret.pow(player.tokens.tokens2.total.sub(20).max(1))
+                                return ret
+                        },
                         base(){
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
                                 let ret = c.sub(r.sqrt()).times(50).plus(player.tokens.total).max(1)
-                                if (hasUpgrade("t", 134)) ret = ret.times(3)
+                                if (hasUpgrade("t", 134)) ret = ret.times(tmp.tokens.buyables[102].coefficient)
 
                                 return ret
                         },
@@ -29174,7 +29194,9 @@ addLayer("tokens", {
                                 let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to Stem Cell gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 102)) + " Token II</b><br>"
                                 let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
-                                if (hasUpgrade("t", 134)) eformula = "3" + eformula.slice()
+                                if (hasUpgrade("t", 134)) {
+                                        eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + eformula.slice(0,29) + ")" + eformula.slice(29,)
+                                }
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -29267,16 +29289,16 @@ addLayer("tokens", {
                                 data.buyables[112] = data.buyables[112].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[112].cost)
                         },
-                        coeffecient(){
+                        coefficient(){
                                 let ret = new Decimal(10)
-                                if (hasUpgrade("t", 134)) ret = ret.plus(.7)
+                                if (hasUpgrade("t", 134))       ret = ret.plus(.7)
                                 return ret
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
-                                return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coeffecient)
+                                return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coefficient)
                         },
                         effect(){
                                 return tmp.tokens.buyables[112].base.times(player.tokens.buyables[112])
@@ -29296,7 +29318,7 @@ addLayer("tokens", {
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = format(tmp.tokens.buyables[112].effect, 4) + " to effective Tokens</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 112)) + " Token II</b><br>"
-                                let eformula = format(tmp.tokens.buyables[112].coeffecient)
+                                let eformula = format(tmp.tokens.buyables[112].coefficient)
                                 eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
                                 eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
                                 

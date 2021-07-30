@@ -676,6 +676,13 @@ PROGRESSION_MILESTONES = {
         551: () => player.tokens.tokens2.total.gte(19),
         552: () => player.tokens.tokens2.total.gte(20),
         553: () => player.tokens.tokens2.total.gte(21),
+        554: () => player.tokens.tokens2.total.gte(22),
+        555: () => player.tokens.tokens2.total.gte(23),
+        556: () => player.tokens.tokens2.total.gte(24),
+        557: () => player.tokens.tokens2.total.gte(25),
+        558: () => player.tokens.tokens2.total.gte(26),
+        559: () => player.tokens.tokens2.total.gte(27),
+        560: () => player.tokens.tokens2.total.gte(28),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1232,6 +1239,13 @@ PROGRESSION_MILESTONES_TEXT = {
         551: "19 Token II",
         552: "20 Token II",
         553: "21 Token II",
+        554: "22 Token II",
+        555: "23 Token II",
+        556: "24 Token II",
+        557: "25 Token II",
+        558: "26 Token II",
+        559: "27 Token II",
+        560: "28 Token II",
 }
 
 
