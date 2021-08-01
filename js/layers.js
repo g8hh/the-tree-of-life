@@ -30060,7 +30060,7 @@ addLayer("tokens", {
                         description(){
                                 if (shiftDown) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 22</bdi>"
-                                        let b = "<br>Current requirement:<br>!21"
+                                        let b = "<br>Current requirement:<br>!22"
                                         if (tmp.tokens.upgrades[42].unlocked) b += "||42"
 
                                         return a + b
@@ -30088,7 +30088,7 @@ addLayer("tokens", {
                         description(){
                                 if (shiftDown) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 21</bdi>"
-                                        let b = "<br>Current requirement:<br>!22"
+                                        let b = "<br>Current requirement:<br>!21"
                                         if (tmp.tokens.upgrades[42].unlocked) b += "||42"
 
                                         return a + b
