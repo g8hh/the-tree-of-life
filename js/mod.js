@@ -33,6 +33,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a Cell upgrade.<br>
 		- Added a row of achievements.<br>
 		- 23 Token II is now possible.<br>
+		- Added a custom save.<br>
+		- You can now click and drag to buy upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.092</h3><br>
 		- Added two Tissue upgrades.<br>
 		- 24/95 is now possible.<br>
