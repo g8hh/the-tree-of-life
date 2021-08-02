@@ -12,23 +12,29 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.095",
+	num: "1.096",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("30e30303")
+	return player.t.points.gte("1e61")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Something that says not yet and reaching the endgame screen<br><br>
+		1e61 Tissues and reaching the endgame screen<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.096</h3><br>
+		- Capped Tissue milestone 18 at 1.5x.<br>
+		- Added two Token buyables.<br>
+		- Added two rows of achievements.<br>
+		- Added a Tissue upgrade.<br>
+		- Added a hotkey for going to Stem.<br>
 	<br><h3 style='color: #CC0000'>v1.095</h3><br>
 		- Added a Cell buyable.<br>
 		- Added two Tissue upgrades.<br>
