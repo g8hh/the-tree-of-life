@@ -17390,6 +17390,8 @@ addLayer("cells", {
                         challengeEffect(){
                                 let ret = decimalOne.plus(player.cells.challenges[11])
 
+                                if (ret.eq(25)) ret = new Decimal(25.67)
+
                                 if (hasUpgrade("t", 83) && ret.gt(10)) ret = ret.log10().times(10)
 
                                 return ret
@@ -19761,6 +19763,32 @@ addLayer("t", {
                         unlocked(){
                                 return hasUpgrade("t", 134)
                         }, // hasUpgrade("t", 135)
+                },
+                141: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVI"
+                        },
+                        description(){
+                                let a = "Per upgrade you have one less token for prestige purposes"
+                                return a
+                        },
+                        cost:() => new Decimal(1e35),
+                        unlocked(){
+                                return hasUpgrade("t", 135)
+                        }, // hasUpgrade("t", 141)
+                },
+                142: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVII"
+                        },
+                        description(){
+                                let a = "Unlock a Cell buyable [Multipotent Stem Cells, not yet]"
+                                return a
+                        },
+                        cost:() => new Decimal(2e36),
+                        unlocked(){
+                                return hasUpgrade("t", 141)
+                        }, // hasUpgrade("t", 142)
                 },
         },
         milestones: {
@@ -27671,6 +27699,7 @@ addLayer("tokens", {
                 if (hasMilestone("t", 3))       a += player.t.milestones.length
                 if (hasUpgrade("cells", 45))    a += player.cells.upgrades.length
                                                 a += tmp.tokens.buyables[112].effect.toNumber()
+                if (hasUpgrade("t", 141))       a += player.t.upgrades.length
                 
                 return a
         },
