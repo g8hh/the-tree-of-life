@@ -14933,7 +14933,8 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
                                                         ret = ret.times(tmp.cells.buyables[12].effect)
                                                         ret = ret.times(tmp.cells.buyables[13].effect)
-                                                        //ret = ret.times(tmp.cells.buyables[21].effect)
+                                                        ret = ret.times(tmp.cells.buyables[21].effect)
+                                                        //ret = ret.times(tmp.cells.buyables[22].effect)
                         if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
                         if (hasMilestone("cells", 12))  ret = ret.times(player.cells.milestones.length)
                         if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
@@ -14985,6 +14986,7 @@ addLayer("cells", {
                         if (hasUpgrade("t", 111))       ret = ret.times(5)
                         if (hasUpgrade("t", 113))       ret = ret.times(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total))
                         if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
+                        if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
 
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -17683,7 +17685,7 @@ addLayer("cells", {
                                 let ma = tmp.cells.buyables[id].maxAfford
                                 let up = hasMilestone("cells", 48) || hasMilestone("t", 3) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
-                                if (!false) {
+                                if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
                                 }
                         },
@@ -17785,7 +17787,7 @@ addLayer("cells", {
                                 let ma = tmp.cells.buyables[id].maxAfford
                                 let up = hasUpgrade("t", 73) ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
-                                if (!false) {
+                                if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
                                 }
                         },
@@ -17834,6 +17836,78 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 103))       cost2 = cost2.replace("5e22", "2e21")
                                 if (hasUpgrade("t", 104))       cost2 = cost2.replace("21", "20")
                                 if (hasUpgrade("t", 105))       cost2 = cost2.replace("2", "1")
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                21: {
+                        title: "Multipotent",
+                        cost() {
+                                let amt = getBuyableAmount("cells", 21)
+                                let exp = amt.pow(1.05)
+                                let base = new Decimal(1e40)
+                                let init = new Decimal("1e1120e3")
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return hasUpgrade("t", 72)
+                        },
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[21].cost),
+                        maxAfford(){
+                                let init = new Decimal("1e1120e3")
+                                let pts = player.cells.stem_cells.points
+                                if (pts.lt(init)) return decimalZero
+                                let base = new Decimal(1e40)
+                                return pts.div(init).log(base).root(1.05).plus(1).floor()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                let data2 = data.stem_cells
+                                let id = 21
+
+                                let ma = tmp.cells.buyables[id].maxAfford
+                                let up = hasMilestone("t", 23) ? ma.sub(data.buyables[id]).max(1) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
+                                if (!hasMilestone("t", 23)) {
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let init = player.tokens.tokens2.total.max(1)
+
+                                return init
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 21)
+                                return tmp.cells.buyables[21].base.pow(amt)
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[21]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.cells.buyables[21].effect) + " to Stem Cell gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 21)) + " Stem Cells</b><br>"
+                                let eformula = "Tokens II^x<br>" + format(tmp.cells.buyables[21].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e1,120,000*1e40^(x<sup>1.05</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -19782,13 +19856,39 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVII"
                         },
                         description(){
-                                let a = "Unlock a Cell buyable [Multipotent Stem Cells, not yet]"
+                                let a = "Unlock a Cell buyable"
                                 return a
                         },
                         cost:() => new Decimal(2e36),
                         unlocked(){
                                 return hasUpgrade("t", 141)
                         }, // hasUpgrade("t", 142)
+                },
+                143: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXVIII"
+                        },
+                        description(){
+                                let a = "Strange Quark effect is its best ever"
+                                return a
+                        },
+                        cost:() => new Decimal(2e40),
+                        unlocked(){
+                                return hasUpgrade("t", 142)
+                        }, // hasUpgrade("t", 143)
+                },
+                144: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIX"
+                        },
+                        description(){
+                                let a = "<bdi style='font-size: 80%'>Unlock two Cell buyables [not yet], add 1.5 to Down and Strange Quark's coefficient, and per upgrade double Stem Cell gain</bdi>"
+                                return a
+                        },
+                        cost:() => new Decimal(2e42),
+                        unlocked(){
+                                return hasUpgrade("t", 143)
+                        }, // hasUpgrade("t", 144)
                 },
         },
         milestones: {
@@ -20284,6 +20384,28 @@ addLayer("t", {
                                 return a + b
                         },
                 }, // hasMilestone("t", 22)
+                23: {
+                        requirementDescription(){
+                                return "Requires: 1e23,701 Cells"
+                        },
+                        requirement(){
+                                return new Decimal("1e23701")
+                        },
+                        done(){
+                                return tmp.t.milestones[23].requirement.lte(player.cells.points)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "t") return ""
+                                if (player.subtabs.t.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: You can buy max Multipotent and Stem Cell buyables no longer cost anything."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("t", 23)
         },
         tabFormat: {
                 "Start": {
@@ -27646,6 +27768,7 @@ addLayer("tokens", {
                         111: decimalZero,
                         112: decimalZero,
                 },
+                bestStrange: decimalZero,
                 tokens2: {
                         total: decimalZero,
                         points: decimalZero,
@@ -27780,6 +27903,8 @@ addLayer("tokens", {
                         datac.points = a.plus(nt).times(2).plus(1).sqrt().sub(1)
                         datac.best = datac.best.max(datac.points)
                 }
+
+                data.bestStrange = data.bestStrange.max(tmp.tokens.buyables[112].effect)
         },
         resetsNothing(){
                 return hasMilestone("n", 11) || hasMilestone("l", 1)
@@ -29192,6 +29317,7 @@ addLayer("tokens", {
                         coefficient(){
                                 let ret = new Decimal(1)
                                 if (hasUpgrade("t", 134)) ret = ret.times(3)
+                                if (hasUpgrade("t", 144)) ret = ret.plus(1.5)
                                 if (hasUpgrade("cells", 61)) ret = ret.pow(player.tokens.tokens2.total.sub(20).max(1))
                                 return ret
                         },
@@ -29321,6 +29447,7 @@ addLayer("tokens", {
                         coefficient(){
                                 let ret = new Decimal(10)
                                 if (hasUpgrade("t", 134))       ret = ret.plus(.7)
+                                if (hasUpgrade("t", 144))       ret = ret.plus(1.5)
                                 return ret
                         },
                         base(){
@@ -29330,6 +29457,9 @@ addLayer("tokens", {
                                 return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coefficient)
                         },
                         effect(){
+                                if (hasUpgrade("t", 143)) {
+                                        return tmp.tokens.buyables[112].base.times(player.tokens.buyables[112]).max(player.tokens.bestStrange)
+                                }
                                 return tmp.tokens.buyables[112].base.times(player.tokens.buyables[112])
                         },
                         unlocked(){
@@ -29367,7 +29497,12 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return br + end
+                                if (!hasUpgrade("t", 143)) return br + end
+
+                                let bestDisplay = "Currently: " + format(tmp.tokens.buyables[112].base.times(player.tokens.buyables[112])) 
+                                bestDisplay += "/" + format(player.tokens.bestStrange)
+
+                                return br + end + br + bestDisplay
                         },
                 },
                 191: {
@@ -30732,7 +30867,7 @@ addLayer("tokens", {
                                         let a = "Current tetrational scaling formula: "
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
                                         let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + TOKEN_COSTS.length)
-                                        return a + "<sup>3+(Tokens-" + sub + ")/" + div + "</sup>10"
+                                        return br + a + "<sup>3+(Tokens-" + sub + ")/" + div + "</sup>10"
                                 }],
                         ],
                         unlocked(){
