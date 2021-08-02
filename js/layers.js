@@ -38,7 +38,7 @@ function getPointExponentiation(){
         if (hasMilestone("l", 18))      {
                                         exp = exp.times(2)
                 if (player.l.challenges[11] == 33) {
-                                        exp = exp.times(1.5)
+                                        exp = exp.times(1.6)
                 }
         }
         if (hasUpgrade("mu", 51))       exp = exp.times(player.l.points.max(10).log10())
@@ -7475,7 +7475,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.5 if you are at exactly 33 completions.<br>"
+                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.6 if you are at exactly 33 completions.<br>"
                                 return a
                         },
                 }, // hasMilestone("l", 18)
