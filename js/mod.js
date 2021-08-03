@@ -22,7 +22,7 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		1e38255 Tissues and reaching the endgame screen<br><br>
+		1e42035 Tissues and reaching the endgame screen<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
