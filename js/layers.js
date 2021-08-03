@@ -12586,6 +12586,14 @@ addLayer("a", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("cells", 63)) {
+                                        let base = player.tokens.total.max(1)
+                                        let exp = player.tokens.tokens2.total
+
+                                        let ret = base.pow(exp)
+
+                                        return ret
+                                }
                                 if (hasMilestone("cells", 54)){
                                         let ret = player.l.points.max(10).log10()
 
@@ -12617,8 +12625,9 @@ addLayer("a", {
                                 if (hasMilestone("cells", 18)) {
                                         eformula = eformula.replace("[Non zero gem challenges]", "64+sqrt(Omnipotent)")
                                 }
-                                if (hasMilestone("cells", 35)) eformula = eformula.replace("+sqrt(Omnipotent)", "*Omnipotent")
-                                if (hasMilestone("cells", 54)) eformula = eformula.replace("64*Omnipotent", "log10(Lives)")
+                                if (hasMilestone("cells", 35))  eformula = eformula.replace("+sqrt(Omnipotent)", "*Omnipotent")
+                                if (hasMilestone("cells", 54))  eformula = eformula.replace("64*Omnipotent", "log10(Lives)")
+                                if (hasUpgrade("cells", 63))    eformula = eformula.replace("log10(Lives)", "(Tokens<sup>Tokens II</sup>)")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -12895,6 +12904,7 @@ addLayer("a", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("cells", 63))    return player.points.max(10).log10().max(10).log10()
                                 if (layers.l.grid.getGemEffect(806)) return getBuyableAmount("a", 22).max(1)
                                 let ret = getBuyableAmount("a", 22).max(Math.E).ln()
                                 
@@ -12915,6 +12925,7 @@ addLayer("a", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 32)) + " Protein</b><br>"
                                 let eformula = "ln(siRNA levels)^x<br>" + format(tmp.a.buyables[32].base) + "^x"
                                 if (layers.l.grid.getGemEffect(806)) eformula = eformula.replace("ln", "")
+                                if (hasUpgrade("cells", 63)) eformula = eformula.replace("siRNA levels", "log10(log10(Points))")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -13452,13 +13463,15 @@ addLayer("d", {
                 if (hasUpgrade("cells", 113))   ret = ret.times(tmp.cells.upgrades[113].effect)
                                                 ret = ret.times(tmp.t.effect)
                 if (hasUpgrade("t", 112))       ret = ret.times(tmp.t.effect.pow(player.t.upgrades.length))
-
-                                                
                 if (hasChallenge("l", 111)) {
                         let gain = tmp.l.challenges[21].reward
                                                 ret = ret.times(gain.min(ret.sqrt()))
                 }
-                                                
+                if (player.cells.challenges[21] >= 1) {
+                        let base = player.points.max(10).log10().max(10).log10()
+                        let exp = player.cells.upgrades.length
+                                                ret = ret.times(base.pow(exp))
+                }                               
 
                 return ret.max(1)
         },
@@ -15455,6 +15468,45 @@ addLayer("cells", {
                         unlocked(){
                                 return player.cells.challenges[11] >= 24
                         }, // hasUpgrade("cells", 61)
+                },
+                62: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXVII"
+                        },
+                        description(){
+                                let a = "Unlock Tertiary"
+                                return a
+                        },
+                        cost:() => new Decimal("1e36963"),
+                        unlocked(){
+                                return hasUpgrade("t", 145)
+                        }, // hasUpgrade("cells", 62)
+                },
+                63: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXVIII"
+                        },
+                        description(){
+                                let a = "rRNA base is Tokens<sup>Tokens II</sup> and snRNA base is log10(log10(Points))"
+                                return a
+                        },
+                        cost:() => new Decimal("1e37682"),
+                        unlocked(){
+                                return hasUpgrade("cells", 62)
+                        }, // hasUpgrade("cells", 63)
+                },
+                64: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXIX"
+                        },
+                        description(){
+                                let a = "C74 Gems effect is 1.04, but remove Life buyables [not yet at all]"
+                                return a
+                        },
+                        cost:() => new Decimal("1e10038255"),
+                        unlocked(){
+                                return hasUpgrade("cells", 63)
+                        }, // hasUpgrade("cells", 64)
                 },
                 111: {
                         title(){
@@ -17509,6 +17561,47 @@ addLayer("cells", {
                         completionLimit: 95,
                         countsAs: [],
                 }, // inChallenge("cells", 12) hasChallenge("cells", 12)
+                21: {
+                        name: "Tertiary",
+                        goal() {
+                                let exp = new Decimal(6675)
+
+                                let c = player.cells.challenges[21]
+
+                                exp = exp.times(Decimal.pow(5, c))
+
+                                return Decimal.pow(10, exp)
+                        },
+                        canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[21].goal),
+                        fullDisplay(){
+                                if (player.tab != "cells") return ""
+                                if (player.subtabs.cells.mainTabs != "Stem") return ""
+                                if (player.subtabs.cells.stem_content != "Challenges") return ""
+
+                                let a = "Disable the first" 
+                                if (player.cells.challenges[21] > 0) a += " " + formatWhole(player.cells.challenges[21]+1) 
+                                a += " Stem Cell buyable" + (player.cells.challenges[21] > 0 ? "s" : "")
+                                let b = "Goal: " + format(tmp.cells.challenges[21].goal) + " Stem Cells"
+                                let c = "Reward: To see all rewards go to the info tab"
+                                let d = "Next: "
+                                if (player.cells.challenges[21] == 0) {
+                                        d += "Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
+                                } else {
+                                        d += "not a thing yet"
+                                }
+                                let e = br + "Completion count: " + player.cells.challenges[21] + "/9"
+                                
+                                return a + br + b + br + c + br + d + e
+                        },
+                        unlocked(){
+                                return hasUpgrade("cells", 62)
+                        },
+                        onEnter(){
+                                layers.cells.challenges.onEnter()
+                        },
+                        completionLimit: 9,
+                        countsAs: [],
+                }, // inChallenge("cells", 21) hasChallenge("cells", 21)
         },
         buyables: {
                 rows: 10,
@@ -17593,6 +17686,7 @@ addLayer("cells", {
                                 return ret
                         },
                         base(){
+                                if (player.cells.challenges[21] >= 0 && inChallenge("cells", 21)) return decimalOne
                                 let init = player.cells.points.max(10).log10().log10().plus(tmp.cells.buyables[11].baseConstant)
 
                                 return init
@@ -17690,6 +17784,7 @@ addLayer("cells", {
                                 }
                         },
                         base(){
+                                if (player.cells.challenges[21] >= 1 && inChallenge("cells", 21)) return decimalOne
                                 let init = player.cells.stem_cells.points.max(10).log10()
 
                                 if (hasMilestone("cells", 41)) init = init.div(Math.log10(6))
@@ -17792,6 +17887,7 @@ addLayer("cells", {
                                 }
                         },
                         base(){
+                                if (player.cells.challenges[21] >= 2 && inChallenge("cells", 21)) return decimalOne
                                 let init = tmp.t.effectAmt.max(10).log10()
 
                                 if (hasUpgrade("t", 81))        init = init.times(Math.log(10)/Math.log(4))
@@ -17877,6 +17973,7 @@ addLayer("cells", {
                                 }
                         },
                         base(){
+                                if (player.cells.challenges[21] >= 3 && inChallenge("cells", 21)) return decimalOne
                                 let init = player.tokens.tokens2.total.max(1)
 
                                 return init
@@ -18454,7 +18551,17 @@ addLayer("cells", {
 
                                         let h = "log10(10+Stem cells) multiplies Cells and all minigame gain"
 
-                                        return part3 + br2 + h
+                                        if (player.cells.challenges[21] == 0) return part3 + br2 + h
+
+                                        let tertReward = br2 + "Current Tertiary rewards:" + br
+                                        if (player.cells.challenges[21] >= 1) {
+                                                tertReward += "1: Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
+                                                tertReward += br
+                                        }
+
+                                        let part4 = part3 + tertReward
+
+                                        return part4
                                 }],
                                 ],
                         unlocked(){
@@ -21266,6 +21373,9 @@ addLayer("ach", {
                                         }
                                         if (["Coins"].includes(player.subtabs.tokens.mainTabs)) {
                                                 layers.tokens.buyables[81].buy()
+                                        }
+                                        if (["II"].includes(player.subtabs.tokens.mainTabs)) {
+                                                layers.tokens.clickables[11].onClick()
                                         }
                                 }
                         },
