@@ -327,7 +327,7 @@ var GEM_EFFECT_FORMULAS = {
         701: (x) => x.gt(1330),
         702: (x) => x.cbrt().div(11).times(9).plus(1).round(),
         703: (x) => x.cbrt().plus(1),
-        704: (x) => x.plus(1).log10().div(100).plus(1),
+        704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(100).plus(1),
         705: (x) => x.gt(1330),
         706: (x) => x.cbrt().div(2200),
         707: (x) => x.gt(1330),
@@ -632,7 +632,9 @@ addLayer("h", {
                 data.time += diff
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
-        layerShown(){return !tmp.h.deactivated},
+        layerShown(){
+                return !tmp.h.deactivated
+        },
         prestigeButtonText(){
                 return "hello"
         },
@@ -1864,7 +1866,10 @@ addLayer("c", {
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
-        layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.c.deactivated},
+        layerShown(){
+                if (tmp.c.deactivated) return false
+                return hasUpgrade("h", 55) || tmp.n.layerShown
+        },
         prestigeButtonText(){
                 return "hello"
         },
@@ -2341,7 +2346,10 @@ addLayer("o", {
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
-        layerShown(){return (hasUpgrade("h", 55) || tmp.n.layerShown) && !tmp.o.deactivated},
+        layerShown(){
+                if (tmp.o.deactivated) return false
+                return hasUpgrade("h", 55) || tmp.n.layerShown
+        },
         prestigeButtonText(){
                 return "hello"
         },
@@ -2857,7 +2865,10 @@ addLayer("n", {
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
-        layerShown(){return (hasUpgrade("mini", 45) || player.n.best.gt(0) || player.p.best.gt(0)) && !tmp.n.deactivated},
+        layerShown(){
+                if (tmp.n.deactivated) return false
+                return hasUpgrade("mini", 45) || player.n.best.gt(0) || player.p.best.gt(0)
+        },
         prestigeButtonText(){
                 if (player.tab != "n") return ""
                 
@@ -4367,7 +4378,11 @@ addLayer("p", {
                 let end2 = " and Nitrogen gain by " + format(player.p.points.plus(1))
                 return init + end2 + end
         },
+        deactivated(){
+                return hasUpgrade("t", 151)
+        },
         update(diff){
+                if (hasUpgrade("t", 151)) return 
                 let data = player.p
                 
                 if (tmp.p.layerShown) data.unlocked = true
@@ -4408,7 +4423,10 @@ addLayer("p", {
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
-        layerShown(){return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown},
+        layerShown(){
+                if (hasUpgrade("t", 151)) return false
+                return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown
+        },
         prestigeButtonText(){
                 if (player.tab != "p") return ""
                 
@@ -5356,7 +5374,11 @@ addLayer("mu", {
         autoPrestige(){
                 return hasUpgrade("mu", 35)
         },
+        deactivated(){
+                return hasUpgrade("t", 151)
+        },
         update(diff){
+                if (hasUpgrade("t", 151)) return 
                 let data = player.mu
                 
                 if (tmp.mu.layerShown) data.unlocked = true
@@ -5395,7 +5417,10 @@ addLayer("mu", {
         canBuyMax(){
                 return hasUpgrade("mu", 22) || hasMilestone("d", 1)
         },
-        layerShown(){return hasUpgrade("p", 25) || tmp.a.layerShown},
+        layerShown(){
+                if (hasUpgrade("t", 151)) return false
+                return hasUpgrade("p", 25) || tmp.a.layerShown
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -7034,7 +7059,7 @@ addLayer("l", {
 
                 let universalAllowed = !inChallenge("l", 11) || layers.l.grid.getGemEffect(407)
 
-                if (hasMilestone("l", 21) && universalAllowed && data.time > 1) {
+                if (hasMilestone("l", 21) && universalAllowed && data.time > 1 && !hasUpgrade("t", 151)) {
                         let str = "ee40"
                         if (hasMilestone("l", 22))      str = "ee43"
                         if (hasUpgrade("p", 41))        str = "ee45"
@@ -7110,23 +7135,9 @@ addLayer("l", {
 
                 return a + b
         },
-        layerShown(){return player.l.unlocked},
-        upgrades: {
-                rows: 10,
-                cols: 5,
-                11: {
-                        title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life I"
-                        },
-                        description(){
-                                let a = "Each constant multiplies E Point gain by log10(10+µ) and " + makeRed("E") + " multiplies Phosphorus gain"
-                                return a
-                        },
-                        cost:() => new Decimal(2),
-                        unlocked(){
-                                return false
-                        }, // hasUpgrade("l", 11)
-                },
+        layerShown(){
+                if (tmp.l.deactivated) return false
+                return player.l.unlocked
         },
         milestones: {
                 1: {
@@ -9976,7 +9987,7 @@ addLayer("l", {
                                 ["buyables", [1,2,3]],
                                 ],
                         unlocked(){
-                                return player.l.challenges[11] >= 30 || player.a.unlocked
+                                return (player.l.challenges[11] >= 30 || player.a.unlocked) && !hasUpgrade("cells", 64)
                         },
                         shouldNotify(){
                                 if (hasMilestone("a", 5) && data.autobuylbuys || hasMilestone("d", 1)) return false
@@ -10568,7 +10579,7 @@ addLayer("a", {
                         }
                 } else data.gemPassiveTime = 0
 
-                if (hasMilestone("a", 5) && data.autobuylbuys || hasMilestone("d", 1)) {
+                if (((hasMilestone("a", 5) && data.autobuylbuys) || hasMilestone("d", 1)) && !hasUpgrade("cells", 64)) {
                         if (data.autoBuyableTime > 10) data.autoBuyableTime = 10
                         if (data.autoBuyableTime > 1) {
                                 data.autoBuyableTime += -1
@@ -10657,7 +10668,10 @@ addLayer("a", {
 
                 return a + b
         },
-        layerShown(){return player.a.unlocked},
+        layerShown(){
+                if (tmp.a.deactivated) return false
+                return player.a.unlocked
+        },
         protein: {
                 getAUpgBase(){
                         let aUpgBase = decimalOne
@@ -12507,6 +12521,7 @@ addLayer("a", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("t", 151)) return new Decimal("ee13")
                                 if (hasMilestone("cells", 29)) return player.mu.points.max(1)
                                 let ret = player.l.points.max(10).log10()
 
@@ -12545,6 +12560,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 12)) eformula = eformula.replace("log3", "ln")
                                 if (hasMilestone("d", 13)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 29)) eformula = eformula.replace("log2(Lives)", "µ")
+                                if (hasUpgrade("t", 151)) eformula = eformula.replace("µ", "e1e13")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -13248,7 +13264,14 @@ addLayer("a", {
                                         if (hasMilestone("a", 29)) {
                                                 let base = getBuyableAmount("a", 13).div(100).plus(1)
                                                 let exp = getBuyableAmount("a", 22)
-                                                let m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
+                                                //let m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
+                                                let m29mi 
+                                                if (getBuyableAmount("a", 13).lt(1e8)) {
+                                                        m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
+                                                } else { // the second order term is -.5/miRNA levels compared to the primary
+                                                        m29mi = Decimal.pow(Math.E, exp.times(.01).div(base))
+                                                }
+
                                                 j += "<br>Milestone 29 makes the next siRNA give a " + doEndingFormula(base)
                                                 j += "<br> and the next miRNA give a " + doEndingFormula(m29mi)
                                                 boostPer[22] = boostPer[22].times(base)
@@ -13561,7 +13584,10 @@ addLayer("d", {
 
                 return a + b
         },
-        layerShown(){return player.d.best.gt(0) || hasUpgrade("a", 65) || tmp.cells.layerShown},
+        layerShown(){
+                if (tmp.d.deactivated) return false
+                return player.d.best.gt(0) || hasUpgrade("a", 65) || tmp.cells.layerShown
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -15103,7 +15129,10 @@ addLayer("cells", {
 
                 return a + b
         },
-        layerShown(){return hasUpgrade("d", 35) || player.cells.unlocked},
+        layerShown(){
+                if (tmp.cells.deactivated) return false
+                return hasUpgrade("d", 35) || player.cells.unlocked
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -15507,13 +15536,39 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXIX"
                         },
                         description(){
-                                let a = "C74 Gems effect is 1.04, but remove Life buyables [not yet at all]"
+                                let a = "C74 Gems effect is 1.04 and per upgrade add .022 to Omnipotent base, but remove Life buyables"
                                 return a
                         },
-                        cost:() => new Decimal("1e10038255"),
+                        cost:() => new Decimal("1e38255"),
+                        onPurchase(){
+                                player.l.buyables[11] = decimalZero
+                                player.l.buyables[12] = decimalZero
+                                player.l.buyables[13] = decimalZero
+                                player.l.buyables[21] = decimalZero
+                                player.l.buyables[22] = decimalZero
+                                player.l.buyables[23] = decimalZero
+                                player.l.buyables[31] = decimalZero
+                                player.l.buyables[32] = decimalZero
+                                player.l.buyables[33] = decimalZero
+                                player.mu.buyables[31] = decimalZero
+                                if (player.subtabs.l.mainTabs == "Buyables") player.subtabs.l.mainTabs = "Info"
+                        },
                         unlocked(){
                                 return hasUpgrade("cells", 63)
                         }, // hasUpgrade("cells", 64)
+                },
+                65: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXX"
+                        },
+                        description(){
+                                let a = "Bottom Quark is based on best"
+                                return a
+                        },
+                        cost:() => new Decimal("1e38590"),
+                        unlocked(){
+                                return hasUpgrade("cells", 64)
+                        }, // hasUpgrade("cells", 65)
                 },
                 111: {
                         title(){
@@ -17689,6 +17744,7 @@ addLayer("cells", {
                                 if (hasMilestone("t", 15))      ret = ret.plus(.013 * player.t.upgrades.length)
                                                                 ret = ret.plus(tmp.tokens.buyables[101].effect)
                                 if (hasUpgrade("t", 133))       ret = ret.plus(player.tokens.tokens2.total.times(.002))
+                                if (hasUpgrade("cells", 64))    ret = ret.plus(.022 * player.cells.upgrades.length)
 
                                 return ret
                         },
@@ -18901,7 +18957,10 @@ addLayer("t", {
 
                 return a + b
         },
-        layerShown(){return hasUpgrade("cells", 415) || player.t.unlocked},
+        layerShown(){
+                if (tmp.t.deactivated) return false
+                return hasUpgrade("cells", 415) || player.t.unlocked
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -20019,6 +20078,30 @@ addLayer("t", {
                                 return hasUpgrade("t", 144)
                         }, // hasUpgrade("t", 145)
                 },
+                151: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXXI"
+                        },
+                        description(){
+                                let a = "miRNA base is e1e13 but deactivate and nullify Phosphorus and µ<sup>**</sup>"
+                                return a
+                        },
+                        onPurchase(){
+                                player.p.upgrades = []
+                                player.mu.upgrades = []
+                                player.mu.buyables[31] = decimalZero
+                                player.mu.buyables[32] = decimalZero
+                                player.p.points = decimalZero
+                                player.mu.points = decimalZero
+                                player.p.currentGainPerSec = decimalZero
+                                player.p.best_over_amino = decimalZero
+                                updateTemp()
+                        }, // the only thing that is changed is hasMilestone("cells", 39)
+                        cost:() => new Decimal(5e64),
+                        unlocked(){
+                                return hasUpgrade("cells", 65) || hasUpgrade("t", 151)
+                        }, // hasUpgrade("t", 151)
+                },
         },
         milestones: {
                 1: {
@@ -20616,7 +20699,13 @@ addLayer("t", {
 
                                         let e = "<sup>*</sup> The effect to DNA effect exponent is maxed at 2e8."
 
-                                        return part1 + br + e
+                                        if (!hasUpgrade("cells", 65)) return part1 + br2 + e
+
+                                        let f = "<sup>**</sup> Nullifies Phosphrous and µ upgrades, µ buyables, and sets Phosphorus and µ to zero."
+
+                                        let part2 = part1 + br2 + e + br2 + f 
+
+                                        return part2
                                 }],
                                 ],
                         unlocked(){
@@ -20899,6 +20988,28 @@ addLayer("mc", {
                         }
                 }
         },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return makeBlue("Jump to Stem Cells")
+                        },
+                        display(){
+                                return ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.subtabs.cells.mainTabs = "Stem"
+                                player.tab = "cells"
+                        },
+                },
+        },
         layerShown(){return hasMilestone("cells", 21)},
         tabFormat: {
                 "Activate": {
@@ -20914,6 +21025,8 @@ addLayer("mc", {
                                         ]
                                         ]
                                 ],
+                                "blank",
+                                "clickables",
                         ],
                         unlocked(){
                                 return true
@@ -20933,6 +21046,8 @@ addLayer("mc", {
                                         ]
                                         ]
                                 ],
+                                "blank",
+                                "clickables",
                         ],
                         unlocked(){
                                 return true
@@ -20952,6 +21067,8 @@ addLayer("mc", {
                                         ]
                                         ]
                                 ],
+                                "blank",
+                                "clickables",
                         ],
                         unlocked(){
                                 return true
@@ -20971,6 +21088,8 @@ addLayer("mc", {
                                         ]
                                         ]
                                 ],
+                                "blank",
+                                "clickables",
                         ],
                         unlocked(){
                                 return true
@@ -20994,6 +21113,8 @@ addLayer("mc", {
                                         ]
                                         ]
                                 ],
+                                "blank",
+                                "clickables",
                         ],
                         unlocked(){
                                 return true
@@ -21823,7 +21944,10 @@ addLayer("mini", {
                 }
         },
         row: "side",
-        layerShown(){return (hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown) && !tmp.mini.deactivated},
+        layerShown(){
+                if (tmp.mini.deactivated) return false
+                return hasUpgrade("h", 45) || hasUpgrade("h", 44) || tmp.n.layerShown
+        },
         prestigeButtonText(){
                 return ""
         },
@@ -27913,6 +28037,7 @@ addLayer("tokens", {
                 },
                 bestStrange: decimalZero,
                 bestTop: decimalZero,
+                bestBottom: decimalOne,
                 tokens2: {
                         total: decimalZero,
                         points: decimalZero,
@@ -27995,11 +28120,19 @@ addLayer("tokens", {
                 let tetrationalScaling = tmp.tokens.getTetrationScalingDivisor
 
                 if (getid >= len) {
-                        let diff = 3 + (getid - len) / tetrationalScaling
-                        return new Decimal(diff + "pt10")
+                        let diff = 4 + (getid - len) / tetrationalScaling
+                        return new Decimal(diff + "pt")
                 }
                 let add = player.hardMode ? 4 : 0
                 return Decimal.pow(10, TOKEN_COSTS[getid]).times(Decimal.pow(10, add))
+
+                /*
+                Generalized formula: 
+                player.points.slog().sub(4).times(tmp.tokens.getTetrationScalingDivisor).plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil().plus(1)
+                = player.points.slog().sub(4).times(tmp.tokens.getTetrationScalingDivisor).plus(88).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
+
+
+                */
         },
         update(diff){
                 let data = player.tokens
@@ -28052,6 +28185,7 @@ addLayer("tokens", {
 
                 data.bestStrange = data.bestStrange.max(tmp.tokens.buyables[112].effect)
                 data.bestTop = data.bestTop.max(tmp.tokens.buyables[121].effect)
+                data.bestBottom = data.bestBottom.max(tmp.tokens.buyables[122].effect)
         },
         resetsNothing(){
                 return hasMilestone("n", 11) || hasMilestone("l", 1)
@@ -28081,13 +28215,15 @@ addLayer("tokens", {
                 },
         },
         row: "side",
-        layerShown(){return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown},
+        layerShown(){
+                return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown
+        },
         prestigeButtonText(){
                 if (player.tab != "tokens") return ""
                 if (!["Milestones", "Old"].includes(player.subtabs.tokens.mainTabs)) return ""
 
                 if (player.tokens.total.gt(100)) {
-                        return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
+                        return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt, 3) + " Life Points"
                 }
                 
                 return "Reset for a token (" + formatWhole(player.tokens.total.plus(1)) + ")<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
@@ -29755,6 +29891,9 @@ addLayer("tokens", {
                                 return c.times(30).plus(100).div(r.plus(20))
                         },
                         effect(){
+                                if (hasUpgrade("cells", 65)) {
+                                        return tmp.tokens.buyables[122].base.pow(player.tokens.buyables[122]).max(player.tokens.bestBottom)
+                                }
                                 return tmp.tokens.buyables[122].base.pow(player.tokens.buyables[122])
                         },
                         unlocked(){
@@ -29791,7 +29930,12 @@ addLayer("tokens", {
                                 let allCost = cost1 + cost2 + cost3
 
                                 let end = allEff + allCost
-                                return br + end
+                                if (!hasUpgrade("cells", 65)) return br + end
+
+                                let bestDisplay = "Currently: " + format(tmp.tokens.buyables[122].base.pow(player.tokens.buyables[122])) 
+                                bestDisplay += "/" + format(player.tokens.bestBottom)
+
+                                return br + end + br + bestDisplay
                         },
                 },
                 191: {
@@ -31156,7 +31300,7 @@ addLayer("tokens", {
                                         let a = "Current tetrational scaling formula: "
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
                                         let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + TOKEN_COSTS.length)
-                                        return br + a + "<sup>3+(Tokens-" + sub + ")/" + div + "</sup>10"
+                                        return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>10"
                                 }],
                         ],
                         unlocked(){

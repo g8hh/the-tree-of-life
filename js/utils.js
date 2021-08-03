@@ -155,6 +155,7 @@ function buyUpg(layer, id) {
 	if (!player[layer].unlocked) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(id)) return
+	if (tmp[layer].deactivated) return 
 	if (upg.canAfford === false) return
 	let pay = layers[layer].upgrades[id].pay
 	if (pay !== undefined) run(pay, layers[layer].upgrades[id])

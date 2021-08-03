@@ -12,12 +12,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.097.1",
+	num: "1.098",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("1e38255")
+	return player.cells.points.gte("1e42035")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -29,6 +29,18 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.098</h3><br>
+		- Added a custom save.<br>
+		- Made it so you cannot buy upgrades of a disabled layer.<br>
+		- Added two Cell upgrades.<br>
+		- Added a Tissue upgrade.<br>
+		- Removed Phosphorus and µ.<br>
+		- Removed Life buyables.<br>
+		- Removed some unnecessary code for a Life upgrade.<br>
+		- Fixed the display for Amino Milestone 29 (ln(1+x) ~ x - .5x<sup>2</sup>).<br>
+		- Made a clickable for the M<sub>C</sub> tab for jumping to Stem Cells.<br>
+		- Fixed tetrational token cost display formula.<br>
+		- Various code clearnup.<br>
 	<br><h3 style='color: #CC0000'>v1.097.1</h3><br>
 		- Fixed some issues with need respec not displaying.<br>
 		- Added a custom save.<br>
