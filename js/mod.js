@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.097",
+	num: "1.097.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,11 +29,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.097.1</h3><br>
+		- Fixed some issues with need respec not displaying.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.097</h3><br>
 		- Added three Cell upgrades.<br>
 		- Added a Cell challenge.<br>
 		- Made the 's' hotkey work for Token II.<br>
-		- 
 	<br><h3 style='color: #CC0000'>v1.096</h3><br>
 		- Capped Tissue milestone 18 at 1.5x.<br>
 		- Added two Token buyables.<br>

@@ -4211,6 +4211,9 @@ addLayer("n", {
                         player.h.deuterium.points = decimalZero
                         player.h.deuterium.best = decimalZero
                 }
+
+                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
+                // make the display update
         },
         deactivated(){
                 return inChallenge("l", 41) || hasChallenge("l", 41)
@@ -5247,7 +5250,8 @@ addLayer("p", {
                         } // reset buyables
                 }
 
-                
+                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
+                // make the display update
         },
 })
 
@@ -10351,6 +10355,9 @@ addLayer("l", {
                                 data8.upgrades = filterOut(data8.upgrades, hUpgRem)
                         }
                 }
+
+                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
+                // make the display update
         },
 })
 
@@ -27901,6 +27908,8 @@ addLayer("tokens", {
                         102: decimalZero,
                         111: decimalZero,
                         112: decimalZero,
+                        121: decimalZero,
+                        122: decimalZero,
                 },
                 bestStrange: decimalZero,
                 bestTop: decimalZero,
@@ -28112,6 +28121,7 @@ addLayer("tokens", {
                                 let y = parseFloat("." + y2)
                                 doIt = y < x
                         }
+                        if (lrdf.includes("ceil") && cft.includes("round")) doIt = true
                         if (lrdf.includes("round") && cft.includes("floor")) doIt = true
                         if (!lrdf.includes("max") && cft.includes("max")) doIt = true
                         if (doIt) end = br + "Need Respec"
