@@ -12,12 +12,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.098",
+	num: "1.099",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("1e42035")
+	return player.t.points.gte("1e100")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -29,6 +29,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.099</h3><br>
+		- Added four Tissue upgrades.<br>
+		- Added a second Tiertiary completion/reward.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.098</h3><br>
 		- Added a custom save.<br>
 		- Made it so you cannot buy upgrades of a disabled layer.<br>
