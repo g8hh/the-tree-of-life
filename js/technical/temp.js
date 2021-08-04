@@ -82,10 +82,8 @@ function setupTempData(layerData, tmpData, funcsData) {
 		}
 		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
 			funcsData[item] = layerData[item]
-			if (boolNames.includes(item))
-				tmpData[item] = false
-			else
-				tmpData[item] = decimalOne // The safest thing to put probably?
+			if (boolNames.includes(item)) tmpData[item] = false
+			else tmpData[item] = decimalOne // The safest thing to put probably?
 		} else {
 			tmpData[item] = layerData[item]
 		}
@@ -126,7 +124,10 @@ function updateTemp(noError = false) {
 function updateTempData(layerData, tmpData, funcsData, useThis, noError = false, firstStep = false) {
 	for (item in funcsData){
 		if (firstStep && !noError) {
-			if (tmp[item].deactivated) continue
+			if (tmp[item].deactivated) {
+				tmp[item].deactivated = layers[item].deactivated() 
+				if (tmp[item].deactivated) continue
+			}
 		}
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed

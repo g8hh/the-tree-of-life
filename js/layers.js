@@ -4424,7 +4424,7 @@ addLayer("p", {
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         layerShown(){
-                if (hasUpgrade("t", 151)) return false
+                if (tmp.p.deactivated) return false
                 return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown
         },
         prestigeButtonText(){
@@ -5418,7 +5418,7 @@ addLayer("mu", {
                 return hasUpgrade("mu", 22) || hasMilestone("d", 1)
         },
         layerShown(){
-                if (hasUpgrade("t", 151)) return false
+                if (tmp.mu.deactivated) return false
                 return hasUpgrade("p", 25) || tmp.a.layerShown
         },
         upgrades: {
@@ -17660,7 +17660,7 @@ addLayer("cells", {
                                 return a + br + b + br + c + br + d + e
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 62)
+                                return hasUpgrade("cells", 62) || player.cells.challenges[21] >= 1
                         },
                         onEnter(){
                                 layers.cells.challenges.onEnter()
@@ -20081,7 +20081,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXIX"
                         },
                         description(){
-                                let a = "<bdi style='font-size: 80%'>Unlock two Cell buyables, add 1.5 to Down and Strange Quark's coefficient, and per upgrade double Stem Cell gain</bdi>"
+                                let a = "<bdi style='font-size: 80%'>Unlock two Token buyables, add 1.5 to Down and Strange Quark's coefficient, and per upgrade double Stem Cell gain</bdi>"
                                 return a
                         },
                         cost:() => new Decimal(2e42),
