@@ -12,23 +12,38 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.099",
+	num: "1.100",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.t.points.gte("1e100")
+	return player.or.total.gt(1)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		1e42035 Tissues and reaching the endgame screen<br><br>
+		2 total Organs and reaching the endgame screen<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.100</h3><br>
+		- Added Organs.<br>
+		- Added a Organ upgrade.<br>
+		- Added a Organ milestone.<br>
+		- Fixed an issue with layers un-deactivated-ing.<br>
+		- Subtabs no longer notify when the tab is hidden.<br>
+		- Fixed a bug with Cells being able to reset too early after some upgrades.<br>
+		- Fixed a typo in Tissues XIX display.<br>
+		- Fixed a typo with Tissue reset saying Cells.<br>
+		- Token auto prestiging now uses autoPrestige, meaning it doesnt notify.<br>
+		- Tokens now are cheaper when you are resetting "with" negative tokens.<br>
+		- Added Micro.<br>
+		- Added three Micro buyables.<br>
+		- Added a custom save.<br>
+<bdi style='color: #FFAAFF'>- Note that I now have plans for easy and (sorta) for extreme mode.</bdi><br>
 	<br><h3 style='color: #CC0000'>v1.099</h3><br>
 		- Added four Tissue upgrades.<br>
 		- Added a second Tiertiary completion/reward.<br>
@@ -1132,6 +1147,7 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 	},
 ]

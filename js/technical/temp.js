@@ -61,9 +61,7 @@ const boolNames = ["unlocked", "deactivated"]
 
 function setupTempData(layerData, tmpData, funcsData) {
 	for (item in layerData){
-		if (layerData[item] == null) {
-			tmpData[item] = null
-		}
+		if (layerData[item] == null) tmpData[item] = null
 		else if (layerData[item] instanceof Decimal)
 			tmpData[item] = layerData[item]
 		else if (Array.isArray(layerData[item])) {
@@ -124,9 +122,8 @@ function updateTemp(noError = false) {
 function updateTempData(layerData, tmpData, funcsData, useThis, noError = false, firstStep = false) {
 	for (item in funcsData){
 		if (firstStep && !noError) {
-			if (tmp[item].deactivated) {
-				tmp[item].deactivated = layers[item].deactivated() 
-				if (tmp[item].deactivated) continue
+			if (layers[item].deactivated) {
+				if (layers[item].deactivated()) continue
 			}
 		}
 		if (Array.isArray(layerData[item])) {
