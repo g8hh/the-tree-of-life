@@ -188,10 +188,9 @@ function sortStrings(l){
 var br = "<br>"
 var br2= br + br
 
-function dilate(x, exponent, base = new Decimal(10)){
+function dilate(x, exponent, base = 10){
         if (x.lt(base)) return x
-        let expNew = x.log(base).pow(exponent)
-        return base.pow(expNew)
+        return Decimal.pow(base, x.log(base).pow(exponent))
 }
 
 var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350, 
