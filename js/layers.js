@@ -21204,6 +21204,28 @@ addLayer("or", {
                                 return a + b
                         },
                 }, // hasMilestone("or", 1)
+                2: {
+                        requirementDescription(){
+                                return "Requires: 2 Organ resets"
+                        },
+                        requirement(){
+                                return new Decimal(2)
+                        },
+                        done(){
+                                return tmp.or.milestones[2].requirement.lte(player.or.times)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "or") return ""
+                                if (player.subtabs.or.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Bulk buy tokens and token tetrational base is 9.7."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("or", 2)
         },
         tabFormat: {
                 "Upgrades": {
@@ -21742,7 +21764,7 @@ addLayer("mc", {
                                 return player.mc.buyables[11].gt(2)
                         },
                         base(){
-                                let ret = player.tokens.total.log10()
+                                let ret = player.tokens.total.max(10).log10()
 
                                 return ret
                         },
@@ -28890,6 +28912,13 @@ addLayer("tokens", {
         baseAmount() {return player.points.floor()}, 
         type: "custom",
         getResetGain() {
+                if (hasMilestone("or", 2) && tmp.tokens.getNextAt.slog().gt(4)) {
+                        let tetBase = 9.7
+
+                        let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
+                        let canAff = portion.plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
+                        return canAff.sub(player.tokens.total).max(0)
+                } 
                 if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return decimalOne
                 return decimalZero
         },
@@ -28949,31 +28978,28 @@ addLayer("tokens", {
                 return ret
         },
         getNextAt(){
-                let len = TOKEN_COSTS.length //1e6-1, this is 87 currently
+                //1e6-1
+                let amt = player.tokens.total.toNumber()
 
-                let getid = player.tokens.total.toNumber()
-
-                getid -= tmp.tokens.getMinusEffectiveTokens
+                amt -= tmp.tokens.getMinusEffectiveTokens
                 
-                if (getid < 0) return Decimal.pow(10, 5000 + Math.floor(getid))
+                if (amt < 0) return Decimal.pow(10, 5000 + Math.floor(amt))
 
-                getid = Math.floor(getid)
+                amt = Math.floor(amt)
 
                 let tetrationalScaling = tmp.tokens.getTetrationScalingDivisor
 
-                if (getid >= len) {
-                        let diff = 4 + (getid - len) / tetrationalScaling
-                        return new Decimal(diff + "pt")
+                if (amt >= 87) {
+                        let tetBase = 10
+                        if (hasMilestone("or", 2)) tetBase = 9.7
+                        return Decimal.tetrate(tetBase, 4 + (amt - 87) / tetrationalScaling)
                 }
                 let add = player.hardMode ? 4 : 0
-                return Decimal.pow(10, TOKEN_COSTS[getid]).times(Decimal.pow(10, add))
+                return Decimal.pow(10, TOKEN_COSTS[amt]).times(Decimal.pow(10, add))
 
                 /*
                 Generalized formula: 
-                player.points.slog().sub(4).times(tmp.tokens.getTetrationScalingDivisor).plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil().plus(1)
-                = player.points.slog().sub(4).times(tmp.tokens.getTetrationScalingDivisor).plus(88).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
-
-
+                player.points.slog().sub(4).times(tmp.tokens.getTetrationScalingDivisor).plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
                 */
         },
         update(diff){
