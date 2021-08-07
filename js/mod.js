@@ -34,6 +34,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Cleaned up token cost function.<br>
 		- Added easy mode.<br>
 		- Various code cleanup.<br>
+		- Added a mode switcher tab.<br>
 	<br><h3 style='color: #CC0000'>v1.100</h3><br>
 		- Added Organs.<br>
 		- Added a Organ upgrade.<br>
@@ -1093,6 +1094,7 @@ function addedPlayerData() { return {
 	easyMode: false,
 	hardFromBeginning: false,
 	arrowHotkeys: true,
+	modTab: false,
 	lastLettersPressed: [],
 	targetWord: "johnson",
 	wordsSpelled: 0,
@@ -1268,11 +1270,15 @@ function toggleUndulating(){
 }
 
 function enterHardMode(){
+	let s = "Are you sure you want to enter hard mode? This cannot be undone."
+	if (!confirm(s)) return 
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
 
 function enterEasyMode(){
+	let s = "Are you sure you want to enter easy mode? This cannot be undone."
+	if (!confirm(s)) return 
 	player.easyMode = true
 }
 
