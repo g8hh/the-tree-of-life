@@ -24,11 +24,15 @@ function getPointMultiplier(){
                                         gain = gain.times(tmp.l.effect)
         if (hasUpgrade("mu", 44))       gain = gain.times(player.o.points.max(1))
 
+        if (player.easyMode)            gain = gain.times(4)
+
         return gain
 }
 
 function getPointExponentiation(){
         let exp = decimalOne
+
+        if (player.easyMode)            exp = exp.times(1.001)
         
         if (hasUpgrade("h", 25))        exp = exp.times(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        exp = exp.times(tmp.o.upgrades[13].effect)
@@ -595,6 +599,9 @@ addLayer("h", {
                 if (hasUpgrade("o", 21))        x = x.times(player.o.points.max(1).min("e2.2e11"))
                                                 x = x.times(tmp.n.effect)
                                                 x = x.times(tmp.l.effect)
+                if (player.easyMode)            x = x.times(2)
+
+                if (player.easyMode)            x = x.pow(1.001)
 
                 return x
         },
@@ -1843,6 +1850,9 @@ addLayer("c", {
                 }
                 if (hasUpgrade("mini", 64))     x = x.times(player.mini.d_points.fuel.max(1))
                                                 x = x.times(tmp.l.effect)
+                if (player.easyMode)            x = x.times(2)
+
+                if (player.easyMode)            x = x.pow(1.001)
 
                 return x
         },
@@ -1857,11 +1867,6 @@ addLayer("c", {
                 if (hasMilestone("mu", 1)) data.points = data.points.plus(tmp.c.getResetGain.times(diff))
                 else data.points = getLogisticAmount(data.points, tmp.c.getResetGain, tmp.c.getLossRate, diff)
 
-                if (false) {
-                        //do autobuyer stuff
-                } else {
-                        data.abtime = 0
-                }
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -1888,7 +1893,7 @@ addLayer("c", {
                                 if (hasUpgrade("tokens", 22)) a = a.replace("3)", "3)^2")
                                 return a
                         },
-                        cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2460 : 1024), //may change
+                        cost:() => Decimal.pow(2, hasUpgrade("o", 11) ? 2460 : 1024),
                         currencyLocation:() => player,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Life Points",
@@ -2323,6 +2328,9 @@ addLayer("o", {
                 }
                                                 x = x.times(tmp.n.effect)
                                                 x = x.times(tmp.l.effect)
+                if (player.easyMode)            x = x.times(2)
+
+                if (player.easyMode)            x = x.pow(1.001)
 
                 return x
         },
@@ -2337,11 +2345,6 @@ addLayer("o", {
                 if (hasMilestone("mu", 1)) data.points = data.points.plus(tmp.o.getResetGain.times(diff))
                 else data.points = getLogisticAmount(data.points, tmp.o.getResetGain, tmp.o.getLossRate, diff)
 
-                if (false) {
-                        //do autobuyer stuff
-                } else {
-                        data.abtime = 0
-                }
                 data.time += diff
         },
         row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -2786,6 +2789,9 @@ addLayer("n", {
                 }
                 if (hasUpgrade("p", 14))        x = x.times(tmp.p.upgrades[14].effect)
                                                 x = x.times(tmp.l.effect)
+                if (player.easyMode)            x = x.times(2)
+
+                if (player.easyMode)            x = x.pow(1.001)
 
                 return x
         },
@@ -2856,11 +2862,6 @@ addLayer("n", {
                         data.total = data.total.plus(diff * m)
                 }
 
-                if (false) {
-                        //do autobuyer stuff
-                } else {
-                        data.abtime = 0
-                }
                 data.time += diff
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
@@ -4047,7 +4048,9 @@ addLayer("n", {
                 return hasMilestone("l", 3)
         },
         onPrestige(){
-                player.n.times ++
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                player.n.times += timesAdd
         },
         doReset(layer){
                 /*
@@ -4311,6 +4314,7 @@ addLayer("p", {
                                                 x = x.times(tmp.l.effect)
                                                 x = x.times(tmp.t.effect)
                                                 x = x.times(tmp.or.effect)
+                if (player.easyMode)            x = x.times(2)
 
                 return x
         },
@@ -4443,7 +4447,7 @@ addLayer("p", {
                 return amt + nxt
         },
         canReset(){
-                return !false && tmp.p.getResetGain.gt(0)
+                return !hasUpgrade("p", 13) && tmp.p.getResetGain.gt(0)
         },
         upgrades: {
                 rows: 10,
@@ -5047,7 +5051,10 @@ addLayer("p", {
                 return hasMilestone("a", 1)
         },
         onPrestige(gain){
-                player.p.times += hasMilestone("l", 1) ? 3 : 1
+                let timesAdd = 1
+                if (hasMilestone("l", 1)) timesAdd *= 3
+                if (player.easyMode) timesAdd *= 2
+                player.p.times += timesAdd
                 player.p.currentGainPerSec = player.p.currentGainPerSec.plus(gain)
         },
         doReset(layer){
@@ -6599,7 +6606,7 @@ addLayer("mu", {
                                 return player.mu.points.div(tmp.mu.buyables[32].initialCost).log(tmp.mu.buyables[32].costBase).floor().plus(1).max(0)
                         },
                         getMaxBulk(){
-                                if (hasMilestone("d", 3) || hasUpgrade("cells", 11)) return new Decimal(Infinity)
+                                if (hasMilestone("d", 3) || hasUpgrade("cells", 11) || player.easyMode) return new Decimal(Infinity)
                                 let ret = decimalOne
 
                                 if (hasMilestone("l", 27)) ret = ret.times(5)
@@ -6699,7 +6706,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.l.points.gte(tmp.mu.buyables[33].cost) && !hasUpgrade("cells", 14),
                         getMaxBulk(){
-                                if (hasMilestone("d", 3) || hasUpgrade("cells", 11)) return new Decimal(Infinity)
+                                if (hasMilestone("d", 3) || hasUpgrade("cells", 11) || player.easyMode) return new Decimal(Infinity)
                                 return decimalOne
                         },
                         buy(){
@@ -6942,6 +6949,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.cells.effect)
                                                 ret = ret.times(tmp.t.effect)
                                                 ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
 
                 return ret.max(1)
         },
@@ -7124,7 +7132,6 @@ addLayer("l", {
                         let gemGain = gemPercentGainps.times(tmp.l.challenges[12].reward).times(diff)
                         player.l.grid[gainId].gems = player.l.grid[gainId].gems.plus(gemGain)
                 }
-                
         },
         row: 3, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -7960,6 +7967,7 @@ addLayer("l", {
                         if (hasMilestone("cells", 27)) maxBulk *= 20
                         if (hasMilestone("cells", 28)) maxBulk *= 20
                         if (hasMilestone("cells", 30)) maxBulk *= 1000
+                        if (player.easyMode) maxBulk = 2e10
 
                         return maxBulk
                 }, // tmp.l.buyables.getMaxBulk
@@ -9932,7 +9940,6 @@ addLayer("l", {
                         "Dilation": {
                                 content: [
                                         ["challenges", [1]],
-                                        
                                 ],
                                 unlocked(){
                                         return true
@@ -10076,8 +10083,10 @@ addLayer("l", {
                 
         },
         onPrestige(){
-                player.l.times ++
-                if (hasMilestone("a", 1)) player.l.times += 2
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                if (hasMilestone("a", 1)) timesAdd *= 3
+                player.l.times += timesAdd
                 player.l.time = 0
         },
         doReset(layer){
@@ -10166,7 +10175,6 @@ addLayer("l", {
                 data2.points = decimalZero
                 data2.best = decimalZero
                 data2.total = decimalZero
-                //data2.best_over_amino = decimalZero
 
                 // 3: Nitrogen conent
                 if (!hasMilestone("d", 1)) {
@@ -10175,7 +10183,7 @@ addLayer("l", {
                                        31, 32, 33, 34, 35,
                                        41, 42, 43, 44, 45,
                                        51, 52, 53, 54, 55,]
-                        if (!hasMilestone("a", 6)) {// upgrades
+                        if (!hasMilestone("a", 6)) {
                                 data3.upgrades = filterOut(data3.upgrades, nUpgRem)
                         }
 
@@ -10441,6 +10449,7 @@ addLayer("a", {
                 if (hasMilestone("cells", 10))  ret = ret.times(player.cells.total13.max(1))
                                                 ret = ret.times(tmp.t.effect)
                                                 ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
 
                 return ret
         },
@@ -10736,6 +10745,7 @@ addLayer("a", {
                                                         ret = ret.times(tmp.cells.effect)
                                                         ret = ret.times(tmp.t.effect)
                                                         ret = ret.times(tmp.or.effect)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         return ret
                 },
@@ -12337,7 +12347,7 @@ addLayer("a", {
                                 if (!this.canAfford()) return 
                                 let data = player.a
                                 let ma = tmp.a.buyables[11].maxAfford
-                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) ? ma.sub(data.buyables[11]) : 1
+                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) || player.easyMode ? ma.sub(data.buyables[11]) : 1
                                 data.buyables[11] = data.buyables[11].plus(up)
                                 if (!hasUpgrade("a", 32)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[11].cost)
@@ -12445,7 +12455,7 @@ addLayer("a", {
                                 if (!this.canAfford()) return 
                                 let data = player.a
                                 let ma = tmp.a.buyables[12].maxAfford
-                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) ? ma.sub(data.buyables[12]) : 1
+                                let up = hasMilestone("a", 23) || hasMilestone("d", 1) || player.easyMode ? ma.sub(data.buyables[12]) : 1
                                 data.buyables[12] = data.buyables[12].plus(up)
                                 if (!hasUpgrade("a", 32)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[12].cost)
@@ -12521,7 +12531,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 13
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12609,7 +12619,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 21
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12699,7 +12709,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 22
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12772,7 +12782,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 23
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12847,7 +12857,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 31
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12927,7 +12937,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 32
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -12997,7 +13007,7 @@ addLayer("a", {
                                 let data = player.a
                                 let id = 33
                                 let ma = tmp.a.buyables[id].maxAfford
-                                let up = hasUpgrade("a", 53) ? ma.sub(data.buyables[id]) : 1
+                                let up = hasUpgrade("a", 53) || player.easyMode ? ma.sub(data.buyables[id]) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 48)) {
                                         data.protein.points = data.protein.points.sub(tmp.a.buyables[id].cost)
@@ -13333,8 +13343,10 @@ addLayer("a", {
                 },
         },
         onPrestige(){
-                player.a.times ++
-                if (hasMilestone("d", 1)) player.a.times += 2
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                if (hasMilestone("d", 1)) timesAdd *= 3
+                player.a.times += timesAdd
                 player.a.time = 0
         },
         doReset(layer){
@@ -13510,6 +13522,7 @@ addLayer("d", {
                                                 ret = ret.times(base.pow(exp))
                 }
                                                 ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
 
                 return ret.max(1)
         },
@@ -14476,8 +14489,10 @@ addLayer("d", {
                 },
         },
         onPrestige(){
-                player.d.times ++
-                if (hasUpgrade("cells", 11)) player.d.times += 2
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                if (hasUpgrade("cells", 11)) timesAdd *= 3
+                player.d.times += timesAdd
                 player.d.time = 0
         },
         doReset(layer){
@@ -14711,6 +14726,7 @@ addLayer("cells", {
                                                 ret = ret.times(gain.min(ret.sqrt()))
                 }
                                                 ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
 
                 return ret.max(1)
         },
@@ -14827,6 +14843,7 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.t.effect)
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
 
@@ -14868,6 +14885,7 @@ addLayer("cells", {
                         if (hasUpgrade("t", 61))        ret = ret.times(player.cells.points)
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
+                        if (player.easyMode)            ret = ret.times(4)
                         
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
 
@@ -14914,6 +14932,7 @@ addLayer("cells", {
                         if (hasUpgrade("t", 61))        ret = ret.times(player.cells.points)
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
 
@@ -14965,6 +14984,7 @@ addLayer("cells", {
                         if (hasMilestone("t", 5))       ret = ret.times(player.cells.total11.max(1).pow(.1))
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
                                                         
@@ -14996,8 +15016,6 @@ addLayer("cells", {
                 getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
                         if (!hasUpgrade("cells", 13)) return decimalZero
                         let ret = new Decimal(1)
-
-                        if (player.hardMode)            ret = ret.times(.25)
                         
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
                                                         ret = ret.times(tmp.cells.buyables[12].effect)
@@ -15057,6 +15075,7 @@ addLayer("cells", {
                         if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
                         if (hasUpgrade("t", 144))       ret = ret.times(Decimal.pow(2, player.t.upgrades.length))
                                                         ret = ret.times(tmp.or.effect)
+                        if (player.easyMode)            ret = ret.times(4)
 
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -15066,6 +15085,8 @@ addLayer("cells", {
                         if (hasUpgrade("t", 124))       ret = ret.times(Math.max(1, player.cells.challenges[11]) ** 2.5)
 
                         if (hasUpgrade("t", 35))        ret = ret.pow(1.001)
+
+                        if (player.hardMode)            ret = ret.times(.25)
 
                         return ret
                 },
@@ -17755,7 +17776,7 @@ addLayer("cells", {
                                 let id = 11
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 37) || hasMilestone("t", 3) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("cells", 37) || hasMilestone("t", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -17872,7 +17893,7 @@ addLayer("cells", {
                                 let id = 12
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -17975,7 +17996,7 @@ addLayer("cells", {
                                 let id = 13
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasUpgrade("t", 73) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasUpgrade("t", 73) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -18071,7 +18092,7 @@ addLayer("cells", {
                                 let id = 21
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("t", 23) ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("t", 23) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -18145,7 +18166,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[111].maxAfford
-                                let max = hasMilestone("cells", 12) ? ma.sub(data.buyables[111]).max(1) : 1
+                                let max = hasMilestone("cells", 12) || player.easyMode ? ma.sub(data.buyables[111]).max(1) : 1
                                 data.buyables[111] = data.buyables[111].plus(max)
                                 if (!hasMilestone("cells", 12) && !hasMilestone("t", 1)) {
                                         data.mu.points = data.mu.points.sub(tmp.cells.buyables[111].cost)
@@ -18218,7 +18239,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[112].maxAfford
-                                let max = hasUpgrade("t", 12) ? ma.sub(data.buyables[112]).max(1) : 1
+                                let max = hasUpgrade("t", 12) || player.easyMode ? ma.sub(data.buyables[112]).max(1) : 1
                                 data.buyables[112] = data.buyables[112].plus(max)
                                 if (!false) {
                                         data.mu.points = data.mu.points.sub(tmp.cells.buyables[112].cost)
@@ -18288,7 +18309,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[411].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[411]).max(1) : 1
+                                let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[411]).max(1) : 1
                                 data.buyables[411] = data.buyables[411].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[411].cost)
@@ -18363,7 +18384,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[412].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[412]).max(1) : 1
+                                let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[412]).max(1) : 1
                                 data.buyables[412] = data.buyables[412].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[412].cost)
@@ -18436,7 +18457,7 @@ addLayer("cells", {
                                 if (!this.canAfford()) return 
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[413].maxAfford
-                                let max = hasUpgrade("cells", 213) ? ma.sub(data.buyables[413]).max(1) : 1
+                                let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[413]).max(1) : 1
                                 data.buyables[413] = data.buyables[413].plus(max)
                                 if (!hasMilestone("cells", 48)) {
                                         data.iota.points = data.iota.points.sub(tmp.cells.buyables[413].cost)
@@ -18686,6 +18707,7 @@ addLayer("cells", {
                 let add = 1
                 if (hasMilestone("t", 1)) add *= 3
                 if (hasUpgrade("or", 11)) add *= 3
+                if (player.easyMode) add *= 2
                 player.cells.times += add
                 player.cells.time = 0
                 if (player.cells.milestone2Best != 0) {
@@ -18883,6 +18905,7 @@ addLayer("t", {
                 }
                 if (hasUpgrade("t", 155))       ret = ret.times(Decimal.pow(1.11, player.tokens.tokens2.total))
                                                 ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
 
                 return ret.max(1)
         },
@@ -20825,8 +20848,10 @@ addLayer("t", {
                 },
         },
         onPrestige(g){
-                player.t.times ++
-                if (hasUpgrade("or", 11)) player.t.times += 2
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                if (hasUpgrade("or", 11)) timesAdd *= 3
+                player.t.times += timesAdd
                 player.t.time = 0
                 player.t.bestOnReset = player.t.bestOnReset.max(g)
         },
@@ -21084,6 +21109,8 @@ addLayer("or", {
         getGainMult(){ // o gain organgain ogain organ gain organsgain organs gain
                 let ret = decimalOne
 
+                if (player.easyMode)            ret = ret.times(2)
+
                 return ret.max(1)
         },
         getGainExp(){
@@ -21283,7 +21310,9 @@ addLayer("or", {
                 },
         },
         onPrestige(g){
-                player.or.times ++
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                player.or.times += timesAdd
                 player.or.time = 0
         },
         doReset(layer){
@@ -22603,13 +22632,17 @@ addLayer("mini", {
                                 if (allABContent || hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
                                 
                                 let max = decimalOne // a and b 
-                                if (allABContent || hasMilestone("tokens", 3))          max = max.times(10)
-                                if (allABContent || hasMilestone("tokens", 13))         max = max.times(5)
-                                if (allABContent || hasMilestone("n", 1))               max = max.times(5)
-                                if (allABContent || hasMilestone("n", 2))               max = max.times(4)
-                                if (allABContent || hasUpgrade("o", 31))                max = max.times(10)
-                                if (allABContent || hasUpgrade("o", 32))                max = max.times(10)
-                                if (allABContent || hasUpgrade("mini", 85))             max = max.times(5)
+                                if (player.easyMode || allABContent) {
+                                        max = new Decimal(5e5)
+                                } else {
+                                        if (hasMilestone("tokens", 3))          max = max.times(10)
+                                        if (hasMilestone("tokens", 13))         max = max.times(5)
+                                        if (hasMilestone("n", 1))               max = max.times(5)
+                                        if (hasMilestone("n", 2))               max = max.times(4)
+                                        if (hasUpgrade("o", 31))                max = max.times(10)
+                                        if (hasUpgrade("o", 32))                max = max.times(10)
+                                        if (hasUpgrade("mini", 85))             max = max.times(5)
+                                }
 
                                 let canBuyFirst = allABContent || tmp.tokens.layerShown
                                 for (i = 0; i < list1.length; i++){
@@ -22640,16 +22673,20 @@ addLayer("mini", {
                                 }
 
                                 let bulk = decimalOne // c
-                                if (allABContent || hasUpgrade("mini", 41))     bulk = bulk.times(5)
-                                if (allABContent || hasUpgrade("mini", 44))     bulk = bulk.times(2)
-                                if (allABContent || hasMilestone("n", 2))       bulk = bulk.times(5)
-                                if (allABContent || hasMilestone("n", 4))       bulk = bulk.times(4)
-                                if (allABContent || hasUpgrade("o", 31))        bulk = bulk.times(10)
-                                if (allABContent || hasUpgrade("o", 32))        bulk = bulk.times(10)
-                                if (allABContent || hasUpgrade("mini", 85))     bulk = bulk.times(5)
-                                if (allABContent || hasUpgrade("p", 32))        bulk = bulk.times(100)
-                                if (allABContent || hasUpgrade("mu", 14))       bulk = bulk.times(10)
-                                if (allABContent || hasUpgrade("mu", 34))       bulk = bulk.times(100)
+                                if (player.easyMode || allABContent) {
+                                        bulk = new Decimal(1e10)
+                                } else {
+                                        if (hasUpgrade("mini", 41))     bulk = bulk.times(5)
+                                        if (hasUpgrade("mini", 44))     bulk = bulk.times(2)
+                                        if (hasMilestone("n", 2))       bulk = bulk.times(5)
+                                        if (hasMilestone("n", 4))       bulk = bulk.times(4)
+                                        if (hasUpgrade("o", 31))        bulk = bulk.times(10)
+                                        if (hasUpgrade("o", 32))        bulk = bulk.times(10)
+                                        if (hasUpgrade("mini", 85))     bulk = bulk.times(5)
+                                        if (hasUpgrade("p", 32))        bulk = bulk.times(100)
+                                        if (hasUpgrade("mu", 14))       bulk = bulk.times(10)
+                                        if (hasUpgrade("mu", 34))       bulk = bulk.times(100)
+                                }
                                 
                                 bulk = bulk.sub(1)
 
@@ -22683,12 +22720,13 @@ addLayer("mini", {
                                 }
 
                                 let bulk2 = decimalOne // d
-                                if (allABContent || hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
-                                if (allABContent || hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
-                                if (allABContent || hasUpgrade("mini", 85))     bulk2 = bulk2.times(5)
-                                if (allABContent || hasMilestone("p", 1))       bulk2 = bulk2.times(5)
-                                if (allABContent || hasUpgrade("mu", 14))       bulk2 = bulk2.times(10)
-                                if (allABContent || hasUpgrade("mu", 34))       bulk2 = bulk2.times(100)
+                                let allDbulk = allABContent || player.easyMode
+                                if (allDbulk || hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
+                                if (allDbulk || hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
+                                if (allDbulk || hasUpgrade("mini", 85))     bulk2 = bulk2.times(5)
+                                if (allDbulk || hasMilestone("p", 1))       bulk2 = bulk2.times(5)
+                                if (allDbulk || hasUpgrade("mu", 14))       bulk2 = bulk2.times(10)
+                                if (allDbulk || hasUpgrade("mu", 34))       bulk2 = bulk2.times(100)
                                 
                                 bulk2 = bulk2.sub(1).floor()
 
@@ -22717,19 +22755,23 @@ addLayer("mini", {
                                 }
 
                                 let bulk3 = decimalOne // e
-                                if (allABContent || hasMilestone("n", 17))      bulk3 = bulk3.times(5)
-                                if (allABContent || hasUpgrade("o", 33)) {
-                                        if (hasUpgrade("o", 31))                bulk3 = bulk3.times(2)
-                                        if (hasUpgrade("o", 32))                bulk3 = bulk3.times(2)
-                                                                                bulk3 = bulk3.times(2)
-                                        if (hasUpgrade("o", 34))                bulk3 = bulk3.times(2)
-                                        if (hasUpgrade("o", 35))                bulk3 = bulk3.times(2)
-                                }        
-                                if (allABContent || hasUpgrade("o", 35))        bulk3 = bulk3.times(5)
-                                if (allABContent || hasUpgrade("mini", 85))     bulk3 = bulk3.times(5)
-                                if (allABContent || hasMilestone("p", 2))       bulk3 = bulk3.times(5)
-                                if (allABContent || hasUpgrade("mu", 14))       bulk3 = bulk3.times(10)
-                                if (allABContent || hasUpgrade("mu", 34))       bulk3 = bulk3.times(100)
+                                if (allABContent || player.easyMode) {
+                                        bulk3 = new Decimal(2e7)
+                                } else {
+                                        if (hasMilestone("n", 17))      bulk3 = bulk3.times(5)
+                                        if (hasUpgrade("o", 33)) {
+                                                if (hasUpgrade("o", 31))                bulk3 = bulk3.times(2)
+                                                if (hasUpgrade("o", 32))                bulk3 = bulk3.times(2)
+                                                                                        bulk3 = bulk3.times(2)
+                                                if (hasUpgrade("o", 34))                bulk3 = bulk3.times(2)
+                                                if (hasUpgrade("o", 35))                bulk3 = bulk3.times(2)
+                                        }        
+                                        if (hasUpgrade("o", 35))        bulk3 = bulk3.times(5)
+                                        if (hasUpgrade("mini", 85))     bulk3 = bulk3.times(5)
+                                        if (hasMilestone("p", 2))       bulk3 = bulk3.times(5)
+                                        if (hasUpgrade("mu", 14))       bulk3 = bulk3.times(10)
+                                        if (hasUpgrade("mu", 34))       bulk3 = bulk3.times(100)
+                                }
                                 
                                 bulk3 = bulk3.sub(1).floor()
 
@@ -22834,6 +22876,9 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 45))     ret = ret.times(player.mini.c_points.points.max(1))
                                                         ret = ret.times(tmp.p.effect)
                                                         ret = ret.times(tmp.l.effect)
+                        if (player.easyMode)            ret = ret.times(4)
+
+                        if (player.easyMode)            ret = ret.pow(1.001)
 
                         return ret
                 },
@@ -22902,7 +22947,9 @@ addLayer("mini", {
                         if (hasMilestone("n", 3))       ret = ret.times(100)
                                                         ret = ret.times(tmp.p.effect)
                                                         ret = ret.times(tmp.l.effect)
+                        if (player.easyMode)            ret = ret.times(4)
 
+                        if (player.easyMode)            ret = ret.pow(1.001)
                         if (hasUpgrade("o", 13))        ret = ret.pow(tmp.o.upgrades[13].effect)
                                                         ret = ret.pow(tmp.tokens.buyables[62].effect)
                         if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
@@ -22948,7 +22995,9 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 64))     ret = ret.times(player.mini.d_points.points.max(1))
                                                         ret = ret.times(tmp.p.effect)
                                                         ret = ret.times(tmp.l.effect)
+                        if (player.easyMode)            ret = ret.times(4)
 
+                        if (player.easyMode)            ret = ret.pow(1.001)
                         if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                         if (hasUpgrade("n", 22))        ret = ret.pow(Decimal.pow(1.0002, player.n.upgrades.length))
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
@@ -22999,6 +23048,7 @@ addLayer("mini", {
                         if (hasUpgrade("p", 22))        ret = ret.times(player.mini.e_points.points.max(1).pow(.05 * player.p.upgrades.length))
                         if (hasMilestone("mu", 3))      ret = ret.times(player.mini.e_points.points.max(1))
                                                         ret = ret.times(tmp.l.effect)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         return ret
                 },
@@ -23135,6 +23185,7 @@ addLayer("mini", {
                         if (hasUpgrade("mu", 11))       ret = ret.times(player.mu.points.plus(10).log10().pow(getBuyableAmount("mini", 202)))
                                                         ret = ret.times(tmp.l.effect)
                         if (hasMilestone("l", 1))       ret = ret.times(10)
+                        if (player.easyMode)            ret = ret.times(4)
 
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 

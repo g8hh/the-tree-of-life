@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.100",
+	num: "1.101",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,6 +29,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.101</h3><br>
+		- Added an Organ milestone.<br>
+		- Cleaned up token cost function.<br>
+		- Added easy mode.<br>
+		- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.100</h3><br>
 		- Added Organs.<br>
 		- Added a Organ upgrade.<br>
@@ -1085,6 +1090,7 @@ function addedPlayerData() { return {
 	undulating: false,
 	lastSave: new Date().getTime(),
 	hardMode: false,
+	easyMode: false,
 	hardFromBeginning: false,
 	arrowHotkeys: true,
 	lastLettersPressed: [],
@@ -1264,6 +1270,10 @@ function toggleUndulating(){
 function enterHardMode(){
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterEasyMode(){
+	player.easyMode = true
 }
 
 function toggleArrowHotkeys(){
