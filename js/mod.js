@@ -1092,7 +1092,9 @@ function addedPlayerData() { return {
 	lastSave: new Date().getTime(),
 	hardMode: false,
 	easyMode: false,
+	extremeMode: false,
 	hardFromBeginning: false,
+	extremeFromBeginning: false,
 	arrowHotkeys: true,
 	modTab: false,
 	lastLettersPressed: [],
@@ -1273,6 +1275,14 @@ function enterHardMode(){
 	let s = "Are you sure you want to enter hard mode? This cannot be undone."
 	if (!confirm(s)) return 
 	player.hardMode = true
+	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterExtremeMode(){
+	let s = "Are you sure you want to enter extreme mode? This cannot be undone."
+	if (!confirm(s)) return 
+	player.hardMode = true
+	player.extremeMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
 
