@@ -148,8 +148,24 @@ var systemComponents = {
 		Enter Modes: 
 		<table>
 			<tr>
-				<td><button class="opt" onclick="enterHardMode()"><span><bdi style='color:#CC0033'>{{player.hardMode ? "In hard mode" : "Enter Hard Mode"}}</bdi></span></button></td>
-				<td><button class="opt" onclick="enterEasyMode()"><span><bdi style='color:#CC0033'>{{player.easyMode ? "In easy mode" : "Enter Easy Mode"}}</bdi></span></button></td>
+				<td>
+					<button class="opt" onclick="enterHardMode()">
+						<span v-if="player.hardMode"><bdi style='color:#CC0033'>{{"In hard mode"}}</bdi></span>
+						<span v-if="!player.hardMode"><bdi style='color:#3300CC'>{{"Enter hard mode"}}</bdi></span>
+					</button>
+				</td>
+				<td>
+					<button class="opt" onclick="enterExtremeMode()">
+						<span v-if="player.extremeMode"><bdi style='color:#CC0033'>{{"In extreme mode"}}</bdi></span>
+						<span v-if="!player.extremeMode"><bdi style='color:#3300CC'>{{"Enter extreme mode"}}</bdi></span>
+					</button>
+				</td>
+				<td>
+					<button class="opt" onclick="enterEasyMode()">
+						<span v-if="player.easyMode"><bdi style='color:#CC0033'>{{"In easy mode"}}</bdi></span>
+						<span v-if="!player.easyMode"><bdi style='color:#3300CC'>{{"Enter easy mode"}}</bdi></span>
+					</button>
+				</td>
 			</tr>
 		</table>
 		<br><br>

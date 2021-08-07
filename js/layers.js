@@ -744,14 +744,14 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return player.h.best.gt(0) || hasMilestone("tokens", 2)
-                        }, //hasUpgrade("h", 11)
+                        }, // hasUpgrade("h", 11)
                 },
                 12: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen II"
                         },
                         description(){
-                                if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula"
+                                if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula maximum"
                                 a = "[Hydrogen upgrades]"
                                 if (hasUpgrade("h", 43)) a += "*2"
                                 if (hasUpgrade("h", 12)) return a
@@ -772,7 +772,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasUpgrade("h", 11) || hasMilestone("tokens", 2)
-                        }, //hasUpgrade("h", 12)
+                        }, // hasUpgrade("h", 12)
                 },
                 13: {
                         title(){
@@ -802,7 +802,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasUpgrade("h", 12) || hasMilestone("tokens", 2)
-                        }, //hasUpgrade("h", 13)
+                        }, // hasUpgrade("h", 13)
                 },
                 14: {
                         title(){
@@ -830,7 +830,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasUpgrade("h", 13) || hasMilestone("tokens", 2)
-                        }, //hasUpgrade("h", 14)
+                        }, // hasUpgrade("h", 14)
                 },
                 15: {
                         title(){
@@ -845,7 +845,7 @@ addLayer("h", {
                         cost:() => player.hardMode ? new Decimal(1750) : new Decimal(1000),
                         unlocked(){
                                 return hasUpgrade("h", 14) || hasMilestone("tokens", 2)
-                        }, //hasUpgrade("h", 15)
+                        }, // hasUpgrade("h", 15)
                 },
                 21: {
                         title(){
@@ -862,7 +862,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return  hasMilestone("tokens", 2) || hasUpgrade("h", 15) && (!hasUpgrade("h", 31) || hasUpgrade("h", 35) || hasUpgrade("h", 25))
-                        }, //hasUpgrade("h", 21)
+                        }, // hasUpgrade("h", 21)
                 },
                 22: {
                         title(){
@@ -896,7 +896,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 21)
-                        }, //hasUpgrade("h", 22)
+                        }, // hasUpgrade("h", 22)
                 },
                 23: {
                         title(){
@@ -927,7 +927,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 22)
-                        }, //hasUpgrade("h", 23)
+                        }, // hasUpgrade("h", 23)
                 },
                 24: {
                         title(){
@@ -960,7 +960,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 23)
-                        }, //hasUpgrade("h", 24)
+                        }, // hasUpgrade("h", 24)
                 },
                 25: {
                         title(){
@@ -990,7 +990,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 24)
-                        }, //hasUpgrade("h", 25)
+                        }, // hasUpgrade("h", 25)
                 },
                 31: {
                         title(){
@@ -1007,7 +1007,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 15) && (!hasUpgrade("h", 21) || hasUpgrade("h", 25) || hasUpgrade("h", 35))
-                        }, //hasUpgrade("h", 31)
+                        }, // hasUpgrade("h", 31)
                 },
                 32: {
                         title(){
@@ -1041,7 +1041,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 31) 
-                        }, //hasUpgrade("h", 32)
+                        }, // hasUpgrade("h", 32)
                 },
                 33: {
                         title(){
@@ -1061,7 +1061,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 32) 
-                        }, //hasUpgrade("h", 33)
+                        }, // hasUpgrade("h", 33)
                 },
                 34: {
                         title(){
@@ -1081,7 +1081,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 33) 
-                        }, //hasUpgrade("h", 34)
+                        }, // hasUpgrade("h", 34)
                 },
                 35: {
                         title(){
@@ -1101,7 +1101,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 34) 
-                        }, //hasUpgrade("h", 35)
+                        }, // hasUpgrade("h", 35)
                 },
                 41: {
                         title(){
@@ -1136,7 +1136,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 35) && hasUpgrade("h", 25) 
-                        }, //hasUpgrade("h", 41)
+                        }, // hasUpgrade("h", 41)
                 },
                 42: {
                         title(){
@@ -1173,7 +1173,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 41)
-                        }, //hasUpgrade("h", 42)
+                        }, // hasUpgrade("h", 42)
                 },
                 43: {
                         title(){
@@ -1189,7 +1189,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 42)
-                        }, //hasUpgrade("h", 43)
+                        }, // hasUpgrade("h", 43)
                 },
                 44: {
                         title(){
@@ -1213,7 +1213,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 43)
-                        }, //hasUpgrade("h", 44)
+                        }, // hasUpgrade("h", 44)
                 },
                 45: {
                         title(){
@@ -1236,7 +1236,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 43)
-                        }, //hasUpgrade("h", 45)
+                        }, // hasUpgrade("h", 45)
                 },
                 51: {
                         title(){
@@ -1252,7 +1252,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 44) && hasUpgrade("h", 45)
-                        }, //hasUpgrade("h", 51)
+                        }, // hasUpgrade("h", 51)
                 },
                 52: {
                         title(){
@@ -1268,7 +1268,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 51) 
-                        }, //hasUpgrade("h", 52)
+                        }, // hasUpgrade("h", 52)
                 },
                 53: {
                         title(){
@@ -1284,7 +1284,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 52) 
-                        }, //hasUpgrade("h", 53)
+                        }, // hasUpgrade("h", 53)
                 },
                 54: {
                         title(){
@@ -1316,7 +1316,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 54) 
-                        }, //hasUpgrade("h", 55)
+                        }, // hasUpgrade("h", 55)
                 },
                 61: {
                         title(){
@@ -1347,7 +1347,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasUpgrade("h", 61) || hasMilestone("tokens", 2) || hasUpgrade("o", 15) && hasUpgrade("c", 15) 
-                        }, //hasUpgrade("h", 61)
+                        }, // hasUpgrade("h", 61)
                 },
                 62: {
                         title(){
@@ -1363,7 +1363,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 61)
-                        }, //hasUpgrade("h", 62)
+                        }, // hasUpgrade("h", 62)
                 },
                 63: {
                         title(){
@@ -1390,7 +1390,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 62)
-                        }, //hasUpgrade("h", 63)
+                        }, // hasUpgrade("h", 63)
                 },
                 64: {
                         title(){
@@ -1406,7 +1406,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 63)
-                        }, //hasUpgrade("h", 64)
+                        }, // hasUpgrade("h", 64)
                 },
                 65: {
                         title(){
@@ -1425,7 +1425,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 2) || hasUpgrade("h", 64)
-                        }, //hasUpgrade("h", 65)
+                        }, // hasUpgrade("h", 65)
                 },
                 71: { // come back to here pls
                         title(){
@@ -1448,7 +1448,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Deuterium",
                         unlocked(){
                                 return player.tokens.total.gte(23) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 71)
+                        }, // hasUpgrade("h", 71)
                 },
                 72: { // come back to here pls
                         title(){
@@ -1481,7 +1481,7 @@ addLayer("h", {
                         },
                         unlocked(){
                                 return player.tokens.total.gte(26) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 72)
+                        }, // hasUpgrade("h", 72)
                 },
                 73: { // come back to here pls
                         title(){
@@ -1503,7 +1503,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Deuterium",
                         unlocked(){
                                 return player.tokens.total.gte(34) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 73)
+                        }, // hasUpgrade("h", 73)
                 },
                 74: { // come back to here pls
                         title(){
@@ -1524,7 +1524,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Deuterium",
                         unlocked(){
                                 return player.tokens.total.gte(37) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 74)
+                        }, // hasUpgrade("h", 74)
                 },
                 75: { // come back to here pls
                         title(){
@@ -1545,7 +1545,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Deuterium",
                         unlocked(){
                                 return player.tokens.total.gte(39) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 75)
+                        }, // hasUpgrade("h", 75)
                 },
                 81: {
                         title(){
@@ -1568,7 +1568,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 71) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 81)
+                        }, // hasUpgrade("h", 81)
                 },
                 82: {
                         title(){
@@ -1589,7 +1589,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 81) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 82)
+                        }, // hasUpgrade("h", 82)
                 },
                 83: {
                         title(){
@@ -1610,7 +1610,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 82) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 83)
+                        }, // hasUpgrade("h", 83)
                 },
                 84: {
                         title(){
@@ -1631,7 +1631,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 83) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 84)
+                        }, // hasUpgrade("h", 84)
                 },
                 85: {
                         title(){
@@ -1652,7 +1652,7 @@ addLayer("h", {
                         currencyDisplayName:() => "Atomic Hydrogen",
                         unlocked(){
                                 return hasUpgrade("h", 84) || hasMilestone("n", 3)
-                        }, //hasUpgrade("h", 85)
+                        }, // hasUpgrade("h", 85)
                 },
         },
         tabFormat: {
@@ -1905,7 +1905,7 @@ addLayer("c", {
                         currencyDisplayName:() => "Life Points",
                         unlocked(){
                                 return true
-                        }, //hasUpgrade("c", 11)
+                        }, // hasUpgrade("c", 11)
                 },
                 12: {
                         title(){
@@ -1935,7 +1935,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 11)
-                        }, //hasUpgrade("c", 12)
+                        }, // hasUpgrade("c", 12)
                 },
                 13: {
                         title(){
@@ -1953,7 +1953,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 12)
-                        }, //hasUpgrade("c", 13)
+                        }, // hasUpgrade("c", 13)
                 },
                 14: {
                         title(){
@@ -1981,7 +1981,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 13)
-                        }, //hasUpgrade("c", 14)
+                        }, // hasUpgrade("c", 14)
                 },
                 15: {
                         title(){
@@ -1998,7 +1998,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 14)
-                        }, //hasUpgrade("c", 15)
+                        }, // hasUpgrade("c", 15)
                 },
                 21: {
                         title(){
@@ -2025,7 +2025,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 21)
-                        }, //hasUpgrade("c", 21)
+                        }, // hasUpgrade("c", 21)
                 },
                 22: {
                         title(){
@@ -2055,7 +2055,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 22)
-                        }, //hasUpgrade("c", 22)
+                        }, // hasUpgrade("c", 22)
                 },
                 23: {
                         title(){
@@ -2072,7 +2072,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 23)
-                        }, //hasUpgrade("c", 23)
+                        }, // hasUpgrade("c", 23)
                 },
                 24: {
                         title(){
@@ -2089,7 +2089,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 24)
-                        }, //hasUpgrade("c", 24)
+                        }, // hasUpgrade("c", 24)
                 },
                 25: {
                         title(){
@@ -2106,7 +2106,7 @@ addLayer("c", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 25)
-                        }, //hasUpgrade("c", 25)
+                        }, // hasUpgrade("c", 25)
                 },
                 31: {
                         title(){
@@ -2386,7 +2386,7 @@ addLayer("o", {
                         currencyDisplayName:() => "Life Points",
                         unlocked(){
                                 return true
-                        }, //hasUpgrade("o", 11)
+                        }, // hasUpgrade("o", 11)
                 },
                 12: {
                         title(){
@@ -2414,7 +2414,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 11)
-                        }, //hasUpgrade("o", 12)
+                        }, // hasUpgrade("o", 12)
                 },
                 13: {
                         title(){
@@ -2439,7 +2439,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 12)
-                        }, //hasUpgrade("o", 13)
+                        }, // hasUpgrade("o", 13)
                 },
                 14: {
                         title(){
@@ -2471,7 +2471,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 13)
-                        }, //hasUpgrade("o", 14)
+                        }, // hasUpgrade("o", 14)
                 },
                 15: {
                         title(){
@@ -2504,7 +2504,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("o", 14)
-                        }, //hasUpgrade("o", 15)
+                        }, // hasUpgrade("o", 15)
                 },
                 21: {
                         title(){
@@ -2519,7 +2519,7 @@ addLayer("o", {
                         cost:() => new Decimal(3e22),
                         unlocked(){
                                 return hasMilestone("n", 6) || hasMilestone("tokens", 12)
-                        }, //hasUpgrade("o", 21)
+                        }, // hasUpgrade("o", 21)
                 },
                 22: {
                         title(){
@@ -2534,7 +2534,7 @@ addLayer("o", {
                         cost:() => new Decimal(2e30),
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 21)
-                        }, //hasUpgrade("o", 22)
+                        }, // hasUpgrade("o", 22)
                 },
                 23: {
                         title(){
@@ -2559,7 +2559,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 22)
-                        }, //hasUpgrade("o", 23)
+                        }, // hasUpgrade("o", 23)
                 },
                 24: {
                         title(){
@@ -2584,7 +2584,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("h", 81)
-                        }, //hasUpgrade("o", 24)
+                        }, // hasUpgrade("o", 24)
                 },
                 25: {
                         title(){
@@ -2609,7 +2609,7 @@ addLayer("o", {
                         },
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 24)
-                        }, //hasUpgrade("o", 25)
+                        }, // hasUpgrade("o", 25)
                 },
                 31: {
                         title(){
@@ -28436,7 +28436,7 @@ addLayer("mini", {
         },
         microtabs: {
                 d_content: {
-                        "Fuel": { //has upgrades for getting fuel passively
+                        "Fuel": { // has upgrades for getting fuel passively
                                 content: [
                                         ["bar", "fuel"],
                                         ["display-text", function(){
@@ -28550,7 +28550,7 @@ addLayer("mini", {
                                         return false
                                 },
                         },
-                        "Speed": { //has upgrades for buffing fuel->speed formula
+                        "Speed": { // has upgrades for buffing fuel->speed formula
                                 content: [
                                         ["display-text", function(){
                                                 if (hasUpgrade("mini", 55)) return // eventually dont show this
@@ -31083,7 +31083,7 @@ addLayer("tokens", {
                                 }
                                 return a + b
                         },
-                }, //hasMilestone("tokens", 2)
+                }, // hasMilestone("tokens", 2)
                 3: {
                         requirementDescription(){
                                 return "Requires: 4 total tokens"
@@ -31112,7 +31112,7 @@ addLayer("tokens", {
                                 }
                                 return a + b
                         },
-                }, //hasMilestone("tokens", 3)
+                }, // hasMilestone("tokens", 3)
                 4: {
                         requirementDescription(){
                                 return "Requires: 5 total tokens"
@@ -31621,7 +31621,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return true
-                        }, //hasUpgrade("tokens", 11)
+                        }, // hasUpgrade("tokens", 11)
                 },
                 21: {
                         title(){
@@ -31649,7 +31649,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasUpgrade("tokens", 11) || hasMilestone("tokens", 18)
-                        }, //hasUpgrade("tokens", 21)
+                        }, // hasUpgrade("tokens", 21)
                 },
                 22: {
                         title(){
@@ -31677,7 +31677,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasUpgrade("tokens", 11) || hasMilestone("tokens", 18)
-                        }, //hasUpgrade("tokens", 22)
+                        }, // hasUpgrade("tokens", 22)
                 },
                 31: {
                         title(){
@@ -31705,7 +31705,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("n", 5) ||  hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
-                        }, //hasUpgrade("tokens", 31)
+                        }, // hasUpgrade("tokens", 31)
                 },
                 32: {
                         title(){
@@ -31733,7 +31733,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
-                        }, //hasUpgrade("tokens", 32)
+                        }, // hasUpgrade("tokens", 32)
                 },
                 33: {
                         title(){
@@ -31761,7 +31761,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
-                        }, //hasUpgrade("tokens", 33)
+                        }, // hasUpgrade("tokens", 33)
                 },
                 34: {
                         title(){
@@ -31789,7 +31789,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
-                        }, //hasUpgrade("tokens", 34)
+                        }, // hasUpgrade("tokens", 34)
                 },
                 41: {
                         title(){
@@ -31816,7 +31816,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || hasUpgrade("tokens", 31) || hasUpgrade("tokens", 32) || hasUpgrade("tokens", 33) || hasUpgrade("tokens", 34)
-                        }, //hasUpgrade("tokens", 41)
+                        }, // hasUpgrade("tokens", 41)
                 },
                 42: {
                         title(){
@@ -31843,7 +31843,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || hasUpgrade("tokens", 31) || hasUpgrade("tokens", 32) || hasUpgrade("tokens", 33) || hasUpgrade("tokens", 34)
-                        }, //hasUpgrade("tokens", 42)
+                        }, // hasUpgrade("tokens", 42)
                 },
                 51: {
                         title(){
@@ -31873,7 +31873,7 @@ addLayer("tokens", {
                                 if (hasMilestone("n", 5) || hasMilestone("tokens", 18)) return true
                                 if (!player.tokens.total.gte(18) && !player.n.unlocked) return false
                                 return hasUpgrade("tokens", 41) && hasUpgrade("tokens", 42)
-                        }, //hasUpgrade("tokens", 51)
+                        }, // hasUpgrade("tokens", 51)
                 },
                 52: {
                         title(){
@@ -31903,7 +31903,7 @@ addLayer("tokens", {
                                 if (hasMilestone("n", 5) || hasMilestone("tokens", 18)) return true
                                 if (!player.tokens.total.gte(18) && !player.n.unlocked) return false
                                 return hasUpgrade("tokens", 41) && hasUpgrade("tokens", 42)
-                        }, //hasUpgrade("tokens", 52)
+                        }, // hasUpgrade("tokens", 52)
                 },
                                                                                                                                                                                                                                                                                                 
                 61: {
@@ -31931,7 +31931,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || (hasUpgrade("tokens", 51) || hasUpgrade("tokens", 52)) && player.tokens.total.gte(20)
-                        }, //hasUpgrade("tokens", 61)
+                        }, // hasUpgrade("tokens", 61)
                 },
                 62: {
                         title(){
@@ -31958,7 +31958,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || (hasUpgrade("tokens", 51) || hasUpgrade("tokens", 52)) && player.tokens.total.gte(20)
-                        }, //hasUpgrade("tokens", 62)
+                        }, // hasUpgrade("tokens", 62)
                 },
                 71: {
                         title(){
@@ -31990,7 +31990,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || (hasUpgrade("tokens", 61) || hasUpgrade("tokens", 62)) && player.tokens.total.gte(22)
-                        }, //hasUpgrade("tokens", 71)
+                        }, // hasUpgrade("tokens", 71)
                 },
                 72: {
                         title(){
@@ -32022,7 +32022,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || (hasUpgrade("tokens", 61) || hasUpgrade("tokens", 62)) && player.tokens.total.gte(22)
-                        }, //hasUpgrade("tokens", 72)
+                        }, // hasUpgrade("tokens", 72)
                 },
                 73: {
                         title(){
@@ -32054,7 +32054,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || hasMilestone("tokens", 18) || (hasUpgrade("tokens", 61) || hasUpgrade("tokens", 62)) && player.tokens.total.gte(22)
-                        }, //hasUpgrade("tokens", 73)
+                        }, // hasUpgrade("tokens", 73)
                 },
                 81: {
                         title(){
@@ -32085,7 +32085,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
-                        }, //hasUpgrade("tokens", 81)
+                        }, // hasUpgrade("tokens", 81)
                 },
                 82: {
                         title(){
@@ -32143,7 +32143,7 @@ addLayer("tokens", {
                         unlocked(){
                                 if (hasUpgrade("t", 61)) return false
                                 return hasUpgrade("tokens", 91) || player.tokens.total.gte(54) || hasMilestone("n", 5)
-                        }, //hasUpgrade("tokens", 91)
+                        }, // hasUpgrade("tokens", 91)
                 },
                 92: {
                         title(){

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.101.1",
+	num: "1.102",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,6 +29,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.102</h3><br>
+		- Disjointed hard and extreme mode.<br>
+		- Removed some displays for hard mode.<br>
+		- Various code cleanup.<br>
+		- Improved mode selector display.<br>
 	<br><h3 style='color: #CC0000'>v1.101.1</h3><br>
 		- Added extreme mode.<br>
 		- Implemented extreme mode nerfs.<br>	
@@ -1136,8 +1141,6 @@ var displayThings = [
 		
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
-		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
-		else if (player.hardMode) end += "{Hard}"
 		let saveFinal = getLastSaveDisplay() + end
 
 		let len = pastTickTimes.length
@@ -1277,6 +1280,9 @@ function toggleUndulating(){
 function enterHardMode(){
 	let s = "Are you sure you want to enter hard mode? This cannot be undone."
 	if (!confirm(s)) return 
+	if (player.extremeMode) {
+		if (!confirm("You are already in extreme mode, this is not advised." + s)) return 
+	}
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
@@ -1284,7 +1290,9 @@ function enterHardMode(){
 function enterExtremeMode(){
 	let s = "Are you sure you want to enter extreme mode? This cannot be undone."
 	if (!confirm(s)) return 
-	player.hardMode = true
+	if (player.hardmode) {
+		if (!confirm("You are already in hard mode, this is not advised." + s)) return 
+	}
 	player.extremeMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
