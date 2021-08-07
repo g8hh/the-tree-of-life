@@ -163,7 +163,8 @@ var systemComponents = {
 
 		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
 		Automatically in hardmode<br>
-		Gain of all currencies is raised ^.75<br><br>
+		Gain of all currencies is raised ^.75 (after everything except dilation)<br>
+		For protein, gain is not reduced, but mRNA and tRNA base is ^.75<br><br>
 		
 		</span>
 		

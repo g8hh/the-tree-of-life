@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.101",
+	num: "1.101.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -29,6 +29,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.101.1</h3><br>
+		- Added extreme mode.<br>
+		- Implemented extreme mode nerfs.<br>	
 	<br><h3 style='color: #CC0000'>v1.101</h3><br>
 		- Added an Organ milestone.<br>
 		- Cleaned up token cost function.<br>
