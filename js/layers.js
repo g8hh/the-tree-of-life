@@ -21889,7 +21889,7 @@ addLayer("mc", {
                         },
                 },
         },
-        layerShown(){return hasMilestone("cells", 21) || player.o.unlocked},
+        layerShown(){return hasMilestone("cells", 21) || player.or.unlocked},
         buyables: {
                 rows: 3,
                 cols: 3,
