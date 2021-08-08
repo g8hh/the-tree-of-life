@@ -12,27 +12,93 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.090",
+	num: "1.100",
 	name: "Advil's Auspicious Acension",
 }
 
 function isEndgame() {
-	return player.cells.points.gte("2e19577")
+	return player.or.total.gt(1)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		95 Secondary completions and reaching the endgame screen<br><br>
+		2 total Organs and reaching the endgame screen<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.100</h3><br>
+		- Added Organs.<br>
+		- Added a Organ upgrade.<br>
+		- Added a Organ milestone.<br>
+		- Fixed an issue with layers un-deactivated-ing.<br>
+		- Subtabs no longer notify when the tab is hidden.<br>
+		- Fixed a bug with Cells being able to reset too early after some upgrades.<br>
+		- Fixed a typo in Tissues XIX display.<br>
+		- Fixed a typo with Tissue reset saying Cells.<br>
+		- Token auto prestiging now uses autoPrestige, meaning it doesnt notify.<br>
+		- Tokens now are cheaper when you are resetting "with" negative tokens.<br>
+		- Added Micro.<br>
+		- Added three Micro buyables.<br>
+		- Added a custom save.<br>
+<bdi style='color: #FFAAFF'>- Note that I now have plans for easy and (sorta) for extreme mode.</bdi><br>
+	<br><h3 style='color: #CC0000'>v1.099</h3><br>
+		- Added four Tissue upgrades.<br>
+		- Added a second Tiertiary completion/reward.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.098</h3><br>
+		- Added a custom save.<br>
+		- Made it so you cannot buy upgrades of a disabled layer.<br>
+		- Added two Cell upgrades.<br>
+		- Added a Tissue upgrade.<br>
+		- Removed Phosphorus and µ.<br>
+		- Removed Life buyables.<br>
+		- Removed some unnecessary code for a Life upgrade.<br>
+		- Fixed the display for Amino Milestone 29 (ln(1+x) ~ x - .5x<sup>2</sup>).<br>
+		- Made a clickable for the M<sub>C</sub> tab for jumping to Stem Cells.<br>
+		- Fixed tetrational token cost display formula.<br>
+		- Various code clearnup.<br>
+	<br><h3 style='color: #CC0000'>v1.097.1</h3><br>
+		- Fixed some issues with need respec not displaying.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.097</h3><br>
+		- Added three Cell upgrades.<br>
+		- Added a Cell challenge.<br>
+		- Made the 's' hotkey work for Token II.<br>
+	<br><h3 style='color: #CC0000'>v1.096</h3><br>
+		- Capped Tissue milestone 18 at 1.5x.<br>
+		- Added two Token buyables.<br>
+		- Added two rows of achievements.<br>
+		- Added a Tissue upgrade.<br>
+		- Added a hotkey for going to Stem.<br>
+	<br><h3 style='color: #CC0000'>v1.095</h3><br>
+		- Added a Cell buyable.<br>
+		- Added two Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.094</h3><br>
+		- Added two Tissue upgrades.<br>
+		- Cell challenges are now fully completeable.<br>
+	<br><h3 style='color: #CC0000'>v1.093</h3><br>
+		- Added a Cell upgrade.<br>
+		- Added a row of achievements.<br>
+		- 23 Token II is now possible.<br>
+		- Added a custom save.<br>
+		- You can now click and drag to buy upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.092</h3><br>
+		- Added two Tissue upgrades.<br>
+		- 24/95 is now possible.<br>
+	<br><h3 style='color: #CC0000'>v1.091.1</h3><br>
+		- Added a custom save.<br>
+		- Various bug fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.091</h3><br>
+		- 22/95 is now possible.<br>
+		- Added three Tissue upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.090</h3><br>
 		- 21/95 is now possible.<br>
 		- Added a custom save.<br>
-		- Added 9 Cell upgrades.<br>
+		- Added 9 Tissue upgrades.<br>
 		- Added 2 Tissue milestones.<br>
 		- Added a row of achievements.<br>
 	<br><h3 style='color: #CC0000'>v1.089</h3><br>
@@ -1081,6 +1147,7 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 	},
 ]
