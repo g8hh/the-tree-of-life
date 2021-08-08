@@ -809,7 +809,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IV"
                         },
                         description(){
-                                if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]"
+                                if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]" + (player.extremeMode ? " and unlock the Laboratory":"")
                                 a = "ln([Hydrogen upgrades]"
                                 if (hasUpgrade("h", 43)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 14)) return a
@@ -1753,6 +1753,140 @@ addLayer("h", {
                 return inChallenge("l", 21) || hasChallenge("l", 21)
         },
 })
+
+/*addLayer("sci", {
+        name: "Science", // This is optional, only used in a few places, If absent it just uses the layer id.
+        symbol: "S", // This appears on the layer's node. Default is the id with the first letter capitalized
+        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        startData(){ return {
+                unlocked: false,
+		points: decimalZero,
+                best: decimalZero,
+                abtime: 0,
+                time: 0,
+                times: 0,
+                hydrogen_science: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
+        }}, 
+        color: "#B54153",
+        branches: [],
+        requires: decimalZero, // Can be a function that takes requirement increases into account
+        resource: "Science", // Name of prestige currency
+        baseResource: "total upgrades", // Name of resource prestige is based on
+        baseAmount(){
+                let upg = 0
+                upg += player.h.upgrades.length
+                upg += player.c.upgrades.length
+                upg += player.o.upgrades.length
+                return new Decimal(upg)
+        }, // Get the current amount of baseResource
+        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        getBaseGain(){
+                let amt = tmp.sci.baseAmount
+
+                return amt.sub(2)
+        },
+        getResetGain(){
+                let ret = tmp.sci.getBaseGain.times(tmp.sci.getGainMult)
+
+                ret = ret.pow(.75)
+
+                return ret.floor()
+        },
+        getNextAt(){
+                return decimalZero
+        },
+        getGainMult(){ //science gain sci gain scigain sgain
+                let x = decimalOne
+
+                if (player.easyMode)            x = x.times(2)
+
+                if (player.easyMode)            x = x.pow(1.001)
+
+                return x
+        },
+        update(diff){
+                let data = player.sci
+
+                if (!data.unlocked) data.unlocked = hasUpgrade("h", 14)
+                data.best = data.best.max(data.points)
+                
+                data.time += diff
+        },
+        row: 0, // Row the layer is in on the tree (0 is the first row)
+        layerShown(){
+                return !tmp.sci.deactivated && player.extremeMode && player.sci.unlocked
+        },
+        prestigeButtonText(){
+                return "doesnt display"
+        },
+        canReset(){
+                return false
+        },
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci I"
+                        },
+                        description(){
+                                if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
+                                a = "ln([best Hydrogen])"
+                                if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
+                                if (hasUpgrade("h", 33)) a = a.replace("ln", "log2")
+                                if (hasUpgrade("h", 11)) return a
+                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[11].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                        },
+                        cost:() => new Decimal(3),
+                        effect(){
+                                let init = player.h.best.max(1)
+                                let ret 
+
+                                if (hasUpgrade("h", 33))        ret = init.log2().max(1)
+                                else                            ret = init.ln().max(1)
+
+                                if (hasUpgrade("h", 14))        ret = ret.pow(tmp.h.upgrades[14].effect)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "H Research") return ""
+                                return format(tmp.h.upgrades[11].effect)
+                        },
+                        unlocked(){
+                                return player.h.best.gt(0) || hasMilestone("tokens", 2)
+                        }, // hasUpgrade("h", 11)
+                },
+        },
+        tabFormat: {
+                "H Research": {
+                        content: [
+                                "main-display",
+                                ["secondary-display", "hydrogen_science"]
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7,8,9]]],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                ["display-text", "Every reset other than this resets science"]
+                        ]
+                },
+        },
+        doReset(layer){
+                if (layer != "sci") player.sci.points = decimalZero
+        },
+        deactivated(){
+                return false
+        },
+})*/
 
 addLayer("c", {
         name: "Carbon", // This is optional, only used in a few places, If absent it just uses the layer id.
