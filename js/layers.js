@@ -21742,7 +21742,7 @@ addLayer("mc", {
                                 return player.mc.buyables[11].gt(2)
                         },
                         base(){
-                                let ret = player.tokens.total.log10()
+                                let ret = player.tokens.total.max(10).log10()
 
                                 return ret
                         },
