@@ -31349,7 +31349,7 @@ addLayer("tokens", {
                 },
                 191: {
                         title: "Token II via Token",
-                        cost:() => player.tokens.buyables[191].plus(21).pow(2),
+                        cost:() => player.tokens.buyables[191].plus(21).pow(2).sub(.0001),
                         canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
                         buy(){
                                 if (!this.canAfford()) return 

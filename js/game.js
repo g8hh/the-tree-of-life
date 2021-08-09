@@ -69,6 +69,10 @@ function softcap(value, cap, power = 0.5) {
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){
+	if (layer == "tokens" && hasUpgrade("cells", 42)) {
+		let data = tmp.tokens.buyables
+		return data[191].canAfford || data[192].canAfford || data[193].canAfford
+	}
 	for (id in tmp[layer].upgrades){
 		if (layer == "cells" && id > 100 && tmp.mc.layerShown) break
 		if (isPlainObject(layers[layer].upgrades[id])){
