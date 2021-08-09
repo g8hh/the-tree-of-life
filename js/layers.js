@@ -18139,13 +18139,14 @@ addLayer("cells", {
                 21: {
                         name: "Tertiary",
                         goal(){
-                                let exp = new Decimal(669) // add 668
+                                let exp = new Decimal(167) // add 668
 
                                 let c = player.cells.challenges[21]
 
-                                // 6007 + 668 * 2**c
+                                // 6508 + 167 * 5**c 
+                                // need first = 6675 and 2nd = 7343
 
-                                exp = exp.times(Decimal.pow(2, c)).plus(6006)
+                                exp = exp.times(Decimal.pow(5, c)).plus(6508)
 
                                 return Decimal.pow(10, exp)
                         },
