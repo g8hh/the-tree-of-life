@@ -23,6 +23,8 @@ function getPointMultiplier(){
                                         gain = gain.times(tmp.n.effect)
                                         gain = gain.times(tmp.l.effect)
         if (hasUpgrade("mu", 44))       gain = gain.times(player.o.points.max(1))
+                                        gain = gain.times(tmp.sci.effect)
+                                        gain = gain.times(tmp.sci.buyables[11].effect)
 
         if (player.easyMode)            gain = gain.times(4)
 
@@ -602,6 +604,8 @@ addLayer("h", {
                                                 x = x.times(tmp.n.effect)
                                                 x = x.times(tmp.l.effect)
                 if (player.easyMode)            x = x.times(2)
+                if (hasUpgrade("sci", 11))      x = x.times(tmp.sci.effect)
+                                                x = x.times(tmp.sci.buyables[12].effect)
 
                 if (player.easyMode)            x = x.pow(1.001)
 
@@ -610,6 +614,11 @@ addLayer("h", {
         getDefaultMaximum(){
                 let ret = new Decimal(4)
                 if (hasUpgrade("h", 12)) ret = ret.plus(tmp.h.upgrades[12].effect)
+                if (hasUpgrade("sci", 13)) {
+                        ret = ret.plus(getBuyableAmount("sci", 11))
+                        ret = ret.plus(getBuyableAmount("sci", 12))
+                        ret = ret.plus(getBuyableAmount("sci", 13))
+                }
                 return ret
         },
         update(diff){
@@ -675,6 +684,7 @@ addLayer("h", {
                                                         x = x.times(tmp.mini.buyables[13].effect)
                                                         x = x.times(tmp.tokens.buyables[21].effect)
                                                         x = x.times(tmp.l.effect)
+                        if (hasUpgrade("sci", 12))      x = x.times(2)
 
                         if (x.lt(0))  Decimal(0)
 
@@ -696,7 +706,7 @@ addLayer("h", {
 
                         return ret.max(0)
                 },
-                getLossRate(){ //atomic hydrogen loss atomic loss
+                getLossRate(){ // atomic hydrogen loss atomic loss
                         return new Decimal(.01)
                 },
                 getGainMult(){
@@ -706,6 +716,7 @@ addLayer("h", {
                                                         x = x.times(tmp.mini.buyables[11].effect)
                                                         x = x.times(tmp.tokens.buyables[13].effect)
                                                         x = x.times(tmp.l.effect)
+                        if (hasUpgrade("sci", 12))      x = x.times(2)
 
                         return x
                 },
@@ -790,6 +801,12 @@ addLayer("h", {
                         cost:() => player.hardMode ? new Decimal(450) : new Decimal(100),
                         effect(){
                                 let ret = new Decimal(player.ach.achievements.length).plus(1)
+
+                                if (hasUpgrade("sci", 13)) {
+                                        ret = ret.plus(getBuyableAmount("sci", 11))
+                                        ret = ret.plus(getBuyableAmount("sci", 12))
+                                        ret = ret.plus(getBuyableAmount("sci", 13))
+                                }
 
                                 if (hasUpgrade("h", 32)) ret = ret.pow(tmp.h.upgrades[32].effect)
 
@@ -1754,7 +1771,7 @@ addLayer("h", {
         },
 })
 
-/*addLayer("sci", {
+addLayer("sci", {
         name: "Science", // This is optional, only used in a few places, If absent it just uses the layer id.
         symbol: "S", // This appears on the layer's node. Default is the id with the first letter capitalized
         position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -1775,26 +1792,28 @@ addLayer("h", {
         branches: [],
         requires: decimalZero, // Can be a function that takes requirement increases into account
         resource: "Science", // Name of prestige currency
-        baseResource: "total upgrades", // Name of resource prestige is based on
+        baseResource: "points", // Name of resource prestige is based on
         baseAmount(){
-                let upg = 0
-                upg += player.h.upgrades.length
-                upg += player.c.upgrades.length
-                upg += player.o.upgrades.length
-                return new Decimal(upg)
+                return player.points.max(10)
         }, // Get the current amount of baseResource
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getBaseGain(){
                 let amt = tmp.sci.baseAmount
 
-                return amt.sub(2)
+                if (amt.gt(10))         amt = amt.log10().times(10)
+                if (amt.gt(1e3))        amt = amt.log10().plus(7).pow(3)
+                if (amt.gt(1e10))       amt = amt.log10().pow(10)
+
+                return amt
         },
         getResetGain(){
                 let ret = tmp.sci.getBaseGain.times(tmp.sci.getGainMult)
 
                 ret = ret.pow(.75)
 
-                return ret.floor()
+                ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+
+                return ret
         },
         getNextAt(){
                 return decimalZero
@@ -1811,10 +1830,24 @@ addLayer("h", {
         update(diff){
                 let data = player.sci
 
-                if (!data.unlocked) data.unlocked = hasUpgrade("h", 14)
+                if (!data.unlocked) {
+                        data.unlocked = hasUpgrade("h", 14)
+                        return
+                }
                 data.best = data.best.max(data.points)
+
+                data.points = data.points.plus(tmp.sci.getResetGain.times(diff))
+                data.total = data.total.plus(tmp.sci.getResetGain.times(diff))
                 
                 data.time += diff
+
+                if (hasUpgrade("sci", 11)) layers.sci.hydrogen_science.update(diff)
+        },
+        effect(){
+                return player.sci.points.plus(10).log10()
+        },
+        effectDescription(){
+                return " multiplying Point gain by " + format(tmp.sci.effect) + "."
         },
         row: 0, // Row the layer is in on the tree (0 is the first row)
         layerShown(){
@@ -1826,6 +1859,38 @@ addLayer("h", {
         canReset(){
                 return false
         },
+        hydrogen_science: {
+                getResetGain(){
+                        let ret = player.h.points.plus(10).log10()
+
+                        ret = ret.times(player.h.deuterium.points.plus(10).log10())
+                        ret = ret.times(player.h.atomic_hydrogen.points.plus(10).log10())
+
+                        ret = ret.times(tmp.sci.hydrogen_science.getGainMult)
+
+                        ret = ret.pow(.75) // extreme
+
+                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+
+                        return ret
+                },
+                getGainMult(){
+                        let ret = decimalOne
+
+                        ret = ret.times(tmp.sci.buyables[11].effect)
+                        ret = ret.times(tmp.sci.buyables[12].effect)
+                        ret = ret.times(tmp.sci.buyables[13].effect)
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.sci.hydrogen_science
+                        data.best = data.best.max(data.points)
+                        let gainThisTick = tmp.sci.hydrogen_science.getResetGain.times(diff)
+                        data.points = data.points.plus(gainThisTick)
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
@@ -1834,49 +1899,273 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci I"
                         },
                         description(){
-                                if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
-                                a = "ln([best Hydrogen])"
-                                if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
-                                if (hasUpgrade("h", 33)) a = a.replace("ln", "log2")
-                                if (hasUpgrade("h", 11)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[11].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                return "Begin production of Hydrogen Science and Science effect affects Hydrogen gain"
                         },
-                        cost:() => new Decimal(3),
-                        effect(){
-                                let init = player.h.best.max(1)
-                                let ret 
-
-                                if (hasUpgrade("h", 33))        ret = init.log2().max(1)
-                                else                            ret = init.ln().max(1)
-
-                                if (hasUpgrade("h", 14))        ret = ret.pow(tmp.h.upgrades[14].effect)
-
+                        cost:() => new Decimal(500),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("sci", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci II"
+                        },
+                        description(){
+                                return "Unlock three buyables and double Deuterium and Atomic Hydrogen gain"
+                        },
+                        cost:() => new Decimal(500),
+                        currencyLocation:() => player.sci.hydrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Hydrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 11)
+                        }, // hasUpgrade("sci", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci III"
+                        },
+                        description(){
+                                return "Per buyable add 1 to Hydrogen gain formula maximum and effective achievements for Hydrogen III"
+                        },
+                        cost:() => new Decimal(1e9),
+                        currencyLocation:() => player.sci.hydrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Hydrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 12)
+                        }, // hasUpgrade("sci", 13)
+                },
+        },
+        buyables: {
+                rows: 5,
+                cols: 3,
+                11: {
+                        title: "α ~ 1/147",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 11)
+                                let exp = amt.div(tmp.sci.buyables[11].expDiv).plus(1)
+                                return amt.pow(exp).pow10()
+                        },
+                        expDiv(){
+                                let ret = new Decimal(20)
+                                
                                 return ret
                         },
-                        effectDisplay(){
+                        unlocked(){
+                                return hasUpgrade("sci", 12)
+                        },
+                        canAfford() {
+                                return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[11].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[11] = data.buyables[11].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[11].cost
+                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = player.points.plus(10).log10()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
+                        },
+                        display(){
+                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                return format(tmp.h.upgrades[11].effect)
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
+                                let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[11].expDiv) + "</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                12: {
+                        title: "13.6 eV",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 12)
+                                let exp = amt.div(tmp.sci.buyables[12].expDiv).plus(1)
+                                return amt.pow(exp).pow10().pow(2).times(1e6)
+                        },
+                        expDiv(){
+                                let ret = new Decimal(20)
+                                
+                                return ret
                         },
                         unlocked(){
-                                return player.h.best.gt(0) || hasMilestone("tokens", 2)
-                        }, // hasUpgrade("h", 11)
+                                return hasUpgrade("sci", 12)
+                        },
+                        canAfford() {
+                                return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[12].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[12] = data.buyables[12].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[12].cost
+                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "H Research") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
+                                let eformula = "ln(ln(Hydrogen Science))^x<br>" + format(tmp.sci.buyables[12].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e6*100^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[12].expDiv) + "</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                13: {
+                        title: "1/n^2",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 13)
+                                let exp = amt.div(tmp.sci.buyables[13].expDiv).plus(1)
+                                return amt.pow(exp).pow10().pow(3).times(2e9)
+                        },
+                        expDiv(){
+                                let ret = new Decimal(20)
+                                
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 12)
+                        },
+                        canAfford() {
+                                return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[13].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[13] = data.buyables[13].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[13].cost
+                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = player.h.points.max(10).log10()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
+                        },
+                        display(){
+                                // other than softcapping fully general 
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "H Research") return ""
+                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: *"
+                                let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
+                                let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
+
+                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
+                                let ef2 = "</b><br>"
+                                let allEff = ef1 + eformula + ef2
+
+                                if (!shiftDown) {
+                                        let end = "Shift to see details"
+                                        let start = lvl + eff1 + eff2 + cost
+                                        return br + start + end
+                                }
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "2e9*1000^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[13].expDiv) + "</sup>)" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
                 },
         },
         tabFormat: {
                 "H Research": {
                         content: [
                                 "main-display",
-                                ["secondary-display", "hydrogen_science"]
+                                ["secondary-display", "hydrogen_science"],
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7,8,9]]],
+                                ["display-text", function(){
+                                        let a = "Hydrogen Science gain is currently "
+                                        a += format(tmp.sci.hydrogen_science.getResetGain) + "/s "
+                                        return a
+                                }],
+                                ["upgrades", [1,2]],
+                                ["buyables", [1,2]]
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Info": {
                         content: [
-                                ["display-text", "Every reset other than this resets science"]
+                                ["display-text", "Every reset other than this resets science"],
+                                ["display-text", function(){
+                                        return "You are currently getting " + format(tmp.sci.getResetGain) + " science per second"
+                                }],
+                                ["display-text", function(){
+                                        let a = "<br>Hydrogen Science base gain formula is <br>log10(10+Hydrogen)*"
+                                        a += "log10(10+Deuterium)*log10(10+Atomic Hydrogen)"
+                                        return a
+                                }],
+                                
                         ]
                 },
         },
@@ -1886,7 +2175,7 @@ addLayer("h", {
         deactivated(){
                 return false
         },
-})*/
+})
 
 addLayer("c", {
         name: "Carbon", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -2906,6 +3195,7 @@ addLayer("n", {
         },
         getNextAt(){
                 let curr = tmp.n.getResetGain
+                if (player.extremeMode) curr = curr.root(.75)
                 let v1 = curr.plus(1).div(tmp.n.getGainMult).max(1)
                 if (hasMilestone("l", 1)) v1 = v1.root(tmp.l.milestones[1].effect)
                 let v2 = v1.root(tmp.n.getGainExp).plus(19)
@@ -4441,6 +4731,8 @@ addLayer("p", {
                 let curr = tmp.p.getResetGain
                 let exp = tmp.p.getGainExp
                 let mult = tmp.p.getGainMult
+
+                if (player.extremeMode) curr = curr.root(.75)
 
                 let v1 = curr.div(mult).plus(1).root(exp)
                 let v2 = v1.plus(1).pow(7)
@@ -7102,6 +7394,7 @@ addLayer("l", {
         },
         getNextAt(){
                 let gain = tmp.l.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.l.getGainMult).max(1)
                 let v1 = reqInit.root(tmp.l.getGainExp).plus(9)
                 let v2 = Decimal.pow(2, v1)
@@ -10581,7 +10874,7 @@ addLayer("a", {
 
                 return ret
         },
-        getGainMult(){ //amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
+        getGainMult(){ // amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
                 let ret = decimalOne
 
                 if (hasUpgrade("a", 25))        ret = ret.times(getBuyableAmount("a", 13).max(1))
@@ -10606,6 +10899,7 @@ addLayer("a", {
         },
         getNextAt(){
                 let gain = tmp.a.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.a.getGainMult).max(1)
                 let v1 = reqInit.root(tmp.a.getGainExp).plus(7).pow(3).plus(1368)
                 let v2 = Decimal.pow(2, v1)
@@ -13697,6 +13991,7 @@ addLayer("d", {
         },
         getNextAt(){
                 let gain = tmp.d.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.d.getGainMult).max(1)
                 let v1 = reqInit.root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(4.4e144)
                 return v1
@@ -14904,6 +15199,7 @@ addLayer("cells", {
         },
         getNextAt(){
                 let gain = tmp.cells.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.cells.getGainMult).max(1)
                 return reqInit.plus(1).root(tmp.cells.getGainExp).times("1e582")
         },
@@ -18239,7 +18535,7 @@ addLayer("cells", {
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
-                                return hasUpgrade("t", 72)
+                                return hasUpgrade("t", 142)
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[21].cost),
                         maxAfford(){
@@ -19099,6 +19395,7 @@ addLayer("t", {
         },
         getNextAt(){
                 let gain = tmp.t.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.t.getGainMult).max(1)
                 if (hasUpgrade("t", 71)) return reqInit.root(tmp.t.getGainExp).max("1e1385")
                 return reqInit.plus(9).root(tmp.t.getGainExp).div("1e615")
@@ -21296,6 +21593,7 @@ addLayer("or", {
         },
         getNextAt(){
                 let gain = tmp.or.getResetGain
+                if (player.extremeMode) gain = gain.root(.75)
                 let reqInit = gain.plus(1).div(tmp.or.getGainMult).max(1)
                 return reqInit.plus(9).root(tmp.or.getGainExp).pow10()
         },
@@ -21358,7 +21656,7 @@ addLayer("or", {
                 let a = "Reset for <b>" + formatWhole(tmp.or.getResetGain) + "</b> Organs"
 
                 let b = ""
-                if (tmp.or.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.or.getNextAt) + " Cells."
+                if (tmp.or.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.or.getNextAt) + " Tissues."
 
                 return a + b
         },
@@ -22787,6 +23085,9 @@ addLayer("mini", {
                                 addfrom = order[i]
                                 let base = extras[addfrom].pow(exp).div(20).times(Decimal.pow(2, lvls[addfrom]))
                                 base = base.times(tmp.mini.a_points.colorGainMult)
+
+                                if (player.extremeMode) base = base.pow(.75)
+
                                 extras[addto] = extras[addto].plus(base.times(diff))
                         }
                         apts.points = apts.points.plus(tmp.mini.a_points.getResetGain.times(diff))
@@ -23388,7 +23689,7 @@ addLayer("mini", {
 
                         if (iter <= 5) return recurse(f, decimalZero, iter)
                         let init = recurse(f, decimalZero, 5)
-                        //assume only a and iterations matter
+                        // assume only a and iterations matter
                         let rem = iter - 5
                         let levelsOfA = Decimal.pow(3, rem).sub(1).div(2)
                         let aComponent = a.pow(levelsOfA)
@@ -28570,7 +28871,7 @@ addLayer("mini", {
         },
         microtabs: {
                 d_content: {
-                        "Fuel": { // has upgrades for getting fuel passively
+                        "Fuel": {
                                 content: [
                                         ["bar", "fuel"],
                                         ["display-text", function(){
@@ -28630,7 +28931,7 @@ addLayer("mini", {
                                         return player.mini.d_points.fuel.eq(0)
                                 },
                         },
-                        "Multipliers": {//buff point gain
+                        "Multipliers": {
                                 content: [
                                         ["display-text", function(){
                                                 if (player.tab != "mini") return ""
@@ -31152,7 +31453,8 @@ addLayer("tokens", {
                         onClick(){
                                 let data = player.tokens
                                 data.tokens2.points = data.tokens2.total
-                                ids = [101, 102, 111, 112, 121, 122, 131, 132]//add more
+                                ids = [101, 102, 111, 112, 121, 122, 131, 132]
+                                // add more when applicable
                                 for (i in ids){
                                         data.buyables[ids[i]] = decimalZero
                                 }

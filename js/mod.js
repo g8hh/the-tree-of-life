@@ -12,23 +12,38 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.102",
+	num: "1.103",
 	name: "Advil's Auspicious Acension",
 }
 
+
+var forceEndgame = false
 function isEndgame() {
-	return player.or.total.gt(1)
+	if (forceEndgame) return true
+	if (player.extremeMode) return hasUpgrade("h", 44) || hasUpgrade("h", 45)
+	return player.or.total.gt(2)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		2 total Organs and reaching the endgame screen<br><br>
+		Reaching the endgame screen (updated as of v1.103)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.103</h3><br>
+		- Implemented extreme mode's nerfs.<br>
+		- Balanced until 3 Organs.<br>
+		- Balanced extreme mode until minigame unlock.<br>
+		- Added a custom save.<br>
+		- Added the Labratory and Science.<br>
+		- Added three Science upgrades.<br>
+		- Added three Science buyables.<br>
+		- Added Hydrogen Science.<br>
+		- Added a backup font for most things.<br>
+		- Fixed various display issue.<br>
 	<br><h3 style='color: #CC0000'>v1.102</h3><br>
 		- Disjointed hard and extreme mode.<br>
 		- Removed some displays for hard mode.<br>
@@ -1185,6 +1200,13 @@ function fixOldSave(oldVersion){
 		player.tokens.points = player.tokens.total
 		player.subtabs.tokens.mainTabs = "II"
 		player.tab = "tokens"
+	}
+	if (player.version < "1.103" && player.extremeMode) {
+		player.extremeMode = false
+		player.extremeFromBeginning = false
+		let s = "Your save had extreme mode active in a patch before it did anything."
+		s += "To keep the save balanced, you have been kicked out of extreme mode."
+		alert(s)
 	}
 }
 
