@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.103",
+	num: "1.104",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.104</h3><br>
+		- Added a Organ milestone.<br>
+		- Made Organ milestone 2 autobuy DNA upgrades.<br>
+		- Made Organ upgrade 11 remove coins.<br>
 	<br><h3 style='color: #CC0000'>v1.103</h3><br>
 		- Implemented extreme mode's nerfs.<br>
 		- Balanced until 3 Organs.<br>
