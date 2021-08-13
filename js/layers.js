@@ -15282,6 +15282,10 @@ addLayer("cells", {
                 if (hasUpgrade("or", 11)) {
                         if (player.cells.challenges[12] % 5 > 0) player.cells.challenges[12] ++
                 }
+
+                if (hasMilestone("or", 5)) {
+                        if (player.cells.challenges[11] % 5 > 0) player.cells.challenges[11] ++ 
+                }
         },
         mu: {// mu gain mgain mugain m gain
                 getResetGain(){
@@ -21681,6 +21685,30 @@ addLayer("or", {
                                 boughtYet = buyUpg("cells", id)
                         }
                 }
+
+                if (hasMilestone("or", 4) && data.autobuyt) {
+                        let tissueKeys = ["11", "12", "13", "14", "15", 
+                                          "21", "22", "23", "24", "25", 
+                                          "31", "32", "33", "34", "35", 
+                                          "41", "42", "43", "44", "45", 
+                                          "51", "52", "53", "54", "55", 
+                                          "61", "62", "63", "64", "65", 
+                                          "71", "72", "73", "74", "75", 
+                                          "81", "82", "83", "84", "85", 
+                                          "91", "92", "93", "94", "95", 
+                                          "101", "102", "103", "104", "105", 
+                                          "111", "112", "113", "114", "115", 
+                                          "121", "122", "123", "124", "125", 
+                                          "131", "132", "133", "134", "135", 
+                                          "141", "142", "143", "144", "145", 
+                                          "151", "152", "153", "154", "155"]
+                        let boughtYet = false
+                        for (i in tissueKeys) {
+                                if (boughtYet) break
+                                id = tissueKeys[i]
+                                boughtYet = buyUpg("t", id)
+                        }
+                }
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -21788,6 +21816,51 @@ addLayer("or", {
                                 return a + b
                         },
                 }, // hasMilestone("or", 3)
+                4: {
+                        requirementDescription(){
+                                return "Requires: 4 Organ resets"
+                        },
+                        requirement(){
+                                return new Decimal(4)
+                        },
+                        done(){
+                                return tmp.or.milestones[4].requirement.lte(player.or.times)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        toggles:() => [["or", "autobuyt"]],
+                        effectDescription(){
+                                if (player.tab != "or") return ""
+                                if (player.subtabs.or.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Autobuy Tissue upgrades and per reset keep 2 Tissue upgrades."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("or", 4)
+                5: {
+                        requirementDescription(){
+                                return "Requires: 5 Organ resets"
+                        },
+                        requirement(){
+                                return new Decimal(5)
+                        },
+                        done(){
+                                return tmp.or.milestones[5].requirement.lte(player.or.times)
+                        },
+                        unlocked(){
+                                return true
+                        },  
+                        effectDescription(){
+                                if (player.tab != "or") return ""
+                                if (player.subtabs.or.mainTabs != "Milestones") return ""
+                                
+                                let a = "Reward: Bulk 5x Primary and token tetrational base is 9.5."
+                                let b = ""
+                                return a + b
+                        },
+                }, // hasMilestone("or", 5)
         },
         tabFormat: {
                 "Upgrades": {
@@ -21878,6 +21951,7 @@ addLayer("or", {
                         }
 
                         let tKeptUpgrades = 0
+                        if (hasMilestone("or", 4)) tKeptUpgrades += player.or.times * 2
                         if (!false) {
                                 sortStrings(data1.upgrades)
                                 data1.upgrades = data1.upgrades.slice(0, tKeptUpgrades)
@@ -29508,6 +29582,7 @@ addLayer("tokens", {
         getResetGain(){
                 if (hasMilestone("or", 2) && tmp.tokens.getNextAt.slog().gt(4)) {
                         let tetBase = 9.7
+                        if (hasMilestone("or", 5)) tetBase = 9.5
 
                         let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
                         let canAff = portion.plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
@@ -29581,12 +29656,11 @@ addLayer("tokens", {
 
                 amt = Math.floor(amt)
 
-                let tetrationalScaling = tmp.tokens.getTetrationScalingDivisor
-
                 if (amt >= 87) {
                         let tetBase = 10
                         if (hasMilestone("or", 2)) tetBase = 9.7
-                        return Decimal.tetrate(tetBase, 4 + (amt - 87) / tetrationalScaling)
+                        if (hasMilestone("or", 5)) tetBase = 9.5
+                        return Decimal.tetrate(tetBase, 4 + (amt - 87) / tmp.tokens.getTetrationScalingDivisor)
                 }
                 let add = player.hardMode ? 4 : 0
                 return Decimal.pow(10, TOKEN_COSTS[amt]).times(Decimal.pow(10, add))
