@@ -15257,10 +15257,10 @@ addLayer("cells", {
                                 player.subtabs.cells.mainTabs = "Upgrades"
                         }
                 }
-                let run1 = data.currentMinigame == 11 || hasMilestone("cells", 21)
-                let run2 = data.currentMinigame == 12 || hasMilestone("cells", 32)
-                let run3 = data.currentMinigame == 13 || hasMilestone("cells", 37)
-                let run4 = data.currentMinigame == 14 || hasMilestone("cells", 38)
+                let run1 = data.currentMinigame == 11 || hasMilestone("cells", 21) || hasMilestone("or", 4)
+                let run2 = data.currentMinigame == 12 || hasMilestone("cells", 32) || hasMilestone("or", 4)
+                let run3 = data.currentMinigame == 13 || hasMilestone("cells", 37) || hasMilestone("or", 4)
+                let run4 = data.currentMinigame == 14 || hasMilestone("cells", 38) || hasMilestone("or", 4)
 
                 if (run1) layers.cells.mu.update(diff)
                 if (run2) layers.cells.lambda.update(diff)
@@ -16455,7 +16455,7 @@ addLayer("cells", {
                                 return hasChallenge("l", 102)
                         },
                         canClick(){
-                                return player.cells.currentMinigame == undefined && !hasMilestone("cells", 21)
+                                return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                         onClick(){
                                 player.cells.currentMinigame = 11
@@ -16477,7 +16477,7 @@ addLayer("cells", {
                                 return hasChallenge("l", 102)
                         },
                         canClick(){
-                                return player.cells.currentMinigame == undefined && !hasMilestone("cells", 32)
+                                return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 32) || hasMilestone("or", 4))
                         },
                         onClick(){
                                 player.cells.currentMinigame = 12
@@ -16499,7 +16499,7 @@ addLayer("cells", {
                                 return hasChallenge("l", 102)
                         },
                         canClick(){
-                                return player.cells.currentMinigame == undefined && !hasMilestone("cells", 37)
+                                return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 37) || hasMilestone("or", 4))
                         },
                         onClick(){
                                 player.cells.currentMinigame = 13
@@ -16521,7 +16521,7 @@ addLayer("cells", {
                                 return hasChallenge("l", 102)
                         },
                         canClick(){
-                                return player.cells.currentMinigame == undefined && !hasMilestone("cells", 38)
+                                return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 38) || hasMilestone("or", 4))
                         },
                         onClick(){
                                 player.cells.currentMinigame = 14
@@ -18861,7 +18861,7 @@ addLayer("cells", {
                         },
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
-                                if (hasMilestone("cells", 38)) time = Math.floor(player.timePlayed)
+                                if (hasMilestone("cells", 38) || hasMilestone("or", 4)) time = Math.floor(player.timePlayed)
                                 let base = .8 + 1.7 * ((1 - time % 2) || hasUpgrade("t", 15))
                                 if (hasUpgrade("cells", 12)) base += .3
                                 if (hasMilestone("t", 1)) base = Math.max(base, 1)
@@ -18934,7 +18934,7 @@ addLayer("cells", {
                         },
                         base(){
                                 let time = Math.floor(player.cells.timeInMinigame)
-                                if (hasMilestone("cells", 38)) time = Math.floor(player.timePlayed)
+                                if (hasMilestone("cells", 38) || hasMilestone("or", 4)) time = Math.floor(player.timePlayed)
                                 let base = .8 + 1.2 * ((time % 2) || hasUpgrade("cells", 415))
                                 if (hasUpgrade("cells", 12)) base += .3
                                 if (hasMilestone("t", 1)) base = Math.max(1, base)
@@ -19016,7 +19016,7 @@ addLayer("cells", {
                                   ["display-text", function (){ return hasMilestone("cells", 14) ? "You can reset for " + format(tmp.cells.getResetGain) + " Cells" : ""}], 
                                   ["upgrades", [1,2,3,4,5,6,7]],
                                   "blank",
-                                  ["clickables", function(){return hasMilestone("cells", 21) ? [] : [1]}],
+                                  ["clickables", function(){return hasMilestone("cells", 21) || hasMilestone("or", 4) ? [] : [1]}],
                                 ],
                         unlocked(){
                                 return true
@@ -19048,7 +19048,7 @@ addLayer("cells", {
                                 ["buyables", [11]],
                                 ],
                         unlocked(){
-                                return player.cells.currentMinigame == 11 && !hasMilestone("cells", 21)
+                                return player.cells.currentMinigame == 11 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Lambda": {
@@ -19061,7 +19061,7 @@ addLayer("cells", {
                                 ["clickables", [21]],
                                 ],
                         unlocked(){
-                                return player.cells.currentMinigame == 12 && !hasMilestone("cells", 21)
+                                return player.cells.currentMinigame == 12 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Kappa": {
@@ -19074,7 +19074,7 @@ addLayer("cells", {
                                 ["upgrades", [31, 32]],
                                 ],
                         unlocked(){
-                                return player.cells.currentMinigame == 13 && !hasMilestone("cells", 21)
+                                return player.cells.currentMinigame == 13 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Iota": {
@@ -19090,7 +19090,7 @@ addLayer("cells", {
                                 ["buyables", [41]],
                                 ],
                         unlocked(){
-                                return player.cells.currentMinigame == 14 && !hasMilestone("cells", 21)
+                                return player.cells.currentMinigame == 14 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Stem": {
@@ -21836,7 +21836,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Autobuy Tissue upgrades and per reset keep 2 Tissue upgrades."
+                                let a = "Reward: Autobuy Tissue upgrades, per reset keep 2 Tissue upgrades, and all four minigames constantly run."
                                 let b = ""
                                 return a + b
                         },
@@ -22326,7 +22326,7 @@ addLayer("mc", {
                         },
                 },
         },
-        layerShown(){return hasMilestone("cells", 21) || player.or.unlocked},
+        layerShown(){return hasMilestone("cells", 21) || hasMilestone("or", 4) || player.or.unlocked},
         buyables: {
                 rows: 3,
                 cols: 3,
@@ -22585,7 +22585,7 @@ addLayer("mc", {
                                         [
                                                 ["secondary-display", "iota"],
                                                 ["display-text", function(){
-                                                        if (hasMilestone("cells", 38)) return ""
+                                                        if (hasMilestone("cells", 38) || hasMilestone("or", 4)) return ""
                                                         return "You have spent " + formatTime(player.cells.timeInMinigame) + " in Iota"
                                                 }],
                                                 ["display-text", function(){
