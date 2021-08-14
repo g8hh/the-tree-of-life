@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.105.1",
+	num: "1.105.2",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.105.2</h3><br>
+		- Fixed a bug with Organ milestone 4 autobuyer.<br>
+		- Fixed a bug with buying upgrades generally.<br>
 	<br><h3 style='color: #CC0000'>v1.105.1</h3><br>
 		- Fixed a longstanding bug that messes with Organ resetting.<br>
 		- Made Tissue milestone 4 easier after Organ unlock.<br>
