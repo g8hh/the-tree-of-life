@@ -18362,7 +18362,7 @@ addLayer("cells", {
                                 let id = 12
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
+                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) || hasMilestone("or", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -20780,10 +20780,12 @@ addLayer("t", {
                 }, // hasMilestone("t", 3)
                 4: {
                         requirementDescription(){
+                                if (player.or.unlocked) return "Requires: 10 Tissue resets"
                                 if (player.hardMode) return "Requires: 50 Tissue resets"
                                 return "Requires: 30 Tissue resets"
                         },
                         requirement(){
+                                if (player.or.unlocked) return new Decimal(10)
                                 if (player.hardMode) return new Decimal(50)
                                 return new Decimal(30)
                         },
@@ -21811,7 +21813,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Autobuy Cell upgrades and per reset keep a Cell upgrade."
+                                let a = "Reward: Autobuy Cell upgrades, per reset keep a Cell upgrade, and bulk Totipotent."
                                 let b = ""
                                 return a + b
                         },
@@ -21964,6 +21966,7 @@ addLayer("or", {
                 data1.points = decimalZero
                 data1.best = decimalZero
                 data1.total = decimalZero
+                data1.bestOnReset = decimalZero
 
                 // 1.5 Token II content
                 if (!false) {
