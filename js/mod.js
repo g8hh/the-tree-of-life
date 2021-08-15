@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.105.3",
+	num: "1.105.6",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,16 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.105.7</h3><br>
+		- Various code cleanup.<br>
+		- Made a toggle for disabling milestone popups.<br>
+		- Added a new file (<i>hotkeySupport.js</i>).<br>
+	<br><h3 style='color: #CC0000'>v1.105.6</h3><br>
+		- Various code cleanup.<br>
+		- Removed 12 "new Decimal(0)"s to make the code a tiny bit faster.<br>
+		- Made milestone popups not say "Requires:" anymore.<br>
+	<br><h3 style='color: #CC0000'>v1.105.5</h3><br>
+		- Made Organ milestones 2/3 permanently bulk buy Omnipotent/Totipotent.<br>
 	<br><h3 style='color: #CC0000'>v1.105.4</h3><br>
 		- Fixed Tokens II initial unlock still notifying the layer.<br>
 	<br><h3 style='color: #CC0000'>v1.105.3</h3><br>

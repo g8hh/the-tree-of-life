@@ -1,31 +1,3 @@
-// TAB STUFF
-
-function getNextLeftTab(layer){
-	let l = getUnlockedSubtabs(layer)
-	let id = l.indexOf(player.subtabs[layer].mainTabs)
-	if (id == -1) return l[0]
-	if (id == 0) return l[l.length-1]
-	return l[id - 1]
-}
-
-function getUnlockedSubtabs(layer){
-	let l = Object.keys(layers[layer].tabFormat)
-	let n = []
-	for (i in l) {
-		j = l[i]
-		if (tmp[layer].tabFormat[j].unlocked) n.push(j)
-	}
-	return n
-}
-
-function getNextRightTab(layer){
-	let l = getUnlockedSubtabs(layer)
-	let id = l.indexOf(player.subtabs[layer].mainTabs)
-	if (id == -1) return l[0]
-	if (id == l.length-1) return l[0]
-	return l[id + 1]
-}
-
 function nerfBminigameBuyableAmounts(x){
 	if (x.lt(1000)) return x
 	if (hasUpgrade("h", 52)) return x
@@ -43,15 +15,14 @@ function combineStrings(l){
 
 // ***************************
 
-function uppercaseWord(s){
-	a = s.toLowerCase()
-	return a.slice(0,1).toUpperCase() + a.slice(1,)
-}
-
 function improveName(s){
 	x = s.split("_")
 	l = x.length
 	ret = ""
+	let uppercaseWord = function(s){
+		a = s.toLowerCase()
+		return a.slice(0,1).toUpperCase() + a.slice(1,)
+	}
 	for (i = 0; i < l; i++){
 		if (i > 0) ret += " "
 		ret += uppercaseWord(x[i])
@@ -355,11 +326,14 @@ function toNumber(x) {
 
 function updateMilestones(layer) {
 	if (tmp[layer].deactivated) return
+	shouldPopup = !options.hideMilestonePopups && (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined)
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete()
-			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
+			if (shouldPopup) {
+				doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
+			}
 			player[layer].lastMilestone = id
 		}
 	}
@@ -398,50 +372,6 @@ function addTime(diff, layer) {
 
 	if (layer) data.time = time
 	else data.timePlayed = time
-}
-
-function fixHotkeyCode(s){
-	if (s.length == 1) return s.toLowerCase()
-	s = replaceString(s, "Shift", "shift")
-	s = replaceString(s, "]", "}")
-	s = replaceString(s, "[", "{")
-	s = replaceString(s, ",", "<")
-	s = replaceString(s, ".", ">")
-	s = replaceString(s, "0", ")")
-	s = replaceString(s, "1", "!")
-	s = replaceString(s, "2", "@")
-	s = replaceString(s, "3", "#")
-	s = replaceString(s, "4", "$")
-	s = replaceString(s, "5", "%")
-
-	return s
-}
-
-var logHotkey = false
-var qForClear = false
-
-document.onkeydown = function(e) {
-	if (player === undefined) return;
-	if (tmp.gameEnded && !player.keepGoing) return;
-	if (onFocused) return
-	let key = e.key
-	if (controlDown) key = "Control+" + key.toUpperCase()
-	if (shiftDown) key = "shift+" + key
-	if (e.ctrlKey && hotkeys[key]) e.preventDefault()
-	if (hotkeys[key] != undefined){
-		if (player[hotkeys[key].layer].unlocked) {
-			hotkeys[key].onPress()
-		}
-	} else {
-		key += "ALT"
-		if (hotkeys[key] != undefined){
-			if (player[hotkeys[key].layer].unlocked) {
-				hotkeys[key].onPress()
-			}
-		}
-	}
-	if (logHotkey) console.log(key)
-	if (key == "q" && qForClear) clearInterval(interval)
 }
 
 var onFocused = false
