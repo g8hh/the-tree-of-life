@@ -216,9 +216,9 @@ var onTreeTab = true
 function showTab(name, prev) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
 	if (player.tab !== name) clearParticles(function(p) {return p.layer === player.tab})
-	if (tmp[name] && player.tab === name && isPlainObject(tmp[name].tabFormat)) {
+	/*if (tmp[name] && player.tab === name && isPlainObject(tmp[name].tabFormat)) {
 		player.subtabs[name].mainTabs = Object.keys(layers[name].tabFormat)[0]
-	}
+	}*/
 	var toTreeTab = name == "none"
 	player.tab = name
 	if (tmp[name] && (tmp[name].row !== "side") && (tmp[name].row !== "otherside")) player.lastSafeTab = name
@@ -330,6 +330,7 @@ function updateMilestones(layer) {
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
+			if (!tmp[layer].milestones[id].unlocked) continue
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete()
 			if (shouldPopup) {
 				doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);

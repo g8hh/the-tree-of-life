@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.106",
+	num: "1.107",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,15 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.107</h3><br>
+		- Added a custom save.<br>
+		- Fixed extreme mode description.<br>
+		- Made milestones that are no unlocked not rewarded.<br>
+		- Fixed a "feature" where clicking a layer brings you to the first subtab.<br>
+		- Added 7 B Point milestones.<br>
+		- Added a Hydrogen Science upgrade.<br>
+		- Added a Hydrogen Science buyable.<br>
+		- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.106</h3><br>
 		- Rollover, I guess.<br>
 		- Added a custom save.<br>

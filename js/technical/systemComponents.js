@@ -178,9 +178,8 @@ var systemComponents = {
 		Gain 2x resets at once and pre-Phosphorus gain ^1.001<br><br>
 
 		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
-		Automatically in hardmode<br>
 		Gain of all currencies is raised ^.75 (after everything except dilation)<br>
-		For protein, gain is not reduced, but mRNA and tRNA base is ^.75<br><br>
+		For protein, gain is not reduced, but mRNA and tRNA bases are ^.75<br><br>
 		
 		</span>
 		
