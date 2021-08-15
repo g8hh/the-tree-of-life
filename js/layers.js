@@ -3765,7 +3765,7 @@ addLayer("n", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Nitrogen reset"
+                                return "1 Nitrogen reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -3786,7 +3786,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Nitrogen resets"
+                                return "2 Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -3807,7 +3807,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 Nitrogen resets"
+                                return "3 Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -3828,7 +3828,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 5 : 4) + " Nitrogen resets"
+                                return (player.hardMode ? 5 : 4) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 5 : 4)
@@ -3850,7 +3850,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 7 : 5) + " Nitrogen resets"
+                                return (player.hardMode ? 7 : 5) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 7 : 5)
@@ -3871,7 +3871,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 9 : 6) + " Nitrogen resets"
+                                return (player.hardMode ? 9 : 6) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 9 : 6)
@@ -3892,7 +3892,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 11 : 7) + " Nitrogen resets"
+                                return (player.hardMode ? 11 : 7) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 11 : 7)
@@ -3914,7 +3914,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 14 : 9) + " Nitrogen resets"
+                                return (player.hardMode ? 14 : 9) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 14 : 9)
@@ -3935,7 +3935,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 17 : 12) + " Nitrogen resets"
+                                return (player.hardMode ? 17 : 12) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 17 : 12)
@@ -3956,7 +3956,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 21 : 15) + " Nitrogen resets"
+                                return (player.hardMode ? 21 : 15) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 21 : 15)
@@ -3978,7 +3978,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 25 : 20) + " Nitrogen resets"
+                                return (player.hardMode ? 25 : 20) + " Nitrogen resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 25 : 20)
@@ -3999,7 +3999,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 640 : 128) + " Nitrogen"
+                                return (player.hardMode ? 640 : 128) + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 5 : 1
@@ -4021,7 +4021,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "2,560" : 256) + " Nitrogen"
+                                return (player.hardMode ? "2,560" : 256) + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -4043,7 +4043,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
+                                return (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -4065,7 +4065,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "10,485,760" : "1,048,576") + " Nitrogen and 3 Nitrogen challenges"
+                                return (player.hardMode ? "10,485,760" : "1,048,576") + " Nitrogen and 3 Nitrogen challenges"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -4087,7 +4087,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "1.07e10" : "1.07e9") + " Nitrogen"
+                                return (player.hardMode ? "1.07e10" : "1.07e9") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -4109,7 +4109,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "1.00e47" : "1.00e46") + " Nitrogen"
+                                return (player.hardMode ? "1.00e47" : "1.00e46") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 10 : 1
@@ -4128,7 +4128,7 @@ addLayer("n", {
                 }, // hasMilestone("n", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "7.50e942" : "7.40e942") + " Nitrogen"
+                                return (player.hardMode ? "7.50e942" : "7.40e942") + " Nitrogen"
                         },
                         requirement(){
                                 let m = player.hardMode ? 7.5 : 7.4
@@ -4945,7 +4945,7 @@ addLayer("p", {
                                 return a + b
                         },
                         effect(){
-                                if (inChallenge("l", 92) || hasChallenge("l", 92)) return new Decimal(1)
+                                if (inChallenge("l", 92) || hasChallenge("l", 92)) return decimalOne
                                 return player.p.points.max(1).pow(tmp.mini.e_points.getMaxInterations)
                         },
                         cost:() => new Decimal(player.hardMode ? 1e12 : 2e11),
@@ -5257,7 +5257,7 @@ addLayer("p", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Phosphorus reset"
+                                return "1 Phosphorus reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -5278,7 +5278,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Phosphorus resets"
+                                return "2 Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -5299,7 +5299,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 4 Phosphorus resets"
+                                return "4 Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -5317,7 +5317,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 7 : 6) + " Phosphorus resets"
+                                return (player.hardMode ? 7 : 6) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 7 : 6)
@@ -5335,7 +5335,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 11 : 8) + " Phosphorus resets"
+                                return (player.hardMode ? 11 : 8) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 11 : 8)
@@ -5353,7 +5353,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 16 : 10) + " Phosphorus resets"
+                                return (player.hardMode ? 16 : 10) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 16 : 10)
@@ -5371,7 +5371,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? 22 : 13) + " Phosphorus resets"
+                                return (player.hardMode ? 22 : 13) + " Phosphorus resets"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 22 : 13)
@@ -5389,7 +5389,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "5.00e9" : "1.00e9") + " Phosphorus"
+                                return (player.hardMode ? "5.00e9" : "1.00e9") + " Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 5e9 : 1e9)
@@ -5407,7 +5407,7 @@ addLayer("p", {
                 }, // hasMilestone("p", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: " + (player.hardMode ? "1.00e11" : "2.00e10") + " Phosphorus"
+                                return (player.hardMode ? "1.00e11" : "2.00e10") + " Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(player.hardMode ? 1e11 : 2e10)
@@ -5924,13 +5924,13 @@ addLayer("mu", {
                         },
                         cost:() => new Decimal(6),
                         effect(){
-                                if (inChallenge("l", 91) || hasMilestone("cells", 49)) return new Decimal(1)
+                                if (inChallenge("l", 91) || hasMilestone("cells", 49)) return decimalOne
                                 let base = player.p.points.max(100).log10()
                                 if (hasUpgrade("mu", 22)) base = base.div(Math.log10(6))
                                 if (hasUpgrade("mu", 25)) base = base.times(Math.log(6)/Math.log(5))
                                 if (hasUpgrade("mu", 31)) base = base.times(Math.log(5)/Math.log(4))
 
-                                let exp = new Decimal(1)
+                                let exp = decimalOne
                                 if (hasChallenge("l", 91)) exp = new Decimal(.95)
                                 
                                 return base.pow(player.mu.points.pow(exp)).min("ee1e5")
@@ -6303,7 +6303,7 @@ addLayer("mu", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 µ"
+                                return "1 µ"
                         },
                         requirement(){
                                 return decimalOne
@@ -6321,7 +6321,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 1e1,200,000 E Points"
+                                return "1e1,200,000 E Points"
                         },
                         requirement(){
                                 return Decimal.pow(10, 12e5)
@@ -6339,7 +6339,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 5 µ"
+                                return "5 µ"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -6358,7 +6358,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 7 µ"
+                                return "7 µ"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -6376,7 +6376,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 1.00e194 Phosphorus"
+                                return "1.00e194 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e194)
@@ -6394,7 +6394,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 1.00e211 Phosphorus"
+                                return "1.00e211 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e211)
@@ -6412,7 +6412,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 1.00e243 Phosphorus"
+                                return "1.00e243 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal(1e243)
@@ -6430,7 +6430,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 19 µ"
+                                return "19 µ"
                         },
                         requirement(){
                                 return new Decimal(19)
@@ -6448,7 +6448,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 1.00e345 Phosphorus"
+                                return "1.00e345 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e345")
@@ -6466,7 +6466,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 1.00e370 Phosphorus"
+                                return "1.00e370 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e370")
@@ -6484,7 +6484,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 1.00e398 Phosphorus"
+                                return "1.00e398 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e398")
@@ -6502,7 +6502,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 1.00e1283 Phosphorus"
+                                return "1.00e1283 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e1283")
@@ -6520,7 +6520,7 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 1.00e1456 Phosphorus"
+                                return "1.00e1456 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("1e1456")
@@ -7592,7 +7592,7 @@ addLayer("l", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Life"
+                                return "1 Life"
                         },
                         requirement(){
                                 return decimalOne
@@ -7621,7 +7621,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Lives"
+                                return "2 Lives"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -7640,7 +7640,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 Lives"
+                                return "3 Lives"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -7658,7 +7658,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 4 Lives"
+                                return "4 Lives"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -7677,7 +7677,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 5 Lives"
+                                return "5 Lives"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -7695,7 +7695,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 6 Lives"
+                                return "6 Lives"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -7714,7 +7714,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 7 Lives"
+                                return "7 Lives"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -7732,7 +7732,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 10 Lives"
+                                return "10 Lives"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -7750,7 +7750,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 12 Dilation completions"
+                                return "12 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(12)
@@ -7768,7 +7768,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 13 Dilation completions"
+                                return "13 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(13)
@@ -7796,7 +7796,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 14 Dilation completions"
+                                return "14 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(14)
@@ -7814,7 +7814,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 24 Dilation completions"
+                                return "24 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(24)
@@ -7832,7 +7832,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 25 Dilation completions"
+                                return "25 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(25)
@@ -7851,7 +7851,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 26 Dilation completions"
+                                return "26 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(26)
@@ -7873,7 +7873,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 5.00e21 µ"
+                                return "5.00e21 µ"
                         },
                         requirement(){
                                 return new Decimal(5e21)
@@ -7891,7 +7891,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 2.00e22 µ"
+                                return "2.00e22 µ"
                         },
                         requirement(){
                                 return new Decimal(2e22)
@@ -7909,7 +7909,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 2.70e12 Lives"
+                                return "2.70e12 Lives"
                         },
                         requirement(){
                                 return new Decimal(2.7e12)
@@ -7928,7 +7928,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 1.00e25 µ"
+                                return "1.00e25 µ"
                         },
                         requirement(){
                                 return new Decimal(1e25)
@@ -7946,7 +7946,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: e1.00e1000 Points"
+                                return "e1.00e1000 Points"
                         },
                         requirement(){
                                 return new Decimal("ee1000")
@@ -7964,7 +7964,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: e3.20e306 Points"
+                                return "e3.20e306 Points"
                         },
                         requirement(){
                                 return new Decimal("e3.2e306")
@@ -7986,7 +7986,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: e9.50e305 Points"
+                                return "e9.50e305 Points"
                         },
                         requirement(){
                                 return new Decimal("e9.5e305")
@@ -8008,7 +8008,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 1.00e31 µ"
+                                return "1.00e31 µ"
                         },
                         requirement(){
                                 return new Decimal(1e31)
@@ -8026,7 +8026,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 3.45e31 Lives"
+                                return "3.45e31 Lives"
                         },
                         requirement(){
                                 return new Decimal(3.45e31)
@@ -8044,7 +8044,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 23)
                 24: {
                         requirementDescription(){
-                                return "Requires: 1.70e50 Lives"
+                                return "1.70e50 Lives"
                         },
                         requirement(){
                                 return new Decimal(1.7e50)
@@ -8062,7 +8062,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 24)
                 25: {
                         requirementDescription(){
-                                return "Requires: 5.00e113 Lives"
+                                return "5.00e113 Lives"
                         },
                         requirement(){
                                 return new Decimal(5e113)
@@ -8080,7 +8080,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 25)
                 26: {
                         requirementDescription(){
-                                return "Requires: 7.00e125 Lives"
+                                return "7.00e125 Lives"
                         },
                         requirement(){
                                 return new Decimal(7e125)
@@ -8098,7 +8098,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 26)
                 27: {
                         requirementDescription(){
-                                return "Requires: 4.00e128 Lives"
+                                return "4.00e128 Lives"
                         },
                         requirement(){
                                 return new Decimal(4e128)
@@ -8116,7 +8116,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 27)
                 28: {
                         requirementDescription(){
-                                return "Requires: 1.00e148 Lives"
+                                return "1.00e148 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e148)
@@ -8134,7 +8134,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 28)
                 29: {
                         requirementDescription(){
-                                return "Requires: 1.00e157 Lives"
+                                return "1.00e157 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e157)
@@ -8152,7 +8152,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 29)
                 30: {
                         requirementDescription(){
-                                return "Requires: 1.00e182 Lives"
+                                return "1.00e182 Lives"
                         },
                         requirement(){
                                 return new Decimal(1e182)
@@ -8170,7 +8170,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 30)
                 31: {
                         requirementDescription(){
-                                return "Requires: 4.00e198 Lives"
+                                return "4.00e198 Lives"
                         },
                         requirement(){
                                 return new Decimal(4e198)
@@ -8188,7 +8188,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 31)
                 32: {
                         requirementDescription(){
-                                return "Requires: 2.00e219 Lives"
+                                return "2.00e219 Lives"
                         },
                         requirement(){
                                 return new Decimal(2e219)
@@ -8206,7 +8206,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 32)
                 33: {
                         requirementDescription(){
-                                return "Requires: 7.00e242 Lives"
+                                return "7.00e242 Lives"
                         },
                         requirement(){
                                 return new Decimal(7e242)
@@ -8224,7 +8224,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 33)
                 34: {
                         requirementDescription(){
-                                return "Requires: 2.00e261 Lives"
+                                return "2.00e261 Lives"
                         },
                         requirement(){
                                 return new Decimal(2e261)
@@ -8242,7 +8242,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 34)
                 35: {
                         requirementDescription(){
-                                return "Requires: 5.00e311 Lives"
+                                return "5.00e311 Lives"
                         },
                         requirement(){
                                 return new Decimal("5e311")
@@ -8260,7 +8260,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 35)
                 36: {
                         requirementDescription(){
-                                return "Requires: 5 C12 Gems"
+                                return "5 C12 Gems"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -8278,7 +8278,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 36)
                 37: {
                         requirementDescription(){
-                                return "Requires: 3.00e382 Lives"
+                                return "3.00e382 Lives"
                         },
                         requirement(){
                                 return new Decimal("3e382")
@@ -8296,7 +8296,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 37)
                 38: {
                         requirementDescription(){
-                                return "Requires: 1.00e434 Lives"
+                                return "1.00e434 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e434")
@@ -8314,7 +8314,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 38)
                 39: {
                         requirementDescription(){
-                                return "Requires: 1.00e486 Lives"
+                                return "1.00e486 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e486")
@@ -8332,7 +8332,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 39)
                 40: {
                         requirementDescription(){
-                                return "Requires: 1.00e500 Lives"
+                                return "1.00e500 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e500")
@@ -8350,7 +8350,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 40)
                 41: {
                         requirementDescription(){
-                                return "Requires: 1.00e532 Lives"
+                                return "1.00e532 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e532")
@@ -8368,7 +8368,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 41)
                 42: {
                         requirementDescription(){
-                                return "Requires: 1.00e547 Lives"
+                                return "1.00e547 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e547")
@@ -11673,7 +11673,7 @@ addLayer("a", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Amino Acid reset"
+                                return "1 Amino Acid reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -11695,7 +11695,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Amino Acid resets"
+                                return "2 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -11717,7 +11717,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 Amino Acid resets"
+                                return "3 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -11739,7 +11739,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 4 Amino Acid resets"
+                                return "4 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -11762,7 +11762,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 5 Amino Acid resets"
+                                return "5 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -11785,7 +11785,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 6 Amino Acid resets"
+                                return "6 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -11807,7 +11807,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 7 Amino Acid resets"
+                                return "7 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -11829,7 +11829,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 8 Amino Acid resets"
+                                return "8 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(8)
@@ -11851,7 +11851,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 10 Amino Acid resets"
+                                return "10 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -11873,7 +11873,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 12 Amino Acid resets"
+                                return "12 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(12)
@@ -11895,7 +11895,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 15 Amino Acid resets"
+                                return "15 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(15)
@@ -11917,7 +11917,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 18 Amino Acid resets"
+                                return "18 Amino Acid resets"
                         },
                         requirement(){
                                 return new Decimal(18)
@@ -11939,7 +11939,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 100 Amino Acids"
+                                return "100 Amino Acids"
                         },
                         requirement(){
                                 return new Decimal(100)
@@ -11961,7 +11961,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 1.00e851 Lives"
+                                return "1.00e851 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e851")
@@ -11983,7 +11983,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 1.00e882 Lives"
+                                return "1.00e882 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e882")
@@ -12005,7 +12005,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 1.00e932 Lives"
+                                return "1.00e932 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e932")
@@ -12027,7 +12027,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 1.00e1006 Lives"
+                                return "1.00e1006 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e1006")
@@ -12049,7 +12049,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 1.00e1118 Lives"
+                                return "1.00e1118 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e1118")
@@ -12071,7 +12071,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: 1.00e1256 Lives"
+                                return "1.00e1256 Lives"
                         },
                         requirement(){
                                 return new Decimal("1e1256")
@@ -12098,7 +12098,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: e1.00e2600 Points"
+                                return "e1.00e2600 Points"
                         },
                         requirement(){
                                 return new Decimal("ee2600")
@@ -12120,7 +12120,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: 1.00e34 Proteins"
+                                return "1.00e34 Proteins"
                         },
                         requirement(){
                                 return new Decimal("1e34")
@@ -12142,7 +12142,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 10 C25 Gems"
+                                return "10 C25 Gems"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -12164,7 +12164,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 1e11,111 Protein"
+                                return "1e11,111 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e11111")
@@ -12186,7 +12186,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 23)
                 24: {
                         requirementDescription(){
-                                return "Requires: 1e22,722 Protein"
+                                return "1e22,722 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e22722")
@@ -12212,7 +12212,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 24)
                 25: {
                         requirementDescription(){
-                                return "Requires: 1e23,456 Protein"
+                                return "1e23,456 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e23456")
@@ -12234,7 +12234,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 25)
                 26: {
                         requirementDescription(){
-                                return "Requires: 1e31,313 Protein"
+                                return "1e31,313 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e31313")
@@ -12256,7 +12256,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 26)
                 27: {
                         requirementDescription(){
-                                return "Requires: 1e66,000 Protein"
+                                return "1e66,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e66000")
@@ -12278,7 +12278,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 27)
                 28: {
                         requirementDescription(){
-                                return "Requires: 1e76,543 Protein"
+                                return "1e76,543 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e76543")
@@ -12300,7 +12300,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 28)
                 29: {
                         requirementDescription(){
-                                return "Requires: 1e79,000 Protein"
+                                return "1e79,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e79000")
@@ -12322,7 +12322,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 29)
                 30: {
                         requirementDescription(){
-                                return "Requires: 1e118,000 Protein"
+                                return "1e118,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e118e3")
@@ -12344,7 +12344,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 30)
                 31: {
                         requirementDescription(){
-                                return "Requires: 1e160,000 Protein"
+                                return "1e160,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e160e3")
@@ -12366,7 +12366,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 31)
                 32: {
                         requirementDescription(){
-                                return "Requires: 1e175,000 Protein"
+                                return "1e175,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e175e3")
@@ -12388,7 +12388,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 32)
                 33: {
                         requirementDescription(){
-                                return "Requires: 1e283,000 Protein"
+                                return "1e283,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e283e3")
@@ -12410,7 +12410,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 33)
                 34: {
                         requirementDescription(){
-                                return "Requires: 1e325,000 Protein"
+                                return "1e325,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e325e3")
@@ -12432,7 +12432,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 34)
                 35: {
                         requirementDescription(){
-                                return "Requires: 1e354,000 Protein"
+                                return "1e354,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e354e3")
@@ -12454,7 +12454,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 35)
                 36: {
                         requirementDescription(){
-                                return "Requires: 1e506,000 Protein"
+                                return "1e506,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e506e3")
@@ -12476,7 +12476,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 36)
                 37: {
                         requirementDescription(){
-                                return "Requires: 1e572,000 Protein"
+                                return "1e572,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e572e3")
@@ -12498,7 +12498,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 37)
                 38: {
                         requirementDescription(){
-                                return "Requires: 1e607,000 Protein"
+                                return "1e607,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e607e3")
@@ -12520,7 +12520,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 38)
                 39: {
                         requirementDescription(){
-                                return "Requires: 1e645,000 Protein"
+                                return "1e645,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e645e3")
@@ -12542,7 +12542,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 39)
                 40: {
                         requirementDescription(){
-                                return "Requires: 1e664,000 Protein"
+                                return "1e664,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e664e3")
@@ -12564,7 +12564,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 40)
                 41: {
                         requirementDescription(){
-                                return "Requires: 1e875,700 Protein"
+                                return "1e875,700 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e875.7e3")
@@ -12586,7 +12586,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 41)
                 42: {
                         requirementDescription(){
-                                return "Requires: 1e1,001,000 Protein"
+                                return "1e1,001,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e1001e3")
@@ -12608,7 +12608,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 42)
                 43: {
                         requirementDescription(){
-                                return "Requires: 1e1,099,000 Protein"
+                                return "1e1,099,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e1099e3")
@@ -12630,7 +12630,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 43)
                 44: {
                         requirementDescription(){
-                                return "Requires: 1e42 Amino Acid"
+                                return "1e42 Amino Acid"
                         },
                         requirement(){
                                 return new Decimal("1e42")
@@ -12652,7 +12652,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 44)
                 45: {
                         requirementDescription(){
-                                return "Requires: 1e45 Amino Acid"
+                                return "1e45 Amino Acid"
                         },
                         requirement(){
                                 return new Decimal("1e45")
@@ -12674,7 +12674,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 45) https://www.tweetspeakpoetry.com/2015/06/25/top-ten-shakespeare-sonnets/
                 46: {
                         requirementDescription(){
-                                return "Requires: 3e45 Amino Acid"
+                                return "3e45 Amino Acid"
                         },
                         requirement(){
                                 return new Decimal("3e45")
@@ -12696,7 +12696,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 46)
                 47: {
                         requirementDescription(){
-                                return "Requires: 5e62 Amino Acid"
+                                return "5e62 Amino Acid"
                         },
                         requirement(){
                                 return new Decimal("5e62")
@@ -12718,7 +12718,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 47)
                 48: {
                         requirementDescription(){
-                                return "Requires: 1e2,040,000 Protein"
+                                return "1e2,040,000 Protein"
                         },
                         requirement(){
                                 return new Decimal("1e2040e3")
@@ -12740,7 +12740,7 @@ addLayer("a", {
                 }, // hasMilestone("a", 48)
                 49: {
                         requirementDescription(){
-                                return "Requires: 1e70 Amino Acid"
+                                return "1e70 Amino Acid"
                         },
                         requirement(){
                                 return new Decimal("1e70")
@@ -14265,7 +14265,7 @@ addLayer("d", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 DNA reset"
+                                return "1 DNA reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -14287,7 +14287,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 DNA resets"
+                                return "2 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -14309,7 +14309,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 DNA resets"
+                                return "3 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -14331,7 +14331,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 4 DNA resets"
+                                return "4 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -14353,7 +14353,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 5 DNA resets"
+                                return "5 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -14375,7 +14375,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 6 DNA resets"
+                                return "6 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -14397,7 +14397,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 7 DNA resets"
+                                return "7 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -14419,7 +14419,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 8 DNA resets"
+                                return "8 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(8)
@@ -14441,7 +14441,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 9 DNA resets"
+                                return "9 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(9)
@@ -14463,7 +14463,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 20 DNA resets"
+                                return "20 DNA resets"
                         },
                         requirement(){
                                 return new Decimal(20)
@@ -14485,7 +14485,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 100 DNA"
+                                return "100 DNA"
                         },
                         requirement(){
                                 return new Decimal(100)
@@ -14507,7 +14507,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 2,000 DNA"
+                                return "2,000 DNA"
                         },
                         requirement(){
                                 return new Decimal(2e3)
@@ -14529,7 +14529,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 10,000 C46 Gems"
+                                return "10,000 C46 Gems"
                         },
                         requirement(){
                                 return new Decimal(1e4)
@@ -14551,7 +14551,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 10,000 C64 Gems"
+                                return "10,000 C64 Gems"
                         },
                         requirement(){
                                 return new Decimal(1e4)
@@ -14573,7 +14573,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 18,100 N → Δµ"
+                                return "18,100 N → Δµ"
                         },
                         requirement(){
                                 return new Decimal(18100)
@@ -14595,7 +14595,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 8e48 DNA"
+                                return "8e48 DNA"
                         },
                         requirement(){
                                 return new Decimal(8e48)
@@ -14617,7 +14617,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 1.3e49 DNA"
+                                return "1.3e49 DNA"
                         },
                         requirement(){
                                 return new Decimal(1.3e49)
@@ -14639,7 +14639,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 2.3e49 DNA"
+                                return "2.3e49 DNA"
                         },
                         requirement(){
                                 return new Decimal(2.3e49)
@@ -14661,7 +14661,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: 1e65 DNA"
+                                return "1e65 DNA"
                         },
                         requirement(){
                                 return new Decimal(1e65)
@@ -14683,7 +14683,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: e6e136 Phosphorus"
+                                return "e6e136 Phosphorus"
                         },
                         requirement(){
                                 return new Decimal("e6e136")
@@ -14705,7 +14705,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: 3e100 DNA"
+                                return "3e100 DNA"
                         },
                         requirement(){
                                 return new Decimal("3e100")
@@ -14727,7 +14727,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 1.6e101 DNA"
+                                return "1.6e101 DNA"
                         },
                         requirement(){
                                 return new Decimal("1.6e101")
@@ -14749,7 +14749,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 54,321 C77 Gems"
+                                return "54,321 C77 Gems"
                         },
                         requirement(){
                                 return new Decimal("54321")
@@ -14771,7 +14771,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 23)
                 24: {
                         requirementDescription(){
-                                return "Requires: e1e9 Protein"
+                                return "e1e9 Protein"
                         },
                         requirement(){
                                 return new Decimal("e1e9")
@@ -14793,7 +14793,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 24)
                 25: {
                         requirementDescription(){
-                                return "Requires: e2e9 Protein"
+                                return "e2e9 Protein"
                         },
                         requirement(){
                                 return new Decimal("e2e9")
@@ -14815,7 +14815,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 25)
                 26: {
                         requirementDescription(){
-                                return "Requires: e3e9 Protein"
+                                return "e3e9 Protein"
                         },
                         requirement(){
                                 return new Decimal("e3e9")
@@ -14837,7 +14837,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 26)
                 27: {
                         requirementDescription(){
-                                return "Requires: e4.8e9 Protein"
+                                return "e4.8e9 Protein"
                         },
                         requirement(){
                                 return new Decimal("e4.8e9")
@@ -14862,7 +14862,7 @@ addLayer("d", {
                 }, // hasMilestone("d", 27)
                 28: {
                         requirementDescription(){
-                                return "Requires: 4e153 DNA"
+                                return "4e153 DNA"
                         },
                         requirement(){
                                 return new Decimal("4e153")
@@ -15126,7 +15126,7 @@ addLayer("cells", {
                 kappa: {
                         points: decimalZero,  
                         best: decimalZero,    
-                        currentBarValue: new Decimal(1),
+                        currentBarValue: decimalOne,
                         currentTime: 0,
                 },
                 iota: {
@@ -15289,7 +15289,7 @@ addLayer("cells", {
         },
         mu: {// mu gain mgain mugain m gain
                 getResetGain(){
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
                                                         ret = ret.times(tmp.cells.buyables[111].effect)
                                                         ret = ret.times(tmp.cells.buyables[112].effect)
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
@@ -15409,7 +15409,7 @@ addLayer("cells", {
                         let data2 = data.kappa
                         data2.points = decimalZero
                         data.buyables[311] = decimalZero
-                        data2.currentBarValue = new Decimal(1)
+                        data2.currentBarValue = decimalOne
                 },
                 update(diff){
                         let data = player.cells
@@ -15438,7 +15438,7 @@ addLayer("cells", {
         },
         iota: {
                 getResetGain(){ // iota gain igain iotagain i gain
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
                         if (hasUpgrade("cells", 411))   ret = ret.times(tmp.cells.upgrades[411].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                                                         ret = ret.times(tmp.cells.buyables[411].effect)
@@ -15482,7 +15482,7 @@ addLayer("cells", {
         stem_cells: {
                 getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
                         if (!hasUpgrade("cells", 13)) return decimalZero
-                        let ret = new Decimal(1)
+                        let ret = decimalOne
                         
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
                                                         ret = ret.times(tmp.cells.buyables[12].effect)
@@ -16570,7 +16570,7 @@ addLayer("cells", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Cell reset"
+                                return "1 Cell reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -16595,7 +16595,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Cell resets"
+                                return "2 Cell resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -16620,7 +16620,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 Cell resets"
+                                return "3 Cell resets"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -16642,7 +16642,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 5 Cell resets"
+                                return "5 Cell resets"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -16664,7 +16664,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 8 Cell resets"
+                                return "8 Cell resets"
                         },
                         requirement(){
                                 return new Decimal(8)
@@ -16686,7 +16686,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 13 Cells"
+                                return "13 Cells"
                         },
                         requirement(){
                                 return new Decimal(13)
@@ -16711,7 +16711,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 21 Cells"
+                                return "21 Cells"
                         },
                         requirement(){
                                 return new Decimal(21)
@@ -16733,7 +16733,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 100 Cells"
+                                return "100 Cells"
                         },
                         requirement(){
                                 return new Decimal(100)
@@ -16755,8 +16755,8 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 8)
                 9: {
                         requirementDescription(){
-                                if (player.hardMode) return "Requires: 1,000 of every minigame amount"
-                                return "Requires: 1,000 of any minigame amount"
+                                if (player.hardMode) return "1,000 of every minigame amount"
+                                return "1,000 of any minigame amount"
                         },
                         requirement(){
                                 return new Decimal(1000)
@@ -16783,7 +16783,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 1e100 Kappa"
+                                return "1e100 Kappa"
                         },
                         requirement(){
                                 return new Decimal(1e100)
@@ -16805,7 +16805,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 1e140 Kappa"
+                                return "1e140 Kappa"
                         },
                         requirement(){
                                 return new Decimal(1e140)
@@ -16827,7 +16827,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 1e28 Mu"
+                                return "1e28 Mu"
                         },
                         requirement(){
                                 return new Decimal(1e28)
@@ -16849,7 +16849,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 1e96 Stem Cells"
+                                return "1e96 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e96)
@@ -16879,7 +16879,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 1e109 Stem Cells"
+                                return "1e109 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e109)
@@ -16901,7 +16901,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 1 Cell challenge completion"
+                                return "1 Cell challenge completion"
                         },
                         done(){
                                 return hasChallenge("cells", 11) 
@@ -16920,7 +16920,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 5e122 Stem Cells"
+                                return "5e122 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(5e122)
@@ -16946,7 +16946,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 1e138 Stem Cells"
+                                return "1e138 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e138)
@@ -16968,7 +16968,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 1e167 Stem Cells"
+                                return "1e167 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e167)
@@ -16990,7 +16990,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: 1e178 Stem Cells"
+                                return "1e178 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e178)
@@ -17012,7 +17012,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: 1e180 Stem Cells"
+                                return "1e180 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e180)
@@ -17034,7 +17034,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: 1e236 Stem Cells"
+                                return "1e236 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal(1e236)
@@ -17056,7 +17056,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 3e72 Mu"
+                                return "3e72 Mu"
                         },
                         requirement(){
                                 return new Decimal(3e72)
@@ -17078,7 +17078,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 1.80e308 Stem Cells"
+                                return "1.80e308 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1.80e308")
@@ -17100,7 +17100,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 23)
                 24: {
                         requirementDescription(){
-                                return "Requires: 1e355 Stem Cells"
+                                return "1e355 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e355")
@@ -17122,7 +17122,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 24)
                 25: {
                         requirementDescription(){
-                                return "Requires: 1e416 Stem Cells"
+                                return "1e416 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e416")
@@ -17144,7 +17144,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 25)
                 26: {
                         requirementDescription(){
-                                return "Requires: 1e430 Stem Cells"
+                                return "1e430 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e430")
@@ -17166,7 +17166,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 26)
                 27: {
                         requirementDescription(){
-                                return "Requires: 1e495 Stem Cells"
+                                return "1e495 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e495")
@@ -17188,7 +17188,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 27)
                 28: {
                         requirementDescription(){
-                                return "Requires: 1e572 Stem Cells"
+                                return "1e572 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e572")
@@ -17210,7 +17210,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 28)
                 29: {
                         requirementDescription(){
-                                return "Requires: 1e781 Stem Cells"
+                                return "1e781 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e781")
@@ -17232,7 +17232,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 29)
                 30: {
                         requirementDescription(){
-                                return "Requires: 1e899 Stem Cells"
+                                return "1e899 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e899")
@@ -17254,7 +17254,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 30)
                 31: {
                         requirementDescription(){
-                                return "Requires: 1e916 Stem Cells"
+                                return "1e916 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e916")
@@ -17276,7 +17276,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 31)
                 32: {
                         requirementDescription(){
-                                return "Requires: 1e1177 Stem Cells"
+                                return "1e1177 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1177")
@@ -17298,7 +17298,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 32)
                 33: {
                         requirementDescription(){
-                                return "Requires: 1e1249 Stem Cells"
+                                return "1e1249 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1249")
@@ -17323,7 +17323,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 33)
                 34: {
                         requirementDescription(){
-                                return "Requires: 1e1483 Stem Cells"
+                                return "1e1483 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1483")
@@ -17345,7 +17345,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 34)
                 35: {
                         requirementDescription(){
-                                return "Requires: 1e1567 Stem Cells"
+                                return "1e1567 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1567")
@@ -17367,7 +17367,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 35)
                 36: {
                         requirementDescription(){
-                                return "Requires: 1e1628 Stem Cells"
+                                return "1e1628 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1628")
@@ -17389,7 +17389,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 36)
                 37: {
                         requirementDescription(){
-                                return "Requires: 1e1710 Stem Cells"
+                                return "1e1710 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1710")
@@ -17411,7 +17411,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 37)
                 38: {
                         requirementDescription(){
-                                return "Requires: 1e1789 Stem Cells"
+                                return "1e1789 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1789")
@@ -17433,7 +17433,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 38)
                 39: {
                         requirementDescription(){
-                                return "Requires: 1e1929 Stem Cells"
+                                return "1e1929 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1929")
@@ -17455,7 +17455,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 39)
                 40: {
                         requirementDescription(){
-                                return "Requires: 1e2064 Stem Cells"
+                                return "1e2064 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e2064")
@@ -17477,7 +17477,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 40)
                 41: {
                         requirementDescription(){
-                                return "Requires: 1e2258 Stem Cells"
+                                return "1e2258 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e2258")
@@ -17499,7 +17499,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 41)
                 42: {
                         requirementDescription(){
-                                return "Requires: 1e2687 Stem Cells"
+                                return "1e2687 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e2687")
@@ -17521,7 +17521,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 42)
                 43: {
                         requirementDescription(){
-                                return "Requires: 1e3156 Stem Cells"
+                                return "1e3156 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e3156")
@@ -17543,7 +17543,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 43)
                 44: {
                         requirementDescription(){
-                                return "Requires: 1e3906 Stem Cells"
+                                return "1e3906 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e3906")
@@ -17565,7 +17565,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 44)
                 45: {
                         requirementDescription(){
-                                return "Requires: 1e4966 Stem Cells"
+                                return "1e4966 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e4966")
@@ -17587,7 +17587,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 45)
                 46: {
                         requirementDescription(){
-                                return "Requires: 1e6141 Stem Cells"
+                                return "1e6141 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e6141")
@@ -17609,7 +17609,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 46)
                 47: {
                         requirementDescription(){
-                                return "Requires: 10 Secondary Challenge Completions"
+                                return "10 Secondary Challenge Completions"
                         },
                         done(){
                                 return player.cells.challenges[12] >= 10
@@ -17628,7 +17628,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 47)
                 48: {
                         requirementDescription(){
-                                return "Requires: 1e11,611 Stem Cells"
+                                return "1e11,611 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e11611")
@@ -17650,7 +17650,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 48)
                 49: {
                         requirementDescription(){
-                                return "Requires: 1e11,666 Stem Cells"
+                                return "1e11,666 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e11666")
@@ -17672,7 +17672,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 49)
                 50: {
                         requirementDescription(){
-                                return "Requires: 1e12,127 Stem Cells"
+                                return "1e12,127 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e12127")
@@ -17694,7 +17694,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 50)
                 51: {
                         requirementDescription(){
-                                return "Requires: 1e15,500 Stem Cells"
+                                return "1e15,500 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e15500")
@@ -17716,7 +17716,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 51)
                 52: {
                         requirementDescription(){
-                                return "Requires: 1e16,011 Stem Cells"
+                                return "1e16,011 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e16011")
@@ -17738,7 +17738,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 52)
                 53: {
                         requirementDescription(){
-                                return "Requires: 1e16,471 Stem Cells"
+                                return "1e16,471 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e16471")
@@ -17765,7 +17765,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 53)
                 54: {
                         requirementDescription(){
-                                return "Requires: 1e16,895 Stem Cells"
+                                return "1e16,895 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e16895")
@@ -17787,7 +17787,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 54)
                 55: {
                         requirementDescription(){
-                                return "Requires: 1e17,301 Stem Cells"
+                                return "1e17,301 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e17301")
@@ -17809,7 +17809,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 55)
                 56: {
                         requirementDescription(){
-                                return "Requires: 1e18,131 Stem Cells"
+                                return "1e18,131 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e18131")
@@ -17836,7 +17836,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 56)
                 57: {
                         requirementDescription(){
-                                return "Requires: 1e18,364 Stem Cells"
+                                return "1e18,364 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e18364")
@@ -17858,7 +17858,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 57)
                 58: {
                         requirementDescription(){
-                                return "Requires: 1e19,289 Stem Cells"
+                                return "1e19,289 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e19289")
@@ -17880,7 +17880,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 58)
                 59: {
                         requirementDescription(){
-                                return "Requires: 1e21,555 Stem Cells"
+                                return "1e21,555 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e21555")
@@ -17902,7 +17902,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 59)
                 60: {
                         requirementDescription(){
-                                return "Requires: 1e22,621 Stem Cells"
+                                return "1e22,621 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e22621")
@@ -17924,7 +17924,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 60)
                 61: {
                         requirementDescription(){
-                                return "Requires: 1e22,984 Stem Cells"
+                                return "1e22,984 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e22984")
@@ -17946,7 +17946,7 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 61)
                 62: {
                         requirementDescription(){
-                                return "Requires: 1e23,309 Stem Cells"
+                                return "1e23,309 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e23309")
@@ -18645,7 +18645,7 @@ addLayer("cells", {
                         },
                         effect(){
                                 let amt = getBuyableAmount("cells", 111)
-                                if (amt.eq(0)) return new Decimal(1)
+                                if (amt.eq(0)) return decimalOne
                                 if (hasUpgrade("cells", 115))   return amt.pow(player.cells.milestones.length)
                                 if (hasMilestone("cells", 13))  return amt.pow(player.cells.milestones.length ** .5)
                                 let init = amt
@@ -18722,7 +18722,7 @@ addLayer("cells", {
                         effect(){
                                 let amt = getBuyableAmount("cells", 112)
                                 let base = tmp.cells.buyables[112].base
-                                if (base.eq(1)) return new Decimal(1)
+                                if (base.eq(1)) return decimalOne
                                 return base.pow(amt.sub(amt.div(20).sin().times(10)))
                         },
                         display(){
@@ -20716,7 +20716,7 @@ addLayer("t", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Tissue reset"
+                                return "1 Tissue reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -20738,7 +20738,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Tissue resets"
+                                return "2 Tissue resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -20760,7 +20760,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 5 Tissue resets"
+                                return "5 Tissue resets"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -20782,9 +20782,9 @@ addLayer("t", {
                 }, // hasMilestone("t", 3)
                 4: {
                         requirementDescription(){
-                                if (player.or.unlocked) return "Requires: 10 Tissue resets"
-                                if (player.hardMode) return "Requires: 50 Tissue resets"
-                                return "Requires: 30 Tissue resets"
+                                if (player.or.unlocked) return "10 Tissue resets"
+                                if (player.hardMode) return "50 Tissue resets"
+                                return "30 Tissue resets"
                         },
                         requirement(){
                                 if (player.or.unlocked) return new Decimal(10)
@@ -20815,8 +20815,8 @@ addLayer("t", {
                 }, // hasMilestone("t", 4)
                 5: {
                         requirementDescription(){
-                                if (player.hardMode) return "Requires: 1e1436 Cells"
-                                return "Requires: 5e1435 Cells"
+                                if (player.hardMode) return "1e1436 Cells"
+                                return "5e1435 Cells"
                         },
                         requirement(){
                                 if (player.hardMode) return new Decimal("1e1436")
@@ -20839,7 +20839,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 1e1469 Cells"
+                                return "1e1469 Cells"
                         },
                         requirement(){
                                 return new Decimal("1e1469")
@@ -20861,7 +20861,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 11 Primary Completions"
+                                return "11 Primary Completions"
                         },
                         done(){
                                 return player.cells.challenges[11] >= 11
@@ -20880,7 +20880,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 1e68,134 Stem Cells"
+                                return "1e68,134 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e68134")
@@ -20902,7 +20902,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 1e75,231 Stem Cells"
+                                return "1e75,231 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e75231")
@@ -20924,7 +20924,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 1e76,571 Stem Cells"
+                                return "1e76,571 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e76571")
@@ -20946,7 +20946,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 1e78,906 Stem Cells"
+                                return "1e78,906 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e78906")
@@ -20968,7 +20968,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 1e80,289 Stem Cells"
+                                return "1e80,289 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e80289")
@@ -20990,7 +20990,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 1e96,384 Stem Cells"
+                                return "1e96,384 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e96384")
@@ -21012,7 +21012,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 1e138,397 Stem Cells"
+                                return "1e138,397 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e138397")
@@ -21034,7 +21034,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 1e144,546 Stem Cells"
+                                return "1e144,546 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e144546")
@@ -21056,7 +21056,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 1e158,463 Stem Cells"
+                                return "1e158,463 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e158463")
@@ -21078,7 +21078,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 1e560,130 Stem Cells"
+                                return "1e560,130 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e560130")
@@ -21100,7 +21100,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 1e592,633 Stem Cells"
+                                return "1e592,633 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e592633")
@@ -21122,7 +21122,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: 1e611,726 Stem Cells"
+                                return "1e611,726 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e611726")
@@ -21144,7 +21144,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: 1e634,788 Stem Cells"
+                                return "1e634,788 Stem Cells"
                         },
                         requirement(){
                                 return new Decimal("1e634788")
@@ -21166,7 +21166,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: 1e17,204 Cells"
+                                return "1e17,204 Cells"
                         },
                         requirement(){
                                 return new Decimal("1e17204")
@@ -21188,7 +21188,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 1e18,741 Cells"
+                                return "1e18,741 Cells"
                         },
                         requirement(){
                                 return new Decimal("1e18741")
@@ -21210,7 +21210,7 @@ addLayer("t", {
                 }, // hasMilestone("t", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 1e23,701 Cells"
+                                return "1e23,701 Cells"
                         },
                         requirement(){
                                 return new Decimal("1e23701")
@@ -21758,7 +21758,7 @@ addLayer("or", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 1 Organ reset"
+                                return "1 Organ reset"
                         },
                         requirement(){
                                 return decimalOne
@@ -21781,7 +21781,7 @@ addLayer("or", {
                 }, // hasMilestone("or", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 2 Organ resets"
+                                return "2 Organ resets"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -21804,7 +21804,7 @@ addLayer("or", {
                 }, // hasMilestone("or", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 3 Organ resets"
+                                return "3 Organ resets"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -21827,7 +21827,7 @@ addLayer("or", {
                 }, // hasMilestone("or", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 4 Organ resets"
+                                return "4 Organ resets"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -21850,7 +21850,7 @@ addLayer("or", {
                 }, // hasMilestone("or", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 5 Organ resets"
+                                return "5 Organ resets"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -22348,7 +22348,7 @@ addLayer("mc", {
                                 player.mc.points = player.mc.points.sub(tmp.mc.buyables[11].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal(1)
+                                let div = decimalOne
                                 let base = 2
                                 let exp = 2
                                 let pts = player.mc.points
@@ -31154,7 +31154,7 @@ addLayer("tokens", {
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
                         },
                         coefficient(){
-                                let ret = new Decimal(1)
+                                let ret = decimalOne
                                 if (hasUpgrade("t", 134)) ret = ret.times(3)
                                 if (hasUpgrade("t", 144)) ret = ret.plus(1.5)
                                 if (hasUpgrade("cells", 61)) ret = ret.pow(player.tokens.tokens2.total.sub(20).max(1))
@@ -31611,7 +31611,7 @@ addLayer("tokens", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "Requires: 2 total tokens"
+                                return "2 total tokens"
                         },
                         requirement(){
                                 return new Decimal(2)
@@ -31640,7 +31640,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 1)
                 2: {
                         requirementDescription(){
-                                return "Requires: 3 total tokens"
+                                return "3 total tokens"
                         },
                         requirement(){
                                 return new Decimal(3)
@@ -31669,7 +31669,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 2)
                 3: {
                         requirementDescription(){
-                                return "Requires: 4 total tokens"
+                                return "4 total tokens"
                         },
                         requirement(){
                                 return new Decimal(4)
@@ -31698,7 +31698,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 3)
                 4: {
                         requirementDescription(){
-                                return "Requires: 5 total tokens"
+                                return "5 total tokens"
                         },
                         requirement(){
                                 return new Decimal(5)
@@ -31716,7 +31716,7 @@ addLayer("tokens", {
                 }, // hasMilestone("tokens", 4)
                 5: {
                         requirementDescription(){
-                                return "Requires: 6 total tokens"
+                                return "6 total tokens"
                         },
                         requirement(){
                                 return new Decimal(6)
@@ -31734,7 +31734,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 5)
                 6: {
                         requirementDescription(){
-                                return "Requires: 7 total tokens"
+                                return "7 total tokens"
                         },
                         requirement(){
                                 return new Decimal(7)
@@ -31763,7 +31763,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 6)
                 7: {
                         requirementDescription(){
-                                return "Requires: 8 total tokens"
+                                return "8 total tokens"
                         },
                         requirement(){
                                 return new Decimal(8)
@@ -31792,7 +31792,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 7)
                 8: {
                         requirementDescription(){
-                                return "Requires: 9 total tokens"
+                                return "9 total tokens"
                         },
                         requirement(){
                                 return new Decimal(9)
@@ -31810,7 +31810,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 8)
                 9: {
                         requirementDescription(){
-                                return "Requires: 10 total tokens"
+                                return "10 total tokens"
                         },
                         requirement(){
                                 return new Decimal(10)
@@ -31828,7 +31828,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 9)
                 10: {
                         requirementDescription(){
-                                return "Requires: 11 total tokens"
+                                return "11 total tokens"
                         },
                         requirement(){
                                 return new Decimal(11)
@@ -31857,7 +31857,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 10)
                 11: {
                         requirementDescription(){
-                                return "Requires: 12 total tokens"
+                                return "12 total tokens"
                         },
                         requirement(){
                                 return new Decimal(12)
@@ -31875,7 +31875,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 11)
                 12: {
                         requirementDescription(){
-                                return "Requires: 13 total tokens"
+                                return "13 total tokens"
                         },
                         requirement(){
                                 return new Decimal(13)
@@ -31893,7 +31893,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 12)
                 13: {
                         requirementDescription(){
-                                return "Requires: 14 total tokens"
+                                return "14 total tokens"
                         },
                         requirement(){
                                 return new Decimal(14)
@@ -31911,7 +31911,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 13)
                 14: {
                         requirementDescription(){
-                                return "Requires: 16 total tokens"
+                                return "16 total tokens"
                         },
                         requirement(){
                                 return new Decimal(16)
@@ -31929,7 +31929,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 14)
                 15: {
                         requirementDescription(){
-                                return "Requires: 18 total tokens"
+                                return "18 total tokens"
                         },
                         requirement(){
                                 return new Decimal(18)
@@ -31947,7 +31947,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 15)
                 16: {
                         requirementDescription(){
-                                return "Requires: 19 total tokens"
+                                return "19 total tokens"
                         },
                         requirement(){
                                 return new Decimal(19)
@@ -31978,7 +31978,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 16)
                 17: {
                         requirementDescription(){
-                                return "Requires: 22 total tokens"
+                                return "22 total tokens"
                         },
                         requirement(){
                                 return new Decimal(22)
@@ -31996,7 +31996,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 17)
                 18: {
                         requirementDescription(){
-                                return "Requires: 24 total tokens"
+                                return "24 total tokens"
                         },
                         requirement(){
                                 return new Decimal(24)
@@ -32014,7 +32014,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 18)
                 19: {
                         requirementDescription(){
-                                return "Requires: 27 total tokens"
+                                return "27 total tokens"
                         },
                         requirement(){
                                 return new Decimal(27)
@@ -32032,7 +32032,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 19)
                 20: {
                         requirementDescription(){
-                                return "Requires: 31 total tokens"
+                                return "31 total tokens"
                         },
                         requirement(){
                                 return new Decimal(31)
@@ -32050,7 +32050,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 20)
                 21: {
                         requirementDescription(){
-                                return "Requires: 35 total tokens"
+                                return "35 total tokens"
                         },
                         requirement(){
                                 return new Decimal(35)
@@ -32068,7 +32068,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 21)
                 22: {
                         requirementDescription(){
-                                return "Requires: 39 total tokens"
+                                return "39 total tokens"
                         },
                         requirement(){
                                 return new Decimal(39)
@@ -32086,7 +32086,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 22)
                 23: {
                         requirementDescription(){
-                                return "Requires: 43 total tokens"
+                                return "43 total tokens"
                         },
                         requirement(){
                                 return new Decimal(43) 
@@ -32125,7 +32125,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 23)
                 24: {
                         requirementDescription(){
-                                return "Requires: 51 total tokens"
+                                return "51 total tokens"
                         },
                         requirement(){
                                 return new Decimal(51) 
@@ -32144,7 +32144,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 24)
                 25: {
                         requirementDescription(){
-                                return "Requires: 53 total tokens"
+                                return "53 total tokens"
                         },
                         requirement(){
                                 return new Decimal(53) 
@@ -32163,7 +32163,7 @@ addLayer("tokens", {
                 },  // hasMilestone("tokens", 25)
                 26: {
                         requirementDescription(){
-                                return "Requires: 55 total tokens"
+                                return "55 total tokens"
                         },
                         requirement(){
                                 return new Decimal(55) 
