@@ -32904,6 +32904,7 @@ addLayer("tokens", {
                                 return !hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
+                                if (hasUpgrade("cells", 42)) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -32940,6 +32941,7 @@ addLayer("tokens", {
                                 return !hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
+                                if (hasUpgrade("cells", 42)) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -32973,6 +32975,7 @@ addLayer("tokens", {
                                 return hasUpgrade("c", 21) || hasMilestone("n", 9) || hasChallenge("l", 31)
                         },
                         shouldNotify(){
+                                if (hasUpgrade("cells", 42)) return false
                                 let x = ["11", "21", "22", "31", "32", 
                                          "33", "34", "41", "42", "51", 
                                          "52", "61", "62", "71", "72", 

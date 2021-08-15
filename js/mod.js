@@ -33,6 +33,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.105.4</h3><br>
+		- Fixed Tokens II initial unlock still notifying the layer.<br>
 	<br><h3 style='color: #CC0000'>v1.105.3</h3><br>
 		- Made Organ milestone 4 also give minigame QoL.<br>
 	<br><h3 style='color: #CC0000'>v1.105.2</h3><br>

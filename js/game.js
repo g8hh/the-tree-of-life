@@ -71,7 +71,7 @@ function softcap(value, cap, power = 0.5) {
 function shouldNotify(layer){
 	if (layer == "tokens" && hasUpgrade("cells", 42)) {
 		let data = tmp.tokens.buyables
-		return data[191].canAfford || data[192].canAfford || data[193].canAfford
+		return data[191].canAfford || data[192].canAfford || (data[193].canAfford && data[193].unlocked)
 	}
 	for (id in tmp[layer].upgrades){
 		if (layer == "cells" && id > 100 && tmp.mc.layerShown) break
