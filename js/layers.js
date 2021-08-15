@@ -18245,7 +18245,8 @@ addLayer("cells", {
                                 let id = 11
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 37) || hasMilestone("t", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
+                                let canBulk = hasMilestone("cells", 37) || hasMilestone("t", 3) || player.or.milestone3Ever
+                                let up = canBulk || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -18362,7 +18363,8 @@ addLayer("cells", {
                                 let id = 12
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let up = hasMilestone("cells", 48) || hasMilestone("t", 3) || hasMilestone("or", 3) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
+                                let canBulk = hasMilestone("cells", 48) || hasMilestone("t", 3) || player.or.milestone3Ever
+                                let up = canBulk || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("t", 23)) {
                                         data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
@@ -21566,6 +21568,8 @@ addLayer("or", {
                 time: 0,
                 times: 0,
                 passiveTime: 0,
+                milestone2Ever: false,
+                milestone3Ever: false,
         }},
         color: "#F8C4F0",
         branches: [],
@@ -21711,6 +21715,9 @@ addLayer("or", {
                                 boughtYet = buyUpg("t", id)
                         }
                 }
+
+                if (!data.milestone2Ever) data.milestone2Ever = hasMilestone("or", 2)
+                if (!data.milestone3Ever) data.milestone3Ever = hasMilestone("or", 3)
         },
         row: 2, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
@@ -21790,7 +21797,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Bulk buy tokens, token tetrational base is 9.7, and autobuy DNA upgrades."
+                                let a = "Reward: Bulk buy tokens, token tetrational base is 9.7, permanently bulk Omnipotent, and autobuy DNA upgrades."
                                 let b = ""
                                 return a + b
                         },
@@ -21813,7 +21820,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Autobuy Cell upgrades, per reset keep a Cell upgrade, and bulk Totipotent."
+                                let a = "Reward: Autobuy Cell upgrades, per reset keep a Cell upgrade, and permanently bulk Totipotent."
                                 let b = ""
                                 return a + b
                         },
@@ -21998,6 +22005,7 @@ addLayer("or", {
                                 41, 42, 43,
                                 51, 52, 53, 
                                 61, 62, 63,
+                                102, 
                         ]
 
                         for (i in resetIds){
