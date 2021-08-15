@@ -21865,7 +21865,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Bulk 5x Primary and token tetrational base is 9.5."
+                                let a = "Reward: Bulk 5x Primary, keep best Down Quark amount, and token tetrational base is 9.5."
                                 let b = ""
                                 return a + b
                         },
@@ -22004,9 +22004,9 @@ addLayer("or", {
                                 31, 32, 33,
                                 41, 42, 43,
                                 51, 52, 53, 
-                                61, 62, 63,
-                                102, 
-                        ]
+                                61, 62, 63]
+                        
+                        if (!hasMilestone("or", 5)) resetbbids.push(102)
 
                         for (i in resetIds){
                                 let id = resetIds[i]
