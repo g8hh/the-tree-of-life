@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.105.9",
+	num: "1.106",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.106</h3><br>
+		- Rollover, I guess.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.105.9</h3><br>
 		- Organ milestone 5 makes Down Quarks not reset anymore (used to never reset).<br>
 	<br><h3 style='color: #CC0000'>v1.105.8</h3><br>
