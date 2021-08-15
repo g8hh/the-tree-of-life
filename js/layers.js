@@ -370,13 +370,6 @@ var binomials = [
         [1,8,28,56,70,56,28,8,1],
 ];
 
-function getDescriptionFromKey(id){
-        let d = id.description
-        
-        if (isFunction(d)) return d()
-        return d
-}
-
 // step 2: a function that builds out the LUT if it needs to.
 function binomial(n,k) {
         if (n > 30) return 
@@ -391,6 +384,13 @@ function binomial(n,k) {
                 binomials.push(nextRow);
         }
         return binomials[n][k];
+}
+
+function getDescriptionFromKey(id){
+        let d = id.description
+        
+        if (isFunction(d)) return d()
+        return d
 }
 
 function resetPreLifeCurrencies(){
@@ -15279,11 +15279,11 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
 
-                if (hasUpgrade("or", 11)) {
+                if (hasUpgrade("or", 11) && !inChallenge("cells", 12)) {
                         if (player.cells.challenges[12] % 5 > 0) player.cells.challenges[12] ++
                 }
 
-                if (hasMilestone("or", 5)) {
+                if (hasMilestone("or", 5) && !inChallenge("cells", 11)) {
                         if (player.cells.challenges[11] % 5 > 0) player.cells.challenges[11] ++ 
                 }
         },

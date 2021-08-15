@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.105.8</h3><br>
+		- Added two rows of achievements.<br>
+		- Made bulking of Cell challenges not occur while in them.<br>
 	<br><h3 style='color: #CC0000'>v1.105.7</h3><br>
 		- Various code cleanup.<br>
 		- Made a toggle for disabling milestone popups.<br>

@@ -697,6 +697,21 @@ PROGRESSION_MILESTONES = {
         572: () => player.tokens.tokens2.total.gte(40),
         573: () => player.tokens.tokens2.total.gte(41),
         574: () => player.tokens.tokens2.total.gte(42),
+
+        575: () => player.or.total.gte(1),
+        576: () => player.or.total.gte(2),
+        577: () => player.or.total.gte(3),
+        578: () => player.or.total.gte(4),
+        579: () => player.or.total.gte(5),
+        580: () => player.or.total.gte(6),
+        581: () => player.or.total.gte(7),
+        582: () => player.tokens.tokens2.total.gte(45),
+        583: () => player.tokens.tokens2.total.gte(50),
+        584: () => player.tokens.tokens2.total.gte(55),
+        585: () => player.tokens.tokens2.total.gte(60),
+        586: () => player.tokens.tokens2.total.gte(65),
+        587: () => player.tokens.tokens2.total.gte(70),
+        588: () => player.tokens.tokens2.total.gte(75),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1274,6 +1289,20 @@ PROGRESSION_MILESTONES_TEXT = {
         572: "40 Token II",
         573: "41 Token II",
         574: "42 Token II",
+        575: "a Organ",
+        576: "2 Organs",
+        577: "3 Organs",
+        578: "4 Organs",
+        579: "5 Organs",
+        580: "6 Organs",
+        581: "7 Organs",
+        582: "45 Token II",
+        583: "50 Token II",
+        584: "55 Token II",
+        585: "60 Token II",
+        586: "65 Token II",
+        587: "70 Token II",
+        588: "75 Token II",
 }
 
 
