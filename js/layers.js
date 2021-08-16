@@ -1922,7 +1922,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci III"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per first row buyable add 1 to Hydrogen gain formula maximum and effective achievements for Hydrogen III</bdi>"
+                                return "<bdi style='font-size: 80%'>Per buyable add 1 to Hydrogen gain formula maximum and effective achievements for Hydrogen III</bdi>"
                         },
                         cost:() => new Decimal(1e9),
                         effect(){
