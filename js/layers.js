@@ -1308,11 +1308,15 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIV"
                         },
                         description(){
-                                if (!shiftDown) return "^.5 in the color production formula becomes ^.52"
+                                if (!shiftDown) {
+                                        if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 Decaseconds base cost"
+                                        return "^.5 in the color production formula becomes ^.52"
+                                }
                                 if (hasUpgrade("h", 54)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[54].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e318")
                                 return player.hardMode ? new Decimal("1e364") : new Decimal("1e360")
                         },
                         unlocked(){
@@ -1324,7 +1328,10 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XV"
                         },
                         description(){
-                                if (!shiftDown) return "^.52 in the A production formula becomes ^.524 and unlock Carbon (C) and Oxygen (O)"
+                                if (!shiftDown) {
+                                        if (player.extremeMode) return "^.52 in the A production formula becomes ^.57 and unlock Carbon (C) and Oxygen (O)"
+                                        return "^.52 in the A production formula becomes ^.524 and unlock Carbon (C) and Oxygen (O)"
+                                }
                                 if (hasUpgrade("h", 55)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[55].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -2483,8 +2490,8 @@ addLayer("sci", {
                                 let amt = getBuyableAmount("sci", 23)
                                 let exp = amt.div(tmp.sci.buyables[23].expDiv).plus(1)
                                 let init = 2e291
+                                if (hasUpgrade("h", 54)) init = 1
                                 return amt.pow(exp).pow10().pow(10).times(init) 
-                                // 
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
@@ -2539,6 +2546,7 @@ addLayer("sci", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e291*1e10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[23].expDiv) + "</sup>)"
+                                if (hasUpgrade("h", 54)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -2655,7 +2663,8 @@ addLayer("c", {
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(2)) return decimalZero
-                let base = player.points.log(2).div(256).sub(3).max(0)
+                let initialLogBase = 2 + 2 * player.extremeMode
+                let base = player.points.log(initialLogBase).div(256).sub(3).max(0)
                 
                 if (hasUpgrade("tokens", 22)) base = base.pow(2)
 
@@ -3126,7 +3135,8 @@ addLayer("o", {
         getBaseGain(){
                 let pts = player.points
                 if (player.points.lt(2)) return decimalZero
-                let init = player.points.max(4).log(2).log(2)
+                let initialLogBase = 2 + 2 * player.extremeMode
+                let init = player.points.max(4).log(initialLogBase).log(2)
                 let base 
                 if (hasUpgrade("h", 74)){
                         base = init.max(0).pow(2)
@@ -23952,7 +23962,7 @@ addLayer("mini", {
                 },
                 getColorGainExp(){ // color gain exponent color gain exp
                         let exp = hasUpgrade("h", 54) ? .52 : .5
-                        if (hasUpgrade("h", 55))        exp += .004
+                        if (hasUpgrade("h", 55))        exp += player.extremeMode ? .05 : .004
                         if (hasUpgrade("c", 12))        exp += tmp.c.upgrades[12].effect.toNumber()
                                                         exp += tmp.tokens.buyables[63].effect.toNumber()
                         if (hasMilestone("tokens", 4))  exp += .05

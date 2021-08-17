@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.108",
+	num: "1.109",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.h.points.gte("1e314")
+	if (player.extremeMode) return player.o.points.gt(0) || player.c.points.gt(0)
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.109</h3><br>
+		- Balanced extreme until Carbon and Oxygen are unlocked.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.108</h3><br>
 		- Added two custom saves.<br>
 		- Made extreme mode not nerf B buyable costs.<br>
