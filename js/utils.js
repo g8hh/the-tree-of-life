@@ -1,6 +1,7 @@
 function nerfBminigameBuyableAmounts(x){
 	if (x.lt(1000)) return x
 	if (hasUpgrade("h", 52)) return x
+	if (player.extremeMode) return x
 	return x.times(x.ln()).div(Math.log(1000))
 }
 

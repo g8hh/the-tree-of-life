@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.107.1",
+	num: "1.108",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return hasUpgrade("h", 44) || hasUpgrade("h", 45)
+	if (player.extremeMode) return player.h.points.gte("1e314")
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,15 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.108</h3><br>
+		- Added two custom saves.<br>
+		- Made extreme mode not nerf B buyable costs.<br>
+		- Added 6 Hydrogen Science upgrade.<br>
+		- Added 2 Hydrogen Science buyables.<br>
+		- Added 5 A minigame milestones.<br>
+		- Made various costs cheaper and more expenive in extreme.<br>
+		- Various word fixes (Hydrogen XI actually adds 1 to Violet base, not Hydrogen XII).<br>
+		- Various small bug fixes.<br>
 	<br><h3 style='color: #CC0000'>v1.107.1</h3><br>
 		- Fixed a bug with Cell production.<br>
 		- Added a custom save.<br>
