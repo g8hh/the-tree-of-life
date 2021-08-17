@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.109",
+	num: "1.109.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.109.1</h3><br>
+		- Made various text the correct size.<br>
+		- Balanced Oxygen up to maxing B11.<br>
 	<br><h3 style='color: #CC0000'>v1.109</h3><br>
 		- Balanced extreme until Carbon and Oxygen are unlocked.<br>
 		- Added a custom save.<br>
