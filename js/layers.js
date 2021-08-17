@@ -15380,12 +15380,14 @@ addLayer("cells", {
                 if (run3) layers.cells.kappa.update(diff)
                 if (run4) layers.cells.iota.update(diff)
 
-                if (hasMilestone("cells", 9) && (player.cells.points.lt(tmp.cells.getResetGain) || !hasMilestone("cells", 14))) {
-                        let gain = tmp.cells.getResetGain.times(diff).div(10)
-                        data.points = data.points.plus(gain)
-                        data.total = data.total.plus(gain)
-                        if (hasMilestone("cells", 14)) {
-                                player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
+                if (hasMilestone("cells", 9) || hasMilestone("cells", 14)) {
+                        if (player.cells.points.lt(tmp.cells.getResetGain) || !hasMilestone("cells", 14)) {
+                                let gain = tmp.cells.getResetGain.times(diff).div(10)
+                                data.points = data.points.plus(gain)
+                                data.total = data.total.plus(gain)
+                                if (hasMilestone("cells", 14)) {
+                                        player.cells.points = player.cells.points.min(tmp.cells.getResetGain)
+                                }
                         }
                 }
 
