@@ -1838,6 +1838,7 @@ addLayer("sci", {
                 let x = decimalOne
 
                 if (player.easyMode)            x = x.times(2)
+                                                x = x.times(tmp.tokens.effect)
 
                 if (player.easyMode)            x = x.pow(1.001)
 
@@ -1914,6 +1915,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 23))      ret = ret.times(Decimal.pow(2, player.mini.buyables[62]))
                         if (hasUpgrade("sci", 24))      ret = ret.times(Decimal.pow(2, player.mini.buyables[21]))
                         if (hasUpgrade("sci", 25))      ret = ret.times(Decimal.pow(2, player.mini.buyables[11]))
+                                                        ret = ret.times(tmp.tokens.effect)
 
                         return ret
                 },
@@ -1943,12 +1945,13 @@ addLayer("sci", {
                 getGainMult(){
                         let ret = decimalOne
 
-                        ret = ret.times(tmp.sci.buyables[101].effect)
-                        ret = ret.times(tmp.sci.buyables[102].effect)
-                        ret = ret.times(tmp.sci.buyables[103].effect)
-                        ret = ret.times(tmp.sci.buyables[112].effect)
-                        ret = ret.times(tmp.sci.buyables[113].effect)
-                        if (hasUpgrade("sci", 104)) ret = ret.times(4)
+                                                        ret = ret.times(tmp.sci.buyables[101].effect)
+                                                        ret = ret.times(tmp.sci.buyables[102].effect)
+                                                        ret = ret.times(tmp.sci.buyables[103].effect)
+                                                        ret = ret.times(tmp.sci.buyables[112].effect)
+                                                        ret = ret.times(tmp.sci.buyables[113].effect)
+                        if (hasUpgrade("sci", 104))     ret = ret.times(4)
+                                                        ret = ret.times(tmp.tokens.effect)
 
                         return ret
                 },
@@ -2256,6 +2259,24 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 104)
                         }, // hasUpgrade("sci", 105)
+                },
+                111: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VI"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Remove Cyclic base cost"
+                                return a
+                        },
+                        cost:() => new Decimal(5e74),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return player.tokens.total.gt(0) && hasUpgrade("sci", 105)
+                        }, // hasUpgrade("sci", 111)
                 },
         },
         buyables: {
@@ -2841,7 +2862,7 @@ addLayer("sci", {
                                 let amt = getBuyableAmount("sci", 103)
                                 let exp = amt.div(tmp.sci.buyables[103].expDiv).plus(1)
                                 let init = 5e9
-                                if (false) init = 1
+                                if (hasUpgrade("sci", 111)) init = 1
                                 return amt.pow(exp).pow10().pow(0.47712125471966244).times(init) 
                                 // 0.47712125471966244 = Math.log10(3)
                         },
@@ -2898,6 +2919,7 @@ addLayer("sci", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e9*3^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[103].expDiv) + "</sup>)"
+                                if (hasUpgrade("sci", 111)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3169,7 +3191,51 @@ addLayer("sci", {
                 },
         },
         doReset(layer){
-                if (layer != "sci") player.sci.points = decimalZero
+                // reset sci
+                let data = player.sci
+                let buyData = data.buyables
+
+                data.points = decimalZero
+                data.total = decimalZero
+                data.best = decimalZero
+
+                if (!false) { // Hydrogen Science
+                        let subdata = data.hydrogen_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+
+                        buyData[11] = decimalZero
+                        buyData[12] = decimalZero
+                        buyData[13] = decimalZero
+                        buyData[21] = decimalZero
+                        buyData[22] = decimalZero
+                        buyData[23] = decimalZero
+                        
+                        data.upgrades = filterOut(data.upgrades, [11,12,13,14,15,21,22,23,24,25])
+                }
+
+                if (!false) { // Oxygen Science
+                        console.log(layer)
+                        let subdata = data.oxygen_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+
+                        buyData[101] = decimalZero
+                        buyData[102] = decimalZero
+                        buyData[103] = decimalZero
+                        buyData[111] = decimalZero
+                        buyData[112] = decimalZero
+                        buyData[113] = decimalZero
+                        
+                        data.upgrades = filterOut(data.upgrades, [101,102,103,104,105])
+                }
+
+                player.mini.milestones = filterOut(player.mini.milestones, 
+                                                ["1", "2", "3", "4", "5", 
+                                                "6", "7", "8", "9", "10", 
+                                                "11", "12"])
         },
         deactivated(){
                 return false
@@ -3201,7 +3267,7 @@ addLayer("c", {
         branches: [],
         requires(){
                 if (!player.extremeMode) {
-                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
+                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 2048)
                 }
                 return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 1024)
         }, // Can be a function that takes requirement increases into account
@@ -30988,6 +31054,20 @@ addLayer("tokens", {
                 if (layers.l.grid.getGemEffect(802)) return true
                 return false
         },
+        effect(){
+                if (!player.extremeMode) return decimalOne
+                
+                return player.tokens.total.plus(1).pow(2)
+        },
+        effectDescription(){
+                if (player.tab != "tokens") return ""
+                let eff = tmp.tokens.effect
+                let start = " multiplying Science, Hydrogen Science, and Oxygen Science by " 
+                let end = "."
+                let ret = start + format(eff) + end
+                return ret
+                
+        },
         getMinusEffectiveTokens(){
                 let a = 0
                 
@@ -31179,100 +31259,6 @@ addLayer("tokens", {
                 let mid = makeRed("<b>(" + formatWhole(player.tokens.best_buyables[11]) + ")</b>")
                 if (player.cells.unlocked) return mid + end
                 return init + br + mid + end 
-        },
-        doReset(layer){
-                if (layer != "tokens") return
-                /*
-                Things to Reset 
-                1. A point stuff
-                2. B pt stuff
-                3. C
-                4. O
-                5. H
-                */
-
-                // 1: A point stuff
-                let data1 = player.mini
-                if (!false) {
-                        data1.a_points = {
-                                points: decimalZero,
-                                best: decimalZero,
-                                extras: {
-                                        11: decimalOne,
-                                        12: decimalZero,
-                                        13: decimalZero,
-                                        21: decimalZero,
-                                        23: decimalZero,
-                                        61: decimalZero,
-                                        62: decimalZero,
-                                        63: decimalZero,
-                                }
-                        }
-                        let list1 = ["11", "12", "13", "21", 
-                                     "22", "23", "61", 
-                                     "62", "63"]
-                        for (i = 0; i < list1.length; i++){
-                                data1.buyables[list1[i]] = decimalZero
-                        }
-                }
-                // 2: B point stuff
-                if (!false) {
-                        data1.b_points = {
-                                points: decimalZero,
-                                best: decimalZero,
-                        }
-                        let list2 = ["31", "32", 
-                                     "33", "41", "42", "43", 
-                                     "51", "52", "53"]
-                        for (i = 0; i < list1.length; i++){
-                                data1.buyables[list2[i]] = decimalZero
-                        }
-                }
-
-                
-
-                // 3: C
-                if (!false) {
-                        if (!hasMilestone("tokens", 11) && !hasMilestone("n", 6)) {
-                                player.c.upgrades = filterOut(player.c.upgrades, [11, 12, 13, 14, 15])
-                        }
-                        player.c.points = decimalZero
-                        player.c.best = decimalZero
-                }
-
-                // 4: O
-                if (!false) {
-                        if (!hasMilestone("tokens", 11) && !hasMilestone("n", 5)) {
-                                player.o.upgrades = filterOut(player.o.upgrades, [11, 12, 13, 14, 15])
-                        }
-                        player.o.points = decimalZero
-                        player.o.best = decimalZero
-                }
-
-                // 5: H
-                if (!false) {
-                        let remove = [11, 12, 13, 14, 15, 
-                                      31, 32, 33, 34, 35, 
-                                      21, 22, 23, 24, 25, 
-                                      41, 42, 43, 44, 45, 
-                                      51, 52, 53, 54, 55, 
-                                      61, 62, 63, 64, 65]
-
-                        if (hasMilestone("tokens", 5)) {
-                                remove = remove.slice(player.tokens.milestones.length * 3)
-                        }
-
-                        if (hasMilestone("tokens", 2)) remove = filterOut(remove, [51, 52])
-
-                        if (!hasMilestone("n", 1)) player.h.upgrades = filterOut(player.h.upgrades, remove)
-                        player.h.points = decimalZero
-                        player.h.best = decimalZero
-                        player.h.atomic_hydrogen.points = decimalZero
-                        player.h.atomic_hydrogen.best = decimalZero
-                        player.h.deuterium.points = decimalZero
-                        player.h.deuterium.best = decimalZero
-                }
-
         },
         buyables: {
                 rows: 15,
@@ -34204,6 +34190,7 @@ addLayer("tokens", {
         tabFormat: {
                 "Milestones": {
                         content: [
+                                "main-display",
                                 ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
                                 "milestones",
                         ],
@@ -34363,6 +34350,102 @@ addLayer("tokens", {
                                 return false
                         },
                 },
+        },
+
+        doReset(layer){
+                if (layer != "tokens") return
+                /*
+                Things to Reset 
+                1. A point stuff
+                2. B pt stuff
+                3. C
+                4. O
+                5. H
+                */
+
+                // 1: A point stuff
+                let data1 = player.mini
+                if (!false) {
+                        data1.a_points = {
+                                points: decimalZero,
+                                best: decimalZero,
+                                extras: {
+                                        11: decimalOne,
+                                        12: decimalZero,
+                                        13: decimalZero,
+                                        21: decimalZero,
+                                        23: decimalZero,
+                                        61: decimalZero,
+                                        62: decimalZero,
+                                        63: decimalZero,
+                                }
+                        }
+                        let list1 = ["11", "12", "13", "21", 
+                                     "22", "23", "61", 
+                                     "62", "63"]
+                        for (i = 0; i < list1.length; i++){
+                                data1.buyables[list1[i]] = decimalZero
+                        }
+                }
+                // 2: B point stuff
+                if (!false) {
+                        data1.b_points = {
+                                points: decimalZero,
+                                best: decimalZero,
+                        }
+                        let list2 = ["31", "32", 
+                                     "33", "41", "42", "43", 
+                                     "51", "52", "53"]
+                        for (i = 0; i < list1.length; i++){
+                                data1.buyables[list2[i]] = decimalZero
+                        }
+                }
+
+                
+
+                // 3: C
+                if (!false) {
+                        if (!hasMilestone("tokens", 11) && !hasMilestone("n", 6)) {
+                                player.c.upgrades = filterOut(player.c.upgrades, [11, 12, 13, 14, 15])
+                        }
+                        player.c.points = decimalZero
+                        player.c.best = decimalZero
+                }
+
+                // 4: O
+                if (!false) {
+                        if (!hasMilestone("tokens", 11) && !hasMilestone("n", 5)) {
+                                player.o.upgrades = filterOut(player.o.upgrades, [11, 12, 13, 14, 15])
+                        }
+                        player.o.points = decimalZero
+                        player.o.best = decimalZero
+                }
+
+                // 5: H
+                if (!false) {
+                        let remove = [11, 12, 13, 14, 15, 
+                                      31, 32, 33, 34, 35, 
+                                      21, 22, 23, 24, 25, 
+                                      41, 42, 43, 44, 45, 
+                                      51, 52, 53, 54, 55, 
+                                      61, 62, 63, 64, 65]
+
+                        if (hasMilestone("tokens", 5)) {
+                                remove = remove.slice(player.tokens.milestones.length * 3)
+                        }
+
+                        if (hasMilestone("tokens", 2)) remove = filterOut(remove, [51, 52])
+
+                        if (!hasMilestone("n", 1)) player.h.upgrades = filterOut(player.h.upgrades, remove)
+                        player.h.points = decimalZero
+                        player.h.best = decimalZero
+                        player.h.atomic_hydrogen.points = decimalZero
+                        player.h.atomic_hydrogen.best = decimalZero
+                        player.h.deuterium.points = decimalZero
+                        player.h.deuterium.best = decimalZero
+                }
+
+                if (player.extremeMode) layers.sci.doReset()
         },
 })
 
