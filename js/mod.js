@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.110.1",
+	num: "1.111",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.tokens.total.gt(1)
+	if (player.extremeMode) return player.tokens.total.gt(2)
 	return player.or.total.gt(4)
 }
 
@@ -33,9 +33,14 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.111</h3><br>
+		- Balanced until 3 Tokens.<br>
+		- Added a custom save.<br>
+		- Added a couple autobuyers for science buyables.<br>
 	<br><h3 style='color: #CC0000'>v1.110.1</h3><br>
 		- Balanced until 2 Tokens.<br>
 		- Added a Oxygen Science upgrade.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.110</h3><br>
 		- Balanced extreme until one token.<br>
 		- Fixed a bug with logistic currencies sometimes being negative.<br>

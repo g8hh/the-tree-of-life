@@ -1860,6 +1860,14 @@ addLayer("sci", {
 
                 if (hasUpgrade("sci", 11))      layers.sci.hydrogen_science.update(diff)
                 if (hasUpgrade("o", 13))        layers.sci.oxygen_science.update(diff)
+
+
+                if (data.autobuysci12 && hasMilestone("tokens", 1)) {
+                        if (layers.sci.buyables[12].unlocked) layers.sci.buyables[12].buy()
+                }
+                if (data.autobuysci11 && hasMilestone("tokens", 2)) {
+                        if (layers.sci.buyables[11].unlocked) layers.sci.buyables[11].buy()
+                }
         },
         effect(){
                 return player.sci.points.plus(10).log10()
@@ -32979,11 +32987,18 @@ addLayer("tokens", {
                         effect(){
                                 return player.tokens.total.max(1)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci12"]]
+                        },
                         effectDescription(){
                                 if (player.tab != "tokens") return ""
                                 if (player.subtabs.tokens.mainTabs != "Milestones") return ""
 
                                 let a = "Reward: Raise Radio Wave effect to the total number of tokens.<br>"
+                                if (player.extremeMode) {
+                                        a = "Reward: Raise Radio Wave effect to the total number of tokens and autobuy 13.6 eV.<br>"
+                                }
                                 let b = "Currently: " + format(tmp.tokens.milestones[1].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: [total tokens]"
@@ -33008,11 +33023,18 @@ addLayer("tokens", {
                         effect(){
                                 return player.tokens.total.max(1)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci11"]]
+                        },
                         effectDescription(){
                                 if (player.tab != "tokens") return ""
                                 if (player.subtabs.tokens.mainTabs != "Milestones") return ""
                                 
                                 let a = "Reward: Raise Microwaves effect to the total number of tokens and keep Hydrogen XI and XII.<br>"
+                                if (player.extremeMode) {
+                                        a = "Reward: Raise Microwaves effect to the total number of tokens, keep Hydrogen XI and XII, and autobuy α ~ 1/147.<br>"
+                                }
                                 let b = "Currently: " + format(tmp.tokens.milestones[2].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: [total tokens]"
