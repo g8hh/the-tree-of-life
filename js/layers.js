@@ -221,6 +221,10 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                    24380e5, 29250e5, 
                 ]
 
+TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,     1e6-1         
+                                                                                //        
+]
+
 var GEM_EFFECT_DESCRIPTIONS = {
         101: "Boost life gain<br>*1+sqrt(x)",
         102: "Boost point gain<br>^1+cbrt(x)",
@@ -1309,7 +1313,7 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) {
-                                        if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 Dec" + "aseconds base cost"
+                                        if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 D" + "ec" + "aseconds base cost"
                                         return "^.5 in the color production formula becomes ^.52"
                                 }
                                 if (hasUpgrade("h", 54)) return ""
@@ -1867,6 +1871,9 @@ addLayer("sci", {
                 }
                 if (data.autobuysci11 && hasMilestone("tokens", 2)) {
                         if (layers.sci.buyables[11].unlocked) layers.sci.buyables[11].buy()
+                }
+                if (data.autobuysci13 && hasMilestone("tokens", 3)) {
+                        if (layers.sci.buyables[13].unlocked) layers.sci.buyables[13].buy()
                 }
         },
         effect(){
@@ -3275,9 +3282,9 @@ addLayer("c", {
         branches: [],
         requires(){
                 if (!player.extremeMode) {
-                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 2048)
+                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
                 }
-                return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 1024)
+                return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 2048)
         }, // Can be a function that takes requirement increases into account
         resource: "Carbon", // Name of prestige currency
         baseResource: "Life Points", // Name of resource prestige is based on
@@ -3372,7 +3379,15 @@ addLayer("c", {
                 let data = player.c
                 
                 if (data.best.gt(0)) data.unlocked = true
-                else data.unlocked = (!player.o.best.gt(0) || player.points.max(2).log(2).gte(3072)) &&  player.points.max(2).log(2).gte(1024)
+                else {
+                        let v = player.points.max(2).log(2)
+                        //hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 2048)
+                        if (player.extremeMode) {
+                                data.unlocked = v.gte(2460) || (v.gte(2048) && player.o.best.eq(0))
+                        } else {
+                                data.unlocked = v.gte(3072) || (v.gte(1024) && player.o.best.eq(0))
+                        }
+                }
                 data.best = data.best.max(data.points)
                 
                 // do carbon gain
@@ -25024,6 +25039,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(20)
+                                if (hasUpgrade("sci", 25)) div = decimalOne
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
@@ -25089,6 +25105,10 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e20)
                                 let base = 1e9
+                                if (player.extremeMode) {
+                                        base = 1e4
+                                        div = new Decimal(3e18)
+                                }
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -25150,6 +25170,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e6)
+                                if (hasMilestone("mini", 9)) div = decimalOne
                                 let base = 1e6
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
@@ -25215,6 +25236,10 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e300)
                                 let base = 1e30
+                                if (player.extremeMode) {
+                                        init = new Decimal(1e14)
+                                        base = new Decimal(1e5)
+                                }
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -25288,6 +25313,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e31)
+                                if (player.extremeMode) div = new Decimal(5e29)
                                 let base = 1e11
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -25354,6 +25380,10 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e15)
                                 let base = 1e10
+                                if (player.extremeMode) {
+                                        base = 1e5
+                                        if (hasMilestone("mini", 10)) div = decimalOne
+                                }
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -25420,6 +25450,11 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e33)
                                 let base = 2000
+                                if (player.extremeMode) {
+                                        base = 1e3
+                                        if (hasUpgrade("sci", 24)) div = decimalOne
+                                        else div = new Decimal(1e28)
+                                }
                                 let exp = 1.15
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -25475,7 +25510,8 @@ addLayer("mini", {
                         title: "<bdi style='color:#0000FF'>Blue</bdi>",
                         cost(){
                                 let init = new Decimal(hasMilestone("mini", 8) ? 1 : 1e10)
-                                return init.times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 63), 1.1)))
+                                let exp = Decimal.pow(getBuyableAmount("mini", 63), 1.1)
+                                return init.times(Decimal.pow(1e8, exp))
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[63].cost) && getBuyableAmount("mini", 63).lt(5000),
                         buy(){
@@ -25485,6 +25521,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e10)
+                                if (player.extremeMode) init = decimalOne
                                 let base = 1e8
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -25811,6 +25848,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(5e237)
+                                if (hasUpgrade("c", 13) && player.extremeMode) div = decimalOne
                                 let base = 2e10
                                 let exp = 1.35
                                 let pts = player.mini.b_points.points
@@ -25873,6 +25911,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e425")
+                                if (hasUpgrade("c", 13) && player.extremeMode) div = decimalOne
                                 let base = 1e15
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -25998,7 +26037,8 @@ addLayer("mini", {
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[52].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal("1e18650")
+                                let div = new Decimal(player.extremeMode ? "1e17400" : "1e18650")
+                                if (hasUpgrade("sci", 103)) div = decimalOne
                                 let base = 1e4
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
@@ -31034,8 +31074,10 @@ addLayer("tokens", {
                         let tetBase = 9.7
                         if (hasMilestone("or", 5)) tetBase = 9.5
 
+                        let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
+
                         let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
-                        let canAff = portion.plus(87).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
+                        let canAff = portion.plus(len).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
                         return canAff.sub(player.tokens.total).max(0)
                 } 
                 if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return decimalOne
@@ -31116,6 +31158,7 @@ addLayer("tokens", {
         },
         getNextAt(){
                 //1e6-1
+                let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
                 let amt = player.tokens.total.toNumber()
 
                 amt -= tmp.tokens.getMinusEffectiveTokens
@@ -31124,14 +31167,15 @@ addLayer("tokens", {
 
                 amt = Math.floor(amt)
 
-                if (amt >= 87) {
+                if (amt >= len) {
                         let tetBase = 10
                         if (hasMilestone("or", 2)) tetBase = 9.7
                         if (hasMilestone("or", 5)) tetBase = 9.5
-                        return Decimal.tetrate(tetBase, 4 + (amt - 87) / tmp.tokens.getTetrationScalingDivisor)
+                        return Decimal.tetrate(tetBase, 4 + (amt - len) / tmp.tokens.getTetrationScalingDivisor)
                 }
-                let add = player.hardMode ? 4 : 0
-                return Decimal.pow(10, TOKEN_COSTS[amt]).times(Decimal.pow(10, add))
+                let additional = player.hardMode ? 1e4 : 1
+                if (player.extremeMode) return Decimal.pow(10, TOKEN_COSTS_EXTREME[amt]).times(additional)
+                return Decimal.pow(10, TOKEN_COSTS[amt]).times(additional)
 
                 /*
                 Generalized formula: 
@@ -33060,11 +33104,17 @@ addLayer("tokens", {
                         effect(){
                                 return player.tokens.total.max(1)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci13"]]
+                        },
                         effectDescription(){
                                 if (player.tab != "tokens") return ""
                                 if (player.subtabs.tokens.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Multiply and then raise UHF Gamma Rays effect to the total number of tokens and the autobuyer bulks 10x. Multiply Oxygen and Carbon gain by the number of achievements.<br>"                     
+                                let a = "Reward: Multiply and then raise UHF Gamma Rays base to the total number of tokens and the autobuyer bulks 10x."
+                                if (!player.extremeMode) a += " Multiply Oxygen and Carbon gain by the number of achievements.<br>"  
+                                else a += " Multiply Oxygen and Carbon gain by the number of achievements and autobuy 1/n^2.<br>"   
                                 let b = "Currently: " + format(tmp.tokens.milestones[3].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: [total tokens]"
