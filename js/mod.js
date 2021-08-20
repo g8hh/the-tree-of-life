@@ -12,23 +12,116 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.100",
+	num: "1.109.1",
 	name: "Advil's Auspicious Acension",
 }
 
+
+var forceEndgame = false
 function isEndgame() {
-	return player.or.total.gt(1)
+	if (forceEndgame) return true
+	if (player.extremeMode) return player.o.points.gt(0) || player.c.points.gt(0)
+	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		2 total Organs and reaching the endgame screen<br><br>
+		Reaching the endgame screen (updated as of v1.105)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.109.1</h3><br>
+		- Made various text the correct size.<br>
+		- Balanced Oxygen up to maxing B11.<br>
+	<br><h3 style='color: #CC0000'>v1.109</h3><br>
+		- Balanced extreme until Carbon and Oxygen are unlocked.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.108</h3><br>
+		- Added two custom saves.<br>
+		- Made extreme mode not nerf B buyable costs.<br>
+		- Added 6 Hydrogen Science upgrade.<br>
+		- Added 2 Hydrogen Science buyables.<br>
+		- Added 5 A minigame milestones.<br>
+		- Made various costs cheaper and more expenive in extreme.<br>
+		- Various word fixes (Hydrogen XI actually adds 1 to Violet base, not Hydrogen XII).<br>
+		- Various small bug fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.107.1</h3><br>
+		- Fixed a bug with Cell production.<br>
+		- Added a custom save.<br>
+		- Fixed various display issues.<br>
+	<br><h3 style='color: #CC0000'>v1.107</h3><br>
+		- Added a custom save.<br>
+		- Fixed extreme mode description.<br>
+		- Made milestones that are no unlocked not rewarded.<br>
+		- Fixed a "feature" where clicking a layer brings you to the first subtab.<br>
+		- Added 7 B Point milestones.<br>
+		- Added a Hydrogen Science upgrade.<br>
+		- Added a Hydrogen Science buyable.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.106</h3><br>
+		- Rollover, I guess.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.105.9</h3><br>
+		- Organ milestone 5 makes Down Quarks not reset anymore (used to never reset).<br>
+	<br><h3 style='color: #CC0000'>v1.105.8</h3><br>
+		- Added two rows of achievements.<br>
+		- Made bulking of Cell challenges not occur while in them.<br>
+	<br><h3 style='color: #CC0000'>v1.105.7</h3><br>
+		- Various code cleanup.<br>
+		- Made a toggle for disabling milestone popups.<br>
+		- Added a new file (<i>hotkeySupport.js</i>).<br>
+	<br><h3 style='color: #CC0000'>v1.105.6</h3><br>
+		- Various code cleanup.<br>
+		- Removed 12 "new Decimal(0)"s to make the code a tiny bit faster.<br>
+		- Made milestone popups not say "Requires:" anymore.<br>
+	<br><h3 style='color: #CC0000'>v1.105.5</h3><br>
+		- Made Organ milestones 2/3 permanently bulk buy Omnipotent/Totipotent.<br>
+	<br><h3 style='color: #CC0000'>v1.105.4</h3><br>
+		- Fixed Tokens II initial unlock still notifying the layer.<br>
+	<br><h3 style='color: #CC0000'>v1.105.3</h3><br>
+		- Made Organ milestone 4 also give minigame QoL.<br>
+	<br><h3 style='color: #CC0000'>v1.105.2</h3><br>
+		- Fixed a bug with Organ milestone 4 autobuyer.<br>
+		- Fixed a bug with buying upgrades generally.<br>
+	<br><h3 style='color: #CC0000'>v1.105.1</h3><br>
+		- Fixed a longstanding bug that messes with Organ resetting.<br>
+		- Made Tissue milestone 4 easier after Organ unlock.<br>
+	<br><h3 style='color: #CC0000'>v1.105</h3><br>
+		- Added two Organ milestones.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.104</h3><br>
+		- Added a Organ milestone.<br>
+		- Made Organ milestone 2 autobuy DNA upgrades.<br>
+		- Made Organ upgrade 11 remove coins.<br>
+	<br><h3 style='color: #CC0000'>v1.103</h3><br>
+		- Implemented extreme mode's nerfs.<br>
+		- Balanced until 3 Organs.<br>
+		- Balanced extreme mode until minigame unlock.<br>
+		- Added a custom save.<br>
+		- Added the Labratory and Science.<br>
+		- Added three Science upgrades.<br>
+		- Added three Science buyables.<br>
+		- Added Hydrogen Science.<br>
+		- Added a backup font for most things.<br>
+		- Fixed various display issue.<br>
+	<br><h3 style='color: #CC0000'>v1.102</h3><br>
+		- Disjointed hard and extreme mode.<br>
+		- Removed some displays for hard mode.<br>
+		- Various code cleanup.<br>
+		- Improved mode selector display.<br>
+	<br><h3 style='color: #CC0000'>v1.101.1</h3><br>
+		- Added extreme mode.<br>
+		- Implemented extreme mode nerfs.<br>	
+	<br><h3 style='color: #CC0000'>v1.101</h3><br>
+		- Added an Organ milestone.<br>
+		- Cleaned up token cost function.<br>
+		- Added easy mode.<br>
+		- Various code cleanup.<br>
+		- Added a mode switcher tab.<br>
 	<br><h3 style='color: #CC0000'>v1.100</h3><br>
 		- Added Organs.<br>
 		- Added a Organ upgrade.<br>
@@ -1085,8 +1178,12 @@ function addedPlayerData() { return {
 	undulating: false,
 	lastSave: new Date().getTime(),
 	hardMode: false,
+	easyMode: false,
+	extremeMode: false,
 	hardFromBeginning: false,
+	extremeFromBeginning: false,
 	arrowHotkeys: true,
+	modTab: false,
 	lastLettersPressed: [],
 	targetWord: "johnson",
 	wordsSpelled: 0,
@@ -1123,8 +1220,6 @@ var displayThings = [
 		
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
-		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
-		else if (player.hardMode) end += "{Hard}"
 		let saveFinal = getLastSaveDisplay() + end
 
 		let len = pastTickTimes.length
@@ -1169,6 +1264,13 @@ function fixOldSave(oldVersion){
 		player.tokens.points = player.tokens.total
 		player.subtabs.tokens.mainTabs = "II"
 		player.tab = "tokens"
+	}
+	if (player.version < "1.103" && player.extremeMode) {
+		player.extremeMode = false
+		player.extremeFromBeginning = false
+		let s = "Your save had extreme mode active in a patch before it did anything."
+		s += "To keep the save balanced, you have been kicked out of extreme mode."
+		alert(s)
 	}
 }
 
@@ -1262,8 +1364,29 @@ function toggleUndulating(){
 }
 
 function enterHardMode(){
+	let s = "Are you sure you want to enter hard mode? This cannot be undone."
+	if (!confirm(s)) return 
+	if (player.extremeMode) {
+		if (!confirm("You are already in extreme mode, this is not advised." + s)) return 
+	}
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterExtremeMode(){
+	let s = "Are you sure you want to enter extreme mode? This cannot be undone."
+	if (!confirm(s)) return 
+	if (player.hardmode) {
+		if (!confirm("You are already in hard mode, this is not advised." + s)) return 
+	}
+	player.extremeMode = true
+	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterEasyMode(){
+	let s = "Are you sure you want to enter easy mode? This cannot be undone."
+	if (!confirm(s)) return 
+	player.easyMode = true
 }
 
 function toggleArrowHotkeys(){

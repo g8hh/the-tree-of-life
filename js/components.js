@@ -214,7 +214,7 @@ function loadVue() {
 		props: ['layer', 'data', 'number'],
 		template: `
 		<td v-if="tmp[layer].milestones && tmp[layer].milestones[data]!== undefined && milestoneShown(layer, data) && tmp[layer].milestones[data].unlocked" v-bind:style="[tmp[layer].milestones[data].style]" v-bind:class="{milestone: !hasMilestone(layer, data), tooltipBox: true, milestoneDone: hasMilestone(layer, data)}">
-			<h3 v-html="tmp[layer].milestones[data].requirementDescription + ' (' + number + ')'"></h3><br>
+			<h3 v-html="'Requires: ' + tmp[layer].milestones[data].requirementDescription + ' (' + number + ')'"></h3><br>
 			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data])"></span><br>
 			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="tmp[layer].milestones[data].tooltip"></tooltip>
 
@@ -261,8 +261,6 @@ function loadVue() {
 		<div><span v-if="player[layer][data].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{formatCurrency(player[layer][data].points)}}</h2> {{"Tokens II"}}<br><br></div>
 		`
 	})
-
-	uppercaseWord
 
 	// Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
 	Vue.component('resource-display', {

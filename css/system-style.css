@@ -1,7 +1,7 @@
 * {
 	transition-duration: 0.5s;
 	text-align: center;
-	font-family: "Inconsolata", monospace;
+	font-family: "Inconsolata", "Courier New", monospace;
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
