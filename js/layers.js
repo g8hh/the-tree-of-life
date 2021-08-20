@@ -31072,6 +31072,7 @@ addLayer("tokens", {
         },
         effectDescription(){
                 if (player.tab != "tokens") return ""
+                if (!player.extremeMode) return ""
                 let eff = tmp.tokens.effect
                 let start = " multiplying Science, Hydrogen Science, and Oxygen Science by " 
                 let end = "."
