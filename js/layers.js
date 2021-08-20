@@ -31057,7 +31057,10 @@ addLayer("tokens", {
         effect(){
                 if (!player.extremeMode) return decimalOne
                 
-                return Decimal.pow(4, player.tokens.total)
+                let exp = player.tokens.total
+                if (exp.gt(2)) exp = exp.times(2).sqrt()
+                
+                return Decimal.pow(4, exp)
         },
         effectDescription(){
                 if (player.tab != "tokens") return ""
