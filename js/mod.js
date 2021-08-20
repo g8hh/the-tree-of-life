@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.111.1",
+	num: "1.112",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.112</h3><br>
+		- Balanced until 8 tokens.<br>
+		- Various additional autobuyers added.<br>
+		- Made science mini-notify if a buyable is affordable.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.111.1</h3><br>
 		- Various fixes with extreme mode and bulk buying.<br>
 		- Balanced until 4 tokens.<br>

@@ -221,7 +221,9 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                    24380e5, 29250e5, 
                 ]
 
-TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,     1e6-1         
+TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
+                          10850,  12390,  13231,
+                        
                                                                                 //        
 ]
 
@@ -1848,6 +1850,17 @@ addLayer("sci", {
 
                 return x
         },
+        prestigeNotify(){
+                let buyIds = [   11,  12,  13,
+                                 21,  22,  23,
+                                101, 102, 103,
+                                111, 112, 113]
+                for (i in buyIds){
+                        let id = buyIds[i]
+                        if (!tmp.sci.buyables[id].unlocked) continue
+                        if (tmp.sci.buyables[id].canAfford) return true
+                }
+        },     
         update(diff){
                 let data = player.sci
 
@@ -1874,6 +1887,18 @@ addLayer("sci", {
                 }
                 if (data.autobuysci13 && hasMilestone("tokens", 3)) {
                         if (layers.sci.buyables[13].unlocked) layers.sci.buyables[13].buy()
+                }
+                if (data.autobuysci22 && hasMilestone("tokens", 4)) {
+                        if (layers.sci.buyables[22].unlocked) layers.sci.buyables[22].buy()
+                }
+                if (data.autobuysci21 && hasMilestone("tokens", 5)) {
+                        if (layers.sci.buyables[21].unlocked) layers.sci.buyables[21].buy()
+                }
+                if (data.autobuysci23 && hasMilestone("tokens", 6)) {
+                        if (layers.sci.buyables[23].unlocked) layers.sci.buyables[23].buy()
+                }
+                if (data.autobuysci101 && hasMilestone("tokens", 7)) {
+                        if (layers.sci.buyables[101].unlocked) layers.sci.buyables[101].buy()
                 }
         },
         effect(){
@@ -33136,9 +33161,14 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasMilestone("tokens", 3)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci22"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Radio Waves and Constant are based on best amount, cube X-Ray effect, and add .05 to A Point gain exponent<br>"
-                                return a 
+                                let init = "Reward: Radio Waves and Constant are based on best amount, cube X-Ray effect,"
+                                if (player.extremeMode) return init + " add .05 to color gain exponent and autobuy 1 Minute."
+                                return init + " and add .05 to color gain exponent" 
                         },
                 }, // hasMilestone("tokens", 4)
                 5: {
@@ -33154,9 +33184,14 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasMilestone("tokens", 4)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci21"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Microwaves and Logarithimic are based on best amount, add .01 to Exponential and Semi-exponential, and each milestone keeps three Hydrogen upgrades<br>"
-                                return a 
+                                let init = "Reward: Microwaves and Logarithimic are based on best amount, add .01 to Exponential and Semi-exponential,"
+                                if (player.extremeMode) return init + " per milestone keep three Hydrogen upgrades, and autobuy 60 seconds."
+                                return init + " and per milestone keep three Hydrogen upgrades."
                         },
                 },  // hasMilestone("tokens", 5)
                 6: {
@@ -33175,11 +33210,19 @@ addLayer("tokens", {
                         effect(){
                                 return player.tokens.total.max(1)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci23"]]
+                        },
                         effectDescription(){
                                 if (player.tab != "tokens") return ""
                                 if (player.subtabs.tokens.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Infrared and Linear are based on best amount, and raise Gamma Ray effect to the number of tokens.<br>"                     
+                                let a = "Reward: Infrared and Linear are based on best amount,"
+                                
+                                if (!player.extremeMode) a += " and raise Gamma Ray effect to the number of tokens.<br>" 
+                                else a += " raise Gamma Ray effect to the number of tokens, and autobuy 6 D" + "e" + "caseconds.<br>"
+
                                 let b = "Currently: ^" + format(tmp.tokens.milestones[6].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: [total tokens]"
@@ -33204,11 +33247,20 @@ addLayer("tokens", {
                         effect(){
                                 return player.mini.a_points.points.plus(1).ln().max(1)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci101"]]
+                        },
                         effectDescription(){
                                 if (player.tab != "tokens") return ""
                                 if (player.subtabs.tokens.mainTabs != "Milestones") return ""
+                                    
+
+                                let a = "Reward: Visible and Quadratic are based on best amount, "
                                 
-                                let a = "Reward: Visible and Quadratic are based on best amount, and ln(A Points) multiplies Radio Waves' base.<br>"                     
+                                if (!player.extremeMode) a += " and ln(A Points) multiplies Radio Waves' base.<br>"
+                                else a += "ln(A Points) multiplies Radio Waves' base, and autobuy 21%.<br>"
+                                
                                 let b = "Currently: *" + format(tmp.tokens.milestones[7].effect)
                                 if (shiftDown) {
                                         let formula = "Formula: max(1,ln(A Points+1))"
