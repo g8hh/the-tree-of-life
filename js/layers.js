@@ -3229,7 +3229,7 @@ addLayer("sci", {
                         buyData[112] = decimalZero
                         buyData[113] = decimalZero
                         
-                        data.upgrades = filterOut(data.upgrades, [101,102,103,104,105])
+                        data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111])
                 }
 
                 player.mini.milestones = filterOut(player.mini.milestones, 
@@ -31057,7 +31057,7 @@ addLayer("tokens", {
         effect(){
                 if (!player.extremeMode) return decimalOne
                 
-                return player.tokens.total.plus(1).pow(2)
+                return Decimal.pow(4, player.tokens.total)
         },
         effectDescription(){
                 if (player.tab != "tokens") return ""
