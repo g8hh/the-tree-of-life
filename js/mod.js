@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.113",
+	num: "1.114",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.tokens.total.gt(9)
+	if (player.extremeMode) return player.tokens.total.gt(14)
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.114</h3><br>
+		- Fixed an issue with some tabs not went to when ArrowRight/ArrowLeft.<br>
+		- Added a custom save.<br> 
+		- Balanced until 15 tokens.<br>
+		- Various additional bugfixes and wording amends.<br>
 	<br><h3 style='color: #CC0000'>v1.113</h3><br>
 		- Balanced until 10 tokens.<br>
 		- Added an Oxygen science upgrade.<br>
