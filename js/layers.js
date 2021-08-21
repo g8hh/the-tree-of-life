@@ -222,7 +222,8 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                 ]
 
 TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
-                          10850,  12390,  13231,
+                          10850,  12390,  13231,  13500,  14190,
+                          //15260,
                         
                                                                                 //        
 ]
@@ -1879,26 +1880,33 @@ addLayer("sci", {
                 if (hasUpgrade("o", 13))        layers.sci.oxygen_science.update(diff)
 
 
+                let lsb = layers.sci.buyables
                 if (data.autobuysci12 && hasMilestone("tokens", 1)) {
-                        if (layers.sci.buyables[12].unlocked) layers.sci.buyables[12].buy()
+                        if (lsb[12].unlocked) lsb[12].buy()
                 }
                 if (data.autobuysci11 && hasMilestone("tokens", 2)) {
-                        if (layers.sci.buyables[11].unlocked) layers.sci.buyables[11].buy()
+                        if (lsb[11].unlocked) lsb[11].buy()
                 }
                 if (data.autobuysci13 && hasMilestone("tokens", 3)) {
-                        if (layers.sci.buyables[13].unlocked) layers.sci.buyables[13].buy()
+                        if (lsb[13].unlocked) lsb[13].buy()
                 }
                 if (data.autobuysci22 && hasMilestone("tokens", 4)) {
-                        if (layers.sci.buyables[22].unlocked) layers.sci.buyables[22].buy()
+                        if (lsb[22].unlocked) lsb[22].buy()
                 }
                 if (data.autobuysci21 && hasMilestone("tokens", 5)) {
-                        if (layers.sci.buyables[21].unlocked) layers.sci.buyables[21].buy()
+                        if (lsb[21].unlocked) lsb[21].buy()
                 }
                 if (data.autobuysci23 && hasMilestone("tokens", 6)) {
-                        if (layers.sci.buyables[23].unlocked) layers.sci.buyables[23].buy()
+                        if (lsb[23].unlocked) lsb[23].buy()
                 }
                 if (data.autobuysci101 && hasMilestone("tokens", 7)) {
-                        if (layers.sci.buyables[101].unlocked) layers.sci.buyables[101].buy()
+                        if (lsb[101].unlocked) lsb[101].buy()
+                }
+                if (data.autobuysci102 && hasMilestone("tokens", 8)) {
+                        if (lsb[102].unlocked) lsb[102].buy()
+                }
+                if (data.autobuysci103 && hasMilestone("tokens", 9)) {
+                        if (lsb[103].unlocked) lsb[103].buy()
                 }
         },
         effect(){
@@ -2317,6 +2325,24 @@ addLayer("sci", {
                         unlocked(){
                                 return player.tokens.total.gt(0) && hasUpgrade("sci", 105)
                         }, // hasUpgrade("sci", 111)
+                },
+                112: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Remove Atomic and B33 base cost"
+                                return a
+                        },
+                        cost:() => new Decimal(5e94),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 111) && (player.tokens.total.gt(8) || player.n.unlocked)
+                        }, // hasUpgrade("sci", 112)
                 },
         },
         buyables: {
@@ -2832,7 +2858,7 @@ addLayer("sci", {
                                 let amt = getBuyableAmount("sci", 102)
                                 let exp = amt.div(tmp.sci.buyables[102].expDiv).plus(1)
                                 let init = 5e5
-                                if (false) init = 1
+                                if (hasUpgrade("sci", 112)) init = 1
                                 return amt.pow(exp).pow10().pow(0.3010299956639812).times(init) 
                                 // 0.3010299956639812 = Math.log10(2)
                         },
@@ -2889,6 +2915,7 @@ addLayer("sci", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e5*2^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[102].expDiv) + "</sup>)"
+                                if (hasUpgrade("sci", 112)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3252,7 +3279,7 @@ addLayer("sci", {
                         buyData[22] = decimalZero
                         buyData[23] = decimalZero
                         
-                        data.upgrades = filterOut(data.upgrades, [11,12,13,14,15,21,22,23,24,25])
+                        if (!hasMilestone("tokens", 7)) data.upgrades = filterOut(data.upgrades, [11,12,13,14,15,21,22,23,24,25])
                 }
 
                 if (!false) { // Oxygen Science
@@ -3269,13 +3296,14 @@ addLayer("sci", {
                         buyData[112] = decimalZero
                         buyData[113] = decimalZero
                         
-                        data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111])
+                        if (!false) data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111,112,113,114,115])
                 }
 
-                player.mini.milestones = filterOut(player.mini.milestones, 
-                                                ["1", "2", "3", "4", "5", 
-                                                "6", "7", "8", "9", "10", 
-                                                "11", "12"])
+                if (!false) player.mini.milestones = filterOut(
+                                player.mini.milestones, 
+                                ["1", "2", "3", "4", "5", 
+                                "6", "7", "8", "9", "10", 
+                                "11", "12"])
         },
         deactivated(){
                 return false
@@ -26118,7 +26146,11 @@ addLayer("mini", {
                 },
                 53: {
                         title: "B33", 
-                        cost:() => new Decimal("1e22000").times(Decimal.pow(1e3, Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2))),
+                        cost(){
+                                let init = new Decimal(hasUpgrade("sci", 112) ? 1 :"1e22000")
+                                let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2)       
+                                return init.times(Decimal.pow(1e3, exp))
+                        },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[53].cost) && getBuyableAmount("mini", 53).lt(5000),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -26127,6 +26159,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e22000")
+                                if (hasUpgrade("sci", 112)) div = decimalOne
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -26165,6 +26198,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
+                                if (hasUpgrade("sci", 112)) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -31141,7 +31175,7 @@ addLayer("tokens", {
                 if (player.tab != "tokens") return ""
                 if (!player.extremeMode) return ""
                 let eff = tmp.tokens.effect
-                let start = " multiplying Science, Hydrogen Science, and Oxygen Science by " 
+                let start = " multiplying Science,<br>Hydrogen Science, and Oxygen Science by " 
                 let end = "."
                 let ret = start + format(eff) + end
                 return ret
@@ -33259,7 +33293,7 @@ addLayer("tokens", {
                                 let a = "Reward: Visible and Quadratic are based on best amount, "
                                 
                                 if (!player.extremeMode) a += " and ln(A Points) multiplies Radio Waves' base.<br>"
-                                else a += "ln(A Points) multiplies Radio Waves' base, and autobuy 21%.<br>"
+                                else a += "ln(A Points) multiplies Radio Waves' base, keep Hydrogen Science upgrades, and autobuy 21%.<br>"
                                 
                                 let b = "Currently: *" + format(tmp.tokens.milestones[7].effect)
                                 if (shiftDown) {
@@ -33282,9 +33316,14 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasMilestone("tokens", 7)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci102"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Near-ultraviolet and Cubic are based on best amount, and [A Points]^.1 multipies B Point gain.<br>"
-                                return a 
+                                let a = "Reward: Near-ultraviolet and Cubic are based on best amount, "
+                                if (!player.extremeMode) return a + "and A Points<sup>.1</sup> multipies B Point gain."
+                                return a + "A Points<sup>.1</sup> multipies B Point gain, and autobuy Atomic."
                         },
                 },  // hasMilestone("tokens", 8)
                 9: {
@@ -33300,9 +33339,14 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasMilestone("tokens", 8)
                         },
+                        toggles(){
+                                if (!player.extremeMode) return []
+                                return [["sci", "autobuysci103"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Ultraviolet and Polynomial are based on best amount, and [B Points]^.1 multipies A Point gain.<br>"
-                                return a 
+                                let a = "Reward: Ultraviolet and Polynomial are based on best amount, "
+                                if (!player.extremeMode) return a + "and B Points<sup>.1</sup> multiplies A Point gain."
+                                return a + "B Points<sup>.1</sup> multiplies A Point gain and autobuy Cyclic."
                         },
                 },  // hasMilestone("tokens", 9)
                 10: {
