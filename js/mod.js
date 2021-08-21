@@ -1275,6 +1275,7 @@ var displayThings = [
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
 
