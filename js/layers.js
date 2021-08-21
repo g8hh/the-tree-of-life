@@ -590,7 +590,7 @@ addLayer("h", {
         getNextAt(){
                 return decimalZero
         },
-        getLossRate(){ //hydrogen loss
+        getLossRate(){
                 let ret = new Decimal(.01)
                 if (hasUpgrade("h", 21)) ret = ret.plus(.0002)
                 if (hasUpgrade("h", 31)) ret = ret.plus(.001)
@@ -600,7 +600,7 @@ addLayer("h", {
 
                 return ret
         },
-        getGainMult(){//hydrogen gain h gain hgain
+        getGainMult(){ //hydrogen gain h gain hgain
                 let x = decimalOne
 
                 if (hasUpgrade("h", 13))        x = x.times(tmp.h.upgrades[13].effect)
@@ -634,7 +634,6 @@ addLayer("h", {
                 deut.best = deut.best.max(deut.points)
                 atmc.best = atmc.best.max(atmc.points)
                 
-                // do hydrogen gain
                 if (hasMilestone("mu", 2)) {
                         data.points = data.points.plus(tmp.h.getResetGain.times(diff))
                         if (hasUpgrade("h", 21)) deut.points = deut.points.plus(tmp.h.deuterium.getResetGain.times(diff))
@@ -677,7 +676,7 @@ addLayer("h", {
 
                         return ret.max(0)
                 },
-                getLossRate(){ //deuterium loss
+                getLossRate(){
                         return new Decimal(.01)
                 },
                 getGainMult(){
@@ -710,7 +709,7 @@ addLayer("h", {
 
                         return ret.max(0)
                 },
-                getLossRate(){ // atomic hydrogen loss atomic loss
+                getLossRate(){
                         return new Decimal(.01)
                 },
                 getGainMult(){
@@ -1790,9 +1789,9 @@ addLayer("h", {
 })
 
 addLayer("sci", {
-        name: "Science", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "S", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Science", 
+        symbol: "S",
+        position: 1,
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -1813,13 +1812,13 @@ addLayer("sci", {
         }}, 
         color: "#B54153",
         branches: [],
-        requires: decimalZero, // Can be a function that takes requirement increases into account
-        resource: "Science", // Name of prestige currency
-        baseResource: "points", // Name of resource prestige is based on
+        requires: decimalZero,
+        resource: "Science",
+        baseResource: "points",
         baseAmount(){
                 return player.points.max(10)
-        }, // Get the current amount of baseResource
-        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        },
+        type: "custom", 
         getBaseGain(){
                 let amt = tmp.sci.baseAmount
 
@@ -1924,7 +1923,7 @@ addLayer("sci", {
         effectDescription(){
                 return " multiplying Point gain by " + format(tmp.sci.effect) + "."
         },
-        row: 0, // Row the layer is in on the tree (0 is the first row)
+        row: 0,
         layerShown(){
                 return !tmp.sci.deactivated && player.extremeMode && player.sci.unlocked
         },
@@ -2415,10 +2414,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
@@ -2485,10 +2483,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
@@ -2556,10 +2553,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
@@ -2631,10 +2627,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[21].base.pow(player.sci.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
@@ -2707,10 +2702,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[22].base.pow(player.sci.buyables[22])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
@@ -2779,10 +2773,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[23].base.times(player.sci.buyables[23]).times(player.sci.buyables[23].plus(1).log(2))
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "H Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.sci.buyables[23].effect) + " to Blue base and prior exp dividers</b><br>"
@@ -2849,10 +2842,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[101].base.pow(player.sci.buyables[101])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[101]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
@@ -2920,10 +2912,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[102]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[102].effect) + " to Oxygen Science and color gain</b><br>"
@@ -2991,10 +2982,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[103].base.pow(player.sci.buyables[103])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[103]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[103].effect) + " to Oxygen Science and Carbon gain</b><br>"
@@ -3060,10 +3050,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[111].base.times(player.sci.buyables[111])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.sci.buyables[111].effect) + " to prior exponential dividers and C -> O science exponent</b><br>"
@@ -3129,10 +3118,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[112].base.pow(player.sci.buyables[112])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[112].effect) + " to Oxygen Science and B point gain</b><br>"
@@ -3197,10 +3185,9 @@ addLayer("sci", {
                                 return tmp.sci.buyables[113].base.pow(player.sci.buyables[113])
                         },
                         display(){
-                                // other than softcapping fully general 
                                 if (player.tab != "sci") return ""
                                 if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[113]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[113].effect) + " to Oxygen Science gain</b><br>"
@@ -3339,9 +3326,9 @@ addLayer("sci", {
 })
 
 addLayer("c", {
-        name: "Carbon", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Carbon", 
+        symbol: "C", 
+        position: 0, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -3366,11 +3353,11 @@ addLayer("c", {
                         return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
                 }
                 return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 2048)
-        }, // Can be a function that takes requirement increases into account
-        resource: "Carbon", // Name of prestige currency
-        baseResource: "Life Points", // Name of resource prestige is based on
-        baseAmount(){return player.points.floor()}, // Get the current amount of baseResource
-        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        }, 
+        resource: "Carbon", 
+        baseResource: "Life Points", 
+        baseAmount(){return player.points.floor()}, 
+        type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("c", 11)) return decimalZero
                 let base = tmp.c.getBaseGain
@@ -3416,9 +3403,9 @@ addLayer("c", {
                 return base
         },
         getNextAt(){
-                return decimalZero //this doesnt matter
+                return decimalZero 
         },
-        getLossRate(){ //carbon loss
+        getLossRate(){ 
                 let ret = new Decimal(.01)
 
                 if (hasUpgrade("h", 81)) ret = ret.times(50)
@@ -3462,7 +3449,6 @@ addLayer("c", {
                 if (data.best.gt(0)) data.unlocked = true
                 else {
                         let v = player.points.max(2).log(2)
-                        //hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 2048)
                         if (player.extremeMode) {
                                 data.unlocked = v.gte(2460) || (v.gte(2048) && player.o.best.eq(0))
                         } else {
@@ -3471,13 +3457,12 @@ addLayer("c", {
                 }
                 data.best = data.best.max(data.points)
                 
-                // do carbon gain
                 if (hasMilestone("mu", 1)) data.points = data.points.plus(tmp.c.getResetGain.times(diff))
                 else data.points = getLogisticAmount(data.points, tmp.c.getResetGain, tmp.c.getLossRate, diff)
 
                 data.time += diff
         },
-        row: 1, // Row the layer is in on the tree (0 is the first row)
+        row: 1,
         layerShown(){
                 if (tmp.c.deactivated) return false
                 return hasUpgrade("h", 55) || tmp.n.layerShown
