@@ -3450,9 +3450,9 @@ addLayer("c", {
                 else {
                         let v = player.points.max(2).log(2)
                         if (player.extremeMode) {
-                                data.unlocked = v.gte(2460) || (v.gte(2048) && player.o.best.eq(0))
+                                data.unlocked = v.gte(3072) || (v.gte(2048) && player.o.best.eq(0))
                         } else {
-                                data.unlocked = v.gte(3072) || (v.gte(1024) && player.o.best.eq(0))
+                                data.unlocked = v.gte(2460) || (v.gte(1024) && player.o.best.eq(0))
                         }
                 }
                 data.best = data.best.max(data.points)
