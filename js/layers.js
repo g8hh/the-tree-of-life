@@ -224,7 +224,8 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
 TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           10850,  12390,  13231,  13500,  14190,
                           15260,  16000,  16280,  18000,  20740,
-                        
+                          21650,  28375,  32975,  35000,  35150,
+                          35600,  38500,
                                                                                 //        
 ]
 
@@ -2008,6 +2009,7 @@ addLayer("sci", {
                                                         ret = ret.times(tmp.sci.buyables[113].effect)
                         if (hasUpgrade("sci", 104))     ret = ret.times(4)
                                                         ret = ret.times(tmp.tokens.effect)
+                        if (hasUpgrade("sci", 114))     ret = ret.times(tmp.sci.upgrades[114].effect)
 
                         return ret
                 },
@@ -2369,6 +2371,50 @@ addLayer("sci", {
                         unlocked(){
                                 return (hasUpgrade("sci", 112) && player.tokens.total.gt(11)) || player.n.unlocked
                         }, // hasUpgrade("sci", 113)
+                },
+                114: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IX"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05"
+                                return a
+                        },
+                        effect(){
+                                return Decimal.pow(1.05, player.tokens.total.pow(2))
+                        },
+                        effectDisplay(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "O Research") return ""
+                                return format(tmp.sci.upgrades[114].effect)
+                        },
+                        cost:() => new Decimal(1e136),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasUpgrade("tokens", 61) || hasUpgrade("sci", 114) || player.n.unlocked
+                        }, // hasUpgrade("sci", 114)
+                },
+                115: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci X"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "21%'s log10s become ln and triple coin gain but lose 20x Oxygen"
+                                return a
+                        },
+                        cost:() => new Decimal(2e157),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 114) || player.n.unlocked
+                        }, // hasUpgrade("sci", 115)
                 },
         },
         buyables: {
@@ -2834,7 +2880,9 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.sci.hydrogen_science.points.max(10).log10().log10().max(1)
+                                let logBase = 10
+                                if (hasUpgrade("sci", 115)) logBase = Math.E
+                                let ret = player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
                                 
                                 return ret
                         },
@@ -3085,7 +3133,7 @@ addLayer("sci", {
                                 let amt = getBuyableAmount("sci", 112)
                                 let exp = amt.div(tmp.sci.buyables[112].expDiv).plus(1)
                                 let init = 5e49
-                                if (false) init = 1
+                                if (hasUpgrade("sci", 114)) init = 1
                                 return amt.pow(exp).pow10().pow(5.3010299956639812).times(init) 
                                 // 5.3010299956639812 = Math.log10(2e5)
                         },
@@ -3139,6 +3187,7 @@ addLayer("sci", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "4e49*2e5^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[112].expDiv) + "</sup>)"
+                                if (hasUpgrade("sci", 114)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -3281,7 +3330,7 @@ addLayer("sci", {
                 data.total = decimalZero
                 data.best = decimalZero
 
-                if (!false) { // Hydrogen Science
+                if (!hasMilestone("tokens", 14)) { // Hydrogen Science
                         let subdata = data.hydrogen_science
                         subdata.total = decimalZero
                         subdata.best = decimalZero
@@ -3298,7 +3347,6 @@ addLayer("sci", {
                 }
 
                 if (!false) { // Oxygen Science
-                        console.log(layer)
                         let subdata = data.oxygen_science
                         subdata.total = decimalZero
                         subdata.best = decimalZero
@@ -3626,25 +3674,26 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VII"
                         },
                         description(){
-                                if (!shiftDown) return "cbrt(max(10h, seconds played)) multiplies Ultraviolet base and add .01 to Polynomial base"
+                                if (!shiftDown) {
+                                        if (player.extremeMode) return "Add .01 to Polynomial base and multiply Ultraviolet base by 17"
+                                        return "cbrt(max(10h, seconds played)) multiplies Ultraviolet base and add .01 to Polynomial base<br>Currently: " + format(tmp.c.upgrades[22].effect)
+                                }
                                 a = "cbrt(max(36000, seconds played))"
                                 if (hasUpgrade("c", 24)) a += "+1000"
                                 if (hasUpgrade("c", 22)) return a
+                                if (player.extremeMode) a = ""
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[22].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         effect(){
+                                if (player.extremeMode) return new Decimal(17)
                                 let ret = new Decimal(player.timePlayed).max(36000).root(3)
 
                                 if (hasUpgrade("c", 24)) ret = ret.plus(1000)
 
                                 return ret
                         },
-                        effectDisplay(){
-                                if (player.tab != "c") return ""
-                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
-                                return format(tmp.c.upgrades[22].effect)
-                        },
                         cost(){
+                                if (player.extremeMode) return new Decimal(3e55)
                                 return player.hardMode ? new Decimal(1.4e37) : new Decimal(5e36)
                         },
                         unlocked(){
@@ -3662,6 +3711,7 @@ addLayer("c", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal(1e78)
                                 return player.hardMode ? new Decimal(4e80) : new Decimal(2e80)
                         },
                         unlocked(){
@@ -3673,7 +3723,10 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon IX"
                         },
                         description(){
-                                if (!shiftDown) return "Add 1000 to Carbon VII and halve the Double-exponential divider"
+                                if (!shiftDown) {
+                                        if (player.extremeMode) return "Halve the Double-exponential divider"
+                                        return "Add 1000 to Carbon VII and halve the Double-exponential divider"
+                                }
                                 a = ""
                                 if (hasUpgrade("c", 24)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
@@ -3910,8 +3963,9 @@ addLayer("o", {
 
                 if (hasUpgrade("h", 81)) ret = ret.times(50)
                 if (hasUpgrade("n", 32)) ret = ret.times(100)
+                if (hasUpgrade("sci", 115)) ret = ret.times(20)
 
-                return ret.max(.00001)
+                return ret
         }, //oxygen gain o gain ogain oxygengain 
         getGainMult(){
                 if (inChallenge("n", 42)) return decimalOne
@@ -4137,7 +4191,7 @@ addLayer("o", {
                                 if (hasUpgrade("o", 22)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[22].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e50 : 2e30),
+                        cost:() => new Decimal(player.extremeMode ? (player.tokens.total.gt(15) ? 3e38 : 1e40) : 2e30),
                         unlocked(){
                                 return hasMilestone("n", 6) || hasUpgrade("c", 21)
                         }, // hasUpgrade("o", 22)
@@ -31313,7 +31367,7 @@ addLayer("tokens", {
                 return hasMilestone("n", 11) || hasMilestone("l", 1) || hasMilestone("or", 1)
         },
         coins: {
-                getGainMult(){ //coin gain coins gain
+                getGainMult(){ //coin gain coins gain coingain
                         let ret = decimalOne
 
                         
@@ -31326,6 +31380,7 @@ addLayer("tokens", {
                         if (hasUpgrade("tokens", 93))   ret = ret.times(81)
                         if (hasMilestone("n", 8))       ret = ret.times(20)
                         if (hasMilestone("n", 2))       ret = ret.times(10)
+                        if (hasUpgrade("sci", 115))     ret = ret.times(3)
                                                         ret = ret.times(tmp.l.effect)
 
                         if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
@@ -33477,6 +33532,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 13)
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Tokens multiply coin gain and keep Hydrogen Science content"
                                 let a = "Reward: Tokens multiply coin gain.<br>"
                                 return a 
                         },
@@ -34054,6 +34110,7 @@ addLayer("tokens", {
 
                                         return a + b
                                 }
+                                if (player.extremeMode) return "Re-unlocks the third row of upgrades and unlock an Oxygen science upgrade"
                                 return "Re-unlocks the third row of upgrades"
                         },
                         canAfford(){
