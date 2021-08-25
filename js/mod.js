@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "The Tree of Life",
+	name: "生命树 - The Tree of Life",
 	id: "tree_of_life",
 	author: "pg132",
 	pointsName: "Life Points",
