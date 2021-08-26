@@ -225,7 +225,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           10850,  12390,  13231,  13500,  14190,
                           15260,  16000,  16280,  18000,  20740,
                           21650,  28375,  32975,  35000,  35150,
-                          35600,  38500,
+                          35600,  38500,  45678,
                                                                                 //        
 ]
 
@@ -990,6 +990,7 @@ addLayer("h", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e7")
                                 if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(2000e3) : new Decimal(2000)
                                 return hasUpgrade("h", 31) ? new Decimal(5e8) : new Decimal(5e4)
                         },
@@ -1476,6 +1477,7 @@ addLayer("h", {
                                 return a
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e4467e3")
                                 return Decimal.pow(10, 2100e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1499,6 +1501,7 @@ addLayer("h", {
                                 return a
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e7")
                                 return Decimal.pow(10, 2444e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1596,6 +1599,7 @@ addLayer("h", {
                                 return a
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e7")
                                 return Decimal.pow(10, 5960e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -2898,6 +2902,7 @@ addLayer("sci", {
                                 let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 101)) + " Oxygen Science</b><br>"
                                 let eformula = "log10(log10(H Sci))^x<br>" + format(tmp.sci.buyables[101].base) + "^x"
+                                if (hasUpgrade("sci", 115)) eformula = eformula.replaceAll("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
