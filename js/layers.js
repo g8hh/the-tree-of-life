@@ -990,7 +990,6 @@ addLayer("h", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e7")
                                 if (!player.hardMode) return hasUpgrade("h", 31) ? new Decimal(2000e3) : new Decimal(2000)
                                 return hasUpgrade("h", 31) ? new Decimal(5e8) : new Decimal(5e4)
                         },
