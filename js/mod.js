@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.117",
+	num: "1.117.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.117.1</h3><br>
+		- Hard and extreme is now playable, albeit very slow. Tell me about your progress!<br>
 	<br><h3 style='color: #CC0000'>v1.117</h3><br>
 		- Balanced until 26 tokens.<br>
 		- Next is AH7 -> D7 -> token 27.<br>

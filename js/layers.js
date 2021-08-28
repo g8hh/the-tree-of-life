@@ -733,7 +733,10 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen I"
                         },
                         description(){
-                                if (!shiftDown) return "ln([best Hydrogen]) multiplies Life Point gain"
+                                if (!shiftDown) {
+                                        if (player.extremeMode && player.hardMode) return "ln([best Hydrogen]) multiplies Life Point gain and unlock the Labratory"
+                                        return "ln([best Hydrogen]) multiplies Life Point gain"
+                                }
                                 a = "ln([best Hydrogen])"
                                 if (hasUpgrade("h", 14)) a = "(ln([best Hydrogen]))^[Hydrogen IV effect]"
                                 if (hasUpgrade("h", 33)) a = a.replace("ln", "log2")
@@ -826,7 +829,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IV"
                         },
                         description(){
-                                if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]" + (player.extremeMode ? " and unlock the Laboratory":"")
+                                if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]" + (player.extremeMode && !player.hardMode ? " and unlock the Laboratory":"")
                                 a = "ln([Hydrogen upgrades]"
                                 if (hasUpgrade("h", 43)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 14)) return a
@@ -1876,7 +1879,7 @@ addLayer("sci", {
                 let data = player.sci
 
                 if (!data.unlocked) {
-                        data.unlocked = hasUpgrade("h", 14)
+                        data.unlocked = hasUpgrade("h", 14) || (player.hardMode && hasUpgrade("h", 11))
                         return
                 }
                 data.best = data.best.max(data.points)
@@ -20270,7 +20273,7 @@ addLayer("cells", {
                 "Upgrades": {
                         content: ["main-display",
                                   ["prestige-button", "", function (){ return hasMilestone("cells", 14) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasMilestone("cells", 14) ? "You can reset for " + format(tmp.cells.getResetGain) + " Cells" : ""}], 
+                                  ["display-text", function (){ return hasMilestone("cells", 14) ? "Cell gain is capped at " + format(tmp.cells.getResetGain) : ""}], 
                                   ["upgrades", [1,2,3,4,5,6,7]],
                                   "blank",
                                   ["clickables", function(){return hasMilestone("cells", 21) || hasMilestone("or", 4) ? [] : [1]}],
