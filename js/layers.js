@@ -225,7 +225,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           10850,  12390,  13231,  13500,  14190,
                           15260,  16000,  16280,  18000,  20740,
                           21650,  28375,  32975,  35000,  35150,
-                          35600,  38500,  45678,
+                          35600,  38500,  45678,  49494,  60125,
                                                                                 //        
 ]
 
@@ -1530,6 +1530,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
@@ -1554,6 +1555,7 @@ addLayer("h", {
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 7111e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1575,6 +1577,7 @@ addLayer("h", {
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 7686e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1598,7 +1601,7 @@ addLayer("h", {
                                 return a
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e7")
+                                if (player.extremeMode) return new Decimal("1e4117e3")
                                 return Decimal.pow(10, 5960e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1620,6 +1623,7 @@ addLayer("h", {
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 6750e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1641,6 +1645,7 @@ addLayer("h", {
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 7070e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1662,6 +1667,7 @@ addLayer("h", {
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 7913e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1683,6 +1689,7 @@ addLayer("h", {
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return Decimal.pow(10, 8362e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -4210,7 +4217,9 @@ addLayer("o", {
                                 if (hasUpgrade("o", 23)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[23].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(2e48),
+                        cost(){
+                                return new Decimal(2e48)
+                        },
                         effect(){
                                 let ret = player.points.max(1).log10().max(1)
 
@@ -4235,7 +4244,10 @@ addLayer("o", {
                                 if (hasUpgrade("o", 24)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[24].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(5e155),
+                        cost(){
+                                if (player.extremeMode) return new Decimal(2e140)
+                                return new Decimal(5e155)
+                        },
                         effect(){
                                 let ret = player.points.max(1).log10().max(1)
 

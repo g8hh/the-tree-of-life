@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.116",
+	num: "1.117",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.tokens.total.gt(23)
+	if (player.extremeMode) return player.tokens.total.gt(25)
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.117</h3><br>
+		- Balanced until 26 tokens.<br>
+		- Next is AH7 -> D7 -> token 27.<br>
 	<br><h3 style='color: #CC0000'>v1.116</h3><br>
 		- Balanced until 24 tokens.<br>
 	<br><h3 style='color: #CC0000'>v1.115</h3><br>
