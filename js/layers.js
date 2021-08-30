@@ -226,6 +226,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           15260,  16000,  16280,  18000,  20740,
                           21650,  28375,  32975,  35000,  35150,
                           35600,  38500,  45678,  49494,  60125,
+                          61730,  69111,  77210,  77600,  78000,
                                                                                 //        
 ]
 
@@ -1503,7 +1504,7 @@ addLayer("h", {
                                 return a
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e7")
+                                if (player.extremeMode) return new Decimal("1e4575e3")
                                 return Decimal.pow(10, 2444e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1626,7 +1627,7 @@ addLayer("h", {
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e4523e3")
                                 return Decimal.pow(10, 6750e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1648,7 +1649,7 @@ addLayer("h", {
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e5440e3")
                                 return Decimal.pow(10, 7070e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -2428,6 +2429,24 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 114) || player.n.unlocked
                         }, // hasUpgrade("sci", 115)
+                },
+                121: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XI"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "All Hydrogen Science log10's become ln [NOT YET]"
+                                return a
+                        },
+                        cost:() => new Decimal(5e196),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasMilestone("tokens", 20) || player.n.unlocked
+                        }, // hasUpgrade("sci", 121)
                 },
         },
         buyables: {
@@ -3746,6 +3765,7 @@ addLayer("c", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal(7e154)
                                 return player.hardMode ? new Decimal(8.1e155) : new Decimal(4.6e155)
                         },
                         unlocked(){
