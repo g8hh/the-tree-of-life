@@ -2437,7 +2437,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "All Hydrogen Science log10's become ln [NOT YET]"
+                                let a = "All Hydrogen Science buyable's log10s become ln [NOT YET]"
                                 return a
                         },
                         cost:() => new Decimal(5e196),
@@ -3325,7 +3325,7 @@ addLayer("sci", {
                                         a += format(tmp.sci.oxygen_science.getResetGain) + "/s "
                                         return a
                                 }],
-                                ["upgrades", [10,11]],
+                                ["upgrades", [10,11,12]],
                                 ["buyables", [10,11]]
                         ],
                         unlocked(){
