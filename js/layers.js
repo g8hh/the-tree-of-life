@@ -227,6 +227,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           21650,  28375,  32975,  35000,  35150,
                           35600,  38500,  45678,  49494,  60125,
                           61730,  69111,  77210,  77600,  78000,
+                          83720,  87040,  87420, 107270, 120066,
                                                                                 //        
 ]
 
@@ -1534,10 +1535,10 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal("1e5070e3")
                                 return Decimal.pow(10, 4516e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -2437,7 +2438,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "All Hydrogen Science buyable's log10s become ln [NOT YET]"
+                                let a = "All Hydrogen Science buyable's log10s become ln and add 1 to Artificial base"
                                 return a
                         },
                         cost:() => new Decimal(5e196),
@@ -2485,6 +2486,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = player.points.plus(10).log10()
+
+                                if (hasUpgrade("sci", 121)) ret = ret.times(Math.log(10))
                                 
                                 return ret
                         },
@@ -2500,6 +2503,7 @@ addLayer("sci", {
                                 let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
                                 let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -2624,6 +2628,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = player.h.points.max(10).log10()
+
+                                if (hasUpgrade("sci", 121)) ret = ret.times(Math.log(10))
                                 
                                 return ret
                         },
@@ -2639,6 +2645,7 @@ addLayer("sci", {
                                 let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
                                 let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -2698,6 +2705,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = player.mini.b_points.points.max(10).log10()
+
+                                if (hasUpgrade("sci", 121)) ret = ret.times(Math.log(10))
                                 
                                 return ret
                         },
@@ -2713,6 +2722,7 @@ addLayer("sci", {
                                 let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 21)) + " Hydrogen Science</b><br>"
                                 let eformula = "log10(B Points)^x<br>" + format(tmp.sci.buyables[21].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -2773,6 +2783,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = player.mini.a_points.points.max(10).log10()
+
+                                if (hasUpgrade("sci", 121)) ret = ret.times(Math.log(10))
                                 
                                 return ret
                         },
@@ -2788,6 +2800,7 @@ addLayer("sci", {
                                 let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 22)) + " Hydrogen Science</b><br>"
                                 let eformula = "log10(A Points)^x<br>" + format(tmp.sci.buyables[22].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -3124,6 +3137,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = new Decimal(2)
+
+                                if (hasUpgrade("sci", 121)) ret = ret.plus(1)
                                 
                                 return ret
                         },
@@ -3783,9 +3798,11 @@ addLayer("c", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
+                                if (player.extremeMode) return new Decimal(2e229)
                                 return player.hardMode ? new Decimal(9e222) : new Decimal(8.5e222)
                         },
                         unlocked(){
+                                if (player.extremeMode && player.tokens.total.gte(32)) return true 
                                 return hasMilestone("n", 6) || hasUpgrade("o", 25)
                         }, // hasUpgrade("c", 25)
                 },
@@ -4295,7 +4312,10 @@ addLayer("o", {
                                 if (hasUpgrade("o", 25)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[25].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
-                        cost:() => new Decimal(7e209),
+                        cost(){
+                                if (player.extremeMode) return new Decimal(6.66e199)
+                                return new Decimal(7e209)
+                        },
                         effect(){
                                 let ret = new Decimal(player.o.upgrades.length).times(Math.PI)
 

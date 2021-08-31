@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.118",
+	num: "1.119",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return hasUpgrade("sci", 121)
+	if (player.extremeMode) return player.tokens.total.gte(36)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.118)<br><br>
+		Reaching the endgame screen (updated as of v1.119)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.119</h3><br>
+		- Balanced until 36 tokens.<br>
+		- Various cost changes.<br>
+		- Implemented a Oxygen Science upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.118</h3><br>
 		- Extreme mode is balanced until 11 Oxygen Science upgrades.<br>
 		- Various cost and other balance changes.<br>
