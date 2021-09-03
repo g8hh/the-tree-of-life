@@ -33,6 +33,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.120</h3><br>
+		- Balanced until 42 tokens.<br>
+		- Added three Oxygen Science upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.119</h3><br>
 		- Balanced until 36 tokens.<br>
 		- Various cost changes.<br>

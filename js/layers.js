@@ -228,6 +228,8 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           35600,  38500,  45678,  49494,  60125,
                           61730,  69111,  77210,  77600,  78000,
                           83720,  87040,  87420, 107270, 120066,
+                         120630, 132275, 149300, 151925, 153460,
+                         194050,
                                                                                 //        
 ]
 
@@ -1560,7 +1562,7 @@ addLayer("h", {
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e5203e3")
                                 return Decimal.pow(10, 7111e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1582,7 +1584,7 @@ addLayer("h", {
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e5817e3")
                                 return Decimal.pow(10, 7686e3)
                         },
                         currencyLocation:() => player.h.deuterium,
@@ -1672,7 +1674,7 @@ addLayer("h", {
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e5965e3")
                                 return Decimal.pow(10, 7913e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -1694,7 +1696,7 @@ addLayer("h", {
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal("1e1e8")
+                                if (player.extremeMode) return new Decimal("1e6362e3")
                                 return Decimal.pow(10, 8362e3)
                         },
                         currencyLocation:() => player.h.atomic_hydrogen,
@@ -2025,6 +2027,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 104))     ret = ret.times(4)
                                                         ret = ret.times(tmp.tokens.effect)
                         if (hasUpgrade("sci", 114))     ret = ret.times(tmp.sci.upgrades[114].effect)
+                        if (hasUpgrade("sci", 122))     ret = ret.times(tmp.sci.upgrades[122].effect)
 
                         return ret
                 },
@@ -2449,6 +2452,69 @@ addLayer("sci", {
                                 return hasMilestone("tokens", 20) || player.n.unlocked
                         }, // hasUpgrade("sci", 121)
                 },
+                122: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Per token multiply Oxygen Science gain by tokens"
+                                return a
+                        },
+                        cost:() => new Decimal(1e281),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        effect(){
+                                let t = player.tokens.total.max(1)
+                                return t.pow(t)
+                        },
+                        effectDisplay(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "O Research") return ""
+                                return format(tmp.sci.upgrades[122].effect)
+                        },
+                        unlocked(){
+                                return hasMilestone("tokens", 22) || player.n.unlocked
+                        }, // hasUpgrade("sci", 122)
+                },
+                123: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XIII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Per upgrade add .01 to 6 D" + "e" + "caseconds' base"
+                                return a
+                        },
+                        cost:() => new Decimal("5e345"),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 122) || player.n.unlocked
+                        }, // hasUpgrade("sci", 123)
+                },
+                124: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XIV"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers [not yet]"
+                                return a
+                        },
+                        cost:() => new Decimal("1e363"),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 123) || player.n.unlocked
+                        }, // hasUpgrade("sci", 124)
+                },
         },
         buyables: {
                 rows: 5,
@@ -2857,6 +2923,8 @@ addLayer("sci", {
                         },
                         base(){
                                 let ret = decimalOne
+
+                                if (hasUpgrade("sci", 123)) ret = ret.plus(player.sci.upgrades.length / 100)
                                 
                                 return ret
                         },
@@ -33749,6 +33817,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 21)
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Add .03 to Exponential base and unlock an Oxygen Science upgrade"
                                 let a = "Reward: Add .03 to Exponential base"
                                 return a
                         },
@@ -34330,13 +34399,14 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[81].cost)) return false
                                 return player.p.unlocked || hasMilestone("n", 5) || hasUpgrade("mini", 31) || (!hasUpgrade("tokens", 82))
                         },
-                        cost:() => new Decimal(2e4),
+                        cost:() => new Decimal(player.extremeMode ? 3e4 : 2e4),
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
                                 if (hasUpgrade("t", 61) || hasUpgrade("or", 11)) return false
-                                return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
+                                let v = player.extremeMode ? 42 : 41
+                                return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(v)
                         }, // hasUpgrade("tokens", 81)
                 },
                 82: {
@@ -34361,13 +34431,14 @@ addLayer("tokens", {
                                 if (player.tokens.coins.points.lt(tmp.tokens.upgrades[82].cost)) return false
                                 return player.p.unlocked || hasMilestone("n", 5) || hasUpgrade("mini", 31) || (!hasUpgrade("tokens", 81))
                         },
-                        cost:() => new Decimal(2e4),
+                        cost:() => new Decimal(player.extremeMode ? 3e4 : 2e4),
                         currencyLocation:() => player.tokens.coins,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Coins",
                         unlocked(){
                                 if (hasUpgrade("t", 61) || hasUpgrade("or", 11)) return false
-                                return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(41)
+                                let v = player.extremeMode ? 42 : 41
+                                return hasMilestone("n", 5) || (hasUpgrade("tokens", 71) && hasUpgrade("tokens", 72) && hasUpgrade("tokens", 73)) && player.tokens.total.gte(v)
                         }, // hasUpgrade("tokens", 82)
                 },
                 91: {
