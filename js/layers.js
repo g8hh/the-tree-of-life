@@ -229,7 +229,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           61730,  69111,  77210,  77600,  78000,
                           83720,  87040,  87420, 107270, 120066,
                          120630, 132275, 149300, 151925, 153460,
-                         194050,
+                         194050, 220255,
                                                                                 //        
 ]
 
@@ -2028,6 +2028,7 @@ addLayer("sci", {
                                                         ret = ret.times(tmp.tokens.effect)
                         if (hasUpgrade("sci", 114))     ret = ret.times(tmp.sci.upgrades[114].effect)
                         if (hasUpgrade("sci", 122))     ret = ret.times(tmp.sci.upgrades[122].effect)
+                        if (hasUpgrade("sci", 125))     ret = ret.times(tmp.sci.upgrades[125].effect)
 
                         return ret
                 },
@@ -2504,8 +2505,14 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers [not yet]"
+                                let a = "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers"
                                 return a
+                        },
+                        effect(){
+                                return player.tokens.total.div(5).floor()
+                        },
+                        effectDisplay(){
+                                return formatWhole(tmp.sci.upgrades[124].effect)
                         },
                         cost:() => new Decimal("1e363"),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2514,6 +2521,37 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 123) || player.n.unlocked
                         }, // hasUpgrade("sci", 124)
+                },
+                125: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XV"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "O Research") return 
+                                let a = "<bdi style='font-size: 80%'>Science effect affects C point gain, "
+                                a += "total C buyables multiplies Oxygen science gain, and unlock Carbon Research</bdi>"
+                                return a
+                        },
+                        effect(){
+                                let ids = [71, 72, 73,
+                                           81, 82, 83,
+                                           91, 92, 93,
+                                           101,102,103,
+                                           111,112,113,]
+                                let a = decimalZero
+                                for (i in ids) {
+                                        a = a.plus(getBuyableAmount("mini", ids[i]))
+                                }
+                                return a.max(1)
+                        },
+                        cost:() => new Decimal("3e412"),
+                        currencyLocation:() => player.sci.oxygen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Oxygen Science",
+                        unlocked(){
+                                return tmp.mini.tabFormat.C.unlocked || player.n.unlocked
+                        }, // hasUpgrade("sci", 125)
                 },
         },
         buyables: {
@@ -2532,6 +2570,7 @@ addLayer("sci", {
                                 if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
                                                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2604,6 +2643,7 @@ addLayer("sci", {
                                 if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
                                                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2674,6 +2714,7 @@ addLayer("sci", {
                                 if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
                                                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2751,6 +2792,7 @@ addLayer("sci", {
                                 if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
                                                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2829,6 +2871,7 @@ addLayer("sci", {
                                 if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
                                                                 ret = ret.plus(tmp.sci.buyables[23].effect)
                                                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2903,6 +2946,7 @@ addLayer("sci", {
 
                                 if (hasMilestone("mini", 4)) ret = ret.plus(player.mini.milestones.length)
                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -2974,6 +3018,7 @@ addLayer("sci", {
                                 let ret = new Decimal(30)
 
                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3047,6 +3092,7 @@ addLayer("sci", {
                                 let ret = new Decimal(30)
 
                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3117,6 +3163,7 @@ addLayer("sci", {
                                 let ret = new Decimal(30)
 
                                 ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3185,6 +3232,8 @@ addLayer("sci", {
                         },
                         expDiv(){
                                 let ret = new Decimal(30)
+
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3255,6 +3304,8 @@ addLayer("sci", {
                         },
                         expDiv(){
                                 let ret = new Decimal(30)
+
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3323,6 +3374,8 @@ addLayer("sci", {
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
+
+                                if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
                         },
@@ -3370,7 +3423,7 @@ addLayer("sci", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e57*30^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[112].expDiv) + "</sup>)"
+                                let cost2 = "1e57*30^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[113].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 113)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
@@ -24370,6 +24423,14 @@ addLayer("ach", {
                                 return player.tokens.unlocked
                         },
                 },
+                {key: "g", description: "G: Gamble", 
+                        onPress(){
+                                if (tmp.mini.clickables[41].canClick) layers.mini.clickables[41].onClick()
+                        },
+                        unlocked(){
+                                return tmp.mini.tabFormat.C.unlocked && tmp.mini.layerShown
+                        },
+                },
                 {key: "s", description: "S: Sell token buyables (only if on said tab)", 
                         onPress(){
                                 if (player.tab == "tokens") {
@@ -24534,7 +24595,7 @@ addLayer("mini", {
                         points: decimalZero,
                         best: decimalZero,
                         lastRoll: [],
-                        lastRollTime: new Date().getTime(),
+                        lastRollTime: 0,
                         displayCharacters: true,
                 },
                 d_points: {
@@ -24788,10 +24849,11 @@ addLayer("mini", {
                         data.autotime = 0
                 }
 
-                if (!tmp.mini.tabFormat.C.unlocked) player.mini.c_points.lastRollTime = player.time
+                if (!tmp.mini.tabFormat.C.unlocked) player.mini.c_points.lastRollTime = 0
+                else player.mini.c_points.lastRollTime += diff
                 if (hasUpgrade("mini", 12)) {
-                        let timeSinceLast = player.time - player.mini.c_points.lastRollTime 
-                        if (timeSinceLast >= 1000 * tmp.mini.upgrades[12].timeNeeded) {
+                        let timeSinceLast = player.mini.c_points.lastRollTime 
+                        if (timeSinceLast >= tmp.mini.upgrades[12].timeNeeded) {
                                 layers.mini.clickables[41].onClick()
                         }
                 }
@@ -24998,7 +25060,9 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.p.effect)
                                                         ret = ret.times(tmp.l.effect)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (hasUpgrade("sci", 125))     ret = ret.times(tmp.sci.effect)
 
+                        if (player.extremeMode)         ret = ret.pow(.75)
                         if (player.easyMode)            ret = ret.pow(1.001)
                         if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                         if (hasUpgrade("n", 22))        ret = ret.pow(Decimal.pow(1.0002, player.n.upgrades.length))
@@ -25051,6 +25115,8 @@ addLayer("mini", {
                         if (hasMilestone("mu", 3))      ret = ret.times(player.mini.e_points.points.max(1))
                                                         ret = ret.times(tmp.l.effect)
                         if (player.easyMode)            ret = ret.times(4)
+
+                        if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret
                 },
@@ -25190,6 +25256,7 @@ addLayer("mini", {
                         if (player.easyMode)            ret = ret.times(4)
 
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
+                        if (player.extremeMode)         ret = ret.pow(.75)
 
                         if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
@@ -29700,27 +29767,28 @@ addLayer("mini", {
                                 if (player.subtabs.mini.mainTabs != "C") return ""
                                 
                                 let last = player.mini.c_points.lastRollTime
-                                let now = player.time
-                                let rem = (now - last)/1000
                                 let req = tmp.mini.clickables[41].timeRequired
-                                let a = "Time until next spin: " + formatTime(Math.max(0, req-rem)) + br
+                                let a = "Time until next spin: " + formatTime(Math.max(0, req-last)) + br
                                 return a
                         },
                         unlocked(){
                                 return true
                         },
                         canClick(){
+                                if (!tmp.mini.tabFormat.C.unlocked) return false
                                 let req = tmp.mini.clickables[41].timeRequired
-                                return player.time - player.mini.c_points.lastRollTime >= 1000 * req
+                                return player.mini.c_points.lastRollTime >= req
                         },
                         onClick(){
                                 let data = player.mini.c_points
-                                data.lastRollTime = player.time
+                                data.lastRollTime = 0
                                 data.lastRoll = getRandomSlotValue(tmp.mini.clickables.unlockedSlots)
                                 //then give money and stuff
                                 //getRewardAmount
                                 let mult = tmp.mini.c_points.getGainMult
                                 data.points = data.points.plus(getRewardAmount(data.lastRoll).times(mult))
+
+                                tmp.mini.clickables[41].canClick = false // so only once per tick
 
                         },
                 },      
@@ -29816,11 +29884,8 @@ addLayer("mini", {
                                 a += formatWhole(timeNeed) + " seconds<br>"
 
                                 let last = player.mini.c_points.lastRollTime
-                                let now = player.time
 
-                                let sec = (now-last)/1000
-
-                                a += "The next trigger is in " + formatTime(Math.max(0,timeNeed-sec))
+                                a += "The next trigger is in " + formatTime(Math.max(0,timeNeed-last))
 
                                 return a
                         },
