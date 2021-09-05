@@ -26,6 +26,7 @@ function getPointMultiplier(){
                                         gain = gain.times(tmp.sci.effect)
                                         gain = gain.times(tmp.sci.buyables[11].effect)
                                         gain = gain.times(tmp.sci.buyables[21].effect)
+        if (hasUpgrade("sci", 202))     gain = gain.times(tmp.sci.upgrades[202].effect)
 
         if (player.easyMode)            gain = gain.times(4)
 
@@ -229,7 +230,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           61730,  69111,  77210,  77600,  78000,
                           83720,  87040,  87420, 107270, 120066,
                          120630, 132275, 149300, 151925, 153460,
-                         194050, 220255,
+                         194050, 220254, 225947,
                                                                                 //        
 ]
 
@@ -1827,6 +1828,11 @@ addLayer("sci", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                carbon_science: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
         }}, 
         color: "#B54153",
         branches: [],
@@ -1895,6 +1901,7 @@ addLayer("sci", {
 
                 if (hasUpgrade("sci", 11))      layers.sci.hydrogen_science.update(diff)
                 if (hasUpgrade("o", 13))        layers.sci.oxygen_science.update(diff)
+                if (hasUpgrade("sci", 125))     layers.sci.carbon_science.update(diff)
 
 
                 let lsb = layers.sci.buyables
@@ -2036,6 +2043,35 @@ addLayer("sci", {
                         let data = player.sci.oxygen_science
                         data.best = data.best.max(data.points)
                         let gainThisTick = tmp.sci.oxygen_science.getResetGain.times(diff)
+                        data.points = data.points.plus(gainThisTick)
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
+        carbon_science: {
+                getResetGain(){ // cscigain csci gain c sci carbonscience carbonsci cscience
+                        let ret = player.mini.c_points.points.plus(10).log10()
+
+                        ret = ret.times(player.sci.oxygen_science.points.plus(10).log10())
+                        ret = ret.times(Decimal.pow(10, player.tokens.total.sub(50)))
+                        ret = ret.times(Decimal.pow(10, tmp.mini.clickables.unlockedSlots))
+
+                        ret = ret.times(tmp.sci.carbon_science.getGainMult)
+
+                        ret = ret.pow(.75) // extreme
+
+                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+
+                        return ret
+                },
+                getGainMult(){
+                        let ret = decimalOne
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.sci.carbon_science
+                        data.best = data.best.max(data.points)
+                        let gainThisTick = tmp.sci.carbon_science.getResetGain.times(diff)
                         data.points = data.points.plus(gainThisTick)
                         data.total = data.total.plus(gainThisTick)
                 },
@@ -2552,6 +2588,69 @@ addLayer("sci", {
                         unlocked(){
                                 return tmp.mini.tabFormat.C.unlocked || player.n.unlocked
                         }, // hasUpgrade("sci", 125)
+                },
+                carbonUpgradesLength(){
+                        let a = 0
+                        let ids = [201, 202, 203, 204, 205, 
+                                   211, 212, 213, 214, 215, 
+                                   221, 222, 223, 224, 225, ]
+
+                        for (i in ids) {
+                                a += hasUpgrade("sci", ids[i])
+                        }
+
+                        if (a == 15) console.log("check on me pls")
+
+                        return a
+                },
+                201: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci I"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                let a = "Per upgrade multiply C Point gain by log10(Carbon)"
+                                return a
+                        },
+                        effect(){
+                                return player.c.points.plus(10).log10().pow(tmp.sci.upgrades.carbonUpgradesLength)
+                        },
+                        effectDisplay(){
+                                return format(tmp.sci.upgrades[201].effect)
+                        },
+                        cost:() => new Decimal(1e3),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 125) || player.n.unlocked
+                        }, // hasUpgrade("sci", 201)
+                },
+                202: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci II"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 202) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
+                                let a = "Per upgrade multiply Point gain by C Points"
+                                return a
+                        },
+                        effect(){
+                                return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte(1e15)
+                        },
+                        cost:() => new Decimal(6e3),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 201) || player.n.unlocked
+                        }, // hasUpgrade("sci", 202)
                 },
         },
         buyables: {
@@ -3465,7 +3564,24 @@ addLayer("sci", {
                                 ["buyables", [10,11]]
                         ],
                         unlocked(){
-                                return hasUpgrade("o", 13) || player.n.unlocked
+                                return hasUpgrade("o", 13)
+                        },
+                },
+                "C Research": {
+                        content: [
+                                "main-display",
+                                ["secondary-display", "carbon_science"],
+                                "blank", 
+                                ["display-text", function(){
+                                        let a = "Carbon Science gain is currently "
+                                        a += format(tmp.sci.carbon_science.getResetGain) + "/s "
+                                        return a
+                                }],
+                                ["upgrades", [20,21,22]],
+                                ["buyables", [20,21]]
+                        ],
+                        unlocked(){
+                                return hasUpgrade("sci", 125)
                         },
                 },
                 "Info": {
@@ -3485,7 +3601,13 @@ addLayer("sci", {
                                         
                                         let c = "Oxygen Science base gain is log10(Hydrogen Science)*log10(Oxygen)*log10(Carbon)"
                                         
-                                        return a + br2 + b + br2 + c
+                                        if (!hasUpgrade("sci", 125)) return a + br2 + b + br2 + c
+
+                                        let d = "Carbon Science base gain is log10(Oxygen Science)*log10(C Points)*10<sup>tokens+slots-50</sup>"
+
+                                        let ret1 = a + br2 + b + br2 + c + br2 + d
+
+                                        return ret1 
                                 }],
                         ]
                 },
@@ -25061,6 +25183,7 @@ addLayer("mini", {
                                                         ret = ret.times(tmp.l.effect)
                         if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("sci", 125))     ret = ret.times(tmp.sci.effect)
+                        if (hasUpgrade("sci", 201))     ret = ret.times(tmp.sci.upgrades[201].effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
                         if (player.easyMode)            ret = ret.pow(1.001)
@@ -30831,6 +30954,42 @@ addLayer("mini", {
                                         return false
                                 },
                         },
+                        "Info": {
+                                content: [
+                                        ["display-text", function(){
+                                                if (player.tab != "mini") return
+                                                if (player.subtabs.mini.mainTabs != "C") return 
+
+                                                let a = "Each character has a given value, and the more of said character you get,"
+                                                a += "<br> the more powerful its value is."
+
+                                                let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>"
+                                                b += "Finally, point gain is the product of all above values time multipliers."
+                                                b += "<br>Multipliers: x" + format(tmp.mini.c_points.getGainMult) + " C Point gain"
+
+                                                return a + b
+                                        }],
+                                        "blank",
+                                        ["display-text", function(){
+                                                if (player.tab != "mini") return ""
+                                                if (player.subtabs.mini.mainTabs != "C") return ""
+
+                                                let poss = getAllowedCharacterValues()
+                                                let len = poss.length
+                                                let ret = ""
+                                                for (i = 0; i < len; i++){
+                                                        let id = poss[i]
+                                                        ret += getUnicodeCharacter(id, true)
+                                                        ret += " gives " + format(getCharacterValue(id))
+                                                        ret += " times the points.<br>"
+                                                }
+                                                return ret 
+                                        }],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
                 },
         },
         milestones: {
@@ -31107,20 +31266,6 @@ addLayer("mini", {
                 "C": {
                         content: [
                                 ["secondary-display", "c_points"],
-                                ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "C") return 
-                                        if (!shiftDown) return 
-
-                                        let a = "Each character has a given value, and the more of said character you get,"
-                                        a += "<br> the more powerful its value is."
-
-                                        let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>"
-                                        b += "Finally, point gain is the product of all above values time multipliers."
-                                        b += "<br>Multipliers: x" + format(tmp.mini.c_points.getGainMult) + " C Point gain"
-
-                                        return a + b
-                                }],
                                 ["clickables", [1,2,3,4]],
                                 ["microtabs", "c_content"],
                         ],

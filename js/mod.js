@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.121",
+	num: "1.122",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.c_points.points.gte(1e9)
+	if (player.extremeMode) return player.mini.c_points.points.gte(1e31)
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.122</h3><br>
+		- Balanced until 1e31 C Points.<br>
+		- Added Carbon Science.<br>
+		- Added two Carbon Science upgrades.<br>
+		- C Point displays have been changed around.<br>
 	<br><h3 style='color: #CC0000'>v1.121</h3><br>
 		- Balanced extreme until 1e9 C Points.<br>
 		- Made C point countdown based on game time, not real time.<br>

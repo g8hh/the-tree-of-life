@@ -101,9 +101,10 @@ function getRewardAmount(spins){
         let a = Math.min(rollNums[1], rollNums[2], rollNums[3], rollNums[4])
         val = val.times(Decimal.pow(30, a ** 2))
 
-        if (hasUpgrade("mini", 32)) val = val.sqrt()
-        if (hasUpgrade("mini", 34)) val = val.sqrt()
-        if (hasUpgrade("tokens", 92)) val = val.sqrt()
+        if (hasUpgrade("mini", 32))     val = val.sqrt()
+        if (hasUpgrade("mini", 34))     val = val.sqrt()
+        if (hasUpgrade("tokens", 92))   val = val.sqrt()
+        //if (hasUpgrade("sci", 202))     val = val.sqrt()
 
         return val
 }
