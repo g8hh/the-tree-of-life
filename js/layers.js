@@ -2652,6 +2652,56 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 201) || player.n.unlocked
                         }, // hasUpgrade("sci", 202)
                 },
+                203: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci III"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 203) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
+                                let a = "You have one less token for prestige purposes"
+                                return a
+                        },
+                        effect(){
+                                return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte(1e31)
+                        },
+                        cost:() => new Decimal(1e5),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 202) || player.n.unlocked
+                        }, // hasUpgrade("sci", 203)
+                },
+                204: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci IV"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 204) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
+                                let a = "Remove C Point Gain 1 base cost"
+                                return a
+                        },
+                        effect(){
+                                return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte(1e41)
+                        },
+                        cost:() => new Decimal(2e6),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 203) || player.n.unlocked
+                        }, // hasUpgrade("sci", 204)
+                },
         },
         buyables: {
                 rows: 5,
@@ -26650,7 +26700,10 @@ addLayer("mini", {
                 },
                 72: {
                         title: "C Point Gain 1", 
-                        cost:() => new Decimal(1e3).times(Decimal.pow(100, Decimal.pow(getBuyableAmount("mini", 72), 1.3))),
+                        cost(){
+                                let init = new Decimal(hasUpgrade("sci", 204) ? 1 : 1e3)
+                                return init.times(Decimal.pow(100, Decimal.pow(getBuyableAmount("mini", 72), 1.3)))
+                        },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[72].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -26659,6 +26712,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e3)
+                                if (hasUpgrade("sci", 204)) div = decimalOne
                                 let base = 100
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
@@ -26702,6 +26756,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1000)*(100^x<sup>1.3</sup>)" 
+                                if (hasUpgrade("sci", 204)) cost2 = "100^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -29912,7 +29967,6 @@ addLayer("mini", {
                                 data.points = data.points.plus(getRewardAmount(data.lastRoll).times(mult))
 
                                 tmp.mini.clickables[41].canClick = false // so only once per tick
-
                         },
                 },      
                 42: {
@@ -31606,6 +31660,8 @@ addLayer("tokens", {
                 if (hasUpgrade("cells", 45))    a += player.cells.upgrades.length
                                                 a += tmp.tokens.buyables[112].effect.toNumber()
                 if (hasUpgrade("t", 141))       a += player.t.upgrades.length
+
+                if (hasUpgrade("sci", 203))     a += 1
                 
                 return a
         },
