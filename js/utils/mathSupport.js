@@ -30,7 +30,7 @@ function getLogisticAmount(current, gain, loss, diff){
                 val4 = gain.sub(val3) // should be A-(A-Bx) = Bx
                 val5 = val4.div(loss) // should be x
 
-                return val5
+                return val5.max(0)
         } else {
                 c = getLogisticTimeConstant(current, gain, loss)
                 
@@ -40,7 +40,7 @@ function getLogisticAmount(current, gain, loss, diff){
                 val4 = gain.plus(val3) // should be (Bx-A)+A
                 val5 = val4.div(loss) // should be x
 
-                return val5
+                return val5.max(0)
         }
 }
 

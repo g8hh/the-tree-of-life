@@ -5,7 +5,7 @@ var systemComponents = {
 			<div class="upgRow">
 				<div v-for="tab in Object.keys(data)">
 					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
-					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + data[tab].glowColor || defaultGlow} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
+					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + (data[tab].glowColor || defaultGlow)} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
 						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
 				</div>
 			</div>
@@ -122,65 +122,110 @@ var systemComponents = {
 	`
     },
 
-    'info-tab': {
-        template: `
-        <div>
-        <h2>{{modInfo.name}}</h2>
-        <br>
-        <h3>{{VERSION.withName}}</h3>
-        <span v-if="modInfo.author">
-            <br>
-            Made by {{modInfo.author}}	
-        </span>
-        <br>
-        The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
-        <br>
-        The Prestige Tree made by Jacorb and Aarex
-		<br><br>
-		<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br>
-        <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
-        <a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
-        <a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
-	<br>
-        Time Played: {{ formatTime(player.timePlayed) }}<br>
-	<h1 style='color: #FF0066'>Shift to see details!</h1><br>
-	Toggles:
-	<table>
-		<tr>
-			<td><button class="opt" onclick="toggleShift()">Force toggle shift</button></td>
-			<td><button class="opt" onclick="toggleControl()">Force toggle control</button></td>
-			<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors</button></td>
-			<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys</button></td>
-			<td><button class="opt" onclick="player.spaceBarPauses = !player.spaceBarPauses">Toggle space bar pausing</button></td>
-			<td><button class="opt" onclick="player.paused = !player.paused">Toggle pause</button></td>
-		</tr>
-	</table>
-	Others:
-	<table>
-		<tr>
-			<td><button class="opt" onclick="enterHardMode()">Enter Hard Mode</button></td>
-			<td><button class="opt" onclick="save()">Save</button></td>
-			<td><button class="opt" onclick="player.showBuiltInSaves = true">Show built in saves</button></td>
-			<td><button class="opt" onclick="setUpPGSettings()">Make your settings the same as the dev</button></td>
-		</tr>
-	</table>
-	<br><br>
-        <h2 style='color: #00FF99'>Hotkeys</h2><br>
-        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><span v-html="getDescriptionFromKey(key)"></span><br></span>
-	<br><br>
+	'info-tab': {
+		template: `
+		<div>
+		<h2>{{modInfo.name}}</h2>
+		<br>
+		<h3>{{VERSION.withName}}</h3>
+		<span v-if="modInfo.author">
+		<br>
+		Made by {{modInfo.author}}	
+		</span>
+		<br>
+		The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
+		<br>
+		The Prestige Tree made by Jacorb and Aarex
+			<br><br>
+		<span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
+		<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
+		<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 
-	<span v-if="player.showBuiltInSaves">
-		<h2 style='color: #00FF99'>Built in saves</h2><br>
-		To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
-		<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br>
-		<bdi style='color: #664949'>Consider hard resetting before importing the save.</bdi><br><br>
-		<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
-	</span>
-	<br><br>
-	
-	</div>
-    `
-    },
+		<button class="opt" onclick="player.modTab = !player.modTab"><span>{{player.modTab ? "Show mod selection tab":"Show info tab"}}</button>
+
+		<span v-if="player.modTab">
+		<br><br>
+		Enter Modes: 
+		<table>
+			<tr>
+				<td>
+					<button class="opt" onclick="enterHardMode()">
+						<span v-if="player.hardMode"><bdi style='color:#CC0033'>{{"In hard mode"}}</bdi></span>
+						<span v-if="!player.hardMode"><bdi style='color:#3300CC'>{{"Enter hard mode"}}</bdi></span>
+					</button>
+				</td>
+				<td>
+					<button class="opt" onclick="enterExtremeMode()">
+						<span v-if="player.extremeMode"><bdi style='color:#CC0033'>{{"In extreme mode"}}</bdi></span>
+						<span v-if="!player.extremeMode"><bdi style='color:#3300CC'>{{"Enter extreme mode"}}</bdi></span>
+					</button>
+				</td>
+				<td>
+					<button class="opt" onclick="enterEasyMode()">
+						<span v-if="player.easyMode"><bdi style='color:#CC0033'>{{"In easy mode"}}</bdi></span>
+						<span v-if="!player.easyMode"><bdi style='color:#3300CC'>{{"Enter easy mode"}}</bdi></span>
+					</button>
+				</td>
+			</tr>
+		</table>
+		<br><br>
+		<h2 style='color: #FF0066'>Hard mode</h2>:<br>
+		Passive gains are 4x less and various other smaller nerfs<br><br>
+
+		<h2 style='color: #FF0066'>Easy mode</h2>:<br>
+		All bulk buying is done by default<br>
+		Gain 2x of all prestige currencies, and 4x all passive gain currencies<br>
+		Gain 2x resets at once and pre-Phosphorus gain ^1.001<br><br>
+
+		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
+		Gain of all currencies is raised ^.75 (after everything except dilation)<br>
+		For protein, gain is not reduced, but mRNA and tRNA bases are ^.75<br><br>
+		
+		</span>
+		
+		<span v-if="!player.modTab">
+		<br>
+		Time Played: {{ formatTime(player.timePlayed) }}<br>
+		<h1 style='color: #FF0066'>Shift to see details!</h1><br>
+		Toggles:
+		<table>
+			<tr>
+				<td><button class="opt" onclick="toggleShift()">Force toggle shift<span><bdi style='color:#CC0033'><br>{{shiftDown?"Down":"Up"}}</bdi></span></button></td>
+				<td><button class="opt" onclick="toggleControl()">Force toggle control<span><bdi style='color:#CC0033'><br>{{controlDown?"Down":"Up"}}</bdi></span></button></td>
+				<td><button class="opt" onclick="toggleUndulating()">Toggle Undulating Colors<span><bdi style='color:#CC0033'><br>{{player.undulating?"On":"Off"}}</bdi></span></button></td>
+				<td><button class="opt" onclick="toggleArrowHotkeys()">Toggle Arrow Hotkeys<span><bdi style='color:#CC0033'><br>{{player.arrowHotkeys?"On":"Off"}}</bdi></span></button></td>
+				<td><button class="opt" onclick="player.spaceBarPauses = !player.spaceBarPauses">Toggle space bar pausing<span><bdi style='color:#CC0033'><br>{{player.spaceBarPauses?"Yes":"No"}}</bdi></span></button></td>
+				<td><button class="opt" onclick="player.paused = !player.paused">Toggle pause<span><bdi style='color:#CC0033'><br>{{player.paused?"Paused":"Running"}}</bdi></span></button></td>
+			</tr>
+		</table>
+		Others:
+		<table>
+			<tr>
+				<td><button class="opt" onclick="save()">Save<span><br>{{formatTime((new Date().getTime()-player.lastSave)/1000, true)}}</span></button></td>
+				<td><button class="opt" onclick="player.showBuiltInSaves = true">Show built in saves</button></td>
+				<td><button class="opt" onclick="setUpPGSettings()">Make your settings the same as the dev</button></td>
+				<span v-if="player.keepGoing"><td><button class="opt" onclick="player.keepGoing = false">Re-show endgame screen</button></td></span>
+			</tr>
+		</table>
+		
+		<br><br>
+		<h2 style='color: #00FF99'>Hotkeys</h2><br>
+		<span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><span v-html="getDescriptionFromKey(key)"></span><br></span>
+		<br><br>
+
+		<span v-if="player.showBuiltInSaves">
+			<h2 style='color: #00FF99'>Built in saves</h2><br>
+			To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
+			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br>
+			<bdi style='color: #664949'>Consider hard resetting before importing the save.</bdi><br><br>
+			<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
+		</span>
+		<br><br>
+		</span>
+
+		</div>
+	`
+	},
 
     'options-tab': {
         template: `
@@ -203,7 +248,8 @@ var systemComponents = {
             <tr>
                 <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ options.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
                 <td><button class="opt" onclick="toggleOpt('forceOneTab'); needsCanvasUpdate = true">Single-Tab Mode: {{ options.forceOneTab?"ALWAYS":"AUTO" }}</button></td>
-			</tr> 
+		<td><button class="opt" onclick="toggleOpt('hideMilestonePopups'); needsCanvasUpdate = false">Popups are: {{ options.hideMilestonePopups?"HIDDEN":"SHOWN" }}</button></td>
+	    </tr> 
         </table>`
     },
 

@@ -61,9 +61,7 @@ const boolNames = ["unlocked", "deactivated"]
 
 function setupTempData(layerData, tmpData, funcsData) {
 	for (item in layerData){
-		if (layerData[item] == null) {
-			tmpData[item] = null
-		}
+		if (layerData[item] == null) tmpData[item] = null
 		else if (layerData[item] instanceof Decimal)
 			tmpData[item] = layerData[item]
 		else if (Array.isArray(layerData[item])) {
@@ -82,10 +80,8 @@ function setupTempData(layerData, tmpData, funcsData) {
 		}
 		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
 			funcsData[item] = layerData[item]
-			if (boolNames.includes(item))
-				tmpData[item] = false
-			else
-				tmpData[item] = decimalOne // The safest thing to put probably?
+			if (boolNames.includes(item)) tmpData[item] = false
+			else tmpData[item] = decimalOne // The safest thing to put probably?
 		} else {
 			tmpData[item] = layerData[item]
 		}
@@ -126,7 +122,9 @@ function updateTemp(noError = false) {
 function updateTempData(layerData, tmpData, funcsData, useThis, noError = false, firstStep = false) {
 	for (item in funcsData){
 		if (firstStep && !noError) {
-			if (tmp[item].deactivated) continue
+			if (layers[item].deactivated) {
+				if (layers[item].deactivated()) continue
+			}
 		}
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
@@ -142,8 +140,8 @@ function updateTempData(layerData, tmpData, funcsData, useThis, noError = false,
 			else value = layerData[item]()
 			if (value !== value || checkDecimalNaN(value)){
 				if (!NaNalert && !noError) {
-					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know with a screenshot of the console and the save! You can refresh the page, and you will be un-NaNed.")
 					console.log(value, layerData, funcsData, tmpData, useThis)
+					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know with a screenshot of the console and the save! You can refresh the page, and you will be un-NaNed.")
 					clearInterval(interval);
 					NaNalert = true;
 					return

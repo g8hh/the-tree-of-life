@@ -70,9 +70,7 @@ function format(decimal, precision = 2, small) {
                 val = exponentialFormat(decimal, precision) 
                 return val.replace(/([^(?:e|F)]*)$/, '-$1') 
         } 
-        else    
-                return format(decimal, precision) + "<sup>-1</sup>"        
-
+        else return format(decimal, precision) + "<sup>-1</sup>"
 }
 
 function formatCurrency(decimal){
@@ -83,23 +81,26 @@ function formatCurrency(decimal){
         return format(decimal, 0)
 }
 
-function formatWhole(decimal) {
+function formatWhole(decimal, forceWhole) {
         decimal = new Decimal(decimal)
         if (decimal.gte(1e9)) return format(decimal, 2)
+        if (forceWhole) decimal = decimal.round()
         if (decimal.lte(10) && decimal.neq(decimal.floor())) return format(decimal, 2)
         return format(decimal, 0)
 }
 
-function formatTime(s) {
+function formatTime(s, useWhole) {
         s = new Decimal(s)
         if (s.gt(9007199254740991)) return "Infinite Time"
         if (s < .001 && s > 10**-6) return format(s.times(1e6)) + "µs"
         if (s < 1 && s > .001) return format(s.times(1000)) + "ms"
-        if (s < 60) return format(s) + "s"
-        else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-        else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-        else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-        else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+        if (useWhole) s = s.floor()
+        let secondsFormat = useWhole ? formatWhole : format
+        if (s < 60) return secondsFormat(s) + "s"
+        else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + secondsFormat(s % 60) + "s"
+        else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + secondsFormat(s % 60) + "s"
+        else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + secondsFormat(s % 60) + "s"
+        else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + secondsFormat(s % 60) + "s"
 }
 
 function toPlaces(x, precision, maxAccepted) {
