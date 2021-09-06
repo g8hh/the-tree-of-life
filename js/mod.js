@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.123",
+	num: "1.124",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.c_points.points.gte(1e48)
+	if (player.extremeMode) return player.mini.c_points.points.gte(1e200)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.121)<br><br>
+		Reaching the endgame screen (updated as of v1.124)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.124</h3><br>
+		- Balanced until 1e200 C Points.<br>
+		- Added seven Carbon Science upgrades.<br>
+		- Various other changes for extreme mode.<br>
 	<br><h3 style='color: #CC0000'>v1.123</h3><br>
 		- Balanced until 1e48 C Points.<br>
 		- Added two Carbon Science upgrades.<br>

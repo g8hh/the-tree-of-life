@@ -104,7 +104,7 @@ function getRewardAmount(spins){
         if (hasUpgrade("mini", 32))     val = val.sqrt()
         if (hasUpgrade("mini", 34))     val = val.sqrt()
         if (hasUpgrade("tokens", 92))   val = val.sqrt()
-        //if (hasUpgrade("sci", 202))     val = val.sqrt()
+        //if (hasUpgrade("sci", 205))     val = val.sqrt()
 
         return val
 }
