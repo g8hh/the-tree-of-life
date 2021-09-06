@@ -69,6 +69,10 @@ function softcap(value, cap, power = 0.5) {
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){
+	if (layer == "tokens" && hasUpgrade("cells", 42)) {
+		let data = tmp.tokens.buyables
+		return data[191].canAfford || data[192].canAfford || (data[193].canAfford && data[193].unlocked)
+	}
 	for (id in tmp[layer].upgrades){
 		if (layer == "cells" && id > 100 && tmp.mc.layerShown) break
 		if (isPlainObject(layers[layer].upgrades[id])){
@@ -85,9 +89,9 @@ function shouldNotify(layer){
 
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat){
+			if (!tmp[layer].tabFormat[subtab].unlocked) continue
 			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor || defaultGlow
-
 				return true
 			}
 		}
@@ -95,6 +99,7 @@ function shouldNotify(layer){
 
 	for (family in tmp[layer].microtabs) {
 		for (subtab in tmp[layer].microtabs[family]){
+			if (!tmp[layer].microtabs[family][subtab].unlocked) continue
 			if (subtabShouldNotify(layer, family, subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].microtabs[family][subtab].glowColor
 				return true
@@ -162,9 +167,12 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
+var logLayerReset = false
+
 function doReset(layer, force=false) {
 	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
+	if (logLayerReset) console.log(layer, force)
 	if (!force) {
 		
 		if (tmp[layer].canReset === false) return;

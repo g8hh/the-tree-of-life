@@ -12,27 +12,252 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.090",
+	num: "1.121",
 	name: "Advil's Auspicious Acension",
 }
 
+
+var forceEndgame = false
 function isEndgame() {
-	return player.cells.points.gte("2e19577")
+	if (forceEndgame) return true
+	if (player.extremeMode) return player.mini.c_points.points.gte(1e9)
+	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		95 Secondary completions and reaching the endgame screen<br><br>
+		Reaching the endgame screen (updated as of v1.121)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.121</h3><br>
+		- Balanced extreme until 1e9 C Points.<br>
+		- Made C point countdown based on game time, not real time.<br>
+		- Made extreme mode effect C/D/E Point gain (not achieved prior, so this makes no difference to progression).<br>
+		- Added a single token.<br>
+	<br><h3 style='color: #CC0000'>v1.120</h3><br>
+		- Balanced until 42 tokens.<br>
+		- Added three Oxygen Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.119</h3><br>
+		- Balanced until 36 tokens.<br>
+		- Various cost changes.<br>
+		- Implemented a Oxygen Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.118</h3><br>
+		- Extreme mode is balanced until 11 Oxygen Science upgrades.<br>
+		- Various cost and other balance changes.<br>
+	<br><h3 style='color: #CC0000'>v1.117.2</h3><br>
+		- Phosphorus XXI unlock is now 6.8e107 Lives.<br>
+	<br><h3 style='color: #CC0000'>v1.117.1</h3><br>
+		- Hard and extreme is now playable, albeit very slow. Tell me about your progress!<br>
+	<br><h3 style='color: #CC0000'>v1.117</h3><br>
+		- Balanced until 26 tokens.<br>
+		- Next is AH7 -> D7 -> token 27.<br>
+	<br><h3 style='color: #CC0000'>v1.116</h3><br>
+		- Balanced until 24 tokens.<br>
+	<br><h3 style='color: #CC0000'>v1.115</h3><br>
+		- Added two Oxygen Science upgrades.<br>
+		- Various other changes to make extreme work.<br>
+		- Balanced until 23 tokens.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.114</h3><br>
+		- Fixed an issue with some tabs not went to when ArrowRight/ArrowLeft.<br>
+		- Added a custom save.<br> 
+		- Balanced until 15 tokens.<br>
+		- Various additional bugfixes and wording amends.<br>
+	<br><h3 style='color: #CC0000'>v1.113</h3><br>
+		- Balanced until 10 tokens.<br>
+		- Added an Oxygen science upgrade.<br>
+		- Various milestone changes to autobuy science buyables.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.112</h3><br>
+		- Balanced until 8 tokens.<br>
+		- Various additional autobuyers added.<br>
+		- Made science mini-notify if a buyable is affordable.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.111.1</h3><br>
+		- Various fixes with extreme mode and bulk buying.<br>
+		- Balanced until 4 tokens.<br>
+		- Made extreme mode costs seperate.<br>
+		- Fixed token effect displaying outside of extreme.<br>
+		- Added an autobuyer to token milestone 3.<br>
+	<br><h3 style='color: #CC0000'>v1.111</h3><br>
+		- Balanced until 3 Tokens.<br>
+		- Added a custom save.<br>
+		- Added a couple autobuyers for science buyables.<br>
+	<br><h3 style='color: #CC0000'>v1.110.1</h3><br>
+		- Balanced until 2 Tokens.<br>
+		- Added a Oxygen Science upgrade.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.110</h3><br>
+		- Balanced extreme until one token.<br>
+		- Fixed a bug with logistic currencies sometimes being negative.<br>
+		- Added five Oxygen Science upgrades.<br>
+		- Added six Oxygen Science buyables.<br>
+		- Various cost changes.<br>
+		- Carbon and Oxygen initial costs are higher.<br>
+	<br><h3 style='color: #CC0000'>v1.109.1</h3><br>
+		- Made various text the correct size.<br>
+		- Balanced Oxygen up to maxing B11.<br>
+	<br><h3 style='color: #CC0000'>v1.109</h3><br>
+		- Balanced extreme until Carbon and Oxygen are unlocked.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.108</h3><br>
+		- Added two custom saves.<br>
+		- Made extreme mode not nerf B buyable costs.<br>
+		- Added 6 Hydrogen Science upgrade.<br>
+		- Added 2 Hydrogen Science buyables.<br>
+		- Added 5 A minigame milestones.<br>
+		- Made various costs cheaper and more expenive in extreme.<br>
+		- Various word fixes (Hydrogen XI actually adds 1 to Violet base, not Hydrogen XII).<br>
+		- Various small bug fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.107.1</h3><br>
+		- Fixed a bug with Cell production.<br>
+		- Added a custom save.<br>
+		- Fixed various display issues.<br>
+	<br><h3 style='color: #CC0000'>v1.107</h3><br>
+		- Added a custom save.<br>
+		- Fixed extreme mode description.<br>
+		- Made milestones that are no unlocked not rewarded.<br>
+		- Fixed a "feature" where clicking a layer brings you to the first subtab.<br>
+		- Added 7 B Point milestones.<br>
+		- Added a Hydrogen Science upgrade.<br>
+		- Added a Hydrogen Science buyable.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.106</h3><br>
+		- Rollover, I guess.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.105.9</h3><br>
+		- Organ milestone 5 makes Down Quarks not reset anymore (used to never reset).<br>
+	<br><h3 style='color: #CC0000'>v1.105.8</h3><br>
+		- Added two rows of achievements.<br>
+		- Made bulking of Cell challenges not occur while in them.<br>
+	<br><h3 style='color: #CC0000'>v1.105.7</h3><br>
+		- Various code cleanup.<br>
+		- Made a toggle for disabling milestone popups.<br>
+		- Added a new file (<i>hotkeySupport.js</i>).<br>
+	<br><h3 style='color: #CC0000'>v1.105.6</h3><br>
+		- Various code cleanup.<br>
+		- Removed 12 "new Decimal(0)"s to make the code a tiny bit faster.<br>
+		- Made milestone popups not say "Requires:" anymore.<br>
+	<br><h3 style='color: #CC0000'>v1.105.5</h3><br>
+		- Made Organ milestones 2/3 permanently bulk buy Omnipotent/Totipotent.<br>
+	<br><h3 style='color: #CC0000'>v1.105.4</h3><br>
+		- Fixed Tokens II initial unlock still notifying the layer.<br>
+	<br><h3 style='color: #CC0000'>v1.105.3</h3><br>
+		- Made Organ milestone 4 also give minigame QoL.<br>
+	<br><h3 style='color: #CC0000'>v1.105.2</h3><br>
+		- Fixed a bug with Organ milestone 4 autobuyer.<br>
+		- Fixed a bug with buying upgrades generally.<br>
+	<br><h3 style='color: #CC0000'>v1.105.1</h3><br>
+		- Fixed a longstanding bug that messes with Organ resetting.<br>
+		- Made Tissue milestone 4 easier after Organ unlock.<br>
+	<br><h3 style='color: #CC0000'>v1.105</h3><br>
+		- Added two Organ milestones.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.104</h3><br>
+		- Added a Organ milestone.<br>
+		- Made Organ milestone 2 autobuy DNA upgrades.<br>
+		- Made Organ upgrade 11 remove coins.<br>
+	<br><h3 style='color: #CC0000'>v1.103</h3><br>
+		- Implemented extreme mode's nerfs.<br>
+		- Balanced until 3 Organs.<br>
+		- Balanced extreme mode until minigame unlock.<br>
+		- Added a custom save.<br>
+		- Added the Labratory and Science.<br>
+		- Added three Science upgrades.<br>
+		- Added three Science buyables.<br>
+		- Added Hydrogen Science.<br>
+		- Added a backup font for most things.<br>
+		- Fixed various display issue.<br>
+	<br><h3 style='color: #CC0000'>v1.102</h3><br>
+		- Disjointed hard and extreme mode.<br>
+		- Removed some displays for hard mode.<br>
+		- Various code cleanup.<br>
+		- Improved mode selector display.<br>
+	<br><h3 style='color: #CC0000'>v1.101.1</h3><br>
+		- Added extreme mode.<br>
+		- Implemented extreme mode nerfs.<br>	
+	<br><h3 style='color: #CC0000'>v1.101</h3><br>
+		- Added an Organ milestone.<br>
+		- Cleaned up token cost function.<br>
+		- Added easy mode.<br>
+		- Various code cleanup.<br>
+		- Added a mode switcher tab.<br>
+	<br><h3 style='color: #CC0000'>v1.100</h3><br>
+		- Added Organs.<br>
+		- Added a Organ upgrade.<br>
+		- Added a Organ milestone.<br>
+		- Fixed an issue with layers un-deactivated-ing.<br>
+		- Subtabs no longer notify when the tab is hidden.<br>
+		- Fixed a bug with Cells being able to reset too early after some upgrades.<br>
+		- Fixed a typo in Tissues XIX display.<br>
+		- Fixed a typo with Tissue reset saying Cells.<br>
+		- Token auto prestiging now uses autoPrestige, meaning it doesnt notify.<br>
+		- Tokens now are cheaper when you are resetting "with" negative tokens.<br>
+		- Added Micro.<br>
+		- Added three Micro buyables.<br>
+		- Added a custom save.<br>
+<bdi style='color: #FFAAFF'>- Note that I now have plans for easy and (sorta) for extreme mode.</bdi><br>
+	<br><h3 style='color: #CC0000'>v1.099</h3><br>
+		- Added four Tissue upgrades.<br>
+		- Added a second Tiertiary completion/reward.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.098</h3><br>
+		- Added a custom save.<br>
+		- Made it so you cannot buy upgrades of a disabled layer.<br>
+		- Added two Cell upgrades.<br>
+		- Added a Tissue upgrade.<br>
+		- Removed Phosphorus and µ.<br>
+		- Removed Life buyables.<br>
+		- Removed some unnecessary code for a Life upgrade.<br>
+		- Fixed the display for Amino Milestone 29 (ln(1+x) ~ x - .5x<sup>2</sup>).<br>
+		- Made a clickable for the M<sub>C</sub> tab for jumping to Stem Cells.<br>
+		- Fixed tetrational token cost display formula.<br>
+		- Various code clearnup.<br>
+	<br><h3 style='color: #CC0000'>v1.097.1</h3><br>
+		- Fixed some issues with need respec not displaying.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.097</h3><br>
+		- Added three Cell upgrades.<br>
+		- Added a Cell challenge.<br>
+		- Made the 's' hotkey work for Token II.<br>
+	<br><h3 style='color: #CC0000'>v1.096</h3><br>
+		- Capped Tissue milestone 18 at 1.5x.<br>
+		- Added two Token buyables.<br>
+		- Added two rows of achievements.<br>
+		- Added a Tissue upgrade.<br>
+		- Added a hotkey for going to Stem.<br>
+	<br><h3 style='color: #CC0000'>v1.095</h3><br>
+		- Added a Cell buyable.<br>
+		- Added two Tissue upgrades.<br>
+		- Added a Tissue milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.094</h3><br>
+		- Added two Tissue upgrades.<br>
+		- Cell challenges are now fully completeable.<br>
+	<br><h3 style='color: #CC0000'>v1.093</h3><br>
+		- Added a Cell upgrade.<br>
+		- Added a row of achievements.<br>
+		- 23 Token II is now possible.<br>
+		- Added a custom save.<br>
+		- You can now click and drag to buy upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.092</h3><br>
+		- Added two Tissue upgrades.<br>
+		- 24/95 is now possible.<br>
+	<br><h3 style='color: #CC0000'>v1.091.1</h3><br>
+		- Added a custom save.<br>
+		- Various bug fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.091</h3><br>
+		- 22/95 is now possible.<br>
+		- Added three Tissue upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.090</h3><br>
 		- 21/95 is now possible.<br>
 		- Added a custom save.<br>
-		- Added 9 Cell upgrades.<br>
+		- Added 9 Tissue upgrades.<br>
 		- Added 2 Tissue milestones.<br>
 		- Added a row of achievements.<br>
 	<br><h3 style='color: #CC0000'>v1.089</h3><br>
@@ -1019,8 +1244,12 @@ function addedPlayerData() { return {
 	undulating: false,
 	lastSave: new Date().getTime(),
 	hardMode: false,
+	easyMode: false,
+	extremeMode: false,
 	hardFromBeginning: false,
+	extremeFromBeginning: false,
 	arrowHotkeys: true,
+	modTab: false,
 	lastLettersPressed: [],
 	targetWord: "johnson",
 	wordsSpelled: 0,
@@ -1057,8 +1286,6 @@ var displayThings = [
 		
 		let end = ""
 		if (list1.length > 0) end = "(" + combineStrings(list1) + ")"
-		if (player.hardFromBeginning && player.hardMode) end += "{HARD}" 
-		else if (player.hardMode) end += "{Hard}"
 		let saveFinal = getLastSaveDisplay() + end
 
 		let len = pastTickTimes.length
@@ -1081,7 +1308,9 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
 
@@ -1102,6 +1331,13 @@ function fixOldSave(oldVersion){
 		player.tokens.points = player.tokens.total
 		player.subtabs.tokens.mainTabs = "II"
 		player.tab = "tokens"
+	}
+	if (player.version < "1.103" && player.extremeMode) {
+		player.extremeMode = false
+		player.extremeFromBeginning = false
+		let s = "Your save had extreme mode active in a patch before it did anything."
+		s += "To keep the save balanced, you have been kicked out of extreme mode."
+		alert(s)
 	}
 }
 
@@ -1195,8 +1431,29 @@ function toggleUndulating(){
 }
 
 function enterHardMode(){
+	let s = "Are you sure you want to enter hard mode? This cannot be undone."
+	if (!confirm(s)) return 
+	if (player.extremeMode) {
+		if (!confirm("You are already in extreme mode, this is not advised." + s)) return 
+	}
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterExtremeMode(){
+	let s = "Are you sure you want to enter extreme mode? This cannot be undone."
+	if (!confirm(s)) return 
+	if (player.hardmode) {
+		if (!confirm("You are already in hard mode, this is not advised." + s)) return 
+	}
+	player.extremeMode = true
+	if (player.h.best.lt(10)) player.hardFromBeginning = true
+}
+
+function enterEasyMode(){
+	let s = "Are you sure you want to enter easy mode? This cannot be undone."
+	if (!confirm(s)) return 
+	player.easyMode = true
 }
 
 function toggleArrowHotkeys(){

@@ -246,30 +246,32 @@ function setupModInfo() {
 }
 
 function fixNaNs() {
-	NaNcheck(player);
+	return NaNcheck(player);
 }
 
 function NaNcheck(data) {
+	let curr = true
 	for (item in data) {
 		if (data[item] == null) {
 		}
 		else if (Array.isArray(data[item])) {
-			NaNcheck(data[item]);
+			curr = curr && NaNcheck(data[item]);
 		}
 		else if (data[item] !== data[item] || checkDecimalNaN(data[item])) {
 			if (!NaNalert) {
 				clearInterval(interval);
 				NaNalert = true;
 				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
-				return
+				return false
 			}
 		}
 		else if (data[item] instanceof Decimal) {
 		}
 		else if ((!!data[item]) && (data[item].constructor === Object)) {
-			NaNcheck(data[item]);
+			curr = curr && NaNcheck(data[item]);
 		}
 	}
+	return curr
 }
 function exportSave() {
 	//if (NaNalert) return
@@ -299,7 +301,8 @@ function importSave(imported = undefined, forced = false) {
 		player.versionType = modInfo.id;
 		fixSave();
 		versionCheck();
-		NaNcheck(save)
+		let notbugged = NaNcheck(save)
+		if (!notbugged) return 
 		save();
 		window.location.reload();
 	} catch (e) {

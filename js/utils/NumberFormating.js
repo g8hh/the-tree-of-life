@@ -70,9 +70,7 @@ function format(decimal, precision = 2, small) {
                 val = exponentialFormat(decimal, precision) 
                 return val.replace(/([^(?:e|F)]*)$/, '-$1') 
         } 
-        else    
-                return format(decimal, precision) + "<sup>-1</sup>"        
-
+        else return format(decimal, precision) + "<sup>-1</sup>"
 }
 
 function formatCurrency(decimal){
@@ -83,9 +81,10 @@ function formatCurrency(decimal){
         return format(decimal, 0)
 }
 
-function formatWhole(decimal) {
+function formatWhole(decimal, forceWhole) {
         decimal = new Decimal(decimal)
         if (decimal.gte(1e9)) return format(decimal, 2)
+        if (forceWhole) decimal = decimal.round()
         if (decimal.lte(10) && decimal.neq(decimal.floor())) return format(decimal, 2)
         return format(decimal, 0)
 }
