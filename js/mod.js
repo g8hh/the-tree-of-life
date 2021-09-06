@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.109.1",
+	num: "1.121",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,85 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.o.points.gt(0) || player.c.points.gt(0)
+	if (player.extremeMode) return player.mini.c_points.points.gte(1e9)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.105)<br><br>
+		Reaching the endgame screen (updated as of v1.121)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.121</h3><br>
+		- Balanced extreme until 1e9 C Points.<br>
+		- Made C point countdown based on game time, not real time.<br>
+		- Made extreme mode effect C/D/E Point gain (not achieved prior, so this makes no difference to progression).<br>
+		- Added a single token.<br>
+	<br><h3 style='color: #CC0000'>v1.120</h3><br>
+		- Balanced until 42 tokens.<br>
+		- Added three Oxygen Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.119</h3><br>
+		- Balanced until 36 tokens.<br>
+		- Various cost changes.<br>
+		- Implemented a Oxygen Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.118</h3><br>
+		- Extreme mode is balanced until 11 Oxygen Science upgrades.<br>
+		- Various cost and other balance changes.<br>
+	<br><h3 style='color: #CC0000'>v1.117.2</h3><br>
+		- Phosphorus XXI unlock is now 6.8e107 Lives.<br>
+	<br><h3 style='color: #CC0000'>v1.117.1</h3><br>
+		- Hard and extreme is now playable, albeit very slow. Tell me about your progress!<br>
+	<br><h3 style='color: #CC0000'>v1.117</h3><br>
+		- Balanced until 26 tokens.<br>
+		- Next is AH7 -> D7 -> token 27.<br>
+	<br><h3 style='color: #CC0000'>v1.116</h3><br>
+		- Balanced until 24 tokens.<br>
+	<br><h3 style='color: #CC0000'>v1.115</h3><br>
+		- Added two Oxygen Science upgrades.<br>
+		- Various other changes to make extreme work.<br>
+		- Balanced until 23 tokens.<br>
+		- Various code cleanup.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.114</h3><br>
+		- Fixed an issue with some tabs not went to when ArrowRight/ArrowLeft.<br>
+		- Added a custom save.<br> 
+		- Balanced until 15 tokens.<br>
+		- Various additional bugfixes and wording amends.<br>
+	<br><h3 style='color: #CC0000'>v1.113</h3><br>
+		- Balanced until 10 tokens.<br>
+		- Added an Oxygen science upgrade.<br>
+		- Various milestone changes to autobuy science buyables.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.112</h3><br>
+		- Balanced until 8 tokens.<br>
+		- Various additional autobuyers added.<br>
+		- Made science mini-notify if a buyable is affordable.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.111.1</h3><br>
+		- Various fixes with extreme mode and bulk buying.<br>
+		- Balanced until 4 tokens.<br>
+		- Made extreme mode costs seperate.<br>
+		- Fixed token effect displaying outside of extreme.<br>
+		- Added an autobuyer to token milestone 3.<br>
+	<br><h3 style='color: #CC0000'>v1.111</h3><br>
+		- Balanced until 3 Tokens.<br>
+		- Added a custom save.<br>
+		- Added a couple autobuyers for science buyables.<br>
+	<br><h3 style='color: #CC0000'>v1.110.1</h3><br>
+		- Balanced until 2 Tokens.<br>
+		- Added a Oxygen Science upgrade.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.110</h3><br>
+		- Balanced extreme until one token.<br>
+		- Fixed a bug with logistic currencies sometimes being negative.<br>
+		- Added five Oxygen Science upgrades.<br>
+		- Added six Oxygen Science buyables.<br>
+		- Various cost changes.<br>
+		- Carbon and Oxygen initial costs are higher.<br>
 	<br><h3 style='color: #CC0000'>v1.109.1</h3><br>
 		- Made various text the correct size.<br>
 		- Balanced Oxygen up to maxing B11.<br>
@@ -1244,6 +1310,7 @@ var displayThings = [
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
 

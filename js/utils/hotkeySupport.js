@@ -11,7 +11,8 @@ function getUnlockedSubtabs(layer){
 	let n = []
 	for (i in l) {
 		j = l[i]
-		if (tmp[layer].tabFormat[j].unlocked) n.push(j)
+		let tempportion = tmp[layer].tabFormat[j].unlocked
+		if (tempportion || layers[layer].tabFormat[j].unlocked == undefined) n.push(j)
 	}
 	return n
 }
