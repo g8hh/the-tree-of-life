@@ -223,6 +223,7 @@ function loadOptions() {
 	else 
 		options = getStartOptions()
 	if (themes.indexOf(options.theme) < 0) theme = "default"
+	fixData(options, getStartOptions())
 
 }
 
