@@ -27,6 +27,10 @@ These are the existing components, but you can create more in [components.js](/j
 
 - display-text: Displays some text (can use basic HTML). The argument is the text to display. It can also be a function that returns updating text.
 
+- display-image: Displays an image. The argument is the url of the image.
+
+- h-line, v-line: Display a horizontal or vertical divider line, respectively.
+
 - raw-html: Displays some basic HTML, can also be a function.
 
 - blank: Adds empty space. The default dimensions are 8px x 17px. The argument changes the dimensions. If it's a single value (e.g. "20px"), that determines the height. If you have a pair of arguments, the first is width and the second is height.
