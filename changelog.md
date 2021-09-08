@@ -1,5 +1,9 @@
 # The Modding Tree changelog:
 
+
+- Added display-image, h-line, and v-line to documentation.
+
+
 # v2.6.5.1 - 7/13/21
 - Fixed offline production more.
 
