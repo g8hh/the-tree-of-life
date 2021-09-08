@@ -1,8 +1,12 @@
 # The Modding Tree changelog:
 
-
+- Added option for shift-clicking nodes toggling their tooltips.
+- Fixed NaN check for setting Decimal values with text boxes.
 - Added display-image, h-line, and v-line to documentation.
-
+- Fixed an issue with subtab glow colors.
+- Fixed being able to buy upgrades on deactivated layers.
+- Updated break_eternity library.
+- Cleaned up buyable/clickable code.
 
 # v2.6.5.1 - 7/13/21
 - Fixed offline production more.

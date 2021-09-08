@@ -53,7 +53,7 @@ function buyUpgrade(layer, id) {
 function buyUpg(layer, id) {
 	if (!tmp[layer].upgrades || !tmp[layer].upgrades[id]) return
 	let upg = tmp[layer].upgrades[id]
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || player[layer].deactivated) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(id)) return
 	if (upg.canAfford === false) return
@@ -346,7 +346,7 @@ document.title = modInfo.name
 function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal) {
 		value = new Decimal (value)
-		if (value.eq(decimalNaN)) return decimalZero
+		if (checkDecimalNaN(value)) return decimalZero
 		return value
 	}
 	if (!isNaN(oldValue)) 
