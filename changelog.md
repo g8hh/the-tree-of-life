@@ -1,5 +1,8 @@
 # The Modding Tree changelog:
 
+# v2.6.6.2 = 9/9/21
+- nodeStyle can now be used to set fonts.
+
 # v2.6.6.1 = 9/8/21
 - Fixed options not updating when new ones are added.
 
