@@ -47,7 +47,7 @@ var systemComponents = {
 				front: !tmp.scrolled,
 			}"
 			v-bind:style="constructNodeStyle(layer)">
-			<span v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
 			<tooltip
       v-if="tmp[layer].tooltip != ''"
 			:text="(tmp[layer].isLayer) ? (
