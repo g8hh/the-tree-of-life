@@ -231,7 +231,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                           83720,  87040,  87420, 107270, 120066,
                          120630, 132275, 149300, 151925, 153460,
                          194050, 220254, 225947, 260888, 265010,
-                         267200, 275375, 276940,
+                         267200, 275375, 276940, 359037, 599599,
                                                                                 //        
 ]
 
@@ -2997,6 +2997,50 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 225) || player.n.unlocked
                         }, // hasUpgrade("sci", 231)
+                },
+                232: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 232) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
+                                let a = "Reduce corn interval to 4 and you can gamble every 4 seconds"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte("1e1355")
+                        },
+                        cost:() => new Decimal(9.74e24),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 231) || player.n.unlocked
+                        }, // hasUpgrade("sci", 232)
+                },
+                233: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVIII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 233) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
+                                let a = "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte("1e1425")
+                        },
+                        cost:() => new Decimal(6.47e25),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 232) || player.n.unlocked
+                        }, // hasUpgrade("sci", 233)
                 },
         },
         buyables: {
@@ -27278,6 +27322,7 @@ addLayer("mini", {
                         title: "C Point gain 4",
                         cost(){
                                 let init = new Decimal(1e225)
+                                if (hasUpgrade("mini", 24) && player.extremeMode) init = decimalOne
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 return init.times(Decimal.pow(1e10, Decimal.pow(getBuyableAmount("mini", 83), exp)))
                         },
@@ -27289,6 +27334,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e225)
+                                if (hasUpgrade("mini", 24) && player.extremeMode) div = decimalOne
                                 let base = 1e10
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 let pts = player.mini.c_points.points
@@ -27335,6 +27381,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e225)*(1e10^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
+                                if (hasUpgrade("mini", 24) && player.extremeMode) cost2 = "1e10^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27344,7 +27391,12 @@ addLayer("mini", {
                 },
                 91: {
                         title: "<bdi style='color:#CC0033'>C</bdi> increase 2",
-                        cost:() => new Decimal("1e1300").times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 91), 1.3))),
+                        cost(){
+                                let init = new Decimal("1e1300")
+                                if (hasUpgrade("sci", 233)) init = decimalOne
+                                let exp = player.extremeMode ? 1.2 : 1.3
+                                return init.times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 91), exp)))
+                        },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[91].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -27353,8 +27405,9 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e1300")
+                                if (hasUpgrade("sci", 233)) div = decimalOne
                                 let base = 1e8
-                                let exp = 1.3
+                                let exp = player.extremeMode ? 1.2 : 1.3
                                 let pts = player.mini.c_points.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
@@ -27395,7 +27448,8 @@ addLayer("mini", {
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "(1e1300)*(1e8^x<sup>1.3</sup>)" 
+                                let cost2 = "(1e1300)*(1e8^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
+                                if (hasUpgrade("sci", 233)) cost2 = "1e8^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27405,7 +27459,10 @@ addLayer("mini", {
                 },
                 92: {
                         title: "C Point gain 5",
-                        cost:() => new Decimal("1e1900").times(Decimal.pow(1e50, Decimal.pow(getBuyableAmount("mini", 92), 1.3))),
+                        cost(){
+                                let init = new Decimal(player.extremeMode ? "1e1980" : "1e1900")
+                                return init.times(Decimal.pow(1e50, Decimal.pow(getBuyableAmount("mini", 92), 1.3)))
+                        },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[92].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -27413,7 +27470,7 @@ addLayer("mini", {
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[92].cost)
                         },
                         maxAfford(){
-                                let div = new Decimal("1e1900")
+                                let div = new Decimal(player.extremeMode ? "1e1980" : "1e1900")
                                 let base = 1e50
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
@@ -27421,7 +27478,7 @@ addLayer("mini", {
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         unlocked(){
-                                return getBuyableAmount("mini", 83).gt(50)
+                                return getBuyableAmount("mini", 83).gt(player.extremeMode ? 75 : 50)
                         },
                         base(){
                                 if (inChallenge("n", 32)) return decimalOne
@@ -27460,6 +27517,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1900)*(1e50^x<sup>1.3</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("00", "80")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -30263,13 +30321,13 @@ addLayer("mini", {
                                 return "<h3 style='color: #607216'>GAMBLE!</h3>"
                         },
                         timeRequired(){
-                                let ret = 5
-                                if (hasUpgrade("mini", 34))     ret = 3
-                                if (hasMilestone("tokens", 26)) ret = 1
-                                if (hasUpgrade("tokens", 92))   ret = .25
-                                if (hasUpgrade("mini", 42))     ret = .1
-                                if (hasUpgrade("mini", 43))     ret = .05
-                                return ret
+                                if (hasUpgrade("mini", 43))     return .05
+                                if (hasUpgrade("mini", 42))     return .1
+                                if (hasUpgrade("tokens", 92))   return .25
+                                if (hasMilestone("tokens", 26)) return 1
+                                if (hasUpgrade("mini", 34))     return 3
+                                if (hasUpgrade("sci", 232))     return 4
+                                                                return 5
                         },
                         display(){
                                 if (player.tab != "mini") return ""
@@ -30371,6 +30429,7 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 92))   return .25
                                 if (hasMilestone("tokens", 26)) return 1
                                 if (hasMilestone("tokens", 25)) return 3
+                                if (hasUpgrade("sci", 232))     return 4
                                 if (hasMilestone("n", 3))       return 5
                                 if (hasUpgrade("mini", 23))     return 5
                                 if (hasUpgrade("mini", 22))     return 6
@@ -30405,11 +30464,6 @@ addLayer("mini", {
                 13: {
                         title(){ // https://www.food.com/topic/c
                                 return "<bdi style='color: #FF0000'>Cake</bdi>"
-                        },
-                        timeNeeded(){
-                                let ret = 10
-
-                                return ret
                         },
                         description(){
                                 let a = "log10(C Points) multiplies Ultraviolet base and log10(Ultraviolet) multiplies C Point gain"
@@ -30515,10 +30569,15 @@ addLayer("mini", {
                         },
                         description(){
                                 let a = "Unlock a new symbol and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
+                                if (player.extremeMode) {
+                                        return "Unlock a new symbol, remove C Point gain 4 base cost, and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
+                                }
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1111),
+                        cost(){
+                                return new Decimal(player.extremeMode ? "1.1e1100" : "1.11e1111")
+                        },
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -30535,7 +30594,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1275),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 1322 : 1275),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -30548,11 +30607,11 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Coconut</bdi>"
                         },
                         description(){
-                                let a = "Square suits base, triple 💰 base, and you can buy and keep row 7 and 8 upgrades"
+                                let a = "Square suits base, triple 💰 base, and you can buy and keep row 7 and 8 coin upgrades"
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1375),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 1385 : 1375),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -30569,7 +30628,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1775),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 1860 : 1775),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -30586,7 +30645,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 1825),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 1950 : 1825),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
@@ -31249,23 +31308,6 @@ addLayer("mini", {
                         "Upgrades": {
                                 content: [
                                         ["upgrades", [1,2,3,4]],
-                                        ["display-text", function(){
-                                                if (player.tab != "mini") return ""
-                                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                                if (player.subtabs.mini.c_content != "Upgrades") return ""
-                                                if (!shiftDown) return ""
-
-                                                let poss = getAllowedCharacterValues()
-                                                let len = poss.length
-                                                let ret = ""
-                                                for (i = 0; i < len; i++){
-                                                        let id = poss[i]
-                                                        ret += getUnicodeCharacter(id, true)
-                                                        ret += " gives " + format(getCharacterValue(id))
-                                                        ret += " times the points.<br>"
-                                                }
-                                                return ret 
-                                        }],
                                 ],
                                 unlocked(){
                                         return true
