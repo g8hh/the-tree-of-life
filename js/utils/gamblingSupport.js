@@ -2,8 +2,6 @@ function getAllowedCharacterValues(){
         let a = [1,2,3,4,5,6,7]
         if (hasUpgrade("mini", 24)) a.push(8)
         if (hasMilestone("tokens", 24)) a.push(9)
-        if (false) a.push(10)
-        if (false) a.push(11)
 
         if (hasUpgrade("mini", 25)) a = filterOut(a, [5])
         if (hasUpgrade("mini", 33)) a = filterOut(a, [6])
@@ -34,8 +32,6 @@ function getUnicodeCharacter(value, force = false){
         if (value == 7) return "🌲"
         if (value == 8) return "💰"
         if (value == 9) return "🍎"
-        if (value ==10) return "🌹"
-        if (value ==11) return "🔀"
         console.log("broke")
         return "abc"
 }

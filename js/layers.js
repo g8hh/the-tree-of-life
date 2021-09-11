@@ -1844,6 +1844,13 @@ addLayer("sci", {
                 return player.points.max(10)
         },
         type: "custom", 
+        tooltip(){
+                let t = player.subtabs.sci.mainTabs
+                if (t == "C Research") return format(player.sci.carbon_science.points) + " Carbon Science"
+                if (t == "O Research") return format(player.sci.oxygen_science.points) + " Oxygen Science"
+                if (t == "H Research") return format(player.sci.hydrogen_science.points) + " Hydrogen Science"
+                if (t == "Info") return format(player.sci.points) + " Science"
+        },
         getBaseGain(){
                 let amt = tmp.sci.baseAmount
 
@@ -2969,6 +2976,28 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 224) || player.n.unlocked
                         }, // hasUpgrade("sci", 225)
                 },
+                231: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVI"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 231) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
+                                let a = "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte("1e815")
+                        },
+                        cost:() => new Decimal(3.30e21),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 225) || player.n.unlocked
+                        }, // hasUpgrade("sci", 231)
+                },
         },
         buyables: {
                 rows: 5,
@@ -3894,7 +3923,7 @@ addLayer("sci", {
                                         a += format(tmp.sci.carbon_science.getResetGain) + "/s "
                                         return a
                                 }],
-                                ["upgrades", [20,21,22]],
+                                ["upgrades", [20,21,22,23,24]],
                                 ["buyables", [20,21]]
                         ],
                         unlocked(){
@@ -3903,6 +3932,7 @@ addLayer("sci", {
                 },
                 "Info": {
                         content: [
+                                "main-display",
                                 ["display-text", "Every reset other than this resets science"],
                                 ["display-text", function(){
                                         return "You are currently getting " + format(tmp.sci.getResetGain) + " science per second"
@@ -27129,10 +27159,14 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalZero
+
                                 let ret = new Decimal(.1)
-                                if (hasUpgrade("mini", 21)) ret = ret.plus(.1)
-                                if (hasUpgrade("mini", 24)) ret = ret.plus(.05)
-                                if (hasChallenge("n", 21)) ret = ret.times(tmp.n.challenges[21].rewardEffect)
+
+                                if (hasUpgrade("mini", 21))     ret = ret.plus(.1)
+                                if (hasUpgrade("mini", 24))     ret = ret.plus(.05)
+                                if (hasUpgrade("sci", 231))     ret = ret.plus(.005 * tmp.sci.upgrades.carbonUpgradesLength)
+
+                                if (hasChallenge("n", 21))      ret = ret.times(tmp.n.challenges[21].rewardEffect)
                                 
                                 return ret
                         },
@@ -27149,7 +27183,7 @@ addLayer("mini", {
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 81)) + " C Points</b><br>"
-                                let eformula = format(getBuyableBase("mini", 81)) + "*x"
+                                let eformula = format(getBuyableBase("mini", 81), 3) + "*x"
                                 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -30330,23 +30364,20 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Corn</bdi>"
                         },
                         timeNeeded(){
-                                let ret = 10
-
-                                if (hasUpgrade("mini", 14))     ret = 9
-                                if (hasUpgrade("mini", 15))     ret = 8
-                                if (hasUpgrade("mini", 21))     ret = 7
-                                if (hasUpgrade("mini", 22))     ret = 6
-                                if (hasUpgrade("mini", 23))     ret = 5
-                                if (hasMilestone("n", 3))       ret = 5
-                                if (hasMilestone("tokens", 25)) ret = 3
-                                if (hasMilestone("tokens", 26)) ret = 1
-                                if (hasUpgrade("tokens", 92))   ret = .25
-                                if (hasUpgrade("mini", 42))     ret = .1
-                                if (player.dev.fastCorn)        ret = .1
-                                if (hasUpgrade("mini", 43))     ret = .05
-                                if (hasMilestone("l", 1))       ret = .05
-
-                                return ret
+                                if (hasMilestone("l", 1))       return .05
+                                if (hasUpgrade("mini", 43))     return .05
+                                if (hasUpgrade("mini", 42))     return .1
+                                if (player.dev.fastCorn)        return .1
+                                if (hasUpgrade("tokens", 92))   return .25
+                                if (hasMilestone("tokens", 26)) return 1
+                                if (hasMilestone("tokens", 25)) return 3
+                                if (hasMilestone("n", 3))       return 5
+                                if (hasUpgrade("mini", 23))     return 5
+                                if (hasUpgrade("mini", 22))     return 6
+                                if (hasUpgrade("mini", 21))     return 7
+                                if (hasUpgrade("mini", 15))     return 8
+                                if (hasUpgrade("mini", 14))     return 9
+                                                                return 10
                         },
                         description(){
                                 if (player.tab != "mini") return ""
