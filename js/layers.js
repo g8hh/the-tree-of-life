@@ -232,6 +232,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                          120630, 132275, 149300, 151925, 153460,
                          194050, 220254, 225947, 260888, 265010,
                          267200, 275375, 276940, 359037, 599599,
+                         761000, 782287, 1166e3,
                                                                                 //        
 ]
 
@@ -3041,6 +3042,28 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 232) || player.n.unlocked
                         }, // hasUpgrade("sci", 233)
+                },
+                234: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIX"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "C Research") return 
+                                if (!hasUpgrade("sci", 234) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
+                                let a = "Per upgrade C Points^.001 multiplies C Point gain"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.c_points.points.gte("1e2180")
+                        },
+                        cost:() => new Decimal(1.79e28),
+                        currencyLocation:() => player.sci.carbon_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Carbon Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 233) || player.n.unlocked
+                        }, // hasUpgrade("sci", 234)
                 },
         },
         buyables: {
@@ -25578,6 +25601,7 @@ addLayer("mini", {
                         if (hasUpgrade("sci", 201))     ret = ret.times(tmp.sci.upgrades[201].effect)
                         if (hasUpgrade("sci", 212))     ret = ret.times(player.sci.carbon_science.points.max(1))
                         if (hasUpgrade("sci", 213))     ret = ret.times(tmp.sci.upgrades[213].effect)
+                        if (hasUpgrade("sci", 234))     ret = ret.times(player.mini.c_points.points.max(1).pow(.001 * tmp.sci.upgrades.carbonUpgradesLength))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
                         if (player.easyMode)            ret = ret.pow(1.001)
@@ -30662,7 +30686,7 @@ addLayer("mini", {
 
                                 return a
                         },
-                        cost:() => Decimal.pow(10, 2750),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 2900 : 2750),
                         currencyLocation:() => player.mini.c_points,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "C Points",
