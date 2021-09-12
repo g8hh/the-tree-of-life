@@ -3075,7 +3075,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 235) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
-                                let a = "Per upgrade C Points^.001 multiplies C Point gain"
+                                let a = "C Point Gain 1's ln becomes log2"
                                 return a
                         },
                         canAfford(){
