@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.129",
+	num: "1.130",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.c_points.points.gte("1e14250")
+	if (player.extremeMode) return player.n.unlocked
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,14 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.130</h3><br>
+		- Added five Carbon Science upgrades.<br>
+		- Added two token milestones.<br>
+		- Buffed token milestone 25 in extreme mode.<br>
+		- Various extreme mode changes.<br>
+		- Balanced until Nitrogen is unlocked.<br>
+		- Added a custom save.<br>
+		- Fixed a bunch of next at displays.<br>
 	<br><h3 style='color: #CC0000'>v1.129</h3><br>
 		- Balanced until 1e14250 C Points.<br>
 		- Added a Carbon Science upgrade.<br>
