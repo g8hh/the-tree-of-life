@@ -1885,6 +1885,7 @@ addLayer("sci", {
                 if (hasUpgrade("sci", 215))     x = x.times(player.tokens.total.max(1).pow(2))
 
                 if (player.easyMode)            x = x.pow(1.001)
+                if (hasUpgrade("n", 11))        x = x.pow(1.001)
 
                 return x
         },
@@ -1920,47 +1921,49 @@ addLayer("sci", {
                 
                 data.time += diff
 
-                if (hasUpgrade("sci", 11))      layers.sci.hydrogen_science.update(diff)
-                if (hasUpgrade("o", 13))        layers.sci.oxygen_science.update(diff)
-                if (hasUpgrade("sci", 125))     layers.sci.carbon_science.update(diff)
+                let force = player.n.unlocked || false
+                if (force || hasUpgrade("sci", 11))     layers.sci.hydrogen_science.update(diff)
+                if (force || hasUpgrade("o", 13))       layers.sci.oxygen_science.update(diff)
+                if (force || hasUpgrade("sci", 125))    layers.sci.carbon_science.update(diff)
 
 
                 let lsb = layers.sci.buyables
-                if (data.autobuysci12 && hasMilestone("tokens", 1)) {
-                        if (lsb[12].unlocked) lsb[12].buy()
+                let tsb = tmp.sci.buyables
+                if (data.autobuysci12 && hasMilestone("tokens", 1) || hasMilestone("n", 1)) {
+                        if (tsb[12].unlocked ) lsb[12].buy()
                 }
-                if (data.autobuysci11 && hasMilestone("tokens", 2)) {
-                        if (lsb[11].unlocked) lsb[11].buy()
+                if (data.autobuysci11 && hasMilestone("tokens", 2) || hasMilestone("n", 1)) {
+                        if (tsb[11].unlocked) lsb[11].buy()
                 }
-                if (data.autobuysci13 && hasMilestone("tokens", 3)) {
-                        if (lsb[13].unlocked) lsb[13].buy()
+                if (data.autobuysci13 && hasMilestone("tokens", 3) || hasMilestone("n", 1)) {
+                        if (tsb[13].unlocked) lsb[13].buy()
                 }
-                if (data.autobuysci22 && hasMilestone("tokens", 4)) {
-                        if (lsb[22].unlocked) lsb[22].buy()
+                if (data.autobuysci22 && hasMilestone("tokens", 4) || hasMilestone("n", 1)) {
+                        if (tsb[22].unlocked) lsb[22].buy()
                 }
-                if (data.autobuysci21 && hasMilestone("tokens", 5)) {
-                        if (lsb[21].unlocked) lsb[21].buy()
+                if (data.autobuysci21 && hasMilestone("tokens", 5) || hasMilestone("n", 1)) {
+                        if (tsb[21].unlocked) lsb[21].buy()
                 }
-                if (data.autobuysci23 && hasMilestone("tokens", 6)) {
-                        if (lsb[23].unlocked) lsb[23].buy()
+                if (data.autobuysci23 && hasMilestone("tokens", 6) || hasMilestone("n", 1)) {
+                        if (tsb[23].unlocked) lsb[23].buy()
                 }
-                if (data.autobuysci101 && hasMilestone("tokens", 7)) {
-                        if (lsb[101].unlocked) lsb[101].buy()
+                if (data.autobuysci101 && hasMilestone("tokens", 7) || hasMilestone("n", 2)) {
+                        if (tsb[101].unlocked) lsb[101].buy()
                 }
-                if (data.autobuysci102 && hasMilestone("tokens", 8)) {
-                        if (lsb[102].unlocked) lsb[102].buy()
+                if (data.autobuysci102 && hasMilestone("tokens", 8) || hasMilestone("n", 2)) {
+                        if (tsb[102].unlocked) lsb[102].buy()
                 }
-                if (data.autobuysci103 && hasMilestone("tokens", 9)) {
-                        if (lsb[103].unlocked) lsb[103].buy()
+                if (data.autobuysci103 && hasMilestone("tokens", 9) || hasMilestone("n", 2)) {
+                        if (tsb[103].unlocked) lsb[103].buy()
                 }
-                if (data.autobuysci111 && hasMilestone("tokens", 10)) {
-                        if (lsb[111].unlocked) lsb[111].buy()
+                if (data.autobuysci111 && hasMilestone("tokens", 10) || hasMilestone("n", 2)) {
+                        if (tsb[111].unlocked) lsb[111].buy()
                 }
-                if (data.autobuysci112 && hasMilestone("tokens", 11)) {
-                        if (lsb[112].unlocked) lsb[112].buy()
+                if (data.autobuysci112 && hasMilestone("tokens", 11) || hasMilestone("n", 2)) {
+                        if (tsb[112].unlocked) lsb[112].buy()
                 }
-                if (data.autobuysci113 && hasMilestone("tokens", 12)) {
-                        if (lsb[113].unlocked) lsb[113].buy()
+                if (data.autobuysci113 && hasMilestone("tokens", 12) || hasMilestone("n", 2)) {
+                        if (tsb[113].unlocked) lsb[113].buy()
                 }
         },
         effect(){
@@ -2057,6 +2060,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 114))     ret = ret.times(tmp.sci.upgrades[114].effect)
                         if (hasUpgrade("sci", 122))     ret = ret.times(tmp.sci.upgrades[122].effect)
                         if (hasUpgrade("sci", 125))     ret = ret.times(tmp.sci.upgrades[125].effect)
+                                                        ret = ret.times(tmp.n.effect)
 
                         return ret
                 },
@@ -2087,9 +2091,10 @@ addLayer("sci", {
                 getGainMult(){
                         let ret = decimalOne
 
-                        if (hasUpgrade("sci", 205)) ret = ret.times(Decimal.pow(3, tmp.sci.upgrades.carbonUpgradesLength))
-                        if (hasUpgrade("sci", 214)) ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
-                        if (hasUpgrade("sci", 222)) ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
+                        if (hasUpgrade("sci", 205))     ret = ret.times(Decimal.pow(3, tmp.sci.upgrades.carbonUpgradesLength))
+                        if (hasUpgrade("sci", 214))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
+                        if (hasUpgrade("sci", 222))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
+                                                        ret = ret.times(tmp.n.effect)
 
                         return ret
                 },
@@ -2464,7 +2469,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05"
+                                let a = "<bdi style='font-size: 80%'>Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
                                 return a
                         },
                         effect(){
@@ -4096,7 +4101,7 @@ addLayer("sci", {
                                 ["buyables", [10,11]]
                         ],
                         unlocked(){
-                                return hasUpgrade("o", 13)
+                                return hasUpgrade("o", 13) || player.n.unlocked
                         },
                 },
                 "C Research": {
@@ -4113,7 +4118,7 @@ addLayer("sci", {
                                 ["buyables", [20,21]]
                         ],
                         unlocked(){
-                                return hasUpgrade("sci", 125)
+                                return hasUpgrade("sci", 125) || player.n.unlocked
                         },
                 },
                 "Info": {
@@ -4184,6 +4189,7 @@ addLayer("sci", {
                         buyData[113] = decimalZero
                         
                         if (!hasMilestone("tokens", 11)) data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111,112,113,114,115])
+                        if (layer != "tokens")  data.upgrades = filterOut(data.upgrades, [121, 122, 123, 124, 125])
                 }
 
                 if (!false && layer != "tokens") { // Carbon Science
@@ -4332,7 +4338,7 @@ addLayer("c", {
         update(diff){
                 let data = player.c
                 
-                if (data.best.gt(0)) data.unlocked = true
+                if (data.best.gt(0) || player.n.unlocked) data.unlocked = true
                 else {
                         let v = player.points.max(2).log(2)
                         if (player.extremeMode) {
@@ -4839,7 +4845,7 @@ addLayer("o", {
         update(diff){
                 let data = player.o
                 
-                if (data.best.gt(0)) data.unlocked = true
+                if (data.best.gt(0) || player.n.unlocked) data.unlocked = true
                 else if (player.points.max(2).log(2).gte(1024)) {
                         if (player.extremeMode) data.unlocked = (!player.c.best.gt(0) || player.points.max(2).log(2).gte(2500)) && player.points.max(2).log(2).gt(2048)
                         else data.unlocked = (!player.c.best.gt(0) || player.points.max(2).log(2).gte(2560))
@@ -5335,6 +5341,7 @@ addLayer("n", {
                 let eff = tmp.n.effect
                 let effstr = format(eff)
                 let start = " multiplying Point, Hydrogen, Oxygen, Carbon, C Point, and color production gain by "
+                if (player.extremeMode) start = " multiplying Point, Hydrogen, Oxygen, Carbon, C Point, Carbon Science, Oxygen Science and color production gain by "
                 let end = "."
                 return start + effstr + end
         },
@@ -5415,6 +5422,7 @@ addLayer("n", {
                         description(){
                                 let a = "All previous primary currencies (hold shift to see) gain is raised ^ 1.001"
                                 if (shiftDown) {
+                                        if (player.extremeMode) return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, Science, and Coins"
                                         return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, and Coins"
                                 }
                                 return a
@@ -5865,9 +5873,14 @@ addLayer("n", {
                         effect(){
                                 return decimalOne
                         },
+                        toggles(){
+                                if (!player.extremeMode) return 
+                                return [["sci", "autobuysci11"], ["sci", "autobuysci12"], ["sci", "autobuysci13"], ["sci", "autobuysci21"], ["sci", "autobuysci22"], ["sci", "autobuysci123"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Token resets keep Hydrogen upgrades, the A and B buyable autobuyer bulks 5x, and per milestone squared multiply C Point gain by 10."
-                                return a
+                                let a = "Reward: Token resets keep Hydrogen upgrades, the A and B buyable autobuyer bulks 5x," 
+                                if (player.extremeMode) a += " keep Hydrogen Science buyable autobuyers, "
+                                return a + " and per milestone squared multiply C Point gain by 10."
                         },
                 }, // hasMilestone("n", 1)
                 2: {
@@ -5886,9 +5899,14 @@ addLayer("n", {
                         effect(){
                                 return decimalOne
                         },
+                        toggles(){
+                                if (!player.extremeMode) return 
+                                return [["sci", "autobuysci101"], ["sci", "autobuysci102"], ["sci", "autobuysci103"], ["sci", "autobuysci111"], ["sci", "autobuysci112"], ["sci", "autobuysci113"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: You can bulk 5x C buyables, 4x A and B buyables, gain 10x coins, and keep a token milestone per Nitrogen reset."
-                                return a
+                                let a = "Reward: You can bulk 5x C buyables, 4x A and B buyables, gain 10x coins, "
+                                if (player.extremeMode) a += " keep Oxygen Science buyable autobuyers, "
+                                return a + "and keep a token milestone per Nitrogen reset."
                         },
                 }, // hasMilestone("n", 2)
                 3: {

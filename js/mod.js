@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.130",
+	num: "1.131",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.n.unlocked
+	if (player.extremeMode) return player.n.total.gte(2)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.129)<br><br>
+		Reaching the endgame screen (updated as of v1.131)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.131</h3><br>
+		- Balanced until 2 total nitrogen.<br>
+		- Made token reset do what I want it to do.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.130</h3><br>
 		- Added five Carbon Science upgrades.<br>
 		- Added two token milestones.<br>
