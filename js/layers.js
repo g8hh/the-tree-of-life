@@ -1965,6 +1965,16 @@ addLayer("sci", {
                 if (data.autobuysci113 && hasMilestone("tokens", 12) || hasMilestone("n", 2)) {
                         if (tsb[113].unlocked) lsb[113].buy()
                 }
+                if (data.autobuyhsciupg && hasMilestone("n", 3)) {
+                        let boughtYet = false
+                        let hSciKeys = ["11", "12", "13", "14", "15", 
+                                        "21", "22", "23", "24", "25"]
+                        for (i in hSciKeys) {
+                                if (boughtYet) break
+                                id = hSciKeys[i]
+                                boughtYet = buyUpg("sci", id) 
+                        }
+                }
         },
         effect(){
                 return player.sci.points.plus(10).log10()
@@ -2669,7 +2679,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 202) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
                                 let a = "Per upgrade multiply Point gain by C Points"
                                 return a
                         },
@@ -2677,7 +2687,7 @@ addLayer("sci", {
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e15)
+                                return player.mini.c_points.points.gte(1e15) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(6e3),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2694,7 +2704,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 203) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 203) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
                                 let a = "You have one less token for prestige purposes"
                                 return a
                         },
@@ -2702,7 +2712,7 @@ addLayer("sci", {
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e31)
+                                return player.mini.c_points.points.gte(1e31) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(1e5),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2719,7 +2729,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 204) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
                                 let a = "Remove C Point Gain 1 base cost"
                                 return a
                         },
@@ -2727,7 +2737,7 @@ addLayer("sci", {
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e41)
+                                return player.mini.c_points.points.gte(1e41) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(2e6),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2744,12 +2754,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 205) && !shiftDown) return "Requires: 1e48 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 205) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e48 C Points<br>Shift for effect"
                                 let a = "Per upgrade triple Carbon Science gain"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e48)
+                                return player.mini.c_points.points.gte(1e48) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(2e6),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2766,12 +2776,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 211) && !shiftDown) return "Requires: 1e54 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e54 C Points<br>Shift for effect"
                                 let a = "Remove C Point Gain 2 base cost"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e54)
+                                return player.mini.c_points.points.gte(1e54) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(5e7),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2788,12 +2798,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 212) && !shiftDown) return "Requires: 2e71 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 212) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e71 C Points<br>Shift for effect"
                                 let a = "Carbon Science multiplies C Point gain"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(2e71)
+                                return player.mini.c_points.points.gte(2e71) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(3e8),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2810,7 +2820,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 213) && !shiftDown) return "Requires: 3e116 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 213) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 3e116 C Points<br>Shift for effect"
                                 let a = "Per upgrade log10(Carbon Science) multiplies C Point gain"
                                 return a
                         },
@@ -2821,7 +2831,7 @@ addLayer("sci", {
                                 return format(tmp.sci.upgrades[213].effect)
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(3e116)
+                                return player.mini.c_points.points.gte(3e116) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(5e9),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2838,12 +2848,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 214) && !shiftDown) return "Requires: 1e151 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 214) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e151 C Points<br>Shift for effect"
                                 let a = "Per upgrade double Carbon Science gain but you can only gain 10 seconds of Carbon Science production"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e151)
+                                return player.mini.c_points.points.gte(1e151) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(2e10),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2860,12 +2870,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 215) && !shiftDown) return "Requires: 1e173 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 215) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e173 C Points<br>Shift for effect"
                                 let a = "Tokens<sup>2</sup> multiply Science gain but you can only gain 20 seconds of Science production"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e173)
+                                return player.mini.c_points.points.gte(1e173) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(7.79e12),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2882,12 +2892,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 221) && !shiftDown) return "Requires: 2e187 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e187 C Points<br>Shift for effect"
                                 let a = "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(2e187)
+                                return player.mini.c_points.points.gte(2e187) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(1.77e14),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2904,12 +2914,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 222) && !shiftDown) return "Requires: 1e201 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 222) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e201 C Points<br>Shift for effect"
                                 let a = "Per upgrade double Carbon Science gain"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e201)
+                                return player.mini.c_points.points.gte(1e201) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(7.17e14),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2926,12 +2936,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 223) && !shiftDown) return "Requires: 1e230 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e230 C Points<br>Shift for effect"
                                 let a = "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte(1e230)
+                                return player.mini.c_points.points.gte(1e230) || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(1.5e18),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2948,12 +2958,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 224) && !shiftDown) return "Requires: 1.80e308 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 224) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1.80e308 C Points<br>Shift for effect"
                                 let a = "C Point Gain 1 cost exponent is 1.21"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1.8e308")
+                                return player.mini.c_points.points.gte("1.8e308") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(3.89e20),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2970,12 +2980,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 225) && !shiftDown) return "Requires: 1e653 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 225) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e653 C Points<br>Shift for effect"
                                 let a = "C Point Gain 1 cost exponent is 1.2"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e653")
+                                return player.mini.c_points.points.gte("1e653") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(4.37e21),
                         currencyLocation:() => player.sci.carbon_science,
@@ -2992,12 +3002,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 231) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 231) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
                                 let a = "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e815")
+                                return player.mini.c_points.points.gte("1e815") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(3.30e21),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3014,12 +3024,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 232) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 232) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
                                 let a = "Reduce corn interval to 4 and you can gamble every 4 seconds"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e1355")
+                                return player.mini.c_points.points.gte("1e1355") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(9.74e24),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3036,12 +3046,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 233) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
                                 let a = "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e1425")
+                                return player.mini.c_points.points.gte("1e1425") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(6.47e25),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3058,12 +3068,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 234) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 234) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
                                 let a = "Per upgrade C Points^.001 multiplies C Point gain"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e2180")
+                                return player.mini.c_points.points.gte("1e2180") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(1.79e28),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3080,12 +3090,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 235) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 235) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
                                 let a = "C Point Gain 1's ln becomes log2"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e9561")
+                                return player.mini.c_points.points.gte("1e9561") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(2e33),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3102,12 +3112,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                if (!hasUpgrade("sci", 241) && !shiftDown) return "Requires: 1e42,540 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e42,540 C Points<br>Shift for effect"
                                 let a = "Remove C Point Gain 5 base cost"
                                 return a
                         },
                         canAfford(){
-                                return player.mini.c_points.points.gte("1e42540")
+                                return player.mini.c_points.points.gte("1e42540") || hasMilestone("n", 3)
                         },
                         cost:() => new Decimal(1.36e42),
                         currencyLocation:() => player.sci.carbon_science,
@@ -5925,9 +5935,14 @@ addLayer("n", {
                         effect(){
                                 return decimalOne
                         },
+                        toggles(){
+                                if (!player.extremeMode) return 
+                                return [["sci", "autobuyhsciupg"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Keep Corn and Deuterium VIII, Corn interval is at most 5, and gain 100x A, B, and C Points."
-                                return a
+                                let a = "Reward: Keep Corn and Deuterium VIII, Corn interval is at most 5, "
+                                if (player.extremeMode) a += " autobuy Hydrogen Science upgrades, Carbon Science upgrades do not have C Point requirements, "
+                                return a + "and gain 100x A, B, and C Points."
                         },
                 }, // hasMilestone("n", 3)
                 4: {
