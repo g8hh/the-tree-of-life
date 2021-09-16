@@ -1975,6 +1975,30 @@ addLayer("sci", {
                                 boughtYet = buyUpg("sci", id) 
                         }
                 }
+                if (data.autobuyosciupg && hasMilestone("n", 5)) {
+                        let boughtYet = false
+                        let oSciKeys = ["101", "102", "103", "104", "105", 
+                                        "111", "112", "113", "114", "115",
+                                        "121", "122", "123", "124", "125"]
+                        for (i in oSciKeys) {
+                                if (boughtYet) break
+                                id = oSciKeys[i]
+                                boughtYet = buyUpg("sci", id) 
+                        }
+                }
+                if (data.autobuycsciupg && hasMilestone("n", 6)) {
+                        let boughtYet = false
+                        let cSciKeys = ["201", "202", "203", "204", "205", 
+                                        "211", "212", "213", "214", "215",
+                                        "221", "222", "223", "224", "225",
+                                        "231", "232", "233", "234", "235",
+                                        "241", "242", "243", "244", "245",]
+                        for (i in cSciKeys) {
+                                if (boughtYet) break
+                                id = cSciKeys[i]
+                                boughtYet = buyUpg("sci", id) 
+                        }
+                }
         },
         effect(){
                 return player.sci.points.plus(10).log10()
@@ -3009,7 +3033,7 @@ addLayer("sci", {
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e815") || hasMilestone("n", 3)
                         },
-                        cost:() => new Decimal(3.30e21),
+                        cost:() => new Decimal(3.30e22),
                         currencyLocation:() => player.sci.carbon_science,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Carbon Science",
@@ -5983,9 +6007,14 @@ addLayer("n", {
                         effect(){
                                 return decimalOne
                         },
+                        toggles(){
+                                if (!player.extremeMode) return 
+                                return [["sci", "autobuyosciupg"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Keep Cookie and here..., coin upgrades are always possible to buy, and tokens do not reset Oxygen upgrades."
-                                return a
+                                let a = "Reward: Keep Cookie and here..., coin upgrades are always possible to buy,"
+                                if (player.extremeMode) a += " autobuy Oxygen Science upgrades, "
+                                return a + " and tokens do not reset Oxygen upgrades."
                         },
                 }, // hasMilestone("n", 5)
                 6: {
@@ -6004,9 +6033,14 @@ addLayer("n", {
                         effect(){
                                 return decimalOne
                         },
+                        toggles(){
+                                if (!player.extremeMode) return 
+                                return [["sci", "autobuycsciupg"]]
+                        },
                         effectDescription(){
-                                let a = "Reward: Keep Carbon and Oxygen upgrades unlocked and tokens do not reset Carbon upgrades."
-                                return a
+                                let a = "Reward: Keep Carbon and Oxygen upgrades unlocked" 
+                                if (player.extremeMode) a += ", autobuy Carbon Science upgrades,"
+                                return a + " and tokens do not reset Carbon upgrades."
                         },
                 }, // hasMilestone("n", 6)
                 7: {
@@ -34954,7 +34988,7 @@ addLayer("tokens", {
                         currencyDisplayName:() => "Coins",
                         unlocked(){
                                 if (hasUpgrade("t", 61) || hasUpgrade("or", 11)) return false
-                                return hasMilestone("n", 5) || hasMilestone("n", 5) ||  hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
+                                return hasMilestone("n", 5) ||  hasMilestone("tokens", 18) || hasUpgrade("o", 23) && (hasUpgrade("tokens", 21) || hasUpgrade("tokens", 22))
                         }, // hasUpgrade("tokens", 31)
                 },
                 32: {
