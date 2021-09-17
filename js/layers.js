@@ -5556,7 +5556,7 @@ addLayer("n", {
                                 let b = format(tmp.n.upgrades[23].effect)
                                 return a + b
                         },
-                        cost:() => new Decimal(20),
+                        cost:() => new Decimal(player.extremeMode ? 10 : 20),
                         effect(){
                                 return player.n.best.max(1).pow(player.n.upgrades.length)
                         },
@@ -5577,11 +5577,11 @@ addLayer("n", {
                                         if (hasMilestone("n", 15)) a += " ^[challenges]"
                                         return a
                                 }
-                                let a = "Token cost exponent is .55 and ln(Nitrogen) multiplies Nitrogen" + br
+                                let a = "Token cost exponent is .55 and ln(Nitrogen) multiplies Nitrogen gain" + br
                                 let b = "Currently: " + format(tmp.n.upgrades[24].effect)
                                 return a + b
                         },
-                        cost:() => new Decimal(15),
+                        cost:() => new Decimal(player.extremeMode ? 12 : 15),
                         effect(){
                                 let ret = player.n.points.max(1).ln().max(1)
 
