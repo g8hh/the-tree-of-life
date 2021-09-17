@@ -4648,7 +4648,7 @@ addLayer("c", {
                                 return Decimal.pow(10, 69000)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("o", 32)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 32)
                         }, // hasUpgrade("c", 31)
                 },
                 32: {
@@ -4671,7 +4671,7 @@ addLayer("c", {
                                 return Decimal.pow(10, 6296e3)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("n", 55)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("n", 55)
                         }, // hasUpgrade("c", 32)
                 },
                 33: {
@@ -4686,7 +4686,7 @@ addLayer("c", {
                                 return Decimal.pow(10, 6485e3)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("c", 32)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("c", 32)
                         }, // hasUpgrade("c", 33)
                 },
                 34: {
@@ -4701,7 +4701,7 @@ addLayer("c", {
                                 return Decimal.pow(10, player.hardMode ? 10550e3 : 10530e3)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("o", 34)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 34)
                         }, // hasUpgrade("c", 34)
                 },
                 35: {
@@ -4716,7 +4716,7 @@ addLayer("c", {
                                 return Decimal.pow(10, 11840e3)
                         },
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("c", 34)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("c", 34)
                         }, // hasUpgrade("c", 35)
                 },
                 
@@ -5173,7 +5173,7 @@ addLayer("o", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Nitrogen",
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("n", 25)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("n", 25)
                         }, // hasUpgrade("o", 31)
                 },
                 32: {
@@ -5186,7 +5186,7 @@ addLayer("o", {
                         },
                         cost:() => Decimal.pow(10, 314000),
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("o", 31)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 31)
                         }, // hasUpgrade("o", 32)
                 },
                 33: {
@@ -5199,7 +5199,7 @@ addLayer("o", {
                         },
                         cost:() => Decimal.pow(10, 28274e3),
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("c", 33)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("c", 33)
                         }, // hasUpgrade("o", 33)
                 },
                 34: {
@@ -5212,7 +5212,7 @@ addLayer("o", {
                         },
                         cost:() => Decimal.pow(10, 29185e3),
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("o", 33)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 33)
                         }, // hasUpgrade("o", 34)
                 },
                 35: {
@@ -5225,7 +5225,7 @@ addLayer("o", {
                         },
                         cost:() => Decimal.pow(10, player.hardMode ? 404e6 : 403e6),
                         unlocked(){
-                                return hasMilestone("n", 10) || hasUpgrade("c", 35)
+                                return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("c", 35)
                         }, // hasUpgrade("o", 35)
                 },
         },
