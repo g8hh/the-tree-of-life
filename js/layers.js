@@ -236,7 +236,7 @@ TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
                          2823e3, 2914e3, 3027e3, 3366e3, 5199e3,
                          5622e3, 6263e3, 6487e3, 9936e3, 1695e4,
                          1885e4,19324e3,38092e3,46173e3,47211e3,
-                        61738e3,82413e3,
+                        61738e3,82413e3,17889e4,18704e4, 2624e5,
                                                                                 //        
 ]
 
@@ -4645,7 +4645,7 @@ addLayer("c", {
                                 return a
                         },
                         cost(){
-                                return Decimal.pow(10, 69000)
+                                return Decimal.pow(10, player.extremeMode ? 54500 : 69000)
                         },
                         unlocked(){
                                 return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 32)
@@ -5184,7 +5184,7 @@ addLayer("o", {
                                 let a = "Add .08 to color gain exponent and apply the prior upgrade again"
                                 return a 
                         },
-                        cost:() => Decimal.pow(10, 314000),
+                        cost:() => Decimal.pow(10, player.extremeMode ? 372e3 : 314e3),
                         unlocked(){
                                 return (hasMilestone("n", 10) && player.p.unlocked) || hasUpgrade("o", 31)
                         }, // hasUpgrade("o", 32)
@@ -6196,9 +6196,11 @@ addLayer("n", {
                 }, // hasMilestone("n", 13)
                 14: {
                         requirementDescription(){
+                                if (player.extremeMode) return "10,000 Nitrogen"
                                 return (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
                         },
                         requirement(){
+                                if (player.extremeMode) return Decimal.pow(10, 4)
                                 let m = player.hardMode ? 10 : 1
                                 return Decimal.pow(2, 17).times(m)
                         },
@@ -6212,8 +6214,9 @@ addLayer("n", {
                                 return decimalOne
                         },
                         effectDescription(){
-                                let a = "Reward: Unlock Nitrogen challenges, which only keep content from before tokens and C Point gain 5's log10 becomes ln."
-                                return a
+                                let a = "Reward: Unlock Nitrogen challenges which only keep content from before tokens"
+                                if (player.extremeMode) a += ", unlock Nitrogen Science [NOT YET],"
+                                return a + " and C Point gain 5's log10 becomes ln."
                         },
                 }, // hasMilestone("n", 14)
                 15: {
