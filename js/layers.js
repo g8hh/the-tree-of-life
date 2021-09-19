@@ -27,6 +27,7 @@ function getPointMultiplier(){
                                         gain = gain.times(tmp.sci.buyables[11].effect)
                                         gain = gain.times(tmp.sci.buyables[21].effect)
         if (hasUpgrade("sci", 202))     gain = gain.times(tmp.sci.upgrades[202].effect)
+        if (hasUpgrade("sci", 302))     gain = gain.times(tmp.sci.upgrades[302].effect)
 
         if (player.easyMode)            gain = gain.times(4)
 
@@ -219,24 +220,25 @@ var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350,
                    16455e3, 20892e3, 23072e3, 28491e3, 34256e3,
                    60576e3, 91049e3, 11858e4, 12317e4, 13287e4,
                    13793e4, 18750e4, 40300e4, 91919e4, 10000e5,
-                   24380e5, 29250e5, 
+                   24380e5, 29250e5,
                 ]
 
-TOKEN_COSTS_EXTREME = [    6395,   7600,   7650,   8735,   9060,
-                          10850,  12390,  13231,  13500,  14190,
-                          15260,  16000,  16280,  18000,  20740,
-                          21650,  28375,  32975,  35000,  35150,
-                          35600,  38500,  45678,  49494,  60125,
-                          61730,  69111,  77210,  77600,  78000,
-                          83720,  87040,  87420, 107270, 120066,
-                         120630, 132275, 149300, 151925, 153460,
-                         194050, 220254, 225947, 260888, 265010,
-                         267200, 275375, 276940, 359037, 599599,
-                         761000, 782287, 1166e3, 1367e3, 1852e3,
-                         2823e3, 2914e3, 3027e3, 3366e3, 5199e3,
-                         5622e3, 6263e3, 6487e3, 9936e3, 1695e4,
-                         1885e4,19324e3,38092e3,46173e3,47211e3,
-                        61738e3,82413e3,17889e4,18704e4, 2624e5,
+var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
+                                  10850,  12390,  13231,  13500,  14190,
+                                  15260,  16000,  16280,  18000,  20740,
+                                  21650,  28375,  32975,  35000,  35150,
+                                  35600,  38500,  45678,  49494,  60125,
+                                  61730,  69111,  77210,  77600,  78000,
+                                  83720,  87040,  87420, 107270, 120066,
+                                 120630, 132275, 149300, 151925, 153460,
+                                 194050, 220254, 225947, 260888, 265010,
+                                 267200, 275375, 276940, 359037, 599599,
+                                 761000, 782287, 1166e3, 1367e3, 1852e3,
+                                 2823e3, 2914e3, 3027e3, 3366e3, 5199e3,
+                                 5622e3, 6263e3, 6487e3, 9936e3, 1695e4,
+                                 1885e4,19324e3,38092e3,46173e3,47211e3,
+                                61738e3,82413e3,17889e4,18704e4, 2624e5,
+                                 3068e5,
                                                                                 //        
 ]
 
@@ -1839,6 +1841,12 @@ addLayer("sci", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                nitrogen_science: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
+                everhasnsci2: false,
         }}, 
         color: "#B54153",
         branches: [],
@@ -1851,6 +1859,7 @@ addLayer("sci", {
         type: "custom", 
         tooltip(){
                 let t = player.subtabs.sci.mainTabs
+                if (t == "N Research") return format(player.sci.nitrogen_science.points) + " Nitrogen Science"
                 if (t == "C Research") return format(player.sci.carbon_science.points) + " Carbon Science"
                 if (t == "O Research") return format(player.sci.oxygen_science.points) + " Oxygen Science"
                 if (t == "H Research") return format(player.sci.hydrogen_science.points) + " Hydrogen Science"
@@ -1921,10 +1930,11 @@ addLayer("sci", {
                 
                 data.time += diff
 
-                let force = player.n.unlocked || false
-                if (force || hasUpgrade("sci", 11))     layers.sci.hydrogen_science.update(diff)
-                if (force || hasUpgrade("o", 13))       layers.sci.oxygen_science.update(diff)
-                if (force || hasUpgrade("sci", 125))    layers.sci.carbon_science.update(diff)
+                let force1 = player.n.unlocked || false
+                if (force1 || hasUpgrade("sci", 11))    layers.sci.hydrogen_science.update(diff)
+                if (force1 || hasUpgrade("o", 13))      layers.sci.oxygen_science.update(diff)
+                if (force1 || hasUpgrade("sci", 125))   layers.sci.carbon_science.update(diff)
+                if (hasMilestone("n", 14))              layers.sci.nitrogen_science.update(diff)
 
 
                 let lsb = layers.sci.buyables
@@ -2095,6 +2105,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 122))     ret = ret.times(tmp.sci.upgrades[122].effect)
                         if (hasUpgrade("sci", 125))     ret = ret.times(tmp.sci.upgrades[125].effect)
                                                         ret = ret.times(tmp.n.effect)
+                        if (hasUpgrade("sci", 304))     ret = ret.times(tmp.sci.upgrades[304].effect)
 
                         return ret
                 },
@@ -2128,7 +2139,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 205))     ret = ret.times(Decimal.pow(3, tmp.sci.upgrades.carbonUpgradesLength))
                         if (hasUpgrade("sci", 214))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
                         if (hasUpgrade("sci", 222))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
-                                                        ret = ret.times(tmp.n.effect)
+                                                        ret = ret.times(tmp.n.effect.min("1e500"))
 
                         return ret
                 },
@@ -2145,9 +2156,73 @@ addLayer("sci", {
                         data.total = data.total.plus(gainThisTick)
                 },
         },
+        nitrogen_science: {
+                getResetGain(){ // nscigain nsci gain n sci nitrogenscience nitrogensci nscience
+                        let ret = player.n.points.plus(10).log10()
+
+                        ret = ret.times(player.sci.carbon_science.points.plus(10).log10())
+                        ret = ret.times(Decimal.pow(2, player.tokens.total.sub(90)))
+                        ret = ret.times(Decimal.pow(16, layerChallengeCompletions("n")))
+
+                        ret = ret.times(tmp.sci.nitrogen_science.getGainMult)
+
+                        ret = ret.pow(.75) // extreme
+
+                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+
+                        return ret
+                },
+                getGainMult(){
+                        let ret = decimalOne
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.sci.nitrogen_science
+                        data.best = data.best.max(data.points)
+                        let gain = tmp.sci.nitrogen_science.getResetGain
+                        let gainThisTick = gain.times(diff)
+                        if (!false) {
+                                data.points = data.points.plus(gainThisTick)
+                        } else if (false) {
+                                //data.points = data.points.plus(gainThisTick).min(gain.times(10))
+                        }
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
         upgrades: {
                 rows: 10,
                 cols: 5,
+                carbonUpgradesLength(){
+                        let a = 0
+                        let ids = [201, 202, 203, 204, 205, 
+                                   211, 212, 213, 214, 215, 
+                                   221, 222, 223, 224, 225, 
+                                   231, 232, 233, 234, 235,
+                                   241, 242, 243, 244, 245,]
+
+                        for (i in ids) {
+                                a += hasUpgrade("sci", ids[i])
+                        }
+
+                        return a
+                },
+                nitrogenUpgradesLength(){
+                        let a = 0
+                        let ids = [301, 302, 303, 304, 305, 
+                                   311, 312, 313, 314, 315, 
+                                   321, 322, 323, 324, 325, 
+                                   331, 332, 333, 334, 335,
+                                   341, 342, 343, 344, 345,]
+
+                        for (i in ids) {
+                                a += hasUpgrade("sci", ids[i])
+                        }
+
+                        if (a >= 25) console.log("check on me")
+
+                        return a
+                },
                 11: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci I"
@@ -2657,20 +2732,6 @@ addLayer("sci", {
                         unlocked(){
                                 return tmp.mini.tabFormat.C.unlocked || player.n.unlocked
                         }, // hasUpgrade("sci", 125)
-                },
-                carbonUpgradesLength(){
-                        let a = 0
-                        let ids = [201, 202, 203, 204, 205, 
-                                   211, 212, 213, 214, 215, 
-                                   221, 222, 223, 224, 225, 
-                                   231, 232, 233, 234, 235,
-                                   241, 242, 243, 244, 245,]
-
-                        for (i in ids) {
-                                a += hasUpgrade("sci", ids[i])
-                        }
-
-                        return a
                 },
                 201: {
                         title(){
@@ -3222,6 +3283,125 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 244) || player.n.unlocked
                         }, // hasUpgrade("sci", 245)
+                },
+                301: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci I"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "Remove C Point gain 9 base cost and per upgrade multiply A Point gain by 1e5,000"
+                                return a
+                        },
+                        cost:() => new Decimal(100),
+                        effect(){
+                                let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
+
+                                return Decimal.pow(10, upgs * 5000)
+                        },
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasMilestone("n", 14) || player.p.unlocked
+                        }, // hasUpgrade("sci", 301)
+                },
+                302: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci II"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
+                                return a
+                        },
+                        onPurchase(){
+                                player.sci.everhasnsci2 = true
+                        },
+                        cost:() => new Decimal(400),
+                        effect(){
+                                let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
+
+                                return Decimal.pow(10, upgs * 1e4)
+                        },
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 301) || player.p.unlocked
+                        }, // hasUpgrade("sci", 302)
+                },
+                303: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci III"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "You have one less effective token for prestige purposes and per upgrade add 100 to Blue base"
+                                return a
+                        },
+                        cost:() => new Decimal(1000),
+                        effect(){
+                                let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
+
+                                return Decimal.times(100, upgs)
+                        },
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 301) || player.p.unlocked
+                        }, // hasUpgrade("sci", 303)
+                },
+                304: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci IV"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "Per upgrade Nitrogen multiplies Oxygen Science gain"
+                                return a
+                        },
+                        cost:() => new Decimal(500),
+                        effect(){
+                                let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
+
+                                return Decimal.pow(player.n.points.max(1), upgs)
+                        },
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 301) || player.p.unlocked
+                        }, // hasUpgrade("sci", 304)
+                },
+                305: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci V"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "[will cost 5e5, not yet] Per upgrade multiply Hydrogen gain by 1e1,000 but remove Hydrogen Science" 
+                                //  (upgrades, buyable, currency, etc.)
+                                return a
+                        },
+                        cost:() => new Decimal(5e15),
+                        effect(){
+                                let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
+
+                                return Decimal.pow(10, upgs * 1e3)
+                        },
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 302) && hasUpgrade("sci", 303) && hasUpgrade("sci", 304) || player.p.unlocked
+                        }, // hasUpgrade("sci", 305)
                 },
         },
         buyables: {
@@ -4155,6 +4335,23 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 125) || player.n.unlocked
                         },
                 },
+                "N Research": {
+                        content: [
+                                "main-display",
+                                ["secondary-display", "nitrogen_science"],
+                                "blank", 
+                                ["display-text", function(){
+                                        let a = "Nitrogen Science gain is currently "
+                                        a += format(tmp.sci.nitrogen_science.getResetGain) + "/s "
+                                        return a
+                                }],
+                                ["upgrades", [30,31,32,33,34]],
+                                ["buyables", [30,31]]
+                        ],
+                        unlocked(){
+                                return hasMilestone("n", 14) || player.p.unlocked
+                        },
+                },
                 "Info": {
                         content: [
                                 "main-display",
@@ -4166,20 +4363,30 @@ addLayer("sci", {
                                         let a = "<br>Hydrogen Science base gain formula is <br>log10(10+Hydrogen)*"
                                         a += "log10(10+Deuterium)*log10(10+Atomic Hydrogen)"
 
-                                        if (!hasUpgrade("sci", 13)) return a
+                                        if (!hasUpgrade("sci", 13) && !player.n.unlocked) return a
                                         let b = "H Sci III only counts the first three buyables and \"60 Seconds\""
 
-                                        if (player.o.best.eq(0) && player.c.best.eq(0)) return a + br2 + b
+                                        if (player.o.best.eq(0) && player.c.best.eq(0) && !player.n.unlocked) return a + br2 + b
                                         
                                         let c = "Oxygen Science base gain is log10(Hydrogen Science)*log10(Oxygen)*log10(Carbon)"
                                         
-                                        if (!hasUpgrade("sci", 125)) return a + br2 + b + br2 + c
+                                        if (!hasUpgrade("sci", 125) && !player.n.unlocked) return a + br2 + b + br2 + c
 
                                         let d = "Carbon Science base gain is log10(Oxygen Science)*log10(C Points)*10<sup>tokens+slots-50</sup>"
 
                                         let ret1 = a + br2 + b + br2 + c + br2 + d
 
-                                        return ret1 
+                                        if (!player.n.unlocked) return ret1 
+
+                                        let e = "Nitrogen to Carbon Science multiplier is hardcapped at 1e500"
+
+                                        if (!hasMilestone("n", 14) && !player.p.unlocked) return ret1 + br + e
+
+                                        let f = "Nitrogen Science base gain is<br>log10(Carbon Science)*log10(Nitrogen)*2<sup>tokens+4*[Nitrogen challenge completions]-90</sup>"
+
+                                        let ret2 = ret1 + br + e + br2 + f
+
+                                        if(!false) return ret2
                                 }],
                         ]
                 },
@@ -5368,7 +5575,7 @@ addLayer("n", {
         },
         effectDescription(){
                 if (player.tab != "n") return ""
-                if (shiftDown) {
+                if (player.shiftAlias) {
                         let a = "effect formula: (sqrt(x)*2+1)^log2(x+7)"
                         return a
                 }
@@ -6215,7 +6422,7 @@ addLayer("n", {
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock Nitrogen challenges which only keep content from before tokens"
-                                if (player.extremeMode) a += ", unlock Nitrogen Science [NOT YET],"
+                                if (player.extremeMode) a += ", unlock Nitrogen Science,"
                                 return a + " and C Point gain 5's log10 becomes ln."
                         },
                 }, // hasMilestone("n", 14)
@@ -6312,7 +6519,10 @@ addLayer("n", {
                                 if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[11].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, player.hardMode ? 291590e3 : 287e6),
+                        goal(){
+                                if (player.extremeMode) return Decimal.pow(10, 312700e3)
+                                return Decimal.pow(10, player.hardMode ? 291590e3 : 287e6)
+                        },
                         canComplete: () => player.points.gte(tmp.n.challenges[11].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -6340,7 +6550,7 @@ addLayer("n", {
                                 if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[12].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, 109.3e6),
+                        goal: () => Decimal.pow(10, player.extremeMode ? 150279e3 : 109.3e6),
                         canComplete: () => player.points.gte(tmp.n.challenges[12].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -6363,7 +6573,7 @@ addLayer("n", {
                                 if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[21].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, 74e5),
+                        goal: () => Decimal.pow(10, player.extremeMode ? 107387e3 : 74e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[21].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -25682,6 +25892,7 @@ addLayer("mini", {
                         if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("sci", 15))      ret = ret.times(tmp.sci.upgrades[15].effect)
                                                         ret = ret.times(tmp.sci.buyables[22].effect)
+                        if (hasUpgrade("sci", 301))     ret = ret.times(tmp.sci.upgrades[301].effect)
 
                         if (player.easyMode)            ret = ret.pow(1.001)
 
@@ -26099,7 +26310,8 @@ addLayer("mini", {
                         title: "<bdi style='color:#FF0000'>Red</bdi>",
                         cost(){
                                 let exp = Decimal.pow(getBuyableAmount("mini", 11), 1.2)
-                                let init = new Decimal(hasUpgrade("sci", 25) ? 1 : 20)
+                                let init = new Decimal(20)
+                                if (hasUpgrade("sci", 25) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e3, exp))
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[11].cost) && getBuyableAmount("mini", 11).lt(5000),
@@ -26110,7 +26322,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(20)
-                                if (hasUpgrade("sci", 25)) div = decimalOne
+                                if (hasUpgrade("sci", 25) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
@@ -26150,7 +26362,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(20)*(1e3^x<sup>1.2</sup>)" 
-                                if (hasUpgrade("sci", 25)) cost2 = cost2.slice(5,)
+                                if (hasUpgrade("sci", 25) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26163,7 +26375,7 @@ addLayer("mini", {
                         cost() {
                                 let exp = Decimal.pow(getBuyableAmount("mini", 12), 1.1)
                                 let init = new Decimal(player.extremeMode ? 3e18 : 1e20)
-                                if (hasUpgrade("sci", 22)) init = decimalOne
+                                if (hasUpgrade("sci", 22) || player.sci.everhasnsci2) init = decimalOne
                                 let base = player.extremeMode ? 1e4 : 1e9
                                 return init.times(Decimal.pow(base, exp))
                         },
@@ -26180,6 +26392,7 @@ addLayer("mini", {
                                         base = 1e4
                                         div = new Decimal(3e18)
                                 }
+                                if (hasUpgrade("sci", 22) || player.sci.everhasnsci2) div = decimalOne
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -26219,7 +26432,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e20)*(1e9^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = "(3e18)*(1e4^x<sup>1.1</sup>)"
-                                if (hasUpgrade("sci", 22)) cost2 = cost2.slice(7,)
+                                if (hasUpgrade("sci", 22) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26230,7 +26443,8 @@ addLayer("mini", {
                 13: {
                         title: "<bdi style='color:#FFFF00'>Yellow</bdi>",
                         cost(){
-                                let init = new Decimal(hasMilestone("mini", 9) ? 1 : 1e6)
+                                let init = new Decimal(1e6)
+                                if (hasMilestone("mini", 9) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e6, Decimal.pow(getBuyableAmount("mini", 13), 1.2)))
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[13].cost) && getBuyableAmount("mini", 13).lt(5000),
@@ -26241,7 +26455,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e6)
-                                if (hasMilestone("mini", 9)) div = decimalOne
+                                if (hasMilestone("mini", 9) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e6
                                 let exp = 1.2
                                 let pts = player.mini.a_points.points
@@ -26281,7 +26495,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e6)*(1e6^x<sup>1.2</sup>)" 
-                                if (hasMilestone("mini", 9)) cost2 = cost2.slice(6,)
+                                if (hasMilestone("mini", 9) || player.sci.everhasnsci2) cost2 = "1e6^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26295,7 +26509,7 @@ addLayer("mini", {
                                 let exp = Decimal.pow(getBuyableAmount("mini", 21), 1.1)
                                 let init = new Decimal(player.extremeMode ? 1e14 : 1e300)
                                 let base = new Decimal(player.extremeMode ? 1e5 : 1e30)
-                                if (hasUpgrade("sci", 24)) init = decimalOne
+                                if (hasUpgrade("sci", 24) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(base, exp))
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[21].cost) && getBuyableAmount("mini", 21).lt(5000),
@@ -26312,6 +26526,7 @@ addLayer("mini", {
                                         base = new Decimal(1e5)
                                 }
                                 let exp = 1.1
+                                if (hasUpgrade("sci", 24) || player.sci.everhasnsci2) div = decimalOne
                                 let pts = player.mini.a_points.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(5000)
@@ -26361,7 +26576,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e300)*(1e30^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = "(1e14)*(1e5^x<sup>1.1</sup>)"
-                                if (hasUpgrade("sci", 24)) cost2 = cost2.slice(7,)
+                                if (hasUpgrade("sci", 24) || player.sci.everhasnsci2) cost2 = "1e5^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26373,7 +26588,7 @@ addLayer("mini", {
                         title: "<bdi style='color:#33CC33'>Green</bdi>",
                         cost() {
                                 let init = new Decimal(player.extremeMode ? 5e29 : 1e31)
-                                if (hasMilestone("mini", 11)) init = decimalOne
+                                if (hasMilestone("mini", 11) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e11, Decimal.pow(getBuyableAmount("mini", 23), 1.1)))
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[23].cost) && getBuyableAmount("mini", 23).lt(5000),
@@ -26385,6 +26600,7 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e31)
                                 if (player.extremeMode) div = new Decimal(5e29)
+                                if (hasMilestone("mini", 11) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e11
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -26426,7 +26642,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e31)*(1e11^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("1e31", "5e29")
-                                if (hasMilestone("mini", 11)) cost2 = cost2.slice(7,)
+                                if (hasMilestone("mini", 11) || player.sci.everhasnsci2) cost2 = "1e11^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26438,7 +26654,8 @@ addLayer("mini", {
                         title: "<bdi style='color:#660099'>Violet</bdi>",
                         cost(){
                                 let base = player.extremeMode ? 1e5 : 1e10
-                                let init = new Decimal(hasMilestone("mini", 10) ? 1 : 1e15)
+                                let init = new Decimal(1e15)
+                                if (hasMilestone("mini", 10) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(getBuyableAmount("mini", 61), 1.1)
                                 return init.times(Decimal.pow(base, exp))
                         },
@@ -26453,7 +26670,7 @@ addLayer("mini", {
                                 let base = 1e10
                                 if (player.extremeMode) {
                                         base = 1e5
-                                        if (hasMilestone("mini", 10)) div = decimalOne
+                                        if (hasMilestone("mini", 10) || player.sci.everhasnsci2) div = decimalOne
                                 }
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -26495,7 +26712,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e15)*(1e10^x<sup>1.1</sup>)"
                                 if (player.extremeMode) cost2 = cost2.replace("10", "5") 
-                                if (hasMilestone("mini", 10)) cost2 = cost2.slice(7,)
+                                if (hasMilestone("mini", 10) || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26508,7 +26725,7 @@ addLayer("mini", {
                         cost(){ 
                                 let exp = Decimal.pow(getBuyableAmount("mini", 62), 1.15)
                                 let init = new Decimal(player.extremeMode ? 1e28 : 1e33)
-                                if (hasUpgrade("sci", 23)) init = decimalOne
+                                if (hasUpgrade("sci", 23) || player.sci.everhasnsci2) init = decimalOne
                                 let base = player.extremeMode ? 1e3 : 2e3
                                 return init.times(Decimal.pow(base, exp))
                         },
@@ -26523,7 +26740,7 @@ addLayer("mini", {
                                 let base = 2000
                                 if (player.extremeMode) {
                                         base = 1e3
-                                        if (hasUpgrade("sci", 24)) div = decimalOne
+                                        if (hasUpgrade("sci", 24) || player.sci.everhasnsci2) div = decimalOne
                                         else div = new Decimal(1e28)
                                 }
                                 let exp = 1.15
@@ -26569,7 +26786,7 @@ addLayer("mini", {
                                         cost2 = cost2.replace("33", "28")
                                         cost2 = cost2.replace("2e3", "1e3")
                                 }
-                                if (hasUpgrade("sci", 23)) cost2 = cost2.slice(7,)
+                                if (hasUpgrade("sci", 23) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.15</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26580,7 +26797,8 @@ addLayer("mini", {
                 63: {
                         title: "<bdi style='color:#0000FF'>Blue</bdi>",
                         cost(){
-                                let init = new Decimal(hasMilestone("mini", 8) ? 1 : 1e10)
+                                let init = new Decimal(1e10)
+                                if (hasMilestone("mini", 8) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(getBuyableAmount("mini", 63), 1.1)
                                 return init.times(Decimal.pow(1e8, exp))
                         },
@@ -26592,7 +26810,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e10)
-                                if (player.extremeMode) init = decimalOne
+                                if (hasMilestone("mini", 8) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e8
                                 let exp = 1.1
                                 let pts = player.mini.a_points.points
@@ -26605,6 +26823,7 @@ addLayer("mini", {
                                 let ret = new Decimal(2)
 
                                 ret = ret.plus(tmp.sci.buyables[23].effect)
+                                if (hasUpgrade("sci", 303)) ret = ret.plus(tmp.sci.upgrades[303].effect)
 
                                 return ret
                         },
@@ -26635,7 +26854,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e10)*(1e8^x<sup>1.1</sup>)" 
-                                if (hasMilestone("mini", 8)) cost2 = cost2.slice(7,)
+                                if (hasMilestone("mini", 8) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26654,7 +26873,8 @@ addLayer("mini", {
                 31: {
                         title: "B11", 
                         cost() {
-                                let init = new Decimal(hasMilestone("mini", 2) ? 1 : 10)
+                                let init = new Decimal(10)
+                                if (hasMilestone("mini", 2) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 31)), 1.1)
                                 return init.times(Decimal.pow(20, exp))
                         },
@@ -26666,7 +26886,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(10)
-                                if (hasMilestone("mini", 2)) div = decimalOne
+                                if (hasMilestone("mini", 2) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 20
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
@@ -26705,7 +26925,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(10)*(20^x<sup>1.1</sup>)" 
-                                if (hasMilestone("mini", 2)) cost2 = "20^x<sup>1.1</sup>"
+                                if (hasMilestone("mini", 2) || player.sci.everhasnsci2) cost2 = "20^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26716,7 +26936,8 @@ addLayer("mini", {
                 32: {
                         title: "B12", 
                         cost() {
-                                let init = new Decimal(hasMilestone("mini", 3) ? 1 : 3e6)
+                                let init = new Decimal(3e6)
+                                if (hasMilestone("mini", 3) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 32)), 1.2)
                                 return init.times(Decimal.pow(5e5, exp))
                         },
@@ -26728,7 +26949,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(3e6)
-                                if (hasMilestone("mini", 3)) div = decimalOne
+                                if (hasMilestone("mini", 3) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 5e5
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -26767,7 +26988,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(3e6)*(5e5^x<sup>1.2</sup>)" 
-                                if (hasMilestone("mini", 3)) cost2 = "5e5^x<sup>1.2</sup>"
+                                if (hasMilestone("mini", 3) || player.sci.everhasnsci2) cost2 = "5e5^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26779,7 +27000,8 @@ addLayer("mini", {
                         title: "B13", 
                         cost(){
                                 let dblexp = player.extremeMode ? 1.1 : 1.2
-                                let init = new Decimal(hasMilestone("mini", 1) ? 1 : 1e25)
+                                let init = new Decimal(1e25)
+                                if (hasMilestone("mini", 1) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 33)), dblexp)
                                 return init.times(Decimal.pow(100, exp))
                         },
@@ -26791,7 +27013,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e25)
-                                if (hasMilestone("mini", 1)) div = decimalOne
+                                if (hasMilestone("mini", 1) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 100
                                 let exp = player.extremeMode ? 1.1 : 1.2
                                 let pts = player.mini.b_points.points
@@ -26830,10 +27052,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e25)*(100^x<sup>" + (player.extremeMode ? 1.1 : 1.2) + "</sup>)" 
-                                if (hasMilestone("mini", 1)) {
-                                        cost2 = cost2.replace("(1e25)*(", "")
-                                        cost2 = cost2.replace(")", "")
-                                }
+                                if (hasMilestone("mini", 1) || player.sci.everhasnsci2) cost2 = "100^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26844,7 +27063,8 @@ addLayer("mini", {
                 41: {
                         title: "B21", 
                         cost(){
-                                let init = new Decimal(hasUpgrade("sci", 101) ? 1 : 1e33)
+                                let init = new Decimal(1e33)
+                                if (hasUpgrade("sci", 101) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 41)), 1.5)
                                 return init.times(Decimal.pow(10, exp))
                         },
@@ -26856,7 +27076,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e33)
-                                if (hasUpgrade("sci", 101)) init = decimalOne
+                                if (hasUpgrade("sci", 101) || player.sci.everhasnsci2) init = decimalOne
                                 let base = 10
                                 let exp = 1.5
                                 let pts = player.mini.b_points.points
@@ -26895,7 +27115,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e33)*(10^x<sup>1.5</sup>)" 
-                                if (hasUpgrade("sci", 101)) cost2 = "10^x<sup>1.5</sup>"
+                                if (hasUpgrade("sci", 101) || player.sci.everhasnsci2) cost2 = "10^x<sup>1.5</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26907,7 +27127,7 @@ addLayer("mini", {
                         title: "B22", 
                         cost(){
                                 let init = new Decimal(5e237)
-                                if (hasUpgrade("c", 13) && player.extremeMode) init = decimalOne
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 42)), 1.35)
                                 return init.times(Decimal.pow(2e10, exp))
                         },
@@ -26919,7 +27139,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(5e237)
-                                if (hasUpgrade("c", 13) && player.extremeMode) div = decimalOne
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) div = decimalOne
                                 let base = 2e10
                                 let exp = 1.35
                                 let pts = player.mini.b_points.points
@@ -26958,7 +27178,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5e237)*(2e10^x<sup>1.35</sup>)" 
-                                if (hasUpgrade("c", 13) && player.extremeMode) cost2 = "2e10^x<sup>1.35</sup>"
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) cost2 = "2e10^x<sup>1.35</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26970,7 +27190,7 @@ addLayer("mini", {
                         title: "B23", 
                         cost(){
                                 let init = new Decimal("1e425")
-                                if (hasUpgrade("c", 13) && player.extremeMode) init = decimalOne
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 43)), 1.2)
                                 return init.times(Decimal.pow(1e15, exp))
                         },
@@ -26982,7 +27202,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e425")
-                                if (hasUpgrade("c", 13) && player.extremeMode) div = decimalOne
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e15
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -27021,7 +27241,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e425)*(1e15^x<sup>1.2</sup>)"
-                                if (hasUpgrade("c", 13) && player.extremeMode) cost2 = "1e15^x<sup>1.2</sup>" 
+                                if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) cost2 = "1e15^x<sup>1.2</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27034,7 +27254,7 @@ addLayer("mini", {
                         cost(){
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 51)), 1.3)
                                 let init = new Decimal(player.extremeMode ? "1e3565" : "1e5600")
-                                if (hasUpgrade("sci", 102)) init = decimalOne
+                                if (hasUpgrade("sci", 102) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e8, exp))
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[51].cost) && getBuyableAmount("mini", 51).lt(5000),
@@ -27045,7 +27265,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e3565" : "1e5600")
-                                if (hasUpgrade("sci", 102)) div = decimalOne
+                                if (hasUpgrade("sci", 102) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e8
                                 let exp = 1.3
                                 let pts = player.mini.b_points.points
@@ -27085,7 +27305,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e5600)*(1e8^x<sup>1.3</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("5600", "3565")
-                                if (hasUpgrade("sci", 102)) cost2 = "1e8^x<sup>1.3</sup>"
+                                if (hasUpgrade("sci", 102) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27097,7 +27317,7 @@ addLayer("mini", {
                         title: "B32", 
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e17400" : "1e18650")
-                                if (hasUpgrade("sci", 103)) init = decimalOne
+                                if (hasUpgrade("sci", 103) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 52)), 1.1)
                                 return init.times(Decimal.pow(1e4, exp))
                         },
@@ -27109,7 +27329,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e17400" : "1e18650")
-                                if (hasUpgrade("sci", 103)) div = decimalOne
+                                if (hasUpgrade("sci", 103) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e4
                                 let exp = 1.1
                                 let pts = player.mini.b_points.points
@@ -27154,7 +27374,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e18650)*(1e4^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("18650", "17400")
-                                if (hasUpgrade("sci", 103)) cost2 = "1e4^x<sup>1.1</sup>"
+                                if (hasUpgrade("sci", 103) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27165,7 +27385,8 @@ addLayer("mini", {
                 53: {
                         title: "B33", 
                         cost(){
-                                let init = new Decimal(hasUpgrade("sci", 112) ? 1 :"1e22000")
+                                let init = new Decimal("1e22000")
+                                if (hasUpgrade("sci", 112) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 53)), 1.2)       
                                 return init.times(Decimal.pow(1e3, exp))
                         },
@@ -27177,7 +27398,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e22000")
-                                if (hasUpgrade("sci", 112)) div = decimalOne
+                                if (hasUpgrade("sci", 112) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e3
                                 let exp = 1.2
                                 let pts = player.mini.b_points.points
@@ -27216,7 +27437,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
-                                if (hasUpgrade("sci", 112)) cost2 = "1e3^x<sup>1.2</sup>"
+                                if (hasUpgrade("sci", 112) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27284,7 +27505,8 @@ addLayer("mini", {
                 72: {
                         title: "C Point Gain 1", 
                         cost(){
-                                let init = new Decimal(hasUpgrade("sci", 204) ? 1 : 1e3)
+                                let init = new Decimal(1e3)
+                                if (hasUpgrade("sci", 204) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = hasUpgrade("sci", 224) ? 1.21 : 1.3
                                 if (hasUpgrade("sci", 225)) exp = 1.2
                                 return init.times(Decimal.pow(100, Decimal.pow(getBuyableAmount("mini", 72), exp)))
@@ -27297,7 +27519,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e3)
-                                if (hasUpgrade("sci", 204)) div = decimalOne
+                                if (hasUpgrade("sci", 204) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 100
                                 let exp = hasUpgrade("sci", 224) ? 1.21 : 1.3
                                 if (hasUpgrade("sci", 225)) exp = 1.2
@@ -27347,7 +27569,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1000)*(100^x<sup>1.3</sup>)" 
-                                if (hasUpgrade("sci", 204)) cost2 = "100^x<sup>1.3</sup>"
+                                if (hasUpgrade("sci", 204) || player.sci.everhasnsci2) cost2 = "100^x<sup>1.3</sup>"
                                 if (hasUpgrade("sci", 224)) cost2 = cost2.replace("1.3", "1.21")
                                 if (hasUpgrade("sci", 225)) cost2 = cost2.replace("1.21", "1.2")
                                 let cost3 = "</b><br>"
@@ -27360,7 +27582,8 @@ addLayer("mini", {
                 73: {
                         title: "C Point Gain 2", 
                         cost(){
-                                let init = new Decimal(hasUpgrade("sci", 211) ? 1 : 5e3)
+                                let init = new Decimal(5e3)
+                                if (hasUpgrade("sci", 211) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(200, Decimal.pow(getBuyableAmount("mini", 73), 1.1)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[73].cost),
@@ -27371,7 +27594,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(5e3)
-                                if (hasUpgrade("sci", 211)) div = decimalOne
+                                if (hasUpgrade("sci", 211) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 200
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
@@ -27411,7 +27634,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5000)*(200^x<sup>1.1</sup>)" 
-                                if (hasUpgrade("sci", 211)) cost2 = "200^x<sup>1.1</sup>"
+                                if (hasUpgrade("sci", 211) || player.sci.everhasnsci2) cost2 = "200^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27423,7 +27646,7 @@ addLayer("mini", {
                         title: "<bdi style='color:#CC0033'>C</bdi> increase 1",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 1e96 : 1e90)
-                                if (hasUpgrade("sci", 221)) init = decimalOne
+                                if (hasUpgrade("sci", 221) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e5, Decimal.pow(getBuyableAmount("mini", 81), 1.2)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[81].cost),
@@ -27435,7 +27658,7 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(1e90)
                                 if (player.extremeMode) div = new Decimal(1e96)
-                                if (hasUpgrade("sci", 221)) div = decimalOne
+                                if (hasUpgrade("sci", 221) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e5
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
@@ -27485,8 +27708,8 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e90)*(1e5^x<sup>1.2</sup>)" 
-                                if (hasUpgrade("sci", 212)) cost2 = cost2.replace("90", "96")
-                                if (hasUpgrade("sci", 221)) cost2 = "1e5^x<sup>1.2</sup>"
+                                if (player.extremeMode) cost2 = cost2.replace("90", "96")
+                                if (hasUpgrade("sci", 221) || player.sci.everhasnsci2) cost2 = "1e5^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27497,7 +27720,8 @@ addLayer("mini", {
                 82: {
                         title: "C Point gain 3",
                         cost(){
-                                let init = new Decimal(hasUpgrade("sci", 223) ? 1 : 1e180)
+                                let init = new Decimal(1e180)
+                                if (hasUpgrade("sci", 223) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e4, Decimal.pow(getBuyableAmount("mini", 82), 1.2)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[82].cost),
@@ -27508,7 +27732,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e180)
-                                if (hasUpgrade("sci", 223)) div = decimalOne
+                                if (hasUpgrade("sci", 223) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e4
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
@@ -27554,7 +27778,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e180)*(1e4^x<sup>1.2</sup>)" 
-                                if (hasUpgrade("sci", 223)) cost2 = "1e4^x<sup>1.2</sup>"
+                                if (hasUpgrade("sci", 223) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27566,7 +27790,7 @@ addLayer("mini", {
                         title: "C Point gain 4",
                         cost(){
                                 let init = new Decimal(1e225)
-                                if (hasUpgrade("mini", 24) && player.extremeMode) init = decimalOne
+                                if (hasUpgrade("mini", 24) && player.extremeMode || player.sci.everhasnsci2) init = decimalOne
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 return init.times(Decimal.pow(1e10, Decimal.pow(getBuyableAmount("mini", 83), exp)))
                         },
@@ -27578,7 +27802,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e225)
-                                if (hasUpgrade("mini", 24) && player.extremeMode) div = decimalOne
+                                if (hasUpgrade("mini", 24) && player.extremeMode || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e10
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 let pts = player.mini.c_points.points
@@ -27625,7 +27849,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e225)*(1e10^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
-                                if (hasUpgrade("mini", 24) && player.extremeMode) cost2 = "1e10^x<sup>1.2</sup>"
+                                if (hasUpgrade("mini", 24) && player.extremeMode || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27637,7 +27861,7 @@ addLayer("mini", {
                         title: "<bdi style='color:#CC0033'>C</bdi> increase 2",
                         cost(){
                                 let init = new Decimal("1e1300")
-                                if (hasUpgrade("sci", 233)) init = decimalOne
+                                if (hasUpgrade("sci", 233) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 return init.times(Decimal.pow(1e8, Decimal.pow(getBuyableAmount("mini", 91), exp)))
                         },
@@ -27649,7 +27873,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e1300")
-                                if (hasUpgrade("sci", 233)) div = decimalOne
+                                if (hasUpgrade("sci", 233) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e8
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 let pts = player.mini.c_points.points
@@ -27693,7 +27917,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1300)*(1e8^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
-                                if (hasUpgrade("sci", 233)) cost2 = "1e8^x<sup>1.2</sup>"
+                                if (hasUpgrade("sci", 233) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27705,7 +27929,7 @@ addLayer("mini", {
                         title: "C Point gain 5",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e1980" : "1e1900")
-                                if (hasUpgrade("sci", 241)) init = decimalOne
+                                if (hasUpgrade("sci", 241) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e50, Decimal.pow(getBuyableAmount("mini", 92), 1.3)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[92].cost),
@@ -27716,7 +27940,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e1980" : "1e1900")
-                                if (hasUpgrade("sci", 241)) div = decimalOne
+                                if (hasUpgrade("sci", 241) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e50
                                 let exp = 1.3
                                 let pts = player.mini.c_points.points
@@ -27764,7 +27988,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1900)*(1e50^x<sup>1.3</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("00", "80")
-                                if (hasUpgrade("sci", 241)) cost2 = "1e50^x<sup>1.3</sup>"
+                                if (hasUpgrade("sci", 241) || player.sci.everhasnsci2) cost2 = "1e50^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27776,7 +28000,7 @@ addLayer("mini", {
                         title: "C Point gain 6",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e6280" : "1e6350")
-                                if (hasUpgrade("sci", 242)) init = decimalOne
+                                if (hasUpgrade("sci", 242) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e6, Decimal.pow(getBuyableAmount("mini", 93), 1.1)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[93].cost),
@@ -27787,7 +28011,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e6280" : "1e6350")
-                                if (hasUpgrade("sci", 242)) div = decimalOne
+                                if (hasUpgrade("sci", 242) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e6
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
@@ -27840,7 +28064,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e6350)*(1e6^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("6350", "6280")
-                                if (hasUpgrade("sci", 242)) cost2 = "1e6^x<sup>1.1</sup>"
+                                if (hasUpgrade("sci", 242) || player.sci.everhasnsci2) cost2 = "1e6^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27852,7 +28076,7 @@ addLayer("mini", {
                         title: "Carbon gain 1",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e13700" : "1e13000")
-                                if (hasUpgrade("sci", 243)) init = decimalOne
+                                if (hasUpgrade("sci", 243) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(100, Decimal.pow(getBuyableAmount("mini", 101), 1.4)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[101].cost),
@@ -27863,7 +28087,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e13700" : "1e13000")
-                                if (hasUpgrade("sci", 243)) div = decimalOne
+                                if (hasUpgrade("sci", 243) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 100
                                 let exp = 1.4
                                 let pts = player.mini.c_points.points
@@ -27907,7 +28131,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e13000)*(100^x<sup>1.4</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("13000", "13700")
-                                if (hasUpgrade("sci", 243)) cost2 = "100^x<sup>1.4</sup>"
+                                if (hasUpgrade("sci", 243) || player.sci.everhasnsci2) cost2 = "100^x<sup>1.4</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27919,7 +28143,7 @@ addLayer("mini", {
                         title: "C Point gain 7",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e20400" : "1e19590")
-                                if (hasUpgrade("sci", 245)) init = decimalOne
+                                if (hasUpgrade("sci", 245) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e23, Decimal.pow(getBuyableAmount("mini", 102), 1.2)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[102].cost),
@@ -27930,7 +28154,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e20400" : "1e19590")
-                                if (hasUpgrade("sci", 245)) div = decimalOne
+                                if (hasUpgrade("sci", 245) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e23
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
@@ -27979,7 +28203,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e19590)*(1e23^x<sup>1.2</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("19590", "20400")
-                                if (hasUpgrade("sci", 245)) cost2= "1e23^x<sup>1.2</sup>"
+                                if (hasUpgrade("sci", 245) || player.sci.everhasnsci2) cost2= "1e23^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27991,7 +28215,7 @@ addLayer("mini", {
                         title: "C Point gain 8",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e27400" : "1e27000")
-                                if (hasMilestone("tokens", 27)) init = decimalOne
+                                if (hasMilestone("tokens", 27) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(20, Decimal.pow(getBuyableAmount("mini", 103), 1.2)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[103].cost),
@@ -28002,7 +28226,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e27400" : "1e27000")
-                                if (hasMilestone("tokens", 27)) div = decimalOne
+                                if (hasMilestone("tokens", 27) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 20
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
@@ -28046,7 +28270,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e27000)*(20^x<sup>1.2</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("0", "4")
-                                if (hasMilestone("tokens", 27)) cost2 = "20^x<sup>1.2</sup>"
+                                if (hasMilestone("tokens", 27) || player.sci.everhasnsci2) cost2 = "20^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -28058,7 +28282,7 @@ addLayer("mini", {
                         title: "<bdi style='color:#CC0033'>C</bdi> increase 3",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e58000" : "1e56700")
-                                if (hasMilestone("tokens", 28)) init = decimalOne
+                                if (hasMilestone("tokens", 28) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e11, Decimal.pow(getBuyableAmount("mini", 111), 1.2)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[111].cost),
@@ -28069,7 +28293,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e58000" : "1e56700")
-                                if (hasMilestone("tokens", 28)) div = decimalOne
+                                if (hasMilestone("tokens", 28) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e11
                                 let exp = 1.2
                                 let pts = player.mini.c_points.points
@@ -28113,7 +28337,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e56700)*(1e11^x<sup>1.3</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("67", "80")
-                                if (hasMilestone("tokens", 28)) cost2 = "1e11^x<sup>1.3</sup>"
+                                if (hasMilestone("tokens", 28) || player.sci.everhasnsci2) cost2 = "1e11^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -28125,6 +28349,7 @@ addLayer("mini", {
                         title: "C Point gain 9",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e72385" : "1e72175")
+                                if (hasUpgrade("sci", 301) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e100, Decimal.pow(getBuyableAmount("mini", 112), 1.1)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[112].cost),
@@ -28135,6 +28360,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e72385" : "1e72175")
+                                if (hasUpgrade("sci", 301) || player.sci.everhasnsci2) div = decimalOne
                                 let base = 1e100
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
@@ -28181,6 +28407,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e72175)*(1e100^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("175", "385")
+                                if (hasUpgrade("sci", 301) || player.sci.everhasnsci2) cost2 = "1e100^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -28192,6 +28419,7 @@ addLayer("mini", {
                         title: "C Point gain 10",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? "1e95300" : "1e80870")
+                                if (player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(2, Decimal.pow(getBuyableAmount("mini", 113), 1.1).times(1024)))
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[113].cost),
@@ -28202,6 +28430,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal(player.extremeMode ? "1e95300" : "1e80870")
+                                if (player.sci.everhasnsci2) div = decimalOne
                                 let base = Decimal.pow(2, 1024)
                                 let exp = 1.1
                                 let pts = player.mini.c_points.points
@@ -28248,6 +28477,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e80870)*(1.80e308^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("80870", "95300")
+                                if (player.sci.everhasnsci2) cost2 = "1.80e308^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -32323,6 +32553,7 @@ addLayer("tokens", {
                 if (hasUpgrade("sci", 244))     a += Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5)
 
                 if (hasUpgrade("sci", 203))     a += 1
+                if (hasUpgrade("sci", 303))     a += 1
                 
                 return a
         },
