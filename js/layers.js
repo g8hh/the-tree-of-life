@@ -238,7 +238,7 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
                                  5622e3, 6263e3, 6487e3, 9936e3, 1695e4,
                                  1885e4,19324e3,38092e3,46173e3,47211e3,
                                 61738e3,82413e3,17889e4,18704e4, 2624e5,
-                                 3068e5,
+                                 3068e5,37352e4,  675e6,
                                                                                 //        
 ]
 
@@ -628,6 +628,7 @@ addLayer("h", {
                 if (player.easyMode)            x = x.times(2)
                 if (hasUpgrade("sci", 11))      x = x.times(tmp.sci.effect)
                                                 x = x.times(tmp.sci.buyables[12].effect)
+                if (hasUpgrade("sci", 305))     x = x.times(tmp.sci.upgrades[305].effect)
 
                 if (player.easyMode)            x = x.pow(1.001)
 
@@ -1940,7 +1941,7 @@ addLayer("sci", {
                 let lsb = layers.sci.buyables
                 let tsb = tmp.sci.buyables
                 if (data.autobuysci12 && hasMilestone("tokens", 1) || hasMilestone("n", 1)) {
-                        if (tsb[12].unlocked ) lsb[12].buy()
+                        if (tsb[12].unlocked) lsb[12].buy()
                 }
                 if (data.autobuysci11 && hasMilestone("tokens", 2) || hasMilestone("n", 1)) {
                         if (tsb[11].unlocked) lsb[11].buy()
@@ -2069,6 +2070,7 @@ addLayer("sci", {
                         return ret
                 },
                 update(diff){
+                        if (hasUpgrade("sci", 305)) return 
                         let data = player.sci.hydrogen_science
                         data.best = data.best.max(data.points)
                         let gainThisTick = tmp.sci.hydrogen_science.getResetGain.times(diff)
@@ -3386,15 +3388,28 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "[will cost 5e5, not yet] Per upgrade multiply Hydrogen gain by 1e1,000 but remove Hydrogen Science" 
-                                //  (upgrades, buyable, currency, etc.)
+                                let a = "<bdi style='font-size: 80%'>Per upgrade multiply Hydrogen gain by 1e1,500 and 21%'s base is log10(Science) but remove Hydrogen Science</bdi>" 
+                                // (upgrades, buyable, currency, etc.)
                                 return a
                         },
-                        cost:() => new Decimal(5e15),
+                        cost:() => new Decimal(5e5),
                         effect(){
                                 let upgs = tmp.sci.upgrades.nitrogenUpgradesLength
 
-                                return Decimal.pow(10, upgs * 1e3)
+                                return Decimal.pow(10, upgs * 1500)
+                        },
+                        onPurchase(){
+                                let data = player.sci.hydrogen_science
+                                data.points = decimalZero
+                                data.best = decimalZero
+                                data.total = decimalZero
+                                player.sci.upgrades = filterOut(player.sci.upgrades, [11, 12, 13, 14, 15, 21, 22, 23, 24, 25])
+                                player.sci.buyables[11] = decimalZero
+                                player.sci.buyables[12] = decimalZero
+                                player.sci.buyables[13] = decimalZero
+                                player.sci.buyables[21] = decimalZero
+                                player.sci.buyables[22] = decimalZero
+                                player.sci.buyables[23] = decimalZero
                         },
                         currencyLocation:() => player.sci.nitrogen_science,
                         currencyInternalName:() => "points",
@@ -3402,6 +3417,24 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 302) && hasUpgrade("sci", 303) && hasUpgrade("sci", 304) || player.p.unlocked
                         }, // hasUpgrade("sci", 305)
+                },
+                311: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VI"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                let a = "Square base Nitrogen gain"
+                                return a
+                        },
+                        cost:() => new Decimal(1e6),
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 305) || player.p.unlocked
+                        }, // hasUpgrade("sci", 311)
                 },
         },
         buyables: {
@@ -3425,7 +3458,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 12)
+                                return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[11].cost)
@@ -3498,7 +3531,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 12)
+                                return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[12].cost)
@@ -3569,7 +3602,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 12)
+                                return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[13].cost)
@@ -3647,7 +3680,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 14)
+                                return hasUpgrade("sci", 14) && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[21].cost)
@@ -3726,7 +3759,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 15)
+                                return hasUpgrade("sci", 15) && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[22].cost)
@@ -3801,7 +3834,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("h", 52) 
+                                return hasUpgrade("h", 52)  && !hasUpgrade("sci", 305)
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[23].cost)
@@ -3888,6 +3921,10 @@ addLayer("sci", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("sci", 305)) {
+                                        let logBase = 10
+                                        return player.sci.points.plus(logBase).log(logBase)
+                                }
                                 let logBase = 10
                                 if (hasUpgrade("sci", 115)) logBase = Math.E
                                 let ret = player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
@@ -3907,6 +3944,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 101)) + " Oxygen Science</b><br>"
                                 let eformula = "log10(log10(H Sci))^x<br>" + format(tmp.sci.buyables[101].base) + "^x"
                                 if (hasUpgrade("sci", 115)) eformula = eformula.replaceAll("log10", "ln")
+                                if (hasUpgrade("sci", 305)) eformula = eformula.replace("ln(ln(H Sci))^x", "log10(Science)^x")
 
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
@@ -4298,7 +4336,7 @@ addLayer("sci", {
                                 ["buyables", [1,2]]
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("sci", 305)
                         },
                 },
                 "O Research": {
@@ -4367,14 +4405,17 @@ addLayer("sci", {
                                         let b = "H Sci III only counts the first three buyables and \"60 Seconds\""
 
                                         if (player.o.best.eq(0) && player.c.best.eq(0) && !player.n.unlocked) return a + br2 + b
+
+                                        let ret0 = a + br2 + b + br2
+                                        if (hasUpgrade("sci", 305)) ret0 = ""
                                         
                                         let c = "Oxygen Science base gain is log10(Hydrogen Science)*log10(Oxygen)*log10(Carbon)"
                                         
-                                        if (!hasUpgrade("sci", 125) && !player.n.unlocked) return a + br2 + b + br2 + c
+                                        if (!hasUpgrade("sci", 125) && !player.n.unlocked) return ret0 + c
 
                                         let d = "Carbon Science base gain is log10(Oxygen Science)*log10(C Points)*10<sup>tokens+slots-50</sup>"
 
-                                        let ret1 = a + br2 + b + br2 + c + br2 + d
+                                        let ret1 = ret0 + c + br2 + d
 
                                         if (!player.n.unlocked) return ret1 
 
@@ -5506,8 +5547,10 @@ addLayer("n", {
         },
         getGainExp(){
                 let ret = new Decimal(3)
+
                 if (hasUpgrade("c", 31))        ret = ret.times(2)
                 if (hasUpgrade("mini", 82))     ret = ret.times(2)
+                if (hasUpgrade("sci", 311))     ret = ret.times(2)
 
                 return ret
         },
@@ -5836,7 +5879,7 @@ addLayer("n", {
                                 let a = "You lose 100x Oxygen, Carbon, and Hydrogen"
                                 return a
                         },
-                        cost:() => new Decimal(1e11),
+                        cost:() => new Decimal(player.extremeMode ? 1e12 : 1e11),
                         unlocked(){
                                 return hasMilestone("p", 4) || hasChallenge("n", 22)
                         }, // hasUpgrade("n", 32)
@@ -6115,7 +6158,7 @@ addLayer("n", {
                                 return decimalOne
                         },
                         toggles(){
-                                if (!player.extremeMode) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return 
                                 return [["sci", "autobuysci11"], ["sci", "autobuysci12"], ["sci", "autobuysci13"], ["sci", "autobuysci21"], ["sci", "autobuysci22"], ["sci", "autobuysci123"]]
                         },
                         effectDescription(){
@@ -6601,7 +6644,7 @@ addLayer("n", {
                                 if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[22].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, 166.7e6),
+                        goal: () => Decimal.pow(10, player.extremeMode ? 14325e4 : 1667e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[22].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -6629,7 +6672,7 @@ addLayer("n", {
                                 if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[31].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, 169.5e5),
+                        goal: () => Decimal.pow(10, player.extremeMode ? 70984e3 : 1695e4),
                         canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
                         rewardDescription(){
                                 if (player.tab != "n") return ""
@@ -6652,7 +6695,10 @@ addLayer("n", {
                                 if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 return format(tmp.n.challenges[32].goal) + " Points"
                         },
-                        goal: () => Decimal.pow(10, player.hardMode ? 190e6 : 165.8e6),
+                        goal(){
+                                if (player.extremeMode) return Decimal.pow(10, 145629e3)
+                                return Decimal.pow(10, player.hardMode ? 190e6 : 1658e5)
+                        },
                         canComplete: () => player.points.gte(tmp.n.challenges[32].goal),
                         rewardDescription(){ //red d redd
                                 if (player.tab != "n") return ""
@@ -26053,7 +26099,7 @@ addLayer("mini", {
 
                         return ret
                 },
-                getGainMult(){ // dpoint gain d point gain dpt gain
+                getGainMult(){ // dpoint gain d point gain dpt gain dptgain
                         let ret = decimalOne
 
                         if (player.dev.dPointMult != undefined) ret = ret.times(player.dev.dPointMult)
@@ -34446,7 +34492,7 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci12"]]
                         },
                         effectDescription(){
@@ -34482,7 +34528,7 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci11"]]
                         },
                         effectDescription(){
@@ -34518,7 +34564,7 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci13"]]
                         },
                         effectDescription(){
@@ -34550,7 +34596,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 3)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci22"]]
                         },
                         effectDescription(){
@@ -34573,7 +34619,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 4)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci21"]]
                         },
                         effectDescription(){
@@ -34599,7 +34645,7 @@ addLayer("tokens", {
                                 return player.tokens.total.max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return []
                                 return [["sci", "autobuysci23"]]
                         },
                         effectDescription(){

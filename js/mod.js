@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.135",
+	num: "1.136",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,26 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.sci.nitrogen_science.points.gte(5e5)
+	if (player.extremeMode) return player.mini.d_points.points.gt(0)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.135)<br><br>
+		Reaching the endgame screen (updated as of v1.136)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.136</h3><br>
+		- Balanced until D Point unlocked.<br>
+		- Implemented the removal of Hydrogen Science.<br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
+		- Various code cleanup.<br>
+		- Added a Nitrogen Science upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.135</h3><br>
 		- Balanced until 5e5 Nitrogen Science.<br>
 		- Various code cleanup.<br>
