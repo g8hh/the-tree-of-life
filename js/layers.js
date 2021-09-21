@@ -3471,7 +3471,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 313) && !false && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
                                 let a = "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
                                 return a
                         },
@@ -3496,7 +3496,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 314) && !false && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
                                 let a = "log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain"
                                 return a
                         },
@@ -3518,7 +3518,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 315) && !false && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
                                 let a = "Gas Pedal cost exponent is 1.2"
                                 return a
                         },
@@ -3540,7 +3540,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 321) && !false && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
                                 let a = "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                                 return a
                         },
@@ -3565,7 +3565,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 322) && !false && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
                                 let a = "Remove Engine base cost"
                                 return a
                         },
