@@ -26639,7 +26639,6 @@ addLayer("mini", {
                         if (player.easyMode)            ret = ret.times(4)
 
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
-                        if (player.extremeMode)         ret = ret.pow(.75)
 
                         if (inChallenge("l", 11))       ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
@@ -26671,6 +26670,8 @@ addLayer("mini", {
                         let data = tmp.mini.e_points
 
                         let ret = data.getRecursionValue.times(data.getGainMult)
+                        
+                        if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret
                 },
