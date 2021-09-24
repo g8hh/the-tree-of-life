@@ -1717,6 +1717,25 @@ addLayer("h", {
                         }, // hasUpgrade("h", 85)
                 },
         },
+        infoboxes: {
+                introBox: {
+                        title: "Introduction",
+                        body(){
+                                let a = "<h1>" + makeRed("Welcome to TREE OF LIFE!") + "</h1>"
+
+                                let b = "There are five items of information you should be aware of:"
+                                let c = "First, this game has (currently) three modes, Easy, Hard, and Extreme, each having a different effect."
+                                let d = "To access and select modes go to the info tab (the blue i in the top left corner) and click \"Show mod selection tab\", though it is recommended to play normal mode first."
+                                let e = "Second, the game is balanced around 60 to 250 second waits (at most), so if you find yourself "
+                                e += "waiting longer than that for seemingly no reward, try something else!"
+                                let f = "Third, there is a save bank. View it by going to the info tab and clicking \"Show built in saves\" and scrolling down."
+                                let g = "Fourth, this game is designed to be played on a computer on Google Chrome. If this does not apply to you there might be some bugs or other issues you run into." 
+                                let h = "Finally, there are ways to force toggle shift and control for seeing various details in the info tab."
+
+                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h
+                        },
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: ["main-display",
@@ -1740,7 +1759,10 @@ addLayer("h", {
                                 ],
 
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7,8,9]]],
+                                ["upgrades", [1,2,3,4,5,6,7,8,9]],
+                                "blank",
+                                ["infobox", "introBox"],
+                        ],
                         unlocked(){
                                 return true
                         },

@@ -141,7 +141,7 @@ var systemComponents = {
 		<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
 		<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 
-		<button class="opt" onclick="player.modTab = !player.modTab"><span>{{player.modTab ? "Show mod selection tab":"Show info tab"}}</button>
+		<button class="opt" onclick="player.modTab = !player.modTab"><span>{{player.modTab ? "Show info tab":"Show mod selection tab"}}</button>
 
 		<span v-if="player.modTab">
 		<br><br>
@@ -229,6 +229,7 @@ var systemComponents = {
 
     'options-tab': {
         template: `
+	<div>
         <table>
             <tr>
                 <td><button class="opt" onclick="save()">Save</button></td>
@@ -252,8 +253,12 @@ var systemComponents = {
 	    </tr> 
 	    <tr>
 	    	<td><button class="opt" onclick="toggleOpt('hideMilestonePopups'); needsCanvasUpdate = false">Popups are: {{ options.hideMilestonePopups?"HIDDEN":"SHOWN" }}</button></td>
+		<td><button class="opt" onclick="showAllSaves()">Show your saves</button></td>
+		<td></td>
 	    </tr>
-        </table>`
+        </table>
+	<saves></saves>
+	</div>`
     },
 
     'back-button': {

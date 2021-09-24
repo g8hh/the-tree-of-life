@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.141",
+	num: "1.141.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,22 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.141)<br><br>
+		Reaching the endgame screen (updated as of v1.141.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.141</h3><br>
+		- Thank you so much to Jacorb for <br>
+		1) Letting me use his multisave system and code<br>
+		2) Helping me through the parts I didn't understand<br>
+		3) Giving pointers on the code he provided<br>
+		- Multiple saves are now possible!<br>
+		- Go to the options tab (cog) > Show your saves button to view them<br>
+		- Click outside the popup to close it.<br>
+		- Create new saves (which replicate the current state).<br>
 	<br><h3 style='color: #CC0000'>v1.141</h3><br>
 		- Added a custom save.<br>
 		- Balanced until 1e52 E Points.<br>

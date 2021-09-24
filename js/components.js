@@ -619,6 +619,29 @@ function loadVue() {
 	`
 	})
 
+	
+	// For the save menu popup
+	// all the code regarding multisave stuff was taken with permission from jacorb
+	Vue.component('saves', { 
+		template: `
+		<div class="savePopup" v-if="!(!player.saveMenuOpen)">
+			<div class="savePopupBlocker" onclick="player.saveMenuOpen = false;"></div>
+			<div class="savePopup-content">
+				(Click anywhere outside this popup to make it disappear)
+				<div class="upgRow" style="width: 100%;" v-for="(data, name) in allSaves" v-if="name!='set' && data!==undefined">
+					<div v-bind:class="{ activeSave: (allSaves.set==name), widthLock: true }">{{name}}</div>
+					<button v-on:click="save(); loadSave(name);" class="savePopupBtn can">Load</button>
+					<button v-on:click="renameSave(name)" class="savePopupBtn can">Rename</button>
+					<button v-on:click="deleteSave(name)" class="savePopupBtn can">Delete</button>
+					<div><button class="savePopupBtnMini can" v-on:click="moveSave(name, -1)" v-bind:style="{ visibility: (showMoveSaveBtn(name, 'up')?'visible':'hidden')}">▲</button><button class="savePopupBtnMini can" v-on:click="moveSave(name, 1)" v-bind:style="{ visibility: (showMoveSaveBtn(name, 'down')?'visible':'hidden')}">▼</button></div>
+				</div>
+				<div class="upgRow" style="width: 100%;"><button onclick="newSave()" class="savePopupBtn can">New Save</button></div>
+			</div>
+			 
+		</div>
+	`
+	})
+
 	// SYSTEM COMPONENTS
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])

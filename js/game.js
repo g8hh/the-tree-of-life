@@ -380,16 +380,9 @@ function setUpPGSettings(){
 	player.spaceBarPauses = true
 }
 
-function hardReset(resetOptions) {
-	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
-	player = null
-	if(resetOptions) options = null
-	save(true);
-	window.location.reload();
-}
-
 var ticking = false
 var paused = false
+var logTicks = [false, false]
 var pastTickTimes = []
 
 function runInterval(){
@@ -415,7 +408,8 @@ function runInterval(){
 	player.time = now
 	player.shiftAlias = shiftDown
 	player.controlAlias = controlDown
-	if (needCanvasUpdate){ resizeCanvas();
+	if (needCanvasUpdate){ 
+		resizeCanvas();
 		needCanvasUpdate = false;
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30
@@ -430,7 +424,9 @@ function runInterval(){
 	updateParticles(trueDiff)
 	pastTickTimes = pastTickTimes.slice(0, 9)
 	pastTickTimes = [Date.now() - now].concat(pastTickTimes)
+	if (logTicks[0]) console.log("tick ran")
 	ticking = false
+	if (logTicks[1]) console.log("tick logged")
 }
 /* */
 
