@@ -42,6 +42,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Go to the options tab (cog) > Show your saves button to view them<br>
 		- Click outside the popup to close it.<br>
 		- Create new saves (which replicate the current state).<br>
+		- Added an infobox in Hydrogen that introduce people to various important things.<br>
 	<br><h3 style='color: #CC0000'>v1.141</h3><br>
 		- Added a custom save.<br>
 		- Balanced until 1e52 E Points.<br>
