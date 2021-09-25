@@ -4025,6 +4025,31 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 361) || player.p.unlocked
                         }, // hasUpgrade("sci", 362)
                 },
+                363: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                if (!hasUpgrade("sci", 363) && !false && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
+                                let a = "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.buyables[202].gte(564) || false
+                        },
+                        effect(){
+                                return Decimal.pow(1.1, player.mini.buyables[211])
+                        },
+                        cost:() => new Decimal(1.41e104),
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 362) || player.p.unlocked
+                        }, // hasUpgrade("sci", 363)
+                },
         },
         buyables: {
                 rows: 5,
@@ -6190,6 +6215,7 @@ addLayer("n", {
                 if (hasUpgrade("sci", 341))     x = x.times(player.sci.nitrogen_science.points.max(10).log10())
                 if (hasUpgrade("sci", 354))     x = x.times(2)
                 if (hasUpgrade("sci", 361))     x = x.times(3)
+                if (hasUpgrade("sci", 363))     x = x.times(2)
 
                 if (player.easyMode)            x = x.pow(1.001)
 
@@ -6603,18 +6629,19 @@ addLayer("n", {
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[44].cost)) return false
-                                return player.mini.e_points.best.gte(1e197)
+                                return player.mini.e_points.best.gte(player.extremeMode ? 1e182 : 1e197)
                         },
                         description(){
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e197 E Points"
+                                if (player.extremeMode) b = "Req: 1e182 E Points"
                                 let a = "Per existence of 1 add .01 to " + makeBlue("a")
                                 if (!hasUpgrade("n", 44)) return b + br + a
                                 return a
                         },
-                        cost:() => new Decimal(1.58e36),
+                        cost:() => new Decimal(player.extremeMode ? 1.15e36 : 1.58e36),
                         unlocked(){
                                 return hasMilestone("p", 4) || hasUpgrade("n", 43)
                         }, // hasUpgrade("n", 44)
@@ -6647,13 +6674,14 @@ addLayer("n", {
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[51].cost)) return false
-                                return player.mini.e_points.best.gte(1e234)
+                                return player.mini.e_points.best.gte(player.extremeMode ? 1e245 : 1e234)
                         },
                         description(){
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e234 E Points"
+                                if (player.extremeMode) b = b.replace("234" , "245")
                                 let a = "Each upgrade in this row reapplies the second part of Nitrogen XX and doubles E Point gain"
                                 if (!hasUpgrade("n", 51)) return b + br + a
                                 return a
@@ -6685,18 +6713,19 @@ addLayer("n", {
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[53].cost)) return false
-                                return player.mini.e_points.best.gte("1e1604")
+                                return player.mini.e_points.best.gte(player.extremeMode ? "1e1402" : "1e1604")
                         },
                         description(){
                                 if (player.tab != "n") return ""
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e1604 E Points"
+                                if (player.extremeMode) b = b.replace("1604", "1402")
                                 let a = "Each Quadratic multiplies Nitrogen gain by 1.01"
                                 if (!hasUpgrade("n", 53)) return b + br + a
                                 return a
                         },
-                        cost:() => new Decimal(1.83e37),
+                        cost:() => new Decimal(player.extremeMode ? 1.18e37 : 1.83e37),
                         unlocked(){
                                 return hasMilestone("p", 4) || hasUpgrade("n", 52)
                         }, // hasUpgrade("n", 53)
@@ -26878,6 +26907,7 @@ addLayer("mini", {
                                                         ret = ret.div(20)
                         }
                         if (hasUpgrade("sci", 361))     ret = ret.times(tmp.sci.upgrades[361].effect)
+                        if (hasUpgrade("sci", 363))     ret = ret.times(tmp.sci.upgrades[363].effect)
 
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
@@ -30959,7 +30989,11 @@ addLayer("mini", {
                 },
                 223: {
                         title: "a+b=b+a",
-                        cost:() => new Decimal("1e1507").times(Decimal.pow(8, Decimal.pow(getBuyableAmount("mini", 223), 1.2))),
+                        cost(){
+                                let init = new Decimal("1e1507")
+                                if (player.extremeMode) init = new Decimal("1e1702")
+                                return init.times(Decimal.pow(8, Decimal.pow(getBuyableAmount("mini", 223), 1.2)))
+                        },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[223].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -30968,6 +31002,7 @@ addLayer("mini", {
                         },
                         maxAfford(){
                                 let div = new Decimal("1e1507")
+                                if (player.extremeMode) div = new Decimal("1e1702")
                                 let base = 8
                                 let exp = 1.2
                                 let pts = player.mini.e_points.points
@@ -31020,6 +31055,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1507)*(8^x<sup>1.2</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("1507", "1702")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
