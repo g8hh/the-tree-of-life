@@ -2243,7 +2243,8 @@ addLayer("sci", {
                                    321, 322, 323, 324, 325, 
                                    331, 332, 333, 334, 335,
                                    341, 342, 343, 344, 345,
-                                   351, 352, 353, 354, 355,]
+                                   351, 352, 353, 354, 355,
+                                   361, 362, 363, 364, 365,]
 
                         for (i in ids) {
                                 a += hasUpgrade("sci", ids[i])
@@ -3976,6 +3977,53 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 354) || player.p.unlocked
                         }, // hasUpgrade("sci", 355)
+                },
+                361: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXI"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                if (!hasUpgrade("sci", 361) && !false && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
+                                let a = "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.buyables[202].gte(182) || false
+                        },
+                        effect(){
+                                return Decimal.pow(1.33, player.mini.buyables[203])
+                        },
+                        cost:() => new Decimal(6.7e103),
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 355) || player.p.unlocked
+                        }, // hasUpgrade("sci", 361)
+                },
+                362: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXII"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                if (!hasUpgrade("sci", 362) && !false && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
+                                let a = "Linear cost exponent is 1.1"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.buyables[202].gte(397) || false
+                        },
+                        cost:() => new Decimal(1e104),
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 361) || player.p.unlocked
+                        }, // hasUpgrade("sci", 362)
                 },
         },
         buyables: {
@@ -6141,6 +6189,7 @@ addLayer("n", {
                 if (player.easyMode)            x = x.times(2)
                 if (hasUpgrade("sci", 341))     x = x.times(player.sci.nitrogen_science.points.max(10).log10())
                 if (hasUpgrade("sci", 354))     x = x.times(2)
+                if (hasUpgrade("sci", 361))     x = x.times(3)
 
                 if (player.easyMode)            x = x.pow(1.001)
 
@@ -6530,6 +6579,7 @@ addLayer("n", {
                         },
                         canAfford(){
                                 if (player.n.points.lt(tmp.n.upgrades[43].cost)) return false
+                                if (player.extremeMode) return player.mini.e_points.best.gte(1e168)
                                 return player.mini.e_points.best.gte(1e162)
                         },
                         description(){
@@ -6537,11 +6587,12 @@ addLayer("n", {
                                 if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                 
                                 let b = "Req: 1e162 E Points"
+                                if (player.extremeMode) b = b.replace("162", "168")
                                 let a = "Add .1 to " + makeBlue("a") + " and Quadratic gains a ln(x) term"
                                 if (!hasUpgrade("n", 43)) return b + br + a
                                 return a
                         },
-                        cost:() => new Decimal(1.24e36),
+                        cost:() => new Decimal(player.extremeMode ? 1.05e36 : 1.24e36),
                         unlocked(){
                                 return hasMilestone("p", 4) || hasUpgrade("n", 42)
                         }, // hasUpgrade("n", 43)
@@ -26826,6 +26877,7 @@ addLayer("mini", {
                         if (hasUpgrade("sci", 355) && !player.p.unlocked) {
                                                         ret = ret.div(20)
                         }
+                        if (hasUpgrade("sci", 361))     ret = ret.times(tmp.sci.upgrades[361].effect)
 
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
@@ -30480,6 +30532,7 @@ addLayer("mini", {
                                 let init = new Decimal("250")
                                 if (hasUpgrade("sci", 345)) init = decimalOne
                                 let exp = hasUpgrade("sci", 351) ? 1.15 : 1.2
+                                if (hasUpgrade("sci", 362)) exp = 1.1
                                 return init.times(Decimal.pow(2, Decimal.pow(getBuyableAmount("mini", 203), exp)))
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[203].cost),
@@ -30493,6 +30546,7 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 345)) div = decimalOne
                                 let base = 2
                                 let exp = hasUpgrade("sci", 351) ? 1.15 : 1.2
+                                if (hasUpgrade("sci", 362)) exp = 1.1
                                 let pts = player.mini.e_points.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
@@ -30536,6 +30590,7 @@ addLayer("mini", {
                                 let cost2 = "(250)*(2^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 345)) cost2 = "2^x<sup>1.2</sup>"
                                 if (hasUpgrade("sci", 351)) cost2 = cost2.replace("1.2", "1.15")
+                                if (hasUpgrade("sci", 362)) cost2 = cost2.replace("1.15", "1.1")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -30776,7 +30831,12 @@ addLayer("mini", {
                 },
                 221: {
                         title: "∃0 0+x=x+0=x",
-                        cost:() => new Decimal("1e138").times(Decimal.pow(30, Decimal.pow(getBuyableAmount("mini", 221), 1.3))),
+                        cost(){
+                                let init = new Decimal("1e138")
+                                if (player.extremeMode) init = new Decimal("1e122")
+                                let exp = player.extremeMode ? 1.2 : 1.3
+                                return init.times(Decimal.pow(30, Decimal.pow(getBuyableAmount("mini", 221), exp)))
+                        },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[221].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -30787,6 +30847,10 @@ addLayer("mini", {
                                 let div = new Decimal("1e138")
                                 let base = 30
                                 let exp = 1.3
+                                if (player.extremeMode) {
+                                        exp = 1.2
+                                        div = new Decimal("1e122")
+                                }
                                 let pts = player.mini.e_points.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
@@ -30826,6 +30890,7 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e138)*(30^x<sup>1.3</sup>)" 
+                                if (player.extremeMode) cost2 = "(1e122)*(30^x<sup>1.2</sup>)"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 

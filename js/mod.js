@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.141.1",
+	num: "1.142",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,20 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.e_points.points.gt(1e52)
+	if (player.extremeMode) return player.mini.e_points.points.gt(1e181)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.141.1)<br><br>
+		Reaching the endgame screen (updated as of v1.142)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.141</h3><br>
+	<br><h3 style='color: #CC0000'>v1.142</h3><br>
+		- Balanced until 1e181 E Points.<br>
+		- Added two Nitrogen Science buyables.<br>
+	<br><h3 style='color: #CC0000'>v1.141.1</h3><br>
 		- Thank you so much to Jacorb for <br>
 		1) Letting me use his multisave system and code<br>
 		2) Helping me through the parts I didn't understand<br>
