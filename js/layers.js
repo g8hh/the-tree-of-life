@@ -4050,6 +4050,28 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 362) || player.p.unlocked
                         }, // hasUpgrade("sci", 363)
                 },
+                364: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIV"
+                        },
+                        description(){
+                                if (player.tab != "sci") return 
+                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                                if (!hasUpgrade("sci", 364) && !false && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
+                                let a = "Unlock three buyables, each buyable purchase doubles Nitrogen gain"
+                                return a
+                        },
+                        canAfford(){
+                                return player.mini.buyables[202].gte(4300) || false
+                        },
+                        cost:() => new Decimal(4.25e104),
+                        currencyLocation:() => player.sci.nitrogen_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Nitrogen Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 363) || player.p.unlocked
+                        }, // hasUpgrade("sci", 364)
+                },
         },
         buyables: {
                 rows: 5,
@@ -4932,6 +4954,117 @@ addLayer("sci", {
 
                                 let end = allEff + allCost
                                 return br + end
+                        },
+                },
+                301: {
+                        title: "Reduce", // remove base costs
+                        cost(){
+                                let amt = getBuyableAmount("sci", 301).toNumber()
+                                if (amt == 0) return new Decimal("5e104")
+
+                                return Decimal.tetrate(10, 10)
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 364)
+                        },
+                        canAfford() {
+                                return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[301].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[301] = data.buyables[301].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[301].cost
+                                        data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
+                                }
+                        },
+                        display(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "N Research") return ""
+                                
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[301]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: Remove "
+                                let eff2 = formatWhole(player.sci.buyables[301]) + " E Point buyable base costs</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 301)) + " Nitrogen Science</b><br>"
+
+                                return br + lvl + eff1 + eff2 + cost
+                        },
+                },
+                302: {
+                        title: "Reuse", // cost exponent of quadratic
+                        cost(){
+                                let amt = getBuyableAmount("sci", 302).toNumber()
+                                if (amt == 0) return new Decimal("1e9199")
+
+                                return Decimal.tetrate(10, 10)
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 364)
+                        },
+                        canAfford() {
+                                return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[302].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[302] = data.buyables[302].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[302].cost
+                                        data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
+                                }
+                        },
+                        effect(){
+                                return player.sci.buyables[302].times(.001)
+                        },
+                        display(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "N Research") return ""
+                                
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[302]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: -"
+                                let eff2 = format(tmp.sci.buyables[302].effect,3) + " to Quadratic cost exponent</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 302)) + " Nitrogen Science</b><br>"
+
+                                return br + lvl + eff1 + eff2 + cost
+                        },
+                },
+                303: {
+                        title: "Recycle", // less effective tokens
+                        cost(){
+                                let amt = getBuyableAmount("sci", 303).toNumber()
+                                if (amt == 0) return new Decimal("1e999")
+
+                                return Decimal.tetrate(10, 10)
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 364)
+                        },
+                        canAfford() {
+                                return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[303].cost)
+                        }, 
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[303] = data.buyables[303].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[303].cost
+                                        data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
+                                }
+                        },
+                        effect(){
+                                return player.sci.buyables[303]
+                        },
+                        display(){
+                                if (player.tab != "sci") return ""
+                                if (player.subtabs.sci.mainTabs != "N Research") return ""
+                                
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[303]) + "</b><br>"
+                                let eff1 = "<b><h2>Effect</h2>: -"
+                                let eff2 = formatWhole(tmp.sci.buyables[303].effect) + " effective tokens for prestige purposes</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 303)) + " Nitrogen Science</b><br>"
+
+                                return br + lvl + eff1 + eff2 + cost
                         },
                 },
         },
@@ -33448,9 +33581,12 @@ addLayer("tokens", {
                                                 a += tmp.tokens.buyables[112].effect.toNumber()
                 if (hasUpgrade("t", 141))       a += player.t.upgrades.length
                 if (hasUpgrade("sci", 244))     a += Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5)
+                                                a += tmp.sci.buyables[303].effect.toNumber()
 
                 if (hasUpgrade("sci", 203))     a += 1
                 if (hasUpgrade("sci", 303))     a += 1
+
+                if (typeof a != "number") Decimal(0) 
                 
                 return a
         },
