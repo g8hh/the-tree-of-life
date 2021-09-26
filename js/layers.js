@@ -4058,7 +4058,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 364) && !false && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
-                                let a = "Unlock three buyables, each buyable purchase doubles Nitrogen gain"
+                                let a = "Unlock three buyables, bulk 2x E Point buyables"
                                 return a
                         },
                         canAfford(){
@@ -5033,7 +5033,10 @@ addLayer("sci", {
                         title: "Recycle", // less effective tokens
                         cost(){
                                 let amt = getBuyableAmount("sci", 303).toNumber()
-                                if (amt == 0) return new Decimal("1e999")
+                                if (amt == 0) return new Decimal("5.99e104")
+                                if (amt == 1) return new Decimal("1.01e105")
+                                if (amt == 2) return new Decimal("3.71e106")
+                                if (amt == 3) return new Decimal("6.25e106")
 
                                 return Decimal.tetrate(10, 10)
                         },
@@ -5062,7 +5065,7 @@ addLayer("sci", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[303]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = formatWhole(tmp.sci.buyables[303].effect) + " effective tokens for prestige purposes</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 303)) + " Nitrogen Science</b><br>"
+                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 303), 3) + " Nitrogen Science</b><br>"
 
                                 return br + lvl + eff1 + eff2 + cost
                         },
@@ -5127,7 +5130,7 @@ addLayer("sci", {
                                 "blank", 
                                 ["display-text", function(){
                                         let a = "Nitrogen Science gain is currently "
-                                        a += format(tmp.sci.nitrogen_science.getResetGain) + "/s "
+                                        a += format(tmp.sci.nitrogen_science.getResetGain, 3) + "/s "
                                         return a
                                 }],
                                 ["upgrades", [30,31,32,33,34,35,36]],
@@ -5136,6 +5139,10 @@ addLayer("sci", {
                         unlocked(){
                                 return hasMilestone("n", 14) || player.p.unlocked
                         },
+                        shouldNotify(){
+                                let data = tmp.sci.buyables
+                                return data[301].canAfford || data[302].canAfford || data[303].canAfford
+                        },      
                 },
                 "Info": {
                         content: [
@@ -6874,7 +6881,7 @@ addLayer("n", {
                                 let a = "Existence of 0 affects fuel square rooting factor and you can buy each buyable every tick"
                                 return a
                         },
-                        cost:() => new Decimal(1.44e42),
+                        cost:() => new Decimal(player.extremeMode ? 2.15e40 : 1.44e42),
                         unlocked(){
                                 return hasMilestone("p", 4) || hasUpgrade("n", 53)
                         }, // hasUpgrade("n", 54)
@@ -26581,6 +26588,7 @@ addLayer("mini", {
                                         bulk3 = new Decimal(2e7)
                                 } else {
                                         if (hasMilestone("n", 17))      bulk3 = bulk3.times(5)
+                                        if (hasUpgrade("sci", 364))     bulk3 = bulk3.times(2)
                                         if (hasUpgrade("o", 33)) {
                                                 if (hasUpgrade("o", 31))                bulk3 = bulk3.times(2)
                                                 if (hasUpgrade("o", 32))                bulk3 = bulk3.times(2)
@@ -30997,6 +31005,7 @@ addLayer("mini", {
                         cost(){
                                 let init = new Decimal("1e138")
                                 if (player.extremeMode) init = new Decimal("1e122")
+                                if (player.sci.buyables[301].gt(0)) init = decimalOne
                                 let exp = player.extremeMode ? 1.2 : 1.3
                                 return init.times(Decimal.pow(30, Decimal.pow(getBuyableAmount("mini", 221), exp)))
                         },
@@ -31014,6 +31023,7 @@ addLayer("mini", {
                                         exp = 1.2
                                         div = new Decimal("1e122")
                                 }
+                                if (player.sci.buyables[301].gt(0)) div = decimalOne
                                 let pts = player.mini.e_points.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
@@ -31054,6 +31064,7 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e138)*(30^x<sup>1.3</sup>)" 
                                 if (player.extremeMode) cost2 = "(1e122)*(30^x<sup>1.2</sup>)"
+                                if (player.sci.buyables[301].gt(0)) cost2 = "30^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 

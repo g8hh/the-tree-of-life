@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.142.1",
+	num: "1.143",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.e_points.points.gt("1e1738")
+	if (player.extremeMode) return player.mini.e_points.points.gt("1e8660")
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.143</h3><br>
+		- Balanced until 1e8660 E Points.<br>
 	<br><h3 style='color: #CC0000'>v1.142.1</h3><br>
 		- Balanced until 1e1738 E Points.<br>
 		- Added a Nitrogen Science upgrade.<br>
