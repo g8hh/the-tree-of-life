@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.143",
+	num: "1.144",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.e_points.points.gt("1e8660")
+	if (player.extremeMode) return player.n.points.best.gte("1e2348")
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,14 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.144</h3><br>
+		- Balanced until 1e2348 Nitrogen.<br>
+		- Improved the display of various components.<br>
+		- Added a custom save.<br>
+		- Please do NOT phosphorus reset in extreme mode--the game isn't balanced yet.<br>
+		- Various extreme mode changes.<br>
+		- Fixed initial phosphorus gain display info.<br>
+		- Added a Nitrogen Science upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.143</h3><br>
 		- Balanced until 1e8660 E Points.<br>
 	<br><h3 style='color: #CC0000'>v1.142.1</h3><br>

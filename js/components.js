@@ -255,6 +255,13 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('secondary-display3', {
+		props: ['layer', 'data'],
+		template: `
+		<div><span v-if="player[layer][data].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{format(player[layer][data].points, 3)}}</h2> {{improveName(data)}}<br><br></div>
+		`
+	})
+
 	Vue.component('secondary-display-tokens2', {
 		props: ['layer', 'data'],
 		template: `
