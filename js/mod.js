@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.n.points.best.gte("1e2348")
+	if (player.extremeMode) return player.n.points.gte("1e2348")
 	return player.or.total.gt(4)
 }
 

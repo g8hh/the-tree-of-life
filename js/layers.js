@@ -29873,7 +29873,7 @@ addLayer("mini", {
                         maxAfford(){
                                 let div = new Decimal(5e32)
                                 if (player.extremeMode) div = new Decimal(3e41)
-                                if (hasUpgrade("sci", 322)) init = decimalOne
+                                if (hasUpgrade("sci", 322)) div = decimalOne
                                 let base = 1000
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
