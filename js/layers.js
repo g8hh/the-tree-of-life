@@ -3889,7 +3889,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 352) && !false && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
-                                let a = "Per upgrade in this row triple E Point gain and add .1 to Constant base"
+                                let a = "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
                                 return a
                         },
                         canAfford(){
@@ -3919,7 +3919,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 353) && !false && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
-                                let a = "Add .05 to Quadratic base"
+                                let a = "Per upgrade in this row add .1 to Constant base"
                                 return a
                         },
                         canAfford(){
