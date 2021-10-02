@@ -29571,8 +29571,7 @@ addLayer("mini", {
                                 let init = new Decimal("1e1140")
                                 if (player.extremeMode) init = new Decimal("1e1215")
                                 if (hasUpgrade("sci", 332)) init = decimalOne
-                                let base = player.extremeMode ? 10 : 1e3
-                                return init.times(Decimal.pow(base, Decimal.pow(getBuyableAmount("mini", 131), 1.2)))
+                                return init.times(Decimal.pow(10, Decimal.pow(getBuyableAmount("mini", 131), 1.2)))
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[131].cost),
                         buy(){
@@ -29585,7 +29584,7 @@ addLayer("mini", {
                                 let div = new Decimal("1e1140")
                                 if (player.extremeMode) div = new Decimal("1e1215")
                                 if (hasUpgrade("sci", 332)) div = decimalOne
-                                let base = player.extremeMode ? 10 : 1e3
+                                let base = 10
                                 let exp = 1.2
                                 let pts = player.mini.d_points.points
                                 if (pts.lt(div)) return decimalZero
@@ -29632,11 +29631,8 @@ addLayer("mini", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1140)*(10^x<sup>1.2</sup>)" 
-                                if (player.extremeMode) {
-                                        cost2 = cost2.replace("1140", "1215")
-                                        cost2 = cost2.replace("10", "1e3")
-                                }
-                                if (hasUpgrade("sci", 332)) cost2 = "1e3^x<sup>1.2</sup>"
+                                if (player.extremeMode) cost2 = cost2.replace("1140", "1215")
+                                if (hasUpgrade("sci", 332)) cost2 = "10^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
