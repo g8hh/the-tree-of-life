@@ -2225,6 +2225,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 314))     ret = ret.times(player.mini.d_points.points.plus(10).log10())
                         if (hasUpgrade("sci", 323))     ret = ret.times(tmp.sci.upgrades[323].effect)
                         if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10())
+                        if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().pow(player.p.upgrades.length))
 
                         return ret
                 },
@@ -8022,7 +8023,9 @@ addLayer("p", {
                                                 x = x.times(tmp.or.effect)
                 if (player.easyMode)            x = x.times(2)
                 if (hasUpgrade("p", 101))       x = x.times(tmp.p.upgrades[101].effect)
-                
+                if (player.extremeMode)         x = x.times(tmp.mu.buyables[11].effect)
+                if (player.extremeMode)         x = x.times(tmp.mu.buyables[12].effect)
+                if (player.extremeMode)         x = x.times(tmp.mu.buyables[21].effect)
 
                 return x
         },
@@ -8041,9 +8044,9 @@ addLayer("p", {
                 if (hasUpgrade("mu", 14)) {
                                                 x = x.times(player.extremeMode ? 5 ** player.mu.upgrades.length : 10)
                 }
-                                                x = x.times(tmp.mu.buyables[11].effect)
-                                                x = x.times(tmp.mu.buyables[12].effect)
-                                                x = x.times(tmp.mu.buyables[21].effect)
+                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[11].effect)
+                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[12].effect)
+                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[21].effect)
                 if (hasUpgrade("mu", 23))       x = x.times(Decimal.pow(2, player.mu.upgrades.length))
                 if (hasUpgrade("mu", 32))       x = x.times(tmp.mu.upgrades[32].effect)
                                                 x = x.times(tmp.mu.buyables[31].effect)
@@ -8567,6 +8570,19 @@ addLayer("p", {
                         unlocked(){
                                 return hasUpgrade("p", 101)
                         }, // hasUpgrade("p", 102)
+                },
+                103: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate III"
+                        },
+                        description(){
+                                let a = "Per upgrade multiply Nitrogen Science gain by log10(Phosphorus)"
+                                return a
+                        },
+                        cost:() => new Decimal(5e135),
+                        unlocked(){
+                                return hasUpgrade("p", 102)
+                        }, // hasUpgrade("p", 103)
                 },
         },
         milestones: {
