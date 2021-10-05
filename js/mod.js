@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.147",
+	num: "1.148",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.p.points.gte("1e157")
+	if (player.extremeMode) return player.p.points.gte("6e638")
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.147)<br><br>
+		Reaching the endgame screen (updated as of v1.148)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.148</h3><br>
+		- Balanced until 6e638 Phosphorus.<br>
+		- Added four Phosphorus upgrades.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.147</h3><br>
 		- Balanced until 1e157 Phosphorus.<br>
 		- Added a Phosphorus upgrade.<br>
