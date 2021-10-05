@@ -5282,7 +5282,7 @@ addLayer("sci", {
                         buyData[113] = decimalZero
                         
                         if (!hasMilestone("tokens", 11)) data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111,112,113,114,115])
-                        if (layer != "tokens")  data.upgrades = filterOut(data.upgrades, [121, 122, 123, 124, 125])
+                        if (layer != "tokens" && !hasUpgrade("p", 115))  data.upgrades = filterOut(data.upgrades, [121, 122, 123, 124, 125])
                 }
 
                 if (!false) { // Carbon Science
@@ -5320,7 +5320,7 @@ addLayer("sci", {
                                    351, 352, 353, 354, 355,
                                    361, 362, 363, 364, 365,]
 
-                        if (!false) data.upgrades = filterOut(data.upgrades, ids)
+                        if (!hasUpgrade("p", 114)) data.upgrades = filterOut(data.upgrades, ids)
 
                         if (!hasMilestone("p", 7)) {
                                 data.buyables[301] = decimalZero
@@ -8015,7 +8015,7 @@ addLayer("p", {
 
                 return v3
         },
-        getGainMult(){//phosphorus gain pgain rusgain
+        getGainMult(){//phosphorus gain pgain rusgain rus gain
                 let x = decimalOne
 
                 if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
@@ -8029,8 +8029,10 @@ addLayer("p", {
                 if (player.extremeMode)         x = x.times(tmp.mu.buyables[11].effect)
                 if (player.extremeMode)         x = x.times(tmp.mu.buyables[12].effect)
                 if (player.extremeMode)         x = x.times(tmp.mu.buyables[21].effect)
+                if (player.extremeMode)         x = x.times(tmp.mu.buyables[31].effect)
                 if (hasUpgrade("p", 111))       x = x.times(tmp.p.upgrades[111].effect)
                 if (hasMilestone("mu", 6))      x = x.times(Decimal.pow(5, player.mu.milestones.length))
+                if (hasMilestone("mu", 12))     x = x.times(Decimal.pow(2, player.mu.milestones.length))
 
                 return x
         },
@@ -8054,7 +8056,7 @@ addLayer("p", {
                 if (!player.extremeMode)        x = x.times(tmp.mu.buyables[21].effect)
                 if (hasUpgrade("mu", 23))       x = x.times(Decimal.pow(2, player.mu.upgrades.length))
                 if (hasUpgrade("mu", 32))       x = x.times(tmp.mu.upgrades[32].effect)
-                                                x = x.times(tmp.mu.buyables[31].effect)
+                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[31].effect)
                                                 
                                                 x = x.pow(layers.l.grid.getGemEffect(403))
                 if (hasChallenge("l", 71))      x = x.pow(tmp.l.challenges[71].reward)
@@ -8409,7 +8411,10 @@ addLayer("p", {
                                 let a = "Add .05 to P → ΔP base"
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e1065" : "1e1064"),
+                        cost(){
+                                if (player.extremeMode) return new Decimal("1e1099")
+                                return new Decimal(player.hardMode ? "1e1065" : "1e1064")
+                        },
                         unlocked(){
                                 return player.a.unlocked || hasUpgrade("p", 34)
                         }, // hasUpgrade("p", 35)
@@ -8624,7 +8629,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VI"
                         },
                         description(){
-                                let a = "Per upgrade in this row gain 100x Phosphorus and subtract sqrt(this row upgrades) from the µ cost base"
+                                let a = "Per upgrade in this row gain 100x Phosphorus and subtract sqrt(min(4, this row upgrades)) from the µ cost base"
                                 return a
                         },
                         effect(){
@@ -8662,6 +8667,45 @@ addLayer("p", {
                         unlocked(){
                                 return hasUpgrade("p", 111)
                         }, // hasUpgrade("p", 112)
+                },
+                113: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VIII"
+                        },
+                        description(){
+                                let a = "You have one less effective tokens for prestige purposes and µ base cost is 1e5x less"
+                                return a
+                        },
+                        cost:() => new Decimal("5e672"),
+                        unlocked(){
+                                return hasUpgrade("p", 112)
+                        }, // hasUpgrade("p", 113)
+                },
+                114: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate IX"
+                        },
+                        description(){
+                                let a = "Keep Nitrogen Science upgrades on reset"
+                                return a
+                        },
+                        cost:() => new Decimal("1e830"),
+                        unlocked(){
+                                return hasUpgrade("p", 113)
+                        }, // hasUpgrade("p", 114)
+                },
+                115: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate X"
+                        },
+                        description(){
+                                let a = "Keep Oxygen Science upgrades on reset"
+                                return a
+                        },
+                        cost:() => new Decimal("1e1041"),
+                        unlocked(){
+                                return hasUpgrade("p", 114)
+                        }, // hasUpgrade("p", 115)
                 },
         },
         milestones: {
@@ -9209,10 +9253,13 @@ addLayer("mu", {
         branches: [],
         requires(){
                 if (player.extremeMode) {
+                        if (hasMilestone("mu", 16)) return decimalOne
+
                         let div = decimalOne
                         if (hasMilestone("mu", 7)) div = div.times(100)
                         if (hasMilestone("mu", 9)) div = div.times(100)
                         if (hasMilestone("mu", 11)) div = div.times(100)
+                        if (hasUpgrade("p", 113)) div = div.times(1e5)
 
                         return new Decimal(1e26).div(div)
                 }
@@ -9230,7 +9277,6 @@ addLayer("mu", {
                         if (hasUpgrade("p", 112)) a ++ 
                         if (hasUpgrade("p", 113)) a ++ 
                         if (hasUpgrade("p", 114)) a ++ 
-                        if (hasUpgrade("p", 115)) a ++
                         ret = ret.sub(a**.5)
                 }
                 return ret
@@ -9334,7 +9380,7 @@ addLayer("mu", {
                         let p1 = "Formula:" + br + format(tmp.mu.requires, 0) + "*"
                         p1 += formatWhole(tmp.mu.base) + "^(x<sup>" + formatWhole(tmp.mu.exponent)
                         p1 += "</sup>)"
-                        return p1
+                        return p1.replace("1*", "")
                 }
 
                 let a = "Reset for <b>" + formatWhole(tmp.mu.resetGain) + "</b> " + tmp.mu.resource
@@ -9409,6 +9455,7 @@ addLayer("mu", {
                                 if (hasUpgrade("mu", 22)) a = a.replace("log10", "log6")
                                 if (hasUpgrade("mu", 25)) a = a.replace("log6", "log5")
                                 if (hasUpgrade("mu", 31)) a = a.replace("log5", "log4")
+                                if (player.extremeMode)   a = a.replace("log4", "log3")
 
                                 if (hasChallenge("l", 91)) a = a.replace("µ", "µ<sup>.95</sup>")
 
@@ -9420,7 +9467,7 @@ addLayer("mu", {
                                 let base = player.p.points.max(100).log10()
                                 if (hasUpgrade("mu", 22)) base = base.div(Math.log10(6))
                                 if (hasUpgrade("mu", 25)) base = base.times(Math.log(6)/Math.log(5))
-                                if (hasUpgrade("mu", 31)) base = base.times(Math.log(5)/Math.log(4))
+                                if (hasUpgrade("mu", 31)) base = base.times(Math.log(5)/Math.log(player.extremeMode ? 3 : 4))
 
                                 let exp = decimalOne
                                 if (hasChallenge("l", 91)) exp = new Decimal(.95)
@@ -9565,7 +9612,10 @@ addLayer("mu", {
                                 let a = "µ III log6 becomes log5"
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e963" : "5e961"),
+                        cost(){
+                                if (player.extremeMode) return new Decimal("1e988")
+                                return new Decimal(player.hardMode ? "1e963" : "5e961")
+                        },
                         currencyLocation:() => player.p,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
@@ -9583,9 +9633,13 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "µ III log5 becomes log4"
+                                if (player.extremeMode) a = a.replace("4", "3")
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e1167" : "1e1166"),
+                        cost(){
+                                if (player.extremeMode) return new Decimal("1e1143")
+                                return new Decimal(player.hardMode ? "1e1167" : "1e1166")
+                        },
                         currencyLocation:() => player.p,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
@@ -9602,10 +9656,14 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ XII"
                         },
                         description(){
-                                let a = "Each upgrade in this row triples Phosphorus gain"
+                                let a = "Per upgrade in this row gain 3x Phosphorus gain"
+                                if (player.extremeMode) a = a.replace("3", "10")
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e1402" : "1e1401"),
+                        cost(){
+                                if (player.extremeMode) return new Decimal("1e1199")
+                                return new Decimal(player.hardMode ? "1e1402" : "1e1401")
+                        },
                         currencyLocation:() => player.p,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
@@ -9619,7 +9677,7 @@ addLayer("mu", {
                                 if (hasUpgrade("mu", 33)) a ++
                                 if (hasUpgrade("mu", 34)) a ++
                                 if (hasUpgrade("mu", 35)) a ++
-                                return Decimal.pow(3,a)
+                                return Decimal.pow(player.extremeMode ? 10 : 3, a)
                         },
                         unlocked(){
                                 return hasUpgrade("mu", 31) || hasMilestone("l", 3)
@@ -9630,10 +9688,13 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIII"
                         },
                         description(){
-                                let a = "Buyable µ buyables no longer costs µ or Phosphorus and remove the second µ effect softcap"
+                                let a = "Buying µ buyables no longer costs µ or Phosphorus and remove the second µ effect softcap"
                                 return a
                         },
-                        cost:() => new Decimal(player.hardMode ? "1e3316" : "1e3314"),
+                        cost(){
+                                if (player.extremeMode) return new Decimal("1e1885")
+                                return new Decimal(player.hardMode ? "1e3316" : "1e3314")
+                        },
                         currencyLocation:() => player.p,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Phosphorus",
@@ -9650,10 +9711,11 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIV"
                         },
                         description(){
-                                let a = "µ resets no longer do anything and you bulk 100x minigame buyables"
-                                return a
+                                let a = "µ resets no longer do anything"
+                                if (player.extremeMode) a += ", remove P → ΔP and P → ΔN  base costs,"
+                                return a + " and you bulk 100x minigame buyables"
                         },
-                        cost:() => new Decimal(240),
+                        cost:() => new Decimal(player.extremeMode ? 118 : 240),
                         unlocked(){
                                 return hasUpgrade("mu", 33) || hasMilestone("l", 3)
                         }, // hasUpgrade("mu", 34)
@@ -10016,10 +10078,11 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 11)
                 12: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.00e993 Phosphorus"
                                 return "1.00e1283 Phosphorus"
                         },
                         requirement(){
-                                return new Decimal("1e1283")
+                                return new Decimal(player.extremeMode ? "1e993" : "1e1283")
                         },
                         done(){
                                 return tmp.mu.milestones[12].requirement.lte(player.p.points)
@@ -10029,15 +10092,17 @@ addLayer("mu", {
                         },
                         effectDescription(){
                                 let a = "Ponder the universe"
+                                if (player.extremeMode) a += " and per µ milestone double Phosphorus gain"
                                 return a
                         },
                 }, // hasMilestone("mu", 12)
                 13: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.00e1248 Phosphorus"
                                 return "1.00e1456 Phosphorus"
                         },
                         requirement(){
-                                return new Decimal("1e1456")
+                                return new Decimal(player.extremeMode ? "1e1248" : "1e1456")
                         },
                         done(){
                                 return tmp.mu.milestones[13].requirement.lte(player.p.points)
@@ -10050,6 +10115,60 @@ addLayer("mu", {
                                 return a
                         },
                 }, // hasMilestone("mu", 13)
+                14: {
+                        requirementDescription(){
+                                return "1.00e1585 Phosphorus"
+                        },
+                        requirement(){
+                                return new Decimal("1e1585")
+                        },
+                        done(){
+                                return tmp.mu.milestones[14].requirement.lte(player.p.points)
+                        },
+                        unlocked(){
+                                return player.extremeMode
+                        },
+                        effectDescription(){
+                                let a = "Remove µ → ΔN base cost and add 2 to its exponential divisor"
+                                return a
+                        },
+                }, // hasMilestone("mu", 14)
+                15: {
+                        requirementDescription(){
+                                return "1.00e1646 Phosphorus"
+                        },
+                        requirement(){
+                                return new Decimal("1e1646")
+                        },
+                        done(){
+                                return tmp.mu.milestones[15].requirement.lte(player.p.points)
+                        },
+                        unlocked(){
+                                return player.extremeMode
+                        },
+                        effectDescription(){
+                                let a = "Remove P → Δµ base cost"
+                                return a
+                        },
+                }, // hasMilestone("mu", 15)
+                16: {
+                        requirementDescription(){
+                                return "3e1714 Phosphorus"
+                        },
+                        requirement(){
+                                return new Decimal("3e1714")
+                        },
+                        done(){
+                                return tmp.mu.milestones[16].requirement.lte(player.p.points)
+                        },
+                        unlocked(){
+                                return player.extremeMode
+                        },
+                        effectDescription(){
+                                let a = "Remove µ base cost"
+                                return a
+                        },
+                }, // hasMilestone("mu", 16)
         },
         buyables: {
                 rows: 3,
@@ -10203,11 +10322,13 @@ addLayer("mu", {
                                 let exp = amt.div(tmp.mu.buyables[13].expDiv).plus(1)
                                 let init= amt.pow(exp)
                                 let base= new Decimal(player.extremeMode ? 1e293 : 1e281)
+                                if (hasMilestone("mu", 14)) base = decimalOne
                                 return base.times(Decimal.pow(player.extremeMode ? 1e4 : 50, init))
                         },
                         expDiv(){
                                 let ret = new Decimal(10)
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
+                                if (hasMilestone("mu", 14)) ret = ret.plus(2)
                                 
                                 return ret
                         },
@@ -10258,6 +10379,7 @@ addLayer("mu", {
                                 if (player.extremeMode) {
                                         cost2 = cost2.replace("281*50", "293*1e4")
                                 }
+                                if (hasMilestone("mu", 14)) cost2 = cost2.slice(6,)
                                 if (false) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
@@ -10272,7 +10394,9 @@ addLayer("mu", {
                                 let amt = getBuyableAmount("mu", 21)
                                 let exp = amt.div(tmp.mu.buyables[21].expDiv).plus(.8)
                                 let init= amt.pow(exp)
-                                return init.plus(player.extremeMode ? 27 : 25).floor()
+                                let base = player.extremeMode ? 27 : 25
+                                if (hasMilestone("mu", 15)) base = 0
+                                return init.plus(base).floor()
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
@@ -10322,6 +10446,7 @@ addLayer("mu", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "25+x<sup>.8+x/" + formatWhole(tmp.mu.buyables[21].expDiv) + "</sup>" 
                                 if (player.extremeMode) cost2 = cost2.replace("25", "27")
+                                if (hasMilestone("mu", 15)) cost2 = cost2.slice(3,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -10335,7 +10460,9 @@ addLayer("mu", {
                                 let amt = getBuyableAmount("mu", 22)
                                 let exp = amt.div(tmp.mu.buyables[22].expDiv).plus(1)
                                 let init= amt.pow(exp)
-                                return new Decimal(player.extremeMode ? "1e599" : "1e597").times(Decimal.pow(20, init))
+                                let base = new Decimal(player.extremeMode ? "1e599" : "1e597")
+                                if (hasUpgrade("mu", 34)) base = decimalOne
+                                return base.times(Decimal.pow(20, init))
                         },
                         expDiv(){
                                 let ret = new Decimal(30)
@@ -10387,6 +10514,7 @@ addLayer("mu", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e597*20^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[22].expDiv) + "</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("597", "599")
+                                if (hasUpgrade("mu", 34)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -10400,7 +10528,9 @@ addLayer("mu", {
                                 let amt = getBuyableAmount("mu", 23)
                                 let exp = amt.div(tmp.mu.buyables[23].expDiv).plus(1)
                                 let init= amt.pow(exp)
-                                return new Decimal("1e814").times(Decimal.pow(5e90, init))
+                                let base = new Decimal(player.extremeMode ? "1e819" : "1e814")
+                                if (hasUpgrade("mu", 34)) base = decimalOne
+                                return base.times(Decimal.pow(player.extremeMode ? 1e126 : 5e90, init))
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
@@ -10448,6 +10578,8 @@ addLayer("mu", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e814*5e90^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[23].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("814*5e90", "819*1e126")
+                                if (hasUpgrade("mu", 34)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -10463,7 +10595,7 @@ addLayer("mu", {
                                 if (hasUpgrade("d", 31)) return Decimal.pow(1e5, exp).floor()
                                 if (hasUpgrade("d", 25)) return amt.pow(exp).floor()
                                 let init= amt.pow(exp.plus(2))
-                                return new Decimal(65).plus(init).floor()
+                                return new Decimal(player.extremeMode ? 70 : 65).plus(init).floor()
                         },
                         expDiv(){
                                 let ret = new Decimal(15)
@@ -10547,6 +10679,7 @@ addLayer("mu", {
                                         cost2 = cost2.replace("65+", "")
                                         cost2 = cost2.replace("2+", "")
                                 }
+                                if (player.extremeMode) cost2 = cost2.replace("65", "70")
                                 if (hasUpgrade("d", 31)) cost2 = cost2.replace("x", "100,000")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
@@ -33982,6 +34115,7 @@ addLayer("tokens", {
 
                 if (hasUpgrade("sci", 203))     a += 1
                 if (hasUpgrade("sci", 303))     a += 1
+                if (hasUpgrade("p", 113))       a += 1
 
                 if (typeof a != "number") Decimal(0) 
                 
