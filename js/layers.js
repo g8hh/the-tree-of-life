@@ -14133,7 +14133,7 @@ addLayer("l", {
                                         ["challenges", [1]],
                                 ],
                                 unlocked(){
-                                        return true
+                                        return tmp.l.challenges[11].unlocked
                                 },
                         },
                         "Selection": {
@@ -14160,7 +14160,7 @@ addLayer("l", {
                         content: ["main-display",
                                   ["prestige-button", ""],
                                   "blank", 
-                                  ["microtabs", "challenge_content"],
+                                  function(){return tmp.l.challenges[11].unlocked ? ["microtabs", "challenge_content"] : "blank"},
                                 ],
                         unlocked(){
                                 return true
