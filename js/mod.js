@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.121",
+	num: "1.149",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,166 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.mini.c_points.points.gte(1e9)
+	if (player.extremeMode) return hasUpgrade("mu", 34)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.121)<br><br>
+		Reaching the endgame screen (updated as of v1.149)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.149</h3><br>
+		- Balanced until µ XIV.<br>
+		- Added three Phosphorus uprgrades.<br>
+		- Added three µ milestones.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.148</h3><br>
+		- Balanced until 6e638 Phosphorus.<br>
+		- Added four Phosphorus upgrades.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.147</h3><br>
+		- Balanced until 1e157 Phosphorus.<br>
+		- Added a Phosphorus upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.146</h3><br>
+		- Balanced until 1e135 Phosphorus.<br>
+		- Various extreme mode changes.<br>
+		- Added two Phosphorus upgrades.<br>
+		- Added a Phosphorus milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.145</h3><br>
+		- Balanced until 2 Phosphorus resets.<br>
+		- Implemented Phosphorus reset for extreme mode.<br>
+	<br><h3 style='color: #CC0000'>v1.144.1</h3><br>
+		- Fixed an issue with D Points in the main game.<br>
+	<br><h3 style='color: #CC0000'>v1.144</h3><br>
+		- Balanced until 1e2348 Nitrogen.<br>
+		- Improved the display of various components.<br>
+		- Added a custom save.<br>
+		- Please do NOT phosphorus reset in extreme mode--the game isn't balanced yet.<br>
+		- Various extreme mode changes.<br>
+		- Fixed initial phosphorus gain display info.<br>
+		- Added a Nitrogen Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.143</h3><br>
+		- Balanced until 1e8660 E Points.<br>
+	<br><h3 style='color: #CC0000'>v1.142.1</h3><br>
+		- Balanced until 1e1738 E Points.<br>
+		- Added a Nitrogen Science upgrade.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.142</h3><br>
+		- Balanced until 1e181 E Points.<br>
+		- Added two Nitrogen Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.141.1</h3><br>
+		- Thank you so much to Jacorb for <br>
+		1) Letting me use his multisave system and code<br>
+		2) Helping me through the parts I didn't understand<br>
+		3) Giving pointers on the code he provided<br>
+		- Multiple saves are now possible!<br>
+		- Go to the options tab (cog) > Show your saves button to view them<br>
+		- Click outside the popup to close it.<br>
+		- Create new saves (which replicate the current state).<br>
+		- Added an infobox in Hydrogen that introduce people to various important things.<br>
+	<br><h3 style='color: #CC0000'>v1.141</h3><br>
+		- Added a custom save.<br>
+		- Balanced until 1e52 E Points.<br>
+		- Various extreme mode changes.<br>
+		- Added seven Nitrogen Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.140</h3><br>
+		- Balanced until E Points unlock.<br>
+		- Added two custom saves.<br>
+		- Various extreme mode changes.<br>
+		- Added five Nitrogen Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.139</h3><br>
+		- Balanced until 1.3e79 Nitrogen Science.<br>
+		- Added six Nitrogen Science upgrades.<br>
+		- Loads of extreme mode changes (order changes too).<br>
+		- Renamed redudant buyables names (eg. Quadratic Increase 1 -> Quadratic Increase).<br>
+	<br><h3 style='color: #CC0000'>v1.138</h3><br>
+		- Balanced until 1e4046 D Points.<br>
+		- Various extreme mode changes.<br>
+		- Added three Nitrogen Science upgrades.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.137</h3><br>
+		- Balanced until 1e21 D Points.<br>
+		- Added three Nitrogen Science upgrades.<br>
+		- Various changes.<br>
+	<br><h3 style='color: #CC0000'>v1.136</h3><br>
+		- Balanced until D Point unlocked.<br>
+		- Implemented the removal of Hydrogen Science.<br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
+		- Various code cleanup.<br>
+		- Added a Nitrogen Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.135</h3><br>
+		- Balanced until 5e5 Nitrogen Science.<br>
+		- Various code cleanup.<br>
+		- Improved A Point buyables cost formula displays.<br>
+		- Added Nitrogen Science.<br>
+		- Added five Nitrogen Science upgrades.<br>
+		- Hardcapped Nitrogen effect on Carbon Science.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.134</h3><br>
+		- Balanced until 1e4 total nitrogen.<br>
+		- Various extreme mode changes.<br>
+		- Nitrogen science next patch.<br>
+	<br><h3 style='color: #CC0000'>v1.133</h3><br>
+		- Balanced until 20 total nitrogen.<br>
+		- Various extreme mode changes.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.132</h3><br>
+		- Balanced until 3 total nitrogen.<br>
+		- Added a Hydrogen Science upgrade autobuyer.<br>
+	<br><h3 style='color: #CC0000'>v1.131</h3><br>
+		- Balanced until 2 total nitrogen.<br>
+		- Made token reset do what I want it to do.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.130</h3><br>
+		- Added five Carbon Science upgrades.<br>
+		- Added two token milestones.<br>
+		- Buffed token milestone 25 in extreme mode.<br>
+		- Various extreme mode changes.<br>
+		- Balanced until Nitrogen is unlocked.<br>
+		- Added a custom save.<br>
+		- Fixed a bunch of next at displays.<br>
+	<br><h3 style='color: #CC0000'>v1.129</h3><br>
+		- Balanced until 1e14250 C Points.<br>
+		- Added a Carbon Science upgrade.<br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.128</h3><br>
+		- Balanced until 1e6280 C Points.<br>
+		- Added a Carbon Science upgrade.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.127</h3><br>
+		- Balanced until 1e2180 C Points.<br>
+		- Added two Carbon Science upgrades.<br>
+		- Removed the character effect display from the upgrades subtab.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.126</h3><br>
+		- Balanced until 1e1002 C Points.<br>
+		- Added a Carbon Science upgrade.<br>
+		- Various code cleanup.<br>
+		- Improved science tab's tooltip.<br>
+	<br><h3 style='color: #CC0000'>v1.125</h3><br>
+		- Balanced until 1e814 C Points.<br>
+		- Added a custom save.<br>
+		- Added four Carbon Science upgrades.<br>
+		- Various changes for extreme mode.<br>
+	<br><h3 style='color: #CC0000'>v1.124</h3><br>
+		- Balanced until 1e200 C Points.<br>
+		- Added seven Carbon Science upgrades.<br>
+		- Various other changes for extreme mode.<br>
+	<br><h3 style='color: #CC0000'>v1.123</h3><br>
+		- Balanced until 1e48 C Points.<br>
+		- Added two Carbon Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.122</h3><br>
+		- Balanced until 1e31 C Points.<br>
+		- Added Carbon Science.<br>
+		- Added two Carbon Science upgrades.<br>
+		- C Point displays have been changed around.<br>
 	<br><h3 style='color: #CC0000'>v1.121</h3><br>
 		- Balanced extreme until 1e9 C Points.<br>
 		- Made C point countdown based on game time, not real time.<br>
