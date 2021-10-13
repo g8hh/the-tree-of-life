@@ -1578,27 +1578,27 @@ function toggleUndulating(){
 }
 
 function enterHardMode(){
-	let s = "Are you sure you want to enter hard mode? This cannot be undone."
+	let s = "您确定要进入困难模式吗？ 这不能被撤消。"
 	if (!confirm(s)) return 
 	if (player.extremeMode) {
-		if (!confirm("You are already in extreme mode, this is not advised." + s)) return 
+		if (!confirm("您已经处于极端模式，不建议这样做。" + s)) return 
 	}
 	player.hardMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
 
 function enterExtremeMode(){
-	let s = "Are you sure you want to enter extreme mode? This cannot be undone."
+	let s = "您确定要进入极限模式吗？ 这不能被撤消。"
 	if (!confirm(s)) return 
 	if (player.hardmode) {
-		if (!confirm("You are already in hard mode, this is not advised." + s)) return 
+		if (!confirm("您已经处于困难模式，不建议这样做。" + s)) return 
 	}
 	player.extremeMode = true
 	if (player.h.best.lt(10)) player.hardFromBeginning = true
 }
 
 function enterEasyMode(){
-	let s = "Are you sure you want to enter easy mode? This cannot be undone."
+	let s = "您确定要进入简单模式吗？ 这不能被撤消。"
 	if (!confirm(s)) return 
 	player.easyMode = true
 }
