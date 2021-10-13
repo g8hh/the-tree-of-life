@@ -18,7 +18,7 @@ var systemComponents = {
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
-				if (shiftDown) player[layer].forceTooltip = !player[layer].forceTooltip
+				if (shiftDown && options.forceTooltips) player[layer].forceTooltip = !player[layer].forceTooltip
 				else if(tmp[layer].isLayer) {
 					if (tmp[layer].leftTab) {
 						showNavTab(layer, prev)
@@ -47,7 +47,7 @@ var systemComponents = {
 				front: !tmp.scrolled,
 			}"
 			v-bind:style="constructNodeStyle(layer)">
-			<span v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
 			<tooltip
       v-if="tmp[layer].tooltip != ''"
 			:text="(tmp[layer].isLayer) ? (
@@ -141,7 +141,7 @@ var systemComponents = {
 		<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
 		<a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 
-		<button class="opt" onclick="player.modTab = !player.modTab"><span>{{player.modTab ? "Show mod selection tab":"Show info tab"}}</button>
+		<button class="opt" onclick="player.modTab = !player.modTab"><span>{{player.modTab ? "Show info tab":"Show mod selection tab"}}</button>
 
 		<span v-if="player.modTab">
 		<br><br>
@@ -229,6 +229,7 @@ var systemComponents = {
 
     'options-tab': {
         template: `
+	<div>
         <table>
             <tr>
                 <td><button class="opt" onclick="save()">Save</button></td>
@@ -248,9 +249,16 @@ var systemComponents = {
             <tr>
                 <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ options.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
                 <td><button class="opt" onclick="toggleOpt('forceOneTab'); needsCanvasUpdate = true">Single-Tab Mode: {{ options.forceOneTab?"ALWAYS":"AUTO" }}</button></td>
-		<td><button class="opt" onclick="toggleOpt('hideMilestonePopups'); needsCanvasUpdate = false">Popups are: {{ options.hideMilestonePopups?"HIDDEN":"SHOWN" }}</button></td>
+		<td><button class="opt" onclick="toggleOpt('forceTooltips'); needsCanvasUpdate = true">Shift-Click to Toggle Tooltips: {{ options.forceTooltips?"ON":"OFF" }}</button></td>
 	    </tr> 
-        </table>`
+	    <tr>
+	    	<td><button class="opt" onclick="toggleOpt('hideMilestonePopups'); needsCanvasUpdate = false">Popups are: {{ options.hideMilestonePopups?"HIDDEN":"SHOWN" }}</button></td>
+		<td><button class="opt" onclick="showAllSaves()">Show your saves</button></td>
+		<td></td>
+	    </tr>
+        </table>
+	<saves></saves>
+	</div>`
     },
 
     'back-button': {

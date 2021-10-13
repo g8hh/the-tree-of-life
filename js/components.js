@@ -255,6 +255,13 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('secondary-display3', {
+		props: ['layer', 'data'],
+		template: `
+		<div><span v-if="player[layer][data].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{format(player[layer][data].points, 3)}}</h2> {{improveName(data)}}<br><br></div>
+		`
+	})
+
 	Vue.component('secondary-display-tokens2', {
 		props: ['layer', 'data'],
 		template: `
@@ -276,7 +283,6 @@ function loadVue() {
 		`
 	})
 
-	// data = button size, in px
 	Vue.component('buyables', {
 		props: ['layer', 'data'],
 		template: `
@@ -293,11 +299,11 @@ function loadVue() {
 	})
 
 	Vue.component('buyable', {
-		props: ['layer', 'data', 'size'],
+		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
 			<button v-bind:class="{ buyable: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
-			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}, size ? {'height': size, 'width': size} : {}, tmp[layer].componentStyles.buyable, tmp[layer].buyables[data].style]"
+			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles.buyable, tmp[layer].buyables[data].style]"
 			v-on:click="if(!interval) buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 				<span v-if= "tmp[layer].buyables[data].title"><h2 v-html="tmp[layer].buyables[data].title"></h2><br></span>
 				<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
@@ -355,12 +361,12 @@ function loadVue() {
 
 	// data = id of clickable
 	Vue.component('clickable', {
-		props: ['layer', 'data', 'size'],
+		props: ['layer', 'data'],
 		template: `
 		<button 
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
 			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
-			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, size ? {'height': size, 'width': size} : {}, tmp[layer].clickables[data].style]"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
@@ -398,7 +404,7 @@ function loadVue() {
 	})
 
 
-	// data = button size, in px
+	// data = optionally, array of rows for the grid to show
 	Vue.component('grid', {
 		props: ['layer', 'data'],
 		template: `
@@ -450,7 +456,7 @@ function loadVue() {
 		},
 	})
 
-	// data = button size, in px
+	// data = id of microtab family
 	Vue.component('microtabs', {
 		props: ['layer', 'data'],
 		computed: {
@@ -617,6 +623,29 @@ function loadVue() {
 		template: `
 			<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)" v-on:click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])"
 				v-bind:class="{ longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked }">{{tmp[layer].buyables.sellAllText ? tmp[layer].buyables.sellAllText : "Sell All"}}</button>
+	`
+	})
+
+	
+	// For the save menu popup
+	// all the code regarding multisave stuff was taken with permission from jacorb
+	Vue.component('saves', { 
+		template: `
+		<div class="savePopup" v-if="!(!player.saveMenuOpen)">
+			<div class="savePopupBlocker" onclick="player.saveMenuOpen = false;"></div>
+			<div class="savePopup-content">
+				(Click anywhere outside this popup to make it disappear)
+				<div class="upgRow" style="width: 100%;" v-for="(data, name) in allSaves" v-if="name!='set' && data!==undefined">
+					<div v-bind:class="{ activeSave: (allSaves.set==name), widthLock: true }">{{name}}</div>
+					<button v-on:click="save(); loadSave(name);" class="savePopupBtn can">Load</button>
+					<button v-on:click="renameSave(name)" class="savePopupBtn can">Rename</button>
+					<button v-on:click="deleteSave(name)" class="savePopupBtn can">Delete</button>
+					<div><button class="savePopupBtnMini can" v-on:click="moveSave(name, -1)" v-bind:style="{ visibility: (showMoveSaveBtn(name, 'up')?'visible':'hidden')}">▲</button><button class="savePopupBtnMini can" v-on:click="moveSave(name, 1)" v-bind:style="{ visibility: (showMoveSaveBtn(name, 'down')?'visible':'hidden')}">▼</button></div>
+				</div>
+				<div class="upgRow" style="width: 100%;"><button onclick="newSave()" class="savePopupBtn can">New Save</button></div>
+			</div>
+			 
+		</div>
 	`
 	})
 
