@@ -45,7 +45,7 @@ Given that, let's make our first upgrade! Insert this line in between the bracke
 Reload the page, and an upgrade will appear in the layer's tab! It will just be blank though. We need to fill out its features, which works similarly to giving a layer features. Here are the features we'll need:
 
 ```js
-    name: "Make this whatever you want!",
+    title: "Make this whatever you want!",
     description: "Double your point gain.",
     cost: new Decimal(1),
 ```
