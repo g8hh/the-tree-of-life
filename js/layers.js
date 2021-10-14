@@ -615,27 +615,27 @@ addLayer("h", {
                 return ret
         },
         getGainMult(){ //hydrogen gain h gain hgain
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasUpgrade("h", 13))        x = x.times(tmp.h.upgrades[13].effect)
-                if (hasUpgrade("h", 22))        x = x.times(tmp.h.upgrades[22].effect)
-                                                x = x.times(tmp.mini.buyables[42].effect)
-                                                x = x.times(tmp.mini.buyables[63].effect)
-                                                x = x.times(tmp.tokens.buyables[12].effect)
-                if (hasUpgrade("o", 21))        x = x.times(player.o.points.max(1).min("e2.2e11"))
-                                                x = x.times(tmp.n.effect)
-                                                x = x.times(tmp.l.effect)
-                if (player.easyMode)            x = x.times(2)
-                if (hasUpgrade("sci", 11))      x = x.times(tmp.sci.effect)
-                                                x = x.times(tmp.sci.buyables[12].effect)
-                if (hasUpgrade("sci", 305))     x = x.times(tmp.sci.upgrades[305].effect)
+                if (hasUpgrade("h", 13))        ret = ret.times(tmp.h.upgrades[13].effect)
+                if (hasUpgrade("h", 22))        ret = ret.times(tmp.h.upgrades[22].effect)
+                                                ret = ret.times(tmp.mini.buyables[42].effect)
+                                                ret = ret.times(tmp.mini.buyables[63].effect)
+                                                ret = ret.times(tmp.tokens.buyables[12].effect)
+                if (hasUpgrade("o", 21))        ret = ret.times(player.o.points.max(1).min("e2.2e11"))
+                                                ret = ret.times(tmp.n.effect)
+                                                ret = ret.times(tmp.l.effect)
+                if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("sci", 11))      ret = ret.times(tmp.sci.effect)
+                                                ret = ret.times(tmp.sci.buyables[12].effect)
+                if (hasUpgrade("sci", 305))     ret = ret.times(tmp.sci.upgrades[305].effect)
                 if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
-                                                x = x.times(player.p.points.plus(1))
+                                                ret = ret.times(player.p.points.plus(1))
                 }
 
-                if (player.easyMode)            x = x.pow(1.001)
+                if (player.easyMode)            ret = ret.pow(1.001)
 
-                return x
+                return ret
         },
         getDefaultMaximum(){
                 let ret = new Decimal(4)
@@ -698,18 +698,16 @@ addLayer("h", {
                         return new Decimal(.01)
                 },
                 getGainMult(){
-                        let x = decimalOne
+                        let ret = decimalOne
 
-                        if (hasUpgrade("h", 23))        x = x.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41))        x = x.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
-                                                        x = x.times(tmp.mini.buyables[13].effect)
-                                                        x = x.times(tmp.tokens.buyables[21].effect)
-                                                        x = x.times(tmp.l.effect)
-                        if (hasUpgrade("sci", 12))      x = x.times(2)
+                        if (hasUpgrade("h", 23))        ret = ret.times(tmp.h.upgrades[23].effect)
+                        if (hasUpgrade("h", 41))        ret = ret.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
+                                                        ret = ret.times(tmp.mini.buyables[13].effect)
+                                                        ret = ret.times(tmp.tokens.buyables[21].effect)
+                                                        ret = ret.times(tmp.l.effect)
+                        if (hasUpgrade("sci", 12))      ret = ret.times(2)
 
-                        if (x.lt(0))  Decimal(0)
-
-                        return x
+                        return ret
                 },
         },
         atomic_hydrogen: {
@@ -731,15 +729,15 @@ addLayer("h", {
                         return new Decimal(.01)
                 },
                 getGainMult(){
-                        let x = decimalOne
+                        let ret = decimalOne
 
-                        if (hasUpgrade("h", 42))        x = x.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
-                                                        x = x.times(tmp.mini.buyables[11].effect)
-                                                        x = x.times(tmp.tokens.buyables[13].effect)
-                                                        x = x.times(tmp.l.effect)
-                        if (hasUpgrade("sci", 12))      x = x.times(2)
+                        if (hasUpgrade("h", 42))        ret = ret.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
+                                                        ret = ret.times(tmp.mini.buyables[11].effect)
+                                                        ret = ret.times(tmp.tokens.buyables[13].effect)
+                                                        ret = ret.times(tmp.l.effect)
+                        if (hasUpgrade("sci", 12))      ret = ret.times(2)
 
-                        return x
+                        return ret
                 },
         },
         upgrades: {
@@ -1913,19 +1911,21 @@ addLayer("sci", {
                 return decimalZero
         },
         getGainMult(){ //science gain sci gain scigain sgain
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (player.easyMode)            x = x.times(2)
-                                                x = x.times(tmp.tokens.effect)
-                if (hasUpgrade("sci", 215))     x = x.times(player.tokens.total.max(1).pow(2))
+                if (player.easyMode)            ret = ret.times(2)
+                                                ret = ret.times(tmp.tokens.effect)
+                if (hasUpgrade("sci", 215))     ret = ret.times(player.tokens.total.max(1).pow(2))
                 if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
-                                                x = x.times(player.p.points.plus(1).min(1e10))
+                                                ret = ret.times(player.p.points.plus(1).min(1e10))
                 }
+                                                ret = ret.times(tmp.l.effect.min(1e10))
 
-                if (player.easyMode)            x = x.pow(1.001)
-                if (hasUpgrade("n", 11))        x = x.pow(1.001)
+                if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
+                if (player.easyMode)            ret = ret.pow(1.001)
+                if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
 
-                return x
+                return ret
         },
         prestigeNotify(){
                 let buyIds = [   11,  12,  13,
@@ -2076,8 +2076,9 @@ addLayer("sci", {
 
                         ret = ret.times(player.h.deuterium.points.plus(10).log10())
                         ret = ret.times(player.h.atomic_hydrogen.points.plus(10).log10())
-
                         ret = ret.times(tmp.sci.hydrogen_science.getGainMult)
+
+                        if (hasMilestone("l", 1)) ret = ret.pow(tmp.l.milestones[1].effect)
 
                         ret = ret.pow(.75) // extreme
 
@@ -2109,6 +2110,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 24))      ret = ret.times(Decimal.pow(2, player.mini.buyables[21]))
                         if (hasUpgrade("sci", 25))      ret = ret.times(Decimal.pow(2, player.mini.buyables[11]))
                                                         ret = ret.times(tmp.tokens.effect)
+                                                        ret = ret.times(tmp.l.effect)
 
                         return ret
                 },
@@ -2127,8 +2129,9 @@ addLayer("sci", {
 
                         ret = ret.times(player.sci.hydrogen_science.points.plus(10).log10())
                         ret = ret.times(player.c.points.plus(10).log10().pow(tmp.sci.buyables[111].effect.plus(1)))
-
                         ret = ret.times(tmp.sci.oxygen_science.getGainMult)
+
+                        if (hasMilestone("l", 1)) ret = ret.pow(tmp.l.milestones[1].effect)
 
                         ret = ret.pow(.75) // extreme
 
@@ -2152,6 +2155,7 @@ addLayer("sci", {
                                                         ret = ret.times(tmp.n.effect.min("1ee30"))
                         if (hasUpgrade("sci", 304))     ret = ret.times(tmp.sci.upgrades[304].effect)
                         if (hasMilestone("p", 2))       ret = ret.times(tmp.p.milestones[2].effect)
+                                                        ret = ret.times(tmp.l.effect)
 
                         return ret
                 },
@@ -2170,8 +2174,9 @@ addLayer("sci", {
                         ret = ret.times(player.sci.oxygen_science.points.plus(10).log10())
                         ret = ret.times(Decimal.pow(10, player.tokens.total.sub(50)))
                         ret = ret.times(Decimal.pow(10, tmp.mini.clickables.unlockedSlots))
-
                         ret = ret.times(tmp.sci.carbon_science.getGainMult)
+
+                        if (hasMilestone("l", 1)) ret = ret.pow(tmp.l.milestones[1].effect)
 
                         ret = ret.pow(.75) // extreme
 
@@ -2186,6 +2191,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 214))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
                         if (hasUpgrade("sci", 222))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.carbonUpgradesLength))
                                                         ret = ret.times(tmp.n.effect.min("1e500"))
+                                                        ret = ret.times(tmp.l.effect)
 
                         return ret
                 },
@@ -2209,8 +2215,9 @@ addLayer("sci", {
                         ret = ret.times(player.sci.carbon_science.points.plus(10).log10())
                         ret = ret.times(Decimal.pow(2, player.tokens.total.sub(90)))
                         ret = ret.times(Decimal.pow(16, layerChallengeCompletions("n")))
-
                         ret = ret.times(tmp.sci.nitrogen_science.getGainMult)
+
+                        if (hasMilestone("l", 1)) ret = ret.pow(tmp.l.milestones[1].effect)
 
                         ret = ret.pow(.75) // extreme
 
@@ -2226,6 +2233,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 323))     ret = ret.times(tmp.sci.upgrades[323].effect)
                         if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10())
                         if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().pow(player.p.upgrades.length))
+                                                        ret = ret.times(tmp.l.effect)
 
                         return ret
                 },
@@ -5259,9 +5267,6 @@ addLayer("sci", {
                 doNotDoOSciReset = layer == "tokens" && hasMilestone("tokens", 25)
                 if (!doNotDoHSciReset) { // Hydrogen Science
                         let subdata = data.hydrogen_science
-                        subdata.total = decimalZero
-                        subdata.best = decimalZero
-                        subdata.points = decimalZero
 
                         buyData[11] = decimalZero
                         buyData[12] = decimalZero
@@ -5272,12 +5277,12 @@ addLayer("sci", {
                         
                         if (!hasMilestone("tokens", 7)) data.upgrades = filterOut(data.upgrades, [11,12,13,14,15,21,22,23,24,25])
                 }
+                data.hydrogen_science.total = decimalZero
+                data.hydrogen_science.best = decimalZero
+                data.hydrogen_science.points = decimalZero
 
                 if (!doNotDoOSciReset) { // Oxygen Science
                         let subdata = data.oxygen_science
-                        subdata.total = decimalZero
-                        subdata.best = decimalZero
-                        subdata.points = decimalZero
 
                         buyData[101] = decimalZero
                         buyData[102] = decimalZero
@@ -5289,12 +5294,12 @@ addLayer("sci", {
                         if (!hasMilestone("tokens", 11)) data.upgrades = filterOut(data.upgrades, [101,102,103,104,105,111,112,113,114,115])
                         if (layer != "tokens" && !hasUpgrade("p", 115))  data.upgrades = filterOut(data.upgrades, [121, 122, 123, 124, 125])
                 }
+                data.oxygen_science.total = decimalZero
+                data.oxygen_science.best = decimalZero
+                data.oxygen_science.points = decimalZero
 
                 if (!false) { // Carbon Science
                         let subdata = data.carbon_science
-                        subdata.total = decimalZero
-                        subdata.best = decimalZero
-                        subdata.points = decimalZero
 
                         let remUpgs = [201, 202, 203, 204, 205, 
                                        211, 212, 213, 214, 215, 
@@ -5303,6 +5308,9 @@ addLayer("sci", {
                                        241, 242, 243, 244, 245,]
                         if (!hasMilestone("mu", 5)) data.upgrades = filterOut(data.upgrades, remUpgs)
                 }
+                data.carbon_science.total = decimalZero
+                data.carbon_science.best = decimalZero
+                data.carbon_science.points = decimalZero
 
                 if (!hasMilestone("tokens", 9)) player.mini.milestones = filterOut(
                                                                         player.mini.milestones, 
@@ -5428,37 +5436,37 @@ addLayer("c", {
                 return ret.max(.00001)
         },
         getGainMult(){ //carbon gain mult carbongain cgain c gain
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasUpgrade("c", 14))        x = x.times(tmp.c.upgrades[14].effect)
-                if (hasUpgrade("c", 15))        x = x.times(tmp.h.upgrades[25].effect)
-                if (hasUpgrade("h", 62))        x = x.times(tmp.o.upgrades[14].effect)
-                if (hasUpgrade("h", 63))        x = x.times(tmp.h.upgrades[63].effect)
-                                                x = x.times(tmp.tokens.buyables[22].effect)
-                if (hasMilestone("tokens", 3))  x = x.times(player.ach.achievements.length)
-                if (hasUpgrade("c", 21))        x = x.times(tmp.c.upgrades[21].effect)
-                                                x = x.times(tmp.mini.buyables[101].effect)
-                                                x = x.times(tmp.n.effect)
-                if (hasUpgrade("n", 23))        x = x.times(tmp.n.upgrades[23].effect)
+                if (hasUpgrade("c", 14))        ret = ret.times(tmp.c.upgrades[14].effect)
+                if (hasUpgrade("c", 15))        ret = ret.times(tmp.h.upgrades[25].effect)
+                if (hasUpgrade("h", 62))        ret = ret.times(tmp.o.upgrades[14].effect)
+                if (hasUpgrade("h", 63))        ret = ret.times(tmp.h.upgrades[63].effect)
+                                                ret = ret.times(tmp.tokens.buyables[22].effect)
+                if (hasMilestone("tokens", 3))  ret = ret.times(player.ach.achievements.length)
+                if (hasUpgrade("c", 21))        ret = ret.times(tmp.c.upgrades[21].effect)
+                                                ret = ret.times(tmp.mini.buyables[101].effect)
+                                                ret = ret.times(tmp.n.effect)
+                if (hasUpgrade("n", 23))        ret = ret.times(tmp.n.upgrades[23].effect)
                 if (hasChallenge("n", 32)) {
                         let exp = tmp.n.challenges[32].rewardEffect
                         let base = player.o.points.max(10).log10()
-                                                x = x.times(base.pow(exp))
+                                                ret = ret.times(base.pow(exp))
                 }
-                if (hasUpgrade("mini", 64))     x = x.times(player.mini.d_points.fuel.max(1))
-                                                x = x.times(tmp.l.effect)
-                if (player.easyMode)            x = x.times(2)
-                                                x = x.times(tmp.sci.buyables[103].effect)
+                if (hasUpgrade("mini", 64))     ret = ret.times(player.mini.d_points.fuel.max(1))
+                                                ret = ret.times(tmp.l.effect)
+                if (player.easyMode)            ret = ret.times(2)
+                                                ret = ret.times(tmp.sci.buyables[103].effect)
                 if (hasUpgrade("c", 13) && player.extremeMode) {
-                                                x = x.times(2)
+                                                ret = ret.times(2)
                 }
                 if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
-                                                x = x.times(player.p.points.plus(1))
+                                                ret = ret.times(player.p.points.plus(1))
                 }
 
-                if (player.easyMode)            x = x.pow(1.001)
+                if (player.easyMode)            ret = ret.pow(1.001)
 
-                return x
+                return ret
         },
         update(diff){
                 let data = player.c
@@ -5941,34 +5949,34 @@ addLayer("o", {
         }, // oxygen gain o gain ogain oxygengain 
         getGainMult(){
                 if (inChallenge("n", 42)) return decimalOne
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasUpgrade("o", 12))        x = x.times(tmp.o.upgrades[12].effect)
-                if (hasUpgrade("o", 14))        x = x.times(tmp.o.upgrades[14].effect)
-                if (hasUpgrade("h", 63))        x = x.times(tmp.h.upgrades[63].effect)
-                                                x = x.times(tmp.tokens.buyables[23].effect)
-                if (hasMilestone("tokens", 3))  x = x.times(player.ach.achievements.length)
+                if (hasUpgrade("o", 12))        ret = ret.times(tmp.o.upgrades[12].effect)
+                if (hasUpgrade("o", 14))        ret = ret.times(tmp.o.upgrades[14].effect)
+                if (hasUpgrade("h", 63))        ret = ret.times(tmp.h.upgrades[63].effect)
+                                                ret = ret.times(tmp.tokens.buyables[23].effect)
+                if (hasMilestone("tokens", 3))  ret = ret.times(player.ach.achievements.length)
                 if (hasUpgrade("h", 71)) {
-                                                x = x.times(Decimal.pow(player.tokens.coins.points.max(10).log10().min(5), player.h.upgrades.length))
+                                                ret = ret.times(Decimal.pow(player.tokens.coins.points.max(10).log10().min(5), player.h.upgrades.length))
                 }
-                if (hasUpgrade("tokens", 81))   x = x.times(81)
+                if (hasUpgrade("tokens", 81))   ret = ret.times(81)
                 if (hasMilestone("tokens", 23)) {
                         let c = tmp.tokens.milestones[23].effect
                         let base = player.c.points.max(10).log10()
-                                                x = x.times(base.pow(c))
+                                                ret = ret.times(base.pow(c))
                 }
-                                                x = x.times(tmp.n.effect)
-                                                x = x.times(tmp.l.effect)
-                if (player.easyMode)            x = x.times(2)
-                if (hasUpgrade("sci", 101))     x = x.times(tmp.sci.effect)
-                                                x = x.times(tmp.sci.buyables[101].effect)
+                                                ret = ret.times(tmp.n.effect)
+                                                ret = ret.times(tmp.l.effect)
+                if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("sci", 101))     ret = ret.times(tmp.sci.effect)
+                                                ret = ret.times(tmp.sci.buyables[101].effect)
                 if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
-                                                x = x.times(player.p.points.plus(1))
+                                                ret = ret.times(player.p.points.plus(1))
                 }
 
-                if (player.easyMode)            x = x.pow(1.001)
+                if (player.easyMode)            ret = ret.pow(1.001)
 
-                return x
+                return ret
         },
         update(diff){
                 let data = player.o
@@ -6012,7 +6020,10 @@ addLayer("o", {
                                 if (hasUpgrade("h", 74))        a = "(log2(log2(Life Points)))^36<br>*multipliers"
                                 return a
                         },
-                        cost:() => Decimal.pow(2, hasUpgrade("c", 11) ? (player.extremeMode ? 2500 : 2560) : 1024),
+                        cost(){
+                                if (player.extremeMode) return Decimal.pow(2, hasUpgrade("c", 11) ? 2500 : 2048)
+                                return Decimal.pow(2, hasUpgrade("c", 11) ? 2560 : 1024)
+                        },
                         currencyLocation:() => player,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Life Points",
@@ -6426,31 +6437,31 @@ addLayer("n", {
                 return v5
         },
         getGainMult(){// nitrogen gain ngain nitrogengain n gain
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasUpgrade("n", 24))        x = x.times(tmp.n.upgrades[24].effect)
-                if (hasUpgrade("mini", 73))     x = x.times(tmp.mini.d_points.getEffectiveFuelAux.max(1))
-                if (hasUpgrade("mini", 81))     x = x.times(tmp.mini.d_points.getUpgrades)
+                if (hasUpgrade("n", 24))        ret = ret.times(tmp.n.upgrades[24].effect)
+                if (hasUpgrade("mini", 73))     ret = ret.times(tmp.mini.d_points.getEffectiveFuelAux.max(1))
+                if (hasUpgrade("mini", 81))     ret = ret.times(tmp.mini.d_points.getUpgrades)
                 if (hasUpgrade("n", 35)) {
                         let rede = tmp.n.upgrades[35].effect
-                                                x = x.times(player.points.max(10).log10().log10().max(1).pow(rede))
+                                                ret = ret.times(player.points.max(10).log10().log10().max(1).pow(rede))
                 }
-                if (hasUpgrade("n", 41))        x = x.times(player.mini.e_points.points.max(10).log10())
-                if (hasUpgrade("n", 53))        x = x.times(Decimal.pow(1.01, player.mini.buyables[211]))
+                if (hasUpgrade("n", 41))        ret = ret.times(player.mini.e_points.points.max(10).log10())
+                if (hasUpgrade("n", 53))        ret = ret.times(Decimal.pow(1.01, player.mini.buyables[211]))
                 if (!inChallenge("l", 52) && !hasChallenge("l", 52)) {
-                                                x = x.times(player.p.points.plus(1))
+                                                ret = ret.times(player.p.points.plus(1))
                 }
-                if (hasUpgrade("p", 14))        x = x.times(tmp.p.upgrades[14].effect)
-                                                x = x.times(tmp.l.effect)
-                if (player.easyMode)            x = x.times(2)
-                if (hasUpgrade("sci", 341))     x = x.times(player.sci.nitrogen_science.points.max(10).log10())
-                if (hasUpgrade("sci", 354))     x = x.times(2)
-                if (hasUpgrade("sci", 361))     x = x.times(3)
-                if (hasUpgrade("sci", 363))     x = x.times(2)
+                if (hasUpgrade("p", 14))        ret = ret.times(tmp.p.upgrades[14].effect)
+                                                ret = ret.times(tmp.l.effect)
+                if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("sci", 341))     ret = ret.times(player.sci.nitrogen_science.points.max(10).log10())
+                if (hasUpgrade("sci", 354))     ret = ret.times(2)
+                if (hasUpgrade("sci", 361))     ret = ret.times(3)
+                if (hasUpgrade("sci", 363))     ret = ret.times(2)
 
-                if (player.easyMode)            x = x.pow(1.001)
+                if (player.easyMode)            ret = ret.pow(1.001)
 
-                return x
+                return ret
         },
         effect(){
                 let amt = player.n.total
@@ -8021,59 +8032,59 @@ addLayer("p", {
                 return v3
         },
         getGainMult(){//phosphorus gain pgain rusgain rus gain
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasUpgrade("p", 15))        x = x.times(tmp.p.upgrades[15].effect)
-                if (hasUpgrade("p", 24))        x = x.times(tmp.p.upgrades[24].effect)
-                if (hasMilestone("mu", 1))      x = x.times(player.tokens.total.max(1).pow(player.mu.milestones.length))
-                                                x = x.times(tmp.l.effect)
-                                                x = x.times(tmp.t.effect)
-                                                x = x.times(tmp.or.effect)
-                if (player.easyMode)            x = x.times(2)
-                if (hasUpgrade("p", 101))       x = x.times(tmp.p.upgrades[101].effect)
-                if (player.extremeMode)         x = x.times(tmp.mu.buyables[11].effect)
-                if (player.extremeMode)         x = x.times(tmp.mu.buyables[12].effect)
-                if (player.extremeMode)         x = x.times(tmp.mu.buyables[21].effect)
-                if (player.extremeMode)         x = x.times(tmp.mu.buyables[31].effect)
-                if (hasUpgrade("p", 111))       x = x.times(tmp.p.upgrades[111].effect)
-                if (hasMilestone("mu", 6))      x = x.times(Decimal.pow(5, player.mu.milestones.length))
-                if (hasMilestone("mu", 12))     x = x.times(Decimal.pow(2, player.mu.milestones.length))
+                if (hasUpgrade("p", 15))        ret = ret.times(tmp.p.upgrades[15].effect)
+                if (hasUpgrade("p", 24))        ret = ret.times(tmp.p.upgrades[24].effect)
+                if (hasMilestone("mu", 1))      ret = ret.times(player.tokens.total.max(1).pow(player.mu.milestones.length))
+                                                ret = ret.times(tmp.l.effect)
+                                                ret = ret.times(tmp.t.effect)
+                                                ret = ret.times(tmp.or.effect)
+                if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("p", 101))       ret = ret.times(tmp.p.upgrades[101].effect)
+                if (player.extremeMode)         ret = ret.times(tmp.mu.buyables[11].effect)
+                if (player.extremeMode)         ret = ret.times(tmp.mu.buyables[12].effect)
+                if (player.extremeMode)         ret = ret.times(tmp.mu.buyables[21].effect)
+                if (player.extremeMode)         ret = ret.times(tmp.mu.buyables[31].effect)
+                if (hasUpgrade("p", 111))       ret = ret.times(tmp.p.upgrades[111].effect)
+                if (hasMilestone("mu", 6))      ret = ret.times(Decimal.pow(5, player.mu.milestones.length))
+                if (hasMilestone("mu", 12))     ret = ret.times(Decimal.pow(2, player.mu.milestones.length))
 
-                return x
+                return ret
         },
         getPassiveGainMult(){
-                let x = decimalOne
+                let ret = decimalOne
 
-                if (hasMilestone("p", 2))       x = x.times(tmp.p.milestones[2].effect)
-                if (hasUpgrade("mu", 11))       x = x.times(tmp.n.upgrades[35].effect)
+                if (hasMilestone("p", 2))       ret = ret.times(tmp.p.milestones[2].effect)
+                if (hasUpgrade("mu", 11))       ret = ret.times(tmp.n.upgrades[35].effect)
                 if (hasUpgrade("mu", 12))       {
                         let init = player.mu.points.div(100).plus(1).pow(getBuyableAmount("mini", 241).sqrt())
                         if (!hasUpgrade("mu", 35)) init = init.min("1ee5")
-                                                x = x.times(init)
+                                                ret = ret.times(init)
                 }
-                if (hasUpgrade("p", 33))        x = x.times(tmp.p.upgrades[33].effect)
-                if (hasUpgrade("mu", 13))       x = x.times(tmp.mu.upgrades[13].effect)
+                if (hasUpgrade("p", 33))        ret = ret.times(tmp.p.upgrades[33].effect)
+                if (hasUpgrade("mu", 13))       ret = ret.times(tmp.mu.upgrades[13].effect)
                 if (hasUpgrade("mu", 14)) {
-                                                x = x.times(player.extremeMode ? 5 ** player.mu.upgrades.length : 10)
+                                                ret = ret.times(player.extremeMode ? 5 ** player.mu.upgrades.length : 10)
                 }
-                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[11].effect)
-                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[12].effect)
-                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[21].effect)
-                if (hasUpgrade("mu", 23))       x = x.times(Decimal.pow(2, player.mu.upgrades.length))
-                if (hasUpgrade("mu", 32))       x = x.times(tmp.mu.upgrades[32].effect)
-                if (!player.extremeMode)        x = x.times(tmp.mu.buyables[31].effect)
+                if (!player.extremeMode)        ret = ret.times(tmp.mu.buyables[11].effect)
+                if (!player.extremeMode)        ret = ret.times(tmp.mu.buyables[12].effect)
+                if (!player.extremeMode)        ret = ret.times(tmp.mu.buyables[21].effect)
+                if (hasUpgrade("mu", 23))       ret = ret.times(Decimal.pow(2, player.mu.upgrades.length))
+                if (hasUpgrade("mu", 32))       ret = ret.times(tmp.mu.upgrades[32].effect)
+                if (!player.extremeMode)        ret = ret.times(tmp.mu.buyables[31].effect)
                                                 
-                                                x = x.pow(layers.l.grid.getGemEffect(403))
-                if (hasChallenge("l", 71))      x = x.pow(tmp.l.challenges[71].reward)
-                                                x = x.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
-                if (hasMilestone("d", 20))      x = x.pow(Decimal.pow(2, player.d.milestones.length+1))
-                                                x = x.pow(layers.l.grid.getGemEffect(805).pow(tmp.l.getNonZeroGemCount))
-                                                x = x.pow(tmp.cells.effect)
-                if (hasUpgrade("t", 25))        x = x.pow(tmp.t.upgrades[25].effect)
+                                                ret = ret.pow(layers.l.grid.getGemEffect(403))
+                if (hasChallenge("l", 71))      ret = ret.pow(tmp.l.challenges[71].reward)
+                                                ret = ret.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
+                if (hasMilestone("d", 20))      ret = ret.pow(Decimal.pow(2, player.d.milestones.length+1))
+                                                ret = ret.pow(layers.l.grid.getGemEffect(805).pow(tmp.l.getNonZeroGemCount))
+                                                ret = ret.pow(tmp.cells.effect)
+                if (hasUpgrade("t", 25))        ret = ret.pow(tmp.t.upgrades[25].effect)
 
-                                                x = x.times(player.p.points.max(1).pow(tmp.mu.effect))
+                                                ret = ret.times(player.p.points.max(1).pow(tmp.mu.effect))
 
-                return x
+                return ret
         },
         effect(){
                 if (inChallenge("l", 52) || hasChallenge("l", 52)) return decimalOne
@@ -11044,6 +11055,7 @@ addLayer("l", {
                 passiveTime: 0,
                 activeChallengeID: 101,
                 challengesDisplayState: 0,
+                everMilestone1: false,
         }},
         color: "#BE0E00",
         branches: [],
@@ -11360,11 +11372,14 @@ addLayer("l", {
                                 if (hasUpgrade("d", 11)) exp = cap
                                 return Decimal.pow(1.01, exp)
                         },      
+                        onComplete(){
+                                player.l.everMilestone1 = true
+                        },
                         effectDescription(){
                                 if (player.tab != "l") return ""
                                 if (player.subtabs.l.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), maintain all minigame autobuyers, token resets do nothing, gain 10x E Points, and triple Phosphorus reset times.<br>"
+                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), maintain all minigame autobuyers, token resets permanently do nothing, gain 10x E Points, and triple Phosphorus reset times.<br>"
                                 let b = "Currently: " + format(tmp.l.milestones[1].effect, 4)
                                 return a + b
                         },
@@ -14209,17 +14224,20 @@ addLayer("l", {
                                         if (player.tab != "l") return ""
                                         if (player.subtabs.l.mainTabs != "Info") return ""
 
-                                        let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)"
-                                        let b = "Life resets reset everything before Life except achievements"
-                                        let c = "Life affects most prior currencies:"
-                                        let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, "
-                                        let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color,"
-                                        let f = "A Points, B Points, C Points, D Points, and E Points."
-                                        if (!tmp.l.challenges[11].unlocked){
-                                                return a + br2 + b + br2 + c + br + d + br + e + br2 + f
-                                        } 
+                                        let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)" + br2 
+                                        let b = "Life resets reset everything before Life except achievements" + br2
+                                        let c = "Life affects most prior currencies:" + br
+                                        let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, " + br
+                                        let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color amounts," + br
+                                        if (player.extremeMode) e += "Science<sup>**</sup>, Hydrogen Science, Oxygen Science, Carbon Science, Nitrogen Science," + br
+                                        let f = "A Points, B Points, C Points, D Points, and E Points"
+                                        let step0 = a + b + c + d + e + f + "."
+                                        if (player.extremeMode) step0 += br2 + "<sup>**</sup>Capped at 1e10 and not affected by Life milestone 1"
+
+                                        if (!tmp.l.challenges[11].unlocked) return step0
+
                                         let g = "Dilation nerfs x → 10^(log10(x)^exp)"
-                                        let step1 = a + br2 + b + br2 + c + br + d + br + e + br + f + br2 + g
+                                        let step1 = step0 + br2 + g
                                         if (player.l.challenges[11] < 50) return step1
                                         let formExp = format(tmp.l.getGainExp)
                                         let h = "Current base gain is " + format(tmp.l.getBaseGain)
@@ -14345,7 +14363,9 @@ addLayer("l", {
                 if (!hasMilestone("d", 1)) {
                         let pUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
-                                       31, 32, 33, 34, 35]
+                                       31, 32, 33, 34, 35,
+                                       101,102,103,104,105,
+                                       111,112,113,114,115,]
                         if (hasMilestone("l", 6)) pUpgRem = filterOut(pUpgRem, [13])
                         if (!false) { // upgrades
                                 data2.upgrades = filterOut(data2.upgrades, pUpgRem)
@@ -14568,6 +14588,8 @@ addLayer("l", {
                                 data8.upgrades = filterOut(data8.upgrades, hUpgRem)
                         }
                 }
+
+                if (player.extremeMode) layers.sci.doReset("l")
 
                 player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
                 // make the display update
@@ -25535,7 +25557,7 @@ addLayer("or", {
                                 if (player.tab != "or") return ""
                                 if (player.subtabs.or.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Keep all prior automation, µ resets nothing and automatically prestiges, tokens reset nothing, and autobuy Amino Acid upgrades."
+                                let a = "Reward: Keep all prior automation, µ resets nothing and automatically prestiges, and autobuy Amino Acid upgrades."
                                 let b = ""
                                 return a + b
                         },
@@ -34325,7 +34347,7 @@ addLayer("tokens", {
                 data.bestCharm = data.bestCharm.max(tmp.tokens.buyables[111].effect)
         },
         resetsNothing(){
-                return hasMilestone("n", 11) || hasMilestone("l", 1) || hasMilestone("or", 1)
+                return hasMilestone("n", 11) || player.l.everMilestone1
         },
         coins: {
                 getGainMult(){ //coin gain coins gain coingain
@@ -34417,8 +34439,6 @@ addLayer("tokens", {
                         return x.plus(1)
                 },
                 costFormula(x){
-                        if (false)                      return x.pow(.24).floor().sub(1).max(0)
-                        if (false)                      return x.pow(.25).floor().sub(1).max(0)
                         if (hasMilestone("t", 13))      return x.pow(.26).floor().sub(1).max(0)
                         if (hasMilestone("t", 10))      return x.pow(.27).floor().sub(1).max(0)
                         if (hasMilestone("t", 9))       return x.pow(.28).floor().sub(1).max(0)
