@@ -11399,7 +11399,7 @@ addLayer("l", {
                         },
                         toggles:() => [["l", "autobuyhco"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication.<br>"
+                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication."
                                 return a
                         },
                 }, // hasMilestone("l", 2)
@@ -11417,7 +11417,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep µ XV, Nitrogen resets nothing, and coin content is kept until Life reset.<br>"
+                                let a = "Reward: Keep µ XV, Nitrogen resets nothing, and coin content is kept until Life reset."
                                 return a
                         },
                 }, // hasMilestone("l", 3)
@@ -11436,7 +11436,7 @@ addLayer("l", {
                         },
                         toggles:() => [["l", "autobuynp"]],
                         effectDescription(){
-                                let a = "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades.<br>"
+                                let a = "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades."
                                 return a
                         },
                 }, // hasMilestone("l", 4)
@@ -11454,7 +11454,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Start with 1 fuel, keep Corn and Nitrogen milestones, and keep a Phosphorus milestone per reset.<br>"
+                                let a = "Reward: Start with 1 fuel, keep Corn and Nitrogen milestones, and keep a Phosphorus milestone per reset."
                                 return a
                         },
                 }, // hasMilestone("l", 5)
@@ -11473,7 +11473,7 @@ addLayer("l", {
                         },
                         toggles:() => [["l", "autobuymu"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III.<br>"
+                                let a = "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
                                 return a
                         },
                 }, // hasMilestone("l", 6)
@@ -11491,7 +11491,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep C and D point upgrades.<br>"
+                                let a = "Reward: Keep C and D point upgrades."
                                 return a
                         },
                 }, // hasMilestone("l", 7)
@@ -11509,7 +11509,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep token and µ milestones and unlock a challenge.<br>"
+                                let a = "Reward: Keep token and µ milestones and unlock a challenge."
                                 return a
                         },
                 }, // hasMilestone("l", 8)
@@ -11527,7 +11527,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Every other Dilation completion makes you have one less effective token for prestige purposes.<br>"
+                                let a = "Reward: Every other Dilation completion makes you have one less effective token for prestige purposes."
                                 return a
                         },
                 }, // hasMilestone("l", 9)
@@ -11555,7 +11555,7 @@ addLayer("l", {
                                 if (player.tab != "l") return ""
                                 if (player.subtabs.l.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Token costs are floored instead of rounded and cube the Oxygen-Carbon symmetry cap per Dilation completion.<br>"
+                                let a = "Reward: Token costs are floored instead of rounded and cube the Oxygen-Carbon symmetry cap per Dilation completion."
                                 let b = "Currently: " + format(tmp.l.milestones[10].effect)
                                 return a + b
                         },
@@ -11574,7 +11574,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: 1 Life milestone cap is increased by 5 per milestone, generate a Life reset every 5 seconds, and gain 100% of Life gain upon reset per second.<br>"
+                                let a = "Reward: 1 Life milestone cap is increased by 5 per milestone, generate a Life reset every 5 seconds, and gain 100% of Life gain upon reset per second."
                                 return a
                         },
                 }, // hasMilestone("l", 11)
@@ -11592,7 +11592,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Add .1 to the N → ΔN base per milestone.<br>"
+                                let a = "Reward: Add .1 to the N → ΔN base per milestone."
                                 return a
                         },
                 }, // hasMilestone("l", 12)
@@ -11611,7 +11611,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let x = player.hardMode ? 100 : 1000
-                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(x) + "x.<br>"
+                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(x) + "x."
                                 return a
                         },
                 }, // hasMilestone("l", 13)
@@ -11632,8 +11632,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let init = "Note: Requires having 1ee305 Points in Dilation with 26 completions.<br>"
-                                let a = "Reward: You can buy N → ΔP outside of Dilation and each level multiplies Life gain by 1.25.<br>"
+                                let init = "Note: Requires having 1ee305 Points in Dilation with 26 completions."
+                                let a = "Reward: You can buy N → ΔP outside of Dilation and each level multiplies Life gain by 1.25."
                                 return init + a
                         },
                 }, // hasMilestone("l", 14)
@@ -11651,7 +11651,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → Δµ levels multiply Life gain.<br>"
+                                let a = "Reward: N → Δµ levels multiply Life gain."
                                 return a
                         },
                 }, // hasMilestone("l", 15)
@@ -11669,7 +11669,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each milestone adds .0001 to N → ΔP base.<br>"
+                                let a = "Reward: Each milestone adds .0001 to N → ΔP base."
                                 return a
                         },
                 }, // hasMilestone("l", 16)
@@ -11688,7 +11688,7 @@ addLayer("l", {
                         },
                         toggles: () => [["l", "autobuyntodp"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy N → ΔP.<br>"
+                                let a = "Reward: Autobuy N → ΔP."
                                 return a
                         },
                 }, // hasMilestone("l", 17)
@@ -11706,7 +11706,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.5 if you are at exactly 33 completions.<br>"
+                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.5 if you are at exactly 33 completions."
                                 return a
                         },
                 }, // hasMilestone("l", 18)
@@ -11724,7 +11724,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔP cost base is 8.<br>"
+                                let a = "Reward: N → ΔP cost base is 8."
                                 return a
                         },
                 }, // hasMilestone("l", 19)
@@ -11745,8 +11745,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let init = "Note: Requires having 1e3.2e306 being in Dilation with 35 completions.<br>"
-                                let a = "Reward: N → ΔP cost base is 7.<br>"
+                                let init = "Note: Requires having 1e3.2e306 being in Dilation with 35 completions." + br
+                                let a = "Reward: N → ΔP cost base is 7."
                                 return init + a
                         },
                 }, // hasMilestone("l", 20)
@@ -11767,8 +11767,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let init = "Note: Requires having being in Dilation with 39 completions. This will be refered to as \"Universe\"<br>"
-                                let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second.<br>"
+                                let init = "Note: Requires having being in Dilation with 39 completions. This will be refered to as \"Universe\"" + br
+                                let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return init + a
                         },
                 }, // hasMilestone("l", 21)
@@ -11786,7 +11786,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each N → ΔP after 40 multiplies life gain by 1.5 and Universe becomes ee43.<br>"
+                                let a = "Reward: Each N → ΔP after 40 multiplies life gain by 1.5 and Universe becomes ee43."
                                 return a
                         },
                 }, // hasMilestone("l", 22)
@@ -11804,7 +11804,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>.<br>"
+                                let a = "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>."
                                 return a
                         },
                 }, // hasMilestone("l", 23)
@@ -11822,7 +11822,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .47.<br>"
+                                let a = "Reward: Token cost exponent is .47."
                                 return a
                         },
                 }, // hasMilestone("l", 24)
@@ -11840,7 +11840,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln.<br>"
+                                let a = "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln."
                                 return a
                         },
                 }, // hasMilestone("l", 25)
@@ -11858,7 +11858,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .45 and 𝛾 → ∂α's ln becomes log2.<br>"
+                                let a = "Reward: Token cost exponent is .45 and 𝛾 → ∂α's ln becomes log2."
                                 return a
                         },
                 }, // hasMilestone("l", 26)
@@ -11876,7 +11876,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP.<br>"
+                                let a = "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP."
                                 return a
                         },
                 }, // hasMilestone("l", 27)
@@ -11894,7 +11894,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log7 becomes log5.<br>"
+                                let a = "Reward: α → ∂β log7 becomes log5."
                                 return a
                         },
                 }, // hasMilestone("l", 28)
@@ -11912,7 +11912,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43.<br>"
+                                let a = "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43."
                                 return a
                         },
                 }, // hasMilestone("l", 29)
@@ -11930,7 +11930,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log5 becomes log4, token cost exponent is .41 and you bulk 5x N → ΔP.<br>"
+                                let a = "Reward: α → ∂β log5 becomes log4, token cost exponent is .41 and you bulk 5x N → ΔP."
                                 return a
                         },
                 }, // hasMilestone("l", 30)
@@ -11948,7 +11948,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^100 per Dilation completion over 100.<br>"
+                                let a = "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^100 per Dilation completion over 100."
                                 return a
                         },
                 }, // hasMilestone("l", 31)
@@ -11966,7 +11966,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain.<br>"
+                                let a = "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
                                 return a
                         },
                 }, // hasMilestone("l", 32)
@@ -11984,7 +11984,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Point gain is raised Dilation completions/100 per N → ΔN level and per milestone double life gain.<br>"
+                                let a = "Reward: Point gain is raised Dilation completions/100 per N → ΔN level and per milestone double life gain."
                                 return a
                         },
                 }, // hasMilestone("l", 33)
@@ -12002,7 +12002,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain.<br>"
+                                let a = "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
                                 return a
                         },
                 }, // hasMilestone("l", 34)
@@ -12020,7 +12020,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Per milestone multiple life gain by 1.12 and Universe is ee50.<br>"
+                                let a = "Reward: Per milestone multiple life gain by 1.12 and Universe is ee50."
                                 return a
                         },
                 }, // hasMilestone("l", 35)
@@ -12056,7 +12056,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each N → ΔP level after 300 doubles Life gain.<br>"
+                                let a = "Reward: Each N → ΔP level after 300 doubles Life gain."
                                 return a
                         },
                 }, // hasMilestone("l", 37)
@@ -12074,7 +12074,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: β → ∂α's log10 becomes log8.<br>"
+                                let a = "Reward: β → ∂α's log10 becomes log8."
                                 return a
                         },
                 }, // hasMilestone("l", 38)
@@ -12092,7 +12092,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: β → ∂α's log8 becomes log6.<br>"
+                                let a = "Reward: β → ∂α's log8 becomes log6."
                                 return a
                         },
                 }, // hasMilestone("l", 39)
@@ -12110,7 +12110,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: β → ∂α's log6 becomes log5.<br>"
+                                let a = "Reward: β → ∂α's log6 becomes log5."
                                 return a
                         },
                 }, // hasMilestone("l", 40)
@@ -12128,7 +12128,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: β → ∂α's log5 becomes log4 and you have one less token for prestige purposes.<br>"
+                                let a = "Reward: β → ∂α's log5 becomes log4 and you have one less token for prestige purposes."
                                 return a
                         },
                 }, // hasMilestone("l", 41)
@@ -12146,7 +12146,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: β → ∂α's log4 becomes log3 and Universe becomes best Phosphorus over Amino reset.<br>Note: Amino is unlocked by getting a C33 gem.<br>"
+                                let a = "Reward: β → ∂α's log4 becomes log3 and Universe becomes best Phosphorus over Amino reset.<br>Note: Amino is unlocked by getting a C33 gem."
                                 return a
                         },
                 }, // hasMilestone("l", 42)
