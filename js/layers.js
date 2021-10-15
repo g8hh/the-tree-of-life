@@ -9354,7 +9354,7 @@ addLayer("mu", {
                 }
                 if (ret.gt(.45) && !hasUpgrade("mu", 33)) ret = ret.pow(2).times(.69).plus(.31)
 
-                if (player.extremeMode && ret.gte(.92)) ret = ret.sub(.92).div(.08).pow(1.31).times(.08).plus(.92)
+                if (player.extremeMode && ret.gte(.92)) ret = ret.sub(.92).div(.08).pow(1.22).times(.08).plus(.92)
 
                 return ret
         },
@@ -11017,14 +11017,15 @@ addLayer("mu", {
                         },
                         shouldNotify(){
                                 if (hasMilestone("l", 7)) return false
-                                if (player.mu.points.lt(1000)) {
-                                        ids = [11, 12, 13, 21, 22, 
-                                               23, 31, 32, 33]
-                                        for (i in ids) {
-                                                id = ids[i]
-                                                if (layers.mu.buyables[id] == undefined) continue
-                                                if (tmp.mu.buyables[id].canAfford) return true
-                                        }
+
+                                ids = [11, 12, 13, 21, 22, 
+                                        23, 31, 32, 33]
+                                for (i in ids) {
+                                        id = ids[i]
+                                        if (layers.mu.buyables[id] == undefined) continue
+                                        if (!tmp.mu.buyables[id].unlocked) continue
+                                        if (player.mu.buyables[id].neq(0)) continue
+                                        if (tmp.mu.buyables[id].canAfford) return true
                                 }
                                 return false
                         },
@@ -11235,6 +11236,10 @@ addLayer("l", {
                         let pKeys = ["11", "12", "13", "14", "15", 
                                       "21", "22", "23", "24", "25", 
                                       "31", "32", "33", "34", "35"]
+                        if (player.extremeMode) {
+                                pKeys = pKeys.concat(["101", "102", "103", "104", "105", 
+                                                      "111", "112", "113", "114", "115"])
+                        }
                         for (i in nKeys) {
                                 if (boughtYet) break
                                 id = nKeys[i]
