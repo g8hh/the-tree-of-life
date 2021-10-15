@@ -2053,6 +2053,9 @@ addLayer("sci", {
                                 boughtYet = buyUpg("sci", id) 
                         }
                 }
+                if (data.autobuyreuse && hasMilestone("l", 3)) {
+                        if (tsb[302].unlocked) lsb[302].buy()
+                }
         },
         effect(){
                 return player.sci.points.plus(10).log10()
@@ -11417,9 +11420,11 @@ addLayer("l", {
                         unlocked(){
                                 return true
                         },
+                        toggles:() => player.extremeMode ? [["sci", "autobuyreuse"]] : [],
                         effectDescription(){
-                                let a = "Reward: Keep µ XV, Nitrogen resets nothing, and coin content is kept until Life reset."
-                                return a
+                                let a = "Reward: Keep µ XV, Nitrogen resets nothing,"
+                                if (player.extremeMode) a += " autobuy Reuse, "
+                                return a + " and coin content is kept until Life reset."
                         },
                 }, // hasMilestone("l", 3)
                 4: {
@@ -37616,6 +37621,7 @@ addLayer("tokens", {
                         ],
                         unlocked(){
                                 if (hasUpgrade("t", 61) || hasUpgrade("or", 11)) return false
+                                if (hasMilestone("l", 3)) return true
                                 return hasUpgrade("c", 21) || hasMilestone("n", 9) || hasChallenge("l", 31)
                         },
                         shouldNotify(){
