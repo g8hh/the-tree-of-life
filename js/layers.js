@@ -7772,6 +7772,7 @@ addLayer("n", {
         onPrestige(){
                 let timesAdd = 1
                 if (player.easyMode) timesAdd *= 2
+                if (hasMilestone("l", 1)) timesAdd *= 3
                 player.n.times += timesAdd
         },
         doReset(layer){
@@ -9350,7 +9351,7 @@ addLayer("mu", {
                 }
                 if (ret.gt(.45) && !hasUpgrade("mu", 33)) ret = ret.pow(2).times(.69).plus(.31)
 
-                if (player.extremeMode && ret.gte(.93)) ret = ret.sub(.92).div(.07).pow(10).times(.07).plus(.92)
+                if (player.extremeMode && ret.gte(.92)) ret = ret.sub(.92).div(.08).pow(1.31).times(.08).plus(.92)
 
                 return ret
         },
@@ -11379,7 +11380,7 @@ addLayer("l", {
                                 if (player.tab != "l") return ""
                                 if (player.subtabs.l.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), maintain all minigame autobuyers, token resets permanently do nothing, gain 10x E Points, and triple Phosphorus reset times.<br>"
+                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), maintain all minigame autobuyers, token resets permanently do nothing, gain 10x D and E Points, and triple Phosphorus and Nitrogen reset times.<br>"
                                 let b = "Currently: " + format(tmp.l.milestones[1].effect, 4)
                                 return a + b
                         },
@@ -27492,6 +27493,7 @@ addLayer("mini", {
                         if (hasUpgrade("sci", 312))     ret = ret.times(tmp.sci.upgrades[312].effect)
                         if (hasUpgrade("sci", 314))     ret = ret.times(player.sci.nitrogen_science.points.plus(10).log10().min(1e20))
                         if (hasUpgrade("sci", 321))     ret = ret.times(tmp.sci.upgrades[321].effect)
+                        if (hasMilestone("l", 1))       ret = ret.times(10)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -32634,7 +32636,6 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Corn</bdi>"
                         },
                         timeNeeded(){
-                                if (hasMilestone("l", 1))       return .05
                                 if (hasUpgrade("mini", 43))     return .05
                                 if (hasUpgrade("mini", 42))     return .1
                                 if (player.dev.fastCorn)        return .1
