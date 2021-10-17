@@ -10708,7 +10708,7 @@ addLayer("mu", {
                                 if (hasUpgrade("d", 31)) return Decimal.pow(1e5, exp).floor()
                                 if (hasUpgrade("d", 25)) return amt.pow(exp).floor()
                                 let init= amt.pow(exp.plus(2))
-                                let base = player.extremeMode ? 70 : 65
+                                let base = player.extremeMode ? 69 : 65
                                 return new Decimal(base).plus(init).floor()
                         },
                         expDiv(){
@@ -10793,7 +10793,7 @@ addLayer("mu", {
                                         cost2 = cost2.replace("65+", "")
                                         cost2 = cost2.replace("2+", "")
                                 }
-                                if (player.extremeMode) cost2 = cost2.replace("65", "70")
+                                if (player.extremeMode) cost2 = cost2.replace("65", "69")
                                 if (hasUpgrade("d", 31)) cost2 = cost2.replace("x", "100,000")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
