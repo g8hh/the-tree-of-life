@@ -114,6 +114,7 @@ function getPointExponentiation(){
                                         exp = exp.times(a2da.pow(d34exp))
         }
         if (hasMilestone("d", 27))      exp = exp.times(tmp.d.milestones[27].effect)
+        if (hasUpgrade("l", 14))        exp = exp.times(tmp.l.upgrades[14].effect)
         
         return exp
 }
@@ -2239,8 +2240,8 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 313))     ret = ret.times(tmp.sci.upgrades[313].effect)
                         if (hasUpgrade("sci", 314))     ret = ret.times(player.mini.d_points.points.plus(10).log10().min(1e20))
                         if (hasUpgrade("sci", 323))     ret = ret.times(tmp.sci.upgrades[323].effect)
-                        if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10())
-                        if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().pow(player.p.upgrades.length))
+                        if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10().min(1e50))
+                        if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().min(1e30).pow(player.p.upgrades.length))
                                                         ret = ret.times(tmp.l.effect.min(1e10))
 
                         return ret
@@ -3655,7 +3656,7 @@ addLayer("sci", {
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 323) && !false && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
                                 let a = "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
-                                if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>"
+                                if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
                                 return a
                         },
                         canAfford(){
@@ -3807,6 +3808,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
+                                if (player.shiftAlias) return "Hardcapped at 1e50"
                                 let a = "<bdi style='font-size: 80%'>Remove Seat Belt base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
                                 return a
                         },
@@ -8614,7 +8616,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate III"
                         },
                         description(){
-                                let a = "Per upgrade multiply Nitrogen Science gain by log10(Phosphorus)"
+                                let a = "Per upgrade multiply Nitrogen Science gain by min(1e30, log10(Phosphorus))"
                                 return a
                         },
                         cost:() => new Decimal(5e135),
@@ -10902,14 +10904,16 @@ addLayer("mu", {
                         title: "N → ΔN",
                         cost(){
                                 let amt = getBuyableAmount("mu", 33)
-                                return new Decimal(1e4).times(Decimal.pow(3, amt.pow(1.3)))
+                                let init = hasUpgrade("l", 21) ? 1 : 1e4
+                                return new Decimal(init).times(Decimal.pow(3, amt.pow(1.3)))
                         },
                         unlocked(){
                                 return (player.l.challenges[11] >= 20 || player.a.unlocked) && !hasUpgrade("cells", 14)
                         },
                         getMaxAfford(){
-                                if (player.l.points.lt(1e4)) return decimalZero
-                                return player.l.points.div(1e4).log(3).root(1.3).floor().plus(1).max(0)
+                                let div = hasUpgrade("l", 21) ? 1 : 1e4
+                                if (player.l.points.lt(div)) return decimalZero
+                                return player.l.points.div(div).log(3).root(1.3).floor().plus(1).max(0)
                         },
                         canAfford:() => player.l.points.gte(tmp.mu.buyables[33].cost) && !hasUpgrade("cells", 14),
                         getMaxBulk(){
@@ -10966,6 +10970,7 @@ addLayer("mu", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e4*3^(x<sup>1.2</sup>)" 
+                                if (hasUpgrade("l", 21)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -11320,8 +11325,8 @@ addLayer("l", {
                 data.time += diff
                 data.passiveTime += diff
                 if (hasMilestone("l", 11) && tmp.l.getResetGain.gt(0)) {
-                        if (data.passiveTime > 5) {
-                                data.passiveTime += -5
+                        if (data.passiveTime > 1) {
+                                data.passiveTime += -1
                                 data.times ++
                         } 
                         if (data.passiveTime > 10) data.passiveTime = 10
@@ -11401,13 +11406,54 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life III"
                         },
                         description(){
-                                return "Remove .92 µ effect softcap"
+                                return "Remove .92 µ effect softcap and E buyables no longer cost anything"
                         },
                         cost:() => new Decimal(90),
                         unlocked(){
                                 return hasUpgrade("l", 12) && player.l.challenges[11] >= 4
                         }, 
                 }, // hasUpgrade("l", 13)
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life IV"
+                        },
+                        description(){
+                                let a = "Every second Dilation completion makes Reuse base exponentiate point gain"
+                                return a + br + "Currently: " + format(tmp.l.upgrades[14].effect)
+                        },
+                        cost:() => new Decimal(270),
+                        effect(){
+                                let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
+                                return tmp.sci.buyables[302].base.pow(lvls)
+                        },
+                        unlocked(){
+                                return hasUpgrade("l", 13) && player.l.challenges[11] >= 7
+                        }, 
+                }, // hasUpgrade("l", 14)
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life V"
+                        },
+                        description(){
+                                return "Life IV becomes every Dilation completion"
+                        },
+                        cost:() => new Decimal(300),
+                        unlocked(){
+                                return hasUpgrade("l", 14) && player.l.challenges[11] >= 9
+                        }, 
+                }, // hasUpgrade("l", 15)
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life VI"
+                        },
+                        description(){
+                                return "Remove N → ΔN base cost"
+                        },
+                        cost:() => new Decimal(713e5),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 30
+                        }, 
+                }, // hasUpgrade("l", 21)
         },
         milestones: {
                 1: {
@@ -11597,9 +11643,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 9)
                 10: {
                         requirementDescription(){
+                                if (player.extremeMode) return "8 Dilation completions"
                                 return "13 Dilation completions"
                         },
                         requirement(){
+                                if (player.extremeMode) return new Decimal(8)
                                 return new Decimal(13)
                         },
                         done(){
@@ -11626,9 +11674,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 10)
                 11: {
                         requirementDescription(){
+                                if (player.extremeMode) return "11 Dilation completions"
                                 return "14 Dilation completions"
                         },
                         requirement(){
+                                if (player.extremeMode) return new Decimal(11)
                                 return new Decimal(14)
                         },
                         done(){
@@ -11638,7 +11688,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: 1 Life milestone cap is increased by 5 per milestone, generate a Life reset every 5 seconds, and gain 100% of Life gain upon reset per second."
+                                let a = "Reward: 1 Life milestone cap is increased by 5 per milestone, generate a Life reset every second, and gain 100% of Life gain upon reset per second."
                                 return a
                         },
                 }, // hasMilestone("l", 11)
@@ -11681,12 +11731,16 @@ addLayer("l", {
                 }, // hasMilestone("l", 13)
                 14: {
                         requirementDescription(){
+                                if (player.extremeMode) return "28 Dilation completions"
                                 return "26 Dilation completions"
                         },
                         requirement(){
                                 return new Decimal(26)
                         },
                         done(){
+                                if (player.extremeMode) {
+                                        return player.l.challenges[11] >= 28
+                                } 
                                 if (player.l.challenges[11] > 26) return true
                                 if (!inChallenge("l", 11)) return
                                 if (player.points.lt("1ee305")) return 
@@ -11698,7 +11752,8 @@ addLayer("l", {
                         effectDescription(){
                                 let init = "Note: Requires having 1ee305 Points in Dilation with 26 completions."
                                 let a = "Reward: You can buy N → ΔP outside of Dilation and each level multiplies Life gain by 1.25."
-                                return init + a
+                                if (player.extremeMode) return a 
+                                return init + br + a
                         },
                 }, // hasMilestone("l", 14)
                 15: {
@@ -11782,6 +11837,7 @@ addLayer("l", {
                                 return new Decimal("ee1000")
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return tmp.l.milestones[19].requirement.lte(player.points)
                         },
                         unlocked(){
@@ -13230,7 +13286,7 @@ addLayer("l", {
                                 
                                 let a = "All prior currencies are dilated<br>^" 
                                 let e = tmp.l.challenges[11].challengeEffect
-                                if (e.gt(.1)) a += format(e, 3)
+                                if (e.gt(.1)) a += format(e, 4)
                                 else a += formatSmall(e)
 
                                 if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
@@ -13244,11 +13300,17 @@ addLayer("l", {
                         },
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
+                                if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
-                                        
+                                        if (eff >= 28) eff -= .7
+                                        if (eff >= 24) eff -= .8
+                                        if (eff >= 23) eff -= .5
+                                        if (eff >= 22) eff -= .5
+                                        if (eff >= 21) eff -= .5
+                                        if (eff >= 20) eff ++
+                                        if (eff >= 19) eff ++
                                 } else {
-                                        if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
                                         if (eff > 91) eff = eff * 1.5 - 45.5
                                         if (eff > 65) eff = eff * 2 - 65
                                         if (eff > 50) eff = eff * 2 - 50
@@ -31279,7 +31341,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[201] = player.mini.buyables[201].plus(1)
-                                if (false) return 
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[201].cost)
                         },
                         unlocked(){
@@ -31326,7 +31388,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[202] = player.mini.buyables[202].plus(1)
-                                if (hasUpgrade("sci", 345)) return
+                                if (hasUpgrade("sci", 345) || hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[202].cost)
                         },
                         maxAfford(){
@@ -31400,6 +31462,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[203] = player.mini.buyables[203].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[203].cost)
                         },
                         maxAfford(){
@@ -31470,6 +31533,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[211] = player.mini.buyables[211].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[211].cost)
                         },
                         maxAfford(){
@@ -31554,6 +31618,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[212] = player.mini.buyables[212].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[212].cost)
                         },
                         maxAfford(){
@@ -31624,6 +31689,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[213] = player.mini.buyables[213].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[213].cost)
                         },
                         maxAfford(){
@@ -31703,6 +31769,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[221] = player.mini.buyables[221].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[221].cost)
                         },
                         maxAfford(){
@@ -31773,6 +31840,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[222] = player.mini.buyables[222].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[222].cost)
                         },
                         maxAfford(){
@@ -31839,6 +31907,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[223] = player.mini.buyables[223].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[223].cost)
                         },
                         maxAfford(){
@@ -31918,6 +31987,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mini.buyables[231] = player.mini.buyables[231].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[231].cost)
                         },
                         maxAfford(){
@@ -31998,6 +32068,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[232] = player.mini.buyables[232].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[232].cost)
                         },
                         maxAfford(){
@@ -32069,6 +32140,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[233] = player.mini.buyables[233].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[233].cost)
                         },
                         maxAfford(){
@@ -32136,6 +32208,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[241] = player.mini.buyables[241].plus(1)
+                                if (hasUpgrade("l", 13)) return 
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[241].cost)
                         },
                         maxAfford(){
