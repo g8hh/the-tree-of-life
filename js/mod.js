@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.150",
+	num: "1.152",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,36 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.l.unlocked
+	if (player.extremeMode) return player.l.total.gte(4)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.150)<br><br>
+		Reaching the endgame screen (updated as of v1.152)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.152</h3><br>
+		- Various extreme mode changes.<br>
+		- Balanced until 4 Lives.<br>
+	<br><h3 style='color: #CC0000'>v1.151.2</h3><br>
+		- Added a custom save.<br>
+		- Various small changes.<br>
+	<br><h3 style='color: #CC0000'>v1.151.1</h3><br>
+		- Created Life reset for extreme mode.<br>
+		- Replaced instances of "x = x.times" with "ret = ret.times" (cleaner code).<br>
+		- Buffed Life milestone 1 to make tokens permanently reset nothing.<br>
+		- Correspondingly removed above effect from Organ milestone 1.<br>
+		- Cleaned up Life info display.<br>
+		- Various code cleanup.<br>
+		- Made Life effect affect Science content.<br>
+		- Fixed Oxygen I cost being less than intended (not a substantive change).<br>
+	<br><h3 style='color: #CC0000'>v1.151</h3><br>
+		- Fixed some stuff surrounding dilation.<br>
 	<br><h3 style='color: #CC0000'>v1.150</h3><br>
 		- Balanced until Life unlock.<br>
 		- Various extreme mode changes.<br>
@@ -1490,6 +1507,9 @@ function fixOldSave(oldVersion){
 		let s = "Your save had extreme mode active in a patch before it did anything."
 		s += "To keep the save balanced, you have been kicked out of extreme mode."
 		alert(s)
+	}
+	if (player.version < "1.151.1") {
+		player.l.everMilestone1 = player.l.milestones.includes("1") || player.a.unlocked
 	}
 }
 
