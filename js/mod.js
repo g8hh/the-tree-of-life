@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.155",
+	num: "1.156",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.l.challenges[11] >= 31
+	if (player.extremeMode) return player.l.challenges[11] >= 43
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.156</h3><br>
+		- Balanced until 43 Dilation completions.<br>
+		- Added a Life upgrade.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.155</h3><br>
 		- Balanced until 31 Dilation completions.<br>
 		- Added three Life upgrades.<br>

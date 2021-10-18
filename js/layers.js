@@ -45,7 +45,7 @@ function getPointExponentiation(){
                                         exp = exp.times(tmp.tokens.buyables[41].effect)
         if (hasUpgrade("n", 11))        exp = exp.times(1.001)
         if (hasMilestone("l", 1))       exp = exp.times(tmp.l.milestones[1].effect)
-        if (hasMilestone("l", 18))      {
+        if (hasMilestone("l", 18) && !player.extremeMode) {
                                         exp = exp.times(2)
                 if (player.l.challenges[11] == 33) {
                                         exp = exp.times(1.5)
@@ -9297,6 +9297,7 @@ addLayer("mu", {
         baseAmount(){return player.p.points.floor()}, // Get the current amount of baseResource
         type: "static",
         base(){
+                if (hasUpgrade("l", 22)) return new Decimal(2)
                 let ret = new Decimal(100)
                 if (hasUpgrade("mu", 12)) ret = ret.sub(tmp.mu.upgrades[12].effect)
                 if (hasUpgrade("p", 111)) {
@@ -9781,9 +9782,9 @@ addLayer("mu", {
                                 let a = "N → ΔP base is 9"
                                 return a
                         },
-                        cost:() => new Decimal(5e25),
+                        cost:() => new Decimal(player.extremeMode ? 2e24 : 5e25),
                         unlocked(){
-                                return player.l.challenges[11] >= 33 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 38 : 33) || player.a.unlocked
                         }, // hasUpgrade("mu", 41)
                 },
                 42: {
@@ -11168,6 +11169,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.t.effect)
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("l", 22))        ret = ret.times(tmp.l.upgrades[22].effect)
 
                 return ret.max(1)
         },
@@ -11454,6 +11456,23 @@ addLayer("l", {
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 30
                         }, 
                 }, // hasUpgrade("l", 21)
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life VII"
+                        },
+                        description(){
+                                let a = "µ cost base is 2 and each upgrade multiplies Life gain by Milestones/12"
+                                return a + br + "Currently: " + format(tmp.l.upgrades[22].effect)
+                        },
+                        cost:() => new Decimal(1.91e14),
+                        effect(){
+                                let base = new Decimal(player.l.milestones.length).div(12).max(1)
+                                return base.pow(player.l.upgrades.length)
+                        },
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 40
+                        }, 
+                }, // hasUpgrade("l", 22)
         },
         milestones: {
                 1: {
@@ -11758,10 +11777,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 14)
                 15: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.00e21 µ"
                                 return "5.00e21 µ"
                         },
                         requirement(){
-                                return new Decimal(5e21)
+                                return new Decimal(player.extremeMode ? 1e21 : 5e21)
                         },
                         done(){
                                 return tmp.l.milestones[15].requirement.lte(player.mu.points)
@@ -11776,12 +11796,14 @@ addLayer("l", {
                 }, // hasMilestone("l", 15)
                 16: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.93e12 Lives"
                                 return "2.00e22 µ"
                         },
                         requirement(){
                                 return new Decimal(2e22)
                         },
                         done(){
+                                if (player.extremeMode) return player.l.points.gte(2.93e12)
                                 return tmp.l.milestones[16].requirement.lte(player.mu.points)
                         },
                         unlocked(){
@@ -11794,10 +11816,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 16)
                 17: {
                         requirementDescription(){
+                                if (player.extremeMode) return "4.5e12 Lives"
                                 return "2.70e12 Lives"
                         },
                         requirement(){
-                                return new Decimal(2.7e12)
+                                return new Decimal(player.extremeMode ? 4.5e12 : 2.7e12)
                         },
                         done(){
                                 return tmp.l.milestones[17].requirement.lte(player.l.points)
@@ -11813,10 +11836,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 17)
                 18: {
                         requirementDescription(){
+                                if (player.extremeMode) return "3e23 µ"
                                 return "1.00e25 µ"
                         },
                         requirement(){
-                                return new Decimal(1e25)
+                                return new Decimal(player.extremeMode ? 3e23 : 1e25)
                         },
                         done(){
                                 return tmp.l.milestones[18].requirement.lte(player.mu.points)
@@ -11825,19 +11849,21 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Reduce token cost exponent to .49, square point gain, and raise point gain ^1.5 if you are at exactly 33 completions."
-                                return a
+                                let a = "Reward: Reduce token cost exponent to .49"
+                                if (player.extremeMode) return a + "."
+                                return a + ", square point gain, and raise point gain ^1.5 if you are at exactly 33 completions."
                         },
                 }, // hasMilestone("l", 18)
                 19: {
                         requirementDescription(){
+                                if (player.extremeMode) return "7e24 µ"
                                 return "e1.00e1000 Points"
                         },
                         requirement(){
                                 return new Decimal("ee1000")
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.mu.points.gte(7e24)
                                 return tmp.l.milestones[19].requirement.lte(player.points)
                         },
                         unlocked(){
@@ -11850,12 +11876,14 @@ addLayer("l", {
                 }, // hasMilestone("l", 19)
                 20: {
                         requirementDescription(){
+                                if (player.extremeMode) return "7e25 µ"
                                 return "e3.20e306 Points"
                         },
                         requirement(){
                                 return new Decimal("e3.2e306")
                         },
                         done(){
+                                if (player.extremeMode) return player.mu.points.gte(7e25)
                                 if (player.l.challenges[11] > 35) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 35) return false
@@ -11867,18 +11895,20 @@ addLayer("l", {
                         effectDescription(){
                                 let init = "Note: Requires having 1e3.2e306 being in Dilation with 35 completions." + br
                                 let a = "Reward: N → ΔP cost base is 7."
+                                if (player.extremeMode) return a
                                 return init + a
                         },
                 }, // hasMilestone("l", 20)
                 21: {
                         requirementDescription(){
+                                if (player.extremeMode) return "39 Dilation completions"
                                 return "e9.50e305 Points"
                         },
                         requirement(){
                                 return new Decimal("e9.5e305")
                         },
                         done(){
-                                if (player.l.challenges[11] > 39) return true
+                                if (player.l.challenges[11] > (player.extremeMode ? 38 : 39)) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 39) return false
                                 return tmp.l.milestones[21].requirement.lte(player.points)
@@ -11888,6 +11918,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let init = "Note: Requires having being in Dilation with 39 completions. This will be refered to as \"Universe\"" + br
+                                if (player.extremeMode) init = init.slice(61, )
                                 let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return init + a
                         },
@@ -12300,8 +12331,8 @@ addLayer("l", {
                 11: {
                         title: "α → ∂α",
                         cost(){
-                                let init = new Decimal(7e11)
-                                let base = new Decimal(4)
+                                let init = new Decimal(player.extremeMode ? 1e8 : 7e11)
+                                let base = new Decimal(player.extremeMode ? 2.5 : 4)
                                 let id = 11
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -12315,8 +12346,8 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 7e11
-                                let base = 4
+                                let init = player.extremeMode ? 1e8 : 7e11
+                                let base = player.extremeMode ? 2.5 : 4
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[11].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[11].expDiv).plus(1).floor()
@@ -12402,6 +12433,9 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e11*4^(x<sup>1+x/" + formatWhole(tmp.l.buyables[11].expDiv) + "</sup>)" 
+                                if (player.extremeMode) {
+                                        cost2 = cost2.replace("7e11*4", "1e8*2.5")
+                                }
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -13303,6 +13337,12 @@ addLayer("l", {
                                 if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
+                                        if (eff >= 41) eff += 4.25
+                                        if (eff >= 40) eff += .75
+                                        if (eff >= 39) eff += eff - 30
+                                        if (eff >= 38) eff += 4
+                                        if (eff >= 37) eff += 2
+                                        if (eff >= 34) eff += eff - 33
                                         if (eff >= 28) eff -= .7
                                         if (eff >= 24) eff -= .8
                                         if (eff >= 23) eff -= .5
