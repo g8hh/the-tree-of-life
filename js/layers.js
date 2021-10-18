@@ -1904,7 +1904,7 @@ addLayer("sci", {
 
                 ret = ret.pow(.75)
 
-                ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                if (inChallenge("l", 11)) ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
                 return ret
         },
@@ -2089,7 +2089,7 @@ addLayer("sci", {
 
                         ret = ret.pow(.75) // extreme
 
-                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                        if (inChallenge("l", 11)) ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
                         return ret
                 },
@@ -2142,7 +2142,7 @@ addLayer("sci", {
 
                         ret = ret.pow(.75) // extreme
 
-                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                        if (inChallenge("l", 11)) ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
                         return ret
                 },
@@ -2187,7 +2187,7 @@ addLayer("sci", {
 
                         ret = ret.pow(.75) // extreme
 
-                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                        if (inChallenge("l", 11)) ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
                         return ret
                 },
@@ -2230,7 +2230,7 @@ addLayer("sci", {
 
                         ret = ret.pow(.75) // extreme
 
-                        ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
+                        if (inChallenge("l", 11)) ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
 
                         return ret
                 },
@@ -9793,11 +9793,12 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "α → ∂α log10's become log8"
+                                if (player.extremeMode) a += " and Universe becomes e7e41"
                                 return a
                         },
-                        cost:() => new Decimal(3e31),
+                        cost:() => new Decimal(player.extremeMode ? 2e30 : 3e31),
                         unlocked(){
-                                return player.l.challenges[11] >= 49 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 54 : 49) || player.a.unlocked
                         }, // hasUpgrade("mu", 42)
                 },
                 43: {
@@ -9808,9 +9809,9 @@ addLayer("mu", {
                                 let a = "α → ∂α log8's become log7 and subtract .01 from the µ cost exponent"
                                 return a
                         },
-                        cost:() => new Decimal(4e31),
+                        cost:() => new Decimal(player.extremeMode ? 3e30 : 4e31),
                         unlocked(){
-                                return player.l.challenges[11] >= 51 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 55 : 51) || player.a.unlocked
                         }, // hasUpgrade("mu", 43)
                 },
                 44: {
@@ -9818,12 +9819,13 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ XIX"
                         },
                         description(){
-                                let a = "Oxygen multiplies Point gain and token cost exponent is .48"
-                                return a
+                                let a = "Oxygen multiplies Point gain"
+                                if (player.extremeMode) a += ", Universe is e2e42, "
+                                return a + " and token cost exponent is .48"
                         },
-                        cost:() => new Decimal(5e31),
+                        cost:() => new Decimal(player.extremeMode ? 7e30 : 5e31),
                         unlocked(){
-                                return player.l.challenges[11] >= 52 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 55 : 52) || player.a.unlocked
                         }, // hasUpgrade("mu", 44)
                 },
                 45: {
@@ -9832,11 +9834,12 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "α → ∂α log7's become log6"
+                                if (player.extremeMode) a += " and Universe is e3e42"
                                 return a
                         },
-                        cost:() => new Decimal(6e31),
+                        cost:() => new Decimal(player.extremeMode ? 9e30 : 6e31),
                         unlocked(){
-                                return player.l.challenges[11] >= 59 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 58 : 59) || player.a.unlocked
                         }, // hasUpgrade("mu", 45)
                 },
                 51: {
@@ -11112,6 +11115,8 @@ addLayer("l", {
         getGainExp(){
                 let ret = new Decimal(.5)
 
+                if (hasUpgrade("l", 23)) ret = ret.times(2)
+
                 ret = ret.plus(tmp.l.buyables[13].effect)
 
                 return ret
@@ -11299,7 +11304,17 @@ addLayer("l", {
 
                 if (hasMilestone("l", 21) && universalAllowed && data.time > 1 && !hasUpgrade("t", 151)) {
                         let str = "ee40"
-                        if (hasMilestone("l", 22))      str = "ee43"
+                        if (hasUpgrade("l", 23))        str = "ee41"
+                        if (hasMilestone("l", 22))      str = player.extremeMode ? "e2e41" : "ee43"
+                        if (hasUpgrade("mu", 42) && player.extremeMode) {
+                                                        str = "e7e41"
+                        }
+                        if (hasUpgrade("mu", 44) && player.extremeMode) {
+                                                        str = "e2e42"
+                        }
+                        if (hasUpgrade("mu", 45) && player.extremeMode) {
+                                                        str = "e3e42"
+                        }
                         if (hasUpgrade("p", 41))        str = "ee45"
                         if (hasUpgrade("p", 54))        str = "ee46"
                         if (hasUpgrade("p", 55))        str = "ee47"
@@ -11473,6 +11488,42 @@ addLayer("l", {
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 40
                         }, 
                 }, // hasUpgrade("l", 22)
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life VIII"
+                        },
+                        description(){
+                                return "Universe is ee41 and square base life gain"
+                        },
+                        cost:() => new Decimal(3e16),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 44
+                        }, 
+                }, // hasUpgrade("l", 23)
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life IX"
+                        },
+                        description(){
+                                return "Life reset keeps content prior to tokens and you start with 200 tokens"
+                        },
+                        cost:() => new Decimal(1.92e17),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 48
+                        }, 
+                }, // hasUpgrade("l", 24)
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life X"
+                        },
+                        description(){
+                                return "Remove α → ∂α base cost"
+                        },
+                        cost:() => new Decimal(3.75e17),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 49
+                        }, 
+                }, // hasUpgrade("l", 25)
         },
         milestones: {
                 1: {
@@ -11925,31 +11976,33 @@ addLayer("l", {
                 }, // hasMilestone("l", 21)
                 22: {
                         requirementDescription(){
+                                if (player.extremeMode) return "7.77e20 Lives"
                                 return "1.00e31 µ"
                         },
-                        requirement(){
-                                return new Decimal(1e31)
-                        },
                         done(){
-                                return tmp.l.milestones[22].requirement.lte(player.mu.points)
+                                if (player.extremeMode) return player.l.points.gte(7.77e20)
+                                return player.mu.points.gte(1e31)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
                                 let a = "Reward: Each N → ΔP after 40 multiplies life gain by 1.5 and Universe becomes ee43."
+                                if (player.extremeMode) a = a.replace("ee43", "e2e41")
                                 return a
                         },
                 }, // hasMilestone("l", 22)
                 23: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.75e25 Lives"
                                 return "3.45e31 Lives"
                         },
                         requirement(){
                                 return new Decimal(3.45e31)
                         },
                         done(){
-                                return tmp.l.milestones[23].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(2.75e25)
+                                return player.l.points.gte(3.45e31)
                         },
                         unlocked(){
                                 return true
@@ -12332,6 +12385,7 @@ addLayer("l", {
                         title: "α → ∂α",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 1e8 : 7e11)
+                                if (hasUpgrade("l", 25)) init = decimalOne
                                 let base = new Decimal(player.extremeMode ? 2.5 : 4)
                                 let id = 11
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -12347,6 +12401,7 @@ addLayer("l", {
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
                                 let init = player.extremeMode ? 1e8 : 7e11
+                                if (hasUpgrade("l", 25)) init = 1
                                 let base = player.extremeMode ? 2.5 : 4
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[11].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -12433,9 +12488,8 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e11*4^(x<sup>1+x/" + formatWhole(tmp.l.buyables[11].expDiv) + "</sup>)" 
-                                if (player.extremeMode) {
-                                        cost2 = cost2.replace("7e11*4", "1e8*2.5")
-                                }
+                                if (player.extremeMode) cost2 = cost2.replace("7e11*4", "1e8*2.5")
+                                if (hasUpgrade("l", 25)) cost2 = cost2.slice(4,)
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12454,6 +12508,7 @@ addLayer("l", {
                         cost(){
                                 let init = new Decimal(1e16)
                                 let base = new Decimal(5)
+                                if (player.extremeMode) base = new Decimal(2)
                                 let id = 12
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -12469,6 +12524,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = 1e16
                                 let base = 5
+                                if (player.extremeMode) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[12].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[12].expDiv).plus(1).floor()
@@ -12550,6 +12606,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e16*5^(x<sup>1+x/" + formatWhole(tmp.l.buyables[12].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("5", "2")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12566,8 +12623,8 @@ addLayer("l", {
                 13: {
                         title: "α → ∂𝛾",
                         cost(){
-                                let init = new Decimal(1e21)
-                                let base = new Decimal(10)
+                                let init = new Decimal(player.extremeMode ? 3e19 : 1e21)
+                                let base = new Decimal(player.extremeMode ? 8 : 10)
                                 let id = 13
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -12581,8 +12638,8 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 1e21
-                                let base = 10
+                                let init = player.extremeMode ? 3e19 : 1e21
+                                let base = player.extremeMode ? 8 : 10
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[13].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
                                 return pts.div(init).log(base).log(500).sub(1).times(tmp.l.buyables[13].expDiv).plus(1).floor()
@@ -12650,6 +12707,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e21*10^(x<sup>1+x/" + formatWhole(tmp.l.buyables[13].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("1e21*10", "3e19*8")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12666,7 +12724,7 @@ addLayer("l", {
                 21: {
                         title: "β → ∂α",
                         cost(){
-                                let init = new Decimal(2.4e26)
+                                let init = new Decimal(player.extremeMode ? 25e26 : 2.4e26)
                                 let base = new Decimal(2)
                                 let id = 21
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -12681,7 +12739,7 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 2.4e26
+                                let init = player.extremeMode ? 25e26 : 2.4e26
                                 let base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[21].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -12765,6 +12823,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2.4e26*2^(x<sup>1+x/" + formatWhole(tmp.l.buyables[21].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("2.4e26", "2.5e27")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -13337,6 +13396,9 @@ addLayer("l", {
                                 if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
+                                        if (eff >= 60) eff += -1/3
+                                        if (eff >= 50) eff += 1
+                                        if (eff >= 47) eff += (eff - 46)/2
                                         if (eff >= 41) eff += 4.25
                                         if (eff >= 40) eff += .75
                                         if (eff >= 39) eff += eff - 30
@@ -14604,7 +14666,7 @@ addLayer("l", {
                 data3.total = decimalZero
 
                 // 4 Oxygen content
-                if (!player.a.everA3) {
+                if (!player.a.everA3 && !hasUpgrade("l", 24)) {
                         let oUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -14620,7 +14682,7 @@ addLayer("l", {
                 data4.total = decimalZero
 
                 // 5 Carbon content
-                if (!player.a.everA3) {
+                if (!player.a.everA3 && !hasUpgrade("l", 24)) {
                         let cUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
@@ -14636,7 +14698,7 @@ addLayer("l", {
 
                 // 6 minigame content
                 if (!player.a.everA3) {
-                        if (!false) { //6a
+                        if (!hasUpgrade("l", 24)) { //6a
                                 data6.a_points.extras[11] = decimalZero
                                 data6.a_points.extras[12] = decimalZero
                                 data6.a_points.extras[13] = decimalZero
@@ -14647,7 +14709,7 @@ addLayer("l", {
                                 data6.a_points.extras[63] = decimalZero
                         }
 
-                        if (!false) {} //6b
+                        if (!hasUpgrade("l", 24)) {} //6b
 
                         if (!false) { //6c
                                 let cPtUpgRem = [11, 12, 13, 14, 15, 
@@ -14739,9 +14801,10 @@ addLayer("l", {
 
                         data7.coins.points = decimalZero
                         data7.coins.best = decimalZero
-                        data7.points = decimalZero
-                        data7.best = decimalZero
-                        data7.total = decimalZero
+                        let tokenStart = hasUpgrade("l", 24) ? new Decimal(200) : decimalZero
+                        data7.points = tokenStart
+                        data7.best = tokenStart
+                        data7.total = tokenStart
                 }
 
                 // 8 Hydrogen content
