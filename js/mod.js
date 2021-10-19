@@ -34,7 +34,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v1.158.1</h3><br>
-		- Various code cleanup (and 300+ lines removed!).<br>
+		- Various code cleanup (and 1000+ lines removed!).<br>
 	<br><h3 style='color: #CC0000'>v1.158</h3><br>
 		- Balanced until 99 Dilation completions.<br>
 		- Added 5 Life upgrades.<br>
