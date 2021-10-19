@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.158",
+	num: "1.158.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,15 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.158)<br><br>
+		Reaching the endgame screen (updated as of v1.158.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.158.1</h3><br>
+		- Various code cleanup (and 300+ lines removed!).<br>
 	<br><h3 style='color: #CC0000'>v1.158</h3><br>
 		- Balanced until 99 Dilation completions.<br>
 		- Added 5 Life upgrades.<br>

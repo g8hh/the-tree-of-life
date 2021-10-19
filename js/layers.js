@@ -5381,9 +5381,7 @@ addLayer("c", {
         color: "#3C9009",
         branches: [],
         requires(){
-                if (!player.extremeMode) {
-                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
-                }
+                if (!player.extremeMode) return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
                 return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 2048)
         }, 
         resource: "Carbon", 
@@ -7020,17 +7018,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "1 Nitrogen reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.n.milestones[1].requirement.lte(player.n.times)
+                                return player.n.times >= 1
                         },
                         unlocked(){
                                 return true
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 305)) return 
@@ -7046,17 +7038,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "2 Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.n.milestones[2].requirement.lte(player.n.times)
+                                return player.n.times >= 2
                         },
                         unlocked(){
                                 return hasMilestone("n", 1)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7072,17 +7058,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "3 Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.n.milestones[3].requirement.lte(player.n.times)
+                                return player.n.times >= 3
                         },
                         unlocked(){
                                 return hasMilestone("n", 2)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7098,39 +7078,26 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 5 : 4) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 5 : 4)
-                        },
                         done(){
-                                return tmp.n.milestones[4].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 5 : 4)
                         },
                         unlocked(){
                                 return hasMilestone("n", 3)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         toggles:() => [["tokens", "autobuytokens"]],
                         effectDescription(){
-                                let a = "Reward: Keep Coffee, autobuy tokens, and you can bulk 4x C buyables."
-                                return a
+                                return "Reward: Keep Coffee, autobuy tokens, and you can bulk 4x C buyables."
                         },
                 }, // hasMilestone("n", 4)
                 5: {
                         requirementDescription(){
                                 return (player.hardMode ? 7 : 5) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 7 : 5)
-                        },
                         done(){
-                                return tmp.n.milestones[5].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 7 : 5)
                         },
                         unlocked(){
                                 return hasMilestone("n", 4)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7146,17 +7113,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 9 : 6) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 9 : 6)
-                        },
                         done(){
-                                return tmp.n.milestones[6].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 9 : 6)
                         },
                         unlocked(){
                                 return hasMilestone("n", 5)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7172,63 +7133,43 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 11 : 7) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 11 : 7)
-                        },
                         done(){
-                                return tmp.n.milestones[7].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 11 : 7)
                         },
                         unlocked(){
                                 return hasMilestone("n", 6)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         toggles:() => [["tokens", "autobuyradio"]],
                         effectDescription(){
-                                let a = "Reward: Keep one C point upgrade per reset and unlock an autobuyer for Radio Waves."
-                                return a
+                                return "Reward: Keep one C point upgrade per reset and unlock an autobuyer for Radio Waves."
                         },
                 }, // hasMilestone("n", 7)
                 8: {
                         requirementDescription(){
                                 return (player.hardMode ? 14 : 9) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 14 : 9)
-                        },
                         done(){
-                                return tmp.n.milestones[8].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 14 : 9)
                         },
                         unlocked(){
                                 return hasMilestone("n", 7)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Gain 20x coins, keep Egg is here., and you can autobuy the first level of C buyables."
-                                return a
+                                return "Reward: Gain 20x coins, keep Egg is here., and you can autobuy the first level of C buyables."
                         },
                 }, // hasMilestone("n", 8)
                 9: {
                         requirementDescription(){
                                 return (player.hardMode ? 17 : 12) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 17 : 12)
-                        },
                         done(){
-                                return tmp.n.milestones[9].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 17 : 12)
                         },
                         unlocked(){
                                 return hasMilestone("n", 8)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Keep coin upgrades."
+                                return "Reward: Keep coin upgrades on Nitrogen reset."
                                 return a
                         },
                 }, // hasMilestone("n", 9)
@@ -7236,17 +7177,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 21 : 15) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 21 : 15)
-                        },
                         done(){
-                                return tmp.n.milestones[10].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 21 : 15)
                         },
                         unlocked(){
                                 return hasMilestone("n", 9)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep the first ten Oxygen and Carbon upgrades upon Nitrogen reset."
@@ -7258,67 +7193,44 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 25 : 20) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 25 : 20)
-                        },
                         done(){
-                                return tmp.n.milestones[11].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 25 : 20)
                         },
                         unlocked(){
                                 return hasMilestone("n", 10)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Token resets don't reset anything."
-                                return a
+                                return "Reward: Token resets don't reset anything."
                         },
                 }, // hasMilestone("n", 11)
                 12: {
                         requirementDescription(){
                                 return (player.hardMode ? 640 : 128) + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 5 : 1
-                                return Decimal.pow(2, 7).times(m)
-                        },
                         done(){
                                 if (player.n.times == 0) return false
-                                return tmp.n.milestones[12].requirement.lte(player.n.points)
+                                return player.n.points.gte(128 * (player.hardMode ? 5 : 1))
                         },
                         unlocked(){
                                 return hasMilestone("n", 11)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Start with 50 tokens."
-                                return a
+                                return "Reward: Start with 50 tokens."
                         },
                 }, // hasMilestone("n", 12)
                 13: {
                         requirementDescription(){
                                 return (player.hardMode ? "2,560" : 256) + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 8).times(m)
-                        },
                         done(){
                                 if (player.n.times == 0) return false
-                                return tmp.n.milestones[13].requirement.lte(player.n.points)
+                                return player.n.points.gte(256 * (player.hardMode ? 10 : 1))
                         },
                         unlocked(){
                                 return hasMilestone("n", 12)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
-                                return a
+                                return "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
                         },
                 }, // hasMilestone("n", 13)
                 14: {
@@ -7326,19 +7238,13 @@ addLayer("n", {
                                 if (player.extremeMode) return "10,000 Nitrogen"
                                 return (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
                         },
-                        requirement(){
-                                if (player.extremeMode) return Decimal.pow(10, 4)
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 17).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[14].requirement.lte(player.n.points)
+                                if (player.extremeMode) return player.n.points.gte(1e4)
+                                let m = player.hardMode ? 10 : 1
+                                return player.n.points.div(m).gte(131072)
                         },
                         unlocked(){
                                 return hasMilestone("n", 13)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock Nitrogen challenges which only keep content from before tokens"
@@ -7350,56 +7256,36 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? "10,485,760" : "1,048,576") + " Nitrogen and 3 Nitrogen challenges"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 20).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[15].requirement.lte(player.n.points) && layerChallengeCompletions("n") >= 3
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(1048576) && layerChallengeCompletions("n") >= 3
                         },
                         unlocked(){
                                 return hasMilestone("n", 14)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Raise Nitrogen IX to the number of N challenge completions."
-                                return a
+                                return "Reward: Raise Nitrogen IX to the number of N challenge completions."
                         },
                 }, // hasMilestone("n", 15)
                 16: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.07e10" : "1.07e9") + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 30).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[16].requirement.lte(player.n.points)
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(2, 30))
                         },
                         unlocked(){
                                 return hasMilestone("n", 15)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: C Point gain 10 amount multiplies its base."
-                                return a
+                                return "Reward: C Point gain 10 amount multiplies its base."
                         },
                 }, // hasMilestone("n", 16)
                 17: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.00e47" : "1.00e46") + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(10, 46).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[17].requirement.lte(player.n.points)
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(10, 46))
                         },
                         unlocked(){
                                 return hasMilestone("n", 16) && player.mini.e_points.best.gte(1e300)
@@ -7414,20 +7300,15 @@ addLayer("n", {
                                 if (player.extremeMode) return "3e1887 Nitrogen"
                                 return (player.hardMode ? "7.50e942" : "7.40e942") + " Nitrogen"
                         },
-                        requirement(){
-                                if (player.extremeMode) return Decimal.pow(10, 1887).times(3)
-                                let m = player.hardMode ? 7.5 : 7.4
-                                return Decimal.pow(10, 942).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[18].requirement.lte(player.n.points)
+                                if (player.extremeMode) return player.n.points.gte("3e1887")
+                                return player.n.points.div(player.hardMode ? 7.5 : 7.4).gte(Decimal.pow(10, 942))
                         },
                         unlocked(){
                                 return hasMilestone("n", 17)
                         },
                         effectDescription(){
-                                let a = "Reward: Add .01 to to left distributivity."
-                                return a
+                                return "Reward: Add .01 to to left distributivity."
                         },
                 }, // hasMilestone("n", 18)
         },
@@ -8745,17 +8626,11 @@ addLayer("p", {
                         requirementDescription(){
                                 return "1 Phosphorus reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.p.milestones[1].requirement.lte(player.p.times)
+                                return player.p.times >= 1
                         },
                         unlocked(){
                                 return true
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep one Nitrogen milestone per reset, you have one less token for prestige purposes, and bulk 5x D buyables."
@@ -8767,11 +8642,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return "2 Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.p.milestones[2].requirement.lte(player.p.times)
+                                return player.p.times >= 2
                         },
                         unlocked(){
                                 return true
@@ -8789,11 +8661,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return "4 Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.p.milestones[3].requirement.lte(player.p.times)
+                                return player.p.times >= 4
                         },
                         unlocked(){
                                 return true
@@ -8808,29 +8677,22 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 7 : 6) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 7 : 6)
-                        },
                         done(){
-                                return tmp.p.milestones[4].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 7 : 6)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep a D Point upgrade per reset, keep Nitrogen XXII, and increase effect exponent to 3.1."
-                                return a
+                                return "Reward: Keep a D Point upgrade per reset, keep Nitrogen XXII, and increase effect exponent to 3.1."
                         },
                 }, // hasMilestone("p", 4)
                 5: {
                         requirementDescription(){
                                 return (player.hardMode ? 11 : 8) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 11 : 8)
-                        },
                         done(){
-                                return tmp.p.milestones[5].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 11 : 8) 
                         },
                         unlocked(){
                                 return true
@@ -8849,11 +8711,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 16 : 10) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 16 : 10)
-                        },
                         done(){
-                                return tmp.p.milestones[6].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 16 : 10)
                         },
                         unlocked(){
                                 return true
@@ -8868,11 +8727,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 22 : 13) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 22 : 13)
-                        },
                         done(){
-                                return tmp.p.milestones[7].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 22 : 13)
                         },
                         unlocked(){
                                 return true
@@ -8887,54 +8743,42 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? "5.00e9" : "1.00e9") + " Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 5e9 : 1e9)
-                        },
                         done(){
-                                return tmp.p.milestones[8].requirement.lte(player.p.points)
+                                return player.p.points.div(player.hardMode ? 5 : 1).gte(1e9)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: You can autobuy Iterations and the first levels of the first four rows of E buyables."
-                                return a
+                                return "Reward: You can autobuy Iterations and the first levels of the first four rows of E buyables."
                         },
                 }, // hasMilestone("p", 8)
                 9: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.00e11" : "2.00e10") + " Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 1e11 : 2e10)
-                        },
                         done(){
-                                return tmp.p.milestones[9].requirement.lte(player.p.points)
+                                return player.p.points.div(player.hardMode ? 5 : 1).gte(2e10)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Square Phosphorus gain."
-                                return a
+                                return "Reward: Square Phosphorus gain."
                         },
                 }, // hasMilestone("p", 9)
                 10: {
                         requirementDescription(){
                                 return "5e10 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(5e10)
-                        },
                         done(){
-                                return tmp.p.milestones[10].requirement.lte(player.p.points)
+                                return player.p.points.gte(5e10)
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reward: Square Phosphorus gain."
-                                return a
+                                return "Reward: Square Phosphorus gain."
                         },
                 }, // hasMilestone("p", 10)
         },
@@ -9922,18 +9766,14 @@ addLayer("mu", {
                         requirementDescription(){
                                 return "1 µ"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.mu.milestones[1].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(1)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Per milestone multiply base Phosphorus gain by total tokens and you no longer lose Oxygen or Carbon."
-                                return a
+                                return "Reward: Per milestone multiply base Phosphorus gain by total tokens and you no longer lose Oxygen or Carbon."
                         },
                 }, // hasMilestone("mu", 1)
                 2: {
@@ -9941,55 +9781,42 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1e1,000,000 E Points"
                                 return "1e1,200,000 E Points"
                         },
-                        requirement(){
-                                return Decimal.pow(10, player.extremeMode ? 1e6 : 12e5)
-                        },
                         done(){
-                                return tmp.mu.milestones[2].requirement.lte(player.mini.e_points.points)
+                                return player.mini.e_points.points.gte(Decimal.pow(10, player.extremeMode ? 1e6 : 12e5))
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Unlock a new E buyable, and you no longer lose any Hydrogen resources."
-                                return a
+                                return "Reward: Unlock a new E buyable, and you no longer lose any Hydrogen resources."
                         },
                 }, // hasMilestone("mu", 2)
                 3: {
                         requirementDescription(){
                                 return "5 µ"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.mu.milestones[3].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(5)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: E Points multiply D Points and each associativity of addition adds .01 to "
-                                a += makeRed("E") + "."
-                                return a
+                                return "Reward: E Points multiply D Points and each associativity of addition adds .01 to " + makeRed("E") + "."
                         },
                 }, // hasMilestone("mu", 3)
                 4: {
                         requirementDescription(){
                                 return "7 µ"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.mu.milestones[4].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(7)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Iterations cost exponent is now x<sup>x</sup>"
-                                return a
+                                return "Iterations cost exponent is now x<sup>x</sup>"
                         },
                 }, // hasMilestone("mu", 4)
                 5: {
@@ -9997,11 +9824,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e206 Phosphorus"
                                 return "1.00e194 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e206 : 1e194)
-                        },
                         done(){
-                                return tmp.mu.milestones[5].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e206 : 1e194)
                         },
                         unlocked(){
                                 return true
@@ -10017,11 +9841,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e227 Phosphorus"
                                 return "1.00e211 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e227 : 1e211)
-                        },
                         done(){
-                                return tmp.mu.milestones[6].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e227 : 1e211)
                         },
                         unlocked(){
                                 return true
@@ -10037,11 +9858,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e259 Phosphorus"
                                 return "1.00e243 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e259 : 1e243)
-                        },
                         done(){
-                                return tmp.mu.milestones[7].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e259 : 1e243)
                         },
                         unlocked(){
                                 return true
@@ -10056,18 +9874,14 @@ addLayer("mu", {
                         requirementDescription(){
                                 return "19 µ"
                         },
-                        requirement(){
-                                return new Decimal(19)
-                        },
                         done(){
-                                return tmp.mu.milestones[8].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(19)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Oxygen Carbon synergy gets effected by tokens"
-                                return a
+                                return "Oxygen Carbon synergy gets effected by tokens"
                         },
                 }, // hasMilestone("mu", 8)
                 9: {
@@ -10075,11 +9889,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e417 Phosphorus"
                                 return "1.00e345 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e417" : "1e345")
-                        },
                         done(){
-                                return tmp.mu.milestones[9].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e417" : "1e345")
                         },
                         unlocked(){
                                 return true
@@ -10095,18 +9906,14 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e459 Phosphorus"
                                 return "1.00e370 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e459" : "1e370")
-                        },
                         done(){
-                                return tmp.mu.milestones[10].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e459" : "1e370")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Each µ adds .001 to the Polynomial base"
-                                return a
+                                return "Each µ adds .001 to the Polynomial base"
                         },
                 }, // hasMilestone("mu", 10)
                 11: {
@@ -10114,11 +9921,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e465 Phosphorus"
                                 return "1.00e398 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e465" : "1e398")
-                        },
                         done(){
-                                return tmp.mu.milestones[11].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e465" : "1e398")
                         },
                         unlocked(){
                                 return true
@@ -10134,19 +9938,15 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e993 Phosphorus"
                                 return "1.00e1283 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e993" : "1e1283")
-                        },
                         done(){
-                                return tmp.mu.milestones[12].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e993" : "1e1283")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Ponder the universe"
-                                if (player.extremeMode) a += " and per µ milestone double Phosphorus gain"
-                                return a
+                                if (player.extremeMode) return "Per µ milestone double Phosphorus gain"
+                                return "Ponder the universe"
                         },
                 }, // hasMilestone("mu", 12)
                 13: {
@@ -10154,137 +9954,106 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e1248 Phosphorus"
                                 return "1.00e1456 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e1248" : "1e1456")
-                        },
                         done(){
-                                return tmp.mu.milestones[13].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e1248" : "1e1456")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "µ cost exponent is 1.9"
-                                return a
+                                return "µ cost exponent is 1.9"
                         },
                 }, // hasMilestone("mu", 13)
                 14: {
                         requirementDescription(){
                                 return "1.00e1585 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e1585")
-                        },
                         done(){
-                                return tmp.mu.milestones[14].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e1585")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove µ → ΔN base cost and add 2 to its exponential divisor"
-                                return a
+                                return "Remove µ → ΔN base cost and add 2 to its exponential divisor"
                         },
                 }, // hasMilestone("mu", 14)
                 15: {
                         requirementDescription(){
                                 return "1.00e1646 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e1646")
-                        },
                         done(){
-                                return tmp.mu.milestones[15].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e1646")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove P → Δµ base cost"
-                                return a
+                                return "Remove P → Δµ base cost"
                         },
                 }, // hasMilestone("mu", 15)
                 16: {
                         requirementDescription(){
                                 return "3e1714 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("3e1714")
-                        },
                         done(){
-                                return tmp.mu.milestones[16].requirement.lte(player.p.points)
+                                return player.p.points.gte("3e1714")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove µ base cost"
-                                return a
+                                return "Remove µ base cost"
                         },
                 }, // hasMilestone("mu", 16)
                 17: {
                         requirementDescription(){
                                 return "1e7789 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e7789")
-                        },
                         done(){
-                                return tmp.mu.milestones[17].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e7789")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1"
-                                return a
+                                return "Reduce µ cost base by 1"
                         },
                 }, // hasMilestone("mu", 17)
                 18: {
                         requirementDescription(){
                                 return "1e10645 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e10645")
-                        },
                         done(){
-                                return tmp.mu.milestones[18].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e10645")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1"
-                                return a
+                                return "Reduce µ cost base by 1"
                         },
                 }, // hasMilestone("mu", 18)
                 19: {
                         requirementDescription(){
                                 return "1e18480 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e18480")
-                        },
                         done(){
-                                return tmp.mu.milestones[19].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e18480")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1 and halve Recycle scaling"
-                                return a
+                                return "Reduce µ cost base by 1 and halve Recycle scaling"
                         },
                 }, // hasMilestone("mu", 19)
                 20: {
                         requirementDescription(){
                                 return "1000 µ"
                         },
-                        requirement(){
-                                return new Decimal("1000")
-                        },
                         done(){
-                                return tmp.mu.milestones[20].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(1000)
                         },
                         unlocked(){
                                 return player.extremeMode
@@ -10293,8 +10062,7 @@ addLayer("mu", {
                                 player.mu.CCostFree = true
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1 and C buyables permanently cost nothing"
-                                return a
+                                return "Reduce µ cost base by 1 and C buyables permanently cost nothing"
                         },
                 }, // hasMilestone("mu", 20)
         },
@@ -11607,11 +11375,8 @@ addLayer("l", {
                         requirementDescription(){
                                 return "1 Life"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.l.milestones[1].requirement.lte(player.l.points)
+                                return player.l.points.gte(1)
                         },
                         unlocked(){
                                 return true
@@ -11641,19 +11406,15 @@ addLayer("l", {
                         requirementDescription(){
                                 return "2 Lives"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.l.milestones[2].requirement.lte(player.l.points)
+                                return player.l.points.gte(2)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuyhco"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication."
-                                return a
+                                return "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication."
                         },
                 }, // hasMilestone("l", 2)
                 3: {
@@ -11664,7 +11425,7 @@ addLayer("l", {
                                 return new Decimal(3)
                         },
                         done(){
-                                return tmp.l.milestones[3].requirement.lte(player.l.points)
+                                return player.l.points.gte(3)
                         },
                         unlocked(){
                                 return true
@@ -11680,30 +11441,23 @@ addLayer("l", {
                         requirementDescription(){
                                 return "4 Lives"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.l.milestones[4].requirement.lte(player.l.points)
+                                return player.l.points.gte(4)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuynp"]],
                         effectDescription(){
-                                let a = "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades."
-                                return a
+                                return "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades."
                         },
                 }, // hasMilestone("l", 4)
                 5: {
                         requirementDescription(){
                                 return "5 Lives"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.l.milestones[5].requirement.lte(player.l.points)
+                                return player.l.points.gte(5)
                         },
                         unlocked(){
                                 return true
@@ -11719,37 +11473,29 @@ addLayer("l", {
                         requirementDescription(){
                                 return "6 Lives"
                         },
-                        requirement(){
-                                return new Decimal(6)
-                        },
                         done(){
-                                return tmp.l.milestones[6].requirement.lte(player.l.points)
+                                return player.l.points.gte(6)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuymu"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
-                                return a
+                                return "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
                         },
                 }, // hasMilestone("l", 6)
                 7: {
                         requirementDescription(){
                                 return "7 Lives"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.l.milestones[7].requirement.lte(player.l.points)
+                                return player.l.points.gte(7)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep C and D point upgrades."
-                                return a
+                                return "Reward: Keep C and D point upgrades."
                         },
                 }, // hasMilestone("l", 7)
                 8: {
@@ -11760,14 +11506,13 @@ addLayer("l", {
                                 return new Decimal(10)
                         },
                         done(){
-                                return tmp.l.milestones[8].requirement.lte(player.l.points)
+                                return player.l.points.gte(10)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep token and µ milestones and unlock a challenge."
-                                return a
+                                return "Reward: Keep token and µ milestones and unlock a challenge."
                         },
                 }, // hasMilestone("l", 8)
                 9: {
@@ -11775,12 +11520,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "6 Dilation completions"
                                 return "12 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(6)
-                                return new Decimal(12)
-                        },
                         done(){
-                                return tmp.l.milestones[9].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 6 : 12)
                         },
                         unlocked(){
                                 return true
@@ -11795,12 +11536,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "8 Dilation completions"
                                 return "13 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(8)
-                                return new Decimal(13)
-                        },
                         done(){
-                                return tmp.l.milestones[10].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 8 : 13)
                         },
                         unlocked(){
                                 return true
@@ -11826,12 +11563,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "11 Dilation completions"
                                 return "14 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(11)
-                                return new Decimal(14)
-                        },
                         done(){
-                                return tmp.l.milestones[11].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 11 : 14)
                         },
                         unlocked(){
                                 return true
@@ -11845,11 +11578,8 @@ addLayer("l", {
                         requirementDescription(){
                                 return "24 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(24)
-                        },
                         done(){
-                                return tmp.l.milestones[12].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 24
                         },
                         unlocked(){
                                 return true
@@ -11863,19 +11593,14 @@ addLayer("l", {
                         requirementDescription(){
                                 return "25 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(25)
-                        },
                         done(){
-                                return tmp.l.milestones[13].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 25
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let x = player.hardMode ? 100 : 1000
-                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(x) + "x."
-                                return a
+                                return "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(player.hardMode ? 100 : 1000) + "x."
                         },
                 }, // hasMilestone("l", 13)
                 14: {
@@ -11883,17 +11608,12 @@ addLayer("l", {
                                 if (player.extremeMode) return "28 Dilation completions"
                                 return "26 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(26)
-                        },
                         done(){
-                                if (player.extremeMode) {
-                                        return player.l.challenges[11] >= 28
-                                } 
+                                if (player.extremeMode) return player.l.challenges[11] >= 28
                                 if (player.l.challenges[11] > 26) return true
                                 if (!inChallenge("l", 11)) return
                                 if (player.points.lt("1ee305")) return 
-                                return tmp.l.milestones[14].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 26
                         },
                         unlocked(){
                                 return true
@@ -11910,18 +11630,14 @@ addLayer("l", {
                                 if (player.extremeMode) return "1.00e21 µ"
                                 return "5.00e21 µ"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e21 : 5e21)
-                        },
                         done(){
-                                return tmp.l.milestones[15].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(player.extremeMode ? 1e21 : 5e21)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → Δµ levels multiply Life gain."
-                                return a
+                                return "Reward: N → Δµ levels multiply Life gain."
                         },
                 }, // hasMilestone("l", 15)
                 16: {
@@ -11929,51 +11645,40 @@ addLayer("l", {
                                 if (player.extremeMode) return "2.93e12 Lives"
                                 return "2.00e22 µ"
                         },
-                        requirement(){
-                                return new Decimal(2e22)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(2.93e12)
-                                return tmp.l.milestones[16].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(2e22)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each milestone adds .0001 to N → ΔP base."
-                                return a
+                                return "Reward: Each milestone adds .0001 to N → ΔP base."
                         },
                 }, // hasMilestone("l", 16)
                 17: {
                         requirementDescription(){
-                                if (player.extremeMode) return "4.5e12 Lives"
+                                if (player.extremeMode) return "4.50e12 Lives"
                                 return "2.70e12 Lives"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 4.5e12 : 2.7e12)
-                        },
                         done(){
-                                return tmp.l.milestones[17].requirement.lte(player.l.points)
+                                return player.l.points.gte(player.extremeMode ? 4.5e12 : 2.7e12)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles: () => [["l", "autobuyntodp"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy N → ΔP."
-                                return a
+                                return "Reward: Autobuy N → ΔP."
                         },
                 }, // hasMilestone("l", 17)
                 18: {
                         requirementDescription(){
-                                if (player.extremeMode) return "3e23 µ"
+                                if (player.extremeMode) return "3.00e23 µ"
                                 return "1.00e25 µ"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 3e23 : 1e25)
-                        },
                         done(){
-                                return tmp.l.milestones[18].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(player.extremeMode ? 3e23 : 1e25)
                         },
                         unlocked(){
                                 return true
@@ -11989,19 +11694,15 @@ addLayer("l", {
                                 if (player.extremeMode) return "7e24 µ"
                                 return "e1.00e1000 Points"
                         },
-                        requirement(){
-                                return new Decimal("ee1000")
-                        },
                         done(){
                                 if (player.extremeMode) return player.mu.points.gte(7e24)
-                                return tmp.l.milestones[19].requirement.lte(player.points)
+                                return player.points.gte("ee1000")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔP cost base is 8."
-                                return a
+                                return "Reward: N → ΔP cost base is 8."
                         },
                 }, // hasMilestone("l", 19)
                 20: {
@@ -12009,15 +11710,12 @@ addLayer("l", {
                                 if (player.extremeMode) return "7e25 µ"
                                 return "e3.20e306 Points"
                         },
-                        requirement(){
-                                return new Decimal("e3.2e306")
-                        },
                         done(){
                                 if (player.extremeMode) return player.mu.points.gte(7e25)
                                 if (player.l.challenges[11] > 35) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 35) return false
-                                return tmp.l.milestones[20].requirement.lte(player.points)
+                                return player.points.gte("e3.2e306")
                         },
                         unlocked(){
                                 return true
@@ -12034,14 +11732,11 @@ addLayer("l", {
                                 if (player.extremeMode) return "39 Dilation completions"
                                 return "e9.50e305 Points"
                         },
-                        requirement(){
-                                return new Decimal("e9.5e305")
-                        },
                         done(){
                                 if (player.l.challenges[11] > (player.extremeMode ? 38 : 39)) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 39) return false
-                                return tmp.l.milestones[21].requirement.lte(player.points)
+                                return player.points.gte("e9.5e305")
                         },
                         unlocked(){
                                 return true
@@ -12076,9 +11771,6 @@ addLayer("l", {
                                 if (player.extremeMode) return "2.75e25 Lives"
                                 return "3.45e31 Lives"
                         },
-                        requirement(){
-                                return new Decimal(3.45e31)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(2.75e25)
                                 return player.l.points.gte(3.45e31)
@@ -12087,17 +11779,13 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>."
-                                return a
+                                return "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>."
                         },
                 }, // hasMilestone("l", 23)
                 24: {
                         requirementDescription(){
                                 if (player.extremeMode) return "1.71e45 Lives"
                                 return "1.70e50 Lives"
-                        },
-                        requirement(){
-                                return new Decimal(1.7e50)
                         },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(1.71e45)
@@ -12107,8 +11795,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .47."
-                                return a
+                                return "Reward: Token cost exponent is .47."
                         },
                 }, // hasMilestone("l", 24)
                 25: {
@@ -12116,20 +11803,16 @@ addLayer("l", {
                                 if (player.extremeMode) return "2.26e116 Lives"
                                 return "5.00e113 Lives"
                         },
-                        requirement(){
-                                return new Decimal(5e113)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(2.26e116)
-                                return tmp.l.milestones[25].requirement.lte(player.l.points)
+                                return player.l.points.gte(5e113)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
                                 if (player.extremeMode) return "Reward: 𝛾 → ∂α's log10 becomes ln."
-                                let a = "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln."
-                                return a
+                                return "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln."
                         },
                 }, // hasMilestone("l", 25)
                 26: {
@@ -12137,12 +11820,9 @@ addLayer("l", {
                                 if (player.extremeMode) return "9.75e126 Lives"
                                 return "7.00e125 Lives"
                         },
-                        requirement(){
-                                return new Decimal(7e125)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(9.75e126)
-                                return tmp.l.milestones[26].requirement.lte(player.l.points)
+                                return player.l.points.gte(7e125)
                         },
                         unlocked(){
                                 return true
@@ -12157,19 +11837,15 @@ addLayer("l", {
                                 if (player.extremeMode) return "7.40e128 Lives"
                                 return "4.00e128 Lives"
                         },
-                        requirement(){
-                                return new Decimal(4e128)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(7.4e128)
-                                return tmp.l.milestones[27].requirement.lte(player.l.points)
+                                return player.l.points.gte(4e128)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP."
-                                return a
+                                return "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP."
                         },
                 }, // hasMilestone("l", 27)
                 28: {
@@ -12185,8 +11861,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log7 becomes log5."
-                                return a
+                                return "Reward: α → ∂β log7 becomes log5."
                         },
                 }, // hasMilestone("l", 28)
                 29: {
@@ -12203,8 +11878,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43."
-                                return a
+                                return "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43."
                         },
                 }, // hasMilestone("l", 29)
                 30: {
