@@ -148,7 +148,7 @@ function getPointDilationExponent(){
                 if (hasMilestone("d", 24)) portion = portion.pow(.94)
                 let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
 
-                if (!player.extremeMode) c58base = layers.l.grid.getGemEffect(508)
+                let c58base = player.extremeMode ? decimalOne : layers.l.grid.getGemEffect(508)
                 
                 portion = portion.pow(c58base.pow(c58exp))
                                         exp = exp.times(portion)
@@ -248,7 +248,7 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
 ]
 
 var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
-        101: "Boost life gain<br>*1+sqrt(x) TEST",
+        101: "Boost life gain<br>*1+x",
         /* THINGS TO CONSIDER KEEPING
         404: "Unlock Amino upgrades<br>min(8,⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋)",
         306: "Passive DNA gain<br>x/11%/s",
@@ -336,7 +336,7 @@ var GEM_EFFECT_DESCRIPTIONS = {
 }
 
 var GEM_EFFECT_FORMULAS_EXTREME = {
-        101: (x) => x.sqrt().plus(1),
+        101: (x) => x.plus(1),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -10424,7 +10424,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.l.buyables[22].effect)
                                                 ret = ret.times(tmp.l.buyables[31].effect)
                                                 ret = ret.times(tmp.l.buyables[32].effect)
-                if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(101))
+                                                ret = ret.times(layers.l.grid.getGemEffect(101))
                 if (hasMilestone("l", 22)) {
                         let exp = player.mu.buyables[32].sub(40).max(0)
                                                 ret = ret.times(Decimal.pow(1.5, exp))
@@ -10877,6 +10877,18 @@ addLayer("l", {
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 77
                         }, 
                 }, // hasUpgrade("l", 35)
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XVI"
+                        },
+                        description(){
+                                return "Remove α → ∂𝛾 base cost and add 10 to its exponential divider"
+                        },
+                        cost:() => new Decimal(1.8e261),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.grid[101].gems.gt(0)
+                        }, 
+                }, // hasUpgrade("l", 41)
         },
         milestones: {
                 1: {
@@ -11867,6 +11879,7 @@ addLayer("l", {
                         title: "α → ∂𝛾",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 3e19 : 1e21)
+                                if (hasUpgrade("l", 41)) init = decimalOne
                                 let base = new Decimal(player.extremeMode ? 8 : 10)
                                 let id = 13
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -11882,6 +11895,7 @@ addLayer("l", {
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
                                 let init = player.extremeMode ? 3e19 : 1e21
+                                if (hasUpgrade("l", 41)) init = 1
                                 let base = player.extremeMode ? 8 : 10
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[13].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -11892,6 +11906,7 @@ addLayer("l", {
 
                                 ret = ret.plus(tmp.l.buyables[23].effect)
                                 ret = ret.plus(tmp.l.buyables[33].effect)
+                                if (hasUpgrade("l", 41)) ret = ret.plus(10)
                                 
                                 return ret.min(1e9)
                         },
@@ -11947,6 +11962,7 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e21*10^(x<sup>1+x/" + formatWhole(tmp.l.buyables[13].expDiv) + "</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("1e21*10", "3e19*8")
+                                if (hasUpgrade("l", 41)) cost2 = cost2.slice(5,)
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12462,8 +12478,8 @@ addLayer("l", {
                 33: {
                         title: "𝛾 → ∂𝛾",
                         cost(){
-                                let init = new Decimal(3e281)
-                                let base = new Decimal(2e16)
+                                let init = new Decimal(player.extremeMode ? 3e241 : 3e281)
+                                let base = new Decimal(player.extremeMode ? 3e15 : 2e16)
                                 if (hasChallenge("l", 101)) base = new Decimal(2468)
                                 if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 33
@@ -12479,8 +12495,8 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 3e281
-                                let base = 2e16
+                                let init = player.extremeMode ? 3e241 : 3e281
+                                let base = player.extremeMode ? 3e15 : 2e16
                                 if (hasChallenge("l", 101)) base = 2468
                                 if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
@@ -12546,6 +12562,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e281*2e16^(x<sup>1+x/" + formatWhole(tmp.l.buyables[33].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("3e281*2e16", "3e241*3e15")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12610,6 +12627,7 @@ addLayer("l", {
                                 if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
+                                        if (eff >=111) eff -= .11
                                         if (eff >=110) eff -= .28
                                         if (eff >=104) eff += (eff - 103)/2
                                         if (eff >=103) eff += .3
