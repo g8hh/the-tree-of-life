@@ -55,12 +55,13 @@ function getPointExponentiation(){
         if (hasMilestone("l", 31)) {
                 let l31exp = new Decimal(player.l.challenges[11]).sub(100).max(0)
                 let l31base = 100
+                if (player.extremeMode) l31base /= 100/9
                 if (hasMilestone("l", 32)) l31base *= 10
                 if (hasMilestone("l", 34)) l31base *= 10
                                         exp = exp.times(Decimal.pow(l31base, l31exp))
         }
         if (hasMilestone("l", 33)) {
-                let l33base = new Decimal(player.l.challenges[11]).div(100).max(1)
+                let l33base = new Decimal(player.l.challenges[11]).div(player.extremeMode ? 98 : 100).max(1)
                 let l33exp = player.mu.buyables[33]
                                         exp = exp.times(Decimal.pow(l33base, l33exp))
         }
@@ -11388,13 +11389,12 @@ addLayer("l", {
                 }, // hasMilestone("l", 28)
                 29: {
                         requirementDescription(){
+                                if (player.extremeMode) return "6.20e159 Lives"
                                 return "1.00e157 Lives"
                         },
-                        requirement(){
-                                return new Decimal(1e157)
-                        },
                         done(){
-                                return tmp.l.milestones[29].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(6.2e159)
+                                return player.l.points.gte(1e157)
                         },
                         unlocked(){
                                 return true
@@ -11405,85 +11405,79 @@ addLayer("l", {
                 }, // hasMilestone("l", 29)
                 30: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.25e168 Lives"
                                 return "1.00e182 Lives"
                         },
-                        requirement(){
-                                return new Decimal(1e182)
-                        },
                         done(){
-                                return tmp.l.milestones[30].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(2.25e168)
+                                return player.l.points.gte(1e182)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log5 becomes log4, token cost exponent is .41 and you bulk 5x N → ΔP."
-                                return a
+                                return "Reward: α → ∂β log5 becomes log4, token cost exponent is .41 and you bulk 5x N → ΔP."
                         },
                 }, // hasMilestone("l", 30)
                 31: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.76e181 Lives"
                                 return "4.00e198 Lives"
                         },
-                        requirement(){
-                                return new Decimal(4e198)
-                        },
                         done(){
-                                return tmp.l.milestones[31].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(2.76e181)
+                                return player.l.points.gte(4e198)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^100 per Dilation completion over 100."
-                                return a
+                                if (player.extremeMode) return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^9 per Dilation completion over 100."
+                                return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^100 per Dilation completion over 100."
                         },
                 }, // hasMilestone("l", 31)
                 32: {
                         requirementDescription(){
+                                if (player.extremeMode) return "5.00e191"
                                 return "2.00e219 Lives"
                         },
-                        requirement(){
-                                return new Decimal(2e219)
-                        },
                         done(){
-                                return tmp.l.milestones[32].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(5e191)
+                                return player.l.points.gte(2e219)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
-                                return a
+                                return "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
                         },
                 }, // hasMilestone("l", 32)
                 33: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.00e214 Lives"
                                 return "7.00e242 Lives"
                         },
-                        requirement(){
-                                return new Decimal(7e242)
-                        },
                         done(){
-                                return tmp.l.milestones[33].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(1e214)
+                                return player.l.points.gte(7e242)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
                                 let a = "Reward: Point gain is raised Dilation completions/100 per N → ΔN level and per milestone double life gain."
+                                if (player.extremeMode) a = a.replace("100", "98")
                                 return a
                         },
                 }, // hasMilestone("l", 33)
                 34: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.00e229 Lives"
                                 return "2.00e261 Lives"
                         },
-                        requirement(){
-                                return new Decimal(2e261)
-                        },
                         done(){
-                                return tmp.l.milestones[34].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(1e229)
+                                return player.l.points.gte(2e261)
                         },
                         unlocked(){
                                 return true
@@ -12398,8 +12392,8 @@ addLayer("l", {
                 32: {
                         title: "𝛾 → ∂β",
                         cost(){
-                                let init = new Decimal(1e166)
-                                let base = new Decimal(1600)
+                                let init = new Decimal(player.extremeMode ? 1.5e145 : 1e166)
+                                let base = new Decimal(player.extremeMode ? 250 : 1600)
                                 if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 32
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -12414,8 +12408,8 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 1e166
-                                let base = 1600
+                                let init = player.extremeMode ? 1.5e145 : 1e166
+                                let base = player.extremeMode ? 250 : 1600
                                 if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[32].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -12479,6 +12473,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e166*1600^(x<sup>1+x/" + formatWhole(tmp.l.buyables[32].expDiv) + "</sup>)"
+                                if (player.extremeMode) cost2 = cost2.replace("1e166*1600", "1.5e145*250")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500") 
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12644,6 +12639,11 @@ addLayer("l", {
                                 if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
+                                        if (eff >=110) eff -= .28
+                                        if (eff >=104) eff += (eff - 103)/2
+                                        if (eff >=103) eff += .3
+                                        if (eff >=101) eff -= .12
+                                        if (eff >=100) eff -= .03
                                         if (eff >= 98) eff -= (eff - 97)*.3
                                         if (eff >= 92) eff -= .62
                                         if (eff >= 91) eff += 5/6
