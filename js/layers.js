@@ -24903,7 +24903,7 @@ addLayer("mini", {
                                                         let maxAfford = tmp.mini.buyables[id].maxAfford
                                                         let curr = getBuyableAmount("mini", id)
                                                         let add = maxAfford.sub(curr).max(0)
-                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulk)
+                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulkC)
                                                         player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                                 }
                                                 if (!(allABContent || hasUpgrade("tokens", 95))) break
