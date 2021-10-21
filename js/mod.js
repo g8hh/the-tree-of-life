@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.159.1",
+	num: "1.160",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,17 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.159)<br><br>
+		Reaching the endgame screen (updated as of v1.160)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.160</h3><br>
+		- Balanced until C13 gems.<br>
+		- Added two Life upgrades.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.159.1</h3><br>
 		- Finished code cleanup (for now)!<br>
 		- Prepped gems for extreme mode.<br>
