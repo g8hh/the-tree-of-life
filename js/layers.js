@@ -2056,6 +2056,9 @@ addLayer("sci", {
                 if (data.autobuyreuse && hasMilestone("l", 3)) {
                         if (tsb[302].unlocked) lsb[302].buy()
                 }
+                if (data.autobuyrecycle && hasMilestone("l", 5)) {
+                        if (tsb[303].unlocked) lsb[303].buy()
+                }
         },
         effect(){
                 return player.sci.points.plus(10).log10()
@@ -2220,8 +2223,6 @@ addLayer("sci", {
                         ret = ret.times(Decimal.pow(16, layerChallengeCompletions("n")))
                         ret = ret.times(tmp.sci.nitrogen_science.getGainMult)
 
-                        if (hasMilestone("l", 1)) ret = ret.pow(tmp.l.milestones[1].effect)
-
                         ret = ret.pow(.75) // extreme
 
                         ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
@@ -2236,7 +2237,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 323))     ret = ret.times(tmp.sci.upgrades[323].effect)
                         if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10())
                         if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().pow(player.p.upgrades.length))
-                                                        ret = ret.times(tmp.l.effect)
+                                                        ret = ret.times(tmp.l.effect.min(1e10))
 
                         return ret
                 },
@@ -5102,7 +5103,6 @@ addLayer("sci", {
                         title: "Recycle", // less effective tokens
                         cost(){
                                 let amt = getBuyableAmount("sci", 303)
-                                if (amt.gte(100)) amt = amt.div(50).pow10()
                                 if (hasMilestone("mu", 19)) amt = amt.div(2)
                                 if (amt.lte(0)) return new Decimal("5.99e104")
                                 if (amt.lte(1)) return new Decimal("1.01e105")
@@ -8220,7 +8220,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 5e8 : 1e8),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 11)
+                                return player.a.unlocked || hasUpgrade("p", 11) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 12)
                 },
                 13: {
@@ -8233,7 +8233,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 5e10 : 1e10),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 12)
+                                return player.a.unlocked || hasUpgrade("p", 12) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 13)
                 },
                 14: {
@@ -8254,7 +8254,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e12 : 2e11),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 13)
+                                return player.a.unlocked || hasUpgrade("p", 13) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 14)
                 },
                 15: {
@@ -8274,7 +8274,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 3e12 : 6e11),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 14)
+                                return player.a.unlocked || hasUpgrade("p", 14) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 15)
                 },
                 21: {
@@ -8287,7 +8287,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e18 : 1e17),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 15)
+                                return player.a.unlocked || hasUpgrade("p", 15) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 21)
                 },
                 22: {
@@ -8300,7 +8300,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e19 : 1e18),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 21)
+                                return player.a.unlocked || hasUpgrade("p", 21) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 22)
                 },
                 23: {
@@ -8313,7 +8313,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 3e19 : 3e18),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 22)
+                                return player.a.unlocked || hasUpgrade("p", 22) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 23)
                 },
                 24: {
@@ -8333,7 +8333,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e20 : 1e19),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 23)
+                                return player.a.unlocked || hasUpgrade("p", 23) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 24)
                 },
                 25: {
@@ -8349,7 +8349,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e26 : 1e25),
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 24)
+                                return player.a.unlocked || hasUpgrade("p", 24) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 25)
                 },
                 31: {
@@ -8362,7 +8362,7 @@ addLayer("p", {
                         },
                         cost:() => new Decimal(player.hardMode ? 1e38 : 1e37),
                         unlocked(){
-                                return player.a.unlocked || hasMilestone("mu", 2)
+                                return player.a.unlocked || hasMilestone("mu", 2) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 31)
                 },
                 32: {
@@ -8381,7 +8381,7 @@ addLayer("p", {
                                 return new Decimal(player.hardMode ? 1e43 : 1e42)
                         },
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 31)
+                                return player.a.unlocked || hasUpgrade("p", 31) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 32)
                 },
                 33: {
@@ -8404,7 +8404,7 @@ addLayer("p", {
                                 return new Decimal(player.hardMode ? 1e61 : 1e60)
                         },
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 32)
+                                return player.a.unlocked || hasUpgrade("p", 32) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 33)
                 },
                 34: {
@@ -8420,7 +8420,7 @@ addLayer("p", {
                                 return new Decimal(player.hardMode ? 1e163 : 1e162)
                         },
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 33)
+                                return player.a.unlocked || hasUpgrade("p", 33) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 34)
                 },
                 35: {
@@ -8436,7 +8436,7 @@ addLayer("p", {
                                 return new Decimal(player.hardMode ? "1e1065" : "1e1064")
                         },
                         unlocked(){
-                                return player.a.unlocked || hasUpgrade("p", 34)
+                                return player.a.unlocked || hasUpgrade("p", 34) || hasMilestone("l", 6)
                         }, // hasUpgrade("p", 35)
                 },
                 41: {
@@ -11464,9 +11464,11 @@ addLayer("l", {
                         unlocked(){
                                 return true
                         },
+                        toggles:() => player.extremeMode ? [["sci", "autobuyrecycle"]] : [],
                         effectDescription(){
-                                let a = "Reward: Start with 1 fuel, keep Corn and Nitrogen milestones, and keep a Phosphorus milestone per reset."
-                                return a
+                                let a = "Reward: Start with 1 fuel, keep Corn and Nitrogen milestones,"
+                                if (player.extremeMode) a += " autobuy Recycle,"
+                                return a + " and keep a Phosphorus milestone per reset."
                         },
                 }, // hasMilestone("l", 5)
                 6: {
@@ -13192,10 +13194,14 @@ addLayer("l", {
                         challengeEffect(){
                                 let eff = player.l.challenges[11] + 1
 
-                                if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
-                                if (eff > 91) eff = eff * 1.5 - 45.5
-                                if (eff > 65) eff = eff * 2 - 65
-                                if (eff > 50) eff = eff * 2 - 50
+                                if (player.extremeMode) { 
+                                        
+                                } else {
+                                        if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
+                                        if (eff > 91) eff = eff * 1.5 - 45.5
+                                        if (eff > 65) eff = eff * 2 - 65
+                                        if (eff > 50) eff = eff * 2 - 50
+                                }
 
                                 let init = decimalOne.sub(eff/1000)
 
@@ -14239,8 +14245,8 @@ addLayer("l", {
                                         let b = "Life resets reset everything before Life except achievements" + br2
                                         let c = "Life affects most prior currencies:" + br
                                         let d = "Life Points, Hydrogen, Atomic Hydrogen, Deuterium, " + br
-                                        let e = "Carbon, Oxygen, Nitrogen, Phosphorus, Coins, Color amounts," + br
-                                        if (player.extremeMode) e += "Science<sup>**</sup>, Hydrogen Science, Oxygen Science, Carbon Science, Nitrogen Science," + br
+                                        let e = "Carbon, Oxygen, Nitrogen, Phosphorus/s, Coins, Color amounts," + br
+                                        if (player.extremeMode) e += "Science<sup>**</sup>, Hydrogen Science, Oxygen Science, Carbon Science, Nitrogen Science<sup>**</sup>," + br
                                         let f = "A Points, B Points, C Points, D Points, and E Points"
                                         let step0 = a + b + c + d + e + f + "."
                                         if (player.extremeMode) step0 += br2 + "<sup>**</sup>Capped at 1e10 and not affected by Life milestone 1"
