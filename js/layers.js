@@ -9185,7 +9185,7 @@ addLayer("mu", {
                                 if (player.extremeMode) a += ", reduce µ cost base by 1,"
                                 return a + " and you can bulk unlimited minigame buyables"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 483 : 1000),
+                        cost:() => new Decimal(player.extremeMode ? 478 : 1000),
                         unlocked(){
                                 return hasUpgrade("mu", 34) || hasMilestone("l", 3)
                         }, // hasUpgrade("mu", 35)
@@ -9569,10 +9569,10 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 16)
                 17: {
                         requirementDescription(){
-                                return "1e7789 Phosphorus"
+                                return "1e7665 Phosphorus"
                         },
                         done(){
-                                return player.p.points.gte("1e7789")
+                                return player.p.points.gte("1e7665")
                         },
                         unlocked(){
                                 return player.extremeMode
@@ -9583,10 +9583,10 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 17)
                 18: {
                         requirementDescription(){
-                                return "1e10645 Phosphorus"
+                                return "1e10500 Phosphorus"
                         },
                         done(){
-                                return player.p.points.gte("1e10645")
+                                return player.p.points.gte("1e10500")
                         },
                         unlocked(){
                                 return player.extremeMode
@@ -9597,10 +9597,10 @@ addLayer("mu", {
                 }, // hasMilestone("mu", 18)
                 19: {
                         requirementDescription(){
-                                return "1e18480 Phosphorus"
+                                return "1e18130 Phosphorus"
                         },
                         done(){
-                                return player.p.points.gte("1e18480")
+                                return player.p.points.gte("1e18130")
                         },
                         unlocked(){
                                 return player.extremeMode
