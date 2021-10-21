@@ -9171,7 +9171,7 @@ addLayer("mu", {
                                 if (player.extremeMode) a += ", remove P → ΔP and P → ΔN  base costs,"
                                 return a + " and you bulk 100x minigame buyables"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 118 : 240),
+                        cost:() => new Decimal(player.extremeMode ? 115 : 240),
                         unlocked(){
                                 return hasUpgrade("mu", 33) || hasMilestone("l", 3)
                         }, // hasUpgrade("mu", 34)
@@ -24921,7 +24921,7 @@ addLayer("mini", {
                                                         let maxAfford = tmp.mini.buyables[id].maxAfford
                                                         let curr = getBuyableAmount("mini", id)
                                                         let add = maxAfford.sub(curr).max(0)
-                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulk)
+                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulkC)
                                                         player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                                 }
                                                 if (!(allABContent || hasUpgrade("tokens", 95))) break
