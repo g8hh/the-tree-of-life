@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.161",
+	num: "1.162",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,19 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.161)<br><br>
+		Reaching the endgame screen (updated as of v1.162)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.162</h3><br>
+		- Made parts of Life/Amino milestone 1 be given for unlocking the layer (see info).<br>
+		- Various code cleanup.<br>
+		- Cleaned up some display issues.<br>
+		- Various code cleanup.<br>
+		- Added a "MAXED" display for Reduce.<br>
 	<br><h3 style='color: #CC0000'>v1.161</h3><br>
 		- Balanced until Amino Acid unlock.<br>
 		- Implemented C23, 31, 32, and 33 gems.<br>
