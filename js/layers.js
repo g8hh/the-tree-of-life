@@ -2223,6 +2223,10 @@ addLayer("sci", {
                         ret = ret.times(Decimal.pow(16, layerChallengeCompletions("n")))
                         ret = ret.times(tmp.sci.nitrogen_science.getGainMult)
 
+                        if (hasUpgrade("l", 11) && hasMilestone("l", 1)) {
+                                ret = ret.pow(tmp.l.milestones[1].effect)
+                        } 
+
                         ret = ret.pow(.75) // extreme
 
                         ret = dilate(ret, tmp.l.challenges[11].challengeEffect)
@@ -9354,7 +9358,9 @@ addLayer("mu", {
                 }
                 if (ret.gt(.45) && !hasUpgrade("mu", 33)) ret = ret.pow(2).times(.69).plus(.31)
 
-                if (player.extremeMode && ret.gte(.92)) ret = ret.sub(.92).div(.08).pow(1.22).times(.08).plus(.92)
+                if (player.extremeMode && !hasUpgrade("l", 13) && ret.gte(.92)) {
+                        ret = ret.sub(.92).div(.08).pow(1.22).times(.08).plus(.92)
+                }
 
                 return ret
         },
@@ -9367,6 +9373,9 @@ addLayer("mu", {
 
                         if (player.mu.points.gt(35)) a += " (softcapped)"
                         if (eff.gt(.45) && !hasUpgrade("mu", 33)) a = a.replace(")", "<sup>2</sup>)")
+                        else if (player.extremeMode && eff.gt(.92) && !hasUpgrade("l", 13)) {
+                                a = a.replace(")", "<sup>2</sup>)")
+                        }
                         //should be 351/400 to be smooth but idc
                         
                         a += " resulting in ^" + format(tmp.mu.effect.sub(1).recip().times(-1), 3) 
@@ -10699,7 +10708,7 @@ addLayer("mu", {
                                 if (hasUpgrade("d", 31)) return Decimal.pow(1e5, exp).floor()
                                 if (hasUpgrade("d", 25)) return amt.pow(exp).floor()
                                 let init= amt.pow(exp.plus(2))
-                                let base = player.extremeMode ? 70 : 65
+                                let base = player.extremeMode ? 69 : 65
                                 return new Decimal(base).plus(init).floor()
                         },
                         expDiv(){
@@ -10784,7 +10793,7 @@ addLayer("mu", {
                                         cost2 = cost2.replace("65+", "")
                                         cost2 = cost2.replace("2+", "")
                                 }
-                                if (player.extremeMode) cost2 = cost2.replace("65", "70")
+                                if (player.extremeMode) cost2 = cost2.replace("65", "69")
                                 if (hasUpgrade("d", 31)) cost2 = cost2.replace("x", "100,000")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
@@ -11347,7 +11356,7 @@ addLayer("l", {
         row: 3, // Row the layer is in on the tree (0 is the first row)
         prestigeButtonText(){
                 if (player.tab != "l") return ""
-                if (player.subtabs.l.mainTabs != "Challenges") return ""
+                if (!["Challenges", "Upgrades"].includes(player.subtabs.l.mainTabs)) return ""
 
                 let a = "Reset for <b>" + formatWhole(tmp.l.getResetGain) + "</b> Lives"
 
@@ -11359,6 +11368,46 @@ addLayer("l", {
         layerShown(){
                 if (tmp.l.deactivated) return false
                 return player.l.unlocked
+        },
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life I"
+                        },
+                        description(){
+                                return "Life Milestone 1 effects Nitrogen Science gain"
+                        },
+                        cost:() => new Decimal(10),
+                        unlocked(){
+                                return player.extremeMode && hasMilestone("l", 8)
+                        }, 
+                }, // hasUpgrade("l", 11)
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life II"
+                        },
+                        description(){
+                                return "Per upgrade you have one less token for prestige purposes and keep Nitrogen upgrades upon Life reset"
+                        },
+                        cost:() => new Decimal(30),
+                        unlocked(){
+                                return hasUpgrade("l", 11) && player.l.challenges[11] >= 2
+                        }, 
+                }, // hasUpgrade("l", 12)
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life III"
+                        },
+                        description(){
+                                return "Remove .92 µ effect softcap"
+                        },
+                        cost:() => new Decimal(90),
+                        unlocked(){
+                                return hasUpgrade("l", 12) && player.l.challenges[11] >= 4
+                        }, 
+                }, // hasUpgrade("l", 13)
         },
         milestones: {
                 1: {
@@ -11528,9 +11577,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 8)
                 9: {
                         requirementDescription(){
+                                if (player.extremeMode) return "6 Dilation completions"
                                 return "12 Dilation completions"
                         },
                         requirement(){
+                                if (player.extremeMode) return new Decimal(6)
                                 return new Decimal(12)
                         },
                         done(){
@@ -11540,8 +11591,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Every other Dilation completion makes you have one less effective token for prestige purposes."
-                                return a
+                                if (player.extremeMode) return "Reward: Every Dilation completion makes you have one less effective token for prestige purposes."
+                                return "Reward: Every other Dilation completion makes you have one less effective token for prestige purposes."
                         },
                 }, // hasMilestone("l", 9)
                 10: {
@@ -11570,7 +11621,7 @@ addLayer("l", {
                                 
                                 let a = "Reward: Token costs are floored instead of rounded and cube the Oxygen-Carbon symmetry cap per Dilation completion."
                                 let b = "Currently: " + format(tmp.l.milestones[10].effect)
-                                return a + b
+                                return a + br + b
                         },
                 }, // hasMilestone("l", 10)
                 11: {
@@ -14198,6 +14249,16 @@ addLayer("l", {
                                 return true
                         },
                 },
+                "Upgrades": {
+                        content: ["main-display",
+                                  ["prestige-button", ""],
+                                  "blank", 
+                                  "upgrades",
+                                ],
+                        unlocked(){
+                                return player.extremeMode && hasMilestone("l", 8)
+                        },
+                },
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
@@ -14411,7 +14472,7 @@ addLayer("l", {
                                        31, 32, 33, 34, 35,
                                        41, 42, 43, 44, 45,
                                        51, 52, 53, 54, 55,]
-                        if (!hasMilestone("a", 6)) {
+                        if (!hasMilestone("a", 6) && !hasUpgrade("l", 12)) {
                                 data3.upgrades = filterOut(data3.upgrades, nUpgRem)
                         }
 
@@ -15592,9 +15653,9 @@ addLayer("a", {
                                 if (player.tab != "a") return ""
                                 if (player.subtabs.a.mainTabs != "Milestones") return ""
                                 
-                                let a = "Reward: Gain a C21 gem per second, and keep Nitrogen upgrades upon Life reset."
-                                let b = ""
-                                return a + b
+                                let a = "Reward: Gain a C21 gem per second"
+                                if (player.extremeMode) return a + "."
+                                return a + ", and keep Nitrogen upgrades upon Life reset."
                         },
                 }, // hasMilestone("a", 6)
                 7: {
@@ -34249,7 +34310,7 @@ addLayer("tokens", {
                 if (hasUpgrade("p", 11))        a += 1
                 if (hasUpgrade("mu", 22))       a += 1
                 if (hasUpgrade("mu", 24))       a += 1
-                if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/2)
+                if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/(player.extremeMode ? 1 : 2))
                 if (hasUpgrade("p", 41))        a += 1
                                                 a += layers.l.grid.getGemEffect(303).toNumber()
                 if (hasMilestone("l", 41))      a += 1
@@ -34263,6 +34324,7 @@ addLayer("tokens", {
                 if (hasUpgrade("t", 141))       a += player.t.upgrades.length
                 if (hasUpgrade("sci", 244))     a += Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5)
                                                 a += tmp.sci.buyables[303].effect.toNumber()
+                if (hasUpgrade("l", 12))        a += player.l.upgrades.length
 
                 if (hasUpgrade("sci", 203))     a += 1
                 if (hasUpgrade("sci", 303))     a += 1
