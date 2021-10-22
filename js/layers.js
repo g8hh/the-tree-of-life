@@ -53,15 +53,15 @@ function getPointExponentiation(){
         }
         if (hasUpgrade("mu", 51))       exp = exp.times(player.l.points.max(10).log10())
         if (hasMilestone("l", 31)) {
-                let l31exp = new Decimal(player.l.challenges[11]).sub(100).max(0)
+                let l31exp = Math.max(0, player.l.challenges[11] - 100)
                 let l31base = 100
-                if (player.extremeMode) l31base /= 100/9
+                if (player.extremeMode) l31base = 9
                 if (hasMilestone("l", 32)) l31base *= 10
                 if (hasMilestone("l", 34)) l31base *= 10
                                         exp = exp.times(Decimal.pow(l31base, l31exp))
         }
         if (hasMilestone("l", 33)) {
-                let l33base = new Decimal(player.l.challenges[11]).div(player.extremeMode ? 98 : 100).max(1)
+                let l33base = Math.max(1, player.l.challenges[11]/(player.extremeMode ? 98 : 100) )
                 let l33exp = player.mu.buyables[33]
                                         exp = exp.times(Decimal.pow(l33base, l33exp))
         }
@@ -522,7 +522,7 @@ function resetPreLifeCurrencies(){
         data6.c_points.lastRoll = []
         data6.d_points.points = decimalZero
         data6.d_points.best = decimalZero
-        data6.d_points.fuel = new Decimal(hasMilestone("l", 5) ? 1 : 0)
+        data6.d_points.fuel = hasMilestone("l", 5) ? decimalOne : decimalZero
         data6.e_points.points = decimalZero
         data6.e_points.best = decimalZero
 
@@ -572,6 +572,10 @@ function filterOut(list, out){
         return list.filter(x => !out.includes(x) && !out.includes(Number(x)))
 }
 
+/*
+
+CODE FOR TOKEN COSTS
+
 function sumValsExpFloorM1(exp){
         a = decimalZero
         b = 0
@@ -604,6 +608,8 @@ function sumValsExpRound(exp){
         }
         return [b - 1, a.sub(formula(b-1)).toNumber()]
 }
+
+*/
 
 addLayer("h", {
         name: "Hydrogen", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1869,7 +1875,7 @@ addLayer("sci", {
                         total: decimalZero,
                 },
                 everhasnsci2: false,
-        }}, 
+        }},
         color: "#B54153",
         branches: [],
         requires: decimalZero,
@@ -2223,7 +2229,7 @@ addLayer("sci", {
 
                         if (hasUpgrade("l", 11) && hasMilestone("l", 1)) {
                                 ret = ret.pow(tmp.l.milestones[1].effect)
-                        } 
+                        }
 
                         ret = ret.pow(.75) // extreme
 
@@ -4072,7 +4078,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[11].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4142,7 +4148,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[12].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4210,7 +4216,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[13].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4285,7 +4291,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[21].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4361,7 +4367,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[22].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4433,7 +4439,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[23].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4502,7 +4508,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[101].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4578,7 +4584,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[102].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4646,7 +4652,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[103].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4713,7 +4719,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[111].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4782,7 +4788,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[112].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4849,7 +4855,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[113].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4912,7 +4918,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[301].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4947,7 +4953,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[302].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -4990,7 +4996,7 @@ addLayer("sci", {
                         },
                         canAfford() {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[303].cost)
-                        }, 
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.sci
@@ -5240,10 +5246,10 @@ addLayer("c", {
         requires(){
                 if (!player.extremeMode) return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
                 return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 2048)
-        }, 
+        },
         resource: "Carbon", 
         baseResource: "Life Points", 
-        baseAmount(){return player.points.floor()}, 
+        baseAmount(){return player.points.floor()},
         type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("c", 11)) return decimalZero
@@ -5731,10 +5737,10 @@ addLayer("o", {
         requires(){
                 if (player.extremeMode) return hasUpgrade("c", 11) ? Decimal.pow(2, 2500) : Decimal.pow(2, 2048)
                 return hasUpgrade("c", 11) ? Decimal.pow(2, 2560) : Decimal.pow(2, 1024)
-        }, 
+        },
         resource: "Oxygen", 
         baseResource: "Life Points", 
-        baseAmount(){return player.points.floor()}, 
+        baseAmount(){return player.points.floor()},
         type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("o", 11)) return decimalZero
@@ -6212,7 +6218,7 @@ addLayer("n", {
         requires:() => Decimal.pow(10, Decimal.pow(2, 20).times(player.extremeMode ? 125 : 105)), 
         resource: "Nitrogen", 
         baseResource: "Life Points", 
-        baseAmount(){return player.points.floor()}, 
+        baseAmount(){return player.points.floor()},
         type: "custom", 
         getResetGain(){
                 let base = tmp.n.getBaseGain
@@ -7534,7 +7540,7 @@ addLayer("p", {
         requires:() => player.extremeMode ? new Decimal("1e2348") : Decimal.pow(10, 2155).times(1.3), 
         resource: "Phosphorus", 
         baseResource: "Nitrogen", 
-        baseAmount(){return player.n.points.floor()}, 
+        baseAmount(){return player.n.points.floor()},
         type: "custom", 
         getResetGain(){
                 let base = tmp.p.getBaseGain
@@ -8745,10 +8751,10 @@ addLayer("mu", {
                         return new Decimal(1e26).div(div)
                 }
                 return Decimal.pow(10, 26).times(player.hardMode ? 10 : 2)    
-        }, 
+        },
         resource: "µ", 
         baseResource: "Phosphorus", 
-        baseAmount(){return player.p.points.floor()}, 
+        baseAmount(){return player.p.points.floor()},
         type: "static",
         base(){
                 if (hasUpgrade("l", 22)) return new Decimal(2)
@@ -10395,7 +10401,7 @@ addLayer("l", {
         requires:() => hasChallenge("l", 51) ? Decimal.pow(10, 1024) : Decimal.pow(2, 1024).pow10(), 
         resource: "Lives", 
         baseResource: "Points", 
-        baseAmount(){return player.points}, 
+        baseAmount(){return player.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.l.getBaseGain.times(tmp.l.getGainMult)
@@ -10717,7 +10723,7 @@ addLayer("l", {
                         cost:() => new Decimal(10),
                         unlocked(){
                                 return player.extremeMode && hasMilestone("l", 8)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 11)
                 12: {
                         title(){
@@ -10729,7 +10735,7 @@ addLayer("l", {
                         cost:() => new Decimal(30),
                         unlocked(){
                                 return hasUpgrade("l", 11) && player.l.challenges[11] >= 2
-                        }, 
+                        },
                 }, // hasUpgrade("l", 12)
                 13: {
                         title(){
@@ -10741,7 +10747,7 @@ addLayer("l", {
                         cost:() => new Decimal(90),
                         unlocked(){
                                 return hasUpgrade("l", 12) && player.l.challenges[11] >= 4
-                        }, 
+                        },
                 }, // hasUpgrade("l", 13)
                 14: {
                         title(){
@@ -10760,7 +10766,7 @@ addLayer("l", {
                         },
                         unlocked(){
                                 return hasUpgrade("l", 13) && player.l.challenges[11] >= 7
-                        }, 
+                        },
                 }, // hasUpgrade("l", 14)
                 15: {
                         title(){
@@ -10772,7 +10778,7 @@ addLayer("l", {
                         cost:() => new Decimal(300),
                         unlocked(){
                                 return hasUpgrade("l", 14) && player.l.challenges[11] >= 9
-                        }, 
+                        },
                 }, // hasUpgrade("l", 15)
                 21: {
                         title(){
@@ -10784,7 +10790,7 @@ addLayer("l", {
                         cost:() => new Decimal(713e5),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 30
-                        }, 
+                        },
                 }, // hasUpgrade("l", 21)
                 22: {
                         title(){
@@ -10801,7 +10807,7 @@ addLayer("l", {
                         },
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 40
-                        }, 
+                        },
                 }, // hasUpgrade("l", 22)
                 23: {
                         title(){
@@ -10813,7 +10819,7 @@ addLayer("l", {
                         cost:() => new Decimal(3e16),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 44
-                        }, 
+                        },
                 }, // hasUpgrade("l", 23)
                 24: {
                         title(){
@@ -10825,7 +10831,7 @@ addLayer("l", {
                         cost:() => new Decimal(1.92e17),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 48
-                        }, 
+                        },
                 }, // hasUpgrade("l", 24)
                 25: {
                         title(){
@@ -10837,7 +10843,7 @@ addLayer("l", {
                         cost:() => new Decimal(3.75e17),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 49
-                        }, 
+                        },
                 }, // hasUpgrade("l", 25)
                 31: {
                         title(){
@@ -10849,7 +10855,7 @@ addLayer("l", {
                         cost:() => new Decimal(8.73e28),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 61
-                        }, 
+                        },
                 }, // hasUpgrade("l", 31)
                 32: {
                         title(){
@@ -10861,7 +10867,7 @@ addLayer("l", {
                         cost:() => new Decimal(7.74e31),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 62
-                        }, 
+                        },
                 }, // hasUpgrade("l", 32)
                 33: {
                         title(){
@@ -10873,7 +10879,7 @@ addLayer("l", {
                         cost:() => new Decimal(4.31e33),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 64
-                        }, 
+                        },
                 }, // hasUpgrade("l", 33)
                 34: {
                         title(){
@@ -10885,7 +10891,7 @@ addLayer("l", {
                         cost:() => new Decimal(1.11e34),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 66
-                        }, 
+                        },
                 }, // hasUpgrade("l", 34)
                 35: {
                         title(){
@@ -10897,7 +10903,7 @@ addLayer("l", {
                         cost:() => new Decimal(5e51),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 77
-                        }, 
+                        },
                 }, // hasUpgrade("l", 35)
                 41: {
                         title(){
@@ -10909,7 +10915,7 @@ addLayer("l", {
                         cost:() => new Decimal(1.8e261),
                         unlocked(){
                                 return hasUpgrade("l", 15) && player.l.grid[101].gems.gt(0)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 41)
                 42: {
                         title(){
@@ -10921,7 +10927,7 @@ addLayer("l", {
                         cost:() => new Decimal(5e267),
                         unlocked(){
                                 return hasUpgrade("l", 41)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 42)
                 43: {
                         title(){
@@ -10933,7 +10939,7 @@ addLayer("l", {
                         cost:() => new Decimal("5e336"),
                         unlocked(){
                                 return hasUpgrade("l", 42)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 43)
                 44: {
                         title(){
@@ -10945,7 +10951,7 @@ addLayer("l", {
                         cost:() => new Decimal("6e492"),
                         unlocked(){
                                 return hasUpgrade("l", 43)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 44)
                 45: {
                         title(){
@@ -10957,7 +10963,7 @@ addLayer("l", {
                         cost:() => new Decimal("1e537"),
                         unlocked(){
                                 return hasUpgrade("l", 44)
-                        }, 
+                        },
                 }, // hasUpgrade("l", 45)
         },
         milestones: {
@@ -14126,7 +14132,7 @@ addLayer("a", {
         requires:() => Decimal.pow(2, player.extremeMode ? 1815 : 1880), 
         resource: "Amino Acids", 
         baseResource: "Lives", 
-        baseAmount(){return player.l.points}, 
+        baseAmount(){return player.l.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.a.getBaseGain.times(tmp.a.getGainMult)
@@ -16728,7 +16734,7 @@ addLayer("d", {
         requires:() => new Decimal(4.4e169), 
         resource: "DNA", 
         baseResource: "Amino Acid", 
-        baseAmount(){return player.a.points}, 
+        baseAmount(){return player.a.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.d.getBaseGain.times(tmp.d.getGainMult)
@@ -17713,7 +17719,7 @@ addLayer("cells", {
         requires:() => new Decimal("1e1172"),
         resource: "Cells", 
         baseResource: "DNA", 
-        baseAmount(){return player.d.points}, 
+        baseAmount(){return player.d.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.cells.getBaseGain.times(tmp.cells.getGainMult)
@@ -21333,7 +21339,7 @@ addLayer("t", {
         requires:() => new Decimal("1e1385"), 
         resource: "Tissues", 
         baseResource: "Cells", 
-        baseAmount(){return player.cells.points}, 
+        baseAmount(){return player.cells.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.t.getBaseGain.times(tmp.t.getGainMult)
@@ -23328,7 +23334,7 @@ addLayer("or", {
         requires:() => new Decimal("1e100"), 
         resource: "Organs", 
         baseResource: "Tissues", 
-        baseAmount(){return player.t.points}, 
+        baseAmount(){return player.t.points},
         type: "custom",
         getResetGain(){
                 let ret = tmp.or.getBaseGain.times(tmp.or.getGainMult)
@@ -23943,7 +23949,7 @@ addLayer("mc", {
         requires:() => decimalZero, 
         resource: "Micro", 
         baseResource: "points", 
-        baseAmount(){return player.points}, 
+        baseAmount(){return player.points},
         type: "custom",
         tooltip(){
                 return format(player.cells.stem_cells.points) + " Stem Cells"
@@ -24470,7 +24476,7 @@ addLayer("ach", {
                         key: "shift+A", 
                         description(){
                                 return player.a.unlocked ? "Shift+A: Go to Amino Acid" : "Shift+A: Go to A"
-                        }, 
+                        },
                         onPress(){
                                 if (!player.a.unlocked) {
                                         if (!tmp.mini.layerShown) return
@@ -24501,7 +24507,7 @@ addLayer("ach", {
                         description(){
                                 if (player.cells.unlocked) return "Shift+C: Go to Cells"
                                 return !hasMilestone("tokens", 23) ? "Shift+C: Go to Carbon" : "Shift+C: Go to C"
-                        }, 
+                        },
                         onPress(){
                                 if (player.cells.unlocked) {
                                         player.tab = "cells"
@@ -24522,7 +24528,7 @@ addLayer("ach", {
                         key: "shift+D", 
                         description(){
                                 return player.d.unlocked ? "Shift+D: Go to DNA" : "Shift+D: Go to D"
-                        }, 
+                        },
                         onPress(){
                                 if (!player.d.unlocked) {
                                         if (!tmp.mini.layerShown) return
@@ -28765,7 +28771,7 @@ addLayer("mini", {
                                 let end = allEff + allCost
                                 return br + end
                         },
-                }, 
+                },
                 183: {
                         title: "Tire",
                         cost:() => new Decimal("3e14159").times(Decimal.pow(265358, Decimal.pow(getBuyableAmount("mini", 183), 2))),
@@ -28820,7 +28826,7 @@ addLayer("mini", {
                                 let end = allEff + allCost
                                 return br + end
                         },
-                }, 
+                },
                 201: {
                         title: "Iterations",
                         cost(){
@@ -29564,7 +29570,7 @@ addLayer("mini", {
 
                                 let end = allEff + allCost
                                 return br + end
-                        }, 
+                        },
                 },
                 233: {
                         title: "(a+b)*c=a*c+b*c",
@@ -29628,7 +29634,7 @@ addLayer("mini", {
 
                                 let end = allEff + allCost
                                 return br + end
-                        }, 
+                        },
                 },
                 241: {
                         title: "(a*b)*c=a*(b*c)",
@@ -29689,7 +29695,7 @@ addLayer("mini", {
 
                                 let end = allEff + allCost
                                 return br + end
-                        }, 
+                        },
                 },
         },
         clickables: {
@@ -31542,7 +31548,7 @@ addLayer("tokens", {
         requires: new Decimal("1e5000"),
         resource: "Tokens",
         baseResource: "points",
-        baseAmount(){return player.points.floor()}, 
+        baseAmount(){return player.points.floor()},
         type: "custom",
         getResetGain(){
                 if (hasMilestone("or", 2) && tmp.tokens.getNextAt.slog().gt(4)) {
