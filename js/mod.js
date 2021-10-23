@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.162",
+	num: "1.163",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,24 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.a.unlocked
+	if (player.extremeMode) return player.a.points.gte(2)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.162)<br><br>
+		Reaching the endgame screen (updated as of v1.163)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.163</h3><br>
+		- Various code cleanup.<br>
+		- Balanced until 2 Amino Acids.<br>
+		- Various small rewordings.<br>
+		- Added an effect to Amino Acid milestone 6.<br>
 	<br><h3 style='color: #CC0000'>v1.162</h3><br>
 		- Made parts of Life/Amino milestone 1 be given for unlocking the layer (see info).<br>
 		- Various code cleanup.<br>

@@ -1931,14 +1931,16 @@ addLayer("sci", {
                 return ret
         },
         prestigeNotify(){
-                let buyIds = [   11,  12,  13,
-                                 21,  22,  23,
-                                101, 102, 103,
-                                111, 112, 113]
-                for (i in buyIds){
-                        let id = buyIds[i]
-                        if (!tmp.sci.buyables[id].unlocked) continue
-                        if (tmp.sci.buyables[id].canAfford) return true
+                if (!player.p.unlocked) {
+                        let buyIds = [   11,  12,  13,
+                                        21,  22,  23,
+                                        101, 102, 103,
+                                        111, 112, 113]
+                        for (i in buyIds){
+                                let id = buyIds[i]
+                                if (!tmp.sci.buyables[id].unlocked) continue
+                                if (tmp.sci.buyables[id].canAfford) return true
+                        }
                 }
         },
         update(diff){
@@ -3455,7 +3457,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 1e8 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 312) && !shiftDown) return "Requires: 1e8 D Points<br>Shift for effect"
                                 return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
                         },
                         canAfford(){
@@ -3479,7 +3481,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 313) && !false && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 313) && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
                                 return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
                         },
                         canAfford(){
@@ -3503,7 +3505,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 314) && !false && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 314) && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
                                 return "<bdi style='font-size: 90%'>log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain</bdi>"
                         },
                         canAfford(){
@@ -3524,7 +3526,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 315) && !false && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 315) && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
                                 return "Gas Pedal cost exponent is 1.2"
                         },
                         canAfford(){
@@ -3545,7 +3547,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 321) && !false && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 321) && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
                                 return "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                         },
                         canAfford(){
@@ -3569,7 +3571,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 322) && !false && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 322) && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
                                 return "Remove Engine base cost"
                         },
                         canAfford(){
@@ -3593,7 +3595,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 323) && !false && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 323) && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
                                 if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
                                 return "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
                         },
@@ -3791,7 +3793,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 344) && !false && !shiftDown) return "Requires: 400 E Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 344) && !shiftDown) return "Requires: 400 E Points<br>Shift for effect"
                                 return "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
                         },
                         canAfford(){
@@ -3812,7 +3814,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 345) && !false && !shiftDown) return "Requires: 25 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 345) && !shiftDown) return "Requires: 25 Constant levels<br>Shift for effect"
                                 return "Remove Linear base cost and Constant costs nothing"
                         },
                         canAfford(){
@@ -3833,7 +3835,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 351) && !false && !shiftDown) return "Requires: 31 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 351) && !shiftDown) return "Requires: 31 Constant levels<br>Shift for effect"
                                 return "Remove Quadratic base cost and Linear cost exponent is 1.15"
                         },
                         canAfford(){
@@ -3854,7 +3856,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 352) && !false && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 352) && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
                                 return "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
                         },
                         canAfford(){
@@ -3883,7 +3885,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 353) && !false && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 353) && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
                                 return "Per upgrade in this row add .1 to Constant base"
                         },
                         canAfford(){
@@ -3904,7 +3906,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 354) && !false && !shiftDown) return "Requires: 29 Linear levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 354) && !shiftDown) return "Requires: 29 Linear levels<br>Shift for effect"
                                 return "Remove respecting scalar multiplication base cost and double Nitrogen gain"
                         },
                         canAfford(){
@@ -3925,7 +3927,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 355) && !false && !shiftDown) return "Requires: 71 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 355) && !shiftDown) return "Requires: 71 Constant levels<br>Shift for effect"
                                 if (player.p.unlocked) return "Remove respecting addition base cost"
                                 return "Remove respecting addition base cost but gain 20x less E Points"
                         },
@@ -3947,7 +3949,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 361) && !false && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 361) && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
                                 return "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
                         },
                         canAfford(){
@@ -3971,7 +3973,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 362) && !false && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 362) && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
                                 return "Linear cost exponent is 1.1"
                         },
                         canAfford(){
@@ -3992,7 +3994,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 363) && !false && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 363) && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
                                 return "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
                         },
                         canAfford(){
@@ -4016,7 +4018,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 364) && !false && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 364) && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
                                 return "Unlock three buyables, bulk 2x E Point buyables"
                         },
                         canAfford(){
@@ -4037,7 +4039,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                if (!hasUpgrade("sci", 365) && !false && !shiftDown) return "Requires: 33,080 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 365) && !shiftDown) return "Requires: 33,080 Constant levels<br>Shift for effect"
                                 return "Gain an iteration"
                         },
                         canAfford(){
@@ -4082,10 +4084,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[11] = data.buyables[11].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[11].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[11].cost)
                         },
                         base(){
                                 let ret = player.points.plus(10).log10()
@@ -4152,10 +4151,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[12] = data.buyables[12].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[12].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[12].cost)
                         },
                         base(){
                                 let ret = player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
@@ -4220,10 +4216,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[13] = data.buyables[13].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[13].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[13].cost)
                         },
                         base(){
                                 let ret = player.h.points.max(10).log10()
@@ -4295,10 +4288,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[21] = data.buyables[21].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[21].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[21].cost)
                         },
                         base(){
                                 let ret = player.mini.b_points.points.max(10).log10()
@@ -4371,10 +4361,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[22] = data.buyables[22].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[22].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[22].cost)
                         },
                         base(){
                                 let ret = player.mini.a_points.points.max(10).log10()
@@ -4443,10 +4430,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[23] = data.buyables[23].plus(1)
-                                if (!false) {
-                                        let c = tmp.sci.buyables[23].cost
-                                        data.hydrogen_science.points = data.hydrogen_science.points.sub(c)
-                                }
+                                data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[23].cost)
                         },
                         base(){
                                 let ret = decimalOne
@@ -4512,7 +4496,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[101] = data.buyables[101].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[101].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4588,7 +4572,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[102] = data.buyables[102].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[102].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4656,7 +4640,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[103] = data.buyables[103].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[103].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4723,7 +4707,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[111] = data.buyables[111].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[111].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4792,7 +4776,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[112] = data.buyables[112].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[112].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4859,7 +4843,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[113] = data.buyables[113].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[113].cost
                                         data.oxygen_science.points = data.oxygen_science.points.sub(c)
                                 }
@@ -4923,7 +4907,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[301] = data.buyables[301].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[301].cost
                                         data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
                                 }
@@ -4959,7 +4943,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[302] = data.buyables[302].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[302].cost
                                         data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
                                 }
@@ -5002,7 +4986,7 @@ addLayer("sci", {
                                 if (!this.canAfford()) return 
                                 let data = player.sci
                                 data.buyables[303] = data.buyables[303].plus(1)
-                                if (!false) {
+                                if (!player.a.unlocked) {
                                         let c = tmp.sci.buyables[303].cost
                                         data.nitrogen_science.points = data.nitrogen_science.points.sub(c)
                                 }
@@ -8491,7 +8475,6 @@ addLayer("p", {
                 if (layer != "p") return
  
                 player.p.time = 0
-                let inChallenge = false
                 let data1 = player.mini
                 let data2 = player.tokens
 
@@ -10908,7 +10891,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(1.8e261),
                         unlocked(){
-                                return hasUpgrade("l", 15) && player.l.grid[101].gems.gt(0)
+                                return hasUpgrade("l", 35) && player.l.grid[101].gems.gt(0)
                         },
                 }, // hasUpgrade("l", 41)
                 42: {
@@ -11490,7 +11473,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 31)
                 32: {
                         requirementDescription(){
-                                if (player.extremeMode) return "5.00e191"
+                                if (player.extremeMode) return "5.00e191 Lives"
                                 return "2.00e219 Lives"
                         },
                         done(){
@@ -11540,7 +11523,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 34)
                 35: {
                         requirementDescription(){
-                                if (player.extremeMode) return "4.00e290"
+                                if (player.extremeMode) return "4.00e290 Lives"
                                 return "5.00e311 Lives"
                         },
                         done(){
@@ -13829,9 +13812,8 @@ addLayer("l", {
                                         21, 22, 23, 24, 25, 
                                         31, 32, 33, 34, 35]
                         if (hasMilestone("l", 3)) muUpgRem = filterOut(muUpgRem, [35])
-                        if (!false) { // upgrades
-                                data1.upgrades = filterOut(data1.upgrades, muUpgRem)
-                        }
+                        // upgrades
+                        data1.upgrades = filterOut(data1.upgrades, muUpgRem)
                         
                         let muKeptMilestones = 0
                         if (hasMilestone("a", 2)) muKeptMilestones += player.a.times 
@@ -13839,8 +13821,6 @@ addLayer("l", {
                                 sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, muKeptMilestones)
                         }
-
-                        data1.unlocked = false
                 }
 
                 data1.points = decimalZero
@@ -13863,9 +13843,8 @@ addLayer("l", {
                                        101,102,103,104,105,
                                        111,112,113,114,115,]
                         if (hasMilestone("l", 6)) pUpgRem = filterOut(pUpgRem, [13])
-                        if (!false) { // upgrades
-                                data2.upgrades = filterOut(data2.upgrades, pUpgRem)
-                        }
+                        // upgrades
+                        data2.upgrades = filterOut(data2.upgrades, pUpgRem)
 
                         let pKeptMilestones = 0
                         if (hasMilestone("l", 5)) pKeptMilestones = player.l.times
@@ -13876,7 +13855,6 @@ addLayer("l", {
                         }
 
                         data2.times = 0
-                        data2.unlocked = false
                 }
 
                 data2.currentGainPerSec = decimalZero
@@ -13913,7 +13891,6 @@ addLayer("l", {
                         }
 
                         data3.times = 0
-                        data3.unlocked = false
                 }
 
                 data3.points = decimalZero
@@ -13925,11 +13902,7 @@ addLayer("l", {
                         let oUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
-                        if (!false) { // upgrades
-                                data4.upgrades = filterOut(data4.upgrades, oUpgRem)
-                        }
-
-                        data4.unlocked = false
+                        data4.upgrades = filterOut(data4.upgrades, oUpgRem)
                 }
                 
                 data4.points = decimalZero
@@ -13941,10 +13914,7 @@ addLayer("l", {
                         let cUpgRem = [11, 12, 13, 14, 15, 
                                        21, 22, 23, 24, 25, 
                                        31, 32, 33, 34, 35]
-                        if (!false) { // upgrades
-                                data5.upgrades = filterOut(data5.upgrades, cUpgRem)
-                        }
-                        data5.unlocked = false
+                        data5.upgrades = filterOut(data5.upgrades, cUpgRem)
                 }
 
                 data5.points = decimalZero
@@ -14020,7 +13990,7 @@ addLayer("l", {
                 data6.c_points.lastRoll = []
                 data6.d_points.points = decimalZero
                 data6.d_points.best = decimalZero
-                data6.d_points.fuel = new Decimal(hasMilestone("l", 5) ? 1 : 0)
+                data6.d_points.fuel = hasMilestone("l", 5) ? decimalOne : decimalZero
                 data6.e_points.points = decimalZero
                 data6.e_points.best = decimalZero
 
@@ -14049,9 +14019,8 @@ addLayer("l", {
                                                   52, 61, 62, 71, 72, 
                                                   73, 81, 82, 91, 92, 
                                                   93, 94, 95]
-                                if (!false) {// upgrades
-                                        data7.upgrades = filterOut(data7.upgrades, coinUpgRem)
-                                }
+                                // upgrades
+                                data7.upgrades = filterOut(data7.upgrades, coinUpgRem)
                         }
 
                         data7.coins.points = decimalZero
@@ -14081,10 +14050,8 @@ addLayer("l", {
                                        61, 62, 63, 64, 65, 
                                        71, 72, 73, 74, 75, 
                                        81, 82, 83, 84, 85]
-
-                        if (!false) {// upgrades
-                                data8.upgrades = filterOut(data8.upgrades, hUpgRem)
-                        }
+                        // upgrades
+                        data8.upgrades = filterOut(data8.upgrades, hUpgRem)
                 }
 
                 if (player.extremeMode) layers.sci.doReset("l")
@@ -14990,7 +14957,7 @@ addLayer("a", {
                         },
                         effectDescription(){
                                 let a = "Reward: Gain a C21 gem per second"
-                                if (player.extremeMode) return a + "."
+                                if (player.extremeMode) return a + " and keep a Life upgrade per Amino Acid reset."
                                 return a + ", and keep Nitrogen upgrades upon Life reset."
                         },
                 }, // hasMilestone("a", 6)
@@ -15005,7 +14972,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C22 gem per second, and subtract .01 from µ cost exponent. You gain five dilation completions at once<sup>*</sup>"
+                                return "Reward: Gain a C22 gem per second, subtract .01 from µ cost exponent, and you gain five dilation completions at once<sup>*</sup>."
                         },
                 }, // hasMilestone("a", 7)
                 8: {
@@ -15019,7 +14986,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast"
+                                return "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast."
                         },
                 }, // hasMilestone("a", 8)
                 9: {
@@ -15033,7 +15000,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C23 gem per second and keep Dilation completions and Life resets"
+                                return "Reward: Gain a C23 gem per second and keep Dilation completions and Life resets."
                         },
                 }, // hasMilestone("a", 9)
                 10: {
@@ -15047,7 +15014,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C31 gem per second and you buy Life buyables 2.5x as fast"
+                                return "Reward: Gain a C31 gem per second and you buy Life buyables 2.5x as fast."
                         },
                 }, // hasMilestone("a", 10)
                 11: {
@@ -15061,7 +15028,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C32 gem per second and you buy Life buyables twice as fast"
+                                return "Reward: Gain a C32 gem per second and you buy Life buyables twice as fast."
                         },
                 }, // hasMilestone("a", 11)
                 12: {
@@ -15075,7 +15042,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C33 gem per second and keep up to 1,000 of each of the first 9 gems upon Amino Acid reset"
+                                return "Reward: Gain a C33 gem per second and keep up to 1,000 of each of the first 9 gems upon Amino Acid reset."
                         },
                 }, // hasMilestone("a", 12)
                 13: {
@@ -15089,7 +15056,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock another set of Life challenges and β → ∂α's log3 becomes ln"
+                                return "Reward: Unlock another set of Life challenges and β → ∂α's log3 becomes ln."
                         },
                 }, // hasMilestone("a", 13)
                 14: {
@@ -15103,7 +15070,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: β → ∂α's ln becomes log2 and add .05 to α → ∂𝛾's base"
+                                return "Reward: β → ∂α's ln becomes log2 and add .05 to α → ∂𝛾's base."
                         },
                 }, // hasMilestone("a", 14)
                 15: {
@@ -15117,7 +15084,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: α → ∂α's log3s becomes lns and add .25 to β → ∂𝛾's base"
+                                return "Reward: α → ∂α's log3s becomes lns and add .25 to β → ∂𝛾's base."
                         },
                 }, // hasMilestone("a", 15)
                 16: {
@@ -15131,7 +15098,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: α → ∂α's lns becomes log2s and you buy Lives buyables twice as fast"
+                                return "Reward: α → ∂α's lns becomes log2s and you buy Lives buyables twice as fast."
                         },
                 }, // hasMilestone("a", 16)
                 17: {
@@ -15145,7 +15112,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider"
+                                return "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider."
                         },
                 }, // hasMilestone("a", 17)
                 18: {
@@ -15159,7 +15126,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each β → ∂𝛾 cubes point gain"
+                                return "Reward: Each β → ∂𝛾 cubes point gain."
                         },
                 }, // hasMilestone("a", 18)
                 19: {
@@ -15178,7 +15145,7 @@ addLayer("a", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate point gain ^1.05"
+                                let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate point gain ^1.05."
                                 let b = "<br>Currently: ^" + format(tmp.a.milestones[19].effect) 
                                 return a + b
                         },
@@ -15196,7 +15163,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: 𝛾 → ∂𝛾 effects N → Δµ and add .002 to Constant's base per milestone"
+                                return "Reward: 𝛾 → ∂𝛾 effects N → Δµ and add .002 to Constant's base per milestone."
                         },
                 }, // hasMilestone("a", 20)
                 21: {
@@ -15210,7 +15177,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Gain a C44 gem per second and Protein (up to 1e2000) multiplies Life gain"
+                                return "Reward: Gain a C44 gem per second and Protein (up to 1e2000) multiplies Life gain."
                         },
                 }, // hasMilestone("a", 21)
                 22: {
@@ -15224,7 +15191,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100"
+                                return "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100."
                         },
                 }, // hasMilestone("a", 22)
                 23: {
@@ -15238,7 +15205,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: You can bulk all tRNA and mRNA"
+                                return "Reward: You can bulk all tRNA and mRNA."
                         },
                 }, // hasMilestone("a", 23)
                 24: {
@@ -15256,7 +15223,7 @@ addLayer("a", {
                                 return l.div(50).plus(1).pow(l)
                         },
                         effectDescription(){
-                                return "Reward: Each rRNA raises point gain ^1+rRNA/50<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
+                                return "Reward: Each rRNA raises point gain ^1+rRNA/50.<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
                         },
                 }, // hasMilestone("a", 24)
                 25: {
@@ -15270,7 +15237,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to tRNA base"
+                                return "Reward: Add .001 to tRNA base."
                         },
                 }, // hasMilestone("a", 25)
                 26: {
@@ -15284,7 +15251,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to mRNA base and unlock siRNA"
+                                return "Reward: Add .001 to mRNA base and unlock siRNA."
                         },
                 }, // hasMilestone("a", 26)
                 27: {
@@ -15298,7 +15265,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to mRNA base and you can bulk 5x N → ΔP"
+                                return "Reward: Add .001 to mRNA base and you can bulk 5x N → ΔP."
                         },
                 }, // hasMilestone("a", 27)
                 28: {
@@ -15312,7 +15279,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: rRNA levels multiply protein and Amino Acid gain"
+                                return "Reward: rRNA levels multiply protein and Amino Acid gain."
                         },
                 }, // hasMilestone("a", 28)
                 29: {
@@ -15326,7 +15293,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
+                                return "Reward: Add .001 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100."
                         },
                 }, // hasMilestone("a", 29)
                 30: {
@@ -15340,7 +15307,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to tRNA base and autobuy rRNA"
+                                return "Reward: Add .001 to tRNA base and autobuy rRNA."
                         },
                 }, // hasMilestone("a", 30)
                 31: {
@@ -15354,7 +15321,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1"
+                                return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1."
                         },
                 }, // hasMilestone("a", 31)
                 32: {
@@ -15368,7 +15335,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: mRNA and tRNA production boost is additionally treated as you can buy them in 1ms<sup>*3</sup>"
+                                return "Reward: mRNA and tRNA production boost is additionally treated as you can buy them in 1ms<sup>*3</sup>."
                         },
                 }, // hasMilestone("a", 32)
                 33: {
@@ -15382,7 +15349,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each milestone doubles protein gain"
+                                return "Reward: Each milestone doubles protein gain."
                         },
                 }, // hasMilestone("a", 33)
                 34: {
@@ -15396,7 +15363,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each milestone doubles protein gain"
+                                return "Reward: Each milestone doubles protein gain."
                         },
                 }, // hasMilestone("a", 34)
                 35: {
@@ -15410,7 +15377,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .001 to mRNA base"
+                                return "Reward: Add .001 to mRNA base."
                         },
                 }, // hasMilestone("a", 35)
                 36: {
@@ -15424,7 +15391,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: crRNA's log10 becomes ln"
+                                return "Reward: crRNA's log10 becomes ln."
                         },
                 }, // hasMilestone("a", 36)
                 37: {
@@ -15438,7 +15405,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: crRNA's ln becomes log2"
+                                return "Reward: crRNA's ln becomes log2."
                         },
                 }, // hasMilestone("a", 37)
                 38: {
@@ -15452,7 +15419,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy siRNA and each milestone doubles protein gain"
+                                return "Reward: Autobuy siRNA and each milestone doubles protein gain."
                         },
                 }, // hasMilestone("a", 38)
                 39: {
@@ -15466,7 +15433,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: 1ms becomes 50ms for production boosts"
+                                return "Reward: 1ms becomes 50ms for production boosts."
                         },
                 }, // hasMilestone("a", 39)
                 40: {
@@ -15480,7 +15447,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock ncRNA and double protein gain per milestone"
+                                return "Reward: Unlock ncRNA and double protein gain per milestone."
                         },
                 }, // hasMilestone("a", 40)
                 41: {
@@ -15494,7 +15461,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Double protein gain per milestone"
+                                return "Reward: Double protein gain per milestone."
                         },
                 }, // hasMilestone("a", 41)
                 42: {
@@ -15508,7 +15475,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock snRNA"
+                                return "Reward: Unlock snRNA."
                         },
                 }, // hasMilestone("a", 42)
                 43: {
@@ -15522,7 +15489,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each milestone doubles Protein gain"
+                                return "Reward: Each milestone doubles Protein gain."
                         },
                 }, // hasMilestone("a", 43)
                 44: {
@@ -15536,7 +15503,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each miRNA multiplies Amino Acid gain by 1.1"
+                                return "Reward: Each miRNA multiplies Amino Acid gain by 1.1 ."
                         },
                 }, // hasMilestone("a", 44)
                 45: {
@@ -16441,7 +16408,9 @@ addLayer("a", {
                                         let a = "Initial Amino Acid gain: (cbrt(log2(Lives)-1368)-7)<sup>2</sup>"
                                         let b = "Amino resets (in order) all Life content, N → ΔN levels, "
                                         let c = "the last two rows of Phosphorus and mu upgrades and finally does a Life reset."
-                                        let d = "For unlocking Amino, Nitrogen and Phosphorus resets permanently do nothing and token and Nitrogen content is permanently kept upon Life resets."
+                                        let d = "For unlocking Amino, Nitrogen and Phosphorus resets permanently do nothing"
+                                        if (player.extremeMode) d += ", Oxygen Science and Nitrogen Science buyables cost nothing,"
+                                        d += " and token and Nitrogen content is permanently kept upon Life resets."
 
                                         if (player.extremeMode) a = a.replace("1368", "1303")
 
@@ -16669,7 +16638,7 @@ addLayer("a", {
 
                         if (player.extremeMode) {
                                 let lKeptUpgrades = 0
-                                if (false) lKeptUpgrades += player.a.times
+                                if (hasMilestone("a", 6)) lKeptUpgrades += player.a.times
                                 if (!false) {
                                         sortStrings(data1.upgrades)
                                         data1.upgrades = data1.upgrades.slice(0, lKeptUpgrades)
@@ -16688,10 +16657,8 @@ addLayer("a", {
 
                         let muUpgRem = [41, 42, 43, 44, 45, 
                                         51, 52, 53, 54, 55]
-                        
-                        if (!false) { // upgrades
-                                data2.upgrades = filterOut(data2.upgrades, muUpgRem)
-                        }
+                        // upgrades
+                        data2.upgrades = filterOut(data2.upgrades, muUpgRem)
                 }
 
                 // 3 Phosphorus content
@@ -16699,10 +16666,8 @@ addLayer("a", {
                         // 2 rows of upgrades
                         let pUpgRem = [41, 42, 43, 44, 45, 
                                        51, 52, 53, 54, 55]
-                        
-                        if (!false) { // upgrades
-                                data3.upgrades = filterOut(data3.upgrades, pUpgRem)
-                        }
+                        // upgrades
+                        data3.upgrades = filterOut(data3.upgrades, pUpgRem)
                 }
                 player.p.best_over_amino = decimalZero
 
@@ -17631,10 +17596,8 @@ addLayer("d", {
 
                         let muUpgRem = [41, 42, 43, 44, 45, 
                                         51, 52, 53, 54, 55]
-                        
-                        if (!false) { // upgrades
-                                data3.upgrades = filterOut(data3.upgrades, muUpgRem)
-                        }
+                        // upgrades
+                        data3.upgrades = filterOut(data3.upgrades, muUpgRem)
                 }
 
                 data3.buyables[11] = decimalZero
@@ -17652,10 +17615,8 @@ addLayer("d", {
                         // 2 rows of upgrades
                         let pUpgRem = [41, 42, 43, 44, 45, 
                                        51, 52, 53, 54, 55]
-                        
-                        if (!false) { // upgrades
-                                data4.upgrades = filterOut(data4.upgrades, pUpgRem)
-                        }
+                        // upgrades
+                        data4.upgrades = filterOut(data4.upgrades, pUpgRem)
                 }
 
                 player.p.best_over_amino = decimalZero
@@ -25124,7 +25085,7 @@ addLayer("mini", {
                 }
 
                 if (tmp.mini.tabFormat.D.unlocked) {
-                        if (!false) dpts.fuel = dpts.fuel.times(Decimal.pow(.99, diff))
+                        dpts.fuel = dpts.fuel.times(Decimal.pow(.99, diff))
                         if (hasUpgrade("mini", 54)) {
                                 dpts.fuel = dpts.fuel.plus(tmp.mini.d_points.getMaximumFuel.times(.002).times(diff))
                         }
