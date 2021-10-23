@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.a.points.gte(2)
+	if (player.extremeMode) return player.l.grid[104].gems.gt(0)
 	return player.or.total.gt(4)
 }
 
@@ -35,9 +35,10 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<br><h3 style='color: #CC0000'>v1.163</h3><br>
 		- Various code cleanup.<br>
-		- Balanced until 2 Amino Acids.<br>
+		- Balanced until C14 Gems.<br>
 		- Various small rewordings.<br>
 		- Added an effect to Amino Acid milestone 6.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.162</h3><br>
 		- Made parts of Life/Amino milestone 1 be given for unlocking the layer (see info).<br>
 		- Various code cleanup.<br>

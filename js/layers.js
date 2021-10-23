@@ -10641,19 +10641,19 @@ addLayer("l", {
 
                 data.time += diff
                 data.passiveTime += diff
-                if (hasMilestone("l", 11) && tmp.l.getResetGain.gt(0)) {
+                if (hasMilestone("l", 11)) {
+                        let gain = tmp.l.getResetGain
                         if (data.passiveTime > 1) {
                                 data.passiveTime += -1
                                 data.times ++
                         } 
                         if (data.passiveTime > 10) data.passiveTime = 10
 
-                        if (!hasMilestone("l", 13) || tmp.l.getResetGain.times(1e4).lt(data.points) || hasMilestone("a", 3)) {
-                                let netGain = tmp.l.getResetGain.times(diff)
+                        if (!hasMilestone("l", 13) || gain.times(1e4).lt(data.points) || hasMilestone("a", 3)) {
+                                let netGain = gain.times(diff)
                                 data.points = data.points.plus(netGain)
                                 data.total = data.total.plus(netGain)
-                        } else {
-                                let gain = tmp.l.getResetGain
+                        } else if (gain.gt(0)) {
                                 let div = player.hardMode ? 100 : 1000
                                 let totalLeft = Decimal.sub(1e4/div, data.points.div(gain).div(div))
                                 if (diff < totalLeft) {
@@ -10699,6 +10699,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return player.extremeMode && hasMilestone("l", 8)
                         },
                 }, // hasUpgrade("l", 11)
@@ -10711,6 +10712,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(30),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 11) && player.l.challenges[11] >= 2
                         },
                 }, // hasUpgrade("l", 12)
@@ -10723,6 +10725,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(90),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 12) && player.l.challenges[11] >= 4
                         },
                 }, // hasUpgrade("l", 13)
@@ -10742,6 +10745,7 @@ addLayer("l", {
                                 return tmp.sci.buyables[302].base.pow(lvls).min(Decimal.pow(2, 1024))
                         },
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 13) && player.l.challenges[11] >= 7
                         },
                 }, // hasUpgrade("l", 14)
@@ -10754,6 +10758,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(300),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 14) && player.l.challenges[11] >= 9
                         },
                 }, // hasUpgrade("l", 15)
@@ -10766,6 +10771,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(713e5),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 30
                         },
                 }, // hasUpgrade("l", 21)
@@ -10783,6 +10789,7 @@ addLayer("l", {
                                 return base.pow(player.l.upgrades.length)
                         },
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 40
                         },
                 }, // hasUpgrade("l", 22)
@@ -10795,6 +10802,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(3e16),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 44
                         },
                 }, // hasUpgrade("l", 23)
@@ -10807,6 +10815,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(1.92e17),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 48
                         },
                 }, // hasUpgrade("l", 24)
@@ -10819,6 +10828,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(3.75e17),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 49
                         },
                 }, // hasUpgrade("l", 25)
@@ -10831,6 +10841,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(8.73e28),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 61
                         },
                 }, // hasUpgrade("l", 31)
@@ -10843,6 +10854,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(7.74e31),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 62
                         },
                 }, // hasUpgrade("l", 32)
@@ -10855,6 +10867,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(4.31e33),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 64
                         },
                 }, // hasUpgrade("l", 33)
@@ -10867,6 +10880,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(1.11e34),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 66
                         },
                 }, // hasUpgrade("l", 34)
@@ -10879,6 +10893,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(5e51),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 77
                         },
                 }, // hasUpgrade("l", 35)
@@ -10891,6 +10906,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(1.8e261),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 35) && player.l.grid[101].gems.gt(0)
                         },
                 }, // hasUpgrade("l", 41)
@@ -10903,6 +10919,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal(5e267),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 41)
                         },
                 }, // hasUpgrade("l", 42)
@@ -10915,6 +10932,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal("5e336"),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 42)
                         },
                 }, // hasUpgrade("l", 43)
@@ -10927,6 +10945,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal("6e492"),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 43)
                         },
                 }, // hasUpgrade("l", 44)
@@ -10939,6 +10958,7 @@ addLayer("l", {
                         },
                         cost:() => new Decimal("1e537"),
                         unlocked(){
+                                if (player.extremeMode && player.a.unlocked) return true
                                 return hasUpgrade("l", 44)
                         },
                 }, // hasUpgrade("l", 45)
@@ -11249,7 +11269,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 18)
                 19: {
                         requirementDescription(){
-                                if (player.extremeMode) return "7e24 µ"
+                                if (player.extremeMode) return "7.00e24 µ"
                                 return "e1.00e1000 Points"
                         },
                         done(){
@@ -11265,7 +11285,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 19)
                 20: {
                         requirementDescription(){
-                                if (player.extremeMode) return "7e25 µ"
+                                if (player.extremeMode) return "7.00e25 µ"
                                 return "e3.20e306 Points"
                         },
                         done(){
@@ -11539,11 +11559,11 @@ addLayer("l", {
                 }, // hasMilestone("l", 35)
                 36: {
                         requirementDescription(){
-                                if (player.extremeMode) return "5 C21 Gems"
+                                if (player.extremeMode) return "5 C21 Gems and 1.00e293 Lives"
                                 return "5 C12 Gems"
                         },
                         done(){
-                                if (player.extremeMode) return player.l.grid[201].gems.gte(5)
+                                if (player.extremeMode) return player.l.grid[201].gems.gte(5) && player.l.points.gte("1e293")
                                 return player.l.grid[102].gems.gte(5) && player.l.points.gte("5e311")
                         },
                         unlocked(){
@@ -12735,7 +12755,7 @@ addLayer("l", {
 
                                 if (inChallenge("l", 12)) {
                                         let depth = tmp.l.challenges[12].getChallengeDepths[4] || 0
-                                        let v = Math.floor(35*Math.sqrt(depth)) // .035
+                                        let v = Math.floor(35 * Math.sqrt(depth)) // .035 in normal
                                         init = init.sub(v/1000)
                                 }
                                 
@@ -14086,7 +14106,7 @@ addLayer("a", {
         }},
         color: "#F2990D",
         branches: [],
-        requires:() => Decimal.pow(2, player.extremeMode ? 1815 : 1880), 
+        requires:() => Decimal.pow(2, player.extremeMode ? 1812 : 1880), 
         resource: "Amino Acids", 
         baseResource: "Lives", 
         baseAmount(){return player.l.points},
@@ -14100,7 +14120,7 @@ addLayer("a", {
         },
         getBaseGain(){
                 let pts = player.l.points
-                let init = pts.max(10).log(2).sub(player.extremeMode ? 1303 : 1368)
+                let init = pts.max(10).log(2).sub(player.extremeMode ? 1300 : 1368)
                 if (init.lt(512)) return decimalZero
 
                 return init.cbrt().sub(7).pow(tmp.a.getGainExp)
@@ -14141,7 +14161,7 @@ addLayer("a", {
                 if (player.extremeMode) gain = gain.root(.75)
 
                 let reqInit = gain.div(tmp.a.getGainMult).max(1)
-                let v1 = reqInit.root(tmp.a.getGainExp).plus(7).pow(3).plus(player.extremeMode ? 1303 : 1368)
+                let v1 = reqInit.root(tmp.a.getGainExp).plus(7).pow(3).plus(player.extremeMode ? 1300 : 1368)
                 let v2 = Decimal.pow(2, v1)
                 return v2
         },
@@ -14942,7 +14962,7 @@ addLayer("a", {
                         },
                         toggles:() => [["a", "autobuylbuys"]],
                         effectDescription(){
-                                return "Reward: Gain a C12 gem per second, subtract .01 from the µ cost exponent, autobuy Life buyables, and autobuy N → ΔN."
+                                return "Reward: Gain a C12 gem per second, subtract .01 from the µ cost exponent, autobuy Life buyables, and keep the N → ΔN autobuyer."
                         },
                 }, // hasMilestone("a", 5)
                 6: {
@@ -15047,9 +15067,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 12)
                 13: {
                         requirementDescription(){
+                                if (player.extremeMode) return "50 Amino Acids"
                                 return "100 Amino Acids"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.points.gte(50)
                                 return player.a.points.gte(100)
                         },
                         unlocked(){
@@ -16412,7 +16434,7 @@ addLayer("a", {
                                         if (player.extremeMode) d += ", Oxygen Science and Nitrogen Science buyables cost nothing,"
                                         d += " and token and Nitrogen content is permanently kept upon Life resets."
 
-                                        if (player.extremeMode) a = a.replace("1368", "1303")
+                                        if (player.extremeMode) a = a.replace("1368", "1300")
 
                                         let part1 = a + br2 + b + br + c + br2 + d
 
