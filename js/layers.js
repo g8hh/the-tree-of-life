@@ -139,7 +139,7 @@ function getPointDilationExponent(){
         if (inChallenge("l", 12))       {
                 let portion = decimalOne
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
-                                        portion = portion.times(Decimal.pow(.665, Math.sqrt(c5depth)))
+                                        portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
                 let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                 let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
@@ -271,8 +271,8 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         402: "Add to base of base life gain<br>sqrt(x)",
         403: "Phosphorus gain<br>^min(10,<wbr>1.02<sup>x</sup>)",
         404: "Unlock Amino upgrades<br>⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋",
+        105: "Protein gain<br>log10(10+x)<sup>2</sup>",
         /* THINGS TO CONSIDER KEEPING
-        404: "Unlock Amino upgrades<br>⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋",
         306: "Passive DNA gain<br>x/11%/s",
         602: "Gem gain<br>1+cbrt(x)",
         603: "Autobuy shRNA<br>x>1330",
@@ -374,6 +374,7 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         402: (x) => x.sqrt(),
         403: (x) => Decimal.pow(1.02, x).min(10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
+        105: (x) => x.plus(10).log10().pow(2)
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -1893,6 +1894,11 @@ addLayer("sci", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                protein_science: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
                 everhasnsci2: false,
         }},
         color: "#B54153",
@@ -1906,6 +1912,7 @@ addLayer("sci", {
         type: "custom", 
         tooltip(){
                 let t = player.subtabs.sci.mainTabs
+                if (t == "Protein Research") return format(player.sci.protein_science.points) + " Protein Science"
                 if (t == "N Research") return format(player.sci.nitrogen_science.points) + " Nitrogen Science"
                 if (t == "C Research") return format(player.sci.carbon_science.points) + " Carbon Science"
                 if (t == "O Research") return format(player.sci.oxygen_science.points) + " Oxygen Science"
@@ -1989,6 +1996,7 @@ addLayer("sci", {
                 if (force1 || hasUpgrade("o", 13))      layers.sci.oxygen_science.update(diff)
                 if (force1 || hasUpgrade("sci", 125))   layers.sci.carbon_science.update(diff)
                 if (hasMilestone("n", 14))              layers.sci.nitrogen_science.update(diff)
+                if (hasUpgrade("a", 23))                layers.sci.protein_science.update(diff)
 
 
                 let lsb = layers.sci.buyables
@@ -2191,6 +2199,7 @@ addLayer("sci", {
                         return ret
                 },
                 update(diff){
+                        if (hasUpgrade("sci", 402)) return 
                         let data = player.sci.oxygen_science
                         data.best = data.best.max(data.points)
                         let gainThisTick = tmp.sci.oxygen_science.getResetGain.times(diff)
@@ -2267,6 +2276,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 341))     ret = ret.times(player.n.points.max(10).log10().min(1e50))
                         if (hasUpgrade("p", 103))       ret = ret.times(player.p.points.plus(10).log10().min(1e30).pow(player.p.upgrades.length))
                                                         ret = ret.times(tmp.l.effect.min(1e10))
+                        if (hasUpgrade("sci", 402))     ret = ret.times(player.a.points.max(1).pow(tmp.sci.upgrades.proteinUpgradesLength))
 
                         return ret
                 },
@@ -2276,6 +2286,41 @@ addLayer("sci", {
                         let gain = tmp.sci.nitrogen_science.getResetGain
                         let gainThisTick = gain.times(diff)
                         if (!hasUpgrade("sci", 323)) {
+                                data.points = data.points.plus(gainThisTick)
+                        } else if (data.points.div(gain).lt(10)) {
+                                data.points = data.points.plus(gainThisTick).min(gain.times(10))
+                        }
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
+        protein_science: {
+                getResetGain(){ // proscigain prosci gain pro sci proteinscience proteinsci pscience
+                        let ret = player.a.protein.points.plus(10).log10()
+
+                        ret = ret.times(player.sci.nitrogen_science.points.plus(10).log10())
+                        ret = ret.times(Decimal.pow(2, player.tokens.total.sub(400)))
+                        ret = ret.times(Decimal.pow(16, tmp.l.getNonZeroGemCount))
+                        ret = ret.times(tmp.sci.protein_science.getGainMult)
+
+                        ret = ret.pow(.75) // extreme
+
+                        return ret
+                },
+                getGainMult(){
+                        let ret = decimalOne
+
+                        if (hasUpgrade("sci", 401))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
+                        if (hasUpgrade("sci", 404))     ret = ret.times(player.a.points.plus(10).log10())
+                        if (hasUpgrade("sci", 405))     ret = ret.times(player.tokens.total.max(1))
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.sci.protein_science
+                        data.best = data.best.max(data.points)
+                        let gain = tmp.sci.protein_science.getResetGain
+                        let gainThisTick = gain.times(diff)
+                        if (!hasUpgrade("sci", 405)) {
                                 data.points = data.points.plus(gainThisTick)
                         } else if (data.points.div(gain).lt(10)) {
                                 data.points = data.points.plus(gainThisTick).min(gain.times(10))
@@ -2309,6 +2354,22 @@ addLayer("sci", {
                                    341, 342, 343, 344, 345,
                                    351, 352, 353, 354, 355,
                                    361, 362, 363, 364, 365,]
+
+                        for (i in ids) {
+                                a += hasUpgrade("sci", ids[i])
+                        }
+
+                        return a
+                },
+                proteinUpgradesLength(){
+                        let a = 0
+                        let ids = [401, 402, 403, 404, 405, 
+                                   411, 412, 413, 414, 415, 
+                                   421, 422, 423, 424, 425, 
+                                   431, 432, 433, 434, 435,
+                                   441, 442, 443, 444, 445,
+                                   451, 452, 453, 454, 455,
+                                   461, 462, 463, 464, 465,]
 
                         for (i in ids) {
                                 a += hasUpgrade("sci", ids[i])
@@ -2529,6 +2590,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("o", 13) || player.n.unlocked
                         }, // hasUpgrade("sci", 101)
                 },
@@ -2546,6 +2608,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 101) || player.n.unlocked
                         }, // hasUpgrade("sci", 102)
                 },
@@ -2563,6 +2626,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("h", 65) || player.n.unlocked
                         }, // hasUpgrade("sci", 103)
                 },
@@ -2580,6 +2644,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 103) || player.n.unlocked
                         }, // hasUpgrade("sci", 104)
                 },
@@ -2597,6 +2662,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 104) || player.n.unlocked
                         }, // hasUpgrade("sci", 105)
                 },
@@ -2614,6 +2680,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return (player.tokens.total.gt(0) && hasUpgrade("sci", 105)) || player.n.unlocked
                         }, // hasUpgrade("sci", 111)
                 },
@@ -2631,6 +2698,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return (hasUpgrade("sci", 111) && player.tokens.total.gt(8)) || player.n.unlocked
                         }, // hasUpgrade("sci", 112)
                 },
@@ -2648,6 +2716,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return (hasUpgrade("sci", 112) && player.tokens.total.gt(11)) || player.n.unlocked
                         }, // hasUpgrade("sci", 113)
                 },
@@ -2671,6 +2740,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("tokens", 61) || hasUpgrade("sci", 114) || player.n.unlocked
                         }, // hasUpgrade("sci", 114)
                 },
@@ -2688,6 +2758,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 114) || player.n.unlocked
                         }, // hasUpgrade("sci", 115)
                 },
@@ -2705,6 +2776,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasMilestone("tokens", 20) || player.n.unlocked
                         }, // hasUpgrade("sci", 121)
                 },
@@ -2729,6 +2801,7 @@ addLayer("sci", {
                                 return format(tmp.sci.upgrades[122].effect)
                         },
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasMilestone("tokens", 22) || player.n.unlocked
                         }, // hasUpgrade("sci", 122)
                 },
@@ -2746,6 +2819,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 122) || player.n.unlocked
                         }, // hasUpgrade("sci", 123)
                 },
@@ -2769,6 +2843,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("sci", 123) || player.n.unlocked
                         }, // hasUpgrade("sci", 124)
                 },
@@ -2798,6 +2873,7 @@ addLayer("sci", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Oxygen Science",
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return tmp.mini.tabFormat.C.unlocked || player.n.unlocked
                         }, // hasUpgrade("sci", 125)
                 },
@@ -3991,8 +4067,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 362) && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
                                 return "Linear cost exponent is 1.1"
                         },
@@ -4012,8 +4086,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 363) && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
                                 return "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
                         },
@@ -4036,8 +4108,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 364) && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
                                 return "Unlock three buyables, bulk 2x E Point buyables"
                         },
@@ -4057,8 +4127,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 365) && !shiftDown) return "Requires: 33,080 Constant levels<br>Shift for effect"
                                 return "Gain an iteration"
                         },
@@ -4072,6 +4140,114 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 364) || player.p.unlocked
                         }, // hasUpgrade("sci", 365)
+                },
+                401: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci I"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 401) && !shiftDown) return "Requires: 1.00e1200 Protein<br>Shift for effect"
+                                return "Per upgrade double Protein and Protein Science gain"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e1200") || false
+                        },
+                        cost:() => new Decimal(5000),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("a", 23) || player.d.unlocked
+                        }, // hasUpgrade("sci", 401)
+                },
+                402: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci II"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 402) && !shiftDown) return "Requires: 1.00e1260 Protein<br>Shift for effect"
+                                return "Per upgrade Amino Acid muliplies Nitrogen Science gain but remove Oxygen Science"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e1260") || false
+                        },
+                        onPurchase(){
+                                let data = player.sci.oxygen_science
+                                data.points = decimalZero
+                                data.best = decimalZero
+                                data.total = decimalZero
+                                player.sci.upgrades = filterOut(player.sci.upgrades, [111, 112, 113, 114, 115, 101, 102, 103, 104, 105])
+                                player.sci.buyables[101] = decimalZero
+                                player.sci.buyables[102] = decimalZero
+                                player.sci.buyables[103] = decimalZero
+                                player.sci.buyables[111] = decimalZero
+                                player.sci.buyables[112] = decimalZero
+                                player.sci.buyables[113] = decimalZero
+                        },
+                        cost:() => new Decimal(10000),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 401) || player.d.unlocked
+                        }, // hasUpgrade("sci", 402)
+                },
+                403: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci III"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 403) && !shiftDown) return "Requires: 1.00e1337 Protein<br>Shift for effect"
+                                return "Uncap C43 and each upgrade doubles Amino Acid gain"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e1337") || false
+                        },
+                        cost:() => new Decimal(20000),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 402) || player.d.unlocked
+                        }, // hasUpgrade("sci", 403)
+                },
+                404: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci IV"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 404) && !shiftDown) return "Requires: 1.00e2500 Protein<br>Shift for effect"
+                                return "<bdi style='font-size: 80%'>log10(Amino Acid) multiplies Protein Science gain and per upgrade log10(Protein Science) multiplies Protein gain</bdi>"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e2500") || false
+                        },
+                        cost:() => new Decimal(4e4),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 403) || player.d.unlocked
+                        }, // hasUpgrade("sci", 404)
+                },
+                405: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci V"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 404) && !shiftDown) return "Requires: 3.33e3333 Protein<br>Shift for effect"
+                                return "Tokens multiply Protein Science gain but you can only get 10 seconds worth of Protein Science"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("3.33e3333") || false
+                        },
+                        cost:() => new Decimal(1e6),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 404) || player.d.unlocked
+                        }, // hasUpgrade("sci", 405)
                 },
         },
         buyables: {
@@ -4507,7 +4683,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 102) 
+                                return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[101].cost)
@@ -4583,7 +4759,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 102) 
+                                return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[102].cost)
@@ -4651,7 +4827,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 102) 
+                                return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[103].cost)
@@ -4718,7 +4894,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("sci", 103) 
+                                return hasUpgrade("sci", 103) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[111].cost)
@@ -4787,7 +4963,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return player.sci.buyables[111].gte(8)
+                                return player.sci.buyables[111].gte(8) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[112].cost)
@@ -4854,7 +5030,7 @@ addLayer("sci", {
                                 return ret
                         },
                         unlocked(){
-                                return player.sci.buyables[111].gte(9)
+                                return player.sci.buyables[111].gte(9) && !hasUpgrade("sci", 402)
                         },
                         canAfford() {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[113].cost)
@@ -5055,6 +5231,7 @@ addLayer("sci", {
                                 ["buyables", [10,11]]
                         ],
                         unlocked(){
+                                if (hasUpgrade("sci", 402)) return false
                                 return hasUpgrade("o", 13) || player.n.unlocked
                         },
                 },
@@ -5067,7 +5244,6 @@ addLayer("sci", {
                                         return "Carbon Science gain is currently " + format(tmp.sci.carbon_science.getResetGain) + "/s "
                                 }],
                                 ["upgrades", [20,21,22,23,24]],
-                                ["buyables", [20,21]]
                         ],
                         unlocked(){
                                 return hasUpgrade("sci", 125) || player.n.unlocked
@@ -5082,15 +5258,33 @@ addLayer("sci", {
                                         return "Nitrogen Science gain is currently " + format(tmp.sci.nitrogen_science.getResetGain, 3) + "/s "
                                 }],
                                 ["upgrades", [30,31,32,33,34,35,36]],
-                                ["buyables", [30,31]]
+                                ["buyables", [30]]
                         ],
                         unlocked(){
                                 return hasMilestone("n", 14) || player.p.unlocked
                         },
                         shouldNotify(){
                                 let data = tmp.sci.buyables
-                                if (!hasUpgrade("sci", 364)) return false
+                                if (!hasUpgrade("sci", 364) || hasMilestone("a", 5)) return false
                                 return data[301].canAfford || data[302].canAfford || data[303].canAfford
+                        },
+                },
+                "Protein Research": {
+                        content: [
+                                "main-display",
+                                ["secondary-display3", "protein_science"],
+                                "blank", 
+                                ["display-text", function(){
+                                        return "Protein Science gain is currently " + format(tmp.sci.protein_science.getResetGain, 3) + "/s "
+                                }],
+                                ["upgrades", [40,41,42,43,44,45,46]],
+                                ["buyables", [40,41]]
+                        ],
+                        unlocked(){
+                                return hasUpgrade("a", 23) || player.d.unlocked
+                        },
+                        shouldNotify(){
+                                return false
                         },
                 },
                 "Info": {
@@ -5111,14 +5305,13 @@ addLayer("sci", {
 
                                         let ret0 = a + br2 + b + br2
                                         if (hasUpgrade("sci", 305)) ret0 = ""
-                                        
                                         let c = "Oxygen Science base gain is log10(Hydrogen Science)*log10(Oxygen)*log10(Carbon)"
                                         
                                         if (!hasUpgrade("sci", 125) && !player.n.unlocked) return ret0 + c
 
                                         let d = "Carbon Science base gain is log10(Oxygen Science)*log10(C Points)*10<sup>tokens+slots-50</sup>"
-
                                         let ret1 = ret0 + c + br2 + d
+                                        if (hasUpgrade("sci", 402)) ret1 = d 
 
                                         if (!player.n.unlocked) return ret1 
 
@@ -5127,10 +5320,13 @@ addLayer("sci", {
                                         if (!hasMilestone("n", 14) && !player.p.unlocked) return ret1 + br + e
 
                                         let f = "Nitrogen Science base gain is<br>log10(Carbon Science)*log10(Nitrogen)*2<sup>tokens+4*[Nitrogen challenge completions]-90</sup>"
-
                                         let ret2 = ret1 + br + e + br2 + f
+                                        
+                                        if (!hasUpgrade("a", 23) && !player.d.unlocked) return ret2
 
-                                        if(!false) return ret2
+                                        let g = "Protein Science base gain is<br>log10(Nitrogen Science)*log10(Protein)*2<sup>tokens+4*[Non-0 gem challenges]-400</sup>"
+
+                                        if (!false) return ret2 + br2 + g
                                 }],
                         ]
                 },
@@ -6804,7 +7000,7 @@ addLayer("n", {
                                 return hasMilestone("n", 1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return 
                                 return [["sci", "autobuysci101"], ["sci", "autobuysci102"], ["sci", "autobuysci103"], ["sci", "autobuysci111"], ["sci", "autobuysci112"], ["sci", "autobuysci113"]]
                         },
                         effectDescription(){
@@ -6824,7 +7020,7 @@ addLayer("n", {
                                 return hasMilestone("n", 2)
                         },
                         toggles(){
-                                if (!player.extremeMode) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return 
                                 return [["sci", "autobuyhsciupg"]]
                         },
                         effectDescription(){
@@ -6859,7 +7055,7 @@ addLayer("n", {
                                 return hasMilestone("n", 4)
                         },
                         toggles(){
-                                if (!player.extremeMode) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return 
                                 return [["sci", "autobuyosciupg"]]
                         },
                         effectDescription(){
@@ -13790,7 +13986,10 @@ addLayer("l", {
                                         let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^.96 per depth<sup>1/8</sup>"
                                         let c7 = "Challenge 7: Challenge 6 base is reduced by .023*depth<sup>.56</sup>"
                                         let c8 = "Challenge 8: Challenge 3 to 7 depths are 3.3 + depths/2 times more and<br>challenge 2 is .5 + depths/2 times more"
-                                        if (player.extremeMode) c3 = c3.replace(".99", ".985-depth/200")
+                                        if (player.extremeMode) {
+                                                c3 = c3.replace(".99", ".985-depth/200")
+                                                c5 = c5.replace(".665", ".713")
+                                        }
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
                                         let p = "Note: Depths is the number of times you are in the given challenge."
@@ -14180,6 +14379,7 @@ addLayer("a", {
                                                 ret = ret.times(tmp.t.effect)
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("sci", 403))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
 
                 return ret
         },
@@ -14414,10 +14614,19 @@ addLayer("a", {
                         let aUpgBase = decimalOne
                         
                         if (hasUpgrade("a", 14))        aUpgBase = aUpgBase.times(player.extremeMode ? 3 : 2)
-                        if (hasUpgrade("a", 32))        aUpgBase = aUpgBase.times(2)
+                        if (hasUpgrade("a", 32))        aUpgBase = aUpgBase.times(player.extremeMode ? 3 : 2)
                         if (!player.extremeMode)        aUpgBase = aUpgBase.times(layers.l.grid.getGemEffect(503))
 
                         return aUpgBase
+                },
+                getSciUpgBase(){
+                        if (!player.extremeMode) return decimalOne
+                        let ret = decimalOne
+
+                        if (hasUpgrade("sci", 401)) ret = ret.times(2)
+                        if (hasUpgrade("sci", 404)) ret = ret.times(player.sci.protein_science.points.plus(10).log10())
+
+                        return ret
                 },
                 getAMilestoneBase(){
                         let base = decimalOne
@@ -14444,9 +14653,8 @@ addLayer("a", {
                                                         ret = ret.times(tmp.a.buyables[31].effect)
                                                         ret = ret.times(tmp.a.buyables[32].effect)
 
-                        let aUpgBase = tmp.a.protein.getAUpgBase
-
-                                                        ret = ret.times(Decimal.pow(aUpgBase, player.a.upgrades.length))
+                                                        ret = ret.times(tmp.a.protein.getAUpgBase.pow(player.a.upgrades.length))
+                        if (player.extremeMode)         ret = ret.times(tmp.a.protein.getSciUpgBase.pow(tmp.sci.upgrades.proteinUpgradesLength))
                         if (hasUpgrade("a", 15))        ret = ret.times(getBuyableAmount("a", 12).max(1))
                         if (hasUpgrade("a", 31))        ret = ret.times(getBuyableAmount("a", 13).max(1).pow(3))
                         if (hasUpgrade("a", 13))        ret = ret.times(getBuyableAmount("a", 11).max(1))
@@ -14463,7 +14671,7 @@ addLayer("a", {
                         if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
                         if (hasMilestone("d", 18))      ret = ret.times(player.d.points.max(1).pow(tmp.l.getNonZeroGemCount))
                         
-                        if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(105))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(105))
                                                         ret = ret.times(tmp.cells.effect)
                                                         ret = ret.times(tmp.t.effect)
                                                         ret = ret.times(tmp.or.effect)
@@ -14613,7 +14821,9 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid VIII"
                         },
                         description(){
-                                return "The autobuyer triggers 2.5x as often and gain a C41 gem per second"
+                                let a = "The autobuyer triggers 2.5x as often"
+                                if (player.extremeMode) a += ", unlock Protein Science,"
+                                return a + " and gain a C41 gem per second"
                         },
                         cost:() => new Decimal("1e999"),
                         currencyLocation:() => player.a.protein,
@@ -14673,7 +14883,9 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XII"
                         },
                         description(){
-                                return "Each upgrade doubles Protein gain, gain a C24 gem per second, and tRNA and mRNA cost nothing"
+                                let a = "Each upgrade doubles Protein gain, gain a C24 gem per second, and tRNA and mRNA cost nothing"
+                                if (player.extremeMode) return a.replace("doubles", "triples")
+                                return a
                         },
                         cost:() => new Decimal("1e4200"),
                         currencyLocation:() => player.a.protein,
@@ -16518,19 +16730,22 @@ addLayer("a", {
                                         let j = j1 + j2 + br
 
                                         if (tmp.a.protein.getAUpgBase.gt(1)) {
-                                                j += "<br>Each upgrade gives a " + doEndingFormula(tmp.a.protein.getAUpgBase)
+                                                j += "<br>Each Amino Acid upgrade gives a " + doEndingFormula(tmp.a.protein.getAUpgBase)
+                                        }
+                                        if (tmp.a.protein.getSciUpgBase.gt(1)) {
+                                                j += "<br>Each Protein Science upgrade gives a " + doEndingFormula(tmp.a.protein.getSciUpgBase)
                                         }
                                         if (hasUpgrade("a", 13)) {
                                                 let a13 = decimalOne
                                                 if (getBuyableAmount("a", 11).gt(0)) a13 = a13.plus(getBuyableAmount("a", 11).pow(-1))
-                                                if (getBuyableAmount("a", 11).lt(1e3)) {
+                                                if (getBuyableAmount("a", 11).lt(14300)) {
                                                         j += "<br>Amino Acid III makes the next tRNA give a " + doEndingFormula(a13) 
                                                 }
                                         }
                                         if (hasUpgrade("a", 15)) {
                                                 let a15 = decimalOne
                                                 if (getBuyableAmount("a", 12).gt(0)) a15 = a15.plus(getBuyableAmount("a", 12).pow(-1))
-                                                if (getBuyableAmount("a", 12).lt(1e3)) {
+                                                if (getBuyableAmount("a", 12).lt(10000)) {
                                                         j += "<br>Amino Acid V makes the next mRNA give a " + doEndingFormula(a15) 
                                                 }
                                         }
@@ -33567,7 +33782,7 @@ addLayer("tokens", {
                                 return player.mini.a_points.points.plus(1).ln().max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci101"]]
                         },
                         effectDescription(){
@@ -33595,7 +33810,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 7)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci102"]]
                         },
                         effectDescription(){
@@ -33615,7 +33830,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 8)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci103"]]
                         },
                         effectDescription(){
@@ -33638,7 +33853,7 @@ addLayer("tokens", {
                                 return player.mini.b_points.points.plus(1).ln().max(1)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci111"]]
                         },
                         effectDescription(){
@@ -33665,7 +33880,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 10)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci112"]]
                         },
                         effectDescription(){
@@ -33685,7 +33900,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 11)
                         },
                         toggles(){
-                                if (!player.extremeMode) return []
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return []
                                 return [["sci", "autobuysci113"]]
                         },
                         effectDescription(){

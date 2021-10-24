@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.164",
+	num: "1.165",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.a.protein.points.gt(0)
+	if (player.extremeMode) return player.a.protein.points.gt("1e6800")
 	return player.or.total.gt(4)
 }
 
@@ -33,6 +33,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.164</h3><br>
+		- Implemented a gems.<br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
+		- Balanced until 1e6800 Protein.<br>
+		- Added Protein Science.<br>
+		- Added five Protein Science upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.163</h3><br>
 		- Implemented 7 gems.<br>
 		- Various extreme mode changes.<br>
