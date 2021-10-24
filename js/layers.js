@@ -2435,8 +2435,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci IV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return
                                 if (hasUpgrade("h", 44) && player.mini.b_points.points.lt(5e11)) return "You need 5e11 B Points to unlock" 
                                 let a = "<bdi style='font-size: 80%'>Unlock another buyable and each buyable multiplies B Point gain by 1+amount<sup>2</sup>"
                                 if (hasUpgrade("h", 44)) a = a.slice(0,103)
@@ -2469,8 +2467,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci V"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 let a = "<bdi style='font-size: 80%'>Per A buyable, multiply Hydrogen Science and A Point gain by 1.1 and unlock another buyable</bdi>"
                                 return a + "<br>Currently: " + formatWhole(tmp.sci.upgrades[15].effect) + "</bdi>"
                         },
@@ -2496,8 +2492,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 return "Remove 60 Seconds base cost"
                         },
                         cost:() => new Decimal(1e152),
@@ -2513,8 +2507,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 return "Remove Orange base cost and each Orange doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e168),
@@ -2530,8 +2522,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 return "Remove Indigo base cost and each Indigo doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e198),
@@ -2547,8 +2537,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci IX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 return "Remove White base cost and each White doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e240),
@@ -2564,8 +2552,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci X"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "H Research") return 
                                 return "Remove Red base cost and each Red doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e269),
@@ -2581,8 +2567,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci I"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Science effects Oxygen gain and remove B21 base cost"
                         },
                         cost:() => new Decimal(1e5),
@@ -2599,8 +2583,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci II"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Unlock three buyables and remove B31 base cost"
                         },
                         cost:() => new Decimal(1e5),
@@ -2617,8 +2599,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci III"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Unlock a buyable and remove B32 base cost"
                         },
                         cost:() => new Decimal(1e19),
@@ -2635,8 +2615,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21% base cost"
                         },
                         cost:() => new Decimal(1e30),
@@ -2653,8 +2631,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci V"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Remove Artificial base cost"
                         },
                         cost:() => new Decimal(1e36),
@@ -2671,8 +2647,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Remove Cyclic base cost"
                         },
                         cost:() => new Decimal(5e74),
@@ -2689,8 +2663,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Remove Atomic and B33 base cost"
                         },
                         cost:() => new Decimal(5e94),
@@ -2707,8 +2679,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Remove Chemistry base cost"
                         },
                         cost:() => new Decimal(5e97),
@@ -2725,8 +2695,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "<bdi style='font-size: 80%'>Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
                         },
                         effect(){
@@ -2749,8 +2717,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci X"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "21%'s log10s become ln and triple coin gain but lose 20x Oxygen"
                         },
                         cost:() => new Decimal(2e157),
@@ -2767,8 +2733,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "All Hydrogen Science buyable's log10s become ln and add 1 to Artificial base"
                         },
                         cost:() => new Decimal(5e196),
@@ -2785,8 +2749,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Per token multiply Oxygen Science gain by tokens"
                         },
                         cost:() => new Decimal(1e281),
@@ -2810,8 +2772,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Per upgrade add .01 to 6 D" + "e" + "caseconds' base"
                         },
                         cost:() => new Decimal("5e345"),
@@ -2828,8 +2788,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers"
                         },
                         effect(){
@@ -2852,8 +2810,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci XV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "O Research") return 
                                 return "<bdi style='font-size: 80%'>Science effect affects C point gain, total C buyables multiplies Oxygen science gain, and unlock Carbon Research</bdi>"
                         },
                         effect(){
@@ -2882,8 +2838,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci I"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 return "Per upgrade multiply C Point gain by log10(Carbon)"
                         },
                         effect(){
@@ -2905,8 +2859,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci II"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
                                 return "Per upgrade multiply Point gain by C Points"
                         },
@@ -2929,8 +2881,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci III"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 203) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
                                 return "You have one less token for prestige purposes"
                         },
@@ -2953,8 +2903,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci IV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 1 base cost"
                         },
@@ -2977,8 +2925,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci V"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 205) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e48 C Points<br>Shift for effect"
                                 return "Per upgrade triple Carbon Science gain"
                         },
@@ -2998,8 +2944,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e54 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 2 base cost"
                         },
@@ -3019,8 +2963,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 212) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e71 C Points<br>Shift for effect"
                                 return "Carbon Science multiplies C Point gain"
                         },
@@ -3040,8 +2982,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 213) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 3e116 C Points<br>Shift for effect"
                                 return "Per upgrade log10(Carbon Science) multiplies C Point gain"
                         },
@@ -3067,8 +3007,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci IX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 214) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e151 C Points<br>Shift for effect"
                                 return "Per upgrade double Carbon Science gain but you can only gain 10 seconds of Carbon Science production"
                         },
@@ -3088,8 +3026,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci X"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 215) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e173 C Points<br>Shift for effect"
                                 return "Tokens<sup>2</sup> multiply Science gain but you can only gain 20 seconds of Science production"
                         },
@@ -3109,8 +3045,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e187 C Points<br>Shift for effect"
                                 return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
                         },
@@ -3130,8 +3064,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 222) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e201 C Points<br>Shift for effect"
                                 return "Per upgrade double Carbon Science gain"
                         },
@@ -3151,8 +3083,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e230 C Points<br>Shift for effect"
                                 return "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
                         },
@@ -3172,8 +3102,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 224) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1.80e308 C Points<br>Shift for effect"
                                 return "C Point Gain 1 cost exponent is 1.21"
                         },
@@ -3193,8 +3121,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 225) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e653 C Points<br>Shift for effect"
                                 return "C Point Gain 1 cost exponent is 1.2"
                         },
@@ -3214,8 +3140,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 231) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
                                 return "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
                         },
@@ -3235,8 +3159,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 232) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
                                 return "Reduce corn interval to 4 and you can gamble every 4 seconds"
                         },
@@ -3256,8 +3178,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
                                 return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
                         },
@@ -3277,8 +3197,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 234) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
                                 return "Per upgrade C Points^.001 multiplies C Point gain"
                         },
@@ -3298,8 +3216,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 235) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
                                 return "C Point Gain 1's ln becomes log2"
                         },
@@ -3319,8 +3235,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e42,540 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 5 base cost"
                         },
@@ -3340,8 +3254,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 return "Remove C Point Gain 6 base cost"
                         },
                         cost:() => new Decimal(9.28e42),
@@ -3357,8 +3269,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 return "Remove Carbon Increase base cost"
                         },
                         cost:() => new Decimal(2.31e45),
@@ -3374,8 +3284,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 return "Per fifth upgrade you have one less effective token for prestige purposes"
                         },
                         cost:() => new Decimal(4.92e47),
@@ -3391,8 +3299,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "C Research") return 
                                 return "Remove C Point gain 7 base cost"
                         },
                         cost:() => new Decimal(3.49e51),
@@ -3408,8 +3314,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci I"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove C Point gain 9 base cost and per upgrade multiply A Point gain by 1e5,000"
                         },
                         cost:() => new Decimal(100),
@@ -3430,8 +3334,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci II"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
                         },
                         onPurchase(){
@@ -3455,8 +3357,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci III"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "You have one less effective token for prestige purposes and per upgrade add 100 to Blue base"
                         },
                         cost:() => new Decimal(1000),
@@ -3477,8 +3377,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci IV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Per upgrade Nitrogen multiplies Oxygen Science gain"
                         },
                         cost:() => new Decimal(500),
@@ -3499,8 +3397,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci V"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "<bdi style='font-size: 80%'>Per upgrade multiply Hydrogen gain by 1e1,500 and 21%'s base is log10(Science) but remove Hydrogen Science</bdi>" 
                         },
                         cost:() => new Decimal(5e5),
@@ -3534,8 +3430,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Square base Nitrogen gain"
                         },
                         cost:() => new Decimal(1e6),
@@ -3551,8 +3445,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 312) && !shiftDown) return "Requires: 1e8 D Points<br>Shift for effect"
                                 return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
                         },
@@ -3575,8 +3467,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 313) && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
                                 return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
                         },
@@ -3599,8 +3489,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci IX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 314) && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
                                 return "<bdi style='font-size: 90%'>log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain</bdi>"
                         },
@@ -3620,8 +3508,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci X"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 315) && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
                                 return "Gas Pedal cost exponent is 1.2"
                         },
@@ -3641,8 +3527,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 321) && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
                                 return "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                         },
@@ -3665,8 +3549,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 322) && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
                                 return "Remove Engine base cost"
                         },
@@ -3689,8 +3571,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 323) && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
                                 if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
                                 return "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
@@ -3716,8 +3596,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Accelerometer base cost"
                         },
                         cost:() => new Decimal(7.33e53),
@@ -3733,8 +3611,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Steering Wheel base cost"
                         },
                         cost:() => new Decimal(3.52e54),
@@ -3750,8 +3626,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Exponential Increase base cost"
                         },
                         cost:() => new Decimal(7.87e55),
@@ -3767,8 +3641,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Quadratic Increase and Fuel Increase 2 base cost"
                         },
                         cost:() => new Decimal(8.48e69),
@@ -3784,8 +3656,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Air Conditioning and Fuel Efficiency base cost"
                         },
                         cost:() => new Decimal(1.3e70),
@@ -3801,8 +3671,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Brake Pedal base cost and Sixteen becomes .03 per challenge"
                         },
                         cost:() => new Decimal(1.3e79),
@@ -3818,8 +3686,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Gas Gauge base cost and Quadratic Increase base is multiplied by upgrades"
                         },
                         cost:() => new Decimal(2.43e81),
@@ -3835,8 +3701,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (player.shiftAlias) return "Hardcapped at 1e50"
                                 return "<bdi style='font-size: 80%'>Remove Seat Belt base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
                         },
@@ -3853,8 +3717,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Accelerometer cost exponent is 1.1"
                         },
                         cost:() => new Decimal(2.02e93),
@@ -3870,8 +3732,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 return "Remove Parking Brake base cost and its cost exponent is 1.2"
                         },
                         cost:() => new Decimal(1.17e100),
@@ -3887,8 +3747,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 344) && !shiftDown) return "Requires: 400 E Points<br>Shift for effect"
                                 return "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
                         },
@@ -3908,8 +3766,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXV"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 345) && !shiftDown) return "Requires: 25 Constant levels<br>Shift for effect"
                                 return "Remove Linear base cost and Constant costs nothing"
                         },
@@ -3929,8 +3785,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 351) && !shiftDown) return "Requires: 31 Constant levels<br>Shift for effect"
                                 return "Remove Quadratic base cost and Linear cost exponent is 1.15"
                         },
@@ -3950,8 +3804,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVII"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 352) && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
                                 return "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
                         },
@@ -3978,9 +3830,7 @@ addLayer("sci", {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVIII"
                         },
-                        description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
+                        description(){ 
                                 if (!hasUpgrade("sci", 353) && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
                                 return "Per upgrade in this row add .1 to Constant base"
                         },
@@ -4000,8 +3850,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 354) && !shiftDown) return "Requires: 29 Linear levels<br>Shift for effect"
                                 return "Remove respecting scalar multiplication base cost and double Nitrogen gain"
                         },
@@ -4021,8 +3869,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXX"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 355) && !shiftDown) return "Requires: 71 Constant levels<br>Shift for effect"
                                 if (player.p.unlocked) return "Remove respecting addition base cost"
                                 return "Remove respecting addition base cost but gain 20x less E Points"
@@ -4043,8 +3889,6 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXI"
                         },
                         description(){
-                                if (player.tab != "sci") return 
-                                if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 361) && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
                                 return "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
                         },
@@ -31261,11 +31105,8 @@ addLayer("mini", {
                         "Info": {
                                 content: [
                                         ["display-text", function(){
-                                                if (player.tab != "mini") return
-                                                if (player.subtabs.mini.mainTabs != "C") return 
-
                                                 let a = "Each character has a given value, and the more of said character you get,"
-                                                a += "<br> the more powerful its value is."
+                                                a += "<br>the more powerful its value is."
 
                                                 let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>"
                                                 b += "Finally, point gain is the product of all above values time multipliers."
@@ -31558,9 +31399,6 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "d_points"],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "D") return 
-                                        
                                         let a = "You can refuel the car by clicking. The car goes faster based on how much fuel it has."
 
                                         let b = "<br>Point gain is based on speed (which is based on fuel), but you lose 1% of your fuel every second."
@@ -31569,7 +31407,6 @@ addLayer("mini", {
                                                 b += "   Multiplier from fuel: x" + format(tmp.mini.d_points.getFuelMultiplier)
                                                 b += "<br>Gain per second: " + format(tmp.mini.d_points.getPointProduction)
                                         }
-
 
                                         return a + b
                                 }],
@@ -31616,8 +31453,6 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "e_points"],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "E") return 
                                         let data = tmp.mini.e_points
 
                                         let mb = makeBlue
