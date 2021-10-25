@@ -386,7 +386,7 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         304: (x) => x.plus(10).log10(),
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02, x).min(10),
+        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) ? 0.005 : 0), x).min(hasChallenge("l", 52) ? 1e100 : 10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
         105: (x) => x.plus(10).log10().pow(2),
         205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
@@ -2339,6 +2339,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 405))     ret = ret.times(player.tokens.total.max(1))
                                                         ret = ret.times(layers.l.grid.getGemEffect(305))
                         if (hasUpgrade("sci", 431))     ret = ret.times(Decimal.pow(2, tmp.l.getMaxedGemCount))
+                        if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(1.03, getBuyableAmount("a", 22)))
 
                         return ret
                 },
@@ -4094,7 +4095,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 403) && !shiftDown) return "Requires: 1.00e1337 Protein<br>Shift for effect"
-                                return "Uncap C43 and each upgrade doubles Amino Acid gain"
+                                return "Each upgrade doubles Amino Acid gain"
                         },
                         canAfford(){
                                 return player.a.protein.points.gte("1e1337") || false
@@ -4355,7 +4356,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 425) && !shiftDown) return "Requires: 1.00e75057 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 431) && !shiftDown) return "Requires: 1.00e75057 Protein<br>Shift for effect"
                                 return "Per maxed gem amount (10,000) double Protein Science gain"
                         },
                         canAfford(){
@@ -4368,6 +4369,129 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 425) || player.d.unlocked
                         }, // hasUpgrade("sci", 431)
+                },
+                432: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVII"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 432) && !shiftDown) return "Requires: 1.00e105,501 Protein<br>Shift for effect"
+                                return "miRNA cost exponent is 1.9"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e105501") || false
+                        },
+                        cost:() => new Decimal(4.5e31),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 431) || player.d.unlocked
+                        }, // hasUpgrade("sci", 432)
+                },
+                433: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVIII"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 433) && !shiftDown) return "Requires: 1.00e113,311 Protein<br>Shift for effect"
+                                return "miRNA cost exponent is 1.8"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e113311") || false
+                        },
+                        cost:() => new Decimal(1.38e32),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 432) || player.d.unlocked
+                        }, // hasUpgrade("sci", 433)
+                },
+                434: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XIX"
+                        },
+                        description(){
+                                if (!hasUpgrade("sci", 434) && !shiftDown) return "Requires: 1.00e159,300 Protein<br>Shift for effect"
+                                return "Per upgrade double Amino Acid gain"
+                        },
+                        canAfford(){
+                                return player.a.protein.points.gte("1e159300") || false
+                        },
+                        cost:() => new Decimal(5.2e32),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 433) || player.d.unlocked
+                        }, // hasUpgrade("sci", 434)
+                },
+                435: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XX"
+                        },
+                        description(){
+                                if (shiftDown) return "Softcapped at 1e10 (x -> log10(x)<sup>10</sup>)"
+                                return "log10(log10(Points)) multiplies Protein gain<br>Currently: " + format(tmp.sci.upgrades[435].effect)
+                        },
+                        cost:() => new Decimal(1.81e33),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        effect(){
+                                let ret = player.points.max(10).log10().max(10).log10()
+                                if (ret.gt(1e10)) ret = ret.log10().pow(10)
+                                return ret
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 434) || player.d.unlocked
+                        }, // hasUpgrade("sci", 435)
+                },
+                441: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXI"
+                        },
+                        description(){
+                                return "Per upgrade log10(log10(Protein)) multiplies Protein gain"
+                        },
+                        cost:() => new Decimal(6.52e38),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 435) || player.d.unlocked
+                        }, // hasUpgrade("sci", 441)
+                },
+                442: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXII"
+                        },
+                        description(){
+                                return "miRNA cost exponent is 1.7"
+                        },
+                        cost:() => new Decimal(3.8e39),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 441) || player.d.unlocked
+                        }, // hasUpgrade("sci", 442)
+                },
+                443: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXIII"
+                        },
+                        description(){
+                                return "Per upgrade add 1 to Life Milestone 1 limit"
+                        },
+                        cost:() => new Decimal(1.67e42),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 442) || player.d.unlocked
+                        }, // hasUpgrade("sci", 443)
                 },
         },
         buyables: {
@@ -11332,6 +11456,7 @@ addLayer("l", {
                                 if (hasMilestone("a", 14) && player.extremeMode) {
                                                                 cap += tmp.l.getNonZeroGemCount
                                 }
+                                if (hasUpgrade("sci", 443))     cap += tmp.sci.upgrades.proteinUpgradesLength
                                 
                                 let exp = Math.min(cap, player.l.times)
                                 if (hasUpgrade("d", 11)) exp = cap
@@ -14512,7 +14637,7 @@ addLayer("a", {
                 if (hasUpgrade("a", 25))        ret = ret.times(getBuyableAmount("a", 13).max(1))
                 if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(305))
                 if (hasMilestone("a", 28))      ret = ret.times(getBuyableAmount("a", 21).max(1))
-                if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(1.02, getBuyableAmount("a", 22)))
+                if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(player.extremeMode ? 1.03 : 1.02, getBuyableAmount("a", 22)))
                 if (hasMilestone("a", 44))      ret = ret.times(Decimal.pow(1.1, getBuyableAmount("a", 13)))
                 if (hasUpgrade("a", 51))        ret = ret.times(Decimal.pow(2, player.a.milestones.length))
                 if (hasUpgrade("a", 63))        ret = ret.times(player.a.protein.points.max(10).log10())
@@ -14527,6 +14652,7 @@ addLayer("a", {
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 403))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
+                if (hasUpgrade("sci", 434))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
 
                 return ret
         },
@@ -14772,6 +14898,7 @@ addLayer("a", {
 
                         if (hasUpgrade("sci", 401)) ret = ret.times(2)
                         if (hasUpgrade("sci", 404)) ret = ret.times(player.sci.protein_science.points.plus(10).log10())
+                        if (hasUpgrade("sci", 441)) ret = ret.times(player.a.protein.points.max(10).log10().max(10).log10())
 
                         return ret
                 },
@@ -14810,7 +14937,7 @@ addLayer("a", {
                         if (hasUpgrade("a", 45))        ret = ret.times(getBuyableAmount("a", 23).max(1).pow(2))
                         
                         if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
-                        if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(1e25).max(1))
+                        if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(player.extremeMode ? 1e50 : 1e25).max(1))
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
                         if (!player.extremeMode)        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
@@ -14828,6 +14955,7 @@ addLayer("a", {
                         }
                         if (hasUpgrade("sci", 412))     ret = ret.times(player.sci.protein_science.points.max(1))
                         if (hasUpgrade("sci", 413))     ret = ret.times(tmp.sci.buyables[302].base)
+                        if (hasUpgrade("sci", 435))     ret = ret.times(tmp.sci.upgrades[435].effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -15124,9 +15252,10 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XVIII"
                         },
                         description(){
+                                if (player.extremeMode) return "Each siRNA multiplies Amino Acid and Protein Science gain by 1.03"
                                 return "Each siRNA multiplies Amino Acid gain by 1.02"
                         },
-                        cost:() => new Decimal("1e198e3"),
+                        cost:() => new Decimal(player.extremeMode ? "1e170e3" : "1e198e3"),
                         currencyLocation:() => player.a.protein,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Protein",
@@ -15141,7 +15270,7 @@ addLayer("a", {
                         description(){
                                 return "Unlock crRNA and add .001 to mRNA base"
                         },
-                        cost:() => new Decimal("1e209e3"),
+                        cost:() => new Decimal(player.extremeMode ? "1e220e3" : "1e209e3"),
                         currencyLocation:() => player.a.protein,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Protein",
@@ -15736,9 +15865,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 29)
                 30: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e123,456 Protein"
                                 return "1e118,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e123456")
                                 return player.a.protein.points.gte("1e118e3")
                         },
                         unlocked(){
@@ -15759,6 +15890,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Amino Acid up to e50 multiplies Protein gain but mRNA and tRNA base cost is set to 1."
                                 return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1."
                         },
                 }, // hasMilestone("a", 31)
@@ -16208,7 +16340,11 @@ addLayer("a", {
                                 let amt = getBuyableAmount("a", 13)
                                 let baseCost = new Decimal("1e1450")
                                 if (hasUpgrade("sci", 411)) baseCost = decimalOne
-                                return baseCost.times(Decimal.pow("1e500", amt.pow(2)))
+                                let exp = 2
+                                if (hasUpgrade("sci", 432)) exp = 1.9
+                                if (hasUpgrade("sci", 433)) exp = 1.8
+                                if (hasUpgrade("sci", 442)) exp = 1.7
+                                return baseCost.times(Decimal.pow("1e500", amt.pow(exp)))
                         },
                         unlocked(){
                                 return hasUpgrade("a", 24) || hasMilestone("d", 5) || player.cells.unlocked
@@ -16217,7 +16353,11 @@ addLayer("a", {
                                 let pts = player.a.protein.points
                                 let base = hasUpgrade("sci", 411) ? "1" : "1e1450"
                                 if (pts.lt(base)) return decimalZero
-                                return pts.div(base).log("1e500").root(2).plus(1).floor()
+                                let exp = 2
+                                if (hasUpgrade("sci", 432)) exp = 1.9
+                                if (hasUpgrade("sci", 433)) exp = 1.8
+                                if (hasUpgrade("sci", 442)) exp = 1.7
+                                return pts.div(base).log("1e500").root(exp).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[13].cost),
                         buy(){
@@ -16282,6 +16422,9 @@ addLayer("a", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1450*1e500^x<sup>2</sup>"
                                 if (hasUpgrade("sci", 411)) cost2 = cost2.slice(7, )
+                                if (hasUpgrade("sci", 432)) cost2 = cost2.replace("2<", "1.9<")
+                                if (hasUpgrade("sci", 433)) cost2 = cost2.replace("1.9<", "1.8<")
+                                if (hasUpgrade("sci", 442)) cost2 = cost2.replace("1.8<", "1.7<")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16459,16 +16602,18 @@ addLayer("a", {
                         title: "crRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 23)
-                                let baseCost = new Decimal("1e257000")
-                                return baseCost.times(Decimal.pow("1e2000", amt.pow(1.2)))
+                                let baseCost = new Decimal(player.extremeMode ? "1e259e3" : "1e257000")
+                                let base = player.extremeMode ? "1e1000" : "1e2000"
+                                return baseCost.times(Decimal.pow(base, amt.pow(1.2)))
                         },
                         unlocked(){
                                 return hasUpgrade("a", 44) || hasMilestone("d", 5) || player.cells.unlocked
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e257000")) return decimalZero
-                                return pts.div("1e257000").log("1e2000").root(1.2).plus(1).floor()
+                                let init = player.extremeMode ? "1e259e3" : "1e257e3"
+                                if (pts.lt(init)) return decimalZero
+                                return pts.div(init).log(player.extremeMode ? "1e1000" : "1e2000").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[23].cost),
                         buy(){
@@ -16519,6 +16664,11 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e257,000*1e2000^x<sup>1.2</sup>"
+                                if (player.extremeMode) {
+                                        cost2 = cost2.replace("7", "9")
+                                        cost2 = cost2.replace("2000", "1000")
+                                }
+
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16781,10 +16931,10 @@ addLayer("a", {
                                 ["secondary-display3", "protein"],
                                 ["display-text", function(){
                                         if (player.cells.times > 11) return ""
-                                        if (player.a.protein.points.lt(1e100)) { 
+                                        if (player.a.protein.total.lt(1e100)) { 
                                                 return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
                                         }
-                                        if (!hasMilestone("a", 32)) { // 175e3
+                                        if (!hasMilestone("a", 32)) { // 175e3 milestone
                                                 let init = tmp.a.protein.getAllOtherGain
                                                 let exp = tmp.a.protein.mRNAtRNABoostExp
                                                 let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
@@ -16794,21 +16944,29 @@ addLayer("a", {
                                                 return start + format(init.times(mult).pow(exp)) + " protein"
                                         }
                                         let boostExp = tmp.a.protein.mRNAtRNABoostExp
-                                        let time = player.a.protein.points.root(boostExp).div(tmp.a.protein.getAllOtherGain || 1)
+                                        let timePerBuyable = player.a.protein.points.root(boostExp).div(tmp.a.protein.getAllOtherGain || 1)
                                         let base1 = tmp.a.buyables[11].base.pow(Math.log(50)/Math.log(25)) 
                                         let base2 = tmp.a.buyables[12].base.pow(Math.log(50)/Math.log(100))
-                                        let oomps = Decimal.pow(base1.times(base2), time.pow(-1).div(2)).log10()
-                                        if (!hasMilestone("a", 39)) {
-                                                oomps = oomps.div(50) // because its bought 50x less often
-                                                oomps = oomps.times(4.129646562409412/2)
-                                                // Math.log(50)/Math.log(5)+Math.log(50)/Math.log(10)
+                                        // sqr(base1 * base2) is the expected multiplier per buyable, weighted cause theyre costs scale differently
+                                        let oomps 
+                                        if (timePerBuyable.gte(.05)) {
+                                                oomps = Decimal.pow(base1.times(base2).sqrt(), timePerBuyable.pow(-1)).log10()
+                                                // we expect to buy timePerBuyable.pow(-1) per second at base1.times(base2).sqrt() multiplier each
+                                                // take log10 because its orders of magnitude
+                                        } else {
+                                                // on a given tick, we expect to buy log10(.05/timePerBuyable) + .5 mRNA and log5(.05/timePerBuyable) + .5 tRNA
+                                                let storeValue = timePerBuyable.pow(-1).times(.05).log10().plus(.5)
+                                                let expectmRNA = storeValue
+                                                let expecttRNA = storeValue.div(0.6989700043360189) // 0.6989700043360189 = Math.log10(5)
+                                                let tRNABoost = tmp.a.buyables[11].base.pow(expecttRNA)
+                                                let mRNABoost = tmp.a.buyables[12].base.pow(expectmRNA)
+                                                let expectBoost = tRNABoost.times(mRNABoost)
+                                                oomps = expectBoost.log10().times(20) // cause 20 ticks per second
                                         }
                                         if (!shiftDown || !tmp.a.buyables[13].unlocked || player.a.protein.points.lt(10)) {
-                                                let a = "Current time to buy a buyable is approximately " + formatTime(time)
+                                                let a = "Current time to buy a buyable is approximately " + formatTime(timePerBuyable) + br
                                                 // Math.log(10*5)/(2*Math.log(5))
-                                                let b = "<br>and you are gaining approximately " + format(oomps) + " OoM of protein per second"
-
-                                                return a + b
+                                                return a + "and you are gaining approximately " + format(oomps) + " OoM of protein per second"
                                         }
                                         let a = "The cheapest buyable other than mRNA and tRNA is "
                                         let cost = tmp.a.buyables[13].cost
@@ -16827,19 +16985,11 @@ addLayer("a", {
                                         // = OoM/s now / ln(10) * boostExp * (10^(Oom Needed/boost exp)-1) 
                                         // last term is from integral
                                         let oomNeeded = cost.div(player.a.protein.points).log10()
-                                        if (time.gt(.05)) {
-                                                let flat = oomps.pow(-1).div(Math.log(10)).times(boostExp)
-                                                let scaling = oomNeeded.div(boostExp).pow10().sub(1).max(0)
-                                                let end = formatTime(flat.times(scaling)) 
-                                                return init + mid + end
-                                        } else {
-                                                let increasePS1 = Decimal.pow(50, boostExp.pow(-1).div(2)) 
-                                                // sqrt(50)**(1/boostexp) = what it should be assuming no other gains in a tick
-                                                let increasePS = increasePS1.div(time).div(20)
-                                                // this tells us how much we are gaining per second compared to no other gain
-                                                let timeNeeded = oomNeeded.div(increasePS.log10()).div(boostExp).max(0)
-                                                return init + mid + formatTime(timeNeeded)
-                                        }
+                                        let flat = oomps.pow(-1).div(Math.log(10)).times(boostExp)
+                                        let scaling = oomNeeded.div(boostExp).pow10().sub(1).max(0)
+                                        let end = formatTime(flat.times(scaling)) 
+                                        
+                                        return init + mid + end
                                 }],
                                 "blank",
                                 ["buyables", [1,2,3]],
@@ -16900,10 +17050,12 @@ addLayer("a", {
                                         let j = j1 + j2 + br
 
                                         if (tmp.a.protein.getAUpgBase.gt(1)) {
-                                                j += "<br>Each Amino Acid upgrade gives a " + doEndingFormula(tmp.a.protein.getAUpgBase)
+                                                j += br + "Each "
+                                                j += makeBlue("Amino Acid upgrade") + " gives a " + doEndingFormula(tmp.a.protein.getAUpgBase)
                                         }
                                         if (tmp.a.protein.getSciUpgBase.gt(1)) {
-                                                j += "<br>Each Protein Science upgrade gives a " + doEndingFormula(tmp.a.protein.getSciUpgBase)
+                                                j += br + "Each "
+                                                j += makeBlue("Protein Science upgrade") + " gives a " + doEndingFormula(tmp.a.protein.getSciUpgBase)
                                         }
                                         if (hasUpgrade("a", 13)) {
                                                 let a13 = decimalOne
@@ -16955,7 +17107,8 @@ addLayer("a", {
                                         }
                                         let mBase = tmp.a.protein.getAMilestoneBase
                                         if (mBase.gt(1)) {
-                                                j += "<br>Each milestone gives a " + doEndingFormula(mBase)
+                                                j += br + "Each "
+                                                j += makeBlue("milestone") + " gives a " + doEndingFormula(mBase)
                                         }
                                         if (hasMilestone("a", 29)) {
                                                 let base = getBuyableAmount("a", 13).div(100).plus(1)
