@@ -4493,6 +4493,21 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 442) || player.d.unlocked
                         }, // hasUpgrade("sci", 443)
                 },
+                444: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXIV"
+                        },
+                        description(){
+                                return "miRNA cost exponent is 1.6"
+                        },
+                        cost:() => new Decimal(1.04e44),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 443) || player.d.unlocked
+                        }, // hasUpgrade("sci", 444)
+                },
         },
         buyables: {
                 rows: 5,
@@ -15300,7 +15315,7 @@ addLayer("a", {
                         description(){
                                 return "Each milestone doubles Amino Acid gain"
                         },
-                        cost:() => new Decimal("1e46"),
+                        cost:() => new Decimal(player.extremeMode ? 3e55 : 1e46),
                         unlocked(){
                                 return hasMilestone("a", 40) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 51)
@@ -15312,7 +15327,7 @@ addLayer("a", {
                         description(){
                                 return "Add .0001 to tRNA base"
                         },
-                        cost:() => new Decimal("3e63"),
+                        cost:() => new Decimal(player.extremeMode ? 1e85 : 3e63),
                         unlocked(){
                                 return hasUpgrade("a", 51) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 52)
@@ -15324,7 +15339,7 @@ addLayer("a", {
                         description(){
                                 return "Autobuy crRNA and you can buy max all Protein buyables"
                         },
-                        cost:() => new Decimal("3e68"),
+                        cost:() => new Decimal(player.extremeMode ? 1e100 : 3e68),
                         unlocked(){
                                 return hasUpgrade("a", 52) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 53)
@@ -15336,7 +15351,7 @@ addLayer("a", {
                         description(){
                                 return "siRNA's log10 becomes log2"
                         },
-                        cost:() => new Decimal("3e69"),
+                        cost:() => new Decimal(player.extremeMode ? 1e101 : 3e69),
                         unlocked(){
                                 return hasUpgrade("a", 53) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 54)
@@ -15348,7 +15363,7 @@ addLayer("a", {
                         description(){
                                 return "Add .0002 to tRNA base"
                         },
-                        cost:() => new Decimal("3e70"),
+                        cost:() => new Decimal(player.extremeMode ? 3e101 : 3e70),
                         unlocked(){
                                 return hasUpgrade("a", 54) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 55)
@@ -15360,7 +15375,7 @@ addLayer("a", {
                         description(){
                                 return "Add .0003 to tRNA base"
                         },
-                        cost:() => new Decimal("1e82"),
+                        cost:() => new Decimal(player.extremeMode ? 1e136 : 1e82),
                         unlocked(){
                                 return hasUpgrade("a", 55) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 61)
@@ -15372,7 +15387,7 @@ addLayer("a", {
                         description(){
                                 return "Add .0004 to tRNA base"
                         },
-                        cost:() => new Decimal("1e106"),
+                        cost:() => new Decimal(player.extremeMode ? 1e214 : 1e106),
                         unlocked(){
                                 return hasUpgrade("a", 61) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 62)
@@ -15384,7 +15399,7 @@ addLayer("a", {
                         description(){
                                 return "<bdi style='font-size: 80%'>log10(Protein) multiplies Amino Acid gain, but you can only get up to 100x what you can reset for worth of Amino Acid production</bdi>"
                         },
-                        cost:() => new Decimal("3e159"),
+                        cost:() => new Decimal(player.extremeMode ? "1e403" : "3e159"),
                         unlocked(){
                                 return hasUpgrade("a", 62) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 63)
@@ -15396,7 +15411,7 @@ addLayer("a", {
                         description(){
                                 return "Unlock shRNA"
                         },
-                        cost:() => new Decimal("2.6e167"),
+                        cost:() => new Decimal(player.extremeMode ? "3.6e410" : "2.6e167"),
                         unlocked(){
                                 return hasUpgrade("a", 63) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 64)
@@ -15408,7 +15423,7 @@ addLayer("a", {
                         description(){
                                 return "Unlock DNA"
                         },
-                        cost:() => new Decimal("4.4e169"),
+                        cost:() => new Decimal(player.extremeMode ? "7.7e415" : "4.4e169"),
                         unlocked(){
                                 return hasUpgrade("a", 64) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 65)
@@ -15924,9 +15939,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 33)
                 34: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e309,000 Protein"
                                 return "1e325,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e309e3")
                                 return player.a.protein.points.gte("1e325e3")
                         },
                         unlocked(){
@@ -15938,9 +15955,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 34)
                 35: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e518,000 Protein"
                                 return "1e354,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e518e3")
                                 return player.a.protein.points.gte("1e354e3")
                         },
                         unlocked(){
@@ -15952,9 +15971,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 35)
                 36: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e765,500 Protein"
                                 return "1e506,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e765.5e3")
                                 return player.a.protein.points.gte("1e506e3")
                         },
                         unlocked(){
@@ -15966,9 +15987,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 36)
                 37: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e959,000 Protein"
                                 return "1e572,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e959e3")
                                 return player.a.protein.points.gte("1e572e3")
                         },
                         unlocked(){
@@ -15980,9 +16003,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 37)
                 38: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,071,300 Protein"
                                 return "1e607,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1071.3e3")
                                 return player.a.protein.points.gte("1e607e3")
                         },
                         unlocked(){
@@ -15994,9 +16019,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 38)
                 39: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,112,000 Protein"
                                 return "1e645,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1112e3")
                                 return player.a.protein.points.gte("1e645e3")
                         },
                         unlocked(){
@@ -16008,9 +16035,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 39)
                 40: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,126,000 Protein"
                                 return "1e664,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1126e3")
                                 return player.a.protein.points.gte("1e664e3")
                         },
                         unlocked(){
@@ -16022,23 +16051,27 @@ addLayer("a", {
                 }, // hasMilestone("a", 40)
                 41: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,373,000 Protein"
                                 return "1e875,700 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1373e3")
                                 return player.a.protein.points.gte("1e875.7e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Double protein gain per milestone."
+                                return "Reward: Each milestone doubles protein gain."
                         },
                 }, // hasMilestone("a", 41)
                 42: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,796,000 Protein"
                                 return "1e1,001,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1796e3")
                                 return player.a.protein.points.gte("1e1001e3")
                         },
                         unlocked(){
@@ -16050,9 +16083,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 42)
                 43: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e1,851,000 Protein"
                                 return "1e1,099,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("1e1851e3")
                                 return player.a.protein.points.gte("1e1099e3")
                         },
                         unlocked(){
@@ -16064,9 +16099,11 @@ addLayer("a", {
                 }, // hasMilestone("a", 43)
                 44: {
                         requirementDescription(){
+                                if (player.extremeMode) return "3e74 Amino Acid"
                                 return "1e42 Amino Acid"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.points.gte(3e74)
                                 return player.a.points.gte(1e42)
                         },
                         unlocked(){
@@ -16081,10 +16118,11 @@ addLayer("a", {
                                 return "1e45 Amino Acid"
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return player.a.points.gte(1e45)
                         },
                         unlocked(){
-                                return true
+                                return !player.extremeMode
                         },
                         effectDescription(){
                                 return "When in the chronicle of wasted time"
@@ -16095,10 +16133,11 @@ addLayer("a", {
                                 return "3e45 Amino Acid"
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return player.a.points.gte(3e45)
                         },
                         unlocked(){
-                                return true
+                                return !player.extremeMode
                         },
                         effectDescription(){
                                 return "I see descriptions of the fairest wights,"
@@ -16109,10 +16148,11 @@ addLayer("a", {
                                 return "5e62 Amino Acid"
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return player.a.points.gte(5e62)
                         },
                         unlocked(){
-                                return true
+                                return !player.extremeMode
                         },
                         effectDescription(){
                                 return "And beauty making beautiful old rhyme"
@@ -16123,10 +16163,11 @@ addLayer("a", {
                                 return "1e2,040,000 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return player.a.protein.points.gte("1e2040e3")
                         },
                         unlocked(){
-                                return true
+                                return !player.extremeMode
                         },
                         effectDescription(){
                                 return "In praise of ladies dead, and lovely knights,"
@@ -16137,10 +16178,11 @@ addLayer("a", {
                                 return "1e70 Amino Acid"
                         },
                         done(){
+                                if (player.extremeMode) return false
                                 return player.a.points.gte(1e70)
                         },
                         unlocked(){
-                                return true
+                                return !player.extremeMode
                         },
                         effectDescription(){
                                 return "Then, in the blazon of sweet beauty’s best,"
@@ -16344,6 +16386,7 @@ addLayer("a", {
                                 if (hasUpgrade("sci", 432)) exp = 1.9
                                 if (hasUpgrade("sci", 433)) exp = 1.8
                                 if (hasUpgrade("sci", 442)) exp = 1.7
+                                if (hasUpgrade("sci", 444)) exp = 1.6
                                 return baseCost.times(Decimal.pow("1e500", amt.pow(exp)))
                         },
                         unlocked(){
@@ -16357,6 +16400,7 @@ addLayer("a", {
                                 if (hasUpgrade("sci", 432)) exp = 1.9
                                 if (hasUpgrade("sci", 433)) exp = 1.8
                                 if (hasUpgrade("sci", 442)) exp = 1.7
+                                if (hasUpgrade("sci", 444)) exp = 1.6
                                 return pts.div(base).log("1e500").root(exp).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[13].cost),
@@ -16425,6 +16469,7 @@ addLayer("a", {
                                 if (hasUpgrade("sci", 432)) cost2 = cost2.replace("2<", "1.9<")
                                 if (hasUpgrade("sci", 433)) cost2 = cost2.replace("1.9<", "1.8<")
                                 if (hasUpgrade("sci", 442)) cost2 = cost2.replace("1.8<", "1.7<")
+                                if (hasUpgrade("sci", 444)) cost2 = cost2.replace("1.7<", "1.6<")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16680,7 +16725,7 @@ addLayer("a", {
                         title: "ncRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 31)
-                                let baseCost = new Decimal("1e702000")
+                                let baseCost = new Decimal(player.extremeMode ? "1e1156.5e3" : "1e702000")
                                 return baseCost.times(Decimal.pow("1e6000", amt.pow(1.2)))
                         },
                         unlocked(){
@@ -16688,8 +16733,9 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e702000")) return decimalZero
-                                return pts.div("1e702000").log("1e6000").root(1.2).plus(1).floor()
+                                let init = player.extremeMode ? "1e1156.5e3" : "1e702000"
+                                if (pts.lt(init)) return decimalZero
+                                return pts.div(init).log("1e6000").root(1.2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[31].cost),
                         buy(){
@@ -16745,6 +16791,7 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e702,000*1e6,000^x<sup>1.2</sup>"
+                                if (player.extremeMode) cost2 = cost2.replace("702,000", "1,156,500")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16756,7 +16803,7 @@ addLayer("a", {
                         title: "snRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 32)
-                                let baseCost = new Decimal("1e1012000")
+                                let baseCost = new Decimal(player.extremeMode ? "1e1826e3" : "1e1012000")
                                 return baseCost.times(Decimal.pow("1e5000", amt.pow(1.1)))
                         },
                         unlocked(){
@@ -16764,8 +16811,9 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e1012000")) return decimalZero
-                                return pts.div("1e1012000").log("1e5000").root(1.1).plus(1).floor()
+                                let init = player.extremeMode ? "1e1826e3" : "1e1012000"
+                                if (pts.lt(init)) return decimalZero
+                                return pts.div(init).log("1e5000").root(1.1).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[32].cost),
                         buy(){
@@ -16811,6 +16859,7 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,012,000*1e5,000^x<sup>1.1</sup>"
+                                if (player.extremeMode) cost2 = cost2.replace("012", "826")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16822,7 +16871,7 @@ addLayer("a", {
                         title: "shRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 33)
-                                let baseCost = new Decimal("1e9484000")
+                                let baseCost = new Decimal(player.extremeMode ? "1e2852e4" : "1e9484e3")
                                 return baseCost.times(Decimal.pow("1e7000", amt.pow(2)))
                         },
                         unlocked(){
@@ -16830,8 +16879,9 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                if (pts.lt("1e9484000")) return decimalZero
-                                return pts.div("1e9484000").log("1e7000").root(2).plus(1).floor()
+                                let init = player.extremeMode ? "1e2852e4" : "1e9484e3"
+                                if (pts.lt(init)) return decimalZero
+                                return pts.div(init).log("1e7000").root(2).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[33].cost),
                         buy(){
@@ -16880,6 +16930,7 @@ addLayer("a", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e9,484,000*1e7,000^x<sup>2</sup>"
+                                if (player.extremeMode) cost2 = cost2.replace("9,484", "28,520")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
