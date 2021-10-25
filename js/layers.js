@@ -6735,10 +6735,7 @@ addLayer("n", {
                 let v1 = curr.div(tmp.n.getGainMult).max(1)
                 if (hasMilestone("l", 1)) v1 = v1.root(tmp.l.milestones[1].effect)
                 let v2 = v1.root(tmp.n.getGainExp).plus(19)
-                let v3 = Decimal.pow(2, v2)
-                let v4 = v3.times(player.extremeMode ? 125 : 105)
-                let v5 = Decimal.pow(10, v4)
-                return v5
+                return Decimal.pow(2, v2).times(player.extremeMode ? 125 : 105).pow10()
         },
         getGainMult(){ // nitrogen gain ngain nitrogengain n gain
                 let ret = decimalOne
@@ -8059,10 +8056,7 @@ addLayer("p", {
                 if (player.extremeMode) curr = curr.root(.75)
 
                 let v1 = curr.div(mult).max(1).root(exp)
-                let v2 = v1.plus(1).pow(7)
-                let v3 = v2.plus(2027).pow10().times(player.extremeMode ? 1e193 : 1.3)
-
-                return v3
+                return v1.plus(1).pow(7).plus(2027).pow10().times(player.extremeMode ? 1e193 : 1.3)
         },
         getGainMult(){ // phosphorus gain pgain rusgain rus gain
                 let ret = decimalOne
@@ -10972,9 +10966,7 @@ addLayer("l", {
 
                 let reqInit = gain.div(tmp.l.getGainMult).max(1)
                 let v1 = reqInit.root(tmp.l.getGainExp).plus(9)
-                let v2 = Decimal.pow(2, v1)
-                let v3 = Decimal.pow(2, v2).pow10()
-                return v3
+                return Decimal.pow(2, Decimal.pow(2, v1)).pow10()
         },
         canReset(){
                 return tmp.l.getResetGain.gt(0)
@@ -13325,10 +13317,7 @@ addLayer("l", {
                                 let mult = data.gemGainMult
 
                                 let v1 = gain.plus(1).div(mult).max(1)
-                                let v2 = v1.plus(7).pow(2).plus(960)
-                                let v3 = Decimal.pow(2, v2).pow10()
-
-                                return v3
+                                return Decimal.pow(2, v1.plus(7).pow(2).plus(960)).pow10()
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
                         canComplete(){ 
@@ -14678,8 +14667,7 @@ addLayer("a", {
 
                 let reqInit = gain.div(tmp.a.getGainMult).max(1)
                 let v1 = reqInit.root(tmp.a.getGainExp).plus(7).pow(3).plus(player.extremeMode ? 1300 : 1368)
-                let v2 = Decimal.pow(2, v1)
-                return v2
+                return Decimal.pow(2, v1)
         },
         canReset(){
                 return tmp.a.getResetGain.gt(0)
@@ -14753,7 +14741,7 @@ addLayer("a", {
                 } else {
                         if (gainportion.gt(0)) {
                                 let time = Decimal.sub(100, data.points.div(tmp.a.getResetGain)).max(0)
-                                if (diff < time) {
+                                if (gainportion.times(diff).lt(time)) { // the amount we expect to gain is less than the max
                                         data.points = data.points.plus(tmp.a.getResetGain.times(gainportion).times(diff))
                                         data.total = data.total.plus(tmp.a.getResetGain.times(gainportion).times(diff))
                                 } else {
@@ -17348,7 +17336,7 @@ addLayer("d", {
         }},
         color: "#8C3300",
         branches: [],
-        requires:() => new Decimal(4.4e169), 
+        requires:() => new Decimal(player.extremeMode ? "8e415" : 4.4e169), 
         resource: "DNA", 
         baseResource: "Amino Acid", 
         baseAmount(){return player.a.points},
@@ -17362,20 +17350,22 @@ addLayer("d", {
         },
         getBaseGain(){
                 let pts = player.a.points
-                let init = pts.div(4.4e144).max(1).log10()
-                if (layers.l.grid.getGemEffect(408) && !player.extremeMode) init = init.plus(144.6434526764861874) 
+                let init = pts.div(player.extremeMode ? "8e315" : 4.4e144).max(1).log10()
+                if (layers.l.grid.getGemEffect(408)) {
+                        if (!player.extremeMode) init = init.plus(144.6434526764861874) 
+                }
                 if (init.lt(25)) return decimalZero
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
-                if (!layers.l.grid.getGemEffect(701) && !player.extremeMode) v1 = v1.div(2)
-                let v2 = v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
-                return v2
+                if (!(layers.l.grid.getGemEffect(701) && !player.extremeMode)) v1 = v1.div(2)
+                return v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
         },
         getBaseGainAddition(){
                 if (hasMilestone("cells", 31)) return decimalZero
                 let ret = new Decimal(-1.5)
 
+                if (player.extremeMode) ret = ret.sub(2.5)
                 if (!player.extremeMode) ret = ret.plus(layers.l.grid.getGemEffect(506))
 
                 return ret
@@ -17437,9 +17427,9 @@ addLayer("d", {
 
                 if (player.extremeMode) gain = gain.root(.75)
 
-                let reqInit = gain.div(tmp.d.getGainMult).max(1)
-                let v1 = reqInit.root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(4.4e144)
-                return v1
+                let baseGain = gain.div(tmp.d.getGainMult)
+
+                return baseGain.max(1).root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(player.extremeMode ? "9e315" : 4.4e144)
         },
         canReset(){
                 return tmp.d.getResetGain.gt(0)
@@ -18108,12 +18098,14 @@ addLayer("d", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>2</sup>"
+                                        let div = player.extremeMode ? "8e315" : "4.4e144"
+                                        let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2-1.50)<sup>2</sup>"
+                                        if (player.extremeMode) a1 = a1.replace("1.50", "4.00")
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
-                                        let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2" + char + format(tmp.d.getBaseGainAddition.abs())
+                                        let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
                                         a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
                                         if (layers.l.grid.getGemEffect(701) && !player.extremeMode) a2 = a2.replace("/2", "")
-                                        if (layers.l.grid.getGemEffect(408) && !player.extremeMode) a2 = a2.replace("/4.4e144", "")
+                                        if (layers.l.grid.getGemEffect(408) && !player.extremeMode) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
                                                 a2 = a2.replace("sqrt(", "")
                                                 a2 = a2.replace(")+0.00", "")
