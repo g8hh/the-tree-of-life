@@ -115,6 +115,7 @@ function getPointExponentiation(){
         }
         if (hasMilestone("d", 27))      exp = exp.times(tmp.d.milestones[27].effect)
         if (hasUpgrade("l", 14))        exp = exp.times(tmp.l.upgrades[14].effect)
+        if (hasUpgrade("p", 43))        exp = exp.times(Decimal.pow(2, player.p.upgrades.length))
         
         return exp
 }
@@ -239,8 +240,7 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
                                  5622e3, 6263e3, 6487e3, 9936e3, 1695e4,
                                  1885e4,19324e3,38092e3,46173e3,47211e3,
                                 61738e3,82413e3,17889e4,18704e4, 2624e5,
-                                 3068e5,37352e4,  675e6,
-                                                                                //        
+                                 3068e5,37352e4,  675e6,        
 ]
 
 var GEM_EFFECT_DESCRIPTIONS = {
@@ -381,7 +381,7 @@ function nCk(n, k){
         return binomial(n, k)
 }
 
-var binomials = [
+var binomials = [ // step 1: small cases
         [1],
         [1,1],
         [1,2,1],
@@ -772,8 +772,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[11].effect)
                         },
                         unlocked(){
@@ -800,8 +798,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[12].effect)
                         },
                         unlocked(){
@@ -813,8 +809,6 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen III"
                         },
                         description(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "1+Achievements multiplies Hydrogen gain"
                                 a = "1+[Achievements]"
                                 if (hasUpgrade("h", 32)) a = "(" + a + ")^" + format(tmp.h.upgrades[32].effect)
@@ -832,8 +826,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[13].effect)
                         },
                         unlocked(){
@@ -860,8 +852,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[14].effect)
                         },
                         unlocked(){
@@ -926,8 +916,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
                                 return "<bdi style='font-size: 80%'>" + format(tmp.h.upgrades[22].effect) + "</bdi>"
                         },
                         unlocked(){
@@ -957,8 +945,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
                                 return format(tmp.h.upgrades[23].effect)
                         },
                         unlocked(){
@@ -990,8 +976,6 @@ addLayer("h", {
                                 return a
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
                                 return format(tmp.h.upgrades[24].effect)
                         },
                         unlocked(){
@@ -1020,8 +1004,6 @@ addLayer("h", {
                                 return a
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
                                 return format(tmp.h.upgrades[25].effect, 4)
                         },
                         unlocked(){
@@ -1071,8 +1053,6 @@ addLayer("h", {
                                 return Decimal.pow(a, .8)
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
                                 return format(tmp.h.upgrades[32].effect)
                         },
                         unlocked(){
@@ -1144,8 +1124,6 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VI"
                         },
                         description(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "ln(3+[Atomic Hydrogen])^<bdi style='color:#CC0033'>A</bdi> multiplies Deuterium gain"
                                 eff = format(tmp.h.upgrades[41].effect)
                                 a = "ln(3+[Atomic Hydrogen])^" + eff
@@ -1166,8 +1144,6 @@ addLayer("h", {
                                 return a
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return "<bdi style='color:#CC0033'>A</bdi>=" + format(tmp.h.upgrades[41].effect)
                         },
                         unlocked(){
@@ -1179,8 +1155,6 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VII"
                         },
                         description(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 if (!shiftDown) return "ln(3+[Deuterium])^<bdi style='color:#CC0033'>B</bdi> multiplies Atomic Hydrogen gain"
                                 eff = format(tmp.h.upgrades[42].effect)
                                 a = "ln(3+[Deuterium])^" + eff
@@ -1203,8 +1177,6 @@ addLayer("h", {
                                 return b
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return "<bdi style='color:#CC0033'>B</bdi>=" + format(tmp.h.upgrades[42].effect)
                         },
                         unlocked(){
@@ -1279,9 +1251,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XI"
                         },
                         description(){
-                                if (!shiftDown) {
-                                        return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
-                                }
+                                if (!shiftDown) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
                                 if (hasUpgrade("h", 51)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[51].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1392,8 +1362,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[61].effect)
                         },
                         unlocked(){
@@ -1437,8 +1405,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                 return format(tmp.h.upgrades[63].effect)
                         },
                         unlocked(){
@@ -1531,8 +1497,6 @@ addLayer("h", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "h") return ""
-                                if (player.subtabs.h.mainTabs != "Upgrades" && player.subtabs.h.mainTabs != "Deuterium") return ""
                                 return format(tmp.h.upgrades[72].effect)
                         },
                         unlocked(){
@@ -1724,9 +1688,8 @@ addLayer("h", {
                         title: "Introduction",
                         body(){
                                 let a = "<h1>" + makeRed("Welcome to TREE OF LIFE!") + "</h1>"
-
                                 let b = "There are five items of information you should be aware of:"
-                                let c = "First, this game has (currently) three modes, Easy, Hard, and Extreme, each having a different effect."
+                                let c = "First, this game has (currently) three modes, Easy, Hard, and Extr" + "eme, each having a different effect."
                                 let d = "To access and select modes go to the info tab (the blue i in the top left corner) and click \"Show mod selection tab\", though it is recommended to play normal mode first."
                                 let e = "Second, the game is balanced around 60 to 250 second waits (at most), so if you find yourself "
                                 e += "waiting longer than that for seemingly no reward, try something else!"
@@ -1743,8 +1706,6 @@ addLayer("h", {
                         content: ["main-display",
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Your best Hydrogen is " + format(player.h.best) + " and you are netting " + format(tmp.h.getResetGain.sub(tmp.h.getLossRate.times(player.h.points))) + " Hydrogen per second"
                                                 return "You are gaining " + format(tmp.h.getResetGain) + " Hydrogen per second"
@@ -1752,8 +1713,6 @@ addLayer("h", {
                                 ],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Upgrades") return ""
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Formula: min(" + formatWhole(tmp.h.getDefaultMaximum) + ",ln(points))*[multipliers]"
                                                 return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
@@ -1773,8 +1732,6 @@ addLayer("h", {
                         content: [["secondary-display", "deuterium"],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) {
                                                         p1 = player.h.deuterium
@@ -1786,8 +1743,6 @@ addLayer("h", {
                                 ],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Deuterium") return ""
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Formula: .0002 * Hydrogen * [multipliers]"
                                                 return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
@@ -1805,8 +1760,6 @@ addLayer("h", {
                         content: [["secondary-display", "atomic_hydrogen"],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
                                                 if (hasMilestone("mu", 2)) return "" 
                                                 if (shiftDown) {
                                                         p1 = player.h.atomic_hydrogen
@@ -1818,8 +1771,6 @@ addLayer("h", {
                                 ],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "h") return ""
-                                                if (player.subtabs.h.mainTabs != "Atomic Hydrogen") return ""
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (shiftDown) return "Formula: .001 * Hydrogen * [multipliers]"
                                                 return "You are losing " + format(tmp.h.atomic_hydrogen.getLossRate.times(100)) + "% of your Atomic Hydrogen per second"
@@ -1911,7 +1862,7 @@ addLayer("sci", {
         getNextAt(){
                 return decimalZero
         },
-        getGainMult(){ //science gain sci gain scigain sgain
+        getGainMult(){ // science gain sci gain scigain sgain
                 let ret = decimalOne
 
                 if (player.easyMode)            ret = ret.times(2)
@@ -2413,8 +2364,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "H Research") return 
-                                let a = "Remove 60 Seconds base cost"
-                                return a
+                                return "Remove 60 Seconds base cost"
                         },
                         cost:() => new Decimal(1e152),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2431,8 +2381,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "H Research") return 
-                                let a = "Remove Orange base cost and each Orange doubles Hydrogen Science gain"
-                                return a
+                                return "Remove Orange base cost and each Orange doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e168),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2449,8 +2398,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "H Research") return 
-                                let a = "Remove Indigo base cost and each Indigo doubles Hydrogen Science gain"
-                                return a
+                                return "Remove Indigo base cost and each Indigo doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e198),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2467,8 +2415,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "H Research") return 
-                                let a = "Remove White base cost and each White doubles Hydrogen Science gain"
-                                return a
+                                return "Remove White base cost and each White doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e240),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2485,8 +2432,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "H Research") return 
-                                let a = "Remove Red base cost and each Red doubles Hydrogen Science gain"
-                                return a
+                                return "Remove Red base cost and each Red doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e269),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2503,8 +2449,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Science effects Oxygen gain and remove B21 base cost"
-                                return a
+                                return "Science effects Oxygen gain and remove B21 base cost"
                         },
                         cost:() => new Decimal(1e5),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2521,8 +2466,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Unlock three buyables and remove B31 base cost"
-                                return a
+                                return "Unlock three buyables and remove B31 base cost"
                         },
                         cost:() => new Decimal(1e5),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2539,8 +2483,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Unlock a buyable and remove B32 base cost"
-                                return a
+                                return "Unlock a buyable and remove B32 base cost"
                         },
                         cost:() => new Decimal(1e19),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2557,8 +2500,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21% base cost"
-                                return a
+                                return "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21% base cost"
                         },
                         cost:() => new Decimal(1e30),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2575,8 +2517,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Remove Artificial base cost"
-                                return a
+                                return "Remove Artificial base cost"
                         },
                         cost:() => new Decimal(1e36),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2593,8 +2534,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Remove Cyclic base cost"
-                                return a
+                                return "Remove Cyclic base cost"
                         },
                         cost:() => new Decimal(5e74),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2611,8 +2551,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Remove Atomic and B33 base cost"
-                                return a
+                                return "Remove Atomic and B33 base cost"
                         },
                         cost:() => new Decimal(5e94),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2629,8 +2568,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Remove Chemistry base cost"
-                                return a
+                                return "Remove Chemistry base cost"
                         },
                         cost:() => new Decimal(5e97),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2647,15 +2585,12 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "<bdi style='font-size: 80%'>Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
-                                return a
+                                return "<bdi style='font-size: 80%'>Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
                         },
                         effect(){
                                 return Decimal.pow(1.05, player.tokens.total.pow(2))
                         },
                         effectDisplay(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
                                 return format(tmp.sci.upgrades[114].effect)
                         },
                         cost:() => new Decimal(1e136),
@@ -2673,8 +2608,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "21%'s log10s become ln and triple coin gain but lose 20x Oxygen"
-                                return a
+                                return "21%'s log10s become ln and triple coin gain but lose 20x Oxygen"
                         },
                         cost:() => new Decimal(2e157),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2691,8 +2625,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "All Hydrogen Science buyable's log10s become ln and add 1 to Artificial base"
-                                return a
+                                return "All Hydrogen Science buyable's log10s become ln and add 1 to Artificial base"
                         },
                         cost:() => new Decimal(5e196),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2709,8 +2642,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Per token multiply Oxygen Science gain by tokens"
-                                return a
+                                return "Per token multiply Oxygen Science gain by tokens"
                         },
                         cost:() => new Decimal(1e281),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2721,8 +2653,6 @@ addLayer("sci", {
                                 return t.pow(t)
                         },
                         effectDisplay(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
                                 return format(tmp.sci.upgrades[122].effect)
                         },
                         unlocked(){
@@ -2736,8 +2666,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Per upgrade add .01 to 6 D" + "e" + "caseconds' base"
-                                return a
+                                return "Per upgrade add .01 to 6 D" + "e" + "caseconds' base"
                         },
                         cost:() => new Decimal("5e345"),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2754,8 +2683,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers"
-                                return a
+                                return "Per fifth token add 1 to all Oxygen and Hydrogen buyables' exponential dividers"
                         },
                         effect(){
                                 return player.tokens.total.div(5).floor()
@@ -2778,9 +2706,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "O Research") return 
-                                let a = "<bdi style='font-size: 80%'>Science effect affects C point gain, "
-                                a += "total C buyables multiplies Oxygen science gain, and unlock Carbon Research</bdi>"
-                                return a
+                                return "<bdi style='font-size: 80%'>Science effect affects C point gain, total C buyables multiplies Oxygen science gain, and unlock Carbon Research</bdi>"
                         },
                         effect(){
                                 let ids = [71, 72, 73,
@@ -2809,8 +2735,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                let a = "Per upgrade multiply C Point gain by log10(Carbon)"
-                                return a
+                                return "Per upgrade multiply C Point gain by log10(Carbon)"
                         },
                         effect(){
                                 return player.c.points.plus(10).log10().pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -2834,8 +2759,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
-                                let a = "Per upgrade multiply Point gain by C Points"
-                                return a
+                                return "Per upgrade multiply Point gain by C Points"
                         },
                         effect(){
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -2859,8 +2783,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 203) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
-                                let a = "You have one less token for prestige purposes"
-                                return a
+                                return "You have one less token for prestige purposes"
                         },
                         effect(){
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -2884,8 +2807,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
-                                let a = "Remove C Point Gain 1 base cost"
-                                return a
+                                return "Remove C Point Gain 1 base cost"
                         },
                         effect(){
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -2909,8 +2831,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 205) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e48 C Points<br>Shift for effect"
-                                let a = "Per upgrade triple Carbon Science gain"
-                                return a
+                                return "Per upgrade triple Carbon Science gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e48) || hasMilestone("n", 3)
@@ -2931,8 +2852,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e54 C Points<br>Shift for effect"
-                                let a = "Remove C Point Gain 2 base cost"
-                                return a
+                                return "Remove C Point Gain 2 base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e54) || hasMilestone("n", 3)
@@ -2953,8 +2873,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 212) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e71 C Points<br>Shift for effect"
-                                let a = "Carbon Science multiplies C Point gain"
-                                return a
+                                return "Carbon Science multiplies C Point gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(2e71) || hasMilestone("n", 3)
@@ -2975,8 +2894,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 213) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 3e116 C Points<br>Shift for effect"
-                                let a = "Per upgrade log10(Carbon Science) multiplies C Point gain"
-                                return a
+                                return "Per upgrade log10(Carbon Science) multiplies C Point gain"
                         },
                         effect(){
                                 return player.sci.carbon_science.points.plus(10).log10().pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -3003,8 +2921,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 214) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e151 C Points<br>Shift for effect"
-                                let a = "Per upgrade double Carbon Science gain but you can only gain 10 seconds of Carbon Science production"
-                                return a
+                                return "Per upgrade double Carbon Science gain but you can only gain 10 seconds of Carbon Science production"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e151) || hasMilestone("n", 3)
@@ -3025,8 +2942,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 215) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e173 C Points<br>Shift for effect"
-                                let a = "Tokens<sup>2</sup> multiply Science gain but you can only gain 20 seconds of Science production"
-                                return a
+                                return "Tokens<sup>2</sup> multiply Science gain but you can only gain 20 seconds of Science production"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e173) || hasMilestone("n", 3)
@@ -3047,8 +2963,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e187 C Points<br>Shift for effect"
-                                let a = "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
-                                return a
+                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(2e187) || hasMilestone("n", 3)
@@ -3069,8 +2984,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 222) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e201 C Points<br>Shift for effect"
-                                let a = "Per upgrade double Carbon Science gain"
-                                return a
+                                return "Per upgrade double Carbon Science gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e201) || hasMilestone("n", 3)
@@ -3091,8 +3005,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e230 C Points<br>Shift for effect"
-                                let a = "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
-                                return a
+                                return "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e230) || hasMilestone("n", 3)
@@ -3113,8 +3026,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 224) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1.80e308 C Points<br>Shift for effect"
-                                let a = "C Point Gain 1 cost exponent is 1.21"
-                                return a
+                                return "C Point Gain 1 cost exponent is 1.21"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1.8e308") || hasMilestone("n", 3)
@@ -3135,8 +3047,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 225) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e653 C Points<br>Shift for effect"
-                                let a = "C Point Gain 1 cost exponent is 1.2"
-                                return a
+                                return "C Point Gain 1 cost exponent is 1.2"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e653") || hasMilestone("n", 3)
@@ -3157,8 +3068,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 231) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
-                                let a = "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
-                                return a
+                                return "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e815") || hasMilestone("n", 3)
@@ -3179,8 +3089,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 232) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
-                                let a = "Reduce corn interval to 4 and you can gamble every 4 seconds"
-                                return a
+                                return "Reduce corn interval to 4 and you can gamble every 4 seconds"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e1355") || hasMilestone("n", 3)
@@ -3201,8 +3110,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
-                                let a = "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
-                                return a
+                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e1425") || hasMilestone("n", 3)
@@ -3223,8 +3131,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 234) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
-                                let a = "Per upgrade C Points^.001 multiplies C Point gain"
-                                return a
+                                return "Per upgrade C Points^.001 multiplies C Point gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e2180") || hasMilestone("n", 3)
@@ -3245,8 +3152,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 235) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
-                                let a = "C Point Gain 1's ln becomes log2"
-                                return a
+                                return "C Point Gain 1's ln becomes log2"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e9561") || hasMilestone("n", 3)
@@ -3267,8 +3173,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
                                 if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e42,540 C Points<br>Shift for effect"
-                                let a = "Remove C Point Gain 5 base cost"
-                                return a
+                                return "Remove C Point Gain 5 base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e42540") || hasMilestone("n", 3)
@@ -3288,8 +3193,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                let a = "Remove C Point Gain 6 base cost"
-                                return a
+                                return "Remove C Point Gain 6 base cost"
                         },
                         cost:() => new Decimal(9.28e42),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3306,8 +3210,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                let a = "Remove Carbon Increase base cost"
-                                return a
+                                return "Remove Carbon Increase base cost"
                         },
                         cost:() => new Decimal(2.31e45),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3324,8 +3227,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                let a = "Per fifth upgrade you have one less effective token for prestige purposes"
-                                return a
+                                return "Per fifth upgrade you have one less effective token for prestige purposes"
                         },
                         cost:() => new Decimal(4.92e47),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3342,8 +3244,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "C Research") return 
-                                let a = "Remove C Point gain 7 base cost"
-                                return a
+                                return "Remove C Point gain 7 base cost"
                         },
                         cost:() => new Decimal(3.49e51),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3360,8 +3261,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove C Point gain 9 base cost and per upgrade multiply A Point gain by 1e5,000"
-                                return a
+                                return "Remove C Point gain 9 base cost and per upgrade multiply A Point gain by 1e5,000"
                         },
                         cost:() => new Decimal(100),
                         effect(){
@@ -3383,8 +3283,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
-                                return a
+                                return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
                         },
                         onPurchase(){
                                 player.sci.everhasnsci2 = true
@@ -3409,8 +3308,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "You have one less effective token for prestige purposes and per upgrade add 100 to Blue base"
-                                return a
+                                return "You have one less effective token for prestige purposes and per upgrade add 100 to Blue base"
                         },
                         cost:() => new Decimal(1000),
                         effect(){
@@ -3432,8 +3330,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Per upgrade Nitrogen multiplies Oxygen Science gain"
-                                return a
+                                return "Per upgrade Nitrogen multiplies Oxygen Science gain"
                         },
                         cost:() => new Decimal(500),
                         effect(){
@@ -3455,9 +3352,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "<bdi style='font-size: 80%'>Per upgrade multiply Hydrogen gain by 1e1,500 and 21%'s base is log10(Science) but remove Hydrogen Science</bdi>" 
-                                // (upgrades, buyable, currency, etc.)
-                                return a
+                                return "<bdi style='font-size: 80%'>Per upgrade multiply Hydrogen gain by 1e1,500 and 21%'s base is log10(Science) but remove Hydrogen Science</bdi>" 
                         },
                         cost:() => new Decimal(5e5),
                         effect(){
@@ -3492,8 +3387,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Square base Nitrogen gain"
-                                return a
+                                return "Square base Nitrogen gain"
                         },
                         cost:() => new Decimal(1e6),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3511,8 +3405,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 312) && !false && !shiftDown) return "Requires: 1e8 D Points<br>Shift for effect"
-                                let a = "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
-                                return a
+                                return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e8) || false
@@ -3536,8 +3429,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 313) && !false && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
-                                let a = "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
-                                return a
+                                return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(3e10) || false
@@ -3561,8 +3453,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 314) && !false && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
-                                let a = "<bdi style='font-size: 90%'>log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain</bdi>"
-                                return a
+                                return "<bdi style='font-size: 90%'>log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain</bdi>"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(3e15) || false
@@ -3583,8 +3474,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 315) && !false && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
-                                let a = "Gas Pedal cost exponent is 1.2"
-                                return a
+                                return "Gas Pedal cost exponent is 1.2"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e21) || false
@@ -3605,8 +3495,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 321) && !false && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
-                                let a = "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
-                                return a
+                                return "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e105) || false
@@ -3630,8 +3519,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 322) && !false && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
-                                let a = "Remove Engine base cost"
-                                return a
+                                return "Remove Engine base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e194) || false
@@ -3655,9 +3543,8 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 323) && !false && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
-                                let a = "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
                                 if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
-                                return a
+                                return "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte("1e4046") || false
@@ -3682,8 +3569,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Accelerometer base cost"
-                                return a
+                                return "Remove Accelerometer base cost"
                         },
                         cost:() => new Decimal(7.33e53),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3700,8 +3586,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Steering Wheel base cost"
-                                return a
+                                return "Remove Steering Wheel base cost"
                         },
                         cost:() => new Decimal(3.52e54),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3718,8 +3603,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Exponential Increase base cost"
-                                return a
+                                return "Remove Exponential Increase base cost"
                         },
                         cost:() => new Decimal(7.87e55),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3736,8 +3620,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Quadratic Increase and Fuel Increase 2 base cost"
-                                return a
+                                return "Remove Quadratic Increase and Fuel Increase 2 base cost"
                         },
                         cost:() => new Decimal(8.48e69),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3754,8 +3637,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Air Conditioning and Fuel Efficiency base cost"
-                                return a
+                                return "Remove Air Conditioning and Fuel Efficiency base cost"
                         },
                         cost:() => new Decimal(1.3e70),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3772,8 +3654,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Brake Pedal base cost and Sixteen becomes .03 per challenge"
-                                return a
+                                return "Remove Brake Pedal base cost and Sixteen becomes .03 per challenge"
                         },
                         cost:() => new Decimal(1.3e79),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3790,8 +3671,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Gas Gauge base cost and Quadratic Increase base is multiplied by upgrades"
-                                return a
+                                return "Remove Gas Gauge base cost and Quadratic Increase base is multiplied by upgrades"
                         },
                         cost:() => new Decimal(2.43e81),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3809,8 +3689,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (player.shiftAlias) return "Hardcapped at 1e50"
-                                let a = "<bdi style='font-size: 80%'>Remove Seat Belt base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
-                                return a
+                                return "<bdi style='font-size: 80%'>Remove Seat Belt base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
                         },
                         cost:() => new Decimal(4.84e91),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3827,8 +3706,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Accelerometer cost exponent is 1.1"
-                                return a
+                                return "Accelerometer cost exponent is 1.1"
                         },
                         cost:() => new Decimal(2.02e93),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3845,8 +3723,7 @@ addLayer("sci", {
                         description(){
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
-                                let a = "Remove Parking Brake base cost and its cost exponent is 1.2"
-                                return a
+                                return "Remove Parking Brake base cost and its cost exponent is 1.2"
                         },
                         cost:() => new Decimal(1.17e100),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3864,8 +3741,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 344) && !false && !shiftDown) return "Requires: 400 E Points<br>Shift for effect"
-                                let a = "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
-                                return a
+                                return "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
                         },
                         canAfford(){
                                 return player.mini.e_points.points.gte(400) || false
@@ -3886,8 +3762,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 345) && !false && !shiftDown) return "Requires: 25 Constant levels<br>Shift for effect"
-                                let a = "Remove Linear base cost and Constant costs nothing"
-                                return a
+                                return "Remove Linear base cost and Constant costs nothing"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(25) || false
@@ -3908,8 +3783,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 351) && !false && !shiftDown) return "Requires: 31 Constant levels<br>Shift for effect"
-                                let a = "Remove Quadratic base cost and Linear cost exponent is 1.15"
-                                return a
+                                return "Remove Quadratic base cost and Linear cost exponent is 1.15"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(31) || false
@@ -3930,8 +3804,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 352) && !false && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
-                                let a = "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
-                                return a
+                                return "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(42) || false
@@ -3960,8 +3833,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 353) && !false && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
-                                let a = "Per upgrade in this row add .1 to Constant base"
-                                return a
+                                return "Per upgrade in this row add .1 to Constant base"
                         },
                         canAfford(){
                                 return player.mini.buyables[203].gte(26) || false
@@ -3982,8 +3854,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 354) && !false && !shiftDown) return "Requires: 29 Linear levels<br>Shift for effect"
-                                let a = "Remove respecting scalar multiplication base cost and double Nitrogen gain"
-                                return a
+                                return "Remove respecting scalar multiplication base cost and double Nitrogen gain"
                         },
                         canAfford(){
                                 return player.mini.buyables[203].gte(29) || false
@@ -4004,9 +3875,8 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 355) && !false && !shiftDown) return "Requires: 71 Constant levels<br>Shift for effect"
-                                let a = "Remove respecting addition base cost but gain 20x less E Points"
                                 if (player.p.unlocked) return "Remove respecting addition base cost"
-                                return a
+                                return "Remove respecting addition base cost but gain 20x less E Points"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(71) || false
@@ -4027,8 +3897,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 361) && !false && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
-                                let a = "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
-                                return a
+                                return "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(182) || false
@@ -4052,8 +3921,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 362) && !false && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
-                                let a = "Linear cost exponent is 1.1"
-                                return a
+                                return "Linear cost exponent is 1.1"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(397) || false
@@ -4074,8 +3942,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 363) && !false && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
-                                let a = "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
-                                return a
+                                return "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(564) || false
@@ -4099,8 +3966,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 364) && !false && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
-                                let a = "Unlock three buyables, bulk 2x E Point buyables"
-                                return a
+                                return "Unlock three buyables, bulk 2x E Point buyables"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(4300) || false
@@ -4121,8 +3987,7 @@ addLayer("sci", {
                                 if (player.tab != "sci") return 
                                 if (player.subtabs.sci.mainTabs != "N Research") return 
                                 if (!hasUpgrade("sci", 365) && !false && !shiftDown) return "Requires: 33,080 Constant levels<br>Shift for effect"
-                                let a = "Gain an iteration"
-                                return a
+                                return "Gain an iteration"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(33080) || false
@@ -4182,9 +4047,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
@@ -4253,9 +4115,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
@@ -4326,9 +4185,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
@@ -4404,9 +4260,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[21].base.pow(player.sci.buyables[21])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
@@ -4483,9 +4336,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[22].base.pow(player.sci.buyables[22])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
@@ -4558,9 +4408,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[23].base.times(player.sci.buyables[23]).times(player.sci.buyables[23].plus(1).log(2))
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "H Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.sci.buyables[23].effect) + " to Blue base and prior exp dividers</b><br>"
@@ -4634,9 +4481,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[101].base.pow(player.sci.buyables[101])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[101]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
@@ -4707,9 +4551,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[102]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[102].effect) + " to Oxygen Science and color gain</b><br>"
@@ -4778,9 +4619,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[103].base.pow(player.sci.buyables[103])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[103]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[103].effect) + " to Oxygen Science and Carbon gain</b><br>"
@@ -4850,9 +4688,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[111].base.times(player.sci.buyables[111])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.sci.buyables[111].effect) + " to prior exponential dividers and C -> O science exponent</b><br>"
@@ -4920,9 +4755,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[112].base.pow(player.sci.buyables[112])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[112].effect) + " to Oxygen Science and B point gain</b><br>"
@@ -4990,9 +4822,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[113].base.pow(player.sci.buyables[113])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "O Research") return ""
-                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[113]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[113].effect) + " to Oxygen Science gain</b><br>"
@@ -5020,7 +4849,7 @@ addLayer("sci", {
                         },
                 },
                 301: {
-                        title: "Reduce", // remove base costs
+                        title: "Reduce",
                         cost(){
                                 let amt = getBuyableAmount("sci", 301).toNumber()
                                 if (amt == 0) return new Decimal("5e104")
@@ -5048,9 +4877,6 @@ addLayer("sci", {
                                 }
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "N Research") return ""
-                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[301]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: Remove "
                                 let eff2 = formatWhole(player.sci.buyables[301]) + " E Point buyable base costs</b><br>"
@@ -5060,7 +4886,7 @@ addLayer("sci", {
                         },
                 },
                 302: {
-                        title: "Reuse", // cost exponent of quadratic
+                        title: "Reuse",
                         cost(){
                                 let amt = getBuyableAmount("sci", 302)
                                 if (amt.gte(100)) amt = amt.div(50).pow10()
@@ -5093,9 +4919,6 @@ addLayer("sci", {
                                 return tmp.sci.buyables[302].base.pow(player.mini.buyables[222])
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "N Research") return ""
-                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[302]) + "<br>"
                                 let eff1 = "<h2>Effect</h2>: *"
                                 let eff2 = format(tmp.sci.buyables[302].base,3) + " to E Point gain per existence of 1<br>"
@@ -5106,7 +4929,7 @@ addLayer("sci", {
                         },
                 },
                 303: {
-                        title: "Recycle", // less effective tokens
+                        title: "Recycle",
                         cost(){
                                 let amt = getBuyableAmount("sci", 303)
                                 if (hasMilestone("mu", 19)) amt = amt.div(2)
@@ -5135,9 +4958,6 @@ addLayer("sci", {
                                 return player.sci.buyables[303]
                         },
                         display(){
-                                if (player.tab != "sci") return ""
-                                if (player.subtabs.sci.mainTabs != "N Research") return ""
-                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[303]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = formatWhole(tmp.sci.buyables[303].effect) + " effective tokens for prestige purposes</b><br>"
@@ -5264,7 +5084,7 @@ addLayer("sci", {
                 },
         },
         doReset(layer){
-                // reset sci
+                // reset sci stuffs
                 let data = player.sci
                 let buyData = data.buyables
 
@@ -5380,9 +5200,7 @@ addLayer("c", {
         color: "#3C9009",
         branches: [],
         requires(){
-                if (!player.extremeMode) {
-                        return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
-                }
+                if (!player.extremeMode) return hasUpgrade("o", 11) ? Decimal.pow(2, 2460) : Decimal.pow(2, 1024)
                 return hasUpgrade("o", 11) ? Decimal.pow(2, 3072) : Decimal.pow(2, 2048)
         }, 
         resource: "Carbon", 
@@ -5444,7 +5262,7 @@ addLayer("c", {
 
                 return ret.max(.00001)
         },
-        getGainMult(){ //carbon gain mult carbongain cgain c gain
+        getGainMult(){ // carbon gain mult carbongain cgain c gain
                 let ret = decimalOne
 
                 if (hasUpgrade("c", 14))        ret = ret.times(tmp.c.upgrades[14].effect)
@@ -5553,8 +5371,6 @@ addLayer("c", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "c") return ""
-                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
                                 return format(tmp.c.upgrades[12].effect, 4)
                         },
                         unlocked(){
@@ -5602,8 +5418,6 @@ addLayer("c", {
                                 return init
                         },
                         effectDisplay(){
-                                if (player.tab != "c") return ""
-                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
                                 return format(tmp.c.upgrades[14].effect)
                         },
                         unlocked(){
@@ -5643,8 +5457,6 @@ addLayer("c", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "c") return ""
-                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
                                 return format(tmp.c.upgrades[21].effect)
                         },
                         cost(){
@@ -5834,16 +5646,12 @@ addLayer("c", {
                         content: ["main-display",
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "c") return ""
-                                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
                                                 if (shiftDown) return "Your best Carbon is " + format(player.c.best) + " and you are netting " + format(tmp.c.getResetGain.sub(tmp.c.getLossRate.times(player.c.points))) + " Carbon per second"
                                                 return "You are gaining " + format(tmp.c.getResetGain) + " Carbon per second"
                                         }
                                 ],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "c") return ""
-                                                if (player.subtabs.c.mainTabs != "Upgrades") return ""
                                                 if (hasMilestone("mu", 1)) return ""
                                                 return "You are losing " + format(tmp.c.getLossRate.times(100)) + "% of your Carbon per second"
                                         },
@@ -5863,9 +5671,9 @@ addLayer("c", {
 })
 
 addLayer("o", {
-        name: "Oxygen", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "O", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Oxygen",
+        symbol: "O",
+        position: 1,
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -5888,11 +5696,11 @@ addLayer("o", {
         requires(){
                 if (player.extremeMode) return hasUpgrade("c", 11) ? Decimal.pow(2, 2500) : Decimal.pow(2, 2048)
                 return hasUpgrade("c", 11) ? Decimal.pow(2, 2560) : Decimal.pow(2, 1024)
-        }, // Can be a function that takes requirement increases into account
-        resource: "Oxygen", // Name of prestige currency
-        baseResource: "Life Points", // Name of resource prestige is based on
-        baseAmount(){return player.points.floor()}, // Get the current amount of baseResource
-        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        }, 
+        resource: "Oxygen", 
+        baseResource: "Life Points", 
+        baseAmount(){return player.points.floor()}, 
+        type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("o", 11)) return decimalZero
                 let base = tmp.o.getBaseGain
@@ -5945,9 +5753,9 @@ addLayer("o", {
                 return base
         },
         getNextAt(){
-                return decimalZero //this doesnt matter
+                return decimalZero 
         },
-        getLossRate(){ //oxygen loss
+        getLossRate(){ // oxygen loss
                 let ret = new Decimal(.01)
 
                 if (hasUpgrade("h", 81)) ret = ret.times(50)
@@ -5955,8 +5763,8 @@ addLayer("o", {
                 if (hasUpgrade("sci", 115)) ret = ret.times(20)
 
                 return ret
-        }, // oxygen gain o gain ogain oxygengain 
-        getGainMult(){
+        },
+        getGainMult(){ // oxygen gain o gain ogain oxygengain 
                 if (inChallenge("n", 42)) return decimalOne
                 let ret = decimalOne
 
@@ -6003,7 +5811,7 @@ addLayer("o", {
 
                 data.time += diff
         },
-        row: 1, // Row the layer is in on the tree (0 is the first row)
+        row: 1,
         layerShown(){
                 if (tmp.o.deactivated) return false
                 return hasUpgrade("h", 55) || tmp.n.layerShown
@@ -6060,8 +5868,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[12].effect)
                         },
                         unlocked(){
@@ -6088,8 +5894,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[13].effect)
                         },
                         unlocked(){
@@ -6120,8 +5924,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[14].effect)
                         },
                         unlocked(){
@@ -6153,8 +5955,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[15].effect)
                         },
                         unlocked(){
@@ -6210,8 +6010,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[23].effect)
                         },
                         unlocked(){
@@ -6238,8 +6036,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[24].effect)
                         },
                         unlocked(){
@@ -6266,8 +6062,6 @@ addLayer("o", {
                                 return ret
                         },
                         effectDisplay(){
-                                if (player.tab != "o") return ""
-                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                 return format(tmp.o.upgrades[25].effect)
                         },
                         unlocked(){
@@ -6347,16 +6141,12 @@ addLayer("o", {
                         content: ["main-display",
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "o") return ""
-                                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                                 if (shiftDown) return "Your best Oxygen is " + format(player.o.best) + " and you are netting " + format(tmp.o.getResetGain.sub(tmp.o.getLossRate.times(player.o.points))) + " Oxygen per second"
                                                 return "You are gaining " + format(tmp.o.getResetGain) + " Oxygen per second"
                                         }
                                 ],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "o") return ""
-                                                if (player.subtabs.o.mainTabs != "Upgrades") return ""
                                                 if (hasMilestone("mu", 1)) return ""
                                                 return "You are losing " + format(tmp.o.getLossRate.times(100)) + "% of your Oxygen per second"
                                         },
@@ -6376,9 +6166,9 @@ addLayer("o", {
 })
 
 addLayer("n", {
-        name: "Nitrogen", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Nitrogen", 
+        symbol: "N", 
+        position: 0, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -6392,11 +6182,11 @@ addLayer("n", {
         }},
         color: "#99582E",
         branches: [],
-        requires:() => Decimal.pow(10, Decimal.pow(2, 20).times(player.extremeMode ? 125 : 105)), // Can be a function that takes requirement increases into account
-        resource: "Nitrogen", // Name of prestige currency
-        baseResource: "Life Points", // Name of resource prestige is based on
-        baseAmount(){return player.points.floor()}, // Get the current amount of baseResource
-        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        requires:() => Decimal.pow(10, Decimal.pow(2, 20).times(player.extremeMode ? 125 : 105)), 
+        resource: "Nitrogen", 
+        baseResource: "Life Points", 
+        baseAmount(){return player.points.floor()}, 
+        type: "custom", 
         getResetGain(){
                 let base = tmp.n.getBaseGain
                 let mult = tmp.n.getGainMult
@@ -6445,7 +6235,7 @@ addLayer("n", {
                 let v5 = Decimal.pow(10, v4)
                 return v5
         },
-        getGainMult(){// nitrogen gain ngain nitrogengain n gain
+        getGainMult(){ // nitrogen gain ngain nitrogengain n gain
                 let ret = decimalOne
 
                 if (hasUpgrade("n", 24))        ret = ret.times(tmp.n.upgrades[24].effect)
@@ -6486,7 +6276,6 @@ addLayer("n", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "n") return ""
                 if (player.shiftAlias) {
                         let a = "effect formula: (sqrt(x)*2+1)^log2(x+7)"
                         return a
@@ -6510,7 +6299,7 @@ addLayer("n", {
                         if (hasUpgrade("mini", 75) && g.times(1e4).gt(data.points)) {
                                 let div = player.hardMode ? 100 : 1000
                                 let rem = data.points.div(g).sub(1e4).times(-1).div(div) 
-                                //number of seconds left of fast stuff
+                                // number of seconds left of fast gain
                                 if (rem.lt(diff)) {
                                         let prodTime = rem.times(div).plus(diff).sub(rem)
                                         let prod = g.times(prodTime)
@@ -6542,14 +6331,12 @@ addLayer("n", {
 
                 data.time += diff
         },
-        row: 2, // Row the layer is in on the tree (0 is the first row)
+        row: 2,
         layerShown(){
                 if (tmp.n.deactivated) return false
                 return hasUpgrade("mini", 45) || player.n.best.gt(0) || player.p.best.gt(0)
         },
         prestigeButtonText(){
-                if (player.tab != "n") return ""
-                
                 let gain = tmp.n.getResetGain
                 let nextAt = tmp.n.getNextAt
                 if (gain.eq(0)) {
@@ -6573,12 +6360,11 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen I"
                         },
                         description(){
-                                let a = "All previous primary currencies (hold shift to see) gain is raised ^ 1.001"
                                 if (shiftDown) {
                                         if (player.extremeMode) return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, Science, and Coins"
                                         return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, and Coins"
                                 }
-                                return a
+                                return "All previous primary currencies (hold shift to see) gain is raised ^ 1.001"
                         },
                         cost:() => decimalOne,
                         unlocked(){
@@ -6590,8 +6376,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen II"
                         },
                         description(){
-                                let a = "A Point gain is raised ^ 1.02"
-                                return a
+                                return "A Point gain is raised ^ 1.02"
                         },
                         cost:() => decimalOne,
                         unlocked(){
@@ -6603,8 +6388,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen III"
                         },
                         description(){
-                                let a = "B Point gain is raised ^ 1.02"
-                                return a
+                                return "B Point gain is raised ^ 1.02"
                         },
                         cost:() => decimalOne,
                         unlocked(){
@@ -6616,8 +6400,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen IV"
                         },
                         description(){
-                                let a = "Add .001 to Cubic base"
-                                return a
+                                return "Add .001 to Cubic base"
                         },
                         cost:() => decimalOne,
                         unlocked(){
@@ -6629,8 +6412,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen V"
                         },
                         description(){
-                                let a = "Add .001 to Polynomial base"
-                                return a
+                                return "Add .001 to Polynomial base"
                         },
                         cost:() => decimalOne,
                         unlocked(){
@@ -6642,8 +6424,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VI"
                         },
                         description(){
-                                let a = "Each upgrade adds .001 to Exponential base"
-                                return a
+                                return "Each upgrade adds .001 to Exponential base"
                         },
                         cost:() => new Decimal(2),
                         unlocked(){
@@ -6655,8 +6436,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VII"
                         },
                         description(){
-                                let a = "Keep the first row of Oxygen and Carbon upgrades upon Nitrogen reset and each upgrade raises C point gain ^1.0002"
-                                return a
+                                return "Keep the first row of Oxygen and Carbon upgrades upon Nitrogen reset and each upgrade raises C point gain ^1.0002"
                         },
                         cost:() => new Decimal(3),
                         unlocked(){
@@ -6668,12 +6448,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen VIII"
                         },
                         description(){ 
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-
-                                let a = "Per upgrade multiply C Point and Carbon gain by best Nitrogen<br>Currently: "
-                                let b = format(tmp.n.upgrades[23].effect)
-                                return a + b
+                                return "Per upgrade multiply C Point and Carbon gain by best Nitrogen<br>Currently: " + format(tmp.n.upgrades[23].effect)
                         },
                         cost:() => new Decimal(player.extremeMode ? 10 : 20),
                         effect(){
@@ -6688,17 +6463,12 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen IX"
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 if (shiftDown) {
                                         let a = "ln(Max(e,Nitrogen))"
                                         if (hasMilestone("n", 15)) a += " ^[challenges]"
                                         return a
                                 }
-                                let a = "Token cost exponent is .55 and ln(Nitrogen) multiplies Nitrogen gain" + br
-                                let b = "Currently: " + format(tmp.n.upgrades[24].effect)
-                                return a + b
+                                return "Token cost exponent is .55 and ln(Nitrogen) multiplies Nitrogen gain" + br + "Currently: " + format(tmp.n.upgrades[24].effect)
                         },
                         cost:() => new Decimal(player.extremeMode ? 12 : 15),
                         effect(){
@@ -6719,8 +6489,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen X"
                         },
                         description(){
-                                let a = "Double-exponential divider is 1 and raise Nitrogen effect to the number of upgrades"
-                                return a
+                                return "Double-exponential divider is 1 and raise Nitrogen effect to the number of upgrades"
                         },
                         cost:() => new Decimal(100),
                         unlocked(){
@@ -6732,8 +6501,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XI"
                         },
                         description(){
-                                let a = "Token buyable exponent is .5"
-                                return a
+                                return "Token buyable exponent is .5"
                         },
                         cost:() => new Decimal(3e8),
                         unlocked(){
@@ -6745,8 +6513,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XII"
                         },
                         description(){
-                                let a = "You lose 100x Oxygen, Carbon, and Hydrogen"
-                                return a
+                                return "You lose 100x Oxygen, Carbon, and Hydrogen"
                         },
                         cost:() => new Decimal(player.extremeMode ? 1e12 : 1e11),
                         unlocked(){
@@ -6758,8 +6525,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XIII"
                         },
                         description(){
-                                let a = "Fuel<sup>.001</sup> multiplies D Point gain"
-                                return a
+                                return "Fuel<sup>.001</sup> multiplies D Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? 6.09e29 : 5.48e27),
                         unlocked(){
@@ -6771,8 +6537,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XIV"
                         },
                         description(){
-                                let a = "Per upgrade D Points<sup>.01</sup> multiplies maxmimum fuel"
-                                return a
+                                return "Per upgrade D Points<sup>.01</sup> multiplies maxmimum fuel"
                         },
                         cost:() => new Decimal(player.extremeMode ? 9.40e31 : 2.75e32),
                         unlocked(){
@@ -6784,12 +6549,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XV"
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
-                                let a = "log10(log10(Points))<sup>" + makeRed("E") + "</sup> multiplies Nitrogen gain"
-                                let b = "Currently: " + makeRed("E") + "=" + format(tmp.n.upgrades[35].effect)
-                                return a + br + b
+                                return "log10(log10(Points))<sup>" + makeRed("E") + "</sup> multiplies Nitrogen gain" + br + "Currently: " + makeRed("E") + "=" + format(tmp.n.upgrades[35].effect)
                         },
                         effect(){ // red e rede
                                 let ret = decimalOne
@@ -6813,14 +6573,9 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(1e16)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e16 E Points"
                                 let a = "log10(Nitrogen) multiplies E Point gain and log10(E Points) multiplies Nitrogen gain"
-                                if (!hasUpgrade("n", 41)) {
-                                        return "<bdi style='font-size: 80%'>" + b + br + a + "</bdi>"
-                                }
+                                if (!hasUpgrade("n", 41)) return "<bdi style='font-size: 80%'>" + b + br + a + "</bdi>"
                                 return a
                         },
                         cost:() => new Decimal(player.extremeMode ? 6.1e33 : 4.2e33),
@@ -6837,9 +6592,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(1e81)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e81 E Points"
                                 let a = "Add .1 to " + makeBlue("a")
                                 if (!hasUpgrade("n", 42)) return b + br + a
@@ -6860,9 +6612,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(1e162)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e162 E Points"
                                 if (player.extremeMode) b = b.replace("162", "168")
                                 let a = "Add .1 to " + makeBlue("a") + " and Quadratic gains a ln(x) term"
@@ -6883,9 +6632,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(player.extremeMode ? 1e182 : 1e197)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e197 E Points"
                                 if (player.extremeMode) b = "Req: 1e182 E Points"
                                 let a = "Per existence of 1 add .01 to " + makeBlue("a")
@@ -6906,9 +6652,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(1e213)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e213 E Points"
                                 let a = "log10(E Points) multiplies E Points and each existence of 0 past 21 multiplies E Point gain by 2"
                                 if (!hasUpgrade("n", 45)) return b + br + a
@@ -6928,9 +6671,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(player.extremeMode ? 1e245 : 1e234)
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e234 E Points"
                                 if (player.extremeMode) b = b.replace("234" , "245")
                                 let a = "Each upgrade in this row reapplies the second part of Nitrogen XX and doubles E Point gain"
@@ -6947,9 +6687,6 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXII"
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let a = "Autobuy E buyables"
                                 return a
                         },
@@ -6967,9 +6704,6 @@ addLayer("n", {
                                 return player.mini.e_points.best.gte(player.extremeMode ? "1e1402" : "1e1604")
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let b = "Req: 1e1604 E Points"
                                 if (player.extremeMode) b = b.replace("1604", "1402")
                                 let a = "Each Quadratic multiplies Nitrogen gain by 1.01"
@@ -6986,9 +6720,6 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXIV"
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let a = "Existence of 0 affects fuel square rooting factor and you can buy each buyable every tick"
                                 return a
                         },
@@ -7002,9 +6733,6 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen XXV"
                         },
                         description(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
-                                
                                 let a = "E Points multiply D Points (up to 1e50000)"
                                 return a
                         },
@@ -7019,17 +6747,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "1 Nitrogen reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.n.milestones[1].requirement.lte(player.n.times)
+                                return player.n.times >= 1
                         },
                         unlocked(){
                                 return true
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode || hasUpgrade("sci", 305)) return 
@@ -7045,17 +6767,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "2 Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.n.milestones[2].requirement.lte(player.n.times)
+                                return player.n.times >= 2
                         },
                         unlocked(){
                                 return hasMilestone("n", 1)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7071,17 +6787,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return "3 Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.n.milestones[3].requirement.lte(player.n.times)
+                                return player.n.times >= 3
                         },
                         unlocked(){
                                 return hasMilestone("n", 2)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7097,39 +6807,26 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 5 : 4) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 5 : 4)
-                        },
                         done(){
-                                return tmp.n.milestones[4].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 5 : 4)
                         },
                         unlocked(){
                                 return hasMilestone("n", 3)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         toggles:() => [["tokens", "autobuytokens"]],
                         effectDescription(){
-                                let a = "Reward: Keep Coffee, autobuy tokens, and you can bulk 4x C buyables."
-                                return a
+                                return "Reward: Keep Coffee, autobuy tokens, and you can bulk 4x C buyables."
                         },
                 }, // hasMilestone("n", 4)
                 5: {
                         requirementDescription(){
                                 return (player.hardMode ? 7 : 5) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 7 : 5)
-                        },
                         done(){
-                                return tmp.n.milestones[5].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 7 : 5)
                         },
                         unlocked(){
                                 return hasMilestone("n", 4)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7145,17 +6842,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 9 : 6) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 9 : 6)
-                        },
                         done(){
-                                return tmp.n.milestones[6].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 9 : 6)
                         },
                         unlocked(){
                                 return hasMilestone("n", 5)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         toggles(){
                                 if (!player.extremeMode) return 
@@ -7171,63 +6862,43 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 11 : 7) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 11 : 7)
-                        },
                         done(){
-                                return tmp.n.milestones[7].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 11 : 7)
                         },
                         unlocked(){
                                 return hasMilestone("n", 6)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         toggles:() => [["tokens", "autobuyradio"]],
                         effectDescription(){
-                                let a = "Reward: Keep one C point upgrade per reset and unlock an autobuyer for Radio Waves."
-                                return a
+                                return "Reward: Keep one C point upgrade per reset and unlock an autobuyer for Radio Waves."
                         },
                 }, // hasMilestone("n", 7)
                 8: {
                         requirementDescription(){
                                 return (player.hardMode ? 14 : 9) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 14 : 9)
-                        },
                         done(){
-                                return tmp.n.milestones[8].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 14 : 9)
                         },
                         unlocked(){
                                 return hasMilestone("n", 7)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Gain 20x coins, keep Egg is here., and you can autobuy the first level of C buyables."
-                                return a
+                                return "Reward: Gain 20x coins, keep Egg is here., and you can autobuy the first level of C buyables."
                         },
                 }, // hasMilestone("n", 8)
                 9: {
                         requirementDescription(){
                                 return (player.hardMode ? 17 : 12) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 17 : 12)
-                        },
                         done(){
-                                return tmp.n.milestones[9].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 17 : 12)
                         },
                         unlocked(){
                                 return hasMilestone("n", 8)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Keep coin upgrades."
+                                return "Reward: Keep coin upgrades on Nitrogen reset."
                                 return a
                         },
                 }, // hasMilestone("n", 9)
@@ -7235,17 +6906,11 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 21 : 15) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 21 : 15)
-                        },
                         done(){
-                                return tmp.n.milestones[10].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 21 : 15)
                         },
                         unlocked(){
                                 return hasMilestone("n", 9)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep the first ten Oxygen and Carbon upgrades upon Nitrogen reset."
@@ -7257,67 +6922,44 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? 25 : 20) + " Nitrogen resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 25 : 20)
-                        },
                         done(){
-                                return tmp.n.milestones[11].requirement.lte(player.n.times)
+                                return player.n.times >= (player.hardMode ? 25 : 20)
                         },
                         unlocked(){
                                 return hasMilestone("n", 10)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Token resets don't reset anything."
-                                return a
+                                return "Reward: Token resets don't reset anything."
                         },
                 }, // hasMilestone("n", 11)
                 12: {
                         requirementDescription(){
                                 return (player.hardMode ? 640 : 128) + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 5 : 1
-                                return Decimal.pow(2, 7).times(m)
-                        },
                         done(){
                                 if (player.n.times == 0) return false
-                                return tmp.n.milestones[12].requirement.lte(player.n.points)
+                                return player.n.points.gte(128 * (player.hardMode ? 5 : 1))
                         },
                         unlocked(){
                                 return hasMilestone("n", 11)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Start with 50 tokens."
-                                return a
+                                return "Reward: Start with 50 tokens."
                         },
                 }, // hasMilestone("n", 12)
                 13: {
                         requirementDescription(){
                                 return (player.hardMode ? "2,560" : 256) + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 8).times(m)
-                        },
                         done(){
                                 if (player.n.times == 0) return false
-                                return tmp.n.milestones[13].requirement.lte(player.n.points)
+                                return player.n.points.gte(256 * (player.hardMode ? 10 : 1))
                         },
                         unlocked(){
                                 return hasMilestone("n", 12)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
-                                return a
+                                return "Reward: Remove the ability to reset for Nitrogen, but get 100% of Nitrogen gain per second."
                         },
                 }, // hasMilestone("n", 13)
                 14: {
@@ -7325,19 +6967,13 @@ addLayer("n", {
                                 if (player.extremeMode) return "10,000 Nitrogen"
                                 return (player.hardMode ? "1,310,720" : "131,072") + " Nitrogen"
                         },
-                        requirement(){
-                                if (player.extremeMode) return Decimal.pow(10, 4)
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 17).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[14].requirement.lte(player.n.points)
+                                if (player.extremeMode) return player.n.points.gte(1e4)
+                                let m = player.hardMode ? 10 : 1
+                                return player.n.points.div(m).gte(131072)
                         },
                         unlocked(){
                                 return hasMilestone("n", 13)
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Unlock Nitrogen challenges which only keep content from before tokens"
@@ -7349,56 +6985,36 @@ addLayer("n", {
                         requirementDescription(){
                                 return (player.hardMode ? "10,485,760" : "1,048,576") + " Nitrogen and 3 Nitrogen challenges"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 20).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[15].requirement.lte(player.n.points) && layerChallengeCompletions("n") >= 3
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(1048576) && layerChallengeCompletions("n") >= 3
                         },
                         unlocked(){
                                 return hasMilestone("n", 14)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: Raise Nitrogen IX to the number of N challenge completions."
-                                return a
+                                return "Reward: Raise Nitrogen IX to the number of N challenge completions."
                         },
                 }, // hasMilestone("n", 15)
                 16: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.07e10" : "1.07e9") + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(2, 30).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[16].requirement.lte(player.n.points)
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(2, 30))
                         },
                         unlocked(){
                                 return hasMilestone("n", 15)
                         },
-                        effect(){
-                                return decimalOne
-                        },
                         effectDescription(){
-                                let a = "Reward: C Point gain 10 amount multiplies its base."
-                                return a
+                                return "Reward: C Point gain 10 amount multiplies its base."
                         },
                 }, // hasMilestone("n", 16)
                 17: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.00e47" : "1.00e46") + " Nitrogen"
                         },
-                        requirement(){
-                                let m = player.hardMode ? 10 : 1
-                                return Decimal.pow(10, 46).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[17].requirement.lte(player.n.points)
+                                return player.n.points.div(player.hardMode ? 10 : 1).gte(Decimal.pow(10, 46))
                         },
                         unlocked(){
                                 return hasMilestone("n", 16) && player.mini.e_points.best.gte(1e300)
@@ -7413,20 +7029,15 @@ addLayer("n", {
                                 if (player.extremeMode) return "3e1887 Nitrogen"
                                 return (player.hardMode ? "7.50e942" : "7.40e942") + " Nitrogen"
                         },
-                        requirement(){
-                                if (player.extremeMode) return Decimal.pow(10, 1887).times(3)
-                                let m = player.hardMode ? 7.5 : 7.4
-                                return Decimal.pow(10, 942).times(m)
-                        },
                         done(){
-                                return tmp.n.milestones[18].requirement.lte(player.n.points)
+                                if (player.extremeMode) return player.n.points.gte("3e1887")
+                                return player.n.points.div(player.hardMode ? 7.5 : 7.4).gte(Decimal.pow(10, 942))
                         },
                         unlocked(){
                                 return hasMilestone("n", 17)
                         },
                         effectDescription(){
-                                let a = "Reward: Add .01 to to left distributivity."
-                                return a
+                                return "Reward: Add .01 to to left distributivity."
                         },
                 }, // hasMilestone("n", 18)
         },
@@ -7435,10 +7046,9 @@ addLayer("n", {
                         name: "Four",
                         challengeDescription: "A buyables and <bdi style='color:#CC0033'>C</bdi> increase 1 effects are nullified",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[11].goal) + " Points"
+                                if (player.extremeMode) return "e312,700,000 Points"
+                                if (player.hardMode) return "e291,590,000 Points"
+                                return "e287,000,000 Points"
                         },
                         goal(){
                                 if (player.extremeMode) return Decimal.pow(10, 312700e3)
@@ -7446,16 +7056,10 @@ addLayer("n", {
                         },
                         canComplete: () => player.points.gte(tmp.n.challenges[11].goal),
                         rewardDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "Per N challenge completion add .001 to Semi-exponential base"
-                                let b = "Currently: +" + format(tmp.n.challenges[11].rewardEffect, 3)
-                                return a + br + b
+                                return "Per N challenge completion add .001 to Semi-exponential base" + br + "Currently: +" + format(tmp.n.challenges[11].rewardEffect, 3)
                         },
                         rewardEffect(){
-                                let comps = layerChallengeCompletions("n")
-                                return Decimal.times(comps, .001)
+                                return Decimal.times(layerChallengeCompletions("n"), .001)
                         },
                         unlocked(){
                                 return true
@@ -7466,19 +7070,13 @@ addLayer("n", {
                         name: "Six",
                         challengeDescription: "Square root Oxygen gain",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[12].goal) + " Points"
+                                if (player.extremeMode) return "e150,279,000 Points"
+                                return "e109,300,000 Points"
                         },
                         goal: () => Decimal.pow(10, player.extremeMode ? 150279e3 : 109.3e6),
                         canComplete: () => player.points.gte(tmp.n.challenges[12].goal),
                         rewardDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["1", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "C Point gain 9's log10 becomes ln"
-                                return a
+                                return "C Point gain 9's log10 becomes ln"
                         },
                         unlocked(){
                                 return hasChallenge("n", 11) || tmp.l.layerShown
@@ -7489,24 +7087,16 @@ addLayer("n", {
                         name: "Nine",
                         challengeDescription: "Four and C Point gain 6 is nullified",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[21].goal) + " Points"
+                                if (player.extremeMode) return "e107,387,000 Points"
+                                return "e7,400,000 Points"
                         },
                         goal: () => Decimal.pow(10, player.extremeMode ? 107387e3 : 74e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[21].goal),
                         rewardDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "<bdi style='color:#CC0033'>C</bdi> increase 1 base is multiplied by the square root of the number of challenge completions"
-                                let b = "Currently: *" + format(tmp.n.challenges[21].rewardEffect, 3)
-                                return a + br + b
+                                return makeRed("C") + " increase 1 base is multiplied by the square root of the number of challenge completions" + br + "Currently: *" + format(tmp.n.challenges[21].rewardEffect, 3)
                         },
                         rewardEffect(){
-                                let comps = layerChallengeCompletions("n")
-                                return Decimal.sqrt(comps)
+                                return Decimal.sqrt(layerChallengeCompletions("n"))
                         },
                         unlocked(){
                                 return hasChallenge("n", 12) || tmp.l.layerShown
@@ -7517,24 +7107,16 @@ addLayer("n", {
                         name: "Ten",
                         challengeDescription: "Six and <bdi style='color:#CC0033'>C</bdi> increase 2 is nullified",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[22].goal) + " Points"
+                                if (player.extremeMode) return "e143,250,000 Points"
+                                return "e166,700,000 Points"
                         },
                         goal: () => Decimal.pow(10, player.extremeMode ? 14325e4 : 1667e5),
                         canComplete: () => player.points.gte(tmp.n.challenges[22].goal),
                         rewardDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["2", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "C Point Gain 7's base is multiplied by log10(Nitrogen)"
-                                let b = "Currently: *" + format(tmp.n.challenges[22].rewardEffect)
-                                return a + br + b
+                                return "C Point Gain 7's base is multiplied by log10(Nitrogen)" + br + "Currently: *" + format(tmp.n.challenges[22].rewardEffect)
                         },
                         rewardEffect(){
-                                let ret = player.n.points.max(10).log10()
-                                return ret
+                                return player.n.points.max(10).log10()
                         },
                         unlocked(){
                                 return hasUpgrade("n", 31) || tmp.l.layerShown
@@ -7545,19 +7127,13 @@ addLayer("n", {
                         name: "Fourteen",
                         challengeDescription: "Nine and you cannot reset for more than fifty tokens",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[31].goal) + " Points"
+                                if (player.extremeMode) return "e70,984,000 Points"
+                                return "e16,950,000 Points" 
                         },
                         goal: () => Decimal.pow(10, player.extremeMode ? 70984e3 : 1695e4),
                         canComplete: () => player.points.gte(tmp.n.challenges[31].goal),
                         rewardDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "Nitrogen multiplies Near-ultraviolet base and cube Near-ultraviolet base"
-                                return a
+                                return "Nitrogen multiplies Near-ultraviolet base and cube Near-ultraviolet base"
                         },
                         unlocked(){
                                 return hasChallenge("n", 22) || tmp.l.layerShown
@@ -7568,20 +7144,15 @@ addLayer("n", {
                         name: "Fifteen",
                         challengeDescription: "Ten and C Point gain 5 is nullified",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[32].goal) + " Points"
+                                if (player.extremeMode) return "e145,629,000 Points"
+                                return "e165,800,000 Points"
                         },
                         goal(){
                                 if (player.extremeMode) return Decimal.pow(10, 145629e3)
-                                return Decimal.pow(10, player.hardMode ? 190e6 : 1658e5)
+                                return Decimal.pow(10, 1658e5)
                         },
                         canComplete: () => player.points.gte(tmp.n.challenges[32].goal),
                         rewardDescription(){ //red d redd
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["3", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "log10(Oxygen)^<bdi style='color:#CC0033'>D</bdi> multiplies Carbon gain and unlock a minigame for <bdi style='color:#CC0033'>D</bdi>"
                                 let b = "Currently: <bdi style='color:#CC0033'>D</bdi>=" + format(tmp.n.challenges[32].rewardEffect)
                                 return a + br + b
@@ -7603,20 +7174,15 @@ addLayer("n", {
                         name: "Sixteen",
                         challengeDescription: "Fourteen and you can't gain A Points",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[41].goal) + " Points"
+                                if (player.extremeMode) return "e332,560,000 Points"
+                                return "e253,800,000 Points"
                         },
                         goal(){
                                 if (player.extremeMode) return Decimal.pow(10, 332560e3)
-                                return Decimal.pow(10, player.hardMode ? 25395e4 : 2538e5)
+                                return Decimal.pow(10, 2538e5)
                         },
                         canComplete: () => player.points.gte(tmp.n.challenges[41].goal),
                         rewardDescription(){ //red d redd
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
                                 let a = "Per challenge completion add .03 to fuel square rooting factor"
                                 if (player.extremeMode && !hasUpgrade("sci", 334)) a = a.replace(".03", ".01")
                                 let b = "Currently: +" + format(tmp.n.challenges[41].rewardEffect)
@@ -7640,10 +7206,9 @@ addLayer("n", {
                         name: "Twenty-one",
                         challengeDescription: "Fifteen and Oxygen gain cannot be increased from base",
                         goalDescription(){
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                return format(tmp.n.challenges[42].goal) + " Points"
+                                if (player.extremeMode) return "e137,490,000 Points"
+                                if (player.hardMode) return "e169,000,000 Points"
+                                return "e167,100,000 Points"
                         },
                         goal(){
                                 if (player.extremeMode) return Decimal.pow(10, 137490e3)
@@ -7651,11 +7216,7 @@ addLayer("n", {
                         },
                         canComplete: () => player.points.gte(tmp.n.challenges[42].goal),
                         rewardDescription(){ //red d redd
-                                if (player.tab != "n") return ""
-                                if (player.subtabs.n.mainTabs != "Challenges") return ""
-                                if (!["4", "All"].includes(player.subtabs.n.challenge_content)) return ""
-                                let a = "Add .001 to Exponential Increase base"
-                                return a
+                                return "Add .001 to Exponential Increase base"
                         },
                         unlocked(){
                                 return hasUpgrade("mini", 73) || tmp.l.layerShown
@@ -7706,30 +7267,6 @@ addLayer("n", {
                                         return tmp.n.challenges[41].unlocked
                                 },
                         },
-                        "5": {
-                                content: [
-                                       ["challenges", [5]] 
-                                ],
-                                unlocked(){
-                                        return false // return tmp.n.challenges[51].unlocked
-                                },
-                        },
-                        "6": {
-                                content: [
-                                       ["challenges", [6]] 
-                                ],
-                                unlocked(){
-                                        return false // return tmp.n.challenges[61].unlocked
-                                },
-                        },
-                        "7": {
-                                content: [
-                                       ["challenges", [7]] 
-                                ],
-                                unlocked(){
-                                        return false //return tmp.n.challenges[71].unlocked
-                                },
-                        },
                 },
         },
         tabFormat: {
@@ -7738,8 +7275,6 @@ addLayer("n", {
                                 ["prestige-button", "", function (){ return hasMilestone("n", 13) ? {'display': 'none'} : {}}],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "n") return ""
-                                                if (player.subtabs.n.mainTabs != "Upgrades") return ""
                                                 if (shiftDown) return "Your best Nitrogen is " + format(player.n.best)
                                                 if (hasMilestone("n", 13)) return "You are gaining " + format(tmp.n.getResetGain, 3) + " Nitrogen per second"
                                         }
@@ -7761,12 +7296,7 @@ addLayer("n", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "n") return ""
-                                        if (player.subtabs.n.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.n.times) + " Nitrogen resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.n.times) + " Nitrogen resets"
                                 }],
                                 "milestones",
                                 ],
@@ -7812,8 +7342,8 @@ addLayer("n", {
                 if (!false) {
                         data1.a_points = {
                                 points: decimalZero, // 1
-                                best: decimalZero, //1 cont
-                                extras: { // 1 cont
+                                best: decimalZero,
+                                extras: {
                                         11: decimalOne,
                                         12: decimalZero,
                                         13: decimalZero,
@@ -7966,9 +7496,9 @@ addLayer("n", {
 })
 
 addLayer("p", {
-        name: "Phosphorus", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Phosphorus", 
+        symbol: "P", 
+        position: 1, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -7984,11 +7514,11 @@ addLayer("p", {
         }},
         color: "#466BA2",
         branches: [],
-        requires:() => player.extremeMode ? new Decimal("1e2348") : Decimal.pow(10, 2155).times(1.3), // Can be a function that takes requirement increases into account
-        resource: "Phosphorus", // Name of prestige currency
-        baseResource: "Nitrogen", // Name of resource prestige is based on
-        baseAmount(){return player.n.points.floor()}, // Get the current amount of baseResource
-        type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+        requires:() => player.extremeMode ? new Decimal("1e2348") : Decimal.pow(10, 2155).times(1.3), 
+        resource: "Phosphorus", 
+        baseResource: "Nitrogen", 
+        baseAmount(){return player.n.points.floor()}, 
+        type: "custom", 
         getResetGain(){
                 let base = tmp.p.getBaseGain
                 let mult = tmp.p.getGainMult
@@ -8041,7 +7571,7 @@ addLayer("p", {
 
                 return v3
         },
-        getGainMult(){//phosphorus gain pgain rusgain rus gain
+        getGainMult(){ // phosphorus gain pgain rusgain rus gain
                 let ret = decimalOne
 
                 if (hasUpgrade("p", 15))        ret = ret.times(tmp.p.upgrades[15].effect)
@@ -8112,7 +7642,7 @@ addLayer("p", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "p" || inChallenge("l", 52) || hasChallenge("l", 52)) return ""
+                if (inChallenge("l", 52) || hasChallenge("l", 52)) return ""
                 if (player.shiftAlias) {
                         let a = "effect formula: 10^(log10(x+1)^3)"
                         if (hasMilestone("p", 4)) a = a.replace("3", "3.1")
@@ -8171,14 +7701,12 @@ addLayer("p", {
                 
                 data.time += diff
         },
-        row: 2, // Row the layer is in on the tree (0 is the first row)
+        row: 2, 
         layerShown(){
                 if (tmp.p.deactivated) return false
                 return player.n.best.div(1.3).max(10).log10().gt(2155) || player.p.best.gt(0) || hasMilestone("l", 5) || tmp.a.layerShown
         },
         prestigeButtonText(){
-                if (player.tab != "p") return ""
-                
                 let gain = tmp.p.getResetGain
                 let nextAt = tmp.p.getNextAt
                 if (gain.eq(0)) {
@@ -8202,11 +7730,8 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus I"
                         },
                         description(){
-                                let a = "Gain .5 Nitrogen per second and you have one less token for prestige purposes"
-                                if (shiftDown) {
-                                        return "What is the imaginary period of exponential speed on two? Dm me: pg132#7975"
-                                }
-                                return a
+                                if (shiftDown) return "What is the imaginary period of exponential speed on two? Dm me: pg132#7975"
+                                return "Gain .5 Nitrogen per second and you have one less token for prestige purposes"
                         },
                         cost:() => new Decimal(25000),
                         unlocked(){
@@ -8218,11 +7743,8 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus II"
                         },
                         description(){
-                                let a = "Tire affects E Point gain"
-                                if (shiftDown) {
-                                        return "Hint: There are generally an even number, and you should depress your shift key."
-                                }
-                                return a
+                                if (shiftDown) return "Hint: There are generally an even number, and you should depress your shift key."
+                                return "Tire affects E Point gain"
                         },
                         cost:() => new Decimal(player.hardMode ? 5e8 : 1e8),
                         unlocked(){
@@ -8234,8 +7756,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus III"
                         },
                         description(){
-                                let a = "Remove the ability to prestige but gain 100% of Phosphorus/s per second"
-                                return a
+                                return "Remove the ability to prestige but gain 100% of Phosphorus/s per second"
                         },
                         cost:() => new Decimal(player.hardMode ? 5e10 : 1e10),
                         unlocked(){
@@ -8247,12 +7768,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus IV"
                         },
                         description(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
-
-                                let a = "Per Iteration Phosphorus multiplies Nitrogen"
-                                let b = br + "Currently: " + format(tmp.p.upgrades[14].effect)
-                                return a + b
+                                return "Per Iteration Phosphorus multiplies Nitrogen" + br + "Currently: " + format(tmp.p.upgrades[14].effect)
                         },
                         effect(){
                                 if (inChallenge("l", 92) || hasChallenge("l", 92)) return decimalOne
@@ -8268,9 +7784,6 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus V"
                         },
                         description(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
-
                                 let a = "<bdi style='font-size: 80%'> Log10(E Points) multiplies base Phosphorus gain and commutativity of addition's outer ln becomes log2"
                                 let b = br + "Currently: " + format(tmp.p.upgrades[15].effect) + "</bdi>"
                                 return a + b
@@ -8288,8 +7801,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VI"
                         },
                         description(){
-                                let a = "Each upgrade adds .01 to left distributivity base"
-                                return a
+                                return "Each upgrade adds .01 to left distributivity base"
                         },
                         cost:() => new Decimal(player.hardMode ? 1e18 : 1e17),
                         unlocked(){
@@ -8301,8 +7813,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VII"
                         },
                         description(){
-                                let a = "Each upgrade makes E Points<sup>.05</sup> multiply D Point gain"
-                                return a
+                                return "Each upgrade makes E Points<sup>.05</sup> multiply D Point gain"
                         },
                         cost:() => new Decimal(player.hardMode ? 1e19 : 1e18),
                         unlocked(){
@@ -8314,8 +7825,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus VIII"
                         },
                         description(){
-                                let a = "Each respect scalar multiples E Point gain by 1 + [upgrades]/10"
-                                return a
+                                return "Each respect scalar multiples E Point gain by 1 + [upgrades]/10"
                         },
                         cost:() => new Decimal(player.hardMode ? 3e19 : 3e18),
                         unlocked(){
@@ -8327,9 +7837,6 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus IX"
                         },
                         description(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
-                                
                                 let a = "<bdi style='font-size: 80%'>Each upgrade multiplies base Phosphorus gain by log10(log10(E Points))"
                                 let b = br + "Currently: " + format(tmp.p.upgrades[24].effect) + "</bdi>"
                                 return a + b
@@ -8347,8 +7854,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus X"
                         },
                         description(){
-                                let a = "Inner ln of commutativity of addition becomes log2, square " + makeBlue("a") + " and unlock another layer"
-                                return a
+                                return "Inner ln of commutativity of addition becomes log2, square " + makeBlue("a") + " and unlock another layer"
                         },
                         effect(){
                                 return player.mini.e_points.points.max(10).log10().max(10).log10().pow(player.p.upgrades.length)
@@ -8363,8 +7869,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XI"
                         },
                         description(){
-                                let a = "Square initial Phosphorus gain and " + makeBlue("a")
-                                return a
+                                return "Square initial Phosphorus gain and " + makeBlue("a")
                         },
                         cost:() => new Decimal(player.hardMode ? 1e38 : 1e37),
                         unlocked(){
@@ -8376,8 +7881,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XII"
                         },
                         description(){
-                                let a = "You can bulk 100x more C Point buyables"
-                                return a
+                                return "You can bulk 100x more C Point buyables"
                         },
                         effect(){
                                 return player.mini.e_points.points.max(10).log10().max(10).log10().pow(player.p.upgrades.length)
@@ -8395,12 +7899,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIII"
                         },
                         description(){
-                                if (player.tab != "p") return ""
-                                if (player.subtabs.p.mainTabs != "Upgrades") return ""
-                                
-                                let a = "Per µ iterations multiply Phosphorus gain"
-                                let b = br + "Currently: " + format(tmp.p.upgrades[33].effect)
-                                return a + b
+                                return "Per µ iterations multiply Phosphorus gain" + br + "Currently: " + format(tmp.p.upgrades[33].effect)
                         },
                         effect(){
                                 return Decimal.pow(tmp.mini.e_points.getMaxInterations, player.mu.points)
@@ -8418,8 +7917,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIV"
                         },
                         description(){
-                                let a = "If you have less than 10,000 seconds of base Phosphorus production gain 1000x base Phosphorus"
-                                return a
+                                return "If you have less than 10,000 seconds of base Phosphorus production gain 1000x base Phosphorus"
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(1e160)
@@ -8434,8 +7932,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XV"
                         },
                         description(){
-                                let a = "Add .05 to P → ΔP base"
-                                return a
+                                return "Add .05 to P → ΔP base"
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal("1e1099")
@@ -8450,11 +7947,13 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVI"
                         },
                         description(){
-                                let a = "You have one less token for prestige purposes and Universe becomes ee45"
+                                let a = "You have three less token for prestige purposes and Universe becomes ee45"
+                                if (player.extremeMode) a = a.replace("ee45", "e4e45")
                                 return a
                         },
-                        cost:() => new Decimal("ee45"),
+                        cost:() => new Decimal(player.extremeMode ? "e4e45" : "ee45"),
                         unlocked(){
+                                if (player.extremeMode && hasUpgrade("mu", 55)) return true
                                 return player.a.unlocked || player.l.challenges[11] >= 79
                         }, // hasUpgrade("p", 41)
                 },
@@ -8463,12 +7962,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XVII"
                         },
                         description(){
-                                let a = "Add .01 to Constant base"
-                                return a
+                                return "Add .01 to Constant base"
                         },
-                        cost:() => new Decimal("e2e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e6e45" : "e2e45"),
                         unlocked(){
-                                return player.a.unlocked || player.l.challenges[11] >= 83
+                                return player.a.unlocked || player.l.challenges[11] >= (player.extremeMode ? 79 : 83)
                         }, // hasUpgrade("p", 42)
                 },
                 43: {
@@ -8477,11 +7975,12 @@ addLayer("p", {
                         },
                         description(){
                                 let a = "N → ΔP cost base is 5.5"
+                                if (player.extremeMode) a += " and each upgrade squares point gain"
                                 return a
                         },
-                        cost:() => new Decimal("e2.5e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e8e45" : "e2.5e45"),
                         unlocked(){
-                                return player.a.unlocked || player.l.challenges[11] >= 84
+                                return player.a.unlocked || player.l.challenges[11] >= (player.extremeMode ? 83 : 84)
                         }, // hasUpgrade("p", 43)
                 },
                 44: {
@@ -8489,12 +7988,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XIX"
                         },
                         description(){
-                                let a = "N → ΔP cost base is 5"
-                                return a
+                                return "N → ΔP cost base is 5"
                         },
-                        cost:() => new Decimal("e3e45"),
+                        cost:() => new Decimal(player.extremeMode ? "ee46" : "e3e45"),
                         unlocked(){
-                                return player.a.unlocked || player.l.challenges[11] >= 86
+                                return player.a.unlocked || player.l.challenges[11] >= (player.extremeMode ? 85 : 86)
                         }, // hasUpgrade("p", 44)
                 },
                 45: {
@@ -8502,10 +8000,9 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XX"
                         },
                         description(){
-                                let a = "N → ΔP cost base is 4.5 and each N → ΔN adds .01 to its base"
-                                return a
+                                return "N → ΔP cost base is 4.5 and each N → ΔN adds .01 to its base"
                         },
-                        cost:() => new Decimal("e3e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e1.2e46" : "e3e45"),
                         unlocked(){
                                 return player.a.unlocked || player.l.challenges[11] >= 87
                         }, // hasUpgrade("p", 45)
@@ -8515,11 +8012,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXI"
                         },
                         description(){
-                                let a = "N → ΔP cost base is 4 and autobuy N → ΔN"
-                                return a
+                                return "N → ΔP cost base is 4 and autobuy N → ΔN"
                         },
-                        cost:() => new Decimal("e3.5e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e1.4e46" : "e3.5e45"),
                         unlocked(){
+                                if (player.extremeMode) return player.a.unlocked || player.l.challenges[11] >= 89
                                 return player.a.unlocked || player.l.challenges[11] >= 93 && player.l.best.gte(6e105)
                         }, // hasUpgrade("p", 51)
                 },
@@ -8529,11 +8026,12 @@ addLayer("p", {
                         },
                         description(){
                                 let a = "Each Dilation completion after 90 doubles Life gain and keep token content upon Life reset"
+                                if (player.extremeMode) a = a.replace("doubles", "quintuples")
                                 return a
                         },
-                        cost:() => new Decimal("e3.5e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e1.6e46" : "e3.5e45"),
                         unlocked(){
-                                return player.a.unlocked || player.l.challenges[11] >= 94
+                                return player.a.unlocked || player.l.challenges[11] >= (player.extremeMode ? 91 : 94)
                         }, // hasUpgrade("p", 52)
                 },
                 53: {
@@ -8541,11 +8039,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXIII"
                         },
                         description(){
-                                let a = "Each Dilation completion after 90 doubles Life gain and token cost exponent is .44"
-                                return a
+                                return "Each Dilation completion after 90 doubles Life gain and token cost exponent is .44"
                         },
-                        cost:() => new Decimal("e13e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e1.8e46" : "e13e45"),
                         unlocked(){
+                                if (player.extremeMode) return player.a.unlocked || player.l.challenges[11] >= 93
                                 return player.a.unlocked || player.l.challenges[11] >= 97 && player.l.best.gte(5e133)
                         }, // hasUpgrade("p", 53)
                 },
@@ -8554,12 +8052,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXIV"
                         },
                         description(){
-                                let a = "Universe is ee46 and add .01 to Constant base"
-                                return a
+                                return "Universe is ee46 and add .01 to Constant base"
                         },
-                        cost:() => new Decimal("e15e45"),
+                        cost:() => new Decimal(player.extremeMode ? "e2e46" : "e15e45"),
                         unlocked(){
-                                return player.l.challenges[11] >= 98  || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 95 : 98) || player.a.unlocked
                         }, // hasUpgrade("p", 54)
                 },
                 55: {
@@ -8567,12 +8064,11 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus XXV"
                         },
                         description(){
-                                let a = "Universe is ee47 and add .01 to Constant base"
-                                return a
+                                return "Universe is ee47 and add .01 to Constant base"
                         },
-                        cost:() => new Decimal("e3e47"),
+                        cost:() => new Decimal(player.extremeMode ? "ee47" : "e3e47"),
                         unlocked(){
-                                return player.l.challenges[11] >= 102 || player.a.unlocked
+                                return player.l.challenges[11] >= (player.extremeMode ? 98 : 102) || player.a.unlocked
                         }, // hasUpgrade("p", 55)
                 },
                 101: {
@@ -8580,8 +8076,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate I"
                         },
                         description(){
-                                let a = "Per Phosphate upgrade log10(Phosphorus) multiplies Phosphorus/s gain"
-                                return a
+                                return "Per Phosphate upgrade log10(Phosphorus) multiplies Phosphorus/s gain"
                         },
                         cost:() => new Decimal(4e9),
                         effect(){
@@ -8603,8 +8098,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate II"
                         },
                         description(){
-                                let a = "Remove Gas Tank base cost"
-                                return a
+                                return "Remove Gas Tank base cost"
                         },
                         cost:() => new Decimal(5e34),
                         unlocked(){
@@ -8616,8 +8110,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate III"
                         },
                         description(){
-                                let a = "Per upgrade multiply Nitrogen Science gain by min(1e30, log10(Phosphorus))"
-                                return a
+                                return "Per upgrade multiply Nitrogen Science gain by min(1e30, log10(Phosphorus))"
                         },
                         cost:() => new Decimal(5e135),
                         unlocked(){
@@ -8629,8 +8122,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate IV"
                         },
                         description(){
-                                let a = "Reuse is exponential and keep Nitrogen upgrades on Phosphorus reset"
-                                return a
+                                return "Reuse is exponential and keep Nitrogen upgrades on Phosphorus reset"
                         },
                         cost:() => new Decimal(2e167),
                         unlocked(){
@@ -8642,8 +8134,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate V"
                         },
                         description(){
-                                let a = "Remove µ → ΔP base cost"
-                                return a
+                                return "Remove µ → ΔP base cost"
                         },
                         cost:() => new Decimal(1e185),
                         unlocked(){
@@ -8655,8 +8146,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VI"
                         },
                         description(){
-                                let a = "Per upgrade in this row gain 100x Phosphorus and subtract sqrt(min(4, this row upgrades)) from the µ cost base"
-                                return a
+                                return "Per upgrade in this row gain 100x Phosphorus and subtract sqrt(min(4, this row upgrades)) from the µ cost base"
                         },
                         effect(){
                                 let base = new Decimal(100)
@@ -8677,8 +8167,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VII"
                         },
                         description(){
-                                let a = "Halve effective Reuse levels for cost purposes"
-                                return a
+                                return "Halve effective Reuse levels for cost purposes"
                         },
                         effect(){
                                 let base = new Decimal(100)
@@ -8699,8 +8188,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VIII"
                         },
                         description(){
-                                let a = "You have one less effective tokens for prestige purposes and µ base cost is 1e5x less"
-                                return a
+                                return "You have one less effective tokens for prestige purposes and µ base cost is 1e5x less"
                         },
                         cost:() => new Decimal("5e672"),
                         unlocked(){
@@ -8712,8 +8200,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate IX"
                         },
                         description(){
-                                let a = "Keep Nitrogen Science upgrades on reset"
-                                return a
+                                return "Keep Nitrogen Science upgrades on reset"
                         },
                         cost:() => new Decimal("1e830"),
                         unlocked(){
@@ -8725,8 +8212,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate X"
                         },
                         description(){
-                                let a = "Keep Oxygen Science upgrades on reset"
-                                return a
+                                return "Keep Oxygen Science upgrades on reset"
                         },
                         cost:() => new Decimal("1e1041"),
                         unlocked(){
@@ -8739,17 +8225,11 @@ addLayer("p", {
                         requirementDescription(){
                                 return "1 Phosphorus reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.p.milestones[1].requirement.lte(player.p.times)
+                                return player.p.times >= 1
                         },
                         unlocked(){
                                 return true
-                        },
-                        effect(){
-                                return decimalOne
                         },
                         effectDescription(){
                                 let a = "Reward: Keep one Nitrogen milestone per reset, you have one less token for prestige purposes, and bulk 5x D buyables."
@@ -8761,11 +8241,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return "2 Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.p.milestones[2].requirement.lte(player.p.times)
+                                return player.p.times >= 2
                         },
                         unlocked(){
                                 return true
@@ -8783,11 +8260,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return "4 Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.p.milestones[3].requirement.lte(player.p.times)
+                                return player.p.times >= 4
                         },
                         unlocked(){
                                 return true
@@ -8802,29 +8276,22 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 7 : 6) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 7 : 6)
-                        },
                         done(){
-                                return tmp.p.milestones[4].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 7 : 6)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep a D Point upgrade per reset, keep Nitrogen XXII, and increase effect exponent to 3.1."
-                                return a
+                                return "Reward: Keep a D Point upgrade per reset, keep Nitrogen XXII, and increase effect exponent to 3.1."
                         },
                 }, // hasMilestone("p", 4)
                 5: {
                         requirementDescription(){
                                 return (player.hardMode ? 11 : 8) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 11 : 8)
-                        },
                         done(){
-                                return tmp.p.milestones[5].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 11 : 8) 
                         },
                         unlocked(){
                                 return true
@@ -8843,11 +8310,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 16 : 10) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 16 : 10)
-                        },
                         done(){
-                                return tmp.p.milestones[6].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 16 : 10)
                         },
                         unlocked(){
                                 return true
@@ -8862,11 +8326,8 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? 22 : 13) + " Phosphorus resets"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 22 : 13)
-                        },
                         done(){
-                                return tmp.p.milestones[7].requirement.lte(player.p.times)
+                                return player.p.times >= (player.hardMode ? 22 : 13)
                         },
                         unlocked(){
                                 return true
@@ -8881,54 +8342,42 @@ addLayer("p", {
                         requirementDescription(){
                                 return (player.hardMode ? "5.00e9" : "1.00e9") + " Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 5e9 : 1e9)
-                        },
                         done(){
-                                return tmp.p.milestones[8].requirement.lte(player.p.points)
+                                return player.p.points.div(player.hardMode ? 5 : 1).gte(1e9)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: You can autobuy Iterations and the first levels of the first four rows of E buyables."
-                                return a
+                                return "Reward: You can autobuy Iterations and the first levels of the first four rows of E buyables."
                         },
                 }, // hasMilestone("p", 8)
                 9: {
                         requirementDescription(){
                                 return (player.hardMode ? "1.00e11" : "2.00e10") + " Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.hardMode ? 1e11 : 2e10)
-                        },
                         done(){
-                                return tmp.p.milestones[9].requirement.lte(player.p.points)
+                                return player.p.points.div(player.hardMode ? 5 : 1).gte(2e10)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Square Phosphorus gain."
-                                return a
+                                return "Reward: Square Phosphorus gain."
                         },
                 }, // hasMilestone("p", 9)
                 10: {
                         requirementDescription(){
                                 return "5e10 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(5e10)
-                        },
                         done(){
-                                return tmp.p.milestones[10].requirement.lte(player.p.points)
+                                return player.p.points.gte(5e10)
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reward: Square Phosphorus gain."
-                                return a
+                                return "Reward: Square Phosphorus gain."
                         },
                 }, // hasMilestone("p", 10)
         },
@@ -8939,8 +8388,6 @@ addLayer("p", {
                                         ["prestige-button", "", function (){ return hasUpgrade("p", 13) ? {'display': 'none'} : {}}],
                                         ["display-text",
                                                 function(){
-                                                        if (player.tab != "p") return ""
-                                                        if (player.subtabs.p.mainTabs != "Upgrades") return ""
                                                         if (shiftDown) {
                                                                 let b = "Your best Phosphorus is " + format(player.p.best)
                                                                 let c = " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
@@ -8962,12 +8409,7 @@ addLayer("p", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "p") return ""
-                                        if (player.subtabs.p.mainTabs != "Milestones") return ""
-                                        
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.p.times) + " Phosphorus resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.p.times) + " Phosphorus resets"
                                 }],
                                 "milestones",
                                 ],
@@ -9076,9 +8518,9 @@ addLayer("p", {
                 // 1: A point stuff
                 if (!false) {
                         data1.a_points = {
-                                points: decimalZero, // 1
-                                best: decimalZero, //1 cont
-                                extras: { // 1 cont
+                                points: decimalZero, 
+                                best: decimalZero,
+                                extras: {
                                         11: decimalOne,
                                         12: decimalZero,
                                         13: decimalZero,
@@ -9260,9 +8702,9 @@ addLayer("p", {
 })
 
 addLayer("mu", {
-        name: "µ", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "µ", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 2, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "µ", 
+        symbol: "µ", 
+        position: 2, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -9291,10 +8733,10 @@ addLayer("mu", {
                         return new Decimal(1e26).div(div)
                 }
                 return Decimal.pow(10, 26).times(player.hardMode ? 10 : 2)    
-        }, // Can be a function that takes requirement increases into account
-        resource: "µ", // Name of prestige currency
-        baseResource: "Phosphorus", // Name of resource prestige is based on
-        baseAmount(){return player.p.points.floor()}, // Get the current amount of baseResource
+        }, 
+        resource: "µ", 
+        baseResource: "Phosphorus", 
+        baseAmount(){return player.p.points.floor()}, 
         type: "static",
         base(){
                 if (hasUpgrade("l", 22)) return new Decimal(2)
@@ -9368,7 +8810,6 @@ addLayer("mu", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "mu") return ""
                 if (inChallenge("l", 71) || hasChallenge("l", 71)) return ""
                 let eff = tmp.mu.effect
                 if (shiftDown) {
@@ -9378,8 +8819,7 @@ addLayer("mu", {
                         if (eff.gt(.45) && !hasUpgrade("mu", 33)) a = a.replace(")", "<sup>2</sup>)")
                         else if (player.extremeMode && eff.gt(.92) && !hasUpgrade("l", 13)) {
                                 a = a.replace(")", "<sup>2</sup>)")
-                        }
-                        //should be 351/400 to be smooth but idc
+                        } // should be 351/400 to be smooth but idc
                         
                         a += " resulting in ^" + format(tmp.mu.effect.sub(1).recip().times(-1), 3) 
                         a += " the Phosphorus."
@@ -9411,11 +8851,8 @@ addLayer("mu", {
                         player.mu.buyables[31] = player.mu.buyables[31].max(data.bestNdM)
                 }
         },
-        row: 2, // Row the layer is in on the tree (0 is the first row)
+        row: 2, 
         prestigeButtonText(){
-                if (player.tab != "mu") return ""
-                if (player.subtabs.mu.mainTabs != "Upgrades") return ""
-                
                 if (shiftDown) {
                         let p1 = "Formula:" + br + format(tmp.mu.requires, 0) + "*"
                         p1 += formatWhole(tmp.mu.base) + "^(x<sup>" + formatWhole(tmp.mu.exponent)
@@ -9432,7 +8869,7 @@ addLayer("mu", {
                 }
                 let c = formatWhole(tmp.mu.baseAmount) + "/" + format(tmp.mu.nextAtDisp) + " " + tmp.mu.baseResource
 
-                return a + br + br + b + c
+                return a + br2 + b + c
         },
         canBuyMax(){
                 return hasUpgrade("mu", 22) || hasMilestone("d", 1)
@@ -9462,9 +8899,6 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ II"
                         },
                         description(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Upgrades") return ""
-
                                 let a = "<bdi style='font-size: 80%'> Per sqrt(associativity of *) multiply Phosphorus gain by 1 + µ/100 and reduces the µ cost base by ceil(40*[this row upgrades]<sup>.5</sup>)"
                                 let b = br + "Currently: -" + formatWhole(tmp.mu.upgrades[12].effect) + "</bdi>"
                                 return a + b
@@ -9487,9 +8921,6 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ III"
                         },
                         description(){
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Upgrades") return ""
-                                
                                 let a = "Per µ multiply Phosphorus gain by log10(Phosphorus)"
                                 let b = "Currently: " + formatWhole(tmp.mu.upgrades[13].effect)
                                 if (hasUpgrade("mu", 22)) a = a.replace("log10", "log6")
@@ -9847,11 +9278,13 @@ addLayer("mu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>µ XXI"
                         },
                         description(){
-                                let a = "α → ∂α log6's become log5 and log10(Lives) exponentiates point gain"
-                                return a
+                                let a = "α → ∂α log6's become log5"
+                                if (player.extremeMode) a += ", Universe is e2e44," 
+                                return a + " and log10(Lives) exponentiates point gain"
                         },
-                        cost:() => new Decimal(7e31),
+                        cost:() => new Decimal(player.extremeMode ? 2e32 : 7e31),
                         unlocked(){
+                                if (player.extremeMode) return player.l.best.gte(1e37) || player.a.unlocked
                                 return player.l.challenges[11] >= 69 || player.a.unlocked
                         }, // hasUpgrade("mu", 51)
                 },
@@ -9863,7 +9296,7 @@ addLayer("mu", {
                                 let a = "Every upgrade adds .001 to Constant base"
                                 return a
                         },
-                        cost:() => new Decimal(8e31),
+                        cost:() => new Decimal(player.extremeMode ? 3e32 : 8e31),
                         unlocked(){
                                 return player.l.challenges[11] >= 71 || player.a.unlocked
                         }, // hasUpgrade("mu", 52)
@@ -9874,9 +9307,10 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "N → ΔP cost base is 6"
+                                if (player.extremeMode) a += " and Universe is ee45"
                                 return a
                         },
-                        cost:() => new Decimal(9e31),
+                        cost:() => new Decimal(player.extremeMode ? 6e32 : 9e31),
                         unlocked(){
                                 return player.l.challenges[11] >= 72 || player.a.unlocked
                         }, // hasUpgrade("mu", 53)
@@ -9889,7 +9323,7 @@ addLayer("mu", {
                                 let a = "α → ∂α log5's become log4"
                                 return a
                         },
-                        cost:() => new Decimal(10e31),
+                        cost:() => new Decimal(player.extremeMode ? 9e32 : 1e32),
                         unlocked(){
                                 return player.l.challenges[11] >= 75 || player.a.unlocked
                         }, // hasUpgrade("mu", 54)
@@ -9902,7 +9336,7 @@ addLayer("mu", {
                                 let a = "α → ∂α log4's become log3"
                                 return a
                         },
-                        cost:() => new Decimal(11e31),
+                        cost:() => new Decimal(player.extremeMode ? 1.2e33 : 1.1e32),
                         unlocked(){
                                 return player.l.challenges[11] >= 76 || player.a.unlocked
                         }, // hasUpgrade("mu", 55)
@@ -9913,18 +9347,14 @@ addLayer("mu", {
                         requirementDescription(){
                                 return "1 µ"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.mu.milestones[1].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(1)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Per milestone multiply base Phosphorus gain by total tokens and you no longer lose Oxygen or Carbon."
-                                return a
+                                return "Reward: Per milestone multiply base Phosphorus gain by total tokens and you no longer lose Oxygen or Carbon."
                         },
                 }, // hasMilestone("mu", 1)
                 2: {
@@ -9932,55 +9362,42 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1e1,000,000 E Points"
                                 return "1e1,200,000 E Points"
                         },
-                        requirement(){
-                                return Decimal.pow(10, player.extremeMode ? 1e6 : 12e5)
-                        },
                         done(){
-                                return tmp.mu.milestones[2].requirement.lte(player.mini.e_points.points)
+                                return player.mini.e_points.points.gte(Decimal.pow(10, player.extremeMode ? 1e6 : 12e5))
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Unlock a new E buyable, and you no longer lose any Hydrogen resources."
-                                return a
+                                return "Reward: Unlock a new E buyable, and you no longer lose any Hydrogen resources."
                         },
                 }, // hasMilestone("mu", 2)
                 3: {
                         requirementDescription(){
                                 return "5 µ"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.mu.milestones[3].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(5)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: E Points multiply D Points and each associativity of addition adds .01 to "
-                                a += makeRed("E") + "."
-                                return a
+                                return "Reward: E Points multiply D Points and each associativity of addition adds .01 to " + makeRed("E") + "."
                         },
                 }, // hasMilestone("mu", 3)
                 4: {
                         requirementDescription(){
                                 return "7 µ"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.mu.milestones[4].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(7)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Iterations cost exponent is now x<sup>x</sup>"
-                                return a
+                                return "Iterations cost exponent is now x<sup>x</sup>"
                         },
                 }, // hasMilestone("mu", 4)
                 5: {
@@ -9988,11 +9405,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e206 Phosphorus"
                                 return "1.00e194 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e206 : 1e194)
-                        },
                         done(){
-                                return tmp.mu.milestones[5].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e206 : 1e194)
                         },
                         unlocked(){
                                 return true
@@ -10008,11 +9422,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e227 Phosphorus"
                                 return "1.00e211 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e227 : 1e211)
-                        },
                         done(){
-                                return tmp.mu.milestones[6].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e227 : 1e211)
                         },
                         unlocked(){
                                 return true
@@ -10028,11 +9439,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e259 Phosphorus"
                                 return "1.00e243 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e259 : 1e243)
-                        },
                         done(){
-                                return tmp.mu.milestones[7].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? 1e259 : 1e243)
                         },
                         unlocked(){
                                 return true
@@ -10047,18 +9455,14 @@ addLayer("mu", {
                         requirementDescription(){
                                 return "19 µ"
                         },
-                        requirement(){
-                                return new Decimal(19)
-                        },
                         done(){
-                                return tmp.mu.milestones[8].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(19)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Oxygen Carbon synergy gets effected by tokens"
-                                return a
+                                return "Oxygen Carbon synergy gets effected by tokens"
                         },
                 }, // hasMilestone("mu", 8)
                 9: {
@@ -10066,11 +9470,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e417 Phosphorus"
                                 return "1.00e345 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e417" : "1e345")
-                        },
                         done(){
-                                return tmp.mu.milestones[9].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e417" : "1e345")
                         },
                         unlocked(){
                                 return true
@@ -10086,18 +9487,14 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e459 Phosphorus"
                                 return "1.00e370 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e459" : "1e370")
-                        },
                         done(){
-                                return tmp.mu.milestones[10].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e459" : "1e370")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Each µ adds .001 to the Polynomial base"
-                                return a
+                                return "Each µ adds .001 to the Polynomial base"
                         },
                 }, // hasMilestone("mu", 10)
                 11: {
@@ -10105,11 +9502,8 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e465 Phosphorus"
                                 return "1.00e398 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e465" : "1e398")
-                        },
                         done(){
-                                return tmp.mu.milestones[11].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e465" : "1e398")
                         },
                         unlocked(){
                                 return true
@@ -10125,19 +9519,15 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e993 Phosphorus"
                                 return "1.00e1283 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e993" : "1e1283")
-                        },
                         done(){
-                                return tmp.mu.milestones[12].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e993" : "1e1283")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Ponder the universe"
-                                if (player.extremeMode) a += " and per µ milestone double Phosphorus gain"
-                                return a
+                                if (player.extremeMode) return "Per µ milestone double Phosphorus gain"
+                                return "Ponder the universe"
                         },
                 }, // hasMilestone("mu", 12)
                 13: {
@@ -10145,137 +9535,106 @@ addLayer("mu", {
                                 if (player.extremeMode) return "1.00e1248 Phosphorus"
                                 return "1.00e1456 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? "1e1248" : "1e1456")
-                        },
                         done(){
-                                return tmp.mu.milestones[13].requirement.lte(player.p.points)
+                                return player.p.points.gte(player.extremeMode ? "1e1248" : "1e1456")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "µ cost exponent is 1.9"
-                                return a
+                                return "µ cost exponent is 1.9"
                         },
                 }, // hasMilestone("mu", 13)
                 14: {
                         requirementDescription(){
                                 return "1.00e1585 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e1585")
-                        },
                         done(){
-                                return tmp.mu.milestones[14].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e1585")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove µ → ΔN base cost and add 2 to its exponential divisor"
-                                return a
+                                return "Remove µ → ΔN base cost and add 2 to its exponential divisor"
                         },
                 }, // hasMilestone("mu", 14)
                 15: {
                         requirementDescription(){
                                 return "1.00e1646 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e1646")
-                        },
                         done(){
-                                return tmp.mu.milestones[15].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e1646")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove P → Δµ base cost"
-                                return a
+                                return "Remove P → Δµ base cost"
                         },
                 }, // hasMilestone("mu", 15)
                 16: {
                         requirementDescription(){
                                 return "3e1714 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("3e1714")
-                        },
                         done(){
-                                return tmp.mu.milestones[16].requirement.lte(player.p.points)
+                                return player.p.points.gte("3e1714")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Remove µ base cost"
-                                return a
+                                return "Remove µ base cost"
                         },
                 }, // hasMilestone("mu", 16)
                 17: {
                         requirementDescription(){
                                 return "1e7789 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e7789")
-                        },
                         done(){
-                                return tmp.mu.milestones[17].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e7789")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1"
-                                return a
+                                return "Reduce µ cost base by 1"
                         },
                 }, // hasMilestone("mu", 17)
                 18: {
                         requirementDescription(){
                                 return "1e10645 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e10645")
-                        },
                         done(){
-                                return tmp.mu.milestones[18].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e10645")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1"
-                                return a
+                                return "Reduce µ cost base by 1"
                         },
                 }, // hasMilestone("mu", 18)
                 19: {
                         requirementDescription(){
                                 return "1e18480 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("1e18480")
-                        },
                         done(){
-                                return tmp.mu.milestones[19].requirement.lte(player.p.points)
+                                return player.p.points.gte("1e18480")
                         },
                         unlocked(){
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1 and halve Recycle scaling"
-                                return a
+                                return "Reduce µ cost base by 1 and halve Recycle scaling"
                         },
                 }, // hasMilestone("mu", 19)
                 20: {
                         requirementDescription(){
                                 return "1000 µ"
                         },
-                        requirement(){
-                                return new Decimal("1000")
-                        },
                         done(){
-                                return tmp.mu.milestones[20].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(1000)
                         },
                         unlocked(){
                                 return player.extremeMode
@@ -10284,8 +9643,7 @@ addLayer("mu", {
                                 player.mu.CCostFree = true
                         },
                         effectDescription(){
-                                let a = "Reduce µ cost base by 1 and C buyables permanently cost nothing"
-                                return a
+                                return "Reduce µ cost base by 1 and C buyables permanently cost nothing"
                         },
                 }, // hasMilestone("mu", 20)
         },
@@ -10326,10 +9684,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mu.buyables[11].effect) + " to Phosphorus gain</b><br>"
@@ -10401,10 +9755,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[12].base.pow(player.mu.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mu.buyables[12].effect) + " to Phosphorus gain</b><br>"
@@ -10473,10 +9823,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[13].base.times(player.mu.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mu.buyables[13].effect) + " to prior exponent dividers</b><br>"
@@ -10542,10 +9888,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[21].base.pow(player.mu.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mu.buyables[21].effect) + " to Phosphorus gain</b><br>"
@@ -10610,10 +9952,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[22].base.times(player.mu.buyables[22])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mu.buyables[22].effect) + " to µ → ΔP base</b><br>"
@@ -10675,10 +10013,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[23].base.times(player.mu.buyables[23])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mu.buyables[23].effect) + " to prior exponent dividers</b><br>"
@@ -10768,10 +10102,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[31].base.pow(player.mu.buyables[31]).min("ee20")
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[31]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mu.buyables[31].effect) + " to Phosphorus</b><br>"
@@ -10872,10 +10202,6 @@ addLayer("mu", {
                                 return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.5)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[32]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = format(tmp.mu.buyables[32].effect, 4) + " to µ cost exp</b><br>"
@@ -10952,10 +10278,6 @@ addLayer("mu", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mu") return ""
-                                if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: /"
                                 let eff2 = format(tmp.mu.buyables[33].effect) + " to N → ΔP cost</b><br>"
@@ -10992,11 +10314,7 @@ addLayer("mu", {
                                 ["prestige-button", ""],
                                 ["display-text",
                                         function(){
-                                                if (player.tab != "mu") return ""
-                                                if (player.subtabs.mu.mainTabs != "Upgrades") return ""
-                                                if (player.mu.points.gt(1e10)) return ""
-                                                let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
-                                                return "You are gaining " + format(x, 3) + " Phosphorus/s"
+                                                return "You are gaining " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         }
                                 ],
                                 "blank", 
@@ -11016,16 +10334,8 @@ addLayer("mu", {
                 "Buyables": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "mu") return ""
-                                        if (player.subtabs.mu.mainTabs != "Buyables") return ""
-                                        
-                                        if (player.mu.points.gt(1e10)) {
-                                                return "You are gaining an estimated " + format(tmp.mu.resetGain.times(20)) + " µ/s"
-                                        }
-                                        if (shiftDown) {
-                                                let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
-                                                return " " + format(x, 3) + " Phosphorus/s"
-                                        }
+                                        if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.times(20)) + " µ/s"
+                                        if (shiftDown) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
                                 ["buyables", [1,2,3]],
@@ -11063,9 +10373,9 @@ addLayer("mu", {
 })
 
 addLayer("l", {
-        name: "Lives", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "L", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Lives", 
+        symbol: "L", 
+        position: 1, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -11082,10 +10392,10 @@ addLayer("l", {
         }},
         color: "#BE0E00",
         branches: [],
-        requires:() => hasChallenge("l", 51) ? Decimal.pow(10, 1024) : Decimal.pow(2, 1024).pow10(), // Can be a function that takes requirement increases into account
-        resource: "Lives", // Name of prestige currency
-        baseResource: "Points", // Name of resource prestige is based on
-        baseAmount(){return player.points}, // Get the current amount of baseResource
+        requires:() => hasChallenge("l", 51) ? Decimal.pow(10, 1024) : Decimal.pow(2, 1024).pow10(), 
+        resource: "Lives", 
+        baseResource: "Points", 
+        baseAmount(){return player.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.l.getBaseGain.times(tmp.l.getGainMult)
@@ -11121,7 +10431,7 @@ addLayer("l", {
 
                 return ret
         },
-        getGainMult(){ //life gain lifegain lgain l gain
+        getGainMult(){ // life gain lifegain lgain l gain
                 let ret = decimalOne
 
                                                 ret = ret.times(tmp.l.challenges[11].rewardEffect)
@@ -11149,7 +10459,8 @@ addLayer("l", {
                 if (hasUpgrade("p", 52)) {
                         let exp = new Decimal(player.l.challenges[11]).sub(90).max(0)
                         let base = 2
-                        if (hasUpgrade("p", 53)) base = 4
+                        if (player.extremeMode) base *= 2.5
+                        if (hasUpgrade("p", 53)) base *= 2
                                                 ret = ret.times(Decimal.pow(base, exp))
                 }
                 if (hasMilestone("l", 32)) {
@@ -11203,7 +10514,7 @@ addLayer("l", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "l" || inChallenge("l", 51) || hasChallenge("l", 51)) return ""
+                if (inChallenge("l", 51) || hasChallenge("l", 51)) return ""
                 let eff = tmp.l.effect
                 let start = " multiplying all prior currencies by " 
                 let end = "."
@@ -11315,7 +10626,13 @@ addLayer("l", {
                         if (hasUpgrade("mu", 45) && player.extremeMode) {
                                                         str = "e3e42"
                         }
-                        if (hasUpgrade("p", 41))        str = "ee45"
+                        if (hasUpgrade("mu", 51) && player.extremeMode) {
+                                                        str = "e2e44"
+                        }
+                        if (hasUpgrade("mu", 53) && player.extremeMode) {
+                                                        str = "ee45"
+                        } 
+                        if (hasUpgrade("p", 41))        str = player.extremeMode ? "e4e45" : "ee45"
                         if (hasUpgrade("p", 54))        str = "ee46"
                         if (hasUpgrade("p", 55))        str = "ee47"
                         if (hasMilestone("l", 35))      str = "ee50"
@@ -11375,17 +10692,12 @@ addLayer("l", {
                         player.l.grid[gainId].gems = player.l.grid[gainId].gems.plus(gemGain)
                 }
         },
-        row: 3, // Row the layer is in on the tree (0 is the first row)
+        row: 3, 
         prestigeButtonText(){
-                if (player.tab != "l") return ""
-                if (!["Challenges", "Upgrades"].includes(player.subtabs.l.mainTabs)) return ""
-
-                let a = "Reset for <b>" + formatWhole(tmp.l.getResetGain) + "</b> Lives"
-
                 let b = ""
                 if (tmp.l.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.l.getNextAt) + " points."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.l.getResetGain) + "</b> Lives" + b
         },
         layerShown(){
                 if (tmp.l.deactivated) return false
@@ -11435,13 +10747,14 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life IV"
                         },
                         description(){
+                                if (player.shiftAlias) return "Capped at 1.80e308"
                                 let a = "Every second Dilation completion makes Reuse base exponentiate point gain"
                                 return a + br + "Currently: " + format(tmp.l.upgrades[14].effect)
                         },
                         cost:() => new Decimal(270),
                         effect(){
                                 let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
-                                return tmp.sci.buyables[302].base.pow(lvls)
+                                return tmp.sci.buyables[302].base.pow(lvls).min(Decimal.pow(2, 1024))
                         },
                         unlocked(){
                                 return hasUpgrade("l", 13) && player.l.challenges[11] >= 7
@@ -11524,24 +10837,83 @@ addLayer("l", {
                                 return hasUpgrade("l", 15) && player.l.challenges[11] >= 49
                         }, 
                 }, // hasUpgrade("l", 25)
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XI"
+                        },
+                        description(){
+                                return "Remove α → ∂β base cost"
+                        },
+                        cost:() => new Decimal(8.73e28),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 61
+                        }, 
+                }, // hasUpgrade("l", 31)
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XII"
+                        },
+                        description(){
+                                return "Per Dilation completion after 50 add .04 to its reward exponent"
+                        },
+                        cost:() => new Decimal(7.74e31),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 62
+                        }, 
+                }, // hasUpgrade("l", 32)
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XIII"
+                        },
+                        description(){
+                                return "Dilation completions after 60 scale 25% slower"
+                        },
+                        cost:() => new Decimal(4.31e33),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 64
+                        }, 
+                }, // hasUpgrade("l", 33)
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XIV"
+                        },
+                        description(){
+                                return "Per upgrade add 2 to Life Milestone 1's cap"
+                        },
+                        cost:() => new Decimal(1.11e34),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 66
+                        }, 
+                }, // hasUpgrade("l", 34)
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Life XV"
+                        },
+                        description(){
+                                return "Dilation completions scale 2% slower"
+                        },
+                        cost:() => new Decimal(5e51),
+                        unlocked(){
+                                return hasUpgrade("l", 15) && player.l.challenges[11] >= 77
+                        }, 
+                }, // hasUpgrade("l", 35)
         },
         milestones: {
                 1: {
                         requirementDescription(){
                                 return "1 Life"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.l.milestones[1].requirement.lte(player.l.points)
+                                return player.l.points.gte(1)
                         },
                         unlocked(){
                                 return true
                         },
                         effect(){
                                 let cap = 50
-                                if (hasMilestone("l", 11)) cap += 5 * player.l.milestones.length
+                                if (hasMilestone("l", 11))      cap += 5 * player.l.milestones.length
+                                if (hasUpgrade("l", 34))        cap += 2 * player.l.upgrades.length
+                                
                                 let exp = Math.min(cap, player.l.times)
                                 if (hasUpgrade("d", 11)) exp = cap
                                 return Decimal.pow(1.01, exp)
@@ -11550,9 +10922,6 @@ addLayer("l", {
                                 player.l.everMilestone1 = true
                         },
                         effectDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), maintain all minigame autobuyers, token resets permanently do nothing, gain 10x D and E Points, and triple Phosphorus and Nitrogen reset times.<br>"
                                 let b = "Currently: " + format(tmp.l.milestones[1].effect, 4)
                                 return a + b
@@ -11562,19 +10931,15 @@ addLayer("l", {
                         requirementDescription(){
                                 return "2 Lives"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.l.milestones[2].requirement.lte(player.l.points)
+                                return player.l.points.gte(2)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuyhco"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication."
-                                return a
+                                return "Reward: Autobuy Hydrogen, Carbon, and Oxygen upgrades, µ resets nothing, and you can autobuy the first level of associativity of multiplication."
                         },
                 }, // hasMilestone("l", 2)
                 3: {
@@ -11585,7 +10950,7 @@ addLayer("l", {
                                 return new Decimal(3)
                         },
                         done(){
-                                return tmp.l.milestones[3].requirement.lte(player.l.points)
+                                return player.l.points.gte(3)
                         },
                         unlocked(){
                                 return true
@@ -11601,30 +10966,23 @@ addLayer("l", {
                         requirementDescription(){
                                 return "4 Lives"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.l.milestones[4].requirement.lte(player.l.points)
+                                return player.l.points.gte(4)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuynp"]],
                         effectDescription(){
-                                let a = "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades."
-                                return a
+                                return "Reward: Keep Nitrogen challenges upon Phosphorus and Life resets, and autobuy Nitrogen and Phosphorus upgrades."
                         },
                 }, // hasMilestone("l", 4)
                 5: {
                         requirementDescription(){
                                 return "5 Lives"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.l.milestones[5].requirement.lte(player.l.points)
+                                return player.l.points.gte(5)
                         },
                         unlocked(){
                                 return true
@@ -11640,37 +10998,29 @@ addLayer("l", {
                         requirementDescription(){
                                 return "6 Lives"
                         },
-                        requirement(){
-                                return new Decimal(6)
-                        },
                         done(){
-                                return tmp.l.milestones[6].requirement.lte(player.l.points)
+                                return player.l.points.gte(6)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles:() => [["l", "autobuymu"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
-                                return a
+                                return "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
                         },
                 }, // hasMilestone("l", 6)
                 7: {
                         requirementDescription(){
                                 return "7 Lives"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.l.milestones[7].requirement.lte(player.l.points)
+                                return player.l.points.gte(7)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep C and D point upgrades."
-                                return a
+                                return "Reward: Keep C and D point upgrades."
                         },
                 }, // hasMilestone("l", 7)
                 8: {
@@ -11681,14 +11031,13 @@ addLayer("l", {
                                 return new Decimal(10)
                         },
                         done(){
-                                return tmp.l.milestones[8].requirement.lte(player.l.points)
+                                return player.l.points.gte(10)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Keep token and µ milestones and unlock a challenge."
-                                return a
+                                return "Reward: Keep token and µ milestones and unlock a challenge."
                         },
                 }, // hasMilestone("l", 8)
                 9: {
@@ -11696,12 +11045,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "6 Dilation completions"
                                 return "12 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(6)
-                                return new Decimal(12)
-                        },
                         done(){
-                                return tmp.l.milestones[9].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 6 : 12)
                         },
                         unlocked(){
                                 return true
@@ -11716,12 +11061,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "8 Dilation completions"
                                 return "13 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(8)
-                                return new Decimal(13)
-                        },
                         done(){
-                                return tmp.l.milestones[10].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 8 : 13)
                         },
                         unlocked(){
                                 return true
@@ -11734,9 +11075,6 @@ addLayer("l", {
                                 return init
                         },
                         effectDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Token costs are floored instead of rounded and cube the Oxygen-Carbon symmetry cap per Dilation completion."
                                 let b = "Currently: " + format(tmp.l.milestones[10].effect)
                                 return a + br + b
@@ -11747,12 +11085,8 @@ addLayer("l", {
                                 if (player.extremeMode) return "11 Dilation completions"
                                 return "14 Dilation completions"
                         },
-                        requirement(){
-                                if (player.extremeMode) return new Decimal(11)
-                                return new Decimal(14)
-                        },
                         done(){
-                                return tmp.l.milestones[11].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= (player.extremeMode ? 11 : 14)
                         },
                         unlocked(){
                                 return true
@@ -11766,11 +11100,8 @@ addLayer("l", {
                         requirementDescription(){
                                 return "24 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(24)
-                        },
                         done(){
-                                return tmp.l.milestones[12].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 24
                         },
                         unlocked(){
                                 return true
@@ -11784,19 +11115,14 @@ addLayer("l", {
                         requirementDescription(){
                                 return "25 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(25)
-                        },
                         done(){
-                                return tmp.l.milestones[13].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 25
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let x = player.hardMode ? 100 : 1000
-                                let a = "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(x) + "x."
-                                return a
+                                return "Reward: If you have less than 10,000 seconds worth of Life production then gain " + formatWhole(player.hardMode ? 100 : 1000) + "x."
                         },
                 }, // hasMilestone("l", 13)
                 14: {
@@ -11804,17 +11130,12 @@ addLayer("l", {
                                 if (player.extremeMode) return "28 Dilation completions"
                                 return "26 Dilation completions"
                         },
-                        requirement(){
-                                return new Decimal(26)
-                        },
                         done(){
-                                if (player.extremeMode) {
-                                        return player.l.challenges[11] >= 28
-                                } 
+                                if (player.extremeMode) return player.l.challenges[11] >= 28
                                 if (player.l.challenges[11] > 26) return true
                                 if (!inChallenge("l", 11)) return
                                 if (player.points.lt("1ee305")) return 
-                                return tmp.l.milestones[14].requirement.lte(player.l.challenges[11])
+                                return player.l.challenges[11] >= 26
                         },
                         unlocked(){
                                 return true
@@ -11831,18 +11152,14 @@ addLayer("l", {
                                 if (player.extremeMode) return "1.00e21 µ"
                                 return "5.00e21 µ"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 1e21 : 5e21)
-                        },
                         done(){
-                                return tmp.l.milestones[15].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(player.extremeMode ? 1e21 : 5e21)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → Δµ levels multiply Life gain."
-                                return a
+                                return "Reward: N → Δµ levels multiply Life gain."
                         },
                 }, // hasMilestone("l", 15)
                 16: {
@@ -11850,51 +11167,40 @@ addLayer("l", {
                                 if (player.extremeMode) return "2.93e12 Lives"
                                 return "2.00e22 µ"
                         },
-                        requirement(){
-                                return new Decimal(2e22)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(2.93e12)
-                                return tmp.l.milestones[16].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(2e22)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Each milestone adds .0001 to N → ΔP base."
-                                return a
+                                return "Reward: Each milestone adds .0001 to N → ΔP base."
                         },
                 }, // hasMilestone("l", 16)
                 17: {
                         requirementDescription(){
-                                if (player.extremeMode) return "4.5e12 Lives"
+                                if (player.extremeMode) return "4.50e12 Lives"
                                 return "2.70e12 Lives"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 4.5e12 : 2.7e12)
-                        },
                         done(){
-                                return tmp.l.milestones[17].requirement.lte(player.l.points)
+                                return player.l.points.gte(player.extremeMode ? 4.5e12 : 2.7e12)
                         },
                         unlocked(){
                                 return true
                         },
                         toggles: () => [["l", "autobuyntodp"]],
                         effectDescription(){
-                                let a = "Reward: Autobuy N → ΔP."
-                                return a
+                                return "Reward: Autobuy N → ΔP."
                         },
                 }, // hasMilestone("l", 17)
                 18: {
                         requirementDescription(){
-                                if (player.extremeMode) return "3e23 µ"
+                                if (player.extremeMode) return "3.00e23 µ"
                                 return "1.00e25 µ"
                         },
-                        requirement(){
-                                return new Decimal(player.extremeMode ? 3e23 : 1e25)
-                        },
                         done(){
-                                return tmp.l.milestones[18].requirement.lte(player.mu.points)
+                                return player.mu.points.gte(player.extremeMode ? 3e23 : 1e25)
                         },
                         unlocked(){
                                 return true
@@ -11910,19 +11216,15 @@ addLayer("l", {
                                 if (player.extremeMode) return "7e24 µ"
                                 return "e1.00e1000 Points"
                         },
-                        requirement(){
-                                return new Decimal("ee1000")
-                        },
                         done(){
                                 if (player.extremeMode) return player.mu.points.gte(7e24)
-                                return tmp.l.milestones[19].requirement.lte(player.points)
+                                return player.points.gte("ee1000")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔP cost base is 8."
-                                return a
+                                return "Reward: N → ΔP cost base is 8."
                         },
                 }, // hasMilestone("l", 19)
                 20: {
@@ -11930,15 +11232,12 @@ addLayer("l", {
                                 if (player.extremeMode) return "7e25 µ"
                                 return "e3.20e306 Points"
                         },
-                        requirement(){
-                                return new Decimal("e3.2e306")
-                        },
                         done(){
                                 if (player.extremeMode) return player.mu.points.gte(7e25)
                                 if (player.l.challenges[11] > 35) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 35) return false
-                                return tmp.l.milestones[20].requirement.lte(player.points)
+                                return player.points.gte("e3.2e306")
                         },
                         unlocked(){
                                 return true
@@ -11955,14 +11254,11 @@ addLayer("l", {
                                 if (player.extremeMode) return "39 Dilation completions"
                                 return "e9.50e305 Points"
                         },
-                        requirement(){
-                                return new Decimal("e9.5e305")
-                        },
                         done(){
                                 if (player.l.challenges[11] > (player.extremeMode ? 38 : 39)) return true
                                 if (!inChallenge("l", 11)) return false
                                 if (player.l.challenges[11] < 39) return false
-                                return tmp.l.milestones[21].requirement.lte(player.points)
+                                return player.points.gte("e9.5e305")
                         },
                         unlocked(){
                                 return true
@@ -11997,9 +11293,6 @@ addLayer("l", {
                                 if (player.extremeMode) return "2.75e25 Lives"
                                 return "3.45e31 Lives"
                         },
-                        requirement(){
-                                return new Decimal(3.45e31)
-                        },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(2.75e25)
                                 return player.l.points.gte(3.45e31)
@@ -12008,98 +11301,89 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>."
-                                return a
+                                return "Reward: N → ΔN in Dilation is softcapped instead of hardcapped x → (log10(x)-2)<sup>12</sup>."
                         },
                 }, // hasMilestone("l", 23)
                 24: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.71e45 Lives"
                                 return "1.70e50 Lives"
                         },
-                        requirement(){
-                                return new Decimal(1.7e50)
-                        },
                         done(){
-                                return tmp.l.milestones[24].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(1.71e45)
+                                return player.l.points.gte(1.7e50)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .47."
-                                return a
+                                return "Reward: Token cost exponent is .47."
                         },
                 }, // hasMilestone("l", 24)
                 25: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.26e116 Lives"
                                 return "5.00e113 Lives"
                         },
-                        requirement(){
-                                return new Decimal(5e113)
-                        },
                         done(){
-                                return tmp.l.milestones[25].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(2.26e116)
+                                return player.l.points.gte(5e113)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln."
-                                return a
+                                if (player.extremeMode) return "Reward: 𝛾 → ∂α's log10 becomes ln."
+                                return "Reward: Token cost exponent is .46 and 𝛾 → ∂α's log10 becomes ln."
                         },
                 }, // hasMilestone("l", 25)
                 26: {
                         requirementDescription(){
+                                if (player.extremeMode) return "9.75e126 Lives"
                                 return "7.00e125 Lives"
                         },
-                        requirement(){
-                                return new Decimal(7e125)
-                        },
                         done(){
-                                return tmp.l.milestones[26].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(9.75e126)
+                                return player.l.points.gte(7e125)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Token cost exponent is .45 and 𝛾 → ∂α's ln becomes log2."
-                                return a
+                                if (player.extremeMode) return "Reward: 𝛾 → ∂α's ln becomes log2."
+                                return "Reward: Token cost exponent is .45 and 𝛾 → ∂α's ln becomes log2."
                         },
                 }, // hasMilestone("l", 26)
                 27: {
                         requirementDescription(){
+                                if (player.extremeMode) return "7.40e128 Lives"
                                 return "4.00e128 Lives"
                         },
-                        requirement(){
-                                return new Decimal(4e128)
-                        },
                         done(){
-                                return tmp.l.milestones[27].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(7.4e128)
+                                return player.l.points.gte(4e128)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP."
-                                return a
+                                return "Reward: α → ∂β log10 becomes log7 and you bulk 5x N → ΔP."
                         },
                 }, // hasMilestone("l", 27)
                 28: {
                         requirementDescription(){
+                                if (player.extremeMode) return "5.00e136 Lives"
                                 return "1.00e148 Lives"
                         },
-                        requirement(){
-                                return new Decimal(1e148)
-                        },
                         done(){
-                                return tmp.l.milestones[28].requirement.lte(player.l.points)
+                                if (player.extremeMode) return player.l.points.gte(5e136)
+                                return player.l.points.gte(1e148)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: α → ∂β log7 becomes log5."
-                                return a
+                                return "Reward: α → ∂β log7 becomes log5."
                         },
                 }, // hasMilestone("l", 28)
                 29: {
@@ -12116,8 +11400,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43."
-                                return a
+                                return "Reward: Add .2 to the base of base Life gain per β → ∂𝛾 and token cost exponent is .43."
                         },
                 }, // hasMilestone("l", 29)
                 30: {
@@ -12461,10 +11744,6 @@ addLayer("l", {
                                 return tmp.l.buyables[11].base.pow(player.l.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
@@ -12509,6 +11788,7 @@ addLayer("l", {
                                 let init = new Decimal(1e16)
                                 let base = new Decimal(5)
                                 if (player.extremeMode) base = new Decimal(2)
+                                if (hasUpgrade("l", 31)) init = decimalOne
                                 let id = 12
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -12523,6 +11803,7 @@ addLayer("l", {
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
                                 let init = 1e16
+                                if (hasUpgrade("l", 31)) init = 1
                                 let base = 5
                                 if (player.extremeMode) base = 2
                                 if (pts.lt(init)) return decimalZero
@@ -12577,10 +11858,6 @@ addLayer("l", {
                                 return tmp.l.buyables[12].base.pow(player.l.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[12].effect) + " to Life gain</b><br>"
@@ -12607,6 +11884,7 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e16*5^(x<sup>1+x/" + formatWhole(tmp.l.buyables[12].expDiv) + "</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("5", "2")
+                                if (hasUpgrade("l", 31)) cost2 = cost2.slice(5, )
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12684,10 +11962,6 @@ addLayer("l", {
                                 return tmp.l.buyables[13].base.times(player.l.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.l.buyables[13].effect, 4) + " to prior exp dividers and Life gain exp</b><br>"
@@ -12792,10 +12066,6 @@ addLayer("l", {
                                 return tmp.l.buyables[21].base.pow(player.l.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[21].effect) + " to Life gain</b><br>"
@@ -12840,7 +12110,7 @@ addLayer("l", {
                 22: {
                         title: "β → ∂β",
                         cost(){
-                                let init = new Decimal(3e34)
+                                let init = new Decimal(player.extremeMode ? 3e36 : 3e34)
                                 let base = new Decimal(30)
                                 let id = 22
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -12855,7 +12125,7 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 3e34
+                                let init = player.extremeMode ? 3e36 : 3e34
                                 let base = 30
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[22].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -12897,10 +12167,6 @@ addLayer("l", {
                                 return tmp.l.buyables[22].base.pow(player.l.buyables[22])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[22].effect) + " to Life gain</b><br>"
@@ -12920,6 +12186,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e34*30^(x<sup>1+x/" + formatWhole(tmp.l.buyables[22].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("3e34", "3e36")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -12936,7 +12203,7 @@ addLayer("l", {
                 23: {
                         title: "β → ∂𝛾",
                         cost(){
-                                let init = new Decimal(4e53)
+                                let init = new Decimal(player.extremeMode ? 1e55 : 4e53)
                                 let base = new Decimal(200)
                                 let id = 23
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -12951,7 +12218,7 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 4e53
+                                let init = player.extremeMode ? 1e55 : 4e53
                                 let base = 200
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[23].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -12996,10 +12263,6 @@ addLayer("l", {
                                 return tmp.l.buyables[23].base.times(player.l.buyables[23])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.l.buyables[23].effect, 4) + " to prior exp dividers</b><br>"
@@ -13018,6 +12281,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "4e53*200^(x<sup>1+x/" + formatWhole(tmp.l.buyables[23].expDiv) + "</sup>)" 
+                                if (player.extremeMode) cost2 = cost2.replace("4e53", "1e55")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -13034,8 +12298,8 @@ addLayer("l", {
                 31: {
                         title: "𝛾 → ∂α",
                         cost(){
-                                let init = new Decimal(7e84)
-                                let base = new Decimal(158)
+                                let init = new Decimal(player.extremeMode ? 2e80 : 7e84)
+                                let base = new Decimal(player.extremeMode ? 987 : 158)
                                 if (hasMilestone("cells", 34)) base = new Decimal(2)
                                 let id = 31
                                 let expDiv = tmp.l.buyables[id].expDiv
@@ -13050,8 +12314,8 @@ addLayer("l", {
                         getMaxAfford(){
                                 if (!hasMilestone("d", 19)) return
                                 let pts = player.l.points
-                                let init = 7e84
-                                let base = 158
+                                let init = player.extremeMode ? 2e80 : 7e84
+                                let base = player.extremeMode ? 987 : 158
                                 if (hasMilestone("cells", 34)) base = 2
                                 if (pts.lt(init)) return decimalZero
                                 if (hasChallenge("l", 101)) return pts.div(init).log(base).times(tmp.l.buyables[31].expDiv).root(tmp.l.buyables.getBuyableExponent).plus(1).floor()
@@ -13095,10 +12359,6 @@ addLayer("l", {
                                 return tmp.l.buyables[31].base.pow(player.l.buyables[31])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[31]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
@@ -13120,6 +12380,7 @@ addLayer("l", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e84*158^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)"
+                                if (player.extremeMode) cost2 = cost2.replace("7e84*158", "2e80*987")
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500") 
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -13198,10 +12459,6 @@ addLayer("l", {
                                 return tmp.l.buyables[32].base.pow(player.l.buyables[32])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[32]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.l.buyables[32].effect) + " to Life gain</b><br>"
@@ -13305,10 +12562,6 @@ addLayer("l", {
                                 return tmp.l.buyables[33].base.times(player.l.buyables[33])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.l.buyables[33].effect, 4) + " to prior exp dividers</b><br>"
@@ -13374,21 +12627,16 @@ addLayer("l", {
                 11: {
                         name: "Dilation",
                         challengeDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-                                
+                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
+
                                 let a = "All prior currencies are dilated<br>^" 
                                 let e = tmp.l.challenges[11].challengeEffect
                                 if (e.gt(.1)) a += format(e, 4)
                                 else a += formatSmall(e)
 
-                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
-
                                 return a
                         },
                         goalDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
                                 return "e1.80e308 Points"
                         },
                         challengeEffect(){
@@ -13396,6 +12644,12 @@ addLayer("l", {
                                 if (player.l.activeChallenge != 11 && player.l.activeChallenge != undefined) eff = 111
 
                                 if (player.extremeMode) { 
+                                        if (eff >= 98) eff -= (eff - 97)*.3
+                                        if (eff >= 92) eff -= .62
+                                        if (eff >= 91) eff += 5/6
+                                        if (hasUpgrade("l", 35)) eff -= eff * .02
+                                        if (eff >= 71) eff += eff/3 - 23
+                                        if (hasUpgrade("l", 33) && eff >= 61) eff -= (eff - 61)/4
                                         if (eff >= 60) eff += -1/3
                                         if (eff >= 50) eff += 1
                                         if (eff >= 47) eff += (eff - 46)/2
@@ -13422,7 +12676,7 @@ addLayer("l", {
 
                                 if (inChallenge("l", 12)) {
                                         let depth = tmp.l.challenges[12].getChallengeDepths[4] || 0
-                                        let v = Math.floor(35*Math.sqrt(depth)) //.035
+                                        let v = Math.floor(35*Math.sqrt(depth)) // .035
                                         init = init.sub(v/1000)
                                 }
                                 
@@ -13452,9 +12706,6 @@ addLayer("l", {
                         goal: () => Decimal.pow(10, Decimal.pow(2, 1024)),
                         canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
                         rewardDescription(){
-                                if (player.tab != "l") return ""
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Each tenth challenge unlocks a buyable and boost life gain"
                                 if (shiftDown) return a
                                 let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
@@ -13465,7 +12716,9 @@ addLayer("l", {
                         completionLimit: 110,
                         rewardEffect(){
                                 let comps = player.l.challenges[11]
-                                return Decimal.pow(comps + 1, 2)
+                                let exp = 2
+                                if (hasUpgrade("l", 32)) exp += Math.max(0, comps - 50) * .04
+                                return Decimal.pow(comps + 1, exp)
                         },
                         unlocked(){
                                 return hasMilestone("l", 8) || player.a.unlocked
@@ -13514,12 +12767,8 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let data = tmp.l.challenges[12]
-                                let a = "Dilation at 110 completions<br>"
-                                a += "Gets harder based on which challenge is selected from the Selection tab" + br
+                                let a = "Dilation at 110 completions<br>Gets harder based on which challenge is selected from the Selection tab"
                                 let b = "Goal: e1.80e308 Points" + br
 
                                 let data2 = player.l.grid[player.l.activeChallengeID]
@@ -13531,7 +12780,7 @@ addLayer("l", {
                                 }
 
                                 let d = "Rewards: Toggle below to see"
-                                return a + b + c + br + d
+                                return a + br + b + c + br + d
                         },
                         unlocked(){
                                 return player.l.challenges[11] >= 110 || player.a.unlocked
@@ -13586,9 +12835,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and all hydrogen content is disabled"
                                 let b = "Goal: e1e140,400 Points"
                                 let c = "Reward: Per anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
@@ -13625,9 +12871,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, all minigame content is disabled, and subtract .02 from the Dilation exponent"
                                 let b = "Goal: e1e145,100 Points"
                                 let c = "Reward: Per anti- challenge log10(DNA) multiplies DNA gain but disable minigame content"
@@ -13663,9 +12906,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, all carbon content is disabled, and subtract .04 from the Dilation exponent"
                                 let b = "Goal: e1e149,100 Points"
                                 let c = "Reward: Per anti- challenge<br> add 117 to 𝛾 → ∂𝛾's exponential divider but disable carbon content"
@@ -13700,9 +12940,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, all oxygen content is disabled, and subtract .06 from the Dilation exponent"
                                 let b = "Goal: e1e151,500 Points"
                                 let c = "Reward: Per anti- challenge<br> add .5 to DNA gain exponent but disable oxygen content"
@@ -13737,9 +12974,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, all nitrogen content is disabled<sup>*</sup>, and subtract .08 from the Dilation exponent"
                                 let b = "Goal: e1e204,700 Points"
                                 let c = "Reward: Per anti- challenge<br> add .2 to 𝛾 → ∂𝛾's base but disable nitrogen content<sup>*</sup>"
@@ -13774,9 +13008,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, and subtract .1 from the Dilation exponent"
                                 let b = "Goal: e1e256,300 Points"
                                 let c = "Reward: Per anti- challenge<br> add .01 to constant's base"
@@ -13798,9 +13029,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, nullify Life effect, and subtract .12 from the Dilation exponent"
                                 let b = "Goal: e1e267,300 Points"
                                 let c = "Reward: Remove a log2 from the Life gain formula and add .005 to C43's base but nullify Life effect"
@@ -13834,9 +13062,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, nullify Phosphorus effect, and subtract .14 from the Dilation exponent"
                                 let b = "Goal: e1e266,000 Points"
                                 let c = "Reward: Uncap C43 effect, and per anti- challenge you have one less token for prestige purposes, but nullify Phosphorus effect"
@@ -13871,9 +13096,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and subtract .16 from the Dilation exponent"
                                 let b = "Goal: e1e274,000 Points"
                                 let c = "Reward: N → Δµ base is 1 + anti- completions/10, but hardcap N → Δµ effect at ee20, and N → Δµ effects Protein gain up to ee20"
@@ -13895,9 +13117,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and subtract .18 from the Dilation exponent"
                                 let b = "Goal: e1e423,000 Points"
                                 let c = "Reward: Unlock the next set of challenges"
@@ -13937,9 +13156,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions, subtract .2 from the Dilation exponent, and nullify µ effect"
                                 let b = "Goal: e1e579,200 Points"
                                 let c = "Reward: Per anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
@@ -13966,9 +13182,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and subtract .22 from the Dilation exponent"
                                 let b = "Goal: e1e641,300 Points"
                                 let c = "Reward: β → ∂α's log2 is removed and Anti-Nitrogen effects β → ∂𝛾"
@@ -13989,9 +13202,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and subtract .24 from the Dilation exponent"
                                 let b = "Goal: e1e701,700 Points"
                                 let c = "Reward: For all Lives buyables the base of the exponent is 500"
@@ -14012,9 +13222,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Dilation at 110 completions and subtract .26 from the Dilation exponent"
                                 let b = "Goal: e1e1,989,000 Points"
                                 let c = "Reward: Add .0001 to tRNA base"
@@ -14049,9 +13256,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
                                 let c = "Reward: Per anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
@@ -14086,9 +13290,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
                                 let b = "Goal: e1e397,000 Points"
                                 let c = "Reward: Raise Constant base to anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
@@ -14111,9 +13312,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
                                 let b = "Goal: e1e396,600 Points"
                                 let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV, 𝛾 → ∂𝛾's primary base is 2468, and bulk 50x N → Δµ"
@@ -14147,9 +13345,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.4"
                                 let b = "Goal: e1e28,900,000 Points"
                                 let c = "Reward: Unlock a new feature in Cells! Bulk 50x N → Δµ"
@@ -14171,9 +13366,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^60"
                                 let b = "Goal: e1e2,544,000 Points"
                                 let c = "Reward: Anti-Hydrogen effects DNA and Anti-Minigame effects Cells each at most ^1.5, and Anti-Carbon effects Stem Cells over 15 Secondary completions"
@@ -14195,9 +13387,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Requires being in C88. Customizable, α → ∂𝛾 doesn't effect prior exponent dividers and raise dilation effect ^60"
                                 let b = "Goal: e1e9,949,000 Points"
                                 let c = "Reward: Anti-Inflammatory effects Visible, add .0003 to tRNA's base, and Secondary is 1e4x easier but α → ∂𝛾 doesn't effect prior exponent dividers"
@@ -14217,9 +13406,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Free!"
                                 let b = "Goal: 1 Point"
                                 let c = "Reward: Satisfaction!"
@@ -14239,9 +13425,6 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
-                                if (player.tab != "l") return 
-                                if (player.subtabs.l.mainTabs != "Challenges") return ""
-
                                 let a = "Free!"
                                 let b = "Goal: 1 Point"
                                 let c = "Reward: Bliss."
@@ -14330,9 +13513,6 @@ addLayer("l", {
                         return {"background-color": x[valId-1]}
                 },
                 getDisplay(data, id) {
-                        if (player.tab != "l") return ""
-                        if (player.subtabs.l.mainTabs != "Challenges") return ""
-                        
                         let x = player.l.challengesDisplayState
                         if (x == 0) {
                                 let a = "Gems: " + formatWhole(data.gems)
@@ -14426,12 +13606,7 @@ addLayer("l", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "l") return ""
-                                        if (player.subtabs.l.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.l.times) + " Life resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.l.times) + " Life resets"
                                 }],
                                 "milestones",
                                 ],
@@ -14463,9 +13638,6 @@ addLayer("l", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "l") return ""
-                                        if (player.subtabs.l.mainTabs != "Info") return ""
-
                                         let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)" + br2 
                                         let b = "Life resets reset everything before Life except achievements" + br2
                                         let c = "Life affects most prior currencies:" + br
@@ -14840,9 +14012,9 @@ addLayer("l", {
 })
 
 addLayer("a", {
-        name: "Amino", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "A", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Amino", 
+        symbol: "A", 
+        position: 0, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -14864,10 +14036,10 @@ addLayer("a", {
         }},
         color: "#F2990D",
         branches: [],
-        requires:() => Decimal.pow(2, 1880), // Can be a function that takes requirement increases into account
-        resource: "Amino Acids", // Name of prestige currency
-        baseResource: "Lives", // Name of resource prestige is based on
-        baseAmount(){return player.l.points}, // Get the current amount of baseResource
+        requires:() => Decimal.pow(2, 1880), 
+        resource: "Amino Acids", 
+        baseResource: "Lives", 
+        baseAmount(){return player.l.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.a.getBaseGain.times(tmp.a.getGainMult)
@@ -14941,7 +14113,6 @@ addLayer("a", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "a") return ""
                 let eff = tmp.a.effect
                 let start = " multiplying Life gain by " 
                 let end = "."
@@ -15134,17 +14305,12 @@ addLayer("a", {
                         }
                 }
         },
-        row: 3, // Row the layer is in on the tree (0 is the first row)
+        row: 3, 
         prestigeButtonText(){
-                if (player.tab != "a") return ""
-                if (player.subtabs.a.mainTabs != "Upgrades") return ""
-
-                let a = "Reset for <b>" + formatWhole(tmp.a.getResetGain) + "</b> Amino Acids"
-
                 let b = ""
                 if (tmp.a.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.a.getNextAt) + " Lives."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.a.getResetGain) + "</b> Amino Acids" + b
         },
         layerShown(){
                 if (tmp.a.deactivated) return false
@@ -15173,7 +14339,7 @@ addLayer("a", {
 
                         return base
                 },
-                getAllOtherGain(){
+                getAllOtherGain(){ // protein gain protaingain progain pgain pro gain
                         let ret = player.a.points.plus(10).log10()
 
                         if (player.hardMode)            ret = ret.div(5)
@@ -15220,12 +14386,12 @@ addLayer("a", {
                         return ret
                 },
                 mRNAtRNABoostExp(){
-                        //1/(1-(Math.log(2.205)/Math.log(5)+Math.log(3.204)/Math.log(10)))
+                        // 1/(1-(Math.log(2.205)/Math.log(5)+Math.log(3.204)/Math.log(10)))
                         let gain = tmp.a.protein.mRNAtRNAGainPer
                         if (gain.lt(1)) return gain.sub(1).pow(-1).times(-1)
                         return "well oops"
                 },
-                getResetGain(){ //protein gain protaingain progain pgain pro gain
+                getResetGain(){
                         let ret = tmp.a.protein.getAllOtherGain
 
                         ret = ret.times(tmp.a.buyables[11].effect)
@@ -15693,131 +14859,85 @@ addLayer("a", {
                         requirementDescription(){
                                 return "1 Amino Acid reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.a.milestones[1].requirement.lte(player.a.times)
+                                return player.a.times >= 1
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Square base Phosphorus gain, Phosphorus resets do nothing, token content is kept upon Life resets, triple Life reset gain, and per Amino Acid reset keep four life milestones and a gem from every challenge."
-                                let b = ""
-                                return a + b
+                                return "Reward: Square base Phosphorus gain, Phosphorus resets do nothing, token content is kept upon Life resets, triple Life reset gain, and per Amino Acid reset keep four life milestones and a gem from every challenge."
                         },
                 }, // hasMilestone("a", 1)
                 2: {
                         requirementDescription(){
                                 return "2 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.a.milestones[2].requirement.lte(player.a.times)
+                                return player.a.times >= 2
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep Phosphorus milestones upon Life reset and a µ milestone upon Life reset per Amino Acid reset."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep Phosphorus milestones upon Life reset and a µ milestone upon Life reset per Amino Acid reset."
                         },
                 }, // hasMilestone("a", 2)
                 3: {
                         requirementDescription(){
                                 return "3 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.a.milestones[3].requirement.lte(player.a.times)
+                                return player.a.times >= 3
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep Hydrogen, Carbon, Oxygen, minigame and token content upon Life reset and permanently henceforth. Gain 2021x Lives but nullify boosted Life gain. You gain two dilation completions at once<sup>*</sup>."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep Hydrogen, Carbon, Oxygen, minigame and token content upon Life reset and permanently henceforth. Gain 2021x Lives but nullify boosted Life gain. You gain two dilation completions at once<sup>*</sup>."
                         },
                 }, // hasMilestone("a", 3)
                 4: {
                         requirementDescription(){
                                 return "4 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.a.milestones[4].requirement.lte(player.a.times)
+                                return player.a.times >= 4
                         },
                         unlocked(){
                                 return true
                         },      
                         toggles:() => [["a", "autobuypmu45"]],
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy the last two rows of µ and Phosphorus upgrades, gain a C11 gem per second<sup>**</sup>, and each milestone adds .005 to the 𝛾 → ∂𝛾 base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy the last two rows of µ and Phosphorus upgrades, gain a C11 gem per second<sup>**</sup>, and each milestone adds .005 to the 𝛾 → ∂𝛾 base."
                         },
                 }, // hasMilestone("a", 4)
                 5: {
                         requirementDescription(){
                                 return "5 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.a.milestones[5].requirement.lte(player.a.times)
+                                return player.a.times >= 5
                         },
                         unlocked(){
                                 return true
                         },      
                         toggles:() => [["a", "autobuylbuys"]],
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C12 gem per second, subtract .01 from the µ cost exponent, autobuy Life buyables, and autobuy N → ΔN."
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C12 gem per second, subtract .01 from the µ cost exponent, autobuy Life buyables, and autobuy N → ΔN."
                         },
                 }, // hasMilestone("a", 5)
                 6: {
                         requirementDescription(){
                                 return "6 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(6)
-                        },
                         done(){
-                                return tmp.a.milestones[6].requirement.lte(player.a.times)
+                                return player.a.times >= 6
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Gain a C21 gem per second"
                                 if (player.extremeMode) return a + "."
                                 return a + ", and keep Nitrogen upgrades upon Life reset."
@@ -15827,274 +14947,176 @@ addLayer("a", {
                         requirementDescription(){
                                 return "7 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.a.milestones[7].requirement.lte(player.a.times)
+                                return player.a.times >= 7
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C22 gem per second, and subtract .01 from µ cost exponent. You gain five dilation completions at once<sup>*</sup>"
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C22 gem per second, and subtract .01 from µ cost exponent. You gain five dilation completions at once<sup>*</sup>"
                         },
                 }, // hasMilestone("a", 7)
                 8: {
                         requirementDescription(){
                                 return "8 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(8)
-                        },
                         done(){
-                                return tmp.a.milestones[8].requirement.lte(player.a.times)
+                                return player.a.times >= 8
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast"
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C13 gem per second and you buy Life buyables twice as fast"
                         },
                 }, // hasMilestone("a", 8)
                 9: {
                         requirementDescription(){
                                 return "10 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(10)
-                        },
                         done(){
-                                return tmp.a.milestones[9].requirement.lte(player.a.times)
+                                return player.a.times >= 10
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C23 gem per second and keep Dilation completions and Life resets"
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C23 gem per second and keep Dilation completions and Life resets"
                         },
                 }, // hasMilestone("a", 9)
                 10: {
                         requirementDescription(){
                                 return "12 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(12)
-                        },
                         done(){
-                                return tmp.a.milestones[10].requirement.lte(player.a.times)
+                                return player.a.times >= 12
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C31 gem per second and you buy Life buyables 2.5x as fast"
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C31 gem per second and you buy Life buyables 2.5x as fast"
                         },
                 }, // hasMilestone("a", 10)
                 11: {
                         requirementDescription(){
                                 return "15 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(15)
-                        },
                         done(){
-                                return tmp.a.milestones[11].requirement.lte(player.a.times)
+                                return player.a.times >= 15
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C32 gem per second and you buy Life buyables twice as fast"
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain a C32 gem per second and you buy Life buyables twice as fast"
                         },
                 }, // hasMilestone("a", 11)
                 12: {
                         requirementDescription(){
                                 return "18 Amino Acid resets"
                         },
-                        requirement(){
-                                return new Decimal(18)
-                        },
                         done(){
-                                return tmp.a.milestones[12].requirement.lte(player.a.times)
+                                return player.a.times >= 18
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C33 gem per second and keep up to 1,000 of each of the first 9 gems upon Amino Acid reset"
-                                return a
+                                return "Reward: Gain a C33 gem per second and keep up to 1,000 of each of the first 9 gems upon Amino Acid reset"
                         },
                 }, // hasMilestone("a", 12)
                 13: {
                         requirementDescription(){
                                 return "100 Amino Acids"
                         },
-                        requirement(){
-                                return new Decimal(100)
-                        },
                         done(){
-                                return tmp.a.milestones[13].requirement.lte(player.a.points)
+                                return player.a.points.gte(100)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock another set of Life challenges and β → ∂α's log3 becomes ln"
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock another set of Life challenges and β → ∂α's log3 becomes ln"
                         },
                 }, // hasMilestone("a", 13)
                 14: {
                         requirementDescription(){
                                 return "1.00e851 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e851")
-                        },
                         done(){
-                                return tmp.a.milestones[14].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e851")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: β → ∂α's ln becomes log2 and add .05 to α → ∂𝛾's base"
-                                let b = ""
-                                return a + b
+                                return "Reward: β → ∂α's ln becomes log2 and add .05 to α → ∂𝛾's base"
                         },
                 }, // hasMilestone("a", 14)
                 15: {
                         requirementDescription(){
                                 return "1.00e882 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e882")
-                        },
                         done(){
-                                return tmp.a.milestones[15].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e881")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: α → ∂α's log3s becomes lns and add .25 to β → ∂𝛾's base"
-                                let b = ""
-                                return a + b
+                                return "Reward: α → ∂α's log3s becomes lns and add .25 to β → ∂𝛾's base"
                         },
                 }, // hasMilestone("a", 15)
                 16: {
                         requirementDescription(){
                                 return "1.00e932 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e932")
-                        },
                         done(){
-                                return tmp.a.milestones[16].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e932")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: α → ∂α's lns becomes log2s and you buy Lives buyables twice as fast"
-                                let b = ""
-                                return a + b
+                                return "Reward: α → ∂α's lns becomes log2s and you buy Lives buyables twice as fast"
                         },
                 }, // hasMilestone("a", 16)
                 17: {
                         requirementDescription(){
                                 return "1.00e1006 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e1006")
-                        },
                         done(){
-                                return tmp.a.milestones[17].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e1006")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider"
-                                let b = ""
-                                return a + b
+                                return "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider"
                         },
                 }, // hasMilestone("a", 17)
                 18: {
                         requirementDescription(){
                                 return "1.00e1118 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e1118")
-                        },
                         done(){
-                                return tmp.a.milestones[18].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e1118")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each β → ∂𝛾 cubes point gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: Each β → ∂𝛾 cubes point gain"
                         },
                 }, // hasMilestone("a", 18)
                 19: {
                         requirementDescription(){
                                 return "1.00e1256 Lives"
                         },
-                        requirement(){
-                                return new Decimal("1e1256")
-                        },
                         done(){
-                                return tmp.a.milestones[19].requirement.lte(player.l.points)
+                                return player.l.points.gte("1e1256")
                         },
                         unlocked(){
                                 return true
@@ -16105,9 +15127,6 @@ addLayer("a", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate point gain ^1.05"
                                 let b = "<br>Currently: ^" + format(tmp.a.milestones[19].effect) 
                                 return a + b
@@ -16115,101 +15134,68 @@ addLayer("a", {
                 }, // hasMilestone("a", 19)
                 20: {
                         requirementDescription(){
+                                if (player.extremeMode) return "nothing so far"
                                 return "e1.00e2600 Points"
                         },
-                        requirement(){
-                                return new Decimal("ee2600")
-                        },
                         done(){
-                                return tmp.a.milestones[20].requirement.lte(player.points)
+                                if (player.extremeMode) return false
+                                return player.points.gte("ee2600")
                         },
                         unlocked(){
                                 return true
                         },     
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: 𝛾 → ∂𝛾 effects N → Δµ and add .002 to Constant's base per milestone"
-                                let b = "" 
-                                return a + b
+                                return "Reward: 𝛾 → ∂𝛾 effects N → Δµ and add .002 to Constant's base per milestone"
                         },
                 }, // hasMilestone("a", 20)
                 21: {
                         requirementDescription(){
                                 return "1.00e34 Proteins"
                         },
-                        requirement(){
-                                return new Decimal("1e34")
-                        },
                         done(){
-                                return tmp.a.milestones[21].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e34")
                         },
                         unlocked(){
                                 return true
                         },     
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain a C44 gem per second and Protein (up to 1e2000) multiplies Life gain"
-                                let b = "" 
-                                return a + b
+                                return "Reward: Gain a C44 gem per second and Protein (up to 1e2000) multiplies Life gain"
                         },
                 }, // hasMilestone("a", 21)
                 22: {
                         requirementDescription(){
                                 return "10 C25 Gems"
                         },
-                        requirement(){
-                                return new Decimal(10)
-                        },
                         done(){
-                                return tmp.a.milestones[22].requirement.lte(player.l.grid[205].gems)
+                                return player.l.grid[205].gems.gte(10)
                         },
                         unlocked(){
                                 return true
                         },     
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100"
-                                let b = "" 
-                                return a + b
+                                return "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100"
                         },
                 }, // hasMilestone("a", 22)
                 23: {
                         requirementDescription(){
                                 return "1e11,111 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e11111")
-                        },
                         done(){
-                                return tmp.a.milestones[23].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e11111")
                         },
                         unlocked(){
                                 return true
                         },     
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: You can bulk all tRNA and mRNA"
-                                let b = "" 
-                                return a + b
+                                return "Reward: You can bulk all tRNA and mRNA"
                         },
                 }, // hasMilestone("a", 23)
                 24: {
                         requirementDescription(){
                                 return "1e22,722 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e22722")
-                        },
                         done(){
-                                return tmp.a.milestones[24].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e22722")
                         },
                         unlocked(){
                                 return true
@@ -16219,562 +15205,357 @@ addLayer("a", {
                                 return l.div(50).plus(1).pow(l)
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each rRNA raises point gain ^1+rRNA/50"
-                                let b = "<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
-                                return a + b
+                                return "Reward: Each rRNA raises point gain ^1+rRNA/50<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
                         },
                 }, // hasMilestone("a", 24)
                 25: {
                         requirementDescription(){
                                 return "1e23,456 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e23456")
-                        },
                         done(){
-                                return tmp.a.milestones[25].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e23456")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to tRNA base"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to tRNA base"
                         },
                 }, // hasMilestone("a", 25)
                 26: {
                         requirementDescription(){
                                 return "1e31,313 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e31313")
-                        },
                         done(){
-                                return tmp.a.milestones[26].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e31313")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to mRNA base and unlock siRNA"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to mRNA base and unlock siRNA"
                         },
                 }, // hasMilestone("a", 26)
                 27: {
                         requirementDescription(){
                                 return "1e66,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e66000")
-                        },
                         done(){
-                                return tmp.a.milestones[27].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e66000")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to mRNA base and you can bulk 5x N → ΔP"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to mRNA base and you can bulk 5x N → ΔP"
                         },
                 }, // hasMilestone("a", 27)
                 28: {
                         requirementDescription(){
                                 return "1e76,543 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e76543")
-                        },
                         done(){
-                                return tmp.a.milestones[28].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e76543")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: rRNA levels multiply protein and Amino Acid gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: rRNA levels multiply protein and Amino Acid gain"
                         },
                 }, // hasMilestone("a", 28)
                 29: {
                         requirementDescription(){
                                 return "1e79,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e79000")
-                        },
                         done(){
-                                return tmp.a.milestones[29].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e79000")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to tRNA base and each siRNA multiplies Protein gain by 1+miRNA/100"
                         },
                 }, // hasMilestone("a", 29)
                 30: {
                         requirementDescription(){
                                 return "1e118,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e118e3")
-                        },
                         done(){
-                                return tmp.a.milestones[30].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e118e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to tRNA base and autobuy rRNA"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to tRNA base and autobuy rRNA"
                         },
                 }, // hasMilestone("a", 30)
                 31: {
                         requirementDescription(){
                                 return "1e160,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e160e3")
-                        },
                         done(){
-                                return tmp.a.milestones[31].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e160e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1"
-                                let b = ""
-                                return a + b
+                                return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1"
                         },
                 }, // hasMilestone("a", 31)
                 32: {
                         requirementDescription(){
                                 return "1e175,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e175e3")
-                        },
                         done(){
-                                return tmp.a.milestones[32].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e175e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: mRNA and tRNA production boost is additionally treated as you can buy them in 1ms<sup>*3</sup>"
-                                let b = ""
-                                return a + b
+                                return "Reward: mRNA and tRNA production boost is additionally treated as you can buy them in 1ms<sup>*3</sup>"
                         },
                 }, // hasMilestone("a", 32)
                 33: {
                         requirementDescription(){
                                 return "1e283,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e283e3")
-                        },
                         done(){
-                                return tmp.a.milestones[33].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e283e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each milestone doubles protein gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: Each milestone doubles protein gain"
                         },
                 }, // hasMilestone("a", 33)
                 34: {
                         requirementDescription(){
                                 return "1e325,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e325e3")
-                        },
                         done(){
-                                return tmp.a.milestones[34].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e325e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each milestone doubles protein gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: Each milestone doubles protein gain"
                         },
                 }, // hasMilestone("a", 34)
                 35: {
                         requirementDescription(){
                                 return "1e354,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e354e3")
-                        },
                         done(){
-                                return tmp.a.milestones[35].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e354e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .001 to mRNA base"
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .001 to mRNA base"
                         },
                 }, // hasMilestone("a", 35)
                 36: {
                         requirementDescription(){
                                 return "1e506,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e506e3")
-                        },
                         done(){
-                                return tmp.a.milestones[36].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e506e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: crRNA's log10 becomes ln"
-                                let b = ""
-                                return a + b
+                                return "Reward: crRNA's log10 becomes ln"
                         },
                 }, // hasMilestone("a", 36)
                 37: {
                         requirementDescription(){
                                 return "1e572,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e572e3")
-                        },
                         done(){
-                                return tmp.a.milestones[37].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e572e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: crRNA's ln becomes log2"
-                                let b = ""
-                                return a + b
+                                return "Reward: crRNA's ln becomes log2"
                         },
                 }, // hasMilestone("a", 37)
                 38: {
                         requirementDescription(){
                                 return "1e607,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e607e3")
-                        },
                         done(){
-                                return tmp.a.milestones[38].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e607e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy siRNA and each milestone doubles protein gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy siRNA and each milestone doubles protein gain"
                         },
                 }, // hasMilestone("a", 38)
                 39: {
                         requirementDescription(){
                                 return "1e645,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e645e3")
-                        },
                         done(){
-                                return tmp.a.milestones[39].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e645e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: 1ms becomes 50ms for production boosts"
-                                let b = ""
-                                return a + b
+                                return "Reward: 1ms becomes 50ms for production boosts"
                         },
                 }, // hasMilestone("a", 39)
                 40: {
                         requirementDescription(){
                                 return "1e664,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e664e3")
-                        },
                         done(){
-                                return tmp.a.milestones[40].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e664e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock ncRNA and double protein gain per milestone"
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock ncRNA and double protein gain per milestone"
                         },
                 }, // hasMilestone("a", 40)
                 41: {
                         requirementDescription(){
                                 return "1e875,700 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e875.7e3")
-                        },
                         done(){
-                                return tmp.a.milestones[41].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e875.7e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Double protein gain per milestone"
-                                let b = ""
-                                return a + b
+                                return "Reward: Double protein gain per milestone"
                         },
                 }, // hasMilestone("a", 41)
                 42: {
                         requirementDescription(){
                                 return "1e1,001,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e1001e3")
-                        },
                         done(){
-                                return tmp.a.milestones[42].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e1001e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock snRNA"
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock snRNA"
                         },
                 }, // hasMilestone("a", 42)
                 43: {
                         requirementDescription(){
                                 return "1e1,099,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e1099e3")
-                        },
                         done(){
-                                return tmp.a.milestones[43].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e1099e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each milestone doubles Protein gain"
-                                let b = ""
-                                return a + b
+                                return "Reward: Each milestone doubles Protein gain"
                         },
                 }, // hasMilestone("a", 43)
                 44: {
                         requirementDescription(){
                                 return "1e42 Amino Acid"
                         },
-                        requirement(){
-                                return new Decimal("1e42")
-                        },
                         done(){
-                                return tmp.a.milestones[44].requirement.lte(player.a.points)
+                                return player.a.points.gte(1e42)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each miRNA multiplies Amino Acid gain by 1.1"
-                                let b = ""
-                                return a + b
+                                return "Reward: Each miRNA multiplies Amino Acid gain by 1.1"
                         },
                 }, // hasMilestone("a", 44)
                 45: {
                         requirementDescription(){
                                 return "1e45 Amino Acid"
                         },
-                        requirement(){
-                                return new Decimal("1e45")
-                        },
                         done(){
-                                return tmp.a.milestones[45].requirement.lte(player.a.points)
+                                return player.a.points.gte(1e45)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "When in the chronicle of wasted time"
-                                let b = ""
-                                return a + b
+                                return "When in the chronicle of wasted time"
                         },
-                }, // hasMilestone("a", 45) https://www.tweetspeakpoetry.com/2015/06/25/top-ten-shakespeare-sonnets/
+                }, // hasMilestone("a", 45) source: https://www.tweetspeakpoetry.com/2015/06/25/top-ten-shakespeare-sonnets/
                 46: {
                         requirementDescription(){
                                 return "3e45 Amino Acid"
                         },
-                        requirement(){
-                                return new Decimal("3e45")
-                        },
                         done(){
-                                return tmp.a.milestones[46].requirement.lte(player.a.points)
+                                return player.a.points.gte(3e45)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "I see descriptions of the fairest wights,"
-                                let b = ""
-                                return a + b
+                                return "I see descriptions of the fairest wights,"
                         },
                 }, // hasMilestone("a", 46)
                 47: {
                         requirementDescription(){
                                 return "5e62 Amino Acid"
                         },
-                        requirement(){
-                                return new Decimal("5e62")
-                        },
                         done(){
-                                return tmp.a.milestones[47].requirement.lte(player.a.points)
+                                return player.a.points.gte(5e62)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "And beauty making beautiful old rhyme"
-                                let b = ""
-                                return a + b
+                                return "And beauty making beautiful old rhyme"
                         },
                 }, // hasMilestone("a", 47)
                 48: {
                         requirementDescription(){
                                 return "1e2,040,000 Protein"
                         },
-                        requirement(){
-                                return new Decimal("1e2040e3")
-                        },
                         done(){
-                                return tmp.a.milestones[48].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("1e2040e3")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "In praise of ladies dead, and lovely knights,"
-                                let b = ""
-                                return a + b
+                                return "In praise of ladies dead, and lovely knights,"
                         },
                 }, // hasMilestone("a", 48)
                 49: {
                         requirementDescription(){
                                 return "1e70 Amino Acid"
                         },
-                        requirement(){
-                                return new Decimal("1e70")
-                        },
                         done(){
-                                return tmp.a.milestones[49].requirement.lte(player.a.points)
+                                return player.a.points.gte(1e70)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Milestones") return ""
-                                
-                                let a = "Then, in the blazon of sweet beauty’s best,"
-                                let b = ""
-                                return a + b
+                                return "Then, in the blazon of sweet beauty’s best,"
                         },
                 }, // hasMilestone("a", 49)
         },
@@ -16861,10 +15642,6 @@ addLayer("a", {
                                 return tmp.a.buyables[11].base.pow(player.a.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[11].effect) + " to Protein gain</b><br>"
@@ -16946,10 +15723,6 @@ addLayer("a", {
                                 return tmp.a.buyables[12].base.pow(player.a.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[12].effect) + " to Protein gain</b><br>"
@@ -17024,10 +15797,6 @@ addLayer("a", {
                                 return tmp.a.buyables[13].base.pow(player.a.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
@@ -17119,10 +15888,6 @@ addLayer("a", {
                                 return tmp.a.buyables[21].base.pow(player.a.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
@@ -17196,10 +15961,6 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.a.buyables[22].effect) + " to Point gain</b><br>"
@@ -17270,10 +16031,6 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[23].effect) + " to Protein gain</b><br>"
@@ -17348,10 +16105,6 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[31]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[31].effect) + " to Protein gain</b><br>"
@@ -17421,10 +16174,6 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[32]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[32].effect) + " to Protein gain</b><br>"
@@ -17495,10 +16244,6 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "a") return ""
-                                if (player.subtabs.a.mainTabs != "Protein") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.a.buyables[33].effect) + " to Amino Acid gain</b><br>"
@@ -17556,12 +16301,7 @@ addLayer("a", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "a") return ""
-                                        if (player.subtabs.a.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.a.times) + " Amino Acid resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.a.times) + " Amino Acid resets"
                                 }],
                                 "milestones",
                                 ],
@@ -17577,7 +16317,7 @@ addLayer("a", {
                                         if (player.a.protein.points.lt(1e100)) { 
                                                 return "Current gain is " + format(tmp.a.protein.getResetGain) + " Protein per second"
                                         }
-                                        if (!hasMilestone("a", 32)) {// 175e3
+                                        if (!hasMilestone("a", 32)) { // 175e3
                                                 let init = tmp.a.protein.getAllOtherGain
                                                 let exp = tmp.a.protein.mRNAtRNABoostExp
                                                 let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
@@ -17644,8 +16384,7 @@ addLayer("a", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "a") return ""
-                                        if (player.subtabs.a.mainTabs != "Info") return ""
+                                        if (player.or.unlocked) return ""
 
                                         let a = "Initial Amino Acid gain: (cbrt(log2(Lives)-1368)-7)<sup>2</sup>"
                                         let b = "Amino resets (in order) all Life content, N → ΔN levels, "
@@ -17747,7 +16486,7 @@ addLayer("a", {
                                         if (hasMilestone("a", 29)) {
                                                 let base = getBuyableAmount("a", 13).div(100).plus(1)
                                                 let exp = getBuyableAmount("a", 22)
-                                                //let m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
+                                                // let m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
                                                 let m29mi 
                                                 if (getBuyableAmount("a", 13).lt(1e8)) {
                                                         m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
@@ -17907,9 +16646,9 @@ addLayer("a", {
 })
 
 addLayer("d", {
-        name: "DNA", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "D", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "DNA", 
+        symbol: "D", 
+        position: 3, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -17922,10 +16661,10 @@ addLayer("d", {
         }},
         color: "#8C3300",
         branches: [],
-        requires:() => new Decimal(4.4e169), // Can be a function that takes requirement increases into account
-        resource: "DNA", // Name of prestige currency
-        baseResource: "Amino Acid", // Name of resource prestige is based on
-        baseAmount(){return player.a.points}, // Get the current amount of baseResource
+        requires:() => new Decimal(4.4e169), 
+        resource: "DNA", 
+        baseResource: "Amino Acid", 
+        baseAmount(){return player.a.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.d.getBaseGain.times(tmp.d.getGainMult)
@@ -18031,7 +16770,6 @@ addLayer("d", {
                 return [ret1, amt.times(3).plus(1)]
         },
         effectDescription(){
-                if (player.tab != "d") return ""
                 let eff = tmp.d.effect
                 let start = " multiplying Life and Protein gain by " 
                 let end = "."
@@ -18066,17 +16804,12 @@ addLayer("d", {
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
         },
-        row: 3, // Row the layer is in on the tree (0 is the first row)
+        row: 3, 
         prestigeButtonText(){
-                if (player.tab != "d") return ""
-                if (player.subtabs.d.mainTabs != "Upgrades") return ""
-
-                let a = "Reset for <b>" + formatWhole(tmp.d.getResetGain) + "</b> DNA"
-
                 let b = ""
                 if (tmp.d.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.d.getNextAt) + " Amino Acid."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.d.getResetGain) + "</b> DNA" + b
         },
         layerShown(){
                 if (tmp.d.deactivated) return false
@@ -18286,583 +17019,372 @@ addLayer("d", {
                         requirementDescription(){
                                 return "1 DNA reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.d.milestones[1].requirement.lte(player.d.times)
+                                return player.d.times >= 1
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep Nitrogen, Phosphorus, and µ content on all prior resets, you gain 10 dilation completions at once, keep all prior automation, and gain 3x Amino Acid resets."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep Nitrogen, Phosphorus, and µ content on all prior resets, you gain 10 dilation completions at once, keep all prior automation, and gain 3x Amino Acid resets."
                         },
                 }, // hasMilestone("d", 1)
                 2: {
                         requirementDescription(){
                                 return "2 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.d.milestones[2].requirement.lte(player.d.times)
+                                return player.d.times >= 2
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per reset keep three Amino Acid milestones, keep Phosphorus upgrades, and mRNA and tRNA production boost is additionally treated as you can buy them in 1µs."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per reset keep three Amino Acid milestones, keep Phosphorus upgrades, and mRNA and tRNA production boost is additionally treated as you can buy them in 1µs."
                         },
                 }, // hasMilestone("d", 2)
                 3: {
                         requirementDescription(){
                                 return "3 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.d.milestones[3].requirement.lte(player.d.times)
+                                return player.d.times >= 3
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's log10 becomes log9, you gain 10 passive gems at once, and you infinitely bulk N → ΔP and N → ΔN."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's log10 becomes log9, you gain 10 passive gems at once, and you infinitely bulk N → ΔP and N → ΔN."
                         },
                 }, // hasMilestone("d", 3)
                 4: {
                         requirementDescription(){
                                 return "4 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.d.milestones[4].requirement.lte(player.d.times)
+                                return player.d.times >= 4
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA effects Life gain, gain C45 gems passively, and autobuy ncRNA."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA effects Life gain, gain C45 gems passively, and autobuy ncRNA."
                         },
                 }, // hasMilestone("d", 4)
                 5: {
                         requirementDescription(){
                                 return "5 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.d.milestones[5].requirement.lte(player.d.times)
+                                return player.d.times >= 5
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep Amino Acid resets, gain C35 gems passively, and gain an Amino Acid reset per second."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep Amino Acid resets, gain C35 gems passively, and gain an Amino Acid reset per second."
                         },
                 }, // hasMilestone("d", 5)
                 6: {
                         requirementDescription(){
                                 return "6 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(6)
-                        },
                         done(){
-                                return tmp.d.milestones[6].requirement.lte(player.d.times)
+                                return player.d.times >= 6
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy snRNA, miRNA's log9 becomes log8, and gain C25 gems passively."
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy snRNA, miRNA's log9 becomes log8, and gain C25 gems passively."
                         },
                 }, // hasMilestone("d", 6)
                 7: {
                         requirementDescription(){
                                 return "7 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(7)
-                        },
                         done(){
-                                return tmp.d.milestones[7].requirement.lte(player.d.times)
+                                return player.d.times >= 7
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep two Amino Acid upgrades per reset, miRNA's log8 becomes log7, and gain C15 gems passively."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep two Amino Acid upgrades per reset, miRNA's log8 becomes log7, and gain C15 gems passively."
                         },
                 }, // hasMilestone("d", 7)
                 8: {
                         requirementDescription(){
                                 return "8 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(8)
-                        },
                         done(){
-                                return tmp.d.milestones[8].requirement.lte(player.d.times)
+                                return player.d.times >= 8
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: You passively gain 100 gems instead of 10, passive gem gain is capped at 10,000, miRNA's log7 becomes log6, and gain C51 gems passively."
-                                let b = ""
-                                return a + b
+                                return "Reward: You passively gain 100 gems instead of 10, passive gem gain is capped at 10,000, miRNA's log7 becomes log6, and gain C51 gems passively."
                         },
                 }, // hasMilestone("d", 8)
                 9: {
                         requirementDescription(){
                                 return "9 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(9)
-                        },
                         done(){
-                                return tmp.d.milestones[9].requirement.lte(player.d.times)
+                                return player.d.times >= 9
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's log6 becomes log5, and gain C52 gems passively."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's log6 becomes log5, and gain C52 gems passively."
                         },
                 }, // hasMilestone("d", 9)
                 10: {
                         requirementDescription(){
                                 return "20 DNA resets"
                         },
-                        requirement(){
-                                return new Decimal(20)
-                        },
                         done(){
-                                return tmp.d.milestones[10].requirement.lte(player.d.times)
+                                return player.d.times >= 20
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's log5 becomes log4, gain C53 gems passively, and unlock a new set of challenges."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's log5 becomes log4, gain C53 gems passively, and unlock a new set of challenges."
                         },
                 }, // hasMilestone("d", 10)
                 11: {
                         requirementDescription(){
                                 return "100 DNA"
                         },
-                        requirement(){
-                                return new Decimal(100)
-                        },
                         done(){
-                                return tmp.d.milestones[11].requirement.lte(player.d.points)
+                                return player.d.points.gte(100)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's log4 becomes log3, gain C54 gems passively, and gain 10x gems."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's log4 becomes log3, gain C54 gems passively, and gain 10x gems."
                         },
                 }, // hasMilestone("d", 11)
                 12: {
                         requirementDescription(){
                                 return "2,000 DNA"
                         },
-                        requirement(){
-                                return new Decimal(2e3)
-                        },
                         done(){
-                                return tmp.d.milestones[12].requirement.lte(player.d.points)
+                                return player.d.points.gte(2e3)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's log3 becomes ln, gain C55 gems passively, keep gems, and autobuy miRNA."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's log3 becomes ln, gain C55 gems passively, keep gems, and autobuy miRNA."
                         },
                 }, // hasMilestone("d", 12)
                 13: {
                         requirementDescription(){
                                 return "10,000 C46 Gems"
                         },
-                        requirement(){
-                                return new Decimal(1e4)
-                        },
                         done(){
-                                return tmp.d.milestones[13].requirement.lte(player.l.grid[406].gems)
+                                return player.l.grid[406].gems.gte(1e4)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA's ln becomes log2 and unlock new Life Challenges whose completions never get removed."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA's ln becomes log2 and unlock new Life Challenges whose completions never get removed."
                         },
                 }, // hasMilestone("d", 13)
                 14: {
                         requirementDescription(){
                                 return "10,000 C64 Gems"
                         },
-                        requirement(){
-                                return new Decimal(1e4)
-                        },
                         done(){
-                                return tmp.d.milestones[14].requirement.lte(player.l.grid[604].gems)
+                                return player.l.grid[604].gems.gte(1e4)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: DNA multiplies protein gain, unlock anti-nitrogen, and per upgrade double DNA gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: DNA multiplies protein gain, unlock anti-nitrogen, and per upgrade double DNA gain."
                         },
                 }, // hasMilestone("d", 14)
                 15: {
                         requirementDescription(){
                                 return "18,100 N → Δµ"
                         },
-                        requirement(){
-                                return new Decimal(18100)
-                        },
                         done(){
-                                return tmp.d.milestones[15].requirement.lte(getBuyableAmount("mu", 31)) || hasMilestone("cells", 1)
+                                return getBuyableAmount("mu", 31).gte(18100) || hasMilestone("cells", 1)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Subtract .01 from the µ cost exponent and N → Δµ levels are rounded up to a multiple of 20 when bought but disable DNA VII for N → Δµ."
-                                let b = ""
-                                return a + b
+                                return "Reward: Subtract .01 from the µ cost exponent and N → Δµ levels are rounded up to a multiple of 20 when bought but disable DNA VII for N → Δµ."
                         },
                 }, // hasMilestone("d", 15)
                 16: {
                         requirementDescription(){
                                 return "8e48 DNA"
                         },
-                        requirement(){
-                                return new Decimal(8e48)
-                        },
                         done(){
-                                return tmp.d.milestones[16].requirement.lte(player.d.points)
+                                return player.d.points.gte(8e48)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Subtract .05 from the µ cost exponent while in Customizable and N → Δµ levels are rounded up to a multiple of 100 when bought."
-                                let b = ""
-                                return a + b
+                                return "Reward: Subtract .05 from the µ cost exponent while in Customizable and N → Δµ levels are rounded up to a multiple of 100 when bought."
                         },
                 }, // hasMilestone("d", 16)
                 17: {
                         requirementDescription(){
                                 return "1.3e49 DNA"
                         },
-                        requirement(){
-                                return new Decimal(1.3e49)
-                        },
                         done(){
-                                return tmp.d.milestones[17].requirement.lte(player.d.points)
+                                return player.d.points.gte(1.3e49)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: N → ΔN effect is no longer softcapped in dilation."
-                                let b = ""
-                                return a + b
+                                return "Reward: N → ΔN effect is no longer softcapped in dilation."
                         },
                 }, // hasMilestone("d", 17)
                 18: {
                         requirementDescription(){
                                 return "2.3e49 DNA"
                         },
-                        requirement(){
-                                return new Decimal(2.3e49)
-                        },
                         done(){
-                                return tmp.d.milestones[18].requirement.lte(player.d.points)
+                                return player.d.points.gte(2.3e49)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per milestone double DNA gain, per non-zero gem multiply Protein gain by DNA, and unlock a challenge."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per milestone double DNA gain, per non-zero gem multiply Protein gain by DNA, and unlock a challenge."
                         },
                 }, // hasMilestone("d", 18)
                 19: {
                         requirementDescription(){
                                 return "1e65 DNA"
                         },
-                        requirement(){
-                                return new Decimal(1e65)
-                        },
                         done(){
-                                return tmp.d.milestones[19].requirement.lte(player.d.points)
+                                return player.d.points.gte(1e65)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: You can bulk up to 20 Life buyables."
-                                let b = ""
-                                return a + b
+                                return "Reward: You can bulk up to 20 Life buyables."
                         },
                 }, // hasMilestone("d", 19)
                 20: {
                         requirementDescription(){
                                 return "e6e136 Phosphorus"
                         },
-                        requirement(){
-                                return new Decimal("e6e136")
-                        },
                         done(){
-                                return tmp.d.milestones[20].requirement.lte(player.p.points)
+                                return player.p.points.gte("e6e136")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per milestone + 1 square Phosphorus gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per milestone + 1 square Phosphorus gain."
                         },
                 }, // hasMilestone("d", 20)
                 21: {
                         requirementDescription(){
                                 return "3e100 DNA"
                         },
-                        requirement(){
-                                return new Decimal("3e100")
-                        },
                         done(){
-                                return tmp.d.milestones[21].requirement.lte(player.d.points)
+                                return player.d.points.gte(3e100)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base."
                         },
                 }, // hasMilestone("d", 21)
                 22: {
                         requirementDescription(){
                                 return "1.6e101 DNA"
                         },
-                        requirement(){
-                                return new Decimal("1.6e101")
-                        },
                         done(){
-                                return tmp.d.milestones[22].requirement.lte(player.d.points)
+                                return player.d.points.gte(1.6e101)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base and remove α → ∂β's log2."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base and remove α → ∂β's log2."
                         },
                 }, // hasMilestone("d", 22)
                 23: {
                         requirementDescription(){
                                 return "54,321 C77 Gems"
                         },
-                        requirement(){
-                                return new Decimal("54321")
-                        },
                         done(){
-                                return tmp.d.milestones[23].requirement.lte(player.l.grid[707].gems)
+                                return player.l.grid[707].gems.gte(54321)
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock the next set of challenges."
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock the next set of challenges."
                         },
                 }, // hasMilestone("d", 23)
                 24: {
                         requirementDescription(){
                                 return "e1e9 Protein"
                         },
-                        requirement(){
-                                return new Decimal("e1e9")
-                        },
                         done(){
-                                return tmp.d.milestones[24].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("e1e9")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Dilation effect from Customizable is raised ^.94."
-                                let b = ""
-                                return a + b
+                                return "Reward: Dilation effect from Customizable is raised ^.94."
                         },
                 }, // hasMilestone("d", 24)
                 25: {
                         requirementDescription(){
                                 return "e2e9 Protein"
                         },
-                        requirement(){
-                                return new Decimal("e2e9")
-                        },
                         done(){
-                                return tmp.d.milestones[25].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("e2e9")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0003 to tRNA's base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0003 to tRNA's base."
                         },
                 }, // hasMilestone("d", 25)
                 26: {
                         requirementDescription(){
                                 return "e3e9 Protein"
                         },
-                        requirement(){
-                                return new Decimal("e3e9")
-                        },
                         done(){
-                                return tmp.d.milestones[26].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("e3e9")
                         },
                         unlocked(){
                                 return true
                         },      
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0003 to tRNA's base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0003 to tRNA's base."
                         },
                 }, // hasMilestone("d", 26)
                 27: {
                         requirementDescription(){
                                 return "e4.8e9 Protein"
                         },
-                        requirement(){
-                                return new Decimal("e4.8e9")
-                        },
                         done(){
-                                return tmp.d.milestones[27].requirement.lte(player.a.protein.points)
+                                return player.a.protein.points.gte("e4.8e9")
                         },
                         unlocked(){
                                 return true
@@ -18871,34 +17393,21 @@ addLayer("d", {
                                 return Decimal.pow(2, getBuyableAmount("mu", 31).pow(1.41))
                         },
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per N → Δµ<sup>1.41</sup> square point gain."
-                                let b = br + "Currently: " + format(tmp.d.milestones[27].effect)
-                                return a + b
+                                return "Reward: Per N → Δµ<sup>1.41</sup> square point gain." + br + "Currently: " + format(tmp.d.milestones[27].effect)
                         },
                 }, // hasMilestone("d", 27)
                 28: {
                         requirementDescription(){
                                 return "4e153 DNA"
                         },
-                        requirement(){
-                                return new Decimal("4e153")
-                        },
                         done(){
-                                return tmp.d.milestones[28].requirement.lte(player.d.points)
+                                return player.d.points.gte("4e153")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "d") return ""
-                                if (player.subtabs.d.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: N → Δµ rounding is 20x more."
-                                let b = ""
-                                return a + b
+                                return "Reward: N → Δµ rounding is 20x more."
                         },
                 }, // hasMilestone("d", 28)
         },
@@ -18917,12 +17426,7 @@ addLayer("d", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "d") return ""
-                                        if (player.subtabs.d.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.d.times) + " DNA resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.d.times) + " DNA resets"
                                 }],
                                 "milestones",
                                 ],
@@ -18933,9 +17437,6 @@ addLayer("d", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "d") return ""
-                                        if (player.subtabs.d.mainTabs != "Info") return ""
-
                                         let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2-1.5)<sup>2</sup>"
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/4.4e144))/2" + char + format(tmp.d.getBaseGainAddition.abs())
@@ -19113,9 +17614,9 @@ addLayer("d", {
 })
 
 addLayer("cells", {
-        name: "Cells", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Cells", 
+        symbol: "C", 
+        position: 3, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -19159,10 +17660,10 @@ addLayer("cells", {
         }},
         color: "#99E21D",
         branches: [],
-        requires:() => new Decimal("1e1172"), // Can be a function that takes requirement increases into account
-        resource: "Cells", // Name of prestige currency
-        baseResource: "DNA", // Name of resource prestige is based on
-        baseAmount(){return player.d.points}, // Get the current amount of baseResource
+        requires:() => new Decimal("1e1172"),
+        resource: "Cells", 
+        baseResource: "DNA", 
+        baseAmount(){return player.d.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.cells.getBaseGain.times(tmp.cells.getGainMult)
@@ -19246,7 +17747,6 @@ addLayer("cells", {
                 return ret
         },
         effectDescription(){
-                if (player.tab != "cells") return ""
                 let eff = tmp.cells.effect
                 let start = " multiplying DNA, Life, and Protein gain and exponentiating Phosphorus gain by " 
                 let end = "."
@@ -19630,9 +18130,6 @@ addLayer("cells", {
                                 return amt.root(5).div(amt.root(5).plus(1))
                         },
                         display(){
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Kappa") return ""
-
                                 let a = "The bar value is currently " 
                                 let b = format(player.cells.kappa.currentBarValue) 
                                 if (player.cells.kappa.best.lt(1e100)) return a + b
@@ -19657,17 +18154,12 @@ addLayer("cells", {
                 if (player.cells.currentMinigame == undefined) return Infinity
                 return layers.cells.clickables[player.cells.currentMinigame].maxTimes()
         },
-        row: 1, // Row the layer is in on the tree (0 is the first row)
+        row: 1, 
         prestigeButtonText(){
-                if (player.tab != "cells") return ""
-                if (player.subtabs.cells.mainTabs != "Upgrades") return ""
-
-                let a = "Reset for <b>" + formatWhole(tmp.cells.getResetGain) + "</b> Cells"
-
                 let b = ""
                 if (tmp.cells.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.cells.getNextAt) + " DNA."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.cells.getResetGain) + "</b> Cells" + b
         },
         layerShown(){
                 if (tmp.cells.deactivated) return false
@@ -20595,11 +19087,8 @@ addLayer("cells", {
                         requirementDescription(){
                                 return "1 Cell reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.cells.milestones[1].requirement.lte(player.cells.times)
+                                return player.cells.times >= 1
                         },
                         unlocked(){
                                 return true
@@ -20608,23 +19097,15 @@ addLayer("cells", {
                                 player.cells.milestone1Ever = true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, permanently keep Dilation completions, and get DNA milestone 15."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, permanently keep Dilation completions, and get DNA milestone 15."
                         },
                 }, // hasMilestone("cells", 1)
                 2: {
                         requirementDescription(){
                                 return "2 Cell resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.cells.milestones[2].requirement.lte(player.cells.times)
+                                return player.cells.times >= 2
                         },
                         unlocked(){
                                 return true
@@ -20633,89 +19114,57 @@ addLayer("cells", {
                                 if (player.cells.milestone2Best == 0) player.cells.milestone2Best = 2
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per reset permanently keep another gem and keep Life reset times."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per reset permanently keep another gem and keep Life reset times."
                         },
                 }, // hasMilestone("cells", 2)
                 3: {
                         requirementDescription(){
                                 return "3 Cell resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.cells.milestones[3].requirement.lte(player.cells.times)
+                                return player.cells.times >= 3
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per reset keep a DNA reset and Anti-Upsilon's log10 becomes log7."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per reset keep a DNA reset and Anti-Upsilon's log10 becomes log7."
                         },
                 }, // hasMilestone("cells", 3)
                 4: {
                         requirementDescription(){
                                 return "5 Cell resets"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.cells.milestones[4].requirement.lte(player.cells.times)
+                                return player.cells.times >= 5
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: You can bulk 10x more N → Δµ and Anti-Upsilon's log7 becomes log5."
-                                let b = ""
-                                return a + b
+                                return "Reward: You can bulk 10x more N → Δµ and Anti-Upsilon's log7 becomes log5."
                         },
                 }, // hasMilestone("cells", 4)
                 5: {
                         requirementDescription(){
                                 return "8 Cell resets"
                         },
-                        requirement(){
-                                return new Decimal(8)
-                        },
                         done(){
-                                return tmp.cells.milestones[5].requirement.lte(player.cells.times)
+                                return player.cells.times >= 8
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
-                                let b = ""
-                                return a + b
+                                return "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
                         },
                 }, // hasMilestone("cells", 5)
                 6: {
                         requirementDescription(){
                                 return "13 Cells"
                         },
-                        requirement(){
-                                return new Decimal(13)
-                        },
                         done(){
-                                return tmp.cells.milestones[6].requirement.lte(player.cells.points)
+                                return player.cells.points.gte(13)
                         },
                         unlocked(){
                                 return true
@@ -20724,56 +19173,35 @@ addLayer("cells", {
                                 return new Decimal(Math.min(10, player.cells.milestones.length)).div(1e4)
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Per milestone (up to 10) add .0001 to tRNA's base."
-                                let b = br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
-                                return a + b
+                                return "Reward: Per milestone (up to 10) add .0001 to tRNA's base." + br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                         },
                 }, // hasMilestone("cells", 6)
                 7: {
                         requirementDescription(){
                                 return "21 Cells"
                         },
-                        requirement(){
-                                return new Decimal(21)
-                        },
                         done(){
-                                return tmp.cells.milestones[7].requirement.lte(player.cells.points)
+                                return player.cells.points.gte(21)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Anti-Upsilon's ln becomes log2 and Anti-Minigame's log10 becomes log2."
-                                let b = ""
-                                return a + b
+                                return "Reward: Anti-Upsilon's ln becomes log2 and Anti-Minigame's log10 becomes log2."
                         },
                 }, // hasMilestone("cells", 7)
                 8: {
                         requirementDescription(){
                                 return "100 Cells"
                         },
-                        requirement(){
-                                return new Decimal(100)
-                        },
                         done(){
-                                return tmp.cells.milestones[8].requirement.lte(player.cells.points)
+                                return player.cells.points.gte(100)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock another anti- challenge."
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock another anti- challenge."
                         },
                 }, // hasMilestone("cells", 8)
                 9: {
@@ -20781,27 +19209,20 @@ addLayer("cells", {
                                 if (player.hardMode) return "1,000 of every minigame amount"
                                 return "1,000 of any minigame amount"
                         },
-                        requirement(){
-                                return new Decimal(1000)
-                        },
                         done(){
+                                let x = new Decimal(1000)
                                 let a = 0
-                                if (tmp.cells.milestones[9].requirement.lte(player.cells.mu.best)) a += 1
-                                if (tmp.cells.milestones[9].requirement.lte(player.cells.kappa.best)) a += 1
-                                if (tmp.cells.milestones[9].requirement.lte(player.cells.lambda.best)) a += 1
-                                if (tmp.cells.milestones[9].requirement.lte(player.cells.iota.best)) a += 1
+                                if (x.lte(player.cells.mu.best)) a += 1
+                                if (x.lte(player.cells.kappa.best)) a += 1
+                                if (x.lte(player.cells.lambda.best)) a += 1
+                                if (x.lte(player.cells.iota.best)) a += 1
                                 return a >= (player.hardMode ? 4 : 1)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Gain 10% of your Cells on reset per second."
-                                let b = ""
-                                return a + b
+                                return "Reward: Gain 10% of your Cells on reset per second."
                         },
                 }, // hasMilestone("cells", 9)
                 10: {
@@ -20812,73 +19233,49 @@ addLayer("cells", {
                                 return new Decimal(1e100)
                         },
                         done(){
-                                return tmp.cells.milestones[10].requirement.lte(player.cells.kappa.points) 
+                                return player.cells.kappa.points.gte(1e100)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Total kappa multiplies DNA gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Total kappa multiplies DNA gain."
                         },
                 }, // hasMilestone("cells", 10)
                 11: {
                         requirementDescription(){
                                 return "1e140 Kappa"
                         },
-                        requirement(){
-                                return new Decimal(1e140)
-                        },
                         done(){
-                                return tmp.cells.milestones[11].requirement.lte(player.cells.kappa.points) 
+                                return player.cells.kappa.points.gte(1e140)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Each upgrade adds 1 to Cell effect exponent."
-                                let b = ""
-                                return a + b
+                                return "Reward: Each upgrade adds 1 to Cell effect exponent."
                         },
                 }, // hasMilestone("cells", 11)
                 12: {
                         requirementDescription(){
                                 return "1e28 Mu"
                         },
-                        requirement(){
-                                return new Decimal(1e28)
-                        },
                         done(){
-                                return tmp.cells.milestones[12].requirement.lte(player.cells.mu.points) 
+                                return player.cells.mu.points.gte(1e28)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Automatically bulk buy Sinusoidal, Sinusoidal is free, and the number of milestones multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Automatically bulk buy Sinusoidal, Sinusoidal is free, and the number of milestones multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 12)
                 13: {
                         requirementDescription(){
                                 return "1e96 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e96)
-                        },
                         done(){
-                                return tmp.cells.milestones[13].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e96)
                         },
                         unlocked(){
                                 return true
@@ -20892,34 +19289,21 @@ addLayer("cells", {
                                 player.mu.buyables[23] = decimalZero
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Sinusoidal effect is x^sqrt(milestones) but remove the first two rows of µ buyables."
-                                let b = ""
-                                return a + b
+                                return "Reward: Sinusoidal effect is x^sqrt(milestones) but remove the first two rows of µ buyables."
                         },
                 }, // hasMilestone("cells", 13)
                 14: {
                         requirementDescription(){
                                 return "1e109 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e109)
-                        },
                         done(){
-                                return tmp.cells.milestones[14].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e109)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock Stem Cell challenges and gain a free Cell reset per second and square base Cell gain but you can only have 100% of your cells upon reset and you can no longer Cell reset."
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock Stem Cell challenges and gain a free Cell reset per second and square base Cell gain but you can only have 100% of your cells upon reset and you can no longer Cell reset."
                         },
                 }, // hasMilestone("cells", 14)
                 15: {
@@ -20933,23 +19317,15 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: If you are not in a Cell challenge after 1 second you gain .01% of your best Stem Cells."
-                                let b = ""
-                                return a + b
+                                return "Reward: If you are not in a Cell challenge after 1 second you gain .01% of your best Stem Cells."
                         },
                 }, // hasMilestone("cells", 15)
                 16: {
                         requirementDescription(){
                                 return "5e122 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(5e122)
-                        },
                         done(){
-                                return tmp.cells.milestones[16].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(5e122)
                         },
                         unlocked(){
                                 return true
@@ -20959,9 +19335,6 @@ addLayer("cells", {
                                 return amt.div(100).plus(1).pow(amt)
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Per milestone multiply Stem Cell and Cell gain by 1 + milestones/100."
                                 let b = br + "Currently: " + format(tmp.cells.milestones[16].effect)
                                 return a + b
@@ -20971,363 +19344,232 @@ addLayer("cells", {
                         requirementDescription(){
                                 return "1e138 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e138)
-                        },
                         done(){
-                                return tmp.cells.milestones[17].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e138)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: The square root of the number of upgrades multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: The square root of the number of upgrades multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 17)
                 18: {
                         requirementDescription(){
                                 return "1e167 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e167)
-                        },
                         done(){
-                                return tmp.cells.milestones[18].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e167)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: The square root of the number of Omnipotent levels adds to rRNA base and DNA gain exponent."
-                                let b = ""
-                                return a + b
+                                return "Reward: The square root of the number of Omnipotent levels adds to rRNA base and DNA gain exponent."
                         },
                 }, // hasMilestone("cells", 18)
                 19: {
                         requirementDescription(){
                                 return "1e178 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e178)
-                        },
                         done(){
-                                return tmp.cells.milestones[19].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e178) 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: siRNA's base is Stem Cells and ncRNA's base is Cells."
-                                let b = ""
-                                return a + b
+                                return "Reward: siRNA's base is Stem Cells and ncRNA's base is Cells."
                         },
                 }, // hasMilestone("cells", 19)
                 20: {
                         requirementDescription(){
                                 return "1e180 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e180)
-                        },
                         done(){
-                                return tmp.cells.milestones[20].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e180)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Remove Omnipotent base cost and Cells gain exponent is 1/500."
-                                let b = ""
-                                return a + b
+                                return "Reward: Remove Omnipotent base cost and Cells gain exponent is 1/500."
                         },
                 }, // hasMilestone("cells", 20)
                 21: {
                         requirementDescription(){
                                 return "1e236 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal(1e236)
-                        },
                         done(){
-                                return tmp.cells.milestones[21].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte(1e236)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Unlock M<sub>C</sub>, Mu is always active, and permanently keep µ and Phosphorus content."
-                                let b = ""
-                                return a + b
+                                return "Reward: Unlock M<sub>C</sub>, Mu is always active, and permanently keep µ and Phosphorus content."
                         },
                 }, // hasMilestone("cells", 21)
                 22: {
                         requirementDescription(){
                                 return "3e72 Mu"
                         },
-                        requirement(){
-                                return new Decimal(3e72)
-                        },
                         done(){
-                                return tmp.cells.milestones[22].requirement.lte(player.cells.mu.points) 
+                                return player.cells.mu.points.gte(3e72)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Omnipotent levels + 1 multiply Mu and Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Omnipotent levels + 1 multiply Mu and Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 22)
                 23: {
                         requirementDescription(){
                                 return "1.80e308 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1.80e308")
-                        },
                         done(){
-                                return tmp.cells.milestones[23].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1.8e308") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: log10(Best Mu) multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: log10(Best Mu) multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 23)
                 24: {
                         requirementDescription(){
                                 return "1e355 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e355")
-                        },
                         done(){
-                                return tmp.cells.milestones[24].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e355")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Visible effects Stem Cell gain but its base is 1.11."
-                                let b = ""
-                                return a + b
+                                return "Reward: Visible effects Stem Cell gain but its base is 1.11."
                         },
                 }, // hasMilestone("cells", 24)
                 25: {
                         requirementDescription(){
                                 return "1e416 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e416")
-                        },
                         done(){
-                                return tmp.cells.milestones[25].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e416")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Infrared effects shRNA's base and per milestone you have one less token for prestige purposes."
-                                let b = ""
-                                return a + b
+                                return "Reward: Infrared effects shRNA's base and per milestone you have one less token for prestige purposes."
                         },
                 }, // hasMilestone("cells", 25)
                 26: {
                         requirementDescription(){
                                 return "1e430 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e430")
-                        },
                         done(){
-                                return tmp.cells.milestones[26].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e430")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Tokens multiply Stem Cell gain and per milestone add .002 to Visible base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Tokens multiply Stem Cell gain and per milestone add .002 to Visible base."
                         },
                 }, // hasMilestone("cells", 26)
                 27: {
                         requirementDescription(){
                                 return "1e495 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e495")
-                        },
                         done(){
-                                return tmp.cells.milestones[27].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e495")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Remove Totipotent base cost and bulk buy 20x Life buyables."
-                                let b = ""
-                                return a + b
+                                return "Reward: Remove Totipotent base cost and bulk buy 20x Life buyables."
                         },
                 }, // hasMilestone("cells", 27)
                 28: {
                         requirementDescription(){
                                 return "1e572 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e572")
-                        },
                         done(){
-                                return tmp.cells.milestones[28].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e572") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent cost base is 1e9 and bulk buy 20x Life buyables."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent cost base is 1e9 and bulk buy 20x Life buyables."
                         },
                 }, // hasMilestone("cells", 28)
                 29: {
                         requirementDescription(){
                                 return "1e781 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e781")
-                        },
                         done(){
-                                return tmp.cells.milestones[29].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e781")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: miRNA base is µ, Omnipotent is free, and once per tick buy Omnipotent."
-                                let b = ""
-                                return a + b
+                                return "Reward: miRNA base is µ, Omnipotent doesn't cost anything, and once per tick buy Omnipotent."
                         },
                 }, // hasMilestone("cells", 29)
                 30: {
                         requirementDescription(){
                                 return "1e899 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e899")
-                        },
                         done(){
-                                return tmp.cells.milestones[30].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e899")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Life buyable exponents are 2.3 and bulk buy 1000x but Constant base is 2 and nullify prior boosts to it."
-                                let b = ""
-                                return a + b
+                                return "Reward: Life buyable exponents are 2.3 and bulk buy 1000x but Constant base is 2 and nullify prior boosts to it."
                         },
                 }, // hasMilestone("cells", 30)
                 31: {
                         requirementDescription(){
                                 return "1e916 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e916")
-                        },
                         done(){
-                                return tmp.cells.milestones[31].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e916")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Logarithmic effects crRNA and DNA gain base is log10(Amino Acid)."
-                                let b = ""
-                                return a + b
+                                return "Reward: Logarithmic effects crRNA and DNA gain base is log10(Amino Acid)."
                         },
                 }, // hasMilestone("cells", 31)
                 32: {
                         requirementDescription(){
                                 return "1e1177 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1177")
-                        },
                         done(){
-                                return tmp.cells.milestones[32].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1177")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: log10(Lambda) multiplies Stem Cell gain and Lambda is always active."
-                                let b = ""
-                                return a + b
+                                return "Reward: log10(Lambda) multiplies Stem Cell gain and Lambda is always active."
                         },
                 }, // hasMilestone("cells", 32)
                 33: {
                         requirementDescription(){
                                 return "1e1249 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1249")
-                        },
                         done(){
-                                return tmp.cells.milestones[33].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1249")
                         },
                         unlocked(){
                                 return true
@@ -21336,9 +19578,6 @@ addLayer("cells", {
                                 return tmp.l.buyables[23].effect.max(10).log10().sub(7).max(1).log10().max(0)
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: log10(log10(β → ∂𝛾)-7) adds to Omnipotent base."
                                 let b = br + "Currently: " + format(tmp.cells.milestones[33].effect)
                                 return a + b
@@ -21348,286 +19587,182 @@ addLayer("cells", {
                         requirementDescription(){
                                 return "1e1483 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1483")
-                        },
                         done(){
-                                return tmp.cells.milestones[34].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1483")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: 𝛾 → ∂α, 𝛾 → ∂β, and 𝛾 → ∂𝛾 cost bases are 2."
-                                let b = ""
-                                return a + b
+                                return "Reward: 𝛾 → ∂α, 𝛾 → ∂β, and 𝛾 → ∂𝛾 cost bases are 2."
                         },
                 }, // hasMilestone("cells", 34)
                 35: {
                         requirementDescription(){
                                 return "1e1567 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1567")
-                        },
                         done(){
-                                return tmp.cells.milestones[35].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1567")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Omnipotent multiplies rRNA base instead of adding its square root and α → ∂β base is best Lambda."
-                                let b = ""
-                                return a + b
+                                return "Reward: Omnipotent multiplies rRNA base instead of adding its square root and α → ∂β base is best Lambda."
                         },
                 }, // hasMilestone("cells", 35)
                 36: {
                         requirementDescription(){
                                 return "1e1628 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1628")
-                        },
                         done(){
-                                return tmp.cells.milestones[36].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1628")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: β → ∂α base is 2^tokens and tetrational token costs scale 20x slower."
-                                let b = ""
-                                return a + b
+                                return "Reward: β → ∂α base is 2^tokens and tetrational token costs scale 20x slower."
                         },
                 }, // hasMilestone("cells", 36)
                 37: {
                         requirementDescription(){
                                 return "1e1710 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1710")
-                        },
                         done(){
-                                return tmp.cells.milestones[37].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1710")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Kappa is always active, tokens multiply 𝛾 → ∂𝛾's exponential divider, and you can bulk buy Omnipotent."
-                                let b = ""
-                                return a + b
+                                return "Reward: Kappa is always active, tokens multiply 𝛾 → ∂𝛾's exponential divider, and you can bulk buy Omnipotent."
                         },
                 }, // hasMilestone("cells", 37)
                 38: {
                         requirementDescription(){
                                 return "1e1789 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1789")
-                        },
                         done(){
-                                return tmp.cells.milestones[38].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1789")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Iota is always active and instead based on total time played and log10(DNA) multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Iota is always active and instead based on total time played and log10(DNA) multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 38)
                 39: {
                         requirementDescription(){
                                 return "1e1929 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e1929")
-                        },
                         done(){
-                                return tmp.cells.milestones[39].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e1929")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: 𝛾 → ∂β's base is Near-ultraviolet and log10(µ) multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: 𝛾 → ∂β's base is Near-ultraviolet and log10(µ) multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 39)
                 40: {
                         requirementDescription(){
                                 return "1e2064 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e2064")
-                        },
                         done(){
-                                return tmp.cells.milestones[40].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e2064")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Best cells^.02 multiplies Stem Cell gain and best Stem Cells^.01 multiplies Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Best cells^.02 multiplies Stem Cell gain and best Stem Cells^.01 multiplies Cell gain."
                         },
                 }, // hasMilestone("cells", 40)
                 41: {
                         requirementDescription(){
                                 return "1e2258 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e2258")
-                        },
                         done(){
-                                return tmp.cells.milestones[41].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e2258")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's log10 becomes log6 and Radio Wave levels multiply Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's log10 becomes log6 and Radio Wave levels multiply Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 41)
                 42: {
                         requirementDescription(){
                                 return "1e2687 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e2687")
-                        },
                         done(){
-                                return tmp.cells.milestones[42].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e2687")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's log6 becomes log4."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's log6 becomes log4."
                         },
                 }, // hasMilestone("cells", 42)
                 43: {
                         requirementDescription(){
                                 return "1e3156 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e3156")
-                        },
                         done(){
-                                return tmp.cells.milestones[43].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e3156") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's log4 becomes ln."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's log4 becomes ln."
                         },
                 }, // hasMilestone("cells", 43)
                 44: {
                         requirementDescription(){
                                 return "1e3906 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e3906")
-                        },
                         done(){
-                                return tmp.cells.milestones[44].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e3906") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's ln becomes log2."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's ln becomes log2."
                         },
                 }, // hasMilestone("cells", 44)
                 45: {
                         requirementDescription(){
                                 return "1e4966 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e4966")
-                        },
                         done(){
-                                return tmp.cells.milestones[45].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e4966")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's cost base is 5e8."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's cost base is 5e8."
                         },
                 }, // hasMilestone("cells", 45)
                 46: {
                         requirementDescription(){
                                 return "1e6141 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e6141")
-                        },
                         done(){
-                                return tmp.cells.milestones[46].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e6141")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's cost base is 3e8."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's cost base is 3e8."
                         },
                 }, // hasMilestone("cells", 46)
                 47: {
@@ -21641,133 +19776,85 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Totipotent's cost base is 1e8."
-                                let b = ""
-                                return a + b
+                                return "Reward: Totipotent's cost base is 1e8."
                         },
                 }, // hasMilestone("cells", 47)
                 48: {
                         requirementDescription(){
                                 return "1e11,611 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e11611")
-                        },
                         done(){
-                                return tmp.cells.milestones[48].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e11611")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy Squeeze, you can buy max Totipotent, Protein and Iota buyables are free, and constant base is doubled per milestone."
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy Squeeze, you can buy max Totipotent, Protein and Iota buyables are free, and constant base is doubled per milestone."
                         },
                 }, // hasMilestone("cells", 48)
                 49: {
                         requirementDescription(){
                                 return "1e11,666 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e11666")
-                        },
                         done(){
-                                return tmp.cells.milestones[49].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e11666")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Secondary base is (1+x)<sup>3</sup> as opposed to 1+x<sup>2</sup> but nullify µ III."
-                                let b = ""
-                                return a + b
+                                return "Reward: Secondary base is (1+x)<sup>3</sup> as opposed to 1+x<sup>2</sup> but nullify µ III."
                         },
                 }, // hasMilestone("cells", 49)
                 50: {
                         requirementDescription(){
                                 return "1e12,127 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e12127")
-                        },
                         done(){
-                                return tmp.cells.milestones[50].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e12127")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Double-exponential effects Omnipotent base and token cost formula is<br>max(0, x<sup>.4</sup>-1)."
-                                let b = ""
-                                return a + b
+                                return "Reward: Double-exponential effects Omnipotent base and token cost formula is<br>max(0, x<sup>.4</sup>-1)."
                         },
                 }, // hasMilestone("cells", 50)
                 51: {
                         requirementDescription(){
                                 return "1e15,500 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e15500")
-                        },
                         done(){
-                                return tmp.cells.milestones[51].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e15500")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Double-exponential formula is x/500 and token tetrational scaling is 3x slower."
-                                let b = ""
-                                return a + b
+                                return "Reward: Double-exponential formula is x/500 and token tetrational scaling is 3x slower."
                         },
                 }, // hasMilestone("cells", 51)
                 52: {
                         requirementDescription(){
                                 return "1e16,011 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e16011")
-                        },
                         done(){
-                                return tmp.cells.milestones[52].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e16011")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base and per Cell challenge completion add .015 to Visible base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base and per Cell challenge completion add .015 to Visible base."
                         },
                 }, // hasMilestone("cells", 52)
                 53: {
                         requirementDescription(){
                                 return "1e16,471 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e16471")
-                        },
                         done(){
-                                return tmp.cells.milestones[53].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e16471")
                         },
                         unlocked(){
                                 return true
@@ -21778,9 +19865,6 @@ addLayer("cells", {
                                 return player.a.protein.best.max(10).log10().max(10).log10().pow(m)
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Add .0001 to tRNA base and per milestones - 44<br>log10(log10(Protein)) multiplies Stem Cell gain."
                                 let b = br + "Currently: " + format(tmp.cells.milestones[53].effect)
                                 return a + b
@@ -21790,55 +19874,36 @@ addLayer("cells", {
                         requirementDescription(){
                                 return "1e16,895 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e16895")
-                        },
                         done(){
-                                return tmp.cells.milestones[54].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e16895")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base, token exponent is .39, per Secondary completion secondary's goal is 1000x less, rRNA base is log10(Lives) and 𝛾 → ∂α's base is Lambda."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base, token exponent is .39, per Secondary completion secondary's goal is 1000x less, rRNA base is log10(Lives) and 𝛾 → ∂α's base is Lambda."
                         },
                 }, // hasMilestone("cells", 54)
                 55: {
                         requirementDescription(){
                                 return "1e17,301 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e17301")
-                        },
                         done(){
-                                return tmp.cells.milestones[55].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e17301") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base, token exponent is .38, Life buyable exponents are 2.2, and per challenge completion Secondary's goal is 10x less."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base, token exponent is .38, Life buyable exponents are 2.2, and per challenge completion Secondary's goal is 10x less."
                         },
                 }, // hasMilestone("cells", 55)
                 56: {
                         requirementDescription(){
                                 return "1e18,131 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e18131")
-                        },
                         done(){
-                                return tmp.cells.milestones[56].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e18131")
                         },
                         unlocked(){
                                 return true
@@ -21849,9 +19914,6 @@ addLayer("cells", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Add .0001 to tRNA base, token exponent is .37, and per challenge per milestone dilate point gain ^1.001."
                                 let b = br + "Currently: ^" + format(tmp.cells.milestones[56].effect)
                                 return a + b
@@ -21861,132 +19923,84 @@ addLayer("cells", {
                         requirementDescription(){
                                 return "1e18,364 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e18364")
-                        },
                         done(){
-                                return tmp.cells.milestones[57].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e18364")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base, token exponent is .36, and bulk unlimited µ buyables."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base, token exponent is .36, and bulk unlimited µ buyables."
                         },
                 }, // hasMilestone("cells", 57)
                 58: {
                         requirementDescription(){
                                 return "1e19,289 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e19289")
-                        },
                         done(){
-                                return tmp.cells.milestones[58].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e19289")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Add .0001 to tRNA base, token exponent is .35, and unlock an anti- challenge."
-                                let b = ""
-                                return a + b
+                                return "Reward: Add .0001 to tRNA base, token exponent is .35, and unlock an anti- challenge."
                         },
                 }, // hasMilestone("cells", 58)
                 59: {
                         requirementDescription(){
                                 return "1e21,555 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e21555")
-                        },
                         done(){
-                                return tmp.cells.milestones[59].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e21555")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Buy max Life buyables, token exponent is .34, and the number of challenge completions squared multiplies Stem Cell gain."
-                                let b = ""
-                                return a + b
+                                return "Reward: Buy max Life buyables, token exponent is .34, and the number of challenge completions squared multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 59)
                 60: {
                         requirementDescription(){
                                 return "1e22,621 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e22621")
-                        },
                         done(){
-                                return tmp.cells.milestones[60].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e22621")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Double Primary base."
-                                let b = ""
-                                return a + b
+                                return "Reward: Double Primary base."
                         },
                 }, // hasMilestone("cells", 60)
                 61: {
                         requirementDescription(){
                                 return "1e22,984 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e22984")
-                        },
                         done(){
-                                return tmp.cells.milestones[61].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e22984") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Token exponent is .33 and primary base is 45."
-                                let b = ""
-                                return a + b
+                                return "Reward: Token exponent is .33 and primary base is 45."
                         },
                 }, // hasMilestone("cells", 61)
                 62: {
                         requirementDescription(){
                                 return "1e23,309 Stem Cells"
                         },
-                        requirement(){
-                                return new Decimal("1e23309")
-                        },
                         done(){
-                                return tmp.cells.milestones[62].requirement.lte(player.cells.stem_cells.points) 
+                                return player.cells.stem_cells.points.gte("1e23309")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Token exponent is .32 and primary base is 63."
-                                let b = ""
-                                return a + b
+                                return "Reward: Token exponent is .32 and primary base is 63."
                         },
                 }, // hasMilestone("cells", 62)
         },
@@ -22053,10 +20067,6 @@ addLayer("cells", {
                                 return ret
                         },
                         fullDisplay(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                if (player.subtabs.cells.stem_content != "Challenges") return ""
-
                                 let func = hasUpgrade("t", 83) ? format : formatWhole
                                 let a = "Subtract " + func(tmp.cells.challenges[11].challengeEffect) + " from Omnipotent base"
                                 let b = "Goal: " + format(tmp.cells.challenges[11].goal) + " Stem Cells"
@@ -22126,10 +20136,6 @@ addLayer("cells", {
                                 return new Decimal(.97).sub(player.cells.challenges[12]/100)
                         },
                         fullDisplay(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                if (player.subtabs.cells.stem_content != "Challenges") return ""
-
                                 let a = "Raise Stem Cell gain ^" + formatWhole(tmp.cells.challenges[12].challengeEffect)
                                 let b = "Goal: " + format(tmp.cells.challenges[12].goal) + " Stem Cells"
                                 let c = "Reward: Multiply Cell gain per Cell challenge completion"
@@ -22166,12 +20172,9 @@ addLayer("cells", {
                 21: {
                         name: "Tertiary",
                         goal(){
-                                let exp = new Decimal(167) // add 668
+                                let exp = new Decimal(167)
 
                                 let c = player.cells.challenges[21]
-
-                                // 6508 + 167 * 5**c 
-                                // need first = 6675 and 2nd = 7343
 
                                 exp = exp.times(Decimal.pow(5, c)).plus(6508)
 
@@ -22179,10 +20182,6 @@ addLayer("cells", {
                         },
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[21].goal),
                         fullDisplay(){
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                if (player.subtabs.cells.stem_content != "Challenges") return ""
-
                                 let a = "Disable the first" 
                                 if (player.cells.challenges[21] > 0) a += " " + formatWhole(player.cells.challenges[21]+1) 
                                 a += " Stem Cell buyable" + (player.cells.challenges[21] > 0 ? "s" : "")
@@ -22305,10 +20304,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[11].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
@@ -22365,7 +20360,7 @@ addLayer("cells", {
                         },
                         unlocked(){
                                 return hasUpgrade("cells", 214)
-                        },//
+                        },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[12].cost),
                         maxAfford(){
                                 let init = new Decimal(10)
@@ -22409,10 +20404,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[12].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[12].effect) + " to Stem Cell gain</b><br>"
@@ -22510,10 +20501,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[13].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
@@ -22603,10 +20590,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[21].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (player.tab != "cells") return ""
-                                if (player.subtabs.cells.mainTabs != "Stem") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[21].effect) + " to Stem Cell gain</b><br>"
@@ -22676,10 +20659,6 @@ addLayer("cells", {
                                 return init.plus(amt.div(20).sin().times(30))
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Mu") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
@@ -22749,10 +20728,6 @@ addLayer("cells", {
                                 return base.pow(amt.sub(amt.div(20).sin().times(10)))
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Mu") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[112].effect) + " to Mu gain</b><br>"
@@ -22823,10 +20798,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[411].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Iota") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[411]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[411].effect) + " to Iota gain</b><br>"
@@ -22896,10 +20867,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[412].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Iota") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[412]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[412].effect) + " to Iota gain</b><br>"
@@ -22969,10 +20936,6 @@ addLayer("cells", {
                                 return tmp.cells.buyables[413].base.pow(amt)
                         },
                         display(){
-                                // other than softcapping fully general 
-                                if (!["cells", "mc"].includes(player.tab)) return ""
-                                if (player.subtabs[player.tab].mainTabs != "Iota") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[413]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.cells.buyables[413].effect) + " to Iota gain</b><br>"
@@ -23049,12 +21012,7 @@ addLayer("cells", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "cells") return ""
-                                        if (player.subtabs.cells.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.cells.times) + " Cell resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.cells.times) + " Cell resets"
                                 }],
                                 "milestones",
                                 ],
@@ -23148,9 +21106,6 @@ addLayer("cells", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "cells") return ""
-                                        if (player.subtabs.cells.mainTabs != "Info") return ""
-
                                         let a1 = "Initial Cells gain: (DNA/1e582)^(1/1,960)"
                                         let a2 = "Current Cells gain: (DNA/1e582)^(1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
                                         a2 += ")"
@@ -23350,9 +21305,9 @@ addLayer("cells", {
 })
 
 addLayer("t", {
-        name: "Tissues", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "T", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 4, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Tissues", 
+        symbol: "T", 
+        position: 4, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -23366,10 +21321,10 @@ addLayer("t", {
         }},
         color: "#A82450",
         branches: [],
-        requires:() => new Decimal("1e1385"), // Can be a function that takes requirement increases into account
-        resource: "Tissues", // Name of prestige currency
-        baseResource: "Cells", // Name of resource prestige is based on
-        baseAmount(){return player.cells.points}, // Get the current amount of baseResource
+        requires:() => new Decimal("1e1385"), 
+        resource: "Tissues", 
+        baseResource: "Cells", 
+        baseAmount(){return player.cells.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.t.getBaseGain.times(tmp.t.getGainMult)
@@ -23491,7 +21446,6 @@ addLayer("t", {
                 return ret.max(1)
         },
         effectDescription(){
-                if (player.tab != "t") return ""
                 let eff = tmp.t.effect
                 let start = " multiplying all prior currency gain by " 
                 let end = "."
@@ -23525,19 +21479,14 @@ addLayer("t", {
                 if (hasUpgrade("t", 123) || forceAbContent)     layers.cells.buyables[13].buy()
                 if (hasUpgrade("t", 145) || forceAbContent)     layers.cells.buyables[21].buy()
         },
-        row: 2, // Row the layer is in on the tree (0 is the first row)
+        row: 2, 
         prestigeButtonText(){
-                if (player.tab != "t") return ""
-                if (!["Start", "Middle", "End"].includes(player.subtabs.t.mainTabs)) return ""
-
                 if (player.cells.challenges[12] < 25) return "You need to have 25 Secondary completions to reset"
-
-                let a = "Reset for <b>" + formatWhole(tmp.t.getResetGain) + "</b> Tissues"
 
                 let b = ""
                 if (tmp.t.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.t.getNextAt) + " Cells."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.t.getResetGain) + "</b> Tissues" + b
         },
         layerShown(){
                 if (tmp.t.deactivated) return false
@@ -25292,12 +23241,7 @@ addLayer("t", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "t") return ""
-                                        if (player.subtabs.t.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.t.times) + " Tissue resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.t.times) + " Tissue resets"
                                 }],
                                 "milestones",
                                 ],
@@ -25308,9 +23252,6 @@ addLayer("t", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "t") return ""
-                                        if (player.subtabs.t.mainTabs != "Info") return ""
-
                                         let a1 = "Initial Tissue gain: (Cells*1e615)^(1/2,000)-9"
                                         let a2 = "Current Tissue gain: (Cells*1e615)^(1/"
                                         a2 += formatWhole(tmp.t.getGainExp.pow(-1)) + ")-9"
@@ -25580,9 +23521,9 @@ addLayer("t", {
 })
 
 addLayer("or", {
-        name: "Organs", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "O", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 5, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Organs", 
+        symbol: "O", 
+        position: 5, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -25597,10 +23538,10 @@ addLayer("or", {
         }},
         color: "#F8C4F0",
         branches: [],
-        requires:() => new Decimal("1e100"), // Can be a function that takes requirement increases into account
-        resource: "Organs", // Name of prestige currency
-        baseResource: "Tissues", // Name of resource prestige is based on
-        baseAmount(){return player.t.points}, // Get the current amount of baseResource
+        requires:() => new Decimal("1e100"), 
+        resource: "Organs", 
+        baseResource: "Tissues", 
+        baseAmount(){return player.t.points}, 
         type: "custom",
         getResetGain(){
                 let ret = tmp.or.getBaseGain.times(tmp.or.getGainMult)
@@ -25650,7 +23591,6 @@ addLayer("or", {
                 return ret.max(1)
         },
         effectDescription(){
-                if (player.tab != "or") return ""
                 let eff = tmp.or.effect
                 let start = " multiplying all prior currency gain by " 
                 let end = "."
@@ -25745,17 +23685,12 @@ addLayer("or", {
                 if (!data.milestone2Ever) data.milestone2Ever = hasMilestone("or", 2)
                 if (!data.milestone3Ever) data.milestone3Ever = hasMilestone("or", 3)
         },
-        row: 2, // Row the layer is in on the tree (0 is the first row)
+        row: 2, 
         prestigeButtonText(){
-                if (player.tab != "or") return ""
-                if (!["Upgrades"].includes(player.subtabs.or.mainTabs)) return ""
-
-                let a = "Reset for <b>" + formatWhole(tmp.or.getResetGain) + "</b> Organs"
-
                 let b = ""
                 if (tmp.or.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.or.getNextAt) + " Tissues."
 
-                return a + b
+                return "Reset for <b>" + formatWhole(tmp.or.getResetGain) + "</b> Organs" + b
         },
         layerShown(){
                 if (tmp.or.deactivated) return false
@@ -25786,114 +23721,74 @@ addLayer("or", {
                         requirementDescription(){
                                 return "1 Organ reset"
                         },
-                        requirement(){
-                                return decimalOne
-                        },
                         done(){
-                                return tmp.or.milestones[1].requirement.lte(player.or.times)
+                                return player.or.times >= 1
                         },
                         unlocked(){
                                 return true
                         },  
                         toggles:() => [["or", "autobuya"]],
                         effectDescription(){
-                                if (player.tab != "or") return ""
-                                if (player.subtabs.or.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Keep all prior automation, µ resets nothing and automatically prestiges, and autobuy Amino Acid upgrades."
-                                let b = ""
-                                return a + b
+                                return "Reward: Keep all prior automation, µ resets nothing and automatically prestiges, and autobuy Amino Acid upgrades."
                         },
                 }, // hasMilestone("or", 1)
                 2: {
                         requirementDescription(){
                                 return "2 Organ resets"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return tmp.or.milestones[2].requirement.lte(player.or.times)
+                                return player.or.times >= 2
                         },
                         unlocked(){
                                 return true
                         },  
                         toggles:() => [["or", "autobuyd"]],
                         effectDescription(){
-                                if (player.tab != "or") return ""
-                                if (player.subtabs.or.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Bulk buy tokens, token tetrational base is 9.7, permanently bulk Omnipotent, and autobuy DNA upgrades."
-                                let b = ""
-                                return a + b
+                                return "Reward: Bulk buy tokens, token tetrational base is 9.7, permanently bulk Omnipotent, and autobuy DNA upgrades."
                         },
                 }, // hasMilestone("or", 2)
                 3: {
                         requirementDescription(){
                                 return "3 Organ resets"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return tmp.or.milestones[3].requirement.lte(player.or.times)
+                                return player.or.times >= 3
                         },
                         unlocked(){
                                 return true
                         },  
                         toggles:() => [["or", "autobuyc"]],
                         effectDescription(){
-                                if (player.tab != "or") return ""
-                                if (player.subtabs.or.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy Cell upgrades, per reset keep a Cell upgrade, and permanently bulk Totipotent."
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy Cell upgrades, per reset keep a Cell upgrade, and permanently bulk Totipotent."
                         },
                 }, // hasMilestone("or", 3)
                 4: {
                         requirementDescription(){
                                 return "4 Organ resets"
                         },
-                        requirement(){
-                                return new Decimal(4)
-                        },
                         done(){
-                                return tmp.or.milestones[4].requirement.lte(player.or.times)
+                                return player.or.times >= 4
                         },
                         unlocked(){
                                 return true
                         },  
                         toggles:() => [["or", "autobuyt"]],
                         effectDescription(){
-                                if (player.tab != "or") return ""
-                                if (player.subtabs.or.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Autobuy Tissue upgrades, per reset keep 2 Tissue upgrades, and all four minigames constantly run."
-                                let b = ""
-                                return a + b
+                                return "Reward: Autobuy Tissue upgrades, per reset keep 2 Tissue upgrades, and all four minigames constantly run."
                         },
                 }, // hasMilestone("or", 4)
                 5: {
                         requirementDescription(){
                                 return "5 Organ resets"
                         },
-                        requirement(){
-                                return new Decimal(5)
-                        },
                         done(){
-                                return tmp.or.milestones[5].requirement.lte(player.or.times)
+                                return player.or.times >= 5
                         },
                         unlocked(){
                                 return true
                         },  
                         effectDescription(){
-                                if (player.tab != "or") return ""
-                                if (player.subtabs.or.mainTabs != "Milestones") return ""
-                                
-                                let a = "Reward: Bulk 5x Primary, keep best Down Quark amount, and token tetrational base is 9.5."
-                                let b = ""
-                                return a + b
+                                return "Reward: Bulk 5x Primary, keep best Down Quark amount, and token tetrational base is 9.5."
                         },
                 }, // hasMilestone("or", 5)
         },
@@ -25912,12 +23807,7 @@ addLayer("or", {
                 "Milestones": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "or") return ""
-                                        if (player.subtabs.or.mainTabs != "Milestones") return ""
-
-                                        let a = "You have done " 
-                                        let b = formatWhole(player.or.times) + " Organ resets"
-                                        return a + b
+                                        return "You have done " + formatWhole(player.or.times) + " Organ resets"
                                 }],
                                 "milestones",
                                 ],
@@ -25928,9 +23818,6 @@ addLayer("or", {
                 "Info": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.tab != "or") return ""
-                                        if (player.subtabs.or.mainTabs != "Info") return ""
-
                                         let a1 = "Initial Organ gain: (log10(Tissue))^(0.50)-9"
                                         let a2 = "Current Organ gain: (log10(Tissue))^("
                                         a2 += formatWhole(tmp.or.getGainExp) + ")-9"
@@ -26256,9 +24143,9 @@ addLayer("or", {
 })
 
 addLayer("mc", {
-        name: "Micro", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "M<sub>C</sub>", // This appears on the layer's node. Default is the id with the first letter capitalized
-        position: 4, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+        name: "Micro", 
+        symbol: "M<sub>C</sub>", 
+        position: 4, 
         startData(){ return {
                 unlocked: true,
 		points: decimalZero,
@@ -26267,10 +24154,10 @@ addLayer("mc", {
         }},
         color: "#42006D",
         branches: [],
-        requires:() => decimalZero, // Can be a function that takes requirement increases into account
-        resource: "Micro", // Name of prestige currency
-        baseResource: "points", // Name of resource prestige is based on
-        baseAmount(){return player.points}, // Get the current amount of baseResource
+        requires:() => decimalZero, 
+        resource: "Micro", 
+        baseResource: "points", 
+        baseAmount(){return player.points}, 
         type: "custom",
         tooltip(){
                 return format(player.cells.stem_cells.points) + " Stem Cells"
@@ -26325,7 +24212,7 @@ addLayer("mc", {
                 if (player.cells.currentMinigame == undefined) return Infinity
                 return layers.cells.clickables[player.cells.currentMinigame].maxTimes()
         },
-        row: 1, // Row the layer is in on the tree (0 is the first row)
+        row: 1, 
         prestigeButtonText(){
                 return br
         },
@@ -26390,10 +24277,6 @@ addLayer("mc", {
                                 return tmp.mc.buyables[11].base.pow(player.mc.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mc") return ""
-                                if (player.subtabs.mc.mainTabs != "Micro") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mc.buyables[11].effect) + " to Micro gain</b><br>"
@@ -26448,10 +24331,6 @@ addLayer("mc", {
                                 return tmp.mc.buyables[12].base.pow(player.mc.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mc") return ""
-                                if (player.subtabs.mc.mainTabs != "Micro") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mc.buyables[12].effect) + " to Micro gain</b><br>"
@@ -26498,10 +24377,6 @@ addLayer("mc", {
                                 return player.mc.buyables[12].gt(2)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mc") return ""
-                                if (player.subtabs.mc.mainTabs != "Micro") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = formatWhole(player.mc.buyables[13]) + " to base Micro gain log's base</b><br>"
@@ -27078,8 +24953,6 @@ addLayer("ach", {
                 cols: 3,
                 11: {
                         title(){
-                                if (player.tab != "ach") return ""
-                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
                                 return "<h3 style='color: #0033FF'>Hide the top row</h3>"
                         },
                         display(){
@@ -27112,8 +24985,6 @@ addLayer("ach", {
                 },
                 12: {
                         title(){
-                                if (player.tab != "ach") return ""
-                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
                                 return "<h3 style='color: #0033FF'>Show a row</h3>"
                         },
                         display(){
@@ -27133,13 +25004,9 @@ addLayer("ach", {
                 },
                 13: {
                         title(){
-                                if (player.tab != "ach") return ""
-                                if (player.subtabs.ach.mainTabs != "Achievements") return ""
                                 return "<h3 style='color: #0033FF'>Click</h3>"
                         },
                         display(){
-                                if (player.tab != "ach") return ""
-
                                 return formatWhole(player.ach.clickedYeet) + (player.ach.clickedYeet == 69 ? " nice" : "")
                         },
                         unlocked(){
@@ -27289,17 +25156,17 @@ addLayer("mini", {
                                 let list1 = [31, 32, 33, 41, 42, 43, 51, 52, 53]
                                 if (allABContent || hasUpgrade("h", 52)) list1 = [11, 12, 13, 21, 23, 61, 62, 63].concat(list1)
                                 
-                                let max = decimalOne // a and b 
+                                let bulkAB = decimalOne // a and b 
                                 if (player.easyMode || allABContent) {
-                                        max = new Decimal(5e5)
+                                        bulkAB = new Decimal(5e5)
                                 } else {
-                                        if (hasMilestone("tokens", 3))          max = max.times(10)
-                                        if (hasMilestone("tokens", 13))         max = max.times(5)
-                                        if (hasMilestone("n", 1))               max = max.times(5)
-                                        if (hasMilestone("n", 2))               max = max.times(4)
-                                        if (hasUpgrade("o", 31))                max = max.times(10)
-                                        if (hasUpgrade("o", 32))                max = max.times(10)
-                                        if (hasUpgrade("mini", 85))             max = max.times(5)
+                                        if (hasMilestone("tokens", 3))          bulkAB = bulkAB.times(10)
+                                        if (hasMilestone("tokens", 13))         bulkAB = bulkAB.times(5)
+                                        if (hasMilestone("n", 1))               bulkAB = bulkAB.times(5)
+                                        if (hasMilestone("n", 2))               bulkAB = bulkAB.times(4)
+                                        if (hasUpgrade("o", 31))                bulkAB = bulkAB.times(10)
+                                        if (hasUpgrade("o", 32))                bulkAB = bulkAB.times(10)
+                                        if (hasUpgrade("mini", 85))             bulkAB = bulkAB.times(5)
                                 }
 
                                 let canBuyFirst = allABContent || tmp.tokens.layerShown
@@ -27314,142 +25181,141 @@ addLayer("mini", {
                                                 let maxaff = tmp.mini.buyables[id].maxAfford
                                                 let curr = player.mini.buyables[id]
 
-                                                let buy = max.sub(1).min(maxaff.sub(curr)).max(0) // how many we can buy
+                                                let buy = bulkAB.sub(1).min(maxaff.sub(curr)).max(0) // how many we can buy
                                                 player.mini.buyables[id] = player.mini.buyables[id].plus(buy)
-                                                //maxAfford
                                                 if (!(allABContent || hasUpgrade("h", 52))) break
                                         }
                                 }
 
-                                let list2 = [] // c
+                                let autobuyCList = []
                                 if (allABContent || hasUpgrade("mini", 22)) {
                                         if (tmp.mini.tabFormat.C.unlocked) {
-                                                list2 = [71,  72,  73,  81,  82, 
+                                                autobuyCList = [71,  72,  73,  81,  82, 
                                                          83,  91,  92,  93, 101,
                                                          102, 103, 111, 112, 113,]
                                         }
                                 }
 
-                                let bulk = decimalOne // c
+                                let bulkC = decimalOne
                                 if (player.easyMode || allABContent) {
-                                        bulk = new Decimal(1e10)
+                                        bulkC = new Decimal(1e10)
+                                        if (player.extremeMode) bulkC = bulkC.times(5)
                                 } else {
-                                        if (hasUpgrade("mini", 41))     bulk = bulk.times(5)
-                                        if (hasUpgrade("mini", 44))     bulk = bulk.times(2)
-                                        if (hasMilestone("n", 2))       bulk = bulk.times(5)
-                                        if (hasMilestone("n", 4))       bulk = bulk.times(4)
-                                        if (hasUpgrade("o", 31))        bulk = bulk.times(10)
-                                        if (hasUpgrade("o", 32))        bulk = bulk.times(10)
-                                        if (hasUpgrade("mini", 85))     bulk = bulk.times(5)
-                                        if (hasUpgrade("p", 32))        bulk = bulk.times(100)
-                                        if (hasUpgrade("mu", 14))       bulk = bulk.times(10)
-                                        if (hasUpgrade("mu", 34))       bulk = bulk.times(100)
+                                        if (hasUpgrade("mini", 41))     bulkC = bulkC.times(5)
+                                        if (hasUpgrade("mini", 44))     bulkC = bulkC.times(2)
+                                        if (hasMilestone("n", 2))       bulkC = bulkC.times(5)
+                                        if (hasMilestone("n", 4))       bulkC = bulkC.times(4)
+                                        if (hasUpgrade("o", 31))        bulkC = bulkC.times(10)
+                                        if (hasUpgrade("o", 32))        bulkC = bulkC.times(10)
+                                        if (hasUpgrade("mini", 85))     bulkC = bulkC.times(5)
+                                        if (hasUpgrade("p", 32))        bulkC = bulkC.times(100)
+                                        if (hasUpgrade("mu", 14))       bulkC = bulkC.times(10)
+                                        if (hasUpgrade("mu", 34))       bulkC = bulkC.times(100)
                                         if (hasMilestone("p", 1) && player.extremeMode) {
-                                                                        bulk = bulk.times(5)
+                                                                        bulkC = bulkC.times(5)
                                         }
                                 }
                                 
-                                bulk = bulk.sub(1)
+                                bulkC = bulkC.sub(1)
 
-                                for (i = 0; i < list2.length; i++){
-                                        let id = list2[i]
+                                for (i = 0; i < autobuyCList.length; i++){
+                                        let id = autobuyCList[i]
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!(allABContent || hasMilestone("n", 8)) && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
-                                                if (bulk.neq(0) && id != 71) { // cant bulk 71
+                                                if (bulkC.neq(0) && id != 71) { // cant bulk 71
                                                         let maxAfford = tmp.mini.buyables[id].maxAfford
                                                         let curr = getBuyableAmount("mini", id)
                                                         let add = maxAfford.sub(curr).max(0)
-                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulk)
+                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulkC)
                                                         player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                                 }
                                                 if (!(allABContent || hasUpgrade("tokens", 95))) break
                                         }
                                 }
 
-                                let list3 = [] // d buyables
+                                let autobuyDList = []
                                 if (allABContent || hasUpgrade("mini", 52)) {
-                                        list3 = [121, 122, 123, 131, 132,
-                                                 133,]
+                                        autobuyDList = [121, 122, 123, 131, 132, 133]
                                 }
 
                                 if (allABContent || hasUpgrade("mini", 53)) {
-                                        list3 = [151, 152, 153, 161, 162, 
-                                                 163, 171, 172, 173, 181,
-                                                 182, 183].concat(list3)
+                                        autobuyDList = [151, 152, 153, 161, 162, 
+                                                        163, 171, 172, 173, 181,
+                                                        182, 183].concat(autobuyDList)
                                 }
 
-                                let bulk2 = decimalOne // d
+                                let bulkD = decimalOne 
                                 let allDbulk = allABContent || player.easyMode
-                                if (allDbulk || hasUpgrade("mini", 63))     bulk2 = bulk2.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
-                                if (allDbulk || hasUpgrade("mini", 74))     bulk2 = bulk2.times(10)
-                                if (allDbulk || hasUpgrade("mini", 85))     bulk2 = bulk2.times(5)
-                                if (allDbulk || hasMilestone("p", 1))       bulk2 = bulk2.times(5)
-                                if (allDbulk || hasUpgrade("mu", 14))       bulk2 = bulk2.times(10)
-                                if (allDbulk || hasUpgrade("mu", 34))       bulk2 = bulk2.times(100)
+                                if (allDbulk || hasUpgrade("mini", 63))     bulkD = bulkD.times(Decimal.pow(1.3, tmp.mini.d_points.getUpgrades).max(0))
+                                if (allDbulk || hasUpgrade("mini", 74))     bulkD = bulkD.times(10)
+                                if (allDbulk || hasUpgrade("mini", 85))     bulkD = bulkD.times(5)
+                                if (allDbulk || hasMilestone("p", 1))       bulkD = bulkD.times(5)
+                                if (allDbulk || hasUpgrade("mu", 14))       bulkD = bulkD.times(10)
+                                if (allDbulk || hasUpgrade("mu", 34))       bulkD = bulkD.times(100)
                                 
-                                bulk2 = bulk2.sub(1).floor()
+                                bulkD = bulkD.sub(1).floor()
 
-                                for (i = 0; i < list3.length; i++){
-                                        let id = list3[i]
+                                for (i = 0; i < autobuyDList.length; i++){
+                                        let id = autobuyDList[i]
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!(allABContent || hasMilestone("p", 7)) && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
-                                                if (bulk2.neq(0)) {
+                                                if (bulkD.neq(0)) {
                                                         let maxAfford = tmp.mini.buyables[id].maxAfford
                                                         let curr = getBuyableAmount("mini", id)
                                                         let add = maxAfford.sub(curr).max(0)
-                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulk2)
+                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulkD)
                                                         player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                                 }
                                                 if (!(allABContent || hasUpgrade("mini", 61))) break
                                         }
                                 }
 
-                                let list4 = []
+                                let autobuyEList = []
                                 if (allABContent || hasUpgrade("n", 52)) {
-                                        list4 = [201, 202, 203, 211, 212, 
+                                        autobuyEList = [201, 202, 203, 211, 212, 
                                                  213, 221, 222, 223, 231, 
                                                  232, 233, 241]
                                 }
 
-                                let bulk3 = decimalOne // e
+                                let bulkE = decimalOne
                                 if (allABContent || player.easyMode) {
-                                        bulk3 = new Decimal(2e7)
+                                        bulkE = new Decimal(2e7)
                                 } else {
-                                        if (hasMilestone("n", 17))      bulk3 = bulk3.times(5)
-                                        if (hasUpgrade("sci", 364))     bulk3 = bulk3.times(2)
+                                        if (hasMilestone("n", 17))      bulkE = bulkE.times(5)
+                                        if (hasUpgrade("sci", 364))     bulkE = bulkE.times(2)
                                         if (hasUpgrade("o", 33)) {
-                                                if (hasUpgrade("o", 31))                bulk3 = bulk3.times(2)
-                                                if (hasUpgrade("o", 32))                bulk3 = bulk3.times(2)
-                                                                                        bulk3 = bulk3.times(2)
-                                                if (hasUpgrade("o", 34))                bulk3 = bulk3.times(2)
-                                                if (hasUpgrade("o", 35))                bulk3 = bulk3.times(2)
+                                                if (hasUpgrade("o", 31))                bulkE = bulkE.times(2)
+                                                if (hasUpgrade("o", 32))                bulkE = bulkE.times(2)
+                                                                                        bulkE = bulkE.times(2)
+                                                if (hasUpgrade("o", 34))                bulkE = bulkE.times(2)
+                                                if (hasUpgrade("o", 35))                bulkE = bulkE.times(2)
                                         }        
-                                        if (hasUpgrade("o", 35))        bulk3 = bulk3.times(5)
-                                        if (hasUpgrade("mini", 85))     bulk3 = bulk3.times(5)
-                                        if (hasMilestone("p", 2))       bulk3 = bulk3.times(5)
-                                        if (hasUpgrade("mu", 14))       bulk3 = bulk3.times(10)
-                                        if (hasUpgrade("mu", 34))       bulk3 = bulk3.times(100)
+                                        if (hasUpgrade("o", 35))        bulkE = bulkE.times(5)
+                                        if (hasUpgrade("mini", 85))     bulkE = bulkE.times(5)
+                                        if (hasMilestone("p", 2))       bulkE = bulkE.times(5)
+                                        if (hasUpgrade("mu", 14))       bulkE = bulkE.times(10)
+                                        if (hasUpgrade("mu", 34))       bulkE = bulkE.times(100)
                                 }
                                 
-                                bulk3 = bulk3.sub(1).floor()
+                                bulkE = bulkE.sub(1).floor()
 
-                                for (i = 0; i < list4.length; i++){
-                                        let id = list4[i]
+                                for (i = 0; i < autobuyEList.length; i++){
+                                        let id = autobuyEList[i]
                                         if (id == 201 && !(allABContent || hasMilestone("p", 8))) continue
                                         let canBuyFirst = hasMilestone("l", 2) || allABContent || (hasMilestone("p", 8) && id < 240)
                                         if (!tmp.mini.buyables[id].unlocked) continue
                                         if (!canBuyFirst && getBuyableAmount("mini", id).eq(0)) continue
                                         if (tmp.mini.buyables[id].canAfford) {
                                                 layers.mini.buyables[id].buy()
-                                                if (bulk3.neq(0) && id != 201) {
+                                                if (bulkE.neq(0) && id != 201) { // cant bulk 201
                                                         let maxAfford = tmp.mini.buyables[id].maxAfford
                                                         let curr = getBuyableAmount("mini", id)
                                                         let add = maxAfford.sub(curr).max(0)
-                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulk3)
+                                                        if (!(allABContent || hasUpgrade("mu", 35))) add = add.min(bulkE)
                                                         player.mini.buyables[id] = player.mini.buyables[id].plus(add)
                                                 }
                                                 if (!(allABContent || hasUpgrade("n", 54))) break
@@ -27754,7 +25620,7 @@ addLayer("mini", {
 
                         return ret 
                 },
-                getEffectiveFuel(){ //returns the value of fuel for pt gain
+                getEffectiveFuel(){ // returns the value of fuel for pt gain
                         let amt = player.mini.d_points.fuel.div(10)
 
                         if (amt.lt(1)) return amt
@@ -27803,7 +25669,7 @@ addLayer("mini", {
                         let eff = data.getEffectiveFuel
 
                         let lin  = data.getLin
-                        let quad = data.getQuad //quadratic
+                        let quad = data.getQuad // quadratic term
                         let exp1 = data.getExp1 // base of the exponential
 
                         let y = data.getEffectiveFuelAux
@@ -27905,7 +25771,7 @@ addLayer("mini", {
 
                         if (iter <= 5) return recurse(f, decimalZero, iter)
                         let init = recurse(f, decimalZero, 5)
-                        // assume only a and iterations matter
+                        // assume only a and iterations matter from now on
                         let rem = iter - 5
                         let levelsOfA = Decimal.pow(3, rem).sub(1).div(2)
                         let aComponent = a.pow(levelsOfA)
@@ -28003,10 +25869,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[11].base.pow(player.mini.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[11]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28072,10 +25934,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[12].base.pow(player.mini.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[12]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28136,10 +25994,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[13].base.pow(player.mini.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[13]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28212,10 +26066,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[21].base.times(player.mini.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[21]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -28281,10 +26131,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[23].base.times(player.mini.buyables[23])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[23]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
@@ -28352,10 +26198,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[61].base.pow(player.mini.buyables[61])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[61]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[61]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28422,10 +26264,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[62].base.pow(player.mini.buyables[62])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[62]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[62]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28495,10 +26333,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[63].base.pow(player.mini.buyables[63])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[63]) + "</b><br>"
                                 let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[63]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
@@ -28528,8 +26362,6 @@ addLayer("mini", {
                 },
                 22: {
                         display(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "A") return ""
                                 let a = "A Point production is the product of <br><b>(1+[amounts])</b><br> over all colors minus 1<br>Currently: "
                                 return a + format(tmp.mini.a_points.getResetGain) + "/sec"
                         }
@@ -28567,10 +26399,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[31].base.pow(player.mini.buyables[31])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[31]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
@@ -28630,10 +26458,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[32].base.pow(player.mini.buyables[32])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[32]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[32].effect) + " to B Points gain</b><br>"
@@ -28694,10 +26518,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[33].base.times(player.mini.buyables[33])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[33].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -28757,10 +26577,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[41].base.pow(player.mini.buyables[41])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[41]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[41].effect) + " to B Points gain</b><br>"
@@ -28820,10 +26636,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[42].base.pow(player.mini.buyables[42])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[42]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[42].effect) + " to B Points and Hydrogen gain</b><br>"
@@ -28883,10 +26695,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[43].base.times(player.mini.buyables[43])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[43]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[43].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -28946,10 +26754,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[51].base.pow(player.mini.buyables[51])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[51]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[51].effect) + " to A Point gain</b><br>"
@@ -29014,10 +26818,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[52].base.times(player.mini.buyables[52])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[52]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[52].effect) + " to Violet base</b><br>"
@@ -29079,10 +26879,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[53].base.times(player.mini.buyables[53])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "B") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[53]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -29137,14 +26933,8 @@ addLayer("mini", {
                                 return true
                         },
                         display(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[71]) + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29209,11 +26999,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[72].base.pow(player.mini.buyables[72])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[72]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[72].effect) + " to C Point</b><br>"
@@ -29278,11 +27063,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[73].base.pow(player.mini.buyables[73])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[73]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[73].effect) + " to C Point</b><br>"
@@ -29353,11 +27133,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[81].base.times(player.mini.buyables[81])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[81]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -29422,11 +27197,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[82].base.pow(player.mini.buyables[82])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[82]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[82].effect) + " to C Point gain</b><br>"
@@ -29494,11 +27264,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[83].base.pow(player.mini.buyables[83])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
@@ -29565,11 +27330,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[91].base.times(player.mini.buyables[91])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -29634,19 +27394,13 @@ addLayer("mini", {
                                 return tmp.mini.buyables[92].base.pow(player.mini.buyables[92])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[92].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 92)) + " C Points</b><br>"
                                 let eformula = "(log10(Life Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 92)) + "^x"
                                 if (hasMilestone("n", 14)) eformula = eformula.replace("log10", "ln")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29709,11 +27463,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[93].base.pow(player.mini.buyables[93])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[93].effect) + " to C Point gain</b><br>"
@@ -29722,8 +27471,7 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 93)) eformula = eformula.replace("log10", "ln") //only replaces the first one
                                 if (hasUpgrade("tokens", 94)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 44)) eformula = eformula.replace("ln", "log2")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29780,18 +27528,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[101].base.pow(player.mini.buyables[101])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[101]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[101].effect) + " to Carbon gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 101)) + " C Points</b><br>"
                                 let eformula = "(C Point gain 5 buyables)<sup>x</sup><br>" + format(getBuyableBase("mini", 101)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29851,11 +27593,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[102].base.pow(player.mini.buyables[102])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[102]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[102].effect) + " to C Point gain</b><br>"
@@ -29863,8 +27600,7 @@ addLayer("mini", {
                                 let eformula = "(log10(Carbon))<sup>x</sup><br>" + format(getBuyableBase("mini", 102)) + "^x"
                                 if (hasUpgrade("mini", 41)) eformula = eformula.replace("log10", "log2")
                                 if (hasChallenge("n", 22)) eformula = eformula.replace("(","(log10(Nitrogen)*")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29921,18 +27657,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[103].base.pow(player.mini.buyables[103])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[103]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[103].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 103)) + " C Points</b><br>"
                                 let eformula = "(Semi-exponential effect)<sup>x</sup><br>" + format(getBuyableBase("mini", 103)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -29990,11 +27720,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[111].base.times(player.mini.buyables[111])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[111].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -30059,19 +27784,13 @@ addLayer("mini", {
                                 return tmp.mini.buyables[112].base.pow(player.mini.buyables[112])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[112].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 112)) + " C Points</b><br>"
                                 let eformula = "(log10(Hydrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 112)) + "^x"
                                 if (hasChallenge("n", 12)) eformula = eformula.replace("log10", "ln")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30130,19 +27849,13 @@ addLayer("mini", {
                                 return tmp.mini.buyables[113].base.pow(player.mini.buyables[113])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                if (player.subtabs.mini.c_content != "Buyables") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[113]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[113].effect) + " to C Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 113)) + " C Points</b><br>"
                                 let eformula = "(log10(B Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 113)) + "^x"
                                 if (hasMilestone("n", 16)) eformula = eformula.replace("(l", "(x*l")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30207,21 +27920,13 @@ addLayer("mini", {
                                 return tmp.mini.buyables[121].base.times(player.mini.buyables[121])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[121]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[121].effect) + " to Linear speed coefficient</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 121)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 121)) + "*x"
-                                if (hasUpgrade("mini", 61)) {
-                                        eformula = "log8(x)<sup>2*upgrades</sup>*x<br>" + eformula
-                                }
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                if (hasUpgrade("mini", 61)) eformula = "log8(x)<sup>2*upgrades</sup>*x<br>" + eformula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30279,18 +27984,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[122].base.pow(player.mini.buyables[122])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[122]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[122].effect) + " to Maximum Fuel</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 122)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 122)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30348,18 +28047,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[123].base.pow(player.mini.buyables[123])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[123]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[123].effect) + " to Maximum Fuel</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 123)) + " D Points</b><br>"
                                 let eformula = "log10(log10(Points))^x<br>" + format(getBuyableBase("mini", 123)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30422,19 +28115,13 @@ addLayer("mini", {
                                 return tmp.mini.buyables[131].base.times(player.mini.buyables[131])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coefficient and Fuel Increase 1 base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 131)) + " D Points</b><br>"
                                 let eformula = "[upgrades]/100*x<br>" + format(getBuyableBase("mini", 131)) + "*x"
                                 if (hasUpgrade("mini", 62)) eformula = eformula.replace("]", "]^" + (player.extremeMode && !hasUpgrade("sci", 335) ? "2" : "3"))
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30495,18 +28182,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[132].base.times(player.mini.buyables[132])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[132]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[132].effect, 4) + " to exponential speed base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 132)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 132), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30565,18 +28246,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[133].base.times(player.mini.buyables[133])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Speed") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[133]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[133].effect, 4) + " to square rooting factor</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 133)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 133), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30634,18 +28309,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[151].base.pow(player.mini.buyables[151])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[151]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[151].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 151)) + " D Points</b><br>"
                                 let eformula = "(Linear Increase 1 buyables)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 151)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30704,18 +28373,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[152].base.pow(player.mini.buyables[152])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[152]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[152].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 152)) + " D Points</b><br>"
                                 let eformula = "(log10(Nitrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 152)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30772,18 +28435,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[153].base.pow(player.mini.buyables[153])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[153]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[153].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 153)) + " D Points</b><br>"
                                 let eformula = "(log10(Fuel))<sup>x</sup><br>" + format(getBuyableBase("mini", 153)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30842,18 +28499,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[161].base.pow(player.mini.buyables[161])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[161]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[161].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 161)) + " D Points</b><br>"
                                 let eformula = "(log10(D Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 161)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30913,18 +28564,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[162].base.pow(player.mini.buyables[162])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[162]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[162].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 162)) + " D Points</b><br>"
                                 let eformula = "(Upgrades)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 162)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -30983,18 +28628,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[163].base.pow(player.mini.buyables[163])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[163]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[163].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 163)) + " D Points</b><br>"
                                 let eformula = "(Quadratic Increase levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 163)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31053,18 +28692,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[171].base.pow(player.mini.buyables[171])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[171]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[171].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 171)) + " D Points</b><br>"
                                 let eformula = "(Gas Pedal levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 171)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31123,18 +28756,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[172].base.pow(player.mini.buyables[172])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[172]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[172].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 172)) + " D Points</b><br>"
                                 let eformula = "<bdi style='color:#CC0033'>D</bdi><sup>x</sup><br>" + format(getBuyableBase("mini", 172)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31197,18 +28824,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[173].base.pow(player.mini.buyables[173])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[173]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[173].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 173)) + " D Points</b><br>"
                                 let eformula = makeRed("y") + "<sup>x</sup><br>" + format(getBuyableBase("mini", 173)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31268,18 +28889,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[181].base.pow(player.mini.buyables[181])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[181]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[181].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 181)) + " D Points</b><br>"
                                 let eformula = "log10(C Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 181)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31338,18 +28953,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[182].base.pow(player.mini.buyables[182])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[182]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[182].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 182)) + " D Points</b><br>"
                                 let eformula = "log10(E Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 182)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31401,18 +29010,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[183].base.pow(player.mini.buyables[183])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[183]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[183].effect) + " to D Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 183)) + " D Points</b><br>"
                                 let eformula = "Phosphorus<sup>x</sup><br>" + format(getBuyableBase("mini", 183)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31454,10 +29057,6 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 201)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " iterations</b><br>"
@@ -31520,18 +29119,13 @@ addLayer("mini", {
                                 return ret                                                                                                                  
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[202]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 202)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 202)) + "*x"
                                 if (hasUpgrade("c", 35)) eformula = eformula.replace("*x", "*ln(x)*x")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31592,17 +29186,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[203].base.times(player.mini.buyables[203])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[203]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[203].effect) + " to " + makeBlue("c") + "</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 203)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 203)) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31674,10 +29263,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[211].base.times(player.mini.buyables[211])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[211]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
@@ -31686,8 +29271,7 @@ addLayer("mini", {
                                 eformula += format(getBuyableBase("mini", 211)) + "*x" 
                                 if (hasUpgrade("n", 43)) eformula = eformula.replace("*x", "*ln(x)*x")
                                 if (hasUpgrade("c", 34)) eformula = eformula.replace(")", ")<sup>2</sup>")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31748,17 +29332,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[212].base.times(player.mini.buyables[212])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[212]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[212].effect, 4) + " to Linear base per Quadratic</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 212)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 212), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31822,10 +29401,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[213].base.pow(player.mini.buyables[213])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[213]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[213].effect) + " to E Point gain</b><br>"
@@ -31836,8 +29411,7 @@ addLayer("mini", {
                                         if (init == "2.0") init = "2"
                                         eformula = eformula.replace("ln", "log" + init)
                                 }
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31900,17 +29474,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[221].base.times(player.mini.buyables[221])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[221]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[221].effect, 4) + " to Constant base per Constant</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 221)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 221), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -31967,17 +29536,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[222].base.times(player.mini.buyables[222])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[222]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[222].effect, 4) + " to respecting scalar and Quadratic base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 222)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 222), 4) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32042,10 +29606,6 @@ addLayer("mini", {
                                 return tmp.mini.buyables[223].base.pow(player.mini.buyables[223])                                                                                                                     
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[223]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[223].effect) + " to E Point gain</b><br>"
@@ -32055,8 +29615,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 83)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("p", 15)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("p", 25)) eformula = eformula.replace("ln", "log2")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32125,10 +29684,6 @@ addLayer("mini", {
                                 return data.base.times(player.mini.buyables[231].pow(data.levelExp)).plus(1)                                                                                                               
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[231]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[231].effect) + " to " + makeBlue("c") + "</b><br>"
@@ -32136,8 +29691,7 @@ addLayer("mini", {
                                 let eformula = format(getBuyableBase("mini", 231)) + "*x+1"
                                 let lvle = tmp.mini.buyables[231].levelExp
                                 if (lvle.neq(1)) eformula = eformula.replace("*x", "*x<sup>" + formatWhole(lvle) + "</sup>")
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32199,17 +29753,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[232].base.times(player.mini.buyables[232])                                                                                                            
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[232]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.mini.buyables[232].effect) + " to " + makeRed("E") + " and addition is associative base</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 232)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 232)) + "*x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+                                
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32268,17 +29817,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[233].base.pow(player.mini.buyables[233])                                                                                                            
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[233]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[233].effect) + " to E Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 233)) + " E Points</b><br>"
                                 let eformula = makeRed("E") + "^x<br>" + format(getBuyableBase("mini", 233)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32335,17 +29879,12 @@ addLayer("mini", {
                                 return tmp.mini.buyables[241].base.pow(player.mini.buyables[241])                                                                                                            
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "E") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[241]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.mini.buyables[241].effect) + " to E Point gain</b><br>"
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 241)) + " E Points</b><br>"
                                 let eformula = "log10(Phosphorus)^x<br>" + format(getBuyableBase("mini", 241)) + "^x"
-                                //if its undefined set it to that
-                                //otherwise use normal formula
+
                                 let ef1 = "<b><h2>Effect formula</h2>:<br>"
                                 let ef2 = "</b><br>"
                                 let allEff = ef1 + eformula + ef2
@@ -32371,15 +29910,10 @@ addLayer("mini", {
                 rows: 5,
                 cols: 5,
                 unlockedSlots(){
-                        let a = 4
-                        a += getBuyableAmount("mini", 71).toNumber()
-                        if (false) a++ // or something
-                        return a
+                        return 4 + getBuyableAmount("mini", 71).toNumber()
                 },
                 11: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 1</h3>"
                         },
                         display(){
@@ -32405,8 +29939,6 @@ addLayer("mini", {
                 },
                 12: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 2</h3>"
                         },
                         display(){
@@ -32432,8 +29964,6 @@ addLayer("mini", {
                 },
                 13: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 3</h3>"
                         },
                         display(){
@@ -32459,8 +29989,6 @@ addLayer("mini", {
                 },
                 14: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 4</h3>"
                         },
                         display(){
@@ -32486,8 +30014,6 @@ addLayer("mini", {
                 },
                 15: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 5</h3>"
                         },
                         display(){
@@ -32513,8 +30039,6 @@ addLayer("mini", {
                 },
                 21: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 6</h3>"
                         },
                         display(){
@@ -32540,8 +30064,6 @@ addLayer("mini", {
                 },
                 22: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 7</h3>"
                         },
                         display(){
@@ -32567,8 +30089,6 @@ addLayer("mini", {
                 },
                 23: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 8</h3>"
                         },
                         display(){
@@ -32594,8 +30114,6 @@ addLayer("mini", {
                 },
                 24: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 9</h3>"
                         },
                         display(){
@@ -32621,8 +30139,6 @@ addLayer("mini", {
                 },
                 25: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 10</h3>"
                         },
                         display(){
@@ -32648,8 +30164,6 @@ addLayer("mini", {
                 },
                 31: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 11</h3>"
                         },
                         display(){
@@ -32675,8 +30189,6 @@ addLayer("mini", {
                 },
                 32: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 12</h3>"
                         },
                         display(){
@@ -32702,8 +30214,6 @@ addLayer("mini", {
                 },
                 33: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 13</h3>"
                         },
                         display(){
@@ -32729,8 +30239,6 @@ addLayer("mini", {
                 },
                 34: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 14</h3>"
                         },
                         display(){
@@ -32756,8 +30264,6 @@ addLayer("mini", {
                 },
                 35: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>SLOT 15</h3>"
                         },
                         display(){
@@ -32783,8 +30289,6 @@ addLayer("mini", {
                 },
                 41: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "<h3 style='color: #607216'>GAMBLE!</h3>"
                         },
                         timeRequired(){
@@ -32797,9 +30301,6 @@ addLayer("mini", {
                                                                 return 5
                         },
                         display(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                
                                 let last = player.mini.c_points.lastRollTime
                                 let req = tmp.mini.clickables[41].timeRequired
                                 let a = "Time until next spin: " + formatTime(Math.max(0, req-last)) + br
@@ -32817,8 +30318,8 @@ addLayer("mini", {
                                 let data = player.mini.c_points
                                 data.lastRollTime = 0
                                 data.lastRoll = getRandomSlotValue(tmp.mini.clickables.unlockedSlots)
-                                //then give money and stuff
-                                //getRewardAmount
+                                // then give money and stuff
+                                // getRewardAmount
                                 let mult = tmp.mini.c_points.getGainMult
                                 data.points = data.points.plus(getRewardAmount(data.lastRoll).times(mult))
 
@@ -32827,8 +30328,6 @@ addLayer("mini", {
                 },      
                 42: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
                                 return "Toggle character display"
                         },
                         unlocked(){
@@ -32844,8 +30343,6 @@ addLayer("mini", {
                 },  
                 51: {
                         title(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
                                 return "Gain fuel"
                         },
                         display(){
@@ -32870,7 +30367,7 @@ addLayer("mini", {
                 rows: 10,
                 cols: 5,
                 11: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){ // source: https://www.food.com/topic/c
                                 return "<bdi style='color: #FF0000'>Cabbage</bdi>"
                         },
                         description(){
@@ -32885,7 +30382,7 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 11)
                 },
                 12: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){ 
                                 return "<bdi style='color: #FF0000'>Corn</bdi>"
                         },
                         timeNeeded(){
@@ -32905,9 +30402,6 @@ addLayer("mini", {
                                                                 return 10
                         },
                         description(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                
                                 if (shiftDown) return "Warning! May cause lag if this tab is not active in your browser."
                                 let timeNeed = tmp.mini.upgrades[12].timeNeeded
                                 let a = "Automatically gamble if you have not gambled in the last "
@@ -32928,13 +30422,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 12)
                 },
                 13: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cake</bdi>"
                         },
                         description(){
-                                let a = "log10(C Points) multiplies Ultraviolet base and log10(Ultraviolet) multiplies C Point gain"
-
-                                return a
+                                return "log10(C Points) multiplies Ultraviolet base and log10(Ultraviolet) multiplies C Point gain"
                         },
                         cost:() => new Decimal(1e68),
                         currencyLocation:() => player.mini.c_points,
@@ -32945,13 +30437,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 13)
                 },
                 14: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){ 
                                 return "<bdi style='color: #FF0000'>Carrot</bdi>"
                         },
                         description(){
-                                let a = "log10(Life Points) multiplies C Point gain and reduce Corn interval to 9"
-
-                                return a
+                                return "log10(Life Points) multiplies C Point gain and reduce Corn interval to 9"
                         },
                         cost:() => new Decimal(1e98),
                         currencyLocation:() => player.mini.c_points,
@@ -32962,13 +30452,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 14)
                 },
                 15: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cheese</bdi>"
                         },
                         description(){
-                                let a = "log10(B Points) multiplies C Point gain and reduce Corn interval to 8"
-
-                                return a
+                                return "log10(B Points) multiplies C Point gain and reduce Corn interval to 8"
                         },
                         cost:() => new Decimal(1e140),
                         currencyLocation:() => player.mini.c_points,
@@ -32979,13 +30467,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 15)
                 },
                 21: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cream</bdi>"
                         },
                         description(){
-                                let a = "Add .1 to <bdi style='color:#CC0033'>C</bdi> increase 1 base and reduce Corn interval to 7"
-
-                                return a
+                                return "Add .1 to <bdi style='color:#CC0033'>C</bdi> increase 1 base and reduce Corn interval to 7"
                         },
                         cost:() => Decimal.pow(10, 555),
                         currencyLocation:() => player.mini.c_points,
@@ -32996,13 +30482,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 21)
                 },
                 22: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Coffee</bdi>"
                         },
                         description(){
-                                let a = "Autobuy C buyables, log10(Hydrogen) multiplies C point gain, and reduce Corn interval to 6"
-
-                                return a
+                                return "Autobuy C buyables, log10(Hydrogen) multiplies C point gain, and reduce Corn interval to 6"
                         },
                         cost:() => Decimal.pow(10, 777),
                         currencyLocation:() => player.mini.c_points,
@@ -33013,13 +30497,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 22)
                 },
                 23: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Crab</bdi>"
                         },
                         description(){
-                                let a = "Change the log10 to ln in C Point gain 4 and reduce Corn interval to 5"
-
-                                return a
+                                return "Change the log10 to ln in C Point gain 4 and reduce Corn interval to 5"
                         },
                         cost:() => Decimal.pow(10, 900),
                         currencyLocation:() => player.mini.c_points,
@@ -33030,16 +30512,12 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 23)
                 },
                 24: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Chicken</bdi>"
                         },
                         description(){
-                                let a = "Unlock a new symbol and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
-                                if (player.extremeMode) {
-                                        return "Unlock a new symbol, remove C Point gain 4 base cost, and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
-                                }
-
-                                return a
+                                if (player.extremeMode) return "Unlock a new symbol, remove C Point gain 4 base cost, and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
+                                return "Unlock a new symbol and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
                         },
                         cost(){
                                 return new Decimal(player.extremeMode ? "1.1e1100" : "1.11e1111")
@@ -33052,13 +30530,12 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 24)
                 },
                 25: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cherry</bdi>"
                         },
                         description(){
-                                let a = "Remove 🛑 and remove the +1 from Unlock a slot exponent base"
+                                return "Remove 🛑 and remove the +1 from Unlock a slot exponent base"
 
-                                return a
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1322 : 1275),
                         currencyLocation:() => player.mini.c_points,
@@ -33069,13 +30546,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 25)
                 },
                 31: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Coconut</bdi>"
                         },
                         description(){
-                                let a = "Square suits base, triple 💰 base, and you can buy and keep row 7 and 8 coin upgrades"
-
-                                return a
+                                return "Square suits base, triple 💰 base, and you can buy and keep row 7 and 8 coin upgrades"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1385 : 1375),
                         currencyLocation:() => player.mini.c_points,
@@ -33086,13 +30561,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 31)
                 },
                 32: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cod</bdi>"
                         },
                         description(){
-                                let a = "C Points ^.01 multiplies C point gain, but square root the character effect on C point gain"
-
-                                return a
+                                return "C Points ^.01 multiplies C point gain, but square root the character effect on C point gain"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1860 : 1775),
                         currencyLocation:() => player.mini.c_points,
@@ -33103,13 +30576,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 32)
                 },
                 33: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Chocolate</bdi>"
                         },
                         description(){
-                                let a = "Remove 📪 and reduce token buyable exponent to .6"
-
-                                return a
+                                return "Remove 📪 and reduce token buyable exponent to .6"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1950 : 1825),
                         currencyLocation:() => player.mini.c_points,
@@ -33120,13 +30591,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 33)
                 },
                 34: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cupcake</bdi>"
                         },
                         description(){
-                                let a = "Remove 🌲, apply Cod again, and you can gamble every 3 seconds"
-
-                                return a
+                                return "Remove 🌲, apply Cod again, and you can gamble every 3 seconds"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 2900 : 2750),
                         currencyLocation:() => player.mini.c_points,
@@ -33137,13 +30606,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 34)
                 },
                 35: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Crepe</bdi>"
                         },
                         description(){
-                                let a = "Reduce the unlock a slot base to 50 and each upgrade multiplies C point gain by 50"
-
-                                return a
+                                return "Reduce the unlock a slot base to 50 and each upgrade multiplies C point gain by 50"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 13490 : 11825),
                         currencyLocation:() => player.mini.c_points,
@@ -33154,13 +30621,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 35)
                 },
                 41: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Catfish</bdi>"
                         },
                         description(){
-                                let a = "C Point gain 7's log10 becomes log2 and you can bulk C buyables 5x"
-
-                                return a
+                                return "C Point gain 7's log10 becomes log2 and you can bulk C buyables 5x"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 54780 : 50518),
                         currencyLocation:() => player.mini.c_points,
@@ -33171,13 +30636,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 41)
                 },
                 42: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cranberry</bdi>"
                         },
                         description(){
-                                let a = "Unlock a slot exponent is 6, you can gamble every .1 seconds, and C Points multiply B points"
-
-                                return a
+                                return "Unlock a slot exponent is 6, you can gamble every .1 seconds, and C Points multiply B points"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 95300 : 82650),
                         currencyLocation:() => player.mini.c_points,
@@ -33188,13 +30651,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 42)
                 },
                 43: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cookie</bdi>"
                         },
                         description(){
-                                let a = "Each C Point gain 3 adds 1 to its base and you can gamble every tick (.05 seconds)"
-
-                                return a
+                                return "Each C Point gain 3 adds 1 to its base and you can gamble every tick (.05 seconds)"
                         },
                         cost:() => Decimal.pow(10, 97590),
                         currencyLocation:() => player.mini.c_points,
@@ -33205,13 +30666,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 43)
                 },
                 44: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Crumble</bdi>"
                         },
                         description(){
-                                let a = "C Point gain 6 outer ln becomes log2 and you can bulk twice as much"
-
-                                return a
+                                return "C Point gain 6 outer ln becomes log2 and you can bulk twice as much"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 112327 : 128846),
                         currencyLocation:() => player.mini.c_points,
@@ -33222,13 +30681,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 44)
                 },
                 45: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Clam</bdi>"
                         },
                         description(){
-                                let a = "Unlock Nitrogen, a new layer, and C Points multiply A Points"
-
-                                return a
+                                return "Unlock Nitrogen, a new layer, and C Points multiply A Points"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 172582 : 168627),
                         currencyLocation:() => player.mini.c_points,
@@ -33239,17 +30696,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 45)
                 },
                 51: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Repetitive clicking</bdi>"
                         },
                         description(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-
-                                let a = "Once per ten seconds gain fuel"
-                                b = "<br>Next in: " + formatTime(Math.max(0, 10-player.mini.d_points.fuelTimer1))
-
-                                return a + b
+                                return "Once per ten seconds gain fuel <br>Next in: " + formatTime(Math.max(0, 10-player.mini.d_points.fuelTimer1))
                         },
                         cost:() => Decimal.pow(10, 25),
                         currencyLocation:() => player.mini.d_points,
@@ -33260,19 +30711,12 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 51)
                 },
                 52: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Arthritis cure</bdi>"
                         },
                         description(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                
-                                let a = "<bdi style='font-size: 100%'> Once per 11 seconds gain fuel, unlock an autobuyer for Speed buyables, and double D Point gain</bdi>"
-                                b = "Next in: " + formatTime(Math.max(0, 11-player.mini.d_points.fuelTimer2))
-
-                                if (shiftDown) return b
-
-                                return a
+                                if (shiftDown) return "Next in: " + formatTime(Math.max(0, 11-player.mini.d_points.fuelTimer2))
+                                return "<bdi style='font-size: 100%'> Once per 11 seconds gain fuel, unlock an autobuyer for Speed buyables, and double D Point gain</bdi>"
                         },
                         cost:() => Decimal.pow(10, 125),
                         currencyLocation:() => player.mini.d_points,
@@ -33283,13 +30727,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 52)
                 },
                 53: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Pre-frontal cortex</bdi>"
                         },
                         description(){
-                                let a = "The autobuyer buys multiplier buyables and add .01 to quadratic base"
-
-                                return a
+                                return "The autobuyer buys multiplier buyables and add .01 to quadratic base"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 338 : 350),
                         currencyLocation:() => player.mini.d_points,
@@ -33300,13 +30742,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 53)
                 },
                 54: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Frontal cortex</bdi>"
                         },
                         description(){
-                                let a = "Gain .2% of your max fuel per second and Nitrogen multiplies D Point gain"
-
-                                return a
+                                return "Gain .2% of your max fuel per second and Nitrogen multiplies D Point gain"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 431 : 410),
                         currencyLocation:() => player.mini.d_points,
@@ -33317,13 +30757,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 54)
                 },
                 55: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Ankle sprain</bdi>"
                         },
                         description(){
-                                let a = "Each Gas Pedal adds 1 to <bdi style='color:#CC0033'>D</bdi> and Speed buyables no longer cost anything"
-
-                                return a
+                                return "Each Gas Pedal adds 1 to <bdi style='color:#CC0033'>D</bdi> and Speed buyables no longer cost anything"
                         },
                         cost:() => Decimal.pow(10, 969),
                         currencyLocation:() => player.mini.d_points,
@@ -33334,13 +30772,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 55)
                 },
                 61: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Splint</bdi>"
                         },
                         description(){
-                                let a = "You can buy all buyables at once and per upgrade multiply Linear Increase 1 base by log8(x)^2"
-
-                                return a
+                                return "You can buy all buyables at once and per upgrade multiply Linear Increase 1 base by log8(x)^2"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1833 : 1776),
                         currencyLocation:() => player.mini.d_points,
@@ -33351,7 +30787,7 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 61)
                 },
                 62: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cast</bdi>"
                         },
                         description(){
@@ -33370,13 +30806,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 62)
                 },
                 63: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Brace</bdi>"
                         },
                         description(){
-                                let a = "You can bulk 1.3x buyables per upgrade (floored)"
-
-                                return a
+                                return "You can bulk 1.3x buyables per upgrade (floored)"
                         },
                         cost:() => Decimal.pow(10, 3151),
                         currencyLocation:() => player.mini.d_points,
@@ -33387,13 +30821,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 63)
                 },
                 64: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Braces</bdi>"
                         },
                         description(){
-                                let a = "D Point gain multiplies C point gain and fuel multiplies Carbon gain"
-
-                                return a
+                                return "D Point gain multiplies C point gain and fuel multiplies Carbon gain"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 4515 : 4167),
                         currencyLocation:() => player.mini.d_points,
@@ -33404,13 +30836,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 64)
                 },
                 65: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Cyborg</bdi>"
                         },
                         description(){
-                                let a = "Each Quadratic increase increases <bdi style='color:#CC0033'>D</bdi> by 1 and triple D point gain"
-
-                                return a
+                                return "Each Quadratic increase increases <bdi style='color:#CC0033'>D</bdi> by 1 and triple D point gain"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 5347 : 5225),
                         currencyLocation:() => player.mini.d_points,
@@ -33421,13 +30851,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 65)
                 },
                 71: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Breakfast</bdi>"
                         },
                         description(){
-                                let a = "The square rooting factor is 11"
-
-                                return a
+                                return "The square rooting factor is 11"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 6684 : 6584),
                         currencyLocation:() => player.mini.d_points,
@@ -33438,13 +30866,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 71)
                 },
                 72: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Brunch</bdi>"
                         },
                         description(){
-                                let a = "The square rooting factor is 12 and unlock a challenge"
-
-                                return a
+                                return "The square rooting factor is 12 and unlock a challenge"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 9651 : 8868),
                         currencyLocation:() => player.mini.d_points,
@@ -33455,13 +30881,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 72)
                 },
                 73: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Lunch</bdi>"
                         },
                         description(){
-                                let a = makeRed("y") + " multiplies Nitrogen gain and unlock a challenge"
-
-                                return a
+                                return makeRed("y") + " multiplies Nitrogen gain and unlock a challenge"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 24428 : 19428),
                         currencyLocation:() => player.mini.d_points,
@@ -33472,14 +30896,12 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 73)
                 },
                 74: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 if (shiftDown) return "<bdi style='color: #FF0000'>Cass129</bdi>"
                                 return "<bdi style='color: #FF0000'>Supper</bdi>"
                         },
                         description(){
-                                let a = "Bulk 10x and D buyables no longer cost anything"
-
-                                return a
+                                return "Bulk 10x and D buyables no longer cost anything"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 37346 : 31051),
                         currencyLocation:() => player.mini.d_points,
@@ -33490,14 +30912,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 74)
                 },
                 75: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Dinner</bdi>"
                         },
                         description(){
-                                let x = player.hardMode ? "100" : "1000"
-                                let a = "If you have less than 10,000 seconds worth of Nitrogen Production you will gain " + x + "x"
-
-                                return a
+                                return "If you have less than 10,000 seconds worth of Nitrogen Production you will gain " + (player.hardMode ? "100" : "1000") + "x"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 42400 : 36561),
                         currencyLocation:() => player.mini.d_points,
@@ -33508,13 +30927,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 75)
                 },
                 81: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Multiplicative Identity</bdi>"
                         },
                         description(){
-                                let a = "Each upgrade doubles Nitrogen gain"
-
-                                return a
+                                return "Each upgrade doubles Nitrogen gain"
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 46081 : 45477.698),
                         currencyLocation:() => player.mini.d_points,
@@ -33525,13 +30942,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 81)
                 },
                 82: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Even Prime</bdi>"
                         },
                         description(){
-                                let a = "Square base Nitrogen gain" 
-
-                                return a
+                                return "Square base Nitrogen gain" 
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 62537 : 56749),
                         currencyLocation:() => player.mini.d_points,
@@ -33542,13 +30957,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 82)
                 },
                 83: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Odd Prime</bdi>"
                         },
                         description(){
-                                let a = "Make the inner log10 of commutativity of addition ln and E Points<sup>.1</sup> multiplies D Points" 
-
-                                return a
+                                return "Make the inner log10 of commutativity of addition ln and E Points<sup>.1</sup> multiplies D Points" 
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 937500 : 691315),
                         currencyLocation:() => player.mini.d_points,
@@ -33559,13 +30972,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 83)
                 },
                 84: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Even square</bdi>"
                         },
                         description(){
-                                let a = "Each existence of 1 multiples E point gain by 1.02" 
-
-                                return a
+                                return "Each existence of 1 multiples E point gain by 1.02" 
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1026117 : 775628),
                         currencyLocation:() => player.mini.d_points,
@@ -33576,13 +30987,11 @@ addLayer("mini", {
                         }, // hasUpgrade("mini", 84)
                 },
                 85: {
-                        title(){ // https://www.food.com/topic/c
+                        title(){
                                 return "<bdi style='color: #FF0000'>Safe Prime</bdi>"
                         },
                         description(){
-                                let a = "Reduce Iterations exponent to x+1<sup>x</sup> and bulk 5x all minigame buyables" 
-
-                                return a
+                                return "Reduce Iterations exponent to x+1<sup>x</sup> and bulk 5x all minigame buyables" 
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1037e3 : 787029),
                         currencyLocation:() => player.mini.d_points,
@@ -33604,10 +31013,6 @@ addLayer("mini", {
                                 return f.div(tmp.mini.d_points.getMaximumFuel)
                         },
                         display(){
-                                if (player.tab != "mini") return ""
-                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                if (player.subtabs.mini.d_content != "Fuel") return ""
-
                                 if (player.mini.d_points.fuel.lt("1ee6")) {
                                         let a = format(player.mini.d_points.fuel) + "/"
                                         let b = format(tmp.mini.d_points.getMaximumFuel) + " fuel"
@@ -33636,10 +31041,6 @@ addLayer("mini", {
                                 content: [
                                         ["bar", "fuel"],
                                         ["display-text", function(){
-                                                if (player.tab != "mini") return ""
-                                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                                if (player.subtabs.mini.d_content != "Fuel") return ""
-
                                                 let a = "Current speed formula: " 
                                                 let data = tmp.mini.d_points
                                                 let redx = makeRed("x")
@@ -33695,10 +31096,6 @@ addLayer("mini", {
                         "Multipliers": {
                                 content: [
                                         ["display-text", function(){
-                                                if (player.tab != "mini") return ""
-                                                if (player.subtabs.mini.mainTabs != "D") return ""
-                                                if (player.subtabs.mini.d_content != "Multipliers") return ""
-
                                                 if (hasUpgrade("mini", 55)) {
                                                         let data = tmp.mini.buyables
                                                         let a = data[151].cost
@@ -33746,7 +31143,7 @@ addLayer("mini", {
                                         return false
                                 },
                         },
-                        "Speed": { // has upgrades for buffing fuel->speed formula
+                        "Speed": { 
                                 content: [
                                         ["display-text", function(){
                                                 if (hasUpgrade("mini", 55)) return // eventually dont show this
@@ -33797,10 +31194,6 @@ addLayer("mini", {
                         "Buyables": {
                                 content: [ 
                                         ["display-text", function(){
-                                                if (player.tab != "mini") return ""
-                                                if (player.subtabs.mini.mainTabs != "C") return ""
-                                                if (player.subtabs.mini.c_content != "Buyables") return ""
-
                                                 let data = tmp.mini.buyables
                                                 let a = data[71].cost
                                                 let num = 71
@@ -33863,9 +31256,6 @@ addLayer("mini", {
                                         }],
                                         "blank",
                                         ["display-text", function(){
-                                                if (player.tab != "mini") return ""
-                                                if (player.subtabs.mini.mainTabs != "C") return ""
-
                                                 let poss = getAllowedCharacterValues()
                                                 let len = poss.length
                                                 let ret = ""
@@ -34103,17 +31493,11 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "a_points"],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "A") return 
                                         if (hasUpgrade("h", 51)) return ""
-                                        
                                         return "You need to be on this tab to keep this minigame ticking!"
                                 }],
                                 ["display-text", "Each color produces the next color clockwise!"],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "A") return 
-
                                         if (!shiftDown) return ""
                                         let mid = hasUpgrade("h", 45) ? "log10(9+log10(10+B Points))*" : ""
                                         let end = "*2<sup>levels</sup>*" + mid + "multipliers"
@@ -34132,21 +31516,13 @@ addLayer("mini", {
                         content: [
                                 ["secondary-display", "b_points"],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "B") return 
-
                                         if (hasUpgrade("h", 51)) {
                                                 return hasUpgrade("h", 52) || player.extremeMode ? "" : "Costs after 1000 are increased (x->x*log(x)/log(1000))"
                                         }
                                         return "You need to be on this tab to keep this minigame ticking!"
                                 }],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return
-                                        if (player.subtabs.mini.mainTabs != "B") return 
-
-                                        a = "You are currently getting " + format(tmp.mini.b_points.getResetGain)
-                                        b = " B Points per second"
-                                        return a + b
+                                        return "You are currently getting " + format(tmp.mini.b_points.getResetGain) + " B Points per second"
                                 }],
                                 ["buyables", [3,4,5]],
                                 ["milestones", [1,2,3,4,5,6,7]],
@@ -34316,9 +31692,6 @@ addLayer("mini", {
                                         return start+goodPart+badPart+end
                                 }],
                                 ["display-text", function(){
-                                        if (player.tab != "mini") return ""
-                                        if (player.subtabs.mini.mainTabs != "Spelling") return ""
-                                        
                                         let a = "You have spelled " + formatWhole(player.wordsSpelled)
                                         let b = " words correctly!"
                                         let c = "<br><br><br><br><br><br>"
@@ -34469,7 +31842,6 @@ addLayer("tokens", {
                 return Decimal.pow(4, exp)
         },
         effectDescription(){
-                if (player.tab != "tokens") return ""
                 if (!player.extremeMode) return ""
                 let eff = tmp.tokens.effect
                 let start = " multiplying Science,<br>Hydrogen Science, and Oxygen Science by " 
@@ -34487,7 +31859,7 @@ addLayer("tokens", {
                 if (hasUpgrade("mu", 22))       a += 1
                 if (hasUpgrade("mu", 24))       a += 1
                 if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/(player.extremeMode ? 1 : 2))
-                if (hasUpgrade("p", 41))        a += 1
+                if (hasUpgrade("p", 41))        a += player.extremeMode ? 3 : 1
                                                 a += layers.l.grid.getGemEffect(303).toNumber()
                 if (hasMilestone("l", 41))      a += 1
                 if (hasChallenge("l", 52))      a += tmp.l.challenges[52].reward.toNumber()
@@ -34522,7 +31894,7 @@ addLayer("tokens", {
                 return ret
         },
         getNextAt(){
-                //1e6-1
+                // 1e6-1
                 let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
                 let amt = player.tokens.total.toNumber()
 
@@ -34605,7 +31977,7 @@ addLayer("tokens", {
                 return hasMilestone("n", 11) || player.l.everMilestone1
         },
         coins: {
-                getGainMult(){ //coin gain coins gain coingain
+                getGainMult(){ // coin gain coins gain coingain
                         let ret = decimalOne
 
                         
@@ -34634,13 +32006,7 @@ addLayer("tokens", {
                 return hasUpgrade("h", 65) || player.tokens.total.gt(0) || tmp.n.layerShown
         },
         prestigeButtonText(){
-                if (player.tab != "tokens") return ""
-                if (!["Milestones", "Old"].includes(player.subtabs.tokens.mainTabs)) return ""
-
-                if (player.tokens.total.gt(100)) {
-                        return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt, 3) + " Life Points"
-                }
-                
+                if (player.tokens.total.gt(100)) return "Reset for a token<br>Requires: " + format(tmp.tokens.getNextAt, 3) + " Life Points"
                 return "Reset for a token (" + formatWhole(player.tokens.total.plus(1)) + ")<br>Requires: " + format(tmp.tokens.getNextAt) + " Life Points"
         },
         canReset(){ // tokens canReset
@@ -34777,7 +32143,7 @@ addLayer("tokens", {
                         title: "<bdi style='color:#FF0000'>Radio Waves</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(11),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
-                        buy(auto = false){//player.tokens.autobuyradio && hasMilestone("n", 7)
+                        buy(auto = false){// player.tokens.autobuyradio && hasMilestone("n", 7)
                                 if (!this.canAfford()) return 
                                 if (player.tokens.autobuyradio && hasMilestone("n", 7) && !auto) return 
                                 player.tokens.buyables[11] = player.tokens.buyables[11].plus(1)
@@ -34801,10 +32167,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[11].base.pow(player.tokens.buyables[11])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[11]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
@@ -34857,10 +32219,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[12].base.pow(player.tokens.buyables[12])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[12]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
@@ -34909,10 +32267,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[13].base.pow(player.tokens.buyables[13])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
@@ -34973,10 +32327,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[21].base.pow(player.tokens.buyables[21])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[21]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
@@ -35037,10 +32387,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[22].base.pow(player.tokens.buyables[22])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[22]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
@@ -35092,10 +32438,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[23].base.pow(player.tokens.buyables[23])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[23]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
@@ -35150,10 +32492,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[31].base.pow(player.tokens.buyables[31])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[31]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
@@ -35202,10 +32540,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[32].base.pow(player.tokens.buyables[32])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[32]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
@@ -35256,10 +32590,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[33].base.pow(player.tokens.buyables[33])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Flat") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[33]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
@@ -35325,10 +32655,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[41].base.pow(player.tokens.buyables[41])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[41]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
@@ -35379,10 +32705,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[42].base.pow(player.tokens.buyables[42])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[42]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
@@ -35431,10 +32753,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[43].base.pow(player.tokens.buyables[43])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[43]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
@@ -35482,10 +32800,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[51].base.pow(player.tokens.buyables[51])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[51]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
@@ -35536,10 +32850,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[52].base.pow(player.tokens.buyables[52])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[52]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
@@ -35590,10 +32900,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[53].base.pow(player.tokens.buyables[53])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[53]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
@@ -35643,10 +32949,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[61].base.pow(player.tokens.buyables[61])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[61]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
@@ -35696,10 +32998,6 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[62].base.pow(player.tokens.buyables[62])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[62]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: ^"
                                 let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
@@ -35748,13 +33046,8 @@ addLayer("tokens", {
                                         return player.tokens.best_buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                                 }
                                 return player.tokens.buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
-                                //tmp.tokens.buyables[63].base.pow(player.tokens.buyables[63])
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Scaling") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[63]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
@@ -35808,10 +33101,6 @@ addLayer("tokens", {
                                 }
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (!["Scaling", "Flat"].includes(player.subtabs.tokens.mainTabs)) return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 return "Sell all buyables<br>(Both pages)"
                         },
                 },
@@ -35834,10 +33123,6 @@ addLayer("tokens", {
                                 }
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (!["Coins"].includes(player.subtabs.tokens.mainTabs)) return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 return "Sell all coin upgrades<br>(Does not give coins back)"
                         },
                 },
@@ -35882,10 +33167,6 @@ addLayer("tokens", {
                                 return true
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[101]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.tokens.buyables[101].effect, 4) + " to Omnipotent base</b><br>"
@@ -35950,10 +33231,6 @@ addLayer("tokens", {
                                 return true
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[102]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to Stem Cell gain</b><br>"
@@ -36011,10 +33288,6 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 45)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[111]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.tokens.buyables[111].effect, 4) + " to Tissue effect exponent</b><br>"
@@ -36084,13 +33357,8 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 45)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                if (!player.tokens.tokens2Unl.includes(112)) {
-                                        return "<br>You need 5e13435 Cells to unlock this buyable"
-                                }
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                if (!player.tokens.tokens2Unl.includes(112)) return "<br>You need 5e13435 Cells to unlock this buyable"
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[112]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: -"
                                 let eff2 = format(tmp.tokens.buyables[112].effect, 4) + " to effective Tokens</b><br>"
@@ -36156,13 +33424,8 @@ addLayer("tokens", {
                                 return hasUpgrade("t", 144)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                if (!player.tokens.tokens2Unl.includes(121)) {
-                                        return "<br>You need 1e30400 Cells to unlock this buyable"
-                                }
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                if (!player.tokens.tokens2Unl.includes(121)) return "<br>You need 1e30400 Cells to unlock this buyable"
+
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[121]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: +"
                                 let eff2 = format(tmp.tokens.buyables[121].effect, 4) + " to Token tetrational divider</b><br>"
@@ -36227,13 +33490,8 @@ addLayer("tokens", {
                                 return hasUpgrade("t", 144)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                if (!player.tokens.tokens2Unl.includes(122)) {
-                                        return "<br>You need 1e30942 Cells to unlock this buyable"
-                                }
-                                //if we arent on the tab, then we dont care :) (makes it faster)
+                                if (!player.tokens.tokens2Unl.includes(122)) return "<br>You need 1e30942 Cells to unlock this buyable"
+                                
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[122]) + "</b><br>"
                                 let eff1 = "<b><h2>Effect</h2>: *"
                                 let eff2 = format(tmp.tokens.buyables[122].effect, 4) + " to Tissue gain</b><br>"
@@ -36277,10 +33535,6 @@ addLayer("tokens", {
                                 data.tokens2.total = data.tokens2.total.plus(1)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[191]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
@@ -36305,10 +33559,6 @@ addLayer("tokens", {
                                 data.tokens2.total = data.tokens2.total.plus(1)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
@@ -36337,10 +33587,6 @@ addLayer("tokens", {
                                 return hasMilestone("t", 17)
                         },
                         display(){
-                                // other than softcapping fully general
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "II") return ""
-                                //if we arent on the tab, then we dont care :) (makes it faster)
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[193]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193)) + " Cells</b><br>"
                                 let eformula = "10^10^((4+x/" + formatWhole(tmp.tokens.buyables[193].div) + "))"
@@ -36384,11 +33630,8 @@ addLayer("tokens", {
                         requirementDescription(){
                                 return "2 total tokens"
                         },
-                        requirement(){
-                                return new Decimal(2)
-                        },
                         done(){
-                                return player.tokens.total.gte(tmp.tokens.milestones[1].requirement)
+                                return player.tokens.total.gte(2)
                         },
                         unlocked(){
                                 return true
@@ -36401,9 +33644,6 @@ addLayer("tokens", {
                                 return [["sci", "autobuysci12"]]
                         },
                         effectDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-
                                 let a = "Reward: Raise Radio Wave effect to the total number of tokens.<br>"
                                 if (player.extremeMode) {
                                         a = "Reward: Raise Radio Wave effect to the total number of tokens and autobuy 13.6 eV.<br>"
@@ -36420,11 +33660,8 @@ addLayer("tokens", {
                         requirementDescription(){
                                 return "3 total tokens"
                         },
-                        requirement(){
-                                return new Decimal(3)
-                        },
                         done(){
-                                return player.tokens.total.gte(tmp.tokens.milestones[2].requirement)
+                                return player.tokens.total.gte(3)
                         },
                         unlocked(){
                                 return hasMilestone("tokens", 1)
@@ -36437,9 +33674,6 @@ addLayer("tokens", {
                                 return [["sci", "autobuysci11"]]
                         },
                         effectDescription(){
-                                if (player.tab != "tokens") return ""
-                                if (player.subtabs.tokens.mainTabs != "Milestones") return ""
-                                
                                 let a = "Reward: Raise Microwaves effect to the total number of tokens and keep Hydrogen XI and XII.<br>"
                                 if (player.extremeMode) {
                                         a = "Reward: Raise Microwaves effect to the total number of tokens, keep Hydrogen XI and XII, and autobuy α ~ 1/147.<br>"

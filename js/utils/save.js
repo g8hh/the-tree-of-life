@@ -11,7 +11,7 @@ function save(name = allSaves.set, force) {
 }
 
 function hardReset(resetOptions) {
-	if (!confirm("你确定要这么做吗？ 你将失去所有的游戏进度！")) return
+	if (!confirm("你确定要这么做吗？ 你将失去所有的进度！")) return
 	player = getStartPlayer()
 	save()
 	window.location.reload()
@@ -36,16 +36,16 @@ function loadSave(name) {
 }
 
 function renameSave(name) {
-	let newName = prompt("输入存档名称: ")
+	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
-		alert("抱歉，该名称已在游戏数据中使用，因此您不能个人使用，否则会导致严重故障！")
+		alert("Sorry, that name is used in the game's data, so you can't use it personally or it will cause terrible glitches!")
 		return
 	} else if (allSaves[newName] !== undefined) {
-		alert("这个名字已经被占用了，对不起！")
+		alert("That name is taken already, sorry!")
 		return
 	} else if (newName.length>20) {
-		alert("这个名字太长了！")
+		alert("This name is too long!")
 		return
 	} else {
 		if (name==allSaves.set) save()
@@ -74,7 +74,7 @@ function deleteSave(name) {
 }
 
 function newSave() {
-	let newName = prompt("输入存档名称: ")
+	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
 		alert("抱歉，该名称已在游戏数据中使用，因此您不能个人使用，否则会导致严重故障！")
@@ -202,7 +202,7 @@ function NaNcheck(data) {
 			if (!NaNalert) {
 				clearInterval(interval)
 				NaNalert = true
-				alert("在播放器中发现无效值，名为 '" + item + "'。 请让这个mod的创建者知道！ 您可以刷新页面，您将被取消 NaNed。")
+				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				return false
 			}
 		}
@@ -228,9 +228,9 @@ function exportSave() {
 }
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("Paste your save here")
+	if (imported === undefined) imported = prompt("在这里粘贴你的存档")
 	try {
-		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
+		let confirmString = "这个存档似乎是针对不同的模组！ 您确定要导入吗？"
 		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
 		let x = atob(imported)
 		console.log(x)
