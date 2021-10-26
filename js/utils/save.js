@@ -11,7 +11,7 @@ function save(name = allSaves.set, force) {
 }
 
 function hardReset(resetOptions) {
-	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
+	if (!confirm("你确定要这么做吗？ 你将失去所有的进度！")) return
 	player = getStartPlayer()
 	save()
 	window.location.reload()
@@ -62,7 +62,7 @@ function deleteSave(name) {
 		hardReset()
 		return
 	}
-	if (!confirm("Are you sure you wish to delete this save?")) return
+	if (!confirm("您确定要删除此存档吗？")) return
 	allSaves[name] = undefined
 	if (name==allSaves.set) {
 		let valid = Object.keys(allSaves).filter(x => (x!="set" && (allSaves[x]!==undefined||x==name)))
@@ -77,13 +77,13 @@ function newSave() {
 	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
-		alert("Sorry, that name is used in the game's data, so you can't use it personally or it will cause terrible glitches!")
+		alert("抱歉，该名称已在游戏数据中使用，因此您不能个人使用，否则会导致严重故障！")
 		return
 	} else if (allSaves[newName] !== undefined) {
-		alert("That name is taken already, sorry!")
+		alert("这个名字已经被占用了，对不起！")
 		return
 	} else if (newName.length > 20) {
-		alert("This name is too long!")
+		alert("这个名字太长了！")
 		return
 	} else {
 		allSaves[newName] = getStartPlayer()
@@ -228,9 +228,9 @@ function exportSave() {
 }
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("Paste your save here")
+	if (imported === undefined) imported = prompt("在这里粘贴你的存档")
 	try {
-		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
+		let confirmString = "这个存档似乎是针对不同的模组！ 您确定要导入吗？"
 		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
 		let x = atob(imported)
 		console.log(x)
