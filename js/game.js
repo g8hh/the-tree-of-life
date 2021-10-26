@@ -224,7 +224,7 @@ function doReset(layer, force=false) {
 }
 
 function resetRow(row) {
-	if (prompt('您确定要重置此行吗？ 强烈建议您等到当前运行结束后再执行此操作！ 输入 "I WANT TO RESET THIS" 以二次确认')!="I WANT TO RESET THIS") return
+	if (prompt('您确定要重置此行吗？ 强烈建议您等到当前运行结束后再执行此操作！ 输入 "I WANT TO RESET THIS" 以确认')!="I WANT TO RESET THIS") return
 	let pre_layers = ROW_LAYERS[row-1]
 	let layers = ROW_LAYERS[row]
 	let post_layers = ROW_LAYERS[row+1]
