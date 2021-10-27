@@ -4510,7 +4510,7 @@ addLayer("sci", {
                         description(){
                                 return "Remove crRNA base cost"
                         },
-                        cost:() => new Decimal("4e378"),
+                        cost:() => new Decimal("9.73e379"),
                         currencyLocation:() => player.sci.protein_science,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Protein Science",
@@ -15345,7 +15345,7 @@ addLayer("a", {
                         description(){
                                 return "Autobuy crRNA and you can buy max all Protein buyables"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e100 : 3e68),
+                        cost:() => new Decimal(player.extremeMode ? (hasMilestone("d", 4) ? 1e35 : 1e100) : 3e68),
                         unlocked(){
                                 return hasUpgrade("a", 52) || hasMilestone("d", 5) || player.cells.unlocked
                         }, // hasUpgrade("a", 53)
@@ -17481,7 +17481,7 @@ addLayer("d", {
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
-                if (!player.extremeMode) gainPercentage = decimalZero
+                if (player.extremeMode) gainPercentage = decimalZero
                 data.total  =  data.total.plus(tmp.d.getResetGain.times(gainPercentage))
                 if (!hasUpgrade("d", 23)) {
                         data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
@@ -17749,7 +17749,7 @@ addLayer("d", {
                         },
                         effectDescription(){
                                 let a = "Reward: miRNA effects Life gain, gain C45 gems passively,"
-                                if (player.extremeMode) a += " keep a Protein Science upgrade per reset,"
+                                if (player.extremeMode) a += " keep a Protein Science upgrade per reset, Amino Acid XXIII costs 1e35,"
                                 return a + " and autobuy ncRNA."
                         },
                 }, // hasMilestone("d", 4)
