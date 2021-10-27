@@ -1095,8 +1095,7 @@ addLayer("h", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let a = Decimal.pow(1.01, player.h.upgrades.length)
-                                return a
+                                return Decimal.pow(1.01, player.h.upgrades.length)
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[25].effect, 4)
@@ -1232,11 +1231,7 @@ addLayer("h", {
                                 return player.hardMode ? new Decimal(5.5e9) : new Decimal(2e9)
                         },
                         effect(){
-                                let a = decimalOne
-
-                                a = a.plus(tmp.mini.buyables[21].effect)
-                                
-                                return a
+                                return decimalOne.plus(tmp.mini.buyables[21].effect)
                         },
                         effectDisplay(){
                                 return "<bdi style='color:#CC0033'>A</bdi>=" + format(tmp.h.upgrades[41].effect)
@@ -5686,6 +5681,23 @@ addLayer("sci", {
                                 data.buyables[303] = decimalZero
                         }
                 }
+
+                let resetProtein = true 
+                if (["tokens", "p", "l", "a"].includes(layer)) resetProtein = false
+                if (resetProtein && !false) {
+                        let subdata = data.protein_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+                        
+                        let ids = [401, 402, 403, 404, 405, 
+                                   411, 412, 413, 414, 415, 
+                                   421, 422, 423, 424, 425, 
+                                   431, 432, 433, 434, 435,
+                                   441, 442, 443, 444,    ]
+
+                        if (!false) data.upgrades = filterOut(data.upgrades, ids)
+                }
         },
         deactivated(){
                 return false
@@ -6092,7 +6104,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon XII"
                         },
                         description(){
-                                return "Respecting addition log base is decreased to 3 and each upgrade in this row reduces it by .2"
+                                return "Respecting addition log base is decreased by .2 for each upgrade in this row but it is initially 3"
                         },
                         effect(){
                                 let a = 2.8
@@ -9303,14 +9315,10 @@ addLayer("mu", {
                         } // should be 351/400 to be smooth but idc
                         
                         a += " resulting in ^" + format(tmp.mu.effect.sub(1).recip().times(-1), 3) 
-                        a += " the Phosphorus."
-                        return a
+                        return a + " the Phosphorus."
                 }
                 let effstr = player.mu.points.gt(35) ? format(eff, 4) : format(eff)
-                let start = " multiplying Phosphorus gain by Phosphorus<sup>" 
-                let end = "</sup>."
-                let ret = start + effstr + end
-                return ret
+                return " multiplying Phosphorus gain by Phosphorus<sup>" + effstr + "</sup>."
         },
         autoPrestige(){
                 return hasUpgrade("mu", 35) || hasMilestone("or", 1)
@@ -11214,7 +11222,6 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life IV"
                         },
                         description(){
-                                //if (player.shiftAlias) return "Capped at 1.80e308"
                                 let a = "Every second Dilation completion makes Reuse base exponentiate point gain"
                                 return a + br + "Currently: " + format(tmp.l.upgrades[14].effect)
                         },
@@ -11222,7 +11229,7 @@ addLayer("l", {
                         effect(){
                                 let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
                                 if (hasUpgrade("l", 43)) lvls += tmp.l.getNonZeroGemCount
-                                return tmp.sci.buyables[302].base.pow(lvls)//.min(Decimal.pow(2, 1024))
+                                return tmp.sci.buyables[302].base.pow(lvls)
                         },
                         unlocked(){
                                 if (player.extremeMode && player.a.unlocked) return true
@@ -11471,8 +11478,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), gain 10x D and E Points, and triple Phosphorus and Nitrogen reset times.<br>"
-                                let b = "Currently: " + format(tmp.l.milestones[1].effect, 4)
-                                return a + b
+                                return a + "Currently: " + format(tmp.l.milestones[1].effect, 4)
                         },
                 }, // hasMilestone("l", 1)
                 2: {
@@ -11618,8 +11624,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let a = "Reward: Token costs are floored instead of rounded and cube the Oxygen-Carbon symmetry cap per Dilation completion."
-                                let b = "Currently: " + format(tmp.l.milestones[10].effect)
-                                return a + br + b
+                                return a + br + "Currently: " + format(tmp.l.milestones[10].effect)
                         },
                 }, // hasMilestone("l", 10)
                 11: {
@@ -13189,10 +13194,8 @@ addLayer("l", {
 
                                 let a = "All prior currencies are dilated<br>^" 
                                 let e = tmp.l.challenges[11].challengeEffect
-                                if (e.gt(.1)) a += format(e, 4)
-                                else a += formatSmall(e)
-
-                                return a
+                                if (e.gt(.1)) return a + format(e, 4)
+                                return a + formatSmall(e)
                         },
                         goalDescription(){
                                 return "e1.80e308 Points"
@@ -15641,7 +15644,7 @@ addLayer("a", {
                         },
                         effectDescription(){
                                 let a = "Reward: α → ∂α's log3s becomes lns"
-                                if (player.extremeMode) a = ", Reuse levels after 100 scale x<sup>2.65</sup> instead of exponentially,"
+                                if (player.extremeMode) a += ", Reuse levels after 100 scale x<sup>2.65</sup> instead of exponentially,"
                                 return a + " and add .25 to β → ∂𝛾's base."
                         },
                 }, // hasMilestone("a", 15)
@@ -17442,9 +17445,8 @@ addLayer("d", {
 
                 if (hasUpgrade("t", 92))        exp = exp.times(player.tokens.total.max(1).pow(Math.PI).min(2e8))
 
-                let ret1 = amt.plus(1).pow(exp)
 
-                return [ret1, amt.times(3).plus(1)]
+                return [amt.plus(1).pow(exp), amt.times(3).plus(1)]
         },
         effectDescription(){
                 let eff = tmp.d.effect
@@ -17458,7 +17460,7 @@ addLayer("d", {
         update(diff){
                 let data = player.d
                 
-                if (data.points.gt(0)) data.unlocked = true
+                if (tmp.d.layerShown) data.unlocked = true
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
@@ -18111,13 +18113,10 @@ addLayer("d", {
                                                 a2 = a2.replace(")+0.00", "")
                                         }
 
-                                        let a = a1 + br + a2
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
                                         let c = " the last two rows of Phosphorus and mu upgrades."
 
-                                        let part1 = a + br2 + b + br + c
-
-                                        return part1
+                                        return = a1 + br + a2 + br2 + b + br + c
                                 }],
                                 ],
                         unlocked(){
@@ -18229,6 +18228,15 @@ addLayer("d", {
 
                         //reset times
                         if (!hasMilestone("a", 9)) data2.times = 0
+
+                        if (player.extremeMode) {
+                                let lKeptUpgrades = 0
+                                if (hasMilestone("a", 6)) lKeptUpgrades += player.a.times
+                                if (!false) {
+                                        sortStrings(data1.upgrades)
+                                        data2.upgrades = data2.upgrades.slice(0, lKeptUpgrades)
+                                }
+                        }
                 }
 
                 data2.points = decimalZero
@@ -18267,6 +18275,8 @@ addLayer("d", {
                 }
 
                 player.p.best_over_amino = decimalZero
+
+                layers.sci.doReset("d")
 
                 resetPreLifeCurrencies()
         },
@@ -22273,8 +22283,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XIV"
                         },
                         description(){
-                                let a = "cbrt(log10(10+Cells)) multiplies Stem Cell gain"
-                                return a + br + "Currently: " + format(tmp.t.upgrades[34].effect)
+                                return "cbrt(log10(10+Cells)) multiplies Stem Cell gain<br>Currently: " + format(tmp.t.upgrades[34].effect)
                         },
                         cost:() => decimalOne,
                         effect(){
@@ -30797,9 +30806,7 @@ addLayer("mini", {
 
                                 let last = player.mini.c_points.lastRollTime
 
-                                a += "The next trigger is in " + formatTime(Math.max(0,timeNeed-last))
-
-                                return a
+                                return a + "The next trigger is in " + formatTime(Math.max(0,timeNeed-last))
                         },
                         cost:() => new Decimal(1e50),
                         currencyLocation:() => player.mini.c_points,
