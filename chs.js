@@ -1443,7 +1443,7 @@ var cnItems = {
     "multiplies A Point gain.": "乘以 A 点增益。",
     "Reward: Ultraviolet and Polynomial are based on best amount, and B Points": "奖励：紫外线和多项式基于最佳数量，以及 B 分",
     "Reward: X-Rays and Semi-exponential are based on best amount, square Oxygen V exponent, and ln(B Points) multiplies Microwaves' base.": "奖励：X 射线和半指数基于最佳量、平方氧 V 指数和 ln(B 点) 乘以微波的基数。",
-    "": "",
+    "Reward: Gamma Rays and Exponential are based on best amount, square Ultraviolet, and keep Oxygen and Carbon upgrades upon token reset.": "奖励：伽马射线和指数基于最佳数量、方形紫外线，并在令牌重置时保持氧气和碳升级。",
     "": "",
     "": "",
     "": "",
