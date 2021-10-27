@@ -83,6 +83,9 @@ function shouldNotify(layer){
 	}
 	if (player[layer].activeChallenge && canCompleteChallenge(layer, player[layer].activeChallenge)) {
 		if (!inChallenge("l", 12) || layers.l.grid.getGemEffect(205).eq(0)) return true
+		if (player.l.activeChallenge == 12) {
+			if (player.l.grid[player.l.activeChallengeID].gems.gte(1e4)) return true
+		}
 	}
 
 	if (tmp[layer].shouldNotify) return true

@@ -4503,6 +4503,21 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 443) || player.d.unlocked
                         }, // hasUpgrade("sci", 444)
                 },
+                445: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXV"
+                        },
+                        description(){
+                                return "Remove crRNA base cost"
+                        },
+                        cost:() => new Decimal("4e378"),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return player.d.best.gt(0)
+                        }, // hasUpgrade("sci", 445)
+                },
         },
         buyables: {
                 rows: 5,
@@ -5694,8 +5709,8 @@ addLayer("sci", {
                                    411, 412, 413, 414, 415, 
                                    421, 422, 423, 424, 425, 
                                    431, 432, 433, 434, 435,
-                                   441, 442, 443, 444,    ]
-
+                                   441, 442, 443, 444, 445]
+                        if (hasMilestone("d", 4)) ids = ids.slice(player.d.times, )
                         if (!false) data.upgrades = filterOut(data.upgrades, ids)
                 }
         },
@@ -12116,7 +12131,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 39)
                 40: {
                         requirementDescription(){
-                                if (player.extremeMode) return "1e419 Lives"
+                                if (player.extremeMode) return "1.00e419 Lives"
                                 return "1.00e500 Lives"
                         },
                         done(){
@@ -12133,7 +12148,7 @@ addLayer("l", {
                 }, // hasMilestone("l", 40)
                 41: {
                         requirementDescription(){
-                                 if (player.extremeMode) return "1e476 Lives"
+                                 if (player.extremeMode) return "1.00e476 Lives"
                                 return "1.00e532 Lives"
                         },
                         done(){
@@ -16639,6 +16654,7 @@ addLayer("a", {
                         cost(){
                                 let amt = getBuyableAmount("a", 23)
                                 let baseCost = new Decimal(player.extremeMode ? "1e259e3" : "1e257000")
+                                if (hasUpgrade("sci", 445)) baseCost = decimalOne
                                 let base = player.extremeMode ? "1e1000" : "1e2000"
                                 return baseCost.times(Decimal.pow(base, amt.pow(1.2)))
                         },
@@ -16648,6 +16664,7 @@ addLayer("a", {
                         maxAfford(){
                                 let pts = player.a.protein.points
                                 let init = player.extremeMode ? "1e259e3" : "1e257e3"
+                                if (hasUpgrade("sci", 445)) init = "1"
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log(player.extremeMode ? "1e1000" : "1e2000").root(1.2).plus(1).floor()
                         },
@@ -16704,7 +16721,7 @@ addLayer("a", {
                                         cost2 = cost2.replace("7", "9")
                                         cost2 = cost2.replace("2000", "1000")
                                 }
-
+                                if (hasUpgrade("sci", 445)) cost2 = cost2.slice(10,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -17731,7 +17748,9 @@ addLayer("d", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: miRNA effects Life gain, gain C45 gems passively, and autobuy ncRNA."
+                                let a = "Reward: miRNA effects Life gain, gain C45 gems passively,"
+                                if (player.extremeMode) a += " keep a Protein Science upgrade per reset,"
+                                return a + " and autobuy ncRNA."
                         },
                 }, // hasMilestone("d", 4)
                 5: {
@@ -18116,7 +18135,7 @@ addLayer("d", {
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
                                         let c = " the last two rows of Phosphorus and mu upgrades."
 
-                                        return = a1 + br + a2 + br2 + b + br + c
+                                        return a1 + br + a2 + br2 + b + br + c
                                 }],
                                 ],
                         unlocked(){
@@ -18233,7 +18252,7 @@ addLayer("d", {
                                 let lKeptUpgrades = 0
                                 if (hasMilestone("a", 6)) lKeptUpgrades += player.a.times
                                 if (!false) {
-                                        sortStrings(data1.upgrades)
+                                        sortStrings(data2.upgrades)
                                         data2.upgrades = data2.upgrades.slice(0, lKeptUpgrades)
                                 }
                         }
