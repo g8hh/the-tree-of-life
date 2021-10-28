@@ -1825,7 +1825,7 @@ var cnRegReplace = new Map([
     [/^([\d\.]+)e([\d\.,]+) Iota$/, '$1e$2 Iota'],
     [/^([\d\.]+)e([\d\.,]+) Mu$/, '$1e$2 Mu'],
     [/^([\d\.]+)e([\d\.,]+) base Phosphorus$/, '$1e$2 基础磷'],
-    [/^([\d\.]+)e([\d\.,]+) Tissues$/, '$1e$2 纸巾'],
+    [/^([\d\.]+)e([\d\.,]+) Tissues$/, '$1e$2 组织'],
     [/^([\d\.]+)e([\d\.,]+) OOM\^2s$/, '$1e$2 OOM\^2s'],
     [/^\^(.+) to Atomic Hydrogen$/, '\^$1 到 原子氢'],
     [/^\^(.+) to Deuterium$/, '\^$1 到 氘'],
