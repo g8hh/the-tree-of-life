@@ -150,7 +150,7 @@ function getPointDilationExponent(){
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                 let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
                 let c6Layers = (86 + c2depth) * c6depth ** .125
-                let c6Base = .96
+                let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
                 let c7Base = .023
                 if (!player.extremeMode) c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
@@ -286,8 +286,11 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         503: "Protein per Amino Acid upgrade<br>log10(10+x<sup>.5</sup>)",
         504: "Point gain per siRNA<br>log10(10+x)",
         505: "Life gain per rRNA<br>1+x/300",
-        /* THINGS TO CONSIDER KEEPING
+        106: "Add to shRNA base<br>cbrt(x)",
+        206: "Multiply DNA gain<br>log10(10+x)<sup>3</sup>",
         306: "Passive DNA gain<br>x/11%/s",
+        406: "Protein gain per DNA milestone<br>1+x",
+        /* THINGS TO CONSIDER KEEPING
         602: "Gem gain<br>1+cbrt(x)",
         603: "Autobuy shRNA<br>x>1330",
         606: "DNA resets per second<br>cbrt(x)/11",
@@ -397,6 +400,10 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         503: (x) => x.sqrt().plus(10).log10(),
         504: (x) => x.plus(10).log10(),
         505: (x) => x.div(300).plus(1),
+        106: (x) => x.cbrt(),
+        206: (x) => x.plus(10).log10().pow(3),
+        306: (x) => x.div(1100),
+        406: (x) => x.plus(1)
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -4517,6 +4524,36 @@ addLayer("sci", {
                         unlocked(){
                                 return player.d.best.gt(0)
                         }, // hasUpgrade("sci", 445)
+                },
+                451: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXVI"
+                        },
+                        description(){
+                                return "Challenge 6 dilation base becomes .952"
+                        },
+                        cost:() => new Decimal("1.4e481"),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasMilestone("d", 12)
+                        }, // hasUpgrade("sci", 451)
+                },
+                452: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXVII"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Per upgrade log10(DNA)<sup>2</sup> multiplies Protein gain but disable Protein Sci VIII's effect on Protein gain</bdi>"
+                        },
+                        cost:() => new Decimal("1.2e504"),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 451)
+                        }, // hasUpgrade("sci", 452)
                 },
         },
         buyables: {
@@ -13410,7 +13447,7 @@ addLayer("l", {
                                 let ret = base.pow(nz).pow(comps || 1)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 140.4e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 277340e3 : 140.4e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[21].goal)
@@ -14124,7 +14161,7 @@ addLayer("l", {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "/100"
                         }
-                        if ([205, 306, 1205].includes(id2)) {
+                        if ([205, 306, 1205, 1306].includes(id2)) {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "%"
                         }
@@ -14277,12 +14314,13 @@ addLayer("l", {
                                         let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                         let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
                                         let c5 = "Challenge 5: Dilate Point gain ^.665 per sqrt(depth)"
-                                        let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^.96 per depth<sup>1/8</sup>"
+                                        let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^(.96^depth<sup>1/8</sup>)"
                                         let c7 = "Challenge 7: Challenge 6 base is reduced by .023*depth<sup>.56</sup>"
                                         let c8 = "Challenge 8: Challenge 3 to 7 depths are 3.3 + depths/2 times more and<br>challenge 2 is .5 + depths/2 times more"
                                         if (player.extremeMode) {
                                                 c3 = c3.replace(".99", ".985-depth/200")
                                                 c5 = c5.replace(".665", ".713")
+                                                c6 = c6.replace(".96", ".951")
                                         }
                                         let challs = c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
@@ -14960,11 +14998,12 @@ addLayer("a", {
                         if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
                         if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(player.extremeMode ? 1e50 : 1e25).max(1))
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
-                        if (!player.extremeMode)        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
+                                                        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
                         if (hasChallenge("l", 61))      ret = ret.times(tmp.mu.buyables[31].effect)
                         if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
                         if (hasMilestone("d", 18))      ret = ret.times(player.d.points.max(1).pow(tmp.l.getNonZeroGemCount))
+                        if (hasUpgrade("sci", 452))     ret = ret.times(player.d.points.plus(10).log10().pow(2 * tmp.sci.upgrades.proteinUpgradesLength))
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
                                                         ret = ret.times(tmp.cells.effect)
@@ -14975,7 +15014,9 @@ addLayer("a", {
                                                         ret = ret.times(2)
                         }
                         if (hasUpgrade("sci", 412))     ret = ret.times(player.sci.protein_science.points.max(1))
-                        if (hasUpgrade("sci", 413))     ret = ret.times(tmp.sci.buyables[302].base)
+                        if (hasUpgrade("sci", 413) && !hasUpgrade("sci", 452)) {
+                                                        ret = ret.times(tmp.sci.buyables[302].base)
+                        }
                         if (hasUpgrade("sci", 435))     ret = ret.times(tmp.sci.upgrades[435].effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
@@ -16733,7 +16774,7 @@ addLayer("a", {
                         title: "ncRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 31)
-                                let baseCost = new Decimal(player.extremeMode ? "1e1156.5e3" : "1e702000")
+                                let baseCost = new Decimal(player.extremeMode ? (hasMilestone("d", 12) ? 1 : "1e1156.5e3") : "1e702000")
                                 return baseCost.times(Decimal.pow("1e6000", amt.pow(1.2)))
                         },
                         unlocked(){
@@ -16741,7 +16782,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                let init = player.extremeMode ? "1e1156.5e3" : "1e702000"
+                                let init = player.extremeMode ? (hasMilestone("d", 12) ? 1 : "1e1156.5e3") : "1e702000"
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log("1e6000").root(1.2).plus(1).floor()
                         },
@@ -16800,6 +16841,7 @@ addLayer("a", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e702,000*1e6,000^x<sup>1.2</sup>"
                                 if (player.extremeMode) cost2 = cost2.replace("702,000", "1,156,500")
+                                if (hasMilestone("d", 12)) cost2 = cost2.slice(12,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16811,7 +16853,7 @@ addLayer("a", {
                         title: "snRNA",
                         cost(){
                                 let amt = getBuyableAmount("a", 32)
-                                let baseCost = new Decimal(player.extremeMode ? "1e1826e3" : "1e1012000")
+                                let baseCost = new Decimal(player.extremeMode ? (hasMilestone("d", 11) ? 1 : "1e1826e3") : "1e1012000")
                                 return baseCost.times(Decimal.pow("1e5000", amt.pow(1.1)))
                         },
                         unlocked(){
@@ -16819,7 +16861,7 @@ addLayer("a", {
                         },
                         maxAfford(){
                                 let pts = player.a.protein.points
-                                let init = player.extremeMode ? "1e1826e3" : "1e1012000"
+                                let init = player.extremeMode ? (hasMilestone("d", 11) ? 1 : "1e1826e3") : "1e1012000"
                                 if (pts.lt(init)) return decimalZero
                                 return pts.div(init).log("1e5000").root(1.1).plus(1).floor()
                         },
@@ -16868,6 +16910,7 @@ addLayer("a", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,012,000*1e5,000^x<sup>1.1</sup>"
                                 if (player.extremeMode) cost2 = cost2.replace("012", "826")
+                                if (hasMilestone("d", 11)) cost2 = cost2.slice(12, )
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -16906,7 +16949,7 @@ addLayer("a", {
                         base(){
                                 let ret = new Decimal(10)
 
-                                if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(106))
+                                                                ret = ret.plus(layers.l.grid.getGemEffect(106))
                                 if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
                                 
                                 if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1)
@@ -17393,7 +17436,7 @@ addLayer("d", {
         getGainMult(){ // dna gain dnagain dgain d gain
                 let ret = decimalOne
 
-                if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(206))
+                                                ret = ret.times(layers.l.grid.getGemEffect(206))
                 if (hasUpgrade("d", 12)) {
                         let base = 2
                         if (hasUpgrade("d", 13)) base *= 2
@@ -17449,7 +17492,7 @@ addLayer("d", {
 
                 let baseGain = gain.div(tmp.d.getGainMult)
 
-                return baseGain.max(1).root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(player.extremeMode ? "9e315" : 4.4e144)
+                return baseGain.max(1).root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(player.extremeMode ? "8e315" : 4.4e144)
         },
         canReset(){
                 return tmp.d.getResetGain.gt(0)
@@ -17481,8 +17524,7 @@ addLayer("d", {
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
-                if (player.extremeMode) gainPercentage = decimalZero
-                data.total  =  data.total.plus(tmp.d.getResetGain.times(gainPercentage))
+                data.total = data.total.plus(tmp.d.getResetGain.times(gainPercentage))
                 if (!hasUpgrade("d", 23)) {
                         data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
                 } else {
@@ -17532,7 +17574,7 @@ addLayer("d", {
                         description(){
                                 return "Per upgrade per ncRNA exponentiate point gain to the number of ncRNA's and per upgrade double DNA gain"
                         },
-                        cost:() => new Decimal(30),
+                        cost:() => new Decimal(player.extremeMode ? 40 : 30),
                         unlocked(){
                                 return hasMilestone("d", 10) || player.cells.unlocked
                         }, // hasUpgrade("d", 12)
@@ -17848,7 +17890,9 @@ addLayer("d", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: miRNA's log4 becomes log3, gain C54 gems passively, and gain 10x gems."
+                                let a = "Reward: miRNA's log4 becomes log3, "
+                                if (player.extremeMode) a += "remove snRNA base cost, "
+                                return a + "gain C54 gems passively, and gain 10x gems."
                         },
                 }, // hasMilestone("d", 11)
                 12: {
@@ -17862,7 +17906,9 @@ addLayer("d", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: miRNA's log3 becomes ln, gain C55 gems passively, keep gems, and autobuy miRNA."
+                                let a = "Reward: miRNA's log3 becomes ln, gain C55 gems passively, "
+                                if (player.extremeMode) a += "remove ncRNA base cost, "
+                                return a + "keep gems, and autobuy miRNA."
                         },
                 }, // hasMilestone("d", 12)
                 13: {
