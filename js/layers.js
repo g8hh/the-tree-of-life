@@ -290,6 +290,7 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         206: "Multiply DNA gain<br>log10(10+x)<sup>3</sup>",
         306: "Passive DNA gain<br>x/11%/s",
         406: "Protein gain per DNA milestone<br>1+x",
+        506: "Add to base DNA gain<br>x/100",
         /* THINGS TO CONSIDER KEEPING
         602: "Gem gain<br>1+cbrt(x)",
         603: "Autobuy shRNA<br>x>1330",
@@ -403,7 +404,8 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         106: (x) => x.cbrt(),
         206: (x) => x.plus(10).log10().pow(3),
         306: (x) => x.div(1100),
-        406: (x) => x.plus(1)
+        406: (x) => x.plus(1),
+        506: (x) => x.div(100),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -4554,6 +4556,36 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 451)
                         }, // hasUpgrade("sci", 452)
+                },
+                453: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXVIII"
+                        },
+                        description(){
+                                return "Life IV base becomes 1.6^upgrades<sup>2</sup>"
+                        },
+                        cost:() => new Decimal("7e594"),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 452)
+                        }, // hasUpgrade("sci", 453)
+                },
+                454: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXIX"
+                        },
+                        description(){
+                                return "Per upgrade you have three less tokens for prestige purposes and double Protein Science gain but disable Nitrogen Science [not yet]"
+                        },
+                        cost:() => new Decimal("1e100619"),
+                        currencyLocation:() => player.sci.protein_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Protein Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 453)
+                        }, // hasUpgrade("sci", 454)
                 },
         },
         buyables: {
@@ -11281,6 +11313,10 @@ addLayer("l", {
                         effect(){
                                 let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
                                 if (hasUpgrade("l", 43)) lvls += tmp.l.getNonZeroGemCount
+                                if (hasUpgrade("sci", 453)) {
+                                        let exp = lvls * tmp.sci.upgrades.proteinUpgradesLength ** 2
+                                        return Decimal.pow(1.6, exp)
+                                }
                                 return tmp.sci.buyables[302].base.pow(lvls)
                         },
                         unlocked(){
@@ -13447,7 +13483,7 @@ addLayer("l", {
                                 let ret = base.pow(nz).pow(comps || 1)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 277340e3 : 140.4e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 277340 : 140.4e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[21].goal)
@@ -13455,8 +13491,8 @@ addLayer("l", {
                         completionLimit: 1,
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and all hydrogen content is disabled"
-                                let b = "Goal: e1e140,400 Points"
-                                let c = "Reward: Per anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
+                                let b = "Goal: " + (player.extremeMode ? "e1e277,340" : "e1e140,400") + " Points"
+                                let c = "Reward: Per Anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
                                 c += " and add 1.9 to base point gain but disable hydrogen content"
                                 let d = "Currently: " + format(tmp.l.challenges[21].reward)
 
@@ -13483,7 +13519,7 @@ addLayer("l", {
                                 let ret = base.pow(comps)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 145.1e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 275540 : 145.1e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[22].goal)
@@ -13492,7 +13528,8 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, all minigame content is disabled, and subtract .02 from the Dilation exponent"
                                 let b = "Goal: e1e145,100 Points"
-                                let c = "Reward: Per anti- challenge log10(DNA) multiplies DNA gain but disable minigame content"
+                                if (player.extremeMode) b = b.replace("145,100", "275,540")
+                                let c = "Reward: Per Anti- challenge log10(DNA) multiplies DNA gain but disable minigame content"
                                 let d = "Currently: " + format(tmp.l.challenges[22].reward)
                                 if (hasMilestone("cells", 7)) c = c.replace("log10", "log2")
 
@@ -13514,11 +13551,11 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(117)
+                                let base = new Decimal(player.extremeMode ? 100 : 117)
                                 let ret = base.times(comps)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 149.1e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 271950 : 149.1e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[31].goal)
@@ -13527,8 +13564,13 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, all carbon content is disabled, and subtract .04 from the Dilation exponent"
                                 let b = "Goal: e1e149,100 Points"
-                                let c = "Reward: Per anti- challenge<br> add 117 to 𝛾 → ∂𝛾's exponential divider but disable carbon content"
+                                let c = "Reward: Per Anti- challenge<br> add 117 to 𝛾 → ∂𝛾's exponential divider but disable carbon content"
                                 let d = "Currently: " + format(tmp.l.challenges[31].reward)
+
+                                if (player.extremeMode) {
+                                        c = c.replace("117", "100")
+                                        b = b.replace("149,100", "271,950")
+                                }
 
                                 return a + br + b + br + c + br + d
                         },
@@ -13538,7 +13580,7 @@ addLayer("l", {
                         countsAs: [11],
                 }, // inChallenge("l", 31) hasChallenge("l", 31)
                 32: {
-                        name: "Anti-Oxygen", 
+                        name: "Anti-Oxygen",
                         reward(){
                                 let data = player.l.challenges
                                 let comps = 0
@@ -13552,7 +13594,7 @@ addLayer("l", {
                                 let ret = base.times(comps)
                                 return ret
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 151.5e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 268.8e3 : 151.5e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[32].goal)
@@ -13561,8 +13603,10 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, all oxygen content is disabled, and subtract .06 from the Dilation exponent"
                                 let b = "Goal: e1e151,500 Points"
-                                let c = "Reward: Per anti- challenge<br> add .5 to DNA gain exponent but disable oxygen content"
+                                let c = "Reward: Per Anti- challenge<br> add .5 to DNA gain exponent but disable oxygen content"
                                 let d = "Currently: " + format(tmp.l.challenges[32].reward)
+
+                                if (player.extremeMode) b = b.replace("151,500", "268,800")
 
                                 return a + br + b + br + c + br + d
                         },
@@ -13595,7 +13639,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, all nitrogen content is disabled<sup>*</sup>, and subtract .08 from the Dilation exponent"
                                 let b = "Goal: e1e204,700 Points"
-                                let c = "Reward: Per anti- challenge<br> add .2 to 𝛾 → ∂𝛾's base but disable nitrogen content<sup>*</sup>"
+                                let c = "Reward: Per Anti- challenge<br> add .2 to 𝛾 → ∂𝛾's base but disable nitrogen content<sup>*</sup>"
                                 let d = "Currently: " + format(tmp.l.challenges[41].reward)
 
                                 return a + br + b + br + c + br + d
@@ -13629,7 +13673,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, and subtract .1 from the Dilation exponent"
                                 let b = "Goal: e1e256,300 Points"
-                                let c = "Reward: Per anti- challenge<br> add .01 to constant's base"
+                                let c = "Reward: Per Anti- challenge<br> add .01 to constant's base"
                                 let d = "Currently: " + format(tmp.l.challenges[42].reward)
 
                                 return a + br + b + br + c + br + d
@@ -13683,7 +13727,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, nullify Phosphorus effect, and subtract .14 from the Dilation exponent"
                                 let b = "Goal: e1e266,000 Points"
-                                let c = "Reward: Uncap C43 effect, and per anti- challenge you have one less token for prestige purposes, but nullify Phosphorus effect"
+                                let c = "Reward: Uncap C43 effect, and per Anti- challenge you have one less token for prestige purposes, but nullify Phosphorus effect"
                                 let d = "Currently: -" + format(tmp.l.challenges[52].reward)
 
                                 return a + br + b + br + c + br + d
@@ -13717,7 +13761,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .16 from the Dilation exponent"
                                 let b = "Goal: e1e274,000 Points"
-                                let c = "Reward: N → Δµ base is 1 + anti- completions/10, but hardcap N → Δµ effect at ee20, and N → Δµ effects Protein gain up to ee20"
+                                let c = "Reward: N → Δµ base is 1 + Anti- completions/10, but hardcap N → Δµ effect at ee20, and N → Δµ effects Protein gain up to ee20"
                                 let d = "Currently: " + format(tmp.l.challenges[61].reward)
 
                                 return a + br + b + br + c 
@@ -13777,7 +13821,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, subtract .2 from the Dilation exponent, and nullify µ effect"
                                 let b = "Goal: e1e579,200 Points"
-                                let c = "Reward: Per anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
+                                let c = "Reward: Per Anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
                                 let d = "Currently: " + format(tmp.l.challenges[71].reward)
 
                                 if (hasMilestone("cells", 3)) c = c.replace("log10", "log7")
@@ -13877,7 +13921,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
-                                let c = "Reward: Per anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
+                                let c = "Reward: Per Anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
                                 let d = "Currently: " + format(tmp.l.challenges[91].reward)
 
                                 return a + br + b + br + c + br + d
@@ -13911,7 +13955,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
                                 let b = "Goal: e1e397,000 Points"
-                                let c = "Reward: Raise Constant base to anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
+                                let c = "Reward: Raise Constant base to Anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
                                 let d = "Currently: " + format(tmp.l.challenges[92].reward)
 
                                 return a + br + b + br + c + br + d
@@ -17429,7 +17473,7 @@ addLayer("d", {
                 let ret = new Decimal(-1.5)
 
                 if (player.extremeMode) ret = ret.sub(2.5)
-                if (!player.extremeMode) ret = ret.plus(layers.l.grid.getGemEffect(506))
+                ret = ret.plus(layers.l.grid.getGemEffect(506))
 
                 return ret
         },
@@ -17620,7 +17664,7 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA VI"
                         },
                         description(){
-                                return "ncRNA's outer ln becomes log2 and unlock anti-omega but Phosphorus I no longer produces Nitrogen"
+                                return "ncRNA's outer ln becomes log2 and unlock Anti-omega but Phosphorus I no longer produces Nitrogen"
                         },
                         cost:() => new Decimal(5e27),
                         unlocked(){
@@ -17936,7 +17980,7 @@ addLayer("d", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: DNA multiplies protein gain, unlock anti-nitrogen, and per upgrade double DNA gain."
+                                return "Reward: DNA multiplies protein gain, unlock Anti-Nitrogen, and per upgrade double DNA gain."
                         },
                 }, // hasMilestone("d", 14)
                 15: {
@@ -19895,7 +19939,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock another anti- challenge."
+                                return "Reward: Unlock another Anti- challenge."
                         },
                 }, // hasMilestone("cells", 8)
                 9: {
@@ -20635,7 +20679,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .0001 to tRNA base, token exponent is .35, and unlock an anti- challenge."
+                                return "Reward: Add .0001 to tRNA base, token exponent is .35, and unlock an Anti- challenge."
                         },
                 }, // hasMilestone("cells", 58)
                 59: {
@@ -21802,7 +21846,7 @@ addLayer("cells", {
                                         a2 += ")"
                                         let a = a1 + br + a2
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
-                                        let c = "Note that anti- challenges are never reset."
+                                        let c = "Note that Anti- challenges are never reset."
 
                                         let part1 = a + br2 + b + br + c
 
@@ -22435,7 +22479,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXI"
                         },
                         description(){
-                                return "Unlock an anti-challenge with a free goal<br>Requires: 24 Tissue upgrades"
+                                return "Unlock an Anti-challenge with a free goal<br>Requires: 24 Tissue upgrades"
                         },
                         canAfford(){
                                 return player.t.upgrades.length >= 24
@@ -23428,7 +23472,7 @@ addLayer("t", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock another free anti- challenge, Secondary's reward base is (5+x)<sup>3</sup>, and unlock Middle."
+                                return "Reward: Unlock another free Anti- challenge, Secondary's reward base is (5+x)<sup>3</sup>, and unlock Middle."
                         },
                 }, // hasMilestone("t", 6)
                 7: {
@@ -23731,7 +23775,7 @@ addLayer("t", {
                                         a4 = a4.replace("1.00*Tissues+0.00", "Tissues")
                                         let a = a1 + br + a2 + br2 + a3 + br + a4
                                         let b = "Tissue resets all prior content that is not permanently kept."
-                                        let c = "Note that anti- challenges and gems are never reset anymore."
+                                        let c = "Note that Anti- challenges and gems are never reset anymore."
                                         let d1 = "Tissue effect effects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Mu, Lambda, Kappa, and Iota gain."
                                         let d = d1 + br + d2
@@ -24287,7 +24331,7 @@ addLayer("or", {
                                         let a3 = "Initial Organ effect: (Organs+1)^(min(100, 1+cbrt(Organs)/5))"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Organ resets all prior content that is not permanently kept, including Token content."
-                                        let c = "Note that anti- challenges, anti- gems, and Tertiary completions are never reset."
+                                        let c = "Note that Anti- challenges, Anti- gems, and Tertiary completions are never reset."
                                         let d1 = "Organ effect effects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Tissue, Mu, Lambda, Kappa, and Iota gain."
                                         let d = d1 + br + d2
