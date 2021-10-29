@@ -23200,7 +23200,11 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXII"
                         },
                         description(){
+                                if (shiftDown) return "Gives you ten tissue resets on purchase"
                                 return "Gain 99% of Tissue gained on reset per second but you can no longer reset for Tissues"
+                        },
+                        onPurchase(){
+                                player.t.times += 10
                         },
                         cost:() => new Decimal(2e28),
                         unlocked(){
