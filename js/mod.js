@@ -39,6 +39,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added six gems.<br>
 		- Added two Protein Science upgrades.<br>
 		- Added a Life challenge info minitab.<br>
+		- Made various autobuyers not trigger if the game is paused.<br>
 	<br><h3 style='color: #CC0000'>v1.172</h3><br>
 		- Balanced until 1e916 Protein Science.<br>
 		- Added a Protein Science upgrade.<br>
