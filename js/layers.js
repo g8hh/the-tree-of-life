@@ -4805,9 +4805,7 @@ addLayer("sci", {
                                         let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
                                 
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
@@ -4869,9 +4867,7 @@ addLayer("sci", {
                                         let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
                                         
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let eformula = "ln(ln(Hydrogen Science))^x<br>" + format(tmp.sci.buyables[12].base) + "^x"
@@ -4935,9 +4931,7 @@ addLayer("sci", {
                                         let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
                                 
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
@@ -5000,20 +4994,19 @@ addLayer("sci", {
                                 return tmp.sci.buyables[21].base.pow(player.sci.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 21)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 21)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(B Points)^x<br>" + format(tmp.sci.buyables[21].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e17*200^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[21].expDiv) + "</sup>)" 
@@ -5081,9 +5074,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5147,9 +5138,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5220,9 +5209,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5286,9 +5273,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5352,9 +5337,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5419,9 +5402,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5484,9 +5465,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5549,9 +5528,7 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -5731,10 +5708,7 @@ addLayer("sci", {
                                         let eff2 = format(tmp.sci.buyables[501].effect) + "</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 501)) + " DNA Science</b><br>"
                                         
-                                
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let ef = "DNA Science<sup>" + makeGreen("A") + "</sup> multiples Amino Acid gain"
@@ -10491,9 +10465,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10562,9 +10534,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10626,9 +10596,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10689,9 +10657,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10751,9 +10717,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10810,9 +10774,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10901,9 +10863,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -10996,8 +10956,7 @@ addLayer("mu", {
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
                                         if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation "
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -11068,9 +11027,7 @@ addLayer("mu", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12601,9 +12558,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12716,9 +12671,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12816,9 +12769,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -12930,9 +12881,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13025,9 +12974,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13124,9 +13071,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13225,9 +13170,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13326,9 +13269,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -13439,9 +13380,7 @@ addLayer("l", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16613,9 +16552,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16691,9 +16628,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16786,9 +16721,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16877,9 +16810,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -16952,8 +16883,7 @@ addLayer("a", {
                                         let end = "<br>Note: hardcapped at 1e125 in Customizable"
                                         if (hasUpgrade("d", 24)) end = ""
                                         if (player.extremeMode) end = end.replace("125", "100")
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + "Shift to see details" + br + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" + br + end
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17026,9 +16956,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17106,9 +17034,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17173,9 +17099,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -17251,9 +17175,7 @@ addLayer("a", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21313,9 +21235,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21414,9 +21334,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21507,9 +21425,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21592,9 +21508,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21662,9 +21576,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21726,9 +21638,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21794,9 +21704,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21861,9 +21769,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -21928,9 +21834,7 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -25043,9 +24947,7 @@ addLayer("mc", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -25095,9 +24997,7 @@ addLayer("mc", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -25139,9 +25039,7 @@ addLayer("mc", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26626,9 +26524,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26689,9 +26585,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26747,9 +26641,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26821,9 +26713,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26881,9 +26771,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -26945,9 +26833,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27010,9 +26896,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27076,9 +26960,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27139,9 +27021,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27196,9 +27076,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27254,9 +27132,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27311,9 +27187,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27368,9 +27242,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27425,9 +27297,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27482,9 +27352,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27545,9 +27413,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27603,9 +27469,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27650,9 +27514,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
                                 let comp1 = "(x+1)"
                                 if (hasUpgrade("mini", 25)) comp1 = "x"
@@ -27724,9 +27586,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27783,9 +27643,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27851,9 +27709,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27915,9 +27771,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -27980,9 +27834,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28042,9 +27894,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28105,9 +27955,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28174,9 +28022,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28234,9 +28080,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28299,9 +28143,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28359,9 +28201,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28420,9 +28260,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28483,9 +28321,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28546,9 +28382,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28615,9 +28449,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28676,9 +28508,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28737,9 +28567,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28804,9 +28632,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28868,9 +28694,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28930,9 +28754,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -28991,9 +28813,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29053,9 +28873,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29113,9 +28931,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29175,9 +28991,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29238,9 +29052,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29300,9 +29112,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29362,9 +29172,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29424,9 +29232,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29490,9 +29296,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29553,9 +29357,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29615,9 +29417,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29670,9 +29470,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29712,9 +29510,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29778,9 +29574,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29842,9 +29636,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29920,9 +29712,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29984,9 +29774,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30056,9 +29844,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30122,9 +29908,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30182,9 +29966,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30254,9 +30036,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30328,9 +30108,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30393,9 +30171,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30455,9 +30231,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -30515,9 +30289,7 @@ addLayer("mini", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -32745,9 +32517,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -32795,9 +32565,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -32842,9 +32610,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -32902,9 +32668,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -32958,9 +32722,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33006,9 +32768,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33058,9 +32818,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33104,9 +32862,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33152,9 +32908,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33217,9 +32971,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33266,9 +33018,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33311,9 +33061,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33356,9 +33104,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33404,9 +33150,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33452,9 +33196,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33499,9 +33241,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33546,9 +33286,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33599,9 +33337,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33711,9 +33447,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33776,9 +33510,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33828,9 +33560,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33899,9 +33629,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -33963,9 +33691,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -34027,9 +33753,7 @@ addLayer("tokens", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
