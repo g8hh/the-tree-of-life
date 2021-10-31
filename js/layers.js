@@ -134,6 +134,7 @@ function getPointExponentiation(){
                                         exp = exp.times(Decimal.pow(1 + player.a.milestones.length/100, player.a.milestones.length))
         }
         if (hasUpgrade("sci", 411))     exp = exp.times(player.sci.protein_science.points.max(1))
+        if (hasUpgrade("sci", 502))     exp = exp.times(player.d.points.max(1).pow(player.a.buyables[31].plus(player.a.buyables[13])))
         
         return exp
 }
@@ -151,7 +152,7 @@ function getPointDilationExponent(){
                 let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
                 let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
                 let c7Base = player.extremeMode ? .0188 : .023
-                if (!player.extremeMode) c7Base -= layers.l.grid.getGemEffect(706).toNumber()
+                c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
                                         
 
@@ -311,6 +312,7 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         703: "Protein Science per non-0 gem<br>1+x",
         704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/500",
         705: "Add .0001 to tRNA base and unlock DNA Research<br>x>1330",
+        706: "Subtract from Challenge 7 effect<br>cbrt(x)/2752",
         /* THINGS TO CONSIDER KEEPING
         408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
         608: "All µ cost reductions always work<br>x>1330",
@@ -436,6 +438,7 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         703: (x) => x.plus(1),
         704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(500).plus(1),
         705: (x) => x.gt(1330),
+        706: (x) => x.cbrt().div(2752),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -2417,6 +2420,9 @@ addLayer("sci", {
                 },
                 getGainMult(){
                         let ret = decimalOne
+
+                        if (hasUpgrade("sci", 502))     ret = ret.times(Decimal.tetrate(tmp.sci.upgrades.dnaUpgradesLength, 2))
+                                                        ret = ret.times(player.sci.dna_science.points.plus(10).log10().pow(tmp.sci.buyables[502].effect))
 
                         return ret
                 },
@@ -4758,6 +4764,21 @@ addLayer("sci", {
                                 return layers.l.grid.getGemEffect(705)
                         }, // hasUpgrade("sci", 501)
                 },
+                502: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci II"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Per upgrade multiply DNA Science gain by the number of upgrades and each ncRNA and each miRNA exponentiates point gain ^DNA</bdi>"
+                        },//Per upgrade DNA Science multiplies Amino Acid and Protein gain and e
+                        cost:() => new Decimal(2000),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 501)
+                        }, // hasUpgrade("sci", 502)
+                },
         },
         buyables: {
                 rows: 5,
@@ -5727,6 +5748,57 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "300*2^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                502: {
+                        title: "DNA helicase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 502)
+                                let init = 25e3
+                                let base = 3
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 502) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[502].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[502] = data.buyables[502].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[502].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = decimalOne
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[502].base.times(player.sci.buyables[502])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[502]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("B") + "="
+                                        let eff2 = format(tmp.sci.buyables[502].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 502)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "log10(DNA Science)<sup>" + makeGreen("B") + "</sup> multiples DNA Science gain"
+                                let eformula = makeGreen("B") + "=" + format(tmp.sci.buyables[502].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "25,000*3^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -14478,6 +14550,7 @@ addLayer("l", {
                                                         c5 = c5.replace(".665", ".713")
                                                         c6 = c6.replace(".96", ".951")
                                                         c6 = c6.replace("1/8", "1/10")
+                                                        c7 = c7.replace(".023", ".0188")
                                                 }
                                                 let challs = challStart + c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
@@ -35420,8 +35493,3 @@ addLayer("tokens", {
                 if (player.extremeMode) layers.sci.doReset("tokens")
         },
 })
-
-
-
-
-

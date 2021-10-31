@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.174.3",
+	num: "1.174.4",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,25 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.l.grid[705].gems.gt(0)
+	if (player.extremeMode) return player.l.grid[706].gems.gt(0)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.174.3)<br><br>
+		Reaching the endgame screen (updated as of v1.174.4)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.174.4</h3><br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+		- Added a gem.<br>
+		- Various wording fixes.<br>
+		- Balanced until C76 Gems.<br>
 	<br><h3 style='color: #CC0000'>v1.174.3</h3><br>
 	 	- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.174.2</h3><br>
