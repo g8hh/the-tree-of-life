@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.174.1",
+	num: "1.174.2",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,17 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.174.1)<br><br>
+		Reaching the endgame screen (updated as of v1.174.2)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.174.2</h3><br>
+		- Added DNA Science.<br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.174.1</h3><br>
 		- Balanced until C75 Gems.<br>
 		- Added six gems.<br>
@@ -1605,8 +1609,8 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
-		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
