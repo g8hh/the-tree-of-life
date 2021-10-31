@@ -302,9 +302,13 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
         407: "\"Universe\" is universal<br>x>1330",
         507: "Add to DNA gain exponent<br>x/1000",
-        /* THINGS TO CONSIDER KEEPING
+        607: "DNA gain per non-0 gem<br>(x+1)<sup>.25</sup>",
         701: "Remove the /2 in the DNA gain formula<br>x>1330",
         702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
+        703: "Protein Science per non-0 gem<br>1+x",
+        704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/500",
+        705: "Add .0001 to tRNA base<br>x>1330",
+        /* THINGS TO CONSIDER KEEPING
         408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
         608: "All µ cost reductions always work<br>x>1330",
         802: "Autobuy tokens<br>x>1330",
@@ -423,6 +427,12 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         307: (x) => x.plus(1),
         407: (x) => x.gt(1330),
         507: (x) => x.div(1000),
+        607: (x) => x.plus(1).pow(.25),
+        701: (x) => x.gt(1330),
+        702: (x) => x.cbrt().div(11).times(9).plus(1).round(),
+        703: (x) => x.plus(1),
+        704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(500).plus(1),
+        705: (x) => x.gt(1330),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -2362,6 +2372,7 @@ addLayer("sci", {
                                                         ret = ret.times(layers.l.grid.getGemEffect(305))
                         if (hasUpgrade("sci", 431))     ret = ret.times(Decimal.pow(2, tmp.l.getMaxedGemCount))
                         if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(1.03, getBuyableAmount("a", 22)))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(703).pow(tmp.l.getNonZeroGemCount))
 
                         return ret
                 },
@@ -8293,8 +8304,12 @@ addLayer("p", {
                                                 
                                                 ret = ret.pow(layers.l.grid.getGemEffect(403))
                 if (hasChallenge("l", 71))      ret = ret.pow(tmp.l.challenges[71].reward)
-                if (!player.extremeMode)        ret = ret.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
-                if (hasMilestone("d", 20))      ret = ret.pow(Decimal.pow(2, player.d.milestones.length+1))
+                                                ret = ret.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
+                if (hasMilestone("d", 20)) {
+                        let base = 2 + hasMilestone("d", 20)
+                        let exp = player.d.milestones.length + !hasMilestone("d", 20)
+                                                ret = ret.pow(Decimal.pow(base, exp))
+                }
                 if (!player.extremeMode)        ret = ret.pow(layers.l.grid.getGemEffect(805).pow(tmp.l.getNonZeroGemCount))
                                                 ret = ret.pow(tmp.cells.effect)
                 if (hasUpgrade("t", 25))        ret = ret.pow(tmp.t.upgrades[25].effect)
@@ -10740,8 +10755,7 @@ addLayer("mu", {
                                                 if (hasMilestone("cells", 4))   diff *= 10
                                                 if (hasChallenge("l", 101))     diff *= 50
                                                 if (hasChallenge("l", 102))     diff *= 50
-                                                
-                                                if (!player.extremeMode)        diff *= layers.l.grid.getGemEffect(702).toNumber()
+                                                                                diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                                 diff = Math.floor(diff)
                                                 y = Math.ceil(x/diff) * diff
@@ -10991,7 +11005,7 @@ addLayer("mu", {
                 "Buyables": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.times(20)) + " µ/s"
+                                        if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.sub(1).times(20)) + " µ/s"
                                         if (shiftDown) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
@@ -11411,6 +11425,10 @@ addLayer("l", {
                         effect(){
                                 let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
                                 if (hasUpgrade("l", 43)) lvls += tmp.l.getNonZeroGemCount
+                                if (hasMilestone("d", 20)) {
+                                        let exp = tmp.l.getNonZeroGemCount ** 2 * lvls
+                                        return Decimal.pow(player.d.milestones.length, exp).max(1)                               
+                                }
                                 if (hasUpgrade("sci", 453)) {
                                         let exp = lvls * tmp.sci.upgrades.proteinUpgradesLength ** 2
                                         return Decimal.pow(1.6, exp)
@@ -12677,7 +12695,7 @@ addLayer("l", {
 
                                 if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(202))
                                 if (hasMilestone("a", 14))      ret = ret.plus(.05)
-                                if (hasUpgrade("d", 24))        ret = ret.plus(.1375)
+                                if (hasUpgrade("d", 24) && !player.extremeMode)        ret = ret.plus(.1375)
                                 
                                 return ret
                         },
@@ -13995,7 +14013,7 @@ addLayer("l", {
                 }, // inChallenge("l", 81) hasChallenge("l", 81)
                 82: {
                         name: "Anti-Rho", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 1989e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 1981e3 : 1989e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[82].goal)
@@ -14004,6 +14022,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .26 from the Dilation exponent"
                                 let b = "Goal: e1e1,989,000 Points"
+                                if (player.extremeMode) b = b.replace("989", "981")
                                 let c = "Reward: Add .0001 to tRNA base"
 
                                 return a + br + b + br + c
@@ -14333,7 +14352,7 @@ addLayer("l", {
                         if ([303, 404, 1301, 1303].includes(id2)) {
                                 return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(id))
                         }
-                        if ([1603, 1605, 603, 1207, 207, 1407, 407, 507, 701, 705, 707, 408, 608, 802, 803, 804, 806, 808].includes(id2)) {
+                        if ([1603, 1605, 603, 1207, 207, 1407, 407, 507, 1701, 701, 1705, 705, 707, 408, 608, 802, 803, 804, 806, 808].includes(id2)) {
                                 return "Currently:<br>" + layers.l.grid.getGemEffect(id)
                         }
                         return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
@@ -15194,6 +15213,9 @@ addLayer("a", {
                                                         ret = ret.times(tmp.sci.buyables[302].base)
                         }
                         if (hasUpgrade("sci", 435))     ret = ret.times(tmp.sci.upgrades[435].effect)
+                        if (hasMilestone("d", 20) && player.extremeMode) {
+                                                        ret = ret.times(player.mu.points.plus(1).pow(player.d.milestones.length))
+                        }
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -16462,7 +16484,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 61))        ret = ret.plus(.0003)
                                 if (hasUpgrade("a", 62))        ret = ret.plus(.0004)
                                 if (hasChallenge("l", 82))      ret = ret.plus(.0001)
-                                if (layers.l.grid.getGemEffect(705) && !player.extremeMode) {
+                                if (layers.l.grid.getGemEffect(705)) {
                                                                 ret = ret.plus(.0001)
                                 }
                                 if (hasMilestone("d", 21))      ret = ret.plus(.0001)
@@ -17610,7 +17632,7 @@ addLayer("d", {
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
-                if (!(layers.l.grid.getGemEffect(701) && !player.extremeMode)) v1 = v1.div(2)
+                if (layers.l.grid.getGemEffect(701)) v1 = v1.div(2)
                 return v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
         },
         getBaseGainAddition(){
@@ -17639,12 +17661,12 @@ addLayer("d", {
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
                 if (hasMilestone("d", 18))      {
                         let base = 2
-                        if (hasUpgrade("d", 24)) base *= 2
+                        if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                         if (hasUpgrade("d", 25)) base *= 2
                         if (hasUpgrade("d", 31)) base *= 2
                                                 ret = ret.times(Decimal.pow(base, player.d.milestones.length))
                 }
-                if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount))
+                                                ret = ret.times(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount))
                 if (hasUpgrade("d", 35))        ret = ret.times(Decimal.pow(1.01, getBuyableAmount("a", 33)).min("e2e5"))
                                                 ret = ret.times(tmp.cells.effect)
                 if (hasUpgrade("cells", 113))   ret = ret.times(tmp.cells.upgrades[113].effect)
@@ -17849,9 +17871,10 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA IX"
                         },
                         description(){
+                                if (player.extremeMode) return "siRNA is no longer hardcapped"
                                 return "Add .1375 to α → ∂𝛾's base, per milestone double DNA gain, and siRNA is no longer hardcapped"
                         },
-                        cost:() => new Decimal(8e101),
+                        cost:() => new Decimal(player.extremeMode ? 1.8e102 : 8e101),
                         unlocked(){
                                 return hasMilestone("d", 22) || player.cells.unlocked
                         }, // hasUpgrade("d", 24)
@@ -18217,24 +18240,28 @@ addLayer("d", {
                 }, // hasMilestone("d", 19)
                 20: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.20e72 DNA"
                                 return "e6e136 Phosphorus"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.d.points.gte(1.2e72)
                                 return player.p.points.gte("e6e136")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per milestone + 1 square Phosphorus gain."
+                                if (player.extremeMode) return "Reward: Per milestone cube Phosphorus gain and multiply Protein gain by µ+1 and Life IV base is [milestones]^(non-zero gems)<sup>2</sup>."
+                                return "Reward: Per milestone + 1 square Phosphorus gain." 
                         },
                 }, // hasMilestone("d", 20)
                 21: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.70e99 DNA"
                                 return "3.00e100 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(1.7e99)
                                 return player.d.points.gte(3e100)
                         },
                         unlocked(){
@@ -18246,9 +18273,11 @@ addLayer("d", {
                 }, // hasMilestone("d", 21)
                 22: {
                         requirementDescription(){
+                                if (player.extremeMode) return "4.40e100 DNA"
                                 return "1.60e101 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(4.4e100)
                                 return player.d.points.gte(1.6e101)
                         },
                         unlocked(){
