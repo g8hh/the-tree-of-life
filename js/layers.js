@@ -142,7 +142,7 @@ function getPointDilationExponent(){
         let exp = decimalOne
 
         if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
-        if (inChallenge("l", 12))       {
+        if (inChallenge("l", 12)) {
                 let portion = decimalOne
                 let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
                                         portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
@@ -532,13 +532,6 @@ function binomial(n,k) {
                 binomials.push(nextRow);
         }
         return binomials[n][k];
-}
-
-function getDescriptionFromKey(id){
-        let d = id.description
-        
-        if (isFunction(d)) return d()
-        return d
 }
 
 function resetPreLifeCurrencies(){
@@ -4806,22 +4799,21 @@ addLayer("sci", {
                                 return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
-                                let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
-                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
+                                
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
                                         return br + start + end
                                 }
+
+                                let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[11].expDiv) + "</sup>)" 
@@ -4871,21 +4863,20 @@ addLayer("sci", {
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
-                                let eformula = "ln(ln(Hydrogen Science))^x<br>" + format(tmp.sci.buyables[12].base) + "^x"
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
+                                        
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
                                         return br + start + end
                                 }
+
+                                let eformula = "ln(ln(Hydrogen Science))^x<br>" + format(tmp.sci.buyables[12].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e6*100^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[12].expDiv) + "</sup>)" 
@@ -4938,22 +4929,21 @@ addLayer("sci", {
                                 return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
-                                let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
-                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
+                                
                                         let end = "Shift to see details"
                                         let start = lvl + eff1 + eff2 + cost
                                         return br + start + end
                                 }
+
+                                let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
+                                if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e9*1,000^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[13].expDiv) + "</sup>)" 
@@ -5017,9 +5007,7 @@ addLayer("sci", {
                                 let eformula = "log10(B Points)^x<br>" + format(tmp.sci.buyables[21].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5090,9 +5078,7 @@ addLayer("sci", {
                                 let eformula = "log10(A Points)^x<br>" + format(tmp.sci.buyables[22].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5158,9 +5144,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 23)) + " Hydrogen Science</b><br>"
                                 let eformula = format(tmp.sci.buyables[23].base) + "*x*log2(1+x)"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5233,9 +5217,7 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 115)) eformula = eformula.replaceAll("log10", "ln")
                                 if (hasUpgrade("sci", 305)) eformula = eformula.replace("ln(ln(H Sci))^x", "log10(Science)^x")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5301,9 +5283,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 102)) + " Oxygen Science</b><br>"
                                 let eformula = "log10(log10(Hydrogen))^x<br>" + format(tmp.sci.buyables[102].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5369,9 +5349,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 103)) + " Oxygen Science</b><br>"
                                 let eformula = "ln(ln(Oxygen))^x<br>" + format(tmp.sci.buyables[103].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5438,9 +5416,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 111)) + " Oxygen Science</b><br>"
                                 let eformula = format(tmp.sci.buyables[111].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5505,9 +5481,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 112)) + " Oxygen Science</b><br>"
                                 let eformula = "log10(Oxygen Science)^x<br>" + format(tmp.sci.buyables[112].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5572,9 +5546,7 @@ addLayer("sci", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 113)) + " Oxygen Science</b><br>"
                                 let eformula = "log10(Carbon)^x<br>" + format(tmp.sci.buyables[113].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -5765,10 +5737,9 @@ addLayer("sci", {
                                         return br + start + end
                                 }
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "DNA Science<sup>" + makeGreen("A") + "</sup> multiples Amino Acid gain"
+                                let ef = "DNA Science<sup>" + makeGreen("A") + "</sup> multiples Amino Acid gain"
                                 let eformula = makeGreen("A") + "=" + format(tmp.sci.buyables[501].base) + "*x"
-                                let allEff = ef1 + eformula + "</b><br>" + ef2 + br
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "300*2^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
@@ -6093,7 +6064,7 @@ addLayer("c", {
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
-                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 51))   {
+                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 51)) {
                                                 ret = ret.times(player.o.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
                 }
 
@@ -6583,7 +6554,7 @@ addLayer("o", {
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
-                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 52))   {
+                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 52)) {
                                                 ret = ret.times(player.c.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
                 }
 
@@ -10517,9 +10488,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 11)) + " µ</b><br>"
                                 let eformula = "log10(log10(Points))^x<br>" + format(tmp.mu.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10590,9 +10559,7 @@ addLayer("mu", {
                                 eformula += format(tmp.mu.buyables[12].base) + "^x"
                                 eformula = eformula.replace("+0", "")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10656,9 +10623,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 13)) + " Phosphorus</b><br>"
                                 let eformula = format(tmp.mu.buyables[13].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10721,9 +10686,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 21)) + " µ</b><br>"
                                 let eformula = "log10(Phosphorus)^x<br>" + format(tmp.mu.buyables[21].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10785,9 +10748,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 22)) + " Phosphorus</b><br>"
                                 let eformula = format(tmp.mu.buyables[22].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10846,9 +10807,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 23)) + " Phosphorus</b><br>"
                                 let eformula = format(tmp.mu.buyables[23].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -10939,10 +10898,7 @@ addLayer("mu", {
                                         eff2 = eff2.replace("Phosphorus", "Protein")
                                 }
 
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -11035,9 +10991,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 32)) + " µ</b><br>"
                                 let eformula = format(tmp.mu.buyables[32].base, 4)  + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -11111,9 +11065,7 @@ addLayer("mu", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 33)) + " Lives</b><br>"
                                 let eformula = format(tmp.mu.buyables[33].base, 4)  + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -12646,10 +12598,7 @@ addLayer("l", {
                                 if (f == "log2.72") f = "ln"
                                 eformula = eformula.replaceAll("logINS", f)
                                 
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -12764,9 +12713,7 @@ addLayer("l", {
                                 if (hasMilestone("d", 22)) eformula = eformula.replace("log2(Dilation completions)", "Dilation completions")
                                 if (hasMilestone("cells", 35)) eformula = eformula.replace("Dilation completions", "Lambda")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -12866,9 +12813,7 @@ addLayer("l", {
                                 let eformula = format(tmp.l.buyables[13].base, 4) + "*x"
                                 if (inChallenge("l", 112) || hasChallenge("l", 112)) eff2 = eff2.replace("prior exp dividers and ", "")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -12982,9 +12927,7 @@ addLayer("l", {
                                 if (hasChallenge("l", 72)) eformula = eformula.replace("log2(tokens)", "tokens")
                                 if (hasMilestone("cells", 36)) eformula = eformula.replace("tokens", "(2<sup>tokens</sup>)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -13079,9 +13022,7 @@ addLayer("l", {
                                 let eformula = "Constant effect^x<br>" + format(tmp.l.buyables[22].base) + "^x"
                                 if (hasUpgrade("cells", 31)) eformula = eformula.replace("Constant effect", "Kappa")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -13180,9 +13121,7 @@ addLayer("l", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 23)) + " Lives</b><br>"
                                 let eformula = format(tmp.l.buyables[23].base, 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -13283,9 +13222,7 @@ addLayer("l", {
                                 if (hasMilestone("l", 26)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 54)) eformula = eformula.replace("log2(Lives)", "Lambda")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -13386,9 +13323,7 @@ addLayer("l", {
                                 if (hasMilestone("cells", 39))  eformula = eformula.replace("(α → ∂α levels)", "Near-ultraviolet")
                                 if (hasUpgrade("t", 94))        eformula = eformula.replace("Near-ultraviolet", "Stem Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -13501,9 +13436,7 @@ addLayer("l", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 33)) + " Lives</b><br>"
                                 let eformula = format(tmp.l.buyables[33].base, 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -16677,9 +16610,7 @@ addLayer("a", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 11)) + " Protein</b><br>"
                                 let eformula = format(tmp.a.buyables[11].base, 4) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -16757,9 +16688,7 @@ addLayer("a", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 12)) + " Protein</b><br>"
                                 let eformula = format(tmp.a.buyables[12].base, 4) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -16854,9 +16783,7 @@ addLayer("a", {
                                 if (hasMilestone("cells", 29)) eformula = eformula.replace("log2(Lives)", "µ")
                                 if (hasUpgrade("t", 151)) eformula = eformula.replace("µ", "e1e13")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -16947,9 +16874,7 @@ addLayer("a", {
                                 if (hasMilestone("cells", 54))  eformula = eformula.replace("64*Omnipotent", "log10(Lives)")
                                 if (hasUpgrade("cells", 63))    eformula = eformula.replace("log10(Lives)", "(Tokens<sup>Tokens II</sup>)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -17021,9 +16946,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 54)) eformula = eformula.replace("log10", "log2")
                                 if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(Protein)", "Stem Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "<br>Note: hardcapped at 1e125 in Customizable"
@@ -17100,9 +17023,7 @@ addLayer("a", {
                                 if (hasMilestone("a", 37)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("cells", 25)) eformula = eformula.replace("log2(Amino Acid)", "sqrt(Cells)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -17182,9 +17103,7 @@ addLayer("a", {
                                 if (hasUpgrade("d", 22)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(log2(Points))", "Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -17251,9 +17170,7 @@ addLayer("a", {
                                 if (layers.l.grid.getGemEffect(806) && !player.extremeMode) eformula = eformula.replace("ln", "")
                                 if (hasUpgrade("cells", 63)) eformula = eformula.replace("siRNA levels", "log10(log10(Points))")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -17331,9 +17248,7 @@ addLayer("a", {
                                 let eformula = format(tmp.a.buyables[33].base) + "^x"
                                 if (hasUpgrade("cells", 115)) eformula = "(Mu*Infrared)^x" + br + eformula
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -17816,7 +17731,7 @@ addLayer("d", {
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
                                                 ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000"))
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
-                if (hasMilestone("d", 18))      {
+                if (hasMilestone("d", 18)) {
                         let base = 2
                         if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                         if (hasUpgrade("d", 25)) base *= 2
@@ -18943,7 +18858,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total12.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -18985,7 +18900,7 @@ addLayer("cells", {
 
                         if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total13.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -19033,7 +18948,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
                         if (hasUpgrade("cells", 313))   ret = ret.times(tmp.cells.upgrades[313].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total14.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -21395,9 +21310,7 @@ addLayer("cells", {
                                 let eformula = format(tmp.cells.buyables[11].baseConstant, 3) + "+log10(log10(Cells)^x<br>" 
                                 eformula += format(tmp.cells.buyables[11].base, 3) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21498,9 +21411,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 43)) eformula = eformula.replace("log4", "ln")
                                 if (hasMilestone("cells", 44)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21593,9 +21504,7 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 81)) eformula = eformula.replace("log10", "log4")
                                 if (hasUpgrade("t", 82)) eformula = eformula.replace("log4", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21680,9 +21589,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 21)) + " Stem Cells</b><br>"
                                 let eformula = "Tokens II^x<br>" + format(tmp.cells.buyables[21].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21752,9 +21659,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 13)) eformula = "x^sqrt(Cell milestones)"
                                 if (hasUpgrade("cells", 115)) eformula = "x^Cell milestones"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21818,9 +21723,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 112)) + " Mu</b><br>"
                                 let eformula = "log10(DNA)^(x-sin(x/20)*10)<br>" + format(tmp.cells.buyables[112].base) + "^(x-sin(x/20)*10)"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21888,9 +21791,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 411)) + " Iota</b><br>"
                                 let eformula = "(2 if time = prime, .8 otherwise)^x<br>" + format(tmp.cells.buyables[411].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -21957,9 +21858,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 412)) + " Iota</b><br>"
                                 let eformula = "(2.5 if time = even, .8 otherwise)^x<br>" + format(tmp.cells.buyables[412].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -22026,9 +21925,7 @@ addLayer("cells", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 413)) + " Iota</b><br>"
                                 let eformula = "(2 if time = odd, .8 otherwise)^x<br>" + format(tmp.cells.buyables[413].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -25143,9 +25040,7 @@ addLayer("mc", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 11)) + " Micro</b><br>"
                                 let eformula = format(tmp.mc.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -25197,9 +25092,7 @@ addLayer("mc", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 12)) + " Micro</b><br>"
                                 let eformula = "log10(Tokens)^x<br>" + format(tmp.mc.buyables[12].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -25243,9 +25136,7 @@ addLayer("mc", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 13)) + " Micro</b><br>"
                                 let eformula = "10-x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -25530,7 +25421,6 @@ addLayer("ach", {
                                 return tmp.mini.layerShown
                         },
                 },
-                
                 {key: "shift+#", description: "Shift+3: Go to tokens", 
                         onPress(){
                                 if (!tmp.tokens.layerShown) return
@@ -25675,8 +25565,6 @@ addLayer("ach", {
                                 return tmp.t.layerShown
                         },
                 },
-
-                
                 {
                         key: "THIS SHOULD NOT BE POSSIBLE3",
                         description: br + makeBlue("<b>Prestige</b>:"),
@@ -25687,7 +25575,6 @@ addLayer("ach", {
                                 return player.n.unlocked
                         },
                 },
-                
                 {key: "a", description: "A: Reset for Amino Acid", onPress(){
                                 if (canReset("a")) doReset("a")
                         },
@@ -26592,7 +26479,7 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 84))     ret = ret.times(Decimal.pow(1.02, getBuyableAmount("mini", 222)))
                                                         ret = ret.times(tmp.p.effect.min("1ee6"))
                         if (hasMilestone("p", 3))       ret = ret.times(player.mini.e_points.points.max(1).pow(.001))
-                        if (hasUpgrade("p", 23))        {
+                        if (hasUpgrade("p", 23)) {
                                 let base = 1 + player.p.upgrades.length/10
                                 let exp = getBuyableAmount("mini", 212)
                                                         ret = ret.times(Decimal.pow(base, exp))
@@ -26736,9 +26623,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 11)) + " A Points</b><br>"
                                 let eformula = format(tmp.mini.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -26801,9 +26686,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 12)) + " A Points</b><br>"
                                 let eformula = format(tmp.mini.buyables[12].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -26861,9 +26744,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 13)) + " A Points</b><br>"
                                 let eformula = format(tmp.mini.buyables[13].base) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -26937,9 +26818,7 @@ addLayer("mini", {
 
                                 eformula = eformula.replace("2", format(tmp.mini.buyables[21].initBase))
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -26999,9 +26878,7 @@ addLayer("mini", {
                                 let eformula = "x"
                                 if (hasUpgrade("h", 64)) eformula = "log10(x)*x<br>" + format(getBuyableBase("mini", 23)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27065,9 +26942,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 61)) + " A Points</b><br>"
                                 let eformula = format(tmp.mini.buyables[61].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27132,9 +27007,7 @@ addLayer("mini", {
                                 let eformula = "ln(10+[A Points])^x<br>" + format(tmp.mini.buyables[62].base) + "^x" 
                                 if (hasUpgrade("c", 14)) eformula = eformula.replace("ln", "log2")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27200,9 +27073,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 63)) + " A Points</b><br>"
                                 let eformula = format(tmp.mini.buyables[63].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27265,9 +27136,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
                                 let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27324,9 +27193,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 32)) + " B Points</b><br>"
                                 let eformula = "log2([B Points] + 10)^x<br>" + format(getBuyableBase("mini", 32)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27384,9 +27251,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 33)) + " B Points</b><br>"
                                 let eformula = ".1*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27443,9 +27308,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 41)) + " B Points</b><br>"
                                 let eformula = "<bdi style='color:#CC0033'>B</bdi>^x<br>" + format(getBuyableBase("mini", 41)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27502,9 +27365,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 42)) + " B Points</b><br>"
                                 let eformula = "ln(log8([B points]))^x<br>" + format(getBuyableBase("mini", 42)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27561,9 +27422,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 43)) + " B Points</b><br>"
                                 let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 43), 3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27620,9 +27479,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 51)) + " B Points</b><br>"
                                 let eformula = "ln(ln([B Points]))^x<br>" + format(getBuyableBase("mini", 51), 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27685,9 +27542,7 @@ addLayer("mini", {
                                 let eformula = ".01*x"
                                 if (hasUpgrade("c", 13)) eformula = ".01*ln(e+sqrt(x)/10)*x<br>" + format(getBuyableBase("mini", 52), 4) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27745,9 +27600,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 53)) + " B Points</b><br>"
                                 let eformula = "(1+x/30)*x<br>" + format(getBuyableBase("mini", 53)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27868,9 +27721,7 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 235)) init = "log2(C Points)<sup>x</sup>"
                                 let eformula = init + br + format(getBuyableBase("mini", 72)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27929,9 +27780,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 73)) + " C Points</b><br>"
                                 let eformula = "tokens<sup>x</sup><br>" + format(getBuyableBase("mini", 73)) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -27999,9 +27848,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 81)) + " C Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 81), 3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28065,9 +27912,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 43)) baseStr = "(" + baseStr + " + x)"
                                 let eformula = baseStr + "<sup>x</sup><br>" + format(getBuyableBase("mini", 82)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28132,9 +27977,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 23)) eformula = eformula.replace("log10", "ln")
                                 if (hasMilestone("tokens", 24)) eformula = eformula.replace("ln", "log2")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28196,9 +28039,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 91)) + " C Points</b><br>"
                                 let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 91)) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28261,9 +28102,7 @@ addLayer("mini", {
                                 let eformula = "(log10(Life Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 92)) + "^x"
                                 if (hasMilestone("n", 14)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28332,9 +28171,7 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 94)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 44)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28394,9 +28231,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 101)) + " C Points</b><br>"
                                 let eformula = "(C Point gain 5 buyables)<sup>x</sup><br>" + format(getBuyableBase("mini", 101)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28461,9 +28296,7 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 41)) eformula = eformula.replace("log10", "log2")
                                 if (hasChallenge("n", 22)) eformula = eformula.replace("(","(log10(Nitrogen)*")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28523,9 +28356,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 103)) + " C Points</b><br>"
                                 let eformula = "(Semi-exponential effect)<sup>x</sup><br>" + format(getBuyableBase("mini", 103)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28586,9 +28417,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 111)) + " C Points</b><br>"
                                 let eformula = "(1+x/500)*x<br>" + format(getBuyableBase("mini", 111),3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28651,9 +28480,7 @@ addLayer("mini", {
                                 let eformula = "(log10(Hydrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 112)) + "^x"
                                 if (hasChallenge("n", 12)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28716,9 +28543,7 @@ addLayer("mini", {
                                 let eformula = "(log10(B Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 113)) + "^x"
                                 if (hasMilestone("n", 16)) eformula = eformula.replace("(l", "(x*l")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28787,9 +28612,7 @@ addLayer("mini", {
                                 let eformula = format(getBuyableBase("mini", 121)) + "*x"
                                 if (hasUpgrade("mini", 61)) eformula = "log8(x)<sup>2*upgrades</sup>*x<br>" + eformula
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28850,9 +28673,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 122)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 122)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28913,9 +28734,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 123)) + " D Points</b><br>"
                                 let eformula = "log10(log10(Points))^x<br>" + format(getBuyableBase("mini", 123)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -28982,9 +28801,7 @@ addLayer("mini", {
                                 let eformula = "[upgrades]/100*x<br>" + format(getBuyableBase("mini", 131)) + "*x"
                                 if (hasUpgrade("mini", 62)) eformula = eformula.replace("]", "]^" + (player.extremeMode && !hasUpgrade("sci", 335) ? "2" : "3"))
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29048,9 +28865,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 132)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 132), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29112,9 +28927,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 133)) + " D Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 133), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29175,9 +28988,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 151)) + " D Points</b><br>"
                                 let eformula = "(Linear Increase 1 buyables)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 151)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29239,9 +29050,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 152)) + " D Points</b><br>"
                                 let eformula = "(log10(Nitrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 152)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29301,9 +29110,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 153)) + " D Points</b><br>"
                                 let eformula = "(log10(Fuel))<sup>x</sup><br>" + format(getBuyableBase("mini", 153)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29365,9 +29172,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 161)) + " D Points</b><br>"
                                 let eformula = "(log10(D Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 161)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29430,9 +29235,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 162)) + " D Points</b><br>"
                                 let eformula = "(Upgrades)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 162)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29494,9 +29297,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 163)) + " D Points</b><br>"
                                 let eformula = "(Quadratic Increase levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 163)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29558,9 +29359,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 171)) + " D Points</b><br>"
                                 let eformula = "(Gas Pedal levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 171)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29622,9 +29421,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 172)) + " D Points</b><br>"
                                 let eformula = "<bdi style='color:#CC0033'>D</bdi><sup>x</sup><br>" + format(getBuyableBase("mini", 172)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29690,9 +29487,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 173)) + " D Points</b><br>"
                                 let eformula = makeRed("y") + "<sup>x</sup><br>" + format(getBuyableBase("mini", 173)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29755,9 +29550,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 181)) + " D Points</b><br>"
                                 let eformula = "log10(C Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 181)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29819,9 +29612,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 182)) + " D Points</b><br>"
                                 let eformula = "log10(E Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 182)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29876,9 +29667,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 183)) + " D Points</b><br>"
                                 let eformula = "Phosphorus<sup>x</sup><br>" + format(getBuyableBase("mini", 183)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -29986,9 +29775,7 @@ addLayer("mini", {
                                 let eformula = format(getBuyableBase("mini", 202)) + "*x"
                                 if (hasUpgrade("c", 35)) eformula = eformula.replace("*x", "*ln(x)*x")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30052,9 +29839,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 203)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 203)) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30132,9 +29917,7 @@ addLayer("mini", {
                                 if (hasUpgrade("n", 43)) eformula = eformula.replace("*x", "*ln(x)*x")
                                 if (hasUpgrade("c", 34)) eformula = eformula.replace(")", ")<sup>2</sup>")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30198,9 +29981,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 212)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 212), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30272,9 +30053,7 @@ addLayer("mini", {
                                         eformula = eformula.replace("ln", "log" + init)
                                 }
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30340,9 +30119,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 221)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 221), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30402,9 +30179,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 222)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 222), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30476,9 +30251,7 @@ addLayer("mini", {
                                 if (hasUpgrade("p", 15)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("p", 25)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30552,9 +30325,7 @@ addLayer("mini", {
                                 let lvle = tmp.mini.buyables[231].levelExp
                                 if (lvle.neq(1)) eformula = eformula.replace("*x", "*x<sup>" + formatWhole(lvle) + "</sup>")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30619,9 +30390,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 232)) + " E Points</b><br>"
                                 let eformula = format(getBuyableBase("mini", 232)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30683,9 +30452,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 233)) + " E Points</b><br>"
                                 let eformula = makeRed("E") + "^x<br>" + format(getBuyableBase("mini", 233)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -30745,9 +30512,7 @@ addLayer("mini", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 241)) + " E Points</b><br>"
                                 let eformula = "log10(Phosphorus)^x<br>" + format(getBuyableBase("mini", 241)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -32977,9 +32742,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[11].base, 3) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33029,9 +32792,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[12].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33078,9 +32839,7 @@ addLayer("tokens", {
                                 let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x"
                                 if (hasMilestone("cells", 25)) eff2 = eff2.replace("Atomic Hydrogen", "shRNA base")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33140,9 +32899,7 @@ addLayer("tokens", {
                                 if (hasMilestone("cells", 24)) eff2 = eff2.replace("Deuterium", "Stem Cell")
                                 if (hasUpgrade("t", 62)) eff2 = eff2.replace("ll", "lls and Cells")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33198,9 +32955,7 @@ addLayer("tokens", {
                                 let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x"
                                 if (hasMilestone("cells", 39)) eff2 = eff2.replace("Carbon", "𝛾 → ∂β base")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33248,9 +33003,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[23].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33302,9 +33055,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[31].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33350,9 +33101,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[32].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33400,9 +33149,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 33)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[33].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33467,9 +33214,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[41].base, 4) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33518,9 +33263,7 @@ addLayer("tokens", {
                                 let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x"
                                 if (hasMilestone("cells", 31)) eff2 = eff2.replace("Hydrogen", "crRNA")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33565,9 +33308,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 43)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[43].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33612,9 +33353,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 51)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[51].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33662,9 +33401,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 52)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[52].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33712,9 +33449,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 53)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[53].base, 3, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33761,9 +33496,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 61)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[61].base, 3) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33810,9 +33543,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 62)) + " Tokens</b><br>"
                                 let eformula = format(tmp.tokens.buyables[62].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33865,9 +33596,7 @@ addLayer("tokens", {
                                 if (hasMilestone("cells", 50)) eff2 = eff2.replace("Color Production Exponent", "Omnipotent base")
                                 if (hasMilestone("cells", 51)) eformula = "x/500"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!shiftDown) {
                                         let end = "Shift to see details"
@@ -33979,9 +33708,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 101)) + " Token II</b><br>"
                                 let eformula = "(1+C)<sup>.5</sup>/(40+R)*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34046,9 +33773,7 @@ addLayer("tokens", {
                                         eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + eformula.slice(0,29) + ")" + eformula.slice(29,)
                                 }
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34100,9 +33825,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 111)) + " Token II</b><br>"
                                 let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34173,9 +33896,7 @@ addLayer("tokens", {
                                 eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
                                 eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34239,9 +33960,7 @@ addLayer("tokens", {
                                 let eformula = "2C<sup>.6</sup>(100+C)/(50+R)*x<br>" 
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34305,9 +34024,7 @@ addLayer("tokens", {
                                 let eformula = "(100+30C)/(20+R)^x<br>" 
                                 eformula += format(tmp.tokens.buyables[122].base, 4) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 if (!player.shiftAlias) {
                                         let end = "Shift to see details"
@@ -34345,9 +34062,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -34369,9 +34084,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -34397,9 +34110,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193)) + " Cells</b><br>"
                                 let eformula = "10^10^((4+x/" + formatWhole(tmp.tokens.buyables[193].div) + "))"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
