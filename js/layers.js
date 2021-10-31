@@ -143,18 +143,21 @@ function getPointDilationExponent(){
 
         if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
         if (inChallenge("l", 12)) {
-                let portion = decimalOne
-                let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
-                                        portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
-                let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0  
+                let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
+
                 let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
                 let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
                 let c7Base = player.extremeMode ? .0188 : .023
                 if (!player.extremeMode) c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
-                                        portion = portion.times(Decimal.pow(c6Base, c6Layers))
+                                        
+
+                let portion = decimalOne
+                portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
+                portion = portion.times(Decimal.pow(c6Base, c6Layers))
 
                 let challId = player.l.activeChallengeID
                 if (challId > 801) portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
@@ -826,7 +829,7 @@ addLayer("h", {
                         let ret = decimalOne
 
                         if (hasUpgrade("h", 23))        ret = ret.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41))        ret = ret.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
+                        if (hasUpgrade("h", 41))        ret = ret.times(player.h.atomic_hydrogen.points.max(3).ln().pow(tmp.h.upgrades[41].effect))
                                                         ret = ret.times(tmp.mini.buyables[13].effect)
                                                         ret = ret.times(tmp.tokens.buyables[21].effect)
                                                         ret = ret.times(tmp.l.effect)
@@ -856,7 +859,7 @@ addLayer("h", {
                 getGainMult(){
                         let ret = decimalOne
 
-                        if (hasUpgrade("h", 42))        ret = ret.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
+                        if (hasUpgrade("h", 42))        ret = ret.times(player.h.deuterium.points.max(3).ln().pow(tmp.h.upgrades[42].effect))
                                                         ret = ret.times(tmp.mini.buyables[11].effect)
                                                         ret = ret.times(tmp.tokens.buyables[13].effect)
                                                         ret = ret.times(tmp.l.effect)
@@ -15243,7 +15246,7 @@ addLayer("a", {
                         if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
                         if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(player.extremeMode ? 1e50 : 1e25).max(1))
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
-                                                        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(406).pow(player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
                         if (hasChallenge("l", 61))      ret = ret.times(tmp.mu.buyables[31].effect)
                                                         ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
@@ -17264,8 +17267,8 @@ addLayer("a", {
                                         if (!hasMilestone("a", 32)) { // 175e3 milestone
                                                 let init = tmp.a.protein.getAllOtherGain
                                                 let exp = tmp.a.protein.mRNAtRNABoostExp
-                                                let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
-                                                let mRNAFactor = Decimal.pow(tmp.a.buyables[12].baseCost, tmp.a.buyables[12].base.log(10))
+                                                let tRNAFactor = tmp.a.buyables[11].baseCost.pow(tmp.a.buyables[11].base.log(5))
+                                                let mRNAFactor = tmp.a.buyables[12].baseCost.pow(tmp.a.buyables[12].base.log(10))
                                                 let mult = mRNAFactor.times(tRNAFactor).pow(-1).times(.001)
                                                 let start = "For buyables to take 1ms to be affordable, you would have "
                                                 return start + format(init.times(mult).pow(exp)) + " protein"
@@ -17277,7 +17280,7 @@ addLayer("a", {
                                         // sqr(base1 * base2) is the expected multiplier per buyable, weighted cause theyre costs scale differently
                                         let oomps 
                                         if (timePerBuyable.gte(.05)) {
-                                                oomps = Decimal.pow(base1.times(base2).sqrt(), timePerBuyable.pow(-1)).log10()
+                                                oomps = base1.times(base2).sqrt().pow(timePerBuyable.pow(-1)).log10()
                                                 // we expect to buy timePerBuyable.pow(-1) per second at base1.times(base2).sqrt() multiplier each
                                                 // take log10 because its orders of magnitude
                                         } else {
@@ -17445,7 +17448,7 @@ addLayer("a", {
                                                 if (getBuyableAmount("a", 13).lt(1e8)) {
                                                         m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
                                                 } else { // the second order term is -.5/miRNA levels compared to the primary
-                                                        m29mi = Decimal.pow(Math.E, exp.times(.01).div(base))
+                                                        m29mi = Decimal.exp(exp.times(.01).div(base))
                                                 }
 
                                                 j += "<br>Milestone 29 makes the next siRNA give a " + doEndingFormula(base)
