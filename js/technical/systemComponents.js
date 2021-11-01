@@ -179,7 +179,7 @@ var systemComponents = {
 
 		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
 		Gain of all currencies is raised ^.75 (after everything except dilation)<br>
-		For protein, gain is not reduced, but mRNA and tRNA bases are ^.75<br><br>
+		For protein, boosts from things other than mRNA and tRNA are ^.75<br><br>
 		
 		</span>
 		
