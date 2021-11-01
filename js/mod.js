@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.160",
+	num: "1.164",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,44 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.l.challenges[11] >= 110
+	if (player.extremeMode) return player.a.protein.points.gt(0)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.160)<br><br>
+		Reaching the endgame screen (updated as of v1.164)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.163</h3><br>
+		- Implemented 7 gems.<br>
+		- Various extreme mode changes.<br>
+		- Balanced until Protein unlock.<br>
+	<br><h3 style='color: #CC0000'>v1.163</h3><br>
+		- Various code cleanup.<br>
+		- Balanced until C14 Gems.<br>
+		- Various small rewordings.<br>
+		- Added an effect to Amino Acid milestone 6.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.162</h3><br>
+		- Made parts of Life/Amino milestone 1 be given for unlocking the layer (see info).<br>
+		- Various code cleanup.<br>
+		- Cleaned up some display issues.<br>
+		- Various code cleanup.<br>
+		- Added a "MAXED" display for Reduce.<br>
+	<br><h3 style='color: #CC0000'>v1.161</h3><br>
+		- Balanced until Amino Acid unlock.<br>
+		- Implemented C23, 31, 32, and 33 gems.<br>
+		- Made more than 1 C3 depth harder.<br>
+		- Added a custom save.<br>
+		- Added three Life upgrades.<br>
+		- Buffed some of Phosphorus milestone 1 effects to permanent.<br>
+		- Various code cleanup.<br>
+		- Various display cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.160</h3><br>
 		- Balanced until C13 gems.<br>
 		- Added two Life upgrades.<br>
@@ -1553,6 +1578,10 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "1.151.1") {
 		player.l.everMilestone1 = player.l.milestones.includes("1") || player.a.unlocked
+	}
+	if (player.version < "1.161") {
+		player.a.everMilestone3 = player.d.unlocked || player.a.milestones.includes("3")
+		player.a.everMilestone1 = player.d.unlocked || player.a.milestones.includes("1")
 	}
 }
 
