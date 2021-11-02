@@ -93,7 +93,7 @@ function getPointExponentiation(){
                 let c17base = layers.l.grid.getGemEffect(107)
                                         exp = exp.times(c17base.pow(getBuyableAmount("a", 32)))
                 let c18base = layers.l.grid.getGemEffect(108)
-                                        exp = exp.times(c18base.pow(getBuyableAmount("l", 33).pow(1.8)))
+                                        exp = exp.times(c18base.pow(getBuyableAmount("l", 33).pow(player.extremeMode ? 1.9394 : 1.8)))
         }
         if (hasMilestone("a", 19))      exp = exp.times(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        exp = exp.times(Decimal.pow(3, player.a.upgrades.length))
@@ -315,7 +315,8 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         705: "Add .0001 to tRNA base and unlock DNA Research<br>x>1330",
         706: "Subtract from Challenge 7 effect<br>cbrt(x)/2752",
         707: "Add .004 to Dilation effect<br>x>1330",
-        108: "Point gain per 𝛾 → ∂𝛾<sup>1.8</sup> and DNA Science gain<br>1+x",
+        108: "<bdi style='font-size: 80%'>Point gain per 𝛾 → ∂𝛾<sup>1.9394</sup> and DNA Science gain<br>1+x</bdi>",
+        208: "mRNA base per non-zero gem-49 (maxed at 8)<br>x/2662000",
         /* THINGS TO CONSIDER KEEPING
         408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
         608: "All µ cost reductions always work<br>x>1330",
@@ -444,6 +445,7 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         706: (x) => x.cbrt().div(2752),
         707: (x) => x.gt(1330),
         108: (x) => x.plus(1),
+        208: (x) => x.div(2662000),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -16882,7 +16884,7 @@ addLayer("a", {
                                 if (hasMilestone("a", 35))      ret = ret.plus(.001)
 
                                 let lvls = Math.max(0, tmp.l.getNonZeroGemCount - 49)
-                                if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
+                                                                ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
                                 
                                 return ret
                         },
