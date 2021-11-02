@@ -16990,7 +16990,7 @@ addLayer("d", {
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
-                if (!player.extremeMode) gainPercentage = decimalZero
+                if (player.extremeMode) gainPercentage = decimalZero
                 data.total  =  data.total.plus(tmp.d.getResetGain.times(gainPercentage))
                 if (!hasUpgrade("d", 23)) {
                         data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
@@ -19730,7 +19730,7 @@ addLayer("cells", {
                                 return "1e1483 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1483")
+                                return player.cells.stem_cells.points.gte("1e1483")
                         },
                         unlocked(){
                                 return true
