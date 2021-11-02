@@ -135,6 +135,7 @@ function getPointExponentiation(){
         }
         if (hasUpgrade("sci", 411))     exp = exp.times(player.sci.protein_science.points.max(1))
         if (hasUpgrade("sci", 502))     exp = exp.times(player.d.points.max(1).pow(player.a.buyables[31].plus(player.a.buyables[13])))
+        if (hasUpgrade("sci", 504))     exp = exp.times(tmp.sci.upgrades[504].effect)
         
         return exp
 }
@@ -2430,6 +2431,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 503))     ret = ret.times(player.d.points.max(10).log10().log10().max(1).pow(tmp.sci.upgrades.dnaUpgradesLength))
                                                         ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
                                                         ret = ret.times(layers.l.grid.getGemEffect(108))
+                                                        ret = ret.times(tmp.sci.buyables[511].dna_sci_effect)
 
                         return ret
                 },
@@ -4801,6 +4803,29 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 502)
                         }, // hasUpgrade("sci", 503)
                 },
+                504: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci IV"
+                        },
+                        description(){
+                                let func = shiftDown ? makeRed : makeGreen
+                                let a = "DNA Science<sup>" + func("ABC") + "</sup> exponentiates point gain and multiplies Life gain"
+                                return a + br + "Currently: " + format(tmp.sci.upgrades[504].effect)
+                        },
+                        effect(){
+                                let exp = tmp.sci.buyables[501].effect
+                                exp = exp.times(tmp.sci.buyables[502].effect)
+                                exp = exp.times(tmp.sci.buyables[503].effect)
+                                return player.sci.dna_science.points.max(1).pow(exp)
+                        },
+                        cost:() => new Decimal(3e17),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 503)
+                        }, // hasUpgrade("sci", 504)
+                },
         },
         buyables: {
                 rows: 5,
@@ -5873,6 +5898,66 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "1e9*4^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                511: {
+                        title: "DNA clamp",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 511)
+                                let init = 2e19
+                                let base = 5
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 504) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[511].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[511] = data.buyables[511].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[511].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = decimalOne
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[511].base.times(player.sci.buyables[511])
+                        },
+                        dna_sci_effect(){
+                                let data = tmp.sci.buyables
+                                return data[501].effect.plus(data[502].effect).plus(data[503].effect).pow(data[511].effect)
+                        },
+                        protein_effect(){
+                                let data = tmp.sci.buyables
+                                return data[501].effect.pow(2).plus(data[502].effect.pow(2)).plus(data[503].effect.pow(2)).pow(data[511].effect.pow(2).times(100))
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[511]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("D") + "="
+                                        let eff2 = format(tmp.sci.buyables[511].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 511)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "(" + makeGreen("A") + "+" + makeGreen("B") + "+" + makeGreen("C") + ")<sup>" + makeGreen("D") + "</sup> multiples DNA Science gain and ("
+                                ef += makeGreen("A") + "<sup>2</sup>+" + makeGreen("B") + "<sup>2</sup>+" + makeGreen("C") + "<sup>2</sup>)^100" + makeGreen("D") + "<sup>2</sup> multiplies Protein gain"
+                                let eformula = makeGreen("D") + "=" + format(tmp.sci.buyables[511].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "2e19*5^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -11387,6 +11472,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("l", 22))        ret = ret.times(tmp.l.upgrades[22].effect)
+                if (hasUpgrade("sci", 504))     ret = ret.times(tmp.sci.upgrades[504].effect)
 
                 return ret.max(1)
         },
@@ -15428,6 +15514,7 @@ addLayer("a", {
                                                         ret = ret.times(player.mu.points.plus(1).pow(player.d.milestones.length))
                         }
                                                         ret = ret.times(player.mu.points.plus(1).pow(tmp.sci.buyables[503].effect.pow(2)))
+                                                        ret = ret.times(tmp.sci.buyables[511].protein_effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
