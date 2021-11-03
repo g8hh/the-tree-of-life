@@ -41,6 +41,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a DNA Science buyable.<br>
 		- Added two custom saves.<br>
 		- Various wording changes.<br>
+		- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.175.2</h3><br>
 		- Balanced until 1e26 DNA Science.<br>
 		- Added a gem.<br>

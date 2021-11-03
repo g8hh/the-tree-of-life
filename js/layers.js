@@ -1013,10 +1013,8 @@ addLayer("h", {
                         cost:() => player.hardMode ? new Decimal(1700) : new Decimal(500),
                         effect(){
                                 let a1 = new Decimal(player.h.upgrades.length).max(1)
-                                if (hasUpgrade("h", 43))        ret = a1.log2().max(1)
-                                else                            ret = a1.ln().max(1)
-
-                                return ret
+                                if (hasUpgrade("h", 43)) return a1.log2().max(1)
+                                return a1.ln().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[14].effect)
@@ -1107,9 +1105,7 @@ addLayer("h", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let ret = player.h.deuterium.best.max(1).ln().max(1)
-
-                                return ret
+                                return player.h.deuterium.best.max(1).ln().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[23].effect)
@@ -1515,9 +1511,8 @@ addLayer("h", {
                                 return player.hardMode ? Decimal.pow(2, 2100) : Decimal.pow(2, 2048)
                         },
                         effect(){
-                                let b = player.c.points.max(1)
+                                let ret = player.c.points.max(1).pow(player.h.upgrades.length)
 
-                                let ret = b.pow(player.h.upgrades.length)
                                 if (hasMilestone("tokens", 19)) ret = ret.pow(1.5)
                                 
                                 return ret
@@ -1561,9 +1556,7 @@ addLayer("h", {
                                 return player.hardMode ? Decimal.pow(2, 3250) : Decimal.pow(2, 3072)
                         },
                         effect(){
-                                let ret = player.points.max(10).log10().sqrt()
-                                
-                                return ret
+                                return player.points.max(10).log10().sqrt()
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[63].effect)
@@ -1653,9 +1646,7 @@ addLayer("h", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let ret = player.c.points.plus(10).ln()
-
-                                return ret
+                                return player.c.points.plus(10).ln()
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[72].effect)
@@ -4983,9 +4974,7 @@ addLayer("sci", {
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[12].cost)
                         },
                         base(){
-                                let ret = player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
-                                
-                                return ret
+                                return player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
@@ -5231,8 +5220,8 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(20)
 
-                                if (hasMilestone("mini", 4)) ret = ret.plus(player.mini.milestones.length)
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5295,7 +5284,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5316,15 +5305,10 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                if (hasUpgrade("sci", 305)) {
-                                        let logBase = 10
-                                        return player.sci.points.plus(logBase).log(logBase)
-                                }
+                                if (hasUpgrade("sci", 305)) return player.sci.points.plus(10).log(10)
                                 let logBase = 10
                                 if (hasUpgrade("sci", 115)) logBase = Math.E
-                                let ret = player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
-                                
-                                return ret
+                                return player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[101].base.pow(player.sci.buyables[101])
@@ -5368,7 +5352,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5389,9 +5373,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.h.points.max(10).log10().log10().max(1)
-                                
-                                return ret
+                                return player.h.points.max(10).log10().log10().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
@@ -5433,7 +5415,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5454,9 +5436,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.o.points.max(10).ln().ln().max(1)
-                                
-                                return ret
+                                return player.o.points.max(10).ln().ln().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[103].base.pow(player.sci.buyables[103])
@@ -5584,9 +5564,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.sci.oxygen_science.points.max(10).log10()
-                                
-                                return ret
+                                return player.sci.oxygen_science.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.sci.buyables[112].base.pow(player.sci.buyables[112])
@@ -5648,9 +5626,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.c.points.max(10).log10()
-                                
-                                return ret
+                                return player.c.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.sci.buyables[113].base.pow(player.sci.buyables[113])
@@ -5832,9 +5808,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.sci.buyables[501].base.times(player.sci.buyables[501])
@@ -5883,9 +5857,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.sci.buyables[502].base.times(player.sci.buyables[502])
@@ -5934,9 +5906,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.sci.buyables[503].base.times(player.sci.buyables[503])
@@ -5986,9 +5956,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.sci.buyables[511].base.times(player.sci.buyables[511])
@@ -6046,9 +6014,7 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.sci.buyables[512].base.times(player.sci.buyables[512])
@@ -6532,11 +6498,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(130) : new Decimal(30)
                         },
                         effect(){
-                                let init = player.c.points.cbrt().div(50).plus(1)
-
-                                let ret = new Decimal(-.126).times(init.pow(-1).sub(1))
-
-                                return ret
+                                return new Decimal(-.126).times(player.c.points.cbrt().div(50).plus(1).pow(-1).sub(1))
                         },
                         effectDisplay(){
                                 return format(tmp.c.upgrades[12].effect, 4)
@@ -6620,9 +6582,7 @@ addLayer("c", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[21].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         effect(){
-                                let ret = tmp.h.upgrades[41].effect.max(1)
-
-                                return ret
+                                return tmp.h.upgrades[41].effect.max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.c.upgrades[21].effect)
@@ -6923,9 +6883,9 @@ addLayer("o", {
         getLossRate(){ // oxygen loss
                 let ret = new Decimal(.01)
 
-                if (hasUpgrade("h", 81)) ret = ret.times(50)
-                if (hasUpgrade("n", 32)) ret = ret.times(100)
-                if (hasUpgrade("sci", 115)) ret = ret.times(20)
+                if (hasUpgrade("h", 81))        ret = ret.times(50)
+                if (hasUpgrade("n", 32))        ret = ret.times(100)
+                if (hasUpgrade("sci", 115))     ret = ret.times(20)
 
                 return ret
         },
@@ -7028,9 +6988,7 @@ addLayer("o", {
                                 let a = player.h.atomic_hydrogen.points.max(10).log10()
                                 let b = player.h.deuterium.points.max(10).log10()
 
-                                let ret = a.times(b).div(10**7).max(1)
-
-                                return ret
+                                return a.times(b).div(10**7).max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[12].effect)
@@ -7054,9 +7012,7 @@ addLayer("o", {
                         },
                         cost:() => new Decimal(player.extremeMode ? 100 : 200),
                         effect(){
-                                let ret = Decimal.pow(1.02, player.o.upgrades.length)
-
-                                return ret
+                                return Decimal.pow(1.02, player.o.upgrades.length)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[13].effect)
@@ -7082,9 +7038,9 @@ addLayer("o", {
                         effect(){
                                 let ret = player.o.points.max(1).ln().max(1)
 
-                                if (hasUpgrade("o", 15)) ret = ret.pow(2)
+                                if (hasUpgrade("o", 15))        ret = ret.pow(2)
                                 if (hasMilestone("tokens", 13)) ret = ret.pow(2)
-                                if (hasUpgrade("h", 81)) ret = ret.pow(2)
+                                if (hasUpgrade("h", 81))        ret = ret.pow(2)
 
                                 return ret
                         },
@@ -7167,9 +7123,7 @@ addLayer("o", {
                                 return new Decimal(2e48)
                         },
                         effect(){
-                                let ret = player.points.max(1).log10().max(1)
-
-                                return ret
+                                return player.points.max(1).log10().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[23].effect)
@@ -7192,9 +7146,7 @@ addLayer("o", {
                                 return new Decimal(5e155)
                         },
                         effect(){
-                                let ret = player.points.max(1).log10().max(1)
-
-                                return ret
+                                return player.points.max(1).log10().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[24].effect)
@@ -7217,9 +7169,7 @@ addLayer("o", {
                                 return new Decimal(7e209)
                         },
                         effect(){
-                                let ret = new Decimal(player.o.upgrades.length).times(Math.PI)
-
-                                return ret
+                                return new Decimal(player.o.upgrades.length).times(Math.PI)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[25].effect)
@@ -7419,14 +7369,12 @@ addLayer("n", {
                 let amt = player.n.total
 
                 let base = amt.sqrt().times(2).plus(1)
-
                 let exp = amt.plus(7).log2()
 
                 if (hasUpgrade("n", 25)) exp = exp.times(player.n.upgrades.length)
 
-                let ret = base.pow(exp)
+                return base.pow(exp)
 
-                return ret
         },
         effectDescription(){
                 if (player.shiftAlias) return "effect formula: (sqrt(x)*2+1)^log2(x+7)"
@@ -7619,9 +7567,7 @@ addLayer("n", {
                         effect(){
                                 let ret = player.n.points.max(1).ln().max(1)
 
-                                if (hasMilestone("n", 15)) {
-                                        ret = ret.pow(Math.max(1, layerChallengeCompletions("n")))
-                                }
+                                if (hasMilestone("n", 15)) ret = ret.pow(Math.max(1, layerChallengeCompletions("n")))
 
                                 return ret
                         },
@@ -7699,8 +7645,8 @@ addLayer("n", {
                         effect(){ // red e rede
                                 let ret = decimalOne
 
-                                ret = ret.plus(tmp.mini.buyables[232].effect)
-                                if (hasMilestone("mu", 3)) ret = ret.plus(getBuyableAmount("mini", 231).div(100))
+                                                                ret = ret.plus(tmp.mini.buyables[232].effect)
+                                if (hasMilestone("mu", 3))      ret = ret.plus(getBuyableAmount("mini", 231).div(100))
 
                                 return ret
                         },
@@ -8301,8 +8247,8 @@ addLayer("n", {
                         rewardEffect(){
                                 let ret = new Decimal(100)
 
-                                if (hasUpgrade("mini", 55)) ret = ret.plus(getBuyableAmount("mini", 151))
-                                if (hasUpgrade("mini", 65)) ret = ret.plus(getBuyableAmount("mini", 131))
+                                if (hasUpgrade("mini", 55))     ret = ret.plus(getBuyableAmount("mini", 151))
+                                if (hasUpgrade("mini", 65))     ret = ret.plus(getBuyableAmount("mini", 131))
 
                                 return ret
                         },
@@ -8783,9 +8729,7 @@ addLayer("p", {
 
                 let exp = amt.plus(1).log10().pow(exp2)
 
-                let ret = Decimal.pow(10, exp)
-
-                return ret
+                return Decimal.pow(10, exp)
         },
         effectDescription(){
                 if (inChallenge("l", 52) || hasChallenge("l", 52)) return ""
@@ -9894,6 +9838,7 @@ addLayer("mu", {
                 if (hasMilestone("mu", 19)) ret = ret.sub(1)
                 if (hasUpgrade("mu", 35) && player.extremeMode) ret = ret.sub(1)
                 if (hasMilestone("mu", 20)) ret = ret.sub(1)
+
                 return ret
         },
         gainMult(){
@@ -10784,6 +10729,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(10)
+
                                 ret = ret.plus(tmp.mu.buyables[13].effect)
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
                                 
@@ -10801,9 +10747,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.points.max(10).log10().max(10).log10()
-                                
-                                return ret
+                                return player.points.max(10).log10().max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
@@ -10843,6 +10787,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(15)
+
                                 ret = ret.plus(tmp.mu.buyables[13].effect)
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
                                 
@@ -10860,18 +10805,10 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.mu.points.max(1)
-
-                                ret = ret.plus(tmp.mu.buyables[22].effect)
-                                
-                                return ret
+                                return player.mu.points.max(1).plus(tmp.mu.buyables[22].effect)
                         },
                         baseExtra(){
-                                let ret = decimalZero
-
-                                ret = ret.plus(tmp.mu.buyables[22].effect)
-                                
-                                return ret
+                                return tmp.mu.buyables[22].effect
                         },
                         effect(){
                                 return tmp.mu.buyables[12].base.pow(player.mu.buyables[12])
@@ -10915,8 +10852,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(10)
-                                ret = ret.plus(tmp.mu.buyables[23].effect)
-                                if (hasMilestone("mu", 14)) ret = ret.plus(2)
+
+                                                                ret = ret.plus(tmp.mu.buyables[23].effect)
+                                if (hasMilestone("mu", 14))     ret = ret.plus(2)
                                 
                                 return ret
                         },
@@ -10981,7 +10919,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
+
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
+
                                 return ret
                         },
                         unlocked(){
@@ -10996,9 +10936,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.p.points.max(10).log10()
-                                
-                                return ret
+                                return player.p.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[21].base.pow(player.mu.buyables[21])
@@ -11040,7 +10978,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(30)
+
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
+
                                 return ret
                         },
                         unlocked(){
@@ -11101,6 +11041,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
+
                                 return ret
                         },
                         unlocked(){
@@ -11115,9 +11056,7 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.mu.buyables[23].base.times(player.mu.buyables[23])
@@ -11201,9 +11140,7 @@ addLayer("mu", {
                         },
                         base(){
                                 if (hasChallenge("l", 61)) return tmp.l.challenges[61].reward
-                                let ret = player.n.points.max(10).log10()
-                                
-                                return ret
+                                return player.n.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[31].base.pow(player.mu.buyables[31]).min("ee20")
@@ -11603,9 +11540,7 @@ addLayer("l", {
 
                 if (amt.gt(1e5)) amt = amt.log10().times(4).sub(10).pow(5)
 
-                let ret = Decimal.pow(10, amt)
-
-                return ret
+                return Decimal.pow(10, amt)
         },
         effectDescription(){
                 if (inChallenge("l", 51) || hasChallenge("l", 51)) return ""
@@ -13112,7 +13047,9 @@ addLayer("l", {
 
                                 if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(202))
                                 if (hasMilestone("a", 14))      ret = ret.plus(.05)
-                                if (hasUpgrade("d", 24) && !player.extremeMode)        ret = ret.plus(.1375)
+                                if (hasUpgrade("d", 24) && !player.extremeMode) {
+                                                                ret = ret.plus(.1375)
+                                }
                                 
                                 return ret
                         },
@@ -13207,17 +13144,17 @@ addLayer("l", {
                         base(){
                                 let ret = player.tokens.total.max(10).log10()
 
-                                if (hasMilestone("l", 38)) ret = ret.times(Math.log(10)/Math.log(8))
-                                if (hasMilestone("l", 39)) ret = ret.times(Math.log(8)/Math.log(6))
-                                if (hasMilestone("l", 40)) ret = ret.times(Math.log(6)/Math.log(5))
-                                if (hasMilestone("l", 41)) ret = ret.times(Math.log(5)/Math.log(4))
-                                if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
-                                if (hasMilestone("a", 13)) ret = ret.times(Math.log(3))
-                                if (hasMilestone("a", 14)) ret = ret.div(Math.log(2))
+                                if (hasMilestone("l", 38))      ret = ret.times(Math.log(10)/Math.log(8))
+                                if (hasMilestone("l", 39))      ret = ret.times(Math.log(8)/Math.log(6))
+                                if (hasMilestone("l", 40))      ret = ret.times(Math.log(6)/Math.log(5))
+                                if (hasMilestone("l", 41))      ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("l", 42))      ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("a", 13))      ret = ret.times(Math.log(3))
+                                if (hasMilestone("a", 14))      ret = ret.div(Math.log(2))
 
-                                if (hasChallenge("l", 72)) ret = player.tokens.total.max(1)
+                                if (hasChallenge("l", 72))      ret = player.tokens.total.max(1)
 
-                                if (hasMilestone("cells", 36)) ret = Decimal.pow(2, ret)
+                                if (hasMilestone("cells", 36))  ret = Decimal.pow(2, ret)
                                 
                                 return ret
                         },
@@ -13319,9 +13256,7 @@ addLayer("l", {
                         },
                         base(){
                                 if (hasUpgrade("cells", 31)) return player.cells.kappa.points.max(1)
-                                let ret = tmp.tokens.buyables[41].effect
-                                
-                                return ret
+                                return tmp.tokens.buyables[41].effect
                         },
                         effect(){
                                 return tmp.l.buyables[22].base.pow(player.l.buyables[22])
@@ -13612,13 +13547,9 @@ addLayer("l", {
                                 }
                         },
                         base(){
-                                if (hasUpgrade("t", 94)) {
-                                        return player.cells.stem_cells.points.max(1)
-                                }
+                                if (hasUpgrade("t", 94)) return player.cells.stem_cells.points.max(1)
                                 if (hasMilestone("cells", 39)) return tmp.tokens.buyables[22].effect
-                                let ret = player.l.buyables[11]
-                                
-                                return ret
+                                return player.l.buyables[11]
                         },
                         effect(){
                                 return tmp.l.buyables[32].base.pow(player.l.buyables[32])
@@ -14003,8 +13934,7 @@ addLayer("l", {
                                 }
                                 let nz = tmp.l.getNonZeroGemCount
                                 let base = player.a.points.max(10).log10()
-                                let ret = base.pow(nz).pow(comps || 1)
-                                return ret
+                                return base.pow(nz).pow(comps || 1)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 277340 : 140.4e3)),
                         canComplete(){ 
@@ -14039,8 +13969,7 @@ addLayer("l", {
                                 }
                                 let base = player.d.points.max(10).log10()
                                 if (hasMilestone("cells", 7)) base = base.times(Math.log2(10))
-                                let ret = base.pow(comps)
-                                return ret
+                                return base.pow(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 275540 : 145.1e3)),
                         canComplete(){ 
@@ -14074,9 +14003,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(player.extremeMode ? 100 : 117)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(player.extremeMode ? 100 : 117).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 271950 : 149.1e3)),
                         canComplete(){ 
@@ -14113,9 +14040,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.5)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.5).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 268.8e3 : 151.5e3)),
                         canComplete(){ 
@@ -14150,9 +14075,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.2)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.2).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 343565 : 204700)),
                         canComplete(){ 
@@ -14185,9 +14108,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.01)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.01).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 379500 : 256.3e3)),
                         canComplete(){ 
@@ -14241,9 +14162,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = decimalOne
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 368.9e3 : 266e3)),
                         canComplete(){ 
@@ -14276,9 +14195,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.1)
-                                let ret = base.times(comps).plus(1)
-                                return ret
+                                return new Decimal(.1).times(comps).plus(1)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 354453 : 274e3)),
                         canComplete(){ 
@@ -14339,8 +14256,7 @@ addLayer("l", {
                                 if (hasMilestone("cells", 5)) base = base.times(Math.log(5))
                                 if (hasMilestone("cells", 7)) base = base.div(Math.log(2))
 
-                                let ret = base.pow(comps)
-                                return ret
+                                return base.pow(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 675900 : 579200)),
                         canComplete(){ 
@@ -14441,9 +14357,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.01)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.01).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, 312100)),
                         canComplete(){ 
@@ -14476,8 +14390,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let ret = new Decimal(comps).pow(1.5)
-                                return ret
+                                return new Decimal(comps).pow(1.5)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, 397000)),
                         canComplete(){ 
@@ -14531,8 +14444,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let ret = new Decimal(comps).pow(1.5)
-                                return ret
+                                return new Decimal(comps).pow(1.5)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, 28900e3)),
                         canComplete(){ 
@@ -15280,11 +15192,7 @@ addLayer("a", {
                 return init.cbrt().sub(7).pow(tmp.a.getGainExp)
         },
         getGainExp(){
-                let ret = new Decimal(2)
-
-                ret = ret.plus(layers.l.grid.getGemEffect(502))
-
-                return ret
+                return new Decimal(2).plus(layers.l.grid.getGemEffect(502))
         },
         getGainMult(){ // amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
                 let ret = decimalOne
@@ -15334,9 +15242,7 @@ addLayer("a", {
                 let exp = amt.sqrt().min(10)
                 exp = exp.plus(layers.l.grid.getGemEffect(104))
 
-                let ret = amt.plus(1).pow(exp)
-
-                return ret
+                return amt.plus(1).pow(exp)
         },
         effectDescription(){
                 if (player.shiftAlias) return " (x+1)<sup>min(10, sqrt(x))</sup>"
@@ -17062,15 +16968,15 @@ addLayer("a", {
                                 if (hasMilestone("cells", 29)) return player.mu.points.max(1)
                                 let ret = player.l.points.max(10).log10()
 
-                                if (hasMilestone("d", 3)) ret = ret.times(Math.log(10)/Math.log(9))
-                                if (hasMilestone("d", 6)) ret = ret.times(Math.log(9)/Math.log(8))
-                                if (hasMilestone("d", 7)) ret = ret.times(Math.log(8)/Math.log(7))
-                                if (hasMilestone("d", 8)) ret = ret.times(Math.log(7)/Math.log(6))
-                                if (hasMilestone("d", 9)) ret = ret.times(Math.log(6)/Math.log(5))
-                                if (hasMilestone("d", 10)) ret = ret.times(Math.log(5)/Math.log(4))
-                                if (hasMilestone("d", 11)) ret = ret.times(Math.log(4)/Math.log(3))
-                                if (hasMilestone("d", 12)) ret = ret.times(Math.log(3))
-                                if (hasMilestone("d", 13)) ret = ret.div(Math.log(2))
+                                if (hasMilestone("d", 3))       ret = ret.times(Math.log(10)/Math.log(9))
+                                if (hasMilestone("d", 6))       ret = ret.times(Math.log(9)/Math.log(8))
+                                if (hasMilestone("d", 7))       ret = ret.times(Math.log(8)/Math.log(7))
+                                if (hasMilestone("d", 8))       ret = ret.times(Math.log(7)/Math.log(6))
+                                if (hasMilestone("d", 9))       ret = ret.times(Math.log(6)/Math.log(5))
+                                if (hasMilestone("d", 10))      ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("d", 11))      ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("d", 12))      ret = ret.times(Math.log(3))
+                                if (hasMilestone("d", 13))      ret = ret.div(Math.log(2))
                                 
                                 return ret
                         },
@@ -17150,21 +17056,17 @@ addLayer("a", {
                                         let base = player.tokens.total.max(1)
                                         let exp = player.tokens.tokens2.total
 
-                                        let ret = base.pow(exp)
-
-                                        return ret
+                                        return base.pow(exp)
                                 }
                                 if (hasMilestone("cells", 54)){
-                                        let ret = player.l.points.max(10).log10()
-
-                                        return ret
+                                        return player.l.points.max(10).log10()
                                 }
                                 let ret = new Decimal(tmp.l.getNonZeroGemCount).max(1)
 
                                 if (hasMilestone("cells", 18)) {
                                         if (!hasMilestone("cells", 35)) {
-                                                ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
-                                        } else ret = ret.times(getBuyableAmount("cells", 11).max(1))
+                                                return ret.plus(getBuyableAmount("cells", 11).sqrt())
+                                        } else return ret.times(getBuyableAmount("cells", 11).max(1))
                                 }
                                 
                                 return ret
@@ -17318,8 +17220,7 @@ addLayer("a", {
                                 return ret
                         },
                         effect(){
-                                let ret = tmp.a.buyables[23].base.pow(player.a.buyables[23])
-                                return ret
+                                return tmp.a.buyables[23].base.pow(player.a.buyables[23])
                         },
                         display(){
                                 if (!shiftDown) {
@@ -17395,8 +17296,7 @@ addLayer("a", {
                                 return ret.max(1)
                         },
                         effect(){
-                                let ret = tmp.a.buyables[31].base.pow(player.a.buyables[31])
-                                return ret
+                                return tmp.a.buyables[31].base.pow(player.a.buyables[31])
                         },
                         display(){
                                 if (!shiftDown) {
@@ -17462,8 +17362,7 @@ addLayer("a", {
                                 return getBuyableAmount("a", 22).max(Math.E).ln()
                         },
                         effect(){
-                                let ret = tmp.a.buyables[32].base.pow(player.a.buyables[32])
-                                return ret
+                                return tmp.a.buyables[32].base.pow(player.a.buyables[32])
                         },
                         display(){
                                 if (!shiftDown) {
@@ -17540,8 +17439,7 @@ addLayer("a", {
                                 return ret
                         },
                         effect(){
-                                let ret = tmp.a.buyables[33].base.pow(player.a.buyables[33])
-                                return ret
+                                return tmp.a.buyables[33].base.pow(player.a.buyables[33])
                         },
                         display(){
                                 if (!shiftDown) {
@@ -19099,9 +18997,7 @@ addLayer("cells", {
                                                 exp = exp.plus(eff)
                 }
 
-                let ret = base.pow(exp)
-
-                return ret
+                return base.pow(exp)
         },
         effectDescription(){
                 let start = " multiplying DNA, Life, and Protein gain and exponentiating Phosphorus gain by " 
@@ -20277,8 +20173,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Mu</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Mu minigame" + br + "Total points: " + format(player.cells.total11)
@@ -20299,8 +20194,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Lambda</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Lambda minigame" + br + "Total points: " + format(player.cells.total12)
@@ -20321,8 +20215,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Kappa</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Kappa minigame" + br + "Total points: " + format(player.cells.total13)
@@ -20343,8 +20236,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Iota</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Iota minigame" + br + "Total points: " + format(player.cells.total14)
@@ -22661,9 +22553,7 @@ addLayer("t", {
                         ret = ret.sub(amt)
                 }
 
-                ret = ret.pow(-1)
-
-                return ret
+                return ret.pow(-1)
         },
         getNextAt(){
                 let gain = tmp.t.getResetGain.plus(1)
@@ -22720,11 +22610,11 @@ addLayer("t", {
         effectAmt(){
                 if (hasUpgrade("t", 131)) {
                         return tmp.t.getResetGain.max(player.t.bestOnReset)
-                } else if (hasUpgrade("t", 64)) {
-                        return tmp.t.getResetGain.max(player.t.bestOnReset).times(100)
-                } else {
-                        return player.t.total
                 }
+                if (hasUpgrade("t", 64)) {
+                        return tmp.t.getResetGain.max(player.t.bestOnReset).times(100)
+                }
+                return player.t.total
         },
         effect(){
                 let data = tmp.t
@@ -26696,11 +26586,8 @@ addLayer("mini", {
                         return ret
                 },
                 getLin(){
-                        let ret = decimalOne
-                        
-                        ret = ret.plus(tmp.mini.buyables[121].effect)
+                        return decimalOne.plus(tmp.mini.buyables[121].effect)
 
-                        return ret
                 },
                 getQuad(){
                         let ret = decimalZero
@@ -26709,11 +26596,7 @@ addLayer("mini", {
                         return ret
                 },
                 getExp1(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[132].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[132].effect)
                 },
                 getFuelMultiplier(){
                         let data = tmp.mini.d_points
@@ -26860,20 +26743,10 @@ addLayer("mini", {
                         return ret
                 },
                 getC(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[203].effect)
-
-                        ret = ret.times(tmp.mini.buyables[231].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[203].effect).times(tmp.mini.buyables[231].effect)
                 },
                 getD(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[202].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[202].effect)
                 },
                 getMaxInterations(){
                         let ret = 1
@@ -26912,9 +26785,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[11].base.pow(player.mini.buyables[11])
@@ -26974,9 +26845,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[12].base.pow(player.mini.buyables[12])
@@ -27031,9 +26900,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[13].base.pow(player.mini.buyables[13])
@@ -27989,9 +27856,7 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 91))   base = Math.E
                                 if (hasUpgrade("sci", 235))     base = 2
 
-                                let ret = player.mini.c_points.points.max(10).log(base)
-
-                                return ret
+                                return player.mini.c_points.points.max(base).log(base)
                         },
                         effect(){
                                 return tmp.mini.buyables[72].base.pow(player.mini.buyables[72])
@@ -28303,10 +28168,7 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 22)) return decimalZero
-                                let amt = player.mini.buyables[91]
-                                let ret = amt.div(100).plus(1.2).ln()
-                                
-                                return ret
+                                return player.mini.buyables[91].div(100).plus(1.2).ln()
                         },
                         effect(){
                                 return tmp.mini.buyables[91].base.times(player.mini.buyables[91])
@@ -28493,9 +28355,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 92).gt(60)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 92).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 92).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[101].base.pow(player.mini.buyables[101])
@@ -28616,9 +28476,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 92).gt(118)
                         },
                         base(){
-                                let ret = tmp.tokens.buyables[61].effect
-
-                                return ret
+                                return tmp.tokens.buyables[61].effect
                         },
                         effect(){
                                 return tmp.mini.buyables[103].base.pow(player.mini.buyables[103])
@@ -28675,10 +28533,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 102).gt(470)
                         },
                         base(){
-                                let amt = player.mini.buyables[111]
-                                let ret = amt.div(500).plus(1)
-
-                                return ret
+                                return player.mini.buyables[111].div(500).plus(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[111].base.times(player.mini.buyables[111])
@@ -28926,11 +28781,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(7)
                         },
                         base(){
-                                let ret = new Decimal(2)
-
-                                ret = ret.plus(tmp.mini.buyables[131].effect)
-
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[131].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[122].base.pow(player.mini.buyables[122])
@@ -28988,9 +28839,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(78)
                         },
                         base(){
-                                let ret = player.points.max(10).log10().log10().max(1)
-
-                                return ret
+                                return player.points.max(10).log10().log10().max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[123].base.pow(player.mini.buyables[123])
@@ -29053,9 +28902,7 @@ addLayer("mini", {
 
                                 if (hasUpgrade("mini", 62)) ret = ret.pow(player.extremeMode && !hasUpgrade("sci", 335) ? 2 : 3)
 
-                                ret = ret.div(100)
-
-                                return ret
+                                return ret.div(100)
                         },
                         effect(){
                                 return tmp.mini.buyables[131].base.times(player.mini.buyables[131])
@@ -29178,9 +29025,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2400)
                         },
                         base(){
-                                let ret = new Decimal(.01)
-
-                                return ret
+                                return new Decimal(.01)
                         },
                         effect(){
                                 return tmp.mini.buyables[133].base.times(player.mini.buyables[133])
@@ -29238,9 +29083,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(12)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 121).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 121).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[151].base.pow(player.mini.buyables[151])                                                                                                                     
@@ -29299,9 +29142,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(210)
                         },
                         base(){
-                                let ret = player.n.points.max(10).log10()
-
-                                return ret
+                                return player.n.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[152].base.pow(player.mini.buyables[152])                                                                                                                     
@@ -29358,9 +29199,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(880)
                         },
                         base(){
-                                let ret = player.mini.d_points.fuel.max(10).log10()
-
-                                return ret
+                                return player.mini.d_points.fuel.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[153].base.pow(player.mini.buyables[153])                                                                                                                     
@@ -29419,9 +29258,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(1290)
                         },
                         base(){
-                                let ret = player.mini.d_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.d_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[161].base.pow(player.mini.buyables[161])                                                                                                                     
@@ -29481,9 +29318,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(120)
                         },
                         base(){
-                                let ret = new Decimal(tmp.mini.d_points.getUpgrades).max(1)
-
-                                return ret
+                                return new Decimal(tmp.mini.d_points.getUpgrades).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[162].base.pow(player.mini.buyables[162])                                                                                                                     
@@ -29542,9 +29377,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(207)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 131).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 131).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[163].base.pow(player.mini.buyables[163])                                                                                                                     
@@ -29603,9 +29436,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(380)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 151)
-
-                                return ret
+                                return getBuyableAmount("mini", 151)
                         },
                         effect(){
                                 return tmp.mini.buyables[171].base.pow(player.mini.buyables[171])                                                                                                                     
@@ -29664,9 +29495,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(550)
                         },
                         base(){
-                                let ret = tmp.n.challenges[32].rewardEffect
-
-                                return ret
+                                return tmp.n.challenges[32].rewardEffect
                         },
                         effect(){
                                 return tmp.mini.buyables[172].base.pow(player.mini.buyables[172])                                                                                                                     
@@ -29729,9 +29558,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2150)
                         },
                         base(){
-                                let ret = tmp.mini.d_points.getEffectiveFuelAux
-
-                                return ret
+                                return tmp.mini.d_points.getEffectiveFuelAux
                         },
                         effect(){
                                 return tmp.mini.buyables[173].base.pow(player.mini.buyables[173])                                                                                                                     
@@ -29791,9 +29618,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2888)
                         },
                         base(){
-                                let ret = player.mini.c_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.c_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[181].base.pow(player.mini.buyables[181])                                                                                                                     
@@ -29852,9 +29677,7 @@ addLayer("mini", {
                                 return hasUpgrade("c", 33)
                         },
                         base(){
-                                let ret = player.mini.e_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.e_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[182].base.pow(player.mini.buyables[182])                                                                                                                     
@@ -29906,9 +29729,7 @@ addLayer("mini", {
                                 return hasMilestone("p", 3)
                         },
                         base(){
-                                let ret = player.p.points.max(1)
-
-                                return ret
+                                return player.p.points.max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[183].base.pow(player.mini.buyables[183])                                                                                                                     
@@ -30014,7 +29835,9 @@ addLayer("mini", {
                         },
                         effect(){
                                 let ret = tmp.mini.buyables[202].base.times(player.mini.buyables[202])   
+                                
                                 if (hasUpgrade("c", 35)) ret = ret.times(player.mini.buyables[202].max(1).ln().max(1))
+
                                 return ret                                                                                                                  
                         },
                         display(){
@@ -30072,11 +29895,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 202).gte(3)
                         },
                         base(){
-                                let ret = decimalOne
-
-                                ret = ret.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
-
-                                return ret
+                                return decimalOne.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
                         },
                         effect(){
                                 return tmp.mini.buyables[203].base.times(player.mini.buyables[203])                                                                                                                     
@@ -30212,11 +30031,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 202).gte(25)
                         },
                         base(){
-                                let ret = new Decimal(.3)
-
-                                ret = ret.plus(tmp.mini.buyables[222].effect)
-
-                                return ret
+                                return new Decimal(.3).plus(tmp.mini.buyables[222].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[212].base.times(player.mini.buyables[212])                                                                                                                     
@@ -30350,9 +30165,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 212).gte(66)
                         },
                         base(){
-                                let ret = new Decimal(.001)
-
-                                return ret
+                                return new Decimal(.001)
                         },
                         effect(){
                                 return tmp.mini.buyables[221].base.times(player.mini.buyables[221])                                                                                                                     
@@ -30409,9 +30222,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 212).gte(82)
                         },
                         base(){
-                                let ret = new Decimal(.02)
-
-                                return ret
+                                return new Decimal(.02)
                         },
                         effect(){
                                 return tmp.mini.buyables[222].base.times(player.mini.buyables[222])                                                                                                                     
@@ -30541,11 +30352,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 221).gte(865)
                         },
                         base(){
-                                let ret = new Decimal(2.5)
-
-                                ret = ret.plus(tmp.mini.buyables[232].effect)
-
-                                return ret
+                                return new Decimal(2.5).plus(tmp.mini.buyables[232].effect)
                         },
                         levelExp(){
                                 let ret = decimalOne
@@ -30678,9 +30485,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 221).gte(2300)
                         },
                         base(){
-                                let ret = tmp.n.upgrades[35].effect.max(1)
-
-                                return ret
+                                return tmp.n.upgrades[35].effect.max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[233].base.pow(player.mini.buyables[233])                                                                                                            
@@ -30737,9 +30542,7 @@ addLayer("mini", {
                                 return hasMilestone("mu", 2)
                         },
                         base(){
-                                let ret = player.p.points.max(10).log10()
-
-                                return ret
+                                return player.p.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[241].base.pow(player.mini.buyables[241])                                                                                                            
