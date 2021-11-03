@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.cells.unlocked
+	if (player.extremeMode) return tmp.cells.layerShown
 	return player.or.total.gt(4)
 }
 
