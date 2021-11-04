@@ -209,7 +209,7 @@ function getFullEffectDescription(layer){
 }
 
 function getResetGemIDs(){
-        if (!player.cells.milestone1Ever) return            (
+        if (!player.cells.unlocked) return (
                            ["101", "102", "103", "104", "105", "106", "107", "108", 
                             "201", "202", "203", "204", "205", "206", "207", "208", 
                             "301", "302", "303", "304", "305", "306", "307", "308", 
@@ -2466,6 +2466,7 @@ addLayer("sci", {
                         if (hasMilestone("d", 28))      ret = ret.times(20)
                         if (hasUpgrade("d", 32))        ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
                                                         ret = ret.times(Decimal.pow(tmp.l.getNonZeroGemCount, tmp.sci.buyables[512].effect).max(1))
+                        if (hasMilestone("cells", 4))   ret = ret.times(Decimal.pow(2, player.cells.milestones.length))
 
                         return ret
                 },
@@ -6207,7 +6208,7 @@ addLayer("sci", {
 
                 doNotDoHSciReset = layer == "tokens" && hasMilestone("tokens", 14)
                 doNotDoOSciReset = layer == "tokens" && hasMilestone("tokens", 25)
-                if (!doNotDoHSciReset) { // Hydrogen Science
+                if (!doNotDoHSciReset && !player.cells.unlocked) { // Hydrogen Science
                         let subdata = data.hydrogen_science
 
                         buyData[11] = decimalZero
@@ -6223,7 +6224,7 @@ addLayer("sci", {
                 data.hydrogen_science.best = decimalZero
                 data.hydrogen_science.points = decimalZero
 
-                if (!doNotDoOSciReset) { // Oxygen Science
+                if (!doNotDoOSciReset && !player.cells.unlocked) { // Oxygen Science
                         let subdata = data.oxygen_science
 
                         buyData[101] = decimalZero
@@ -6240,7 +6241,7 @@ addLayer("sci", {
                 data.oxygen_science.best = decimalZero
                 data.oxygen_science.points = decimalZero
 
-                if (!false) { // Carbon Science
+                if (!player.cells.unlocked) { // Carbon Science
                         let subdata = data.carbon_science
 
                         let remUpgs = [201, 202, 203, 204, 205, 
@@ -6301,7 +6302,31 @@ addLayer("sci", {
                                    431, 432, 433, 434, 435,
                                    441, 442, 443, 444, 445]
                         if (hasMilestone("d", 4)) ids = ids.slice(player.d.times, )
+                        if (!player.cells.unlocked) data.upgrades = filterOut(data.upgrades, ids)
+                }
+
+                let resetDNA = true 
+                if (["tokens", "p", "l", "a", "d"].includes(layer)) resetDNA = false
+                if (resetDNA && !false) {
+                        let subdata = data.dna_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+                        
+                        let ids = [501, 502, 503, 504, 505, 
+                                   511, 512, 513, 514, 515, 
+                                   521, 522, 523, 524, 525, 
+                                   531, 532, 533, 534, 535,
+                                   541, 542, 543, 544, 545]
+                        if (false) ids = ids.slice(player.cells.times, )
                         if (!false) data.upgrades = filterOut(data.upgrades, ids)
+
+                        let buyIds = [501, 502, 503,
+                                      511, 512, 513, 
+                                      521, 522, 523,]
+                        for (i in buyIds) {
+                                data.buyables[buyIds[i]] = decimalZero
+                        }
                 }
         },
         deactivated(){
@@ -11126,6 +11151,9 @@ addLayer("mu", {
                                                 let x = player.mu.buyables[31].toNumber()
                                                 let diff = 20
                                                 if (hasMilestone("d", 16))      diff = 100
+                                                if (player.extremeMode && hasMilestone("cells", 1)) {
+                                                                                diff *= 10
+                                                } 
                                                 if (hasMilestone("d", 28))      diff *= 20
                                                 if (hasMilestone("cells", 4))   diff *= 10
                                                 if (hasChallenge("l", 101))     diff *= 50
@@ -17820,7 +17848,7 @@ addLayer("a", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data1.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.unlocked) data1.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data1.times = 0
@@ -18155,6 +18183,7 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA X"
                         },
                         description(){
+                                if (player.extremeMode) return "Remove the 69+ and 2+ in the N → Δµ formula and per milestone double DNA gain"
                                 return "Remove the 65+ and 2+ in the N → Δµ formula and per milestone double DNA gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? "3.33e333" : 1e156),
@@ -18434,7 +18463,7 @@ addLayer("d", {
                                 return "18,100 N → Δµ"
                         },
                         done(){
-                                if (hasMilestone("cells", 1)) return true 
+                                if (player.cells.milestone1Ever) return true 
                                 if (player.extremeMode) return player.a.protein.points.max(10).log10().gt(89012345)
                                 return getBuyableAmount("mu", 31).gte(18100)
                         },
@@ -18810,7 +18839,7 @@ addLayer("d", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data2.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.unlocked) data2.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data2.times = 0
@@ -20306,7 +20335,8 @@ addLayer("cells", {
                                 player.cells.milestone1Ever = true
                         },
                         effectDescription(){
-                                return "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, permanently keep Dilation completions, and get DNA milestone 15."
+                                if (player.extremeMode) return "Reward: Per reset keep a DNA milestone, bulk 10x N → Δµ, always start with 500 of each Life buyable, and permanently get DNA milestone 15."
+                                return "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, and permanently get DNA milestone 15."
                         },
                 }, // hasMilestone("cells", 1)
                 2: {
@@ -20351,6 +20381,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per milestone double DNA Science gain and Anti-Upsilon's log7 becomes log5."
                                 return "Reward: You can bulk 10x more N → Δµ and Anti-Upsilon's log7 becomes log5."
                         },
                 }, // hasMilestone("cells", 4)
@@ -22291,9 +22322,12 @@ addLayer("cells", {
                                         let a = a1 + br + a2
                                         if (player.extremeMode) a = a.replaceAll("582", "1228")
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
-                                        let c = "Note that Anti- challenges are never reset."
+                                        b += br + "Note that Anti- challenges are never reset."
+                                        let c = "For unlocking Cells permanently keep Dilation completions<br>and gems from C55 and easier challenges."
+                                        if (player.extremeMode) c = c.replace("completions", "completions, protein science upgrades,")
+                                        c += br + "Additionally, you permanently autobuy tokens and Radio Waves."
 
-                                        let part1 = a + br2 + b + br + c
+                                        let part1 = a + br2 + b + br2 + c
 
                                         if (!hasChallenge("l", 102)) return part1
 
@@ -26276,11 +26310,11 @@ addLayer("mini", {
                         }
                 }
 
-                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) {
-                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
-                }
-                if (layers.l.grid.getGemEffect(803) && !hasUpgrade("cells", 42)) {
-                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
+                if (tmp.tokens.buyables[11].canAfford) {
+                        let buy = player.cells.unlocked
+                        if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) buy = true
+                        if (layers.l.grid.getGemEffect(803) && !hasUpgrade("cells", 42)) buy = true
+                        if (buy) layers.tokens.buyables[11].buy(true)
                 }
 
                 if (tmp.mini.tabFormat.D.unlocked) {
@@ -32447,7 +32481,7 @@ addLayer("tokens", {
                 if ((player.tokens.autobuytokens || player.dev.autobuytokens) && hasMilestone("n", 4)) {
                         return true
                 }
-                return layers.l.grid.getGemEffect(802)
+                return layers.l.grid.getGemEffect(802) || player.cells.unlocked
         },
         effect(){
                 if (!player.extremeMode) return decimalOne
