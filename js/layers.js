@@ -2467,6 +2467,7 @@ addLayer("sci", {
                         if (hasUpgrade("d", 32))        ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
                                                         ret = ret.times(Decimal.pow(tmp.l.getNonZeroGemCount, tmp.sci.buyables[512].effect).max(1))
                         if (hasMilestone("cells", 4))   ret = ret.times(Decimal.pow(2, player.cells.milestones.length))
+                        if (hasChallenge("l", 92))      ret = ret.times(tmp.l.challenges[92].reward)
 
                         return ret
                 },
@@ -5957,7 +5958,11 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                return decimalOne
+                                let ret = decimalOne
+
+                                if (hasChallenge("l", 91))      ret = ret.plus(tmp.l.challenges[91].reward)
+
+                                return ret
                         },
                         effect(){
                                 return tmp.sci.buyables[511].base.times(player.sci.buyables[511])
@@ -6318,13 +6323,13 @@ addLayer("sci", {
                                    521, 522, 523, 524, 525, 
                                    531, 532, 533, 534, 535,
                                    541, 542, 543, 544, 545]
-                        if (false) ids = ids.slice(player.cells.times, )
-                        if (!false) data.upgrades = filterOut(data.upgrades, ids)
+                        if (!hasMilestone("cells", 5)) data.upgrades = filterOut(data.upgrades, ids)
 
                         let buyIds = [501, 502, 503,
                                       511, 512, 513, 
                                       521, 522, 523,]
                         for (i in buyIds) {
+                                if (hasMilestone("cells", 5)) break
                                 data.buyables[buyIds[i]] = decimalZero
                         }
                 }
@@ -11155,7 +11160,9 @@ addLayer("mu", {
                                                                                 diff *= 10
                                                 } 
                                                 if (hasMilestone("d", 28))      diff *= 20
-                                                if (hasMilestone("cells", 4))   diff *= 10
+                                                if (hasMilestone("cells", 4) && !player.extremeMode) {
+                                                                                diff *= 10
+                                                }
                                                 if (hasChallenge("l", 101))     diff *= 50
                                                 if (hasChallenge("l", 102))     diff *= 50
                                                                                 diff *= layers.l.grid.getGemEffect(702).toNumber()
@@ -14387,7 +14394,7 @@ addLayer("l", {
                                 }
                                 return new Decimal(.01).times(comps)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 312100)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 27100 : 312100)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14397,7 +14404,9 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
+                                if (player.extremeMode) b = b.replace("312,100", "27,100")
                                 let c = "Reward: Per Anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
+                                if (player.extremeMode) c= c.replace("but", "and add .01 to " + makeGreen("D") + " base but")
                                 let d = "Currently: " + format(tmp.l.challenges[91].reward)
 
                                 return a + br + b + br + c + br + d
@@ -14420,7 +14429,7 @@ addLayer("l", {
                                 }
                                 return new Decimal(comps).pow(1.5)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 397000)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 27630 : 397000)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14430,7 +14439,9 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
                                 let b = "Goal: e1e397,000 Points"
+                                if (player.extremeMode) b = b.replace("397,000", "27,630")
                                 let c = "Reward: Raise Constant base to Anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
+                                if (player.extremeMode) c = c.replace("to", "to and multiply DNA Science gain by")
                                 let d = "Currently: " + format(tmp.l.challenges[92].reward)
 
                                 return a + br + b + br + c + br + d
@@ -14442,7 +14453,7 @@ addLayer("l", {
                 }, // inChallenge("l", 92) hasChallenge("l", 92)
                 101: {
                         name: "Anti-Xi", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 396600)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 23500 : 396600)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14452,6 +14463,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
                                 let b = "Goal: e1e396,600 Points"
+                                if (player.extremeMode) b = b.replace("396,600", "23,500")
                                 let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV, 𝛾 → ∂𝛾's primary base is 2468, and bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
@@ -14474,7 +14486,7 @@ addLayer("l", {
                                 }
                                 return new Decimal(comps).pow(1.5)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 28900e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 124700 : 28900e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14484,6 +14496,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.4"
                                 let b = "Goal: e1e28,900,000 Points"
+                                if (player.extremeMode) b = b.replace("28,900,000", "124,700")
                                 let c = "Reward: Unlock a new feature in Cells! Bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
@@ -20396,6 +20409,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per reset keep a DNA upgrade, keep DNA Science buyables and upgrades, and Anti-Upsilon's log5 becomes ln."
                                 return "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
                         },
                 }, // hasMilestone("cells", 5)
@@ -20410,9 +20424,11 @@ addLayer("cells", {
                                 return true
                         },
                         effect(){
+                                if (player.extremeMode) return new Decimal(player.cells.milestones.length).div(2).floor().min(10).div(1e4)
                                 return new Decimal(Math.min(10, player.cells.milestones.length)).div(1e4)
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Every other milestone (up to 20) add .0001 to tRNA's base." + br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                                 return "Reward: Per milestone (up to 10) add .0001 to tRNA's base." + br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                         },
                 }, // hasMilestone("cells", 6)
