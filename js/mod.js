@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.164",
+	num: "1.167",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,20 +20,39 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.a.protein.points.gt(0)
+	if (player.extremeMode) return player.a.protein.points.gt("e105e3")
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.164)<br><br>
+		Reaching the endgame screen (updated as of v1.167)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.163</h3><br>
+	<br><h3 style='color: #CC0000'>v1.167</h3><br>
+		- Implemented a gem.<br>
+		- Various extreme mode changes.<br>
+		- Balanced until 1e105,000 Protein.<br>
+		- Added a custom save.<br>
+		- Added nine Protein Science upgrades.<br>
+		- Various wording fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.166</h3><br>
+		- Implemented a gem.<br>
+		- Various extreme mode changes.<br>
+		- Balanced until 1e20,000 Protein.<br>
+		- Added two Protein Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.165</h3><br>
+		- Implemented a gem.<br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
+		- Balanced until 1e6800 Protein.<br>
+		- Added Protein Science.<br>
+		- Added five Protein Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.164</h3><br>
 		- Implemented 7 gems.<br>
 		- Various extreme mode changes.<br>
 		- Balanced until Protein unlock.<br>
@@ -1582,6 +1601,9 @@ function fixOldSave(oldVersion){
 	if (player.version < "1.161") {
 		player.a.everMilestone3 = player.d.unlocked || player.a.milestones.includes("3")
 		player.a.everMilestone1 = player.d.unlocked || player.a.milestones.includes("1")
+	}
+	if (player.version < "1.167") {
+		player.sci.everUpgrade412 = player.sci.upgrades.includes(412)
 	}
 }
 
