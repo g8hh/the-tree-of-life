@@ -20279,7 +20279,7 @@ addLayer("cells", {
                                 return "1e1483 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1483")
+                                return player.cells.stem_cells.points.gte("1e1483")
                         },
                         unlocked(){
                                 return true
