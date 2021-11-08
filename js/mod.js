@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.168",
+	num: "1.171",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,31 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.a.points.gt("8e415")
+	if (player.extremeMode) return player.l.grid[406].gems.gte(1e4)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.168)<br><br>
+		Reaching the endgame screen (updated as of v1.171)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.171</h3><br>
+		- Various code clean up.<br>
+		- Various extreme mode changes.<br>
+		- Implemented four gems.<br>
+		- Added two Protein Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.170</h3><br>
+		- Various bugfixes.<br>
+		- Balanced until 10 DNA resets.<br>
+	<br><h3 style='color: #CC0000'>v1.169</h3><br>
+		- Various code cleanup.<br>
+		- Balanced until 2 DNA resets.<br>
+		- Implemented DNA reset.<br> 
 	<br><h3 style='color: #CC0000'>v1.168</h3><br>
 		- Added eight Protein Science upgrades.<br>
 		- Various extreme mode changes.<br>
