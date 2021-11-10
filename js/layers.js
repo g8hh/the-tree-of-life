@@ -2462,6 +2462,7 @@ addLayer("sci", {
                                                         ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
                                                         ret = ret.times(layers.l.grid.getGemEffect(108))
                                                         ret = ret.times(tmp.sci.buyables[511].dna_sci_effect)
+                                                        ret = ret.times(tmp.sci.buyables[513].dna_sci_effect)
                         if (true) {
                                 let exp = Math.max(0, tmp.l.getNonZeroGemCount - 48)
                                                         ret = ret.times(layers.l.grid.getGemEffect(308).pow(exp))
@@ -4885,6 +4886,44 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 504)
                         }, // hasUpgrade("sci", 505)
                 },
+                511: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci VI"
+                        },
+                        description(){
+                                return "Per upgrade in this row double all minigame and cell gain"
+                        },
+                        lvls(){
+                                let a = 1 
+                                if (hasUpgrade("sci", 512)) a ++ 
+                                if (hasUpgrade("sci", 513)) a ++ 
+                                if (hasUpgrade("sci", 514)) a ++ 
+                                if (hasUpgrade("sci", 515)) a ++ 
+                                return a
+                        },
+                        cost:() => new Decimal(2.12e121),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasMilestone("cells", 9)
+                        }, // hasUpgrade("sci", 511)
+                },
+                512: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci VII"
+                        },
+                        description(){
+                                return "Per upgrade (up to 30) raise all minigame gain ^1.01 [no buyable yet]"
+                        },
+                        cost:() => new Decimal(1e125),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 511)
+                        }, // hasUpgrade("sci", 512)
+                },
         },
         buyables: {
                 rows: 5,
@@ -6048,6 +6087,62 @@ addLayer("sci", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
 
                                 let costmid = "2e40*6^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                513: {
+                        title: "Primase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 513)
+                                let init = 1e123
+                                let base = 7
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 511) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[513].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[513] = data.buyables[513].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[513].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return tmp.sci.buyables[513].base.times(player.sci.buyables[513])
+                        },
+                        dna_sci_effect(){
+                                return player.cells.points.plus(10).log10().pow(tmp.sci.buyables[513].effect.times(2))
+                        },
+                        minigame_effect(){
+                                return tmp.sci.buyables[513].effect.pow(2).plus(1)
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[513]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("F") + "="
+                                        let eff2 = format(tmp.sci.buyables[513].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 513)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "log10(Cells)<sup>2" + makeGreen("F") + "</sup> multiples DNA Science gain and (1+"
+                                ef += makeGreen("F") + "<sup>2</sup>) multiplies minigame gain"
+                                let eformula = makeGreen("F") + "=" + format(tmp.sci.buyables[513].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "1e123*7^x<sup>2</sup>"
                                 let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
 
                                 return br + allEff + allCost
@@ -16874,7 +16969,7 @@ addLayer("a", {
                                 return tmp.a.buyables[11].base.pow(player.a.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[11].effect) + " to Protein gain</b><br>"
@@ -16951,7 +17046,7 @@ addLayer("a", {
                                 return tmp.a.buyables[12].base.pow(player.a.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[12].effect) + " to Protein gain</b><br>"
@@ -17034,7 +17129,7 @@ addLayer("a", {
                                 return tmp.a.buyables[13].base.pow(player.a.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
@@ -17125,7 +17220,7 @@ addLayer("a", {
                                 return tmp.a.buyables[21].base.pow(player.a.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
@@ -17198,7 +17293,7 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.a.buyables[22].effect) + " to Point gain</b><br>"
@@ -17273,7 +17368,7 @@ addLayer("a", {
                                 return tmp.a.buyables[23].base.pow(player.a.buyables[23])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[23].effect) + " to Protein gain</b><br>"
@@ -17349,7 +17444,7 @@ addLayer("a", {
                                 return tmp.a.buyables[31].base.pow(player.a.buyables[31])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[31]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[31].effect) + " to Protein gain</b><br>"
@@ -17415,7 +17510,7 @@ addLayer("a", {
                                 return tmp.a.buyables[32].base.pow(player.a.buyables[32])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[32].effect) + " to Protein gain</b><br>"
@@ -17492,7 +17587,7 @@ addLayer("a", {
                                 return tmp.a.buyables[33].base.pow(player.a.buyables[33])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[33]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.a.buyables[33].effect) + " to Amino Acid gain</b><br>"
@@ -19003,7 +19098,7 @@ addLayer("cells", {
                 if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
                 if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                 if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
-
+                if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
 
                 if (hasChallenge("l", 111)) {
                         let gain = tmp.l.challenges[22].reward
@@ -19132,8 +19227,11 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
+                                                        ret = ret.times(tmp.sci.buyables[513].minigame_effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
+                        if (hasUpgrade("sci", 512))     ret = ret.pow(Decimal.pow(1.01, Math.min(30, player.sci.upgrades.length)))
                         if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret.max(0)
@@ -19175,8 +19273,11 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
+                                                        ret = ret.times(tmp.sci.buyables[513].minigame_effect)
                         
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
+                        if (hasUpgrade("sci", 512))     ret = ret.pow(Decimal.pow(1.01, Math.min(30, player.sci.upgrades.length)))
                         if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret.max(0)
@@ -19223,8 +19324,11 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
+                                                        ret = ret.times(tmp.sci.buyables[513].minigame_effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
+                        if (hasUpgrade("sci", 512))     ret = ret.pow(Decimal.pow(1.01, Math.min(30, player.sci.upgrades.length)))
                         if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret.max(0)
@@ -19276,8 +19380,11 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.or.effect)
                         if (hasUpgrade("or", 11))       ret = ret.times(1e10)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
+                                                        ret = ret.times(tmp.sci.buyables[513].minigame_effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
+                        if (hasUpgrade("sci", 512))     ret = ret.pow(Decimal.pow(1.01, Math.min(30, player.sci.upgrades.length)))
                         if (player.extremeMode)         ret = ret.pow(.75)
                                                         
                         return ret.max(0)
@@ -19902,7 +20009,7 @@ addLayer("cells", {
                         description(){
                                 return "Total resource ^.1 multiplies the resource to the left maxed at 1e50" 
                         },
-                        cost:() => new Decimal(6e6),
+                        cost:() => new Decimal(player.extremeMode ? 1e8 : 6e6),
                         currencyLocation:() => player.cells.mu,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
@@ -20162,7 +20269,7 @@ addLayer("cells", {
                         effect(){
                                 return player.cells.total14.max(10).log10().max(10).log10().pow(player.cells.upgrades.length)
                         },
-                        cost:() => new Decimal(1e45),
+                        cost:() => new Decimal(player.extremeMode ? 1e67 : 1e45),
                         currencyLocation:() => player.cells.iota,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",

@@ -62,7 +62,7 @@ function deleteSave(name) {
 		hardReset()
 		return
 	}
-	if (!confirm("Are you sure you wish to delete this save?")) return
+	if (!confirm("Are you sure you wish to delete your save named " + name + "?")) return
 	allSaves[name] = undefined
 	if (name==allSaves.set) {
 		let valid = Object.keys(allSaves).filter(x => (x!="set" && (allSaves[x]!==undefined||x==name)))
