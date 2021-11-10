@@ -1029,9 +1029,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='font-size: 80%'>Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other</bdi>"
-                                a = ""
-                                if (hasUpgrade("h", 15)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 15)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost:() => player.hardMode ? new Decimal(1750) : new Decimal(1000),
                         unlocked(){
@@ -1610,7 +1609,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
                                 a = "max(5, log10(coins))"
                                 return a
                         },
@@ -1634,7 +1634,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "ln(Carbon) multiplies Near-ultraviolet base"
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "ln(Carbon) multiplies Near-ultraviolet base"
                                 a = "ln(Carbon + 10)"
                                 return a
                         },
@@ -1665,6 +1666,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
@@ -1687,6 +1689,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
@@ -1709,6 +1712,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
@@ -1731,9 +1735,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
-                                a = ""
-                                return a
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal("1e4117e3")
@@ -1755,6 +1758,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
@@ -1777,6 +1781,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
@@ -1799,6 +1804,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
@@ -1821,6 +1827,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
@@ -1840,16 +1847,17 @@ addLayer("h", {
                         title: "Introduction",
                         body(){
                                 let a = "<h1>" + makeRed("Welcome to TREE OF LIFE!") + "</h1>"
-                                let b = "There are five items of information you should be aware of:"
+                                let b = "There are six pieces of information you should be aware of:"
                                 let c = "First, this game has (currently) three modes, Easy, Hard, and Extr" + "eme, each having a different effect."
                                 let d = "To access and select modes go to the info tab (the blue i in the top left corner) and click \"Show mod selection tab\", though it is recommended to play normal mode first."
                                 let e = "Second, the game is balanced around 60 to 250 second waits (at most), so if you find yourself "
                                 e += "waiting longer than that for seemingly no reward, try something else!"
                                 let f = "Third, there is a save bank. View it by going to the info tab and clicking \"Show built in saves\" and scrolling down."
                                 let g = "Fourth, this game is designed to be played on a computer on Google Chrome. If this does not apply to you there might be some bugs or other issues you run into." 
-                                let h = "Finally, there are ways to force toggle shift and control for seeing various details in the info tab."
+                                let h = "Fifth, there are ways to force toggle shift and control for seeing various details in the info tab."
+                                let i = "Finally, you can click and drag to buy lots of upgrades at once!"
 
-                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h
+                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h + br2 + i
                         },
                 },
         },
@@ -2038,7 +2046,6 @@ addLayer("sci", {
                 }
                                                 ret = ret.times(tmp.l.effect.min(1e10))
 
-                if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
                 if (player.easyMode)            ret = ret.pow(1.001)
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
 
@@ -6662,9 +6669,8 @@ addLayer("c", {
                         },
                         description(){
                                 if (!shiftDown) return "Change token buyable cost scaling from exponential to linear"
-                                a = ""
-                                if (hasUpgrade("c", 23)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 23)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(1e78)
@@ -6683,9 +6689,8 @@ addLayer("c", {
                                         if (player.extremeMode) return "Halve the Double-exponential divider"
                                         return "Add 1000 to Carbon VII and halve the Double-exponential divider"
                                 }
-                                a = ""
-                                if (hasUpgrade("c", 24)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 24)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(7e154)
@@ -6701,9 +6706,8 @@ addLayer("c", {
                         },
                         description(){
                                 if (!shiftDown) return "Halve the Double-exponential divider and add .01 to Polynomial base"
-                                a = ""
-                                if (hasUpgrade("c", 25)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 25)) return ""
+                                return "" + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(2e229)
@@ -11662,6 +11666,7 @@ addLayer("l", {
                                          22, 23, 31,]
                         if (hasUpgrade("p", 51) || hasMilestone("a", 5) || forceAbContent) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
+                                if (!player.l.autobuymubuyables && !forceAbContent) break
                                 if (hasMilestone("cells", 13) && muBuyKeys[i] < 31) continue
                                 buyBuyable("mu", muBuyKeys[i])
                         }
@@ -12153,7 +12158,7 @@ addLayer("l", {
                         unlocked(){
                                 return true
                         },
-                        toggles:() => [["l", "autobuymu"]],
+                        toggles:() => [["l", "autobuymu"], ["l", "autobuymubuyables"]],
                         effectDescription(){
                                 return "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
                         },
@@ -14868,6 +14873,10 @@ addLayer("l", {
                                         let f = "A Points, B Points, C Points, D Points, and E Points"
                                         let step0 = a + b + c + d + e + f + "."
                                         if (player.extremeMode) step0 += br2 + "<sup>**</sup>Capped at 1e10 and not affected by Life milestone 1"
+                                        if (hasUpgrade("l", 11)) {
+                                                step0 = step0.replace("Nitrogen Science<sup>**</sup>,", "Nitrogen Science<sup>*3</sup>")
+                                                step0 += br + "<sup>*3</sup>Capped a 1e10"
+                                        }
 
                                         if (!tmp.l.challenges[11].unlocked) return step0
 
@@ -32704,9 +32713,9 @@ addLayer("tokens", {
                         if (needSpec) end = br + "Need Respec"
                 } 
                 if (!player.a.unlocked) return init + end
-                let mid = makeRed("<b>(" + formatWhole(player.tokens.best_buyables[11]) + ")</b>")
-                if (player.cells.unlocked) return mid + end
-                return init + br + mid + end 
+                let mid = "<b>" + formatWhole(player.tokens.best_buyables[11]) + "</b>"
+                if (player.cells.unlocked) return formatWhole(data.total, true) + " " + makeRed(mid) + end
+                return init + br + makeRed("(" + mid + ")") + end 
         },
         buyables: {
                 rows: 15,
