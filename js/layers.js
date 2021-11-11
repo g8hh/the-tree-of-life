@@ -916,7 +916,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen I"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode && player.hardMode) return "ln([best Hydrogen]) multiplies Life Point gain and unlock the Labratory"
                                         return "ln([best Hydrogen]) multiplies Life Point gain"
                                 }
@@ -950,7 +950,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen II"
                         },
                         description(){
-                                if (!shiftDown) return "Each upgrade adds 1 to the Hydrogen gain formula maximum"
+                                if (!player.shiftAlias) return "Each upgrade adds 1 to the Hydrogen gain formula maximum"
                                 a = "[Hydrogen upgrades]"
                                 if (hasUpgrade("h", 43)) a += "*2"
                                 if (hasUpgrade("h", 12)) return a
@@ -976,7 +976,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen III"
                         },
                         description(){
-                                if (!shiftDown) return "1+Achievements multiplies Hydrogen gain"
+                                if (!player.shiftAlias) return "1+Achievements multiplies Hydrogen gain"
                                 a = "1+[Achievements]"
                                 if (hasUpgrade("h", 32)) a = "(" + a + ")^" + format(tmp.h.upgrades[32].effect)
                                 if (hasUpgrade("h", 13)) return a
@@ -1004,7 +1004,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IV"
                         },
                         description(){
-                                if (!shiftDown) return "Raise Hydrogen I to ln([Hydrogen upgrades]" + (player.extremeMode && !player.hardMode ? " and unlock the Laboratory":"")
+                                if (!player.shiftAlias) return "Raise Hydrogen I to ln([Hydrogen upgrades]" + (player.extremeMode && !player.hardMode ? " and unlock the Laboratory":"")
                                 a = "ln([Hydrogen upgrades]"
                                 if (hasUpgrade("h", 43)) a = a.replace("ln", "log2")
                                 if (hasUpgrade("h", 14)) return a
@@ -1028,7 +1028,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen V"
                         },
                         description(){
-                                if (!shiftDown) return "<bdi style='font-size: 80%'>Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other</bdi>"
+                                if (!player.shiftAlias) return "<bdi style='font-size: 80%'>Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other</bdi>"
                                 if (hasUpgrade("h", 15)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1042,7 +1042,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium I"
                         },
                         description(){
-                                if (!shiftDown) return "Search through your Hydrogen to find the special .02% -- Deuterium"
+                                if (!player.shiftAlias) return "Search through your Hydrogen to find the special .02% -- Deuterium"
                                 if (hasUpgrade("h", 21)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[21].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1059,7 +1059,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium II"
                         },
                         description(){
-                                if (!shiftDown) return "<bdi style='font-size: 80%'>ln(ln(10+[best Deuterium])) multiplies Life Point and Hydrogen gain</bdi>"
+                                if (!player.shiftAlias) return "<bdi style='font-size: 80%'>ln(ln(10+[best Deuterium])) multiplies Life Point and Hydrogen gain</bdi>"
                                 a = "ln(ln(10+[best Deuterium]))"
                                 if (hasUpgrade("h", 24)) a = "(ln(ln(10+[best Deuterium])))^[this row upgrades]"
                                 if (hasUpgrade("h", 22)) return a
@@ -1091,7 +1091,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium III"
                         },
                         description(){
-                                if (!shiftDown) return "ln([best Deuterium]) multiplies Deuterium gain"
+                                if (!player.shiftAlias) return "ln([best Deuterium]) multiplies Deuterium gain"
                                 a = "ln(best Deuterium])"
                                 if (hasUpgrade("h", 23)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[23].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
@@ -1118,7 +1118,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium IV"
                         },
                         description(){
-                                if (!shiftDown) return "Raise Deuterium II to the number of upgrades in this row"
+                                if (!player.shiftAlias) return "Raise Deuterium II to the number of upgrades in this row"
                                 if (hasUpgrade("h", 24)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[24].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
                         },
@@ -1149,7 +1149,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Deuterium V"
                         },
                         description(){
-                                if (!shiftDown) return "Each upgrade raises Life Point gain ^1.01"
+                                if (!player.shiftAlias) return "Each upgrade raises Life Point gain ^1.01"
                                 a = "1.01^[upgrades]"
                                 if (hasUpgrade("h", 25)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[25].cost, player.h.deuterium.points, tmp.h.deuterium.getResetGain, tmp.h.deuterium.getLossRate)
@@ -1176,7 +1176,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen I"
                         },
                         description(){
-                                if (!shiftDown) return "Wait for your Hydrogen to cool and bond at a brisk .1% rate"
+                                if (!player.shiftAlias) return "Wait for your Hydrogen to cool and bond at a brisk .1% rate"
                                 if (hasUpgrade("h", 31)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[31].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1193,7 +1193,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen II"
                         },
                         description(){
-                                if (!shiftDown) return "Upgrades in this row ^ .8 raise Hydrogen III effect"
+                                if (!player.shiftAlias) return "Upgrades in this row ^ .8 raise Hydrogen III effect"
                                 a = "[this row upgrades] ^ .8"
                                 if (hasUpgrade("h", 32)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[32].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
@@ -1225,7 +1225,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen III"
                         },
                         description(){
-                                if (!shiftDown) return "Make the ln in Hydrogen I a log2"
+                                if (!player.shiftAlias) return "Make the ln in Hydrogen I a log2"
                                 if (hasUpgrade("h", 33)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[33].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
@@ -1245,7 +1245,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen IV"
                         },
                         description(){
-                                if (!shiftDown) return "Hydrogen III affects Life Points"
+                                if (!player.shiftAlias) return "Hydrogen III affects Life Points"
                                 if (hasUpgrade("h", 34)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[34].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
@@ -1265,7 +1265,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Atomic Hydrogen V"
                         },
                         description(){
-                                if (!shiftDown) return "You lose .12% less Hydrogen per second"
+                                if (!player.shiftAlias) return "You lose .12% less Hydrogen per second"
                                 if (hasUpgrade("h", 35)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[35].cost, player.h.atomic_hydrogen.points, tmp.h.atomic_hydrogen.getResetGain, tmp.h.atomic_hydrogen.getLossRate)
                         },
@@ -1285,7 +1285,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VI"
                         },
                         description(){
-                                if (!shiftDown) return "ln(3+[Atomic Hydrogen])^<bdi style='color:#CC0033'>A</bdi> multiplies Deuterium gain"
+                                if (!player.shiftAlias) return "ln(3+[Atomic Hydrogen])^<bdi style='color:#CC0033'>A</bdi> multiplies Deuterium gain"
                                 eff = format(tmp.h.upgrades[41].effect)
                                 a = "ln(3+[Atomic Hydrogen])^" + eff
                                 if (hasUpgrade("h", 41)) {
@@ -1312,7 +1312,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VII"
                         },
                         description(){
-                                if (!shiftDown) return "ln(3+[Deuterium])^<bdi style='color:#CC0033'>B</bdi> multiplies Atomic Hydrogen gain"
+                                if (!player.shiftAlias) return "ln(3+[Deuterium])^<bdi style='color:#CC0033'>B</bdi> multiplies Atomic Hydrogen gain"
                                 eff = format(tmp.h.upgrades[42].effect)
                                 a = "ln(3+[Deuterium])^" + eff
                                 if (hasUpgrade("h", 42)) {
@@ -1345,7 +1345,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen VIII"
                         },
                         description(){
-                                if (!shiftDown) return "Double Hydrogen II and make the ln in Hydrogen IV a log2"
+                                if (!player.shiftAlias) return "Double Hydrogen II and make the ln in Hydrogen IV a log2"
                                 if (hasUpgrade("h", 43)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[43].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1361,7 +1361,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen IX"
                         },
                         description(){
-                                if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>A</bdi>, but square Hydrogen X cost"
+                                if (!player.shiftAlias) return "Unlock a minigame to increase <bdi style='color:#CC0033'>A</bdi>, but square Hydrogen X cost"
                                 if (hasUpgrade("h", 44)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[44].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1384,7 +1384,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen X"
                         },
                         description(){
-                                if (!shiftDown) return "Unlock a minigame to increase <bdi style='color:#CC0033'>B</bdi>, but square Hydrogen IX cost"
+                                if (!player.shiftAlias) return "Unlock a minigame to increase <bdi style='color:#CC0033'>B</bdi>, but square Hydrogen IX cost"
                                 if (hasUpgrade("h", 45)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[45].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1407,7 +1407,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XI"
                         },
                         description(){
-                                if (!shiftDown) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
+                                if (!player.shiftAlias) return "Both minigames always tick, autobuy a B buyable once per second, and gain 1e5x A Points"
                                 if (hasUpgrade("h", 51)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[51].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1423,7 +1423,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XII"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Autobuy A buyables and autobuy 10x as fast, add 1 to Violet base, and unlock a Hydrogen Science buyable"
                                         return "Autobuy A buyables and autobuy 10x as fast, remove the softcap for B buyables, and add 1 to Violet base"
                                 }
@@ -1443,7 +1443,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIII"
                         },
                         description(){
-                                if (!shiftDown) return "ln(White) multiplies White effect"
+                                if (!player.shiftAlias) return "ln(White) multiplies White effect"
                                 if (hasUpgrade("h", 53)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[53].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1460,7 +1460,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIV"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 D" + "ec" + "aseconds base cost"
                                         return "^.5 in the color production formula becomes ^.52"
                                 }
@@ -1480,7 +1480,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XV"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "^.52 in the A production formula becomes ^.57 and unlock Carbon (C) and Oxygen (O)"
                                         return "^.52 in the A production formula becomes ^.524 and unlock Carbon (C) and Oxygen (O)"
                                 }
@@ -1499,7 +1499,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVI"
                         },
                         description(){
-                                if (!shiftDown) return "Per upgrade multiply Life Points by Carbon"
+                                if (!player.shiftAlias) return "Per upgrade multiply Life Points by Carbon"
                                 a = "Carbon^[upgrades]"
                                 if (hasMilestone("tokens", 19)) a = a.replace("[upgrades]", "(1.5*[upgrades])")
                                 if (hasUpgrade("h", 61)) return a
@@ -1528,7 +1528,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVII"
                         },
                         description(){
-                                if (!shiftDown) return "Oxygen IV affects Carbon gain and double autobuyer speed"
+                                if (!player.shiftAlias) return "Oxygen IV affects Carbon gain and double autobuyer speed"
                                 if (hasUpgrade("h", 62)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[62].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1545,7 +1545,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XVIII"
                         },
                         description(){
-                                if (!shiftDown) return "sqrt(log10(Life Points)) multiplies Carbon and Oxygen gain"
+                                if (!player.shiftAlias) return "sqrt(log10(Life Points)) multiplies Carbon and Oxygen gain"
                                 a = "sqrt(log10(Life Points))"
                                 if (hasUpgrade("h", 63)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[63].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
@@ -1569,7 +1569,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XIX"
                         },
                         description(){
-                                if (!shiftDown) return "Square the ln(x) term in White and add a log10(x) term to Green"
+                                if (!player.shiftAlias) return "Square the ln(x) term in White and add a log10(x) term to Green"
                                 if (hasUpgrade("h", 64)) return ''
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[64].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
@@ -1585,7 +1585,7 @@ addLayer("h", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Hydrogen XX"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Unlock tokens and a Oxygen Science upgrade"
                                         return "Unlock tokens"
                                 }
@@ -1609,8 +1609,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
-                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
                                 a = "max(5, log10(coins))"
                                 return a
                         },
@@ -1634,8 +1634,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
-                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "ln(Carbon) multiplies Near-ultraviolet base"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "ln(Carbon) multiplies Near-ultraviolet base"
                                 a = "ln(Carbon + 10)"
                                 return a
                         },
@@ -1658,7 +1658,7 @@ addLayer("h", {
                 },
                 73: {
                         title(){
-                                let end = shiftDown ? "Jacorb!" : "Deuterium VIII"
+                                let end = player.shiftAlias ? "Jacorb!" : "Deuterium VIII"
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>" + end
                         },
                         canAfford(){
@@ -1666,7 +1666,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
@@ -1689,7 +1689,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
@@ -1712,7 +1712,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
@@ -1735,7 +1735,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
                         },
                         cost(){
@@ -1758,7 +1758,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
@@ -1781,7 +1781,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
@@ -1804,7 +1804,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
@@ -1827,7 +1827,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
@@ -1867,14 +1867,14 @@ addLayer("h", {
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
-                                                if (shiftDown) return "Your best Hydrogen is " + format(player.h.best) + " and you are netting " + format(tmp.h.getResetGain.sub(tmp.h.getLossRate.times(player.h.points))) + " Hydrogen per second"
+                                                if (player.shiftAlias) return "Your best Hydrogen is " + format(player.h.best) + " and you are netting " + format(tmp.h.getResetGain.sub(tmp.h.getLossRate.times(player.h.points))) + " Hydrogen per second"
                                                 return "You are gaining " + format(tmp.h.getResetGain) + " Hydrogen per second"
                                         }
                                 ],
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
-                                                if (shiftDown) return "Formula: min(" + formatWhole(tmp.h.getDefaultMaximum) + ",ln(points))*[multipliers]"
+                                                if (player.shiftAlias) return "Formula: min(" + formatWhole(tmp.h.getDefaultMaximum) + ",ln(points))*[multipliers]"
                                                 return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
                                         },
                                 ],
@@ -1893,10 +1893,9 @@ addLayer("h", {
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
-                                                if (shiftDown) {
-                                                        p1 = player.h.deuterium
+                                                if (player.shiftAlias) {
                                                         t1 = tmp.h.deuterium
-                                                        return "Your best Deuterium is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
+                                                        return "Your best Deuterium is " + format(player.h.deuterium.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
                                                 }
                                                 return "You are gaining " + format(tmp.h.deuterium.getResetGain) + " Deuterium per second"
                                         }
@@ -1904,7 +1903,7 @@ addLayer("h", {
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
-                                                if (shiftDown) return "Formula: .0002 * Hydrogen * [multipliers]"
+                                                if (player.shiftAlias) return "Formula: .0002 * Hydrogen * [multipliers]"
                                                 return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
                                         },
                                 ],
@@ -1921,10 +1920,9 @@ addLayer("h", {
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return "" 
-                                                if (shiftDown) {
-                                                        p1 = player.h.atomic_hydrogen
+                                                if (player.shiftAlias) {
                                                         t1 = tmp.h.atomic_hydrogen
-                                                        return "Your best Atomic Hydrogen is " + format(p1.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Atomic Hydrogen per second"
+                                                        return "Your best Atomic Hydrogen is " + format(player.h.atomic_hydrogen.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Atomic Hydrogen per second"
                                                 }
                                                 return "You are gaining " + format(tmp.h.atomic_hydrogen.getResetGain) + " Atomic Hydrogen per second"
                                         }
@@ -1932,7 +1930,7 @@ addLayer("h", {
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
-                                                if (shiftDown) return "Formula: .001 * Hydrogen * [multipliers]"
+                                                if (player.shiftAlias) return "Formula: .001 * Hydrogen * [multipliers]"
                                                 return "You are losing " + format(tmp.h.atomic_hydrogen.getLossRate.times(100)) + "% of your Atomic Hydrogen per second"
                                         },
                                 ],
@@ -3040,7 +3038,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci II"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e15 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e15 C Points<br>Shift for effect"
                                 return "Per upgrade multiply Point gain by C Points"
                         },
                         effect(){
@@ -3063,7 +3061,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci III"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 203) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e31 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 203) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e31 C Points<br>Shift for effect"
                                 return "You have one less token for prestige purposes"
                         },
                         effect(){
@@ -3086,7 +3084,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci IV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e41 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e41 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 1 base cost"
                         },
                         effect(){
@@ -3109,7 +3107,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci V"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 205) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e48 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 205) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e48 C Points<br>Shift for effect"
                                 return "Per upgrade triple Carbon Science gain"
                         },
                         canAfford(){
@@ -3129,7 +3127,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e54 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e54 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 2 base cost"
                         },
                         canAfford(){
@@ -3149,7 +3147,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 212) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e71 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 212) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 2e71 C Points<br>Shift for effect"
                                 return "Carbon Science multiplies C Point gain"
                         },
                         canAfford(){
@@ -3169,7 +3167,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci VIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 213) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 3e116 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 213) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 3e116 C Points<br>Shift for effect"
                                 return "Per upgrade log10(Carbon Science) multiplies C Point gain"
                         },
                         effect(){
@@ -3195,7 +3193,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci IX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 214) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e151 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 214) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e151 C Points<br>Shift for effect"
                                 return "Per upgrade double Carbon Science gain but you can only gain 10 seconds of Carbon Science production"
                         },
                         canAfford(){
@@ -3215,7 +3213,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci X"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 215) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e173 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 215) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e173 C Points<br>Shift for effect"
                                 return "Tokens<sup>2</sup> multiply Science gain but you can only gain 20 seconds of Science production"
                         },
                         canAfford(){
@@ -3235,7 +3233,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 2e187 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 2e187 C Points<br>Shift for effect"
                                 return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
                         },
                         canAfford(){
@@ -3255,7 +3253,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 222) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e201 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 222) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e201 C Points<br>Shift for effect"
                                 return "Per upgrade double Carbon Science gain"
                         },
                         canAfford(){
@@ -3275,7 +3273,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e230 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e230 C Points<br>Shift for effect"
                                 return "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
                         },
                         canAfford(){
@@ -3295,7 +3293,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 224) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1.80e308 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 224) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1.80e308 C Points<br>Shift for effect"
                                 return "C Point Gain 1 cost exponent is 1.21"
                         },
                         canAfford(){
@@ -3315,7 +3313,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 225) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e653 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 225) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e653 C Points<br>Shift for effect"
                                 return "C Point Gain 1 cost exponent is 1.2"
                         },
                         canAfford(){
@@ -3335,7 +3333,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 231) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e815 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 231) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e815 C Points<br>Shift for effect"
                                 return "Per upgrade add .005 to <bdi style='color:#CC0033'>C</bdi> Increase 1 base"
                         },
                         canAfford(){
@@ -3355,7 +3353,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 232) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1355 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 232) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e1355 C Points<br>Shift for effect"
                                 return "Reduce corn interval to 4 and you can gamble every 4 seconds"
                         },
                         canAfford(){
@@ -3375,7 +3373,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XVIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e1425 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e1425 C Points<br>Shift for effect"
                                 return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
                         },
                         canAfford(){
@@ -3395,7 +3393,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XIX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 234) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e2180 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 234) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e2180 C Points<br>Shift for effect"
                                 return "Per upgrade C Points^.001 multiplies C Point gain"
                         },
                         canAfford(){
@@ -3415,7 +3413,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 235) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e9561 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 235) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e9561 C Points<br>Shift for effect"
                                 return "C Point Gain 1's ln becomes log2"
                         },
                         canAfford(){
@@ -3435,7 +3433,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !shiftDown) return "Requires: 1e42,540 C Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e42,540 C Points<br>Shift for effect"
                                 return "Remove C Point Gain 5 base cost"
                         },
                         canAfford(){
@@ -3656,7 +3654,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 312) && !shiftDown) return "Requires: 1e8 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 312) && !player.shiftAlias) return "Requires: 1e8 D Points<br>Shift for effect"
                                 return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
                         },
                         canAfford(){
@@ -3679,7 +3677,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci VIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 313) && !shiftDown) return "Requires: 3e10 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 313) && !player.shiftAlias) return "Requires: 3e10 D Points<br>Shift for effect"
                                 return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
                         },
                         canAfford(){
@@ -3702,7 +3700,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci IX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 314) && !shiftDown) return "Requires: 3e15 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 314) && !player.shiftAlias) return "Requires: 3e15 D Points<br>Shift for effect"
                                 return "<bdi style='font-size: 90%'>log10(Nitrogen Science) multiplies D Point gain and log10(D Points) multiplies Nitrogen Science gain</bdi>"
                         },
                         canAfford(){
@@ -3722,7 +3720,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci X"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 315) && !shiftDown) return "Requires: 1e21 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 315) && !player.shiftAlias) return "Requires: 1e21 D Points<br>Shift for effect"
                                 return "Gas Pedal cost exponent is 1.2"
                         },
                         canAfford(){
@@ -3742,7 +3740,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 321) && !shiftDown) return "Requires: 1e105 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 321) && !player.shiftAlias) return "Requires: 1e105 D Points<br>Shift for effect"
                                 return "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                         },
                         canAfford(){
@@ -3765,7 +3763,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 322) && !shiftDown) return "Requires: 1e194 D Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 322) && !player.shiftAlias) return "Requires: 1e194 D Points<br>Shift for effect"
                                 return "Remove Engine base cost"
                         },
                         canAfford(){
@@ -3788,8 +3786,8 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 323) && !shiftDown) return "Requires: 1e4046 D Points<br>Shift for effect"
-                                if (shiftDown && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
+                                if (!hasUpgrade("sci", 323) && !player.shiftAlias) return "Requires: 1e4046 D Points<br>Shift for effect"
+                                if (player.shiftAlias && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
                                 return "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
                         },
                         canAfford(){
@@ -3975,7 +3973,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 344) && !shiftDown) return "Requires: 400 E Points<br>Shift for effect"
+                                if (!hasUpgrade("sci", 344) && !player.shiftAlias) return "Requires: 400 E Points<br>Shift for effect"
                                 return "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
                         },
                         canAfford(){
@@ -3995,7 +3993,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 345) && !shiftDown) return "Requires: 25 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 345) && !player.shiftAlias) return "Requires: 25 Constant levels<br>Shift for effect"
                                 return "Remove Linear base cost and Constant costs nothing"
                         },
                         canAfford(){
@@ -4015,7 +4013,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 351) && !shiftDown) return "Requires: 31 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 351) && !player.shiftAlias) return "Requires: 31 Constant levels<br>Shift for effect"
                                 return "Remove Quadratic base cost and Linear cost exponent is 1.15"
                         },
                         canAfford(){
@@ -4035,7 +4033,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 352) && !shiftDown) return "Requires: 42 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 352) && !player.shiftAlias) return "Requires: 42 Constant levels<br>Shift for effect"
                                 return "Add .05 to Quadratic base and per upgrade in this row triple E Point gain"
                         },
                         canAfford(){
@@ -4063,7 +4061,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXVIII"
                         },
                         description(){ 
-                                if (!hasUpgrade("sci", 353) && !shiftDown) return "Requires: 26 Linear levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 353) && !player.shiftAlias) return "Requires: 26 Linear levels<br>Shift for effect"
                                 return "Per upgrade in this row add .1 to Constant base"
                         },
                         canAfford(){
@@ -4083,7 +4081,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 354) && !shiftDown) return "Requires: 29 Linear levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 354) && !player.shiftAlias) return "Requires: 29 Linear levels<br>Shift for effect"
                                 return "Remove respecting scalar multiplication base cost and double Nitrogen gain"
                         },
                         canAfford(){
@@ -4103,7 +4101,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 355) && !shiftDown) return "Requires: 71 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 355) && !player.shiftAlias) return "Requires: 71 Constant levels<br>Shift for effect"
                                 if (player.p.unlocked) return "Remove respecting addition base cost"
                                 return "Remove respecting addition base cost but gain 20x less E Points"
                         },
@@ -4124,7 +4122,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 361) && !shiftDown) return "Requires: 182 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 361) && !player.shiftAlias) return "Requires: 182 Constant levels<br>Shift for effect"
                                 return "Each Linear multiplies E Point gain by 1.33 and triple Nitrogen gain"
                         },
                         canAfford(){
@@ -4147,7 +4145,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 362) && !shiftDown) return "Requires: 397 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 362) && !player.shiftAlias) return "Requires: 397 Constant levels<br>Shift for effect"
                                 return "Linear cost exponent is 1.1"
                         },
                         canAfford(){
@@ -4167,7 +4165,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 363) && !shiftDown) return "Requires: 564 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 363) && !player.shiftAlias) return "Requires: 564 Constant levels<br>Shift for effect"
                                 return "Each Quadratic multiplies E Point gain by 1.1 and double Nitrogen gain"
                         },
                         canAfford(){
@@ -4190,7 +4188,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXIV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 364) && !shiftDown) return "Requires: 4300 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 364) && !player.shiftAlias) return "Requires: 4300 Constant levels<br>Shift for effect"
                                 return "Unlock three buyables, bulk 2x E Point buyables"
                         },
                         canAfford(){
@@ -4210,7 +4208,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXXV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 365) && !shiftDown) return "Requires: 33,080 Constant levels<br>Shift for effect"
+                                if (!hasUpgrade("sci", 365) && !player.shiftAlias) return "Requires: 33,080 Constant levels<br>Shift for effect"
                                 return "Gain an iteration"
                         },
                         canAfford(){
@@ -4230,7 +4228,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci I"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 401) && !shiftDown) return "Requires: 1.00e1200 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 401) && !player.shiftAlias) return "Requires: 1.00e1200 Protein<br>Shift for effect"
                                 return "Per upgrade double Protein and Protein Science gain"
                         },
                         canAfford(){
@@ -4249,7 +4247,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci II"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 402) && !shiftDown) return "Requires: 1.00e1260 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 402) && !player.shiftAlias) return "Requires: 1.00e1260 Protein<br>Shift for effect"
                                 return "Per upgrade Amino Acid muliplies Nitrogen Science gain but remove Oxygen Science"
                         },
                         canAfford(){
@@ -4281,7 +4279,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci III"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 403) && !shiftDown) return "Requires: 1.00e1337 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 403) && !player.shiftAlias) return "Requires: 1.00e1337 Protein<br>Shift for effect"
                                 return "Each upgrade doubles Amino Acid gain"
                         },
                         canAfford(){
@@ -4300,7 +4298,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci IV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 404) && !shiftDown) return "Requires: 1.00e2500 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 404) && !player.shiftAlias) return "Requires: 1.00e2500 Protein<br>Shift for effect"
                                 return "<bdi style='font-size: 80%'>log10(Amino Acid) multiplies Protein Science gain and per upgrade log10(Protein Science) multiplies Protein gain</bdi>"
                         },
                         canAfford(){
@@ -4319,7 +4317,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci V"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 405) && !shiftDown) return "Requires: 3.33e3333 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 405) && !player.shiftAlias) return "Requires: 3.33e3333 Protein<br>Shift for effect"
                                 return "Tokens multiply Protein Science gain but you can only get 10 seconds worth of Protein Science"
                         },
                         canAfford(){
@@ -4338,7 +4336,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci VI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 411) && !shiftDown) return "Requires: 1.00e7654 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 411) && !player.shiftAlias) return "Requires: 1.00e7654 Protein<br>Shift for effect"
                                 return "Remove miRNA base cost and Protein Science exponentiates point gain"
                         },
                         canAfford(){
@@ -4357,7 +4355,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci VII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 412) && !shiftDown) return "Requires: 1.00e14441 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 412) && !player.shiftAlias) return "Requires: 1.00e14441 Protein<br>Shift for effect"
                                 return "Protein Science multiplies Protein gain and permanently keep Nitrogen Science content"
                         },
                         canAfford(){
@@ -4379,7 +4377,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci VIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 413) && !shiftDown) return "Requires: 1.00e20402 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 413) && !player.shiftAlias) return "Requires: 1.00e20402 Protein<br>Shift for effect"
                                 return "Reuse post-100 cost scaling exponent is 7/3 and Reuse base multiplies Protein gain"
                         },
                         canAfford(){
@@ -4398,7 +4396,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci IX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 414) && !shiftDown) return "Requires: 1.00e22822 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 414) && !player.shiftAlias) return "Requires: 1.00e22822 Protein<br>Shift for effect"
                                 return "Reuse post-100 cost scaling exponent is 2"
                         },
                         canAfford(){
@@ -4417,7 +4415,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci X"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 415) && !shiftDown) return "Requires: 1.00e29092 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 415) && !player.shiftAlias) return "Requires: 1.00e29092 Protein<br>Shift for effect"
                                 return "Per upgrade you have one less token for prestige purposes but remove Carbon Science"
                         },
                         canAfford(){
@@ -4448,7 +4446,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 421) && !shiftDown) return "Requires: 1.00e30003 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 421) && !player.shiftAlias) return "Requires: 1.00e30003 Protein<br>Shift for effect"
                                 return "Per upgrade add .025 to 𝛾 → ∂𝛾 base"
                         },
                         canAfford(){
@@ -4467,7 +4465,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 422) && !shiftDown) return "Requires: 1.00e51515 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 422) && !player.shiftAlias) return "Requires: 1.00e51515 Protein<br>Shift for effect"
                                 return "Remove rRNA base cost"
                         },
                         canAfford(){
@@ -4486,7 +4484,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 423) && !shiftDown) return "Requires: 1.00e63036 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 423) && !player.shiftAlias) return "Requires: 1.00e63036 Protein<br>Shift for effect"
                                 return "Reuse post-100 cost scaling exponent is 1.5"
                         },
                         canAfford(){
@@ -4505,7 +4503,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XIV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 424) && !shiftDown) return "Requires: 1.00e70607 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 424) && !player.shiftAlias) return "Requires: 1.00e70607 Protein<br>Shift for effect"
                                 return "Double Gem gain"
                         },
                         canAfford(){
@@ -4524,7 +4522,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XV"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 425) && !shiftDown) return "Requires: 1.00e73037 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 425) && !player.shiftAlias) return "Requires: 1.00e73037 Protein<br>Shift for effect"
                                 return "Remove siRNA base cost and Lives multiply Nitrogen Science gain"
                         },
                         canAfford(){
@@ -4543,7 +4541,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVI"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 431) && !shiftDown) return "Requires: 1.00e75057 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 431) && !player.shiftAlias) return "Requires: 1.00e75057 Protein<br>Shift for effect"
                                 return "Per maxed gem amount (10,000) double Protein Science gain"
                         },
                         canAfford(){
@@ -4562,7 +4560,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 432) && !shiftDown) return "Requires: 1.00e105,501 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 432) && !player.shiftAlias) return "Requires: 1.00e105,501 Protein<br>Shift for effect"
                                 return "miRNA cost exponent is 1.9"
                         },
                         canAfford(){
@@ -4581,7 +4579,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XVIII"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 433) && !shiftDown) return "Requires: 1.00e113,311 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 433) && !player.shiftAlias) return "Requires: 1.00e113,311 Protein<br>Shift for effect"
                                 return "miRNA cost exponent is 1.8"
                         },
                         canAfford(){
@@ -4600,7 +4598,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XIX"
                         },
                         description(){
-                                if (!hasUpgrade("sci", 434) && !shiftDown) return "Requires: 1.00e159,300 Protein<br>Shift for effect"
+                                if (!hasUpgrade("sci", 434) && !player.shiftAlias) return "Requires: 1.00e159,300 Protein<br>Shift for effect"
                                 return "Per upgrade double Amino Acid gain"
                         },
                         canAfford(){
@@ -4619,7 +4617,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XX"
                         },
                         description(){
-                                if (shiftDown) return "Softcapped at 1e10 (x -> log10(x)<sup>10</sup>)"
+                                if (player.shiftAlias) return "Softcapped at 1e10 (x -> log10(x)<sup>10</sup>)"
                                 return "log10(log10(Points)) multiplies Protein gain<br>Currently: " + format(tmp.sci.upgrades[435].effect)
                         },
                         cost:() => new Decimal(1.81e33),
@@ -4852,7 +4850,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci IV"
                         },
                         description(){
-                                let func = shiftDown ? makeRed : makeGreen
+                                let func = player.shiftAlias ? makeRed : makeGreen
                                 let a = "DNA Science<sup>" + func("ABC") + "</sup> exponentiates point gain and multiplies Life gain"
                                 return a + br + "Currently: " + format(tmp.sci.upgrades[504].effect)
                         },
@@ -4968,7 +4966,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
@@ -5028,7 +5026,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
@@ -5092,7 +5090,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
@@ -5161,7 +5159,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[21].base.pow(player.sci.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
@@ -5231,7 +5229,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[22].base.pow(player.sci.buyables[22])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
@@ -5297,7 +5295,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[23].base.times(player.sci.buyables[23]).times(player.sci.buyables[23].plus(1).log(2))
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.sci.buyables[23].effect) + " to Blue base and prior exp dividers</b><br>"
@@ -5362,7 +5360,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[101].base.pow(player.sci.buyables[101])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[101]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
@@ -5427,7 +5425,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[102]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[102].effect) + " to Oxygen Science and color gain</b><br>"
@@ -5490,7 +5488,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[103].base.pow(player.sci.buyables[103])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[103]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[103].effect) + " to Oxygen Science and Carbon gain</b><br>"
@@ -5556,7 +5554,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[111].base.times(player.sci.buyables[111])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[111]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.sci.buyables[111].effect) + " to prior exponential dividers and C -> O science exponent</b><br>"
@@ -5618,7 +5616,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[112].base.pow(player.sci.buyables[112])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[112]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[112].effect) + " to Oxygen Science and B point gain</b><br>"
@@ -5680,7 +5678,7 @@ addLayer("sci", {
                                 return tmp.sci.buyables[113].base.pow(player.sci.buyables[113])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[113]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.sci.buyables[113].effect) + " to Oxygen Science gain</b><br>"
@@ -6599,7 +6597,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon I"
                         },
                         description(){
-                                if (!shiftDown) return "Begin Production of Carbon, but vastly increase the cost of Oxygen I"
+                                if (!player.shiftAlias) return "Begin Production of Carbon, but vastly increase the cost of Oxygen I"
                                 a = "(log2(Life Points)/256-3)*multipliers"
                                 if (hasUpgrade("tokens", 22)) a = a.replace("3)", "3)^2")
                                 return a
@@ -6620,7 +6618,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon II"
                         },
                         description(){
-                                if (!shiftDown) return "Add to the A point exponent .126-.126/<br>(1+cbrt([Carbon])/50)"
+                                if (!player.shiftAlias) return "Add to the A point exponent .126-.126/<br>(1+cbrt([Carbon])/50)"
                                 a = ".126-.126/<br>(1+cbrt([Carbon])/50)"
                                 if (hasUpgrade("c", 12)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[12].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
@@ -6644,7 +6642,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon III"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Add a ln(e+sqrt(x)/10) term to B32, double Carbon gain, and remove B22 and B23 base cost"
                                         return "Add a ln(e+sqrt(x)/10) term to B32"
                                 }
@@ -6665,7 +6663,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon IV"
                         },
                         description(){
-                                if (!shiftDown) return "ln(Deuterium)/1000 multiplies Carbon and Indigo's ln becomes log2"
+                                if (!player.shiftAlias) return "ln(Deuterium)/1000 multiplies Carbon and Indigo's ln becomes log2"
                                 a = "max(1, ln(Deuterium)/1000)"
                                 if (hasUpgrade("c", 14)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[14].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
@@ -6691,7 +6689,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon V"
                         },
                         description(){
-                                if (!shiftDown) return "Deuterium V multiplies and then exponentiates Carbon gain"
+                                if (!player.shiftAlias) return "Deuterium V multiplies and then exponentiates Carbon gain"
                                 if (hasUpgrade("c", 15)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[15].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
@@ -6708,7 +6706,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VI"
                         },
                         description(){
-                                if (!shiftDown) return "<bdi style='color:#CC0033'>A</bdi> multiplies Carbon gain and X-Rays base and unlock coins"
+                                if (!player.shiftAlias) return "<bdi style='color:#CC0033'>A</bdi> multiplies Carbon gain and X-Rays base and unlock coins"
                                 a = "<bdi style='color:#CC0033'>A</bdi>"
                                 if (hasUpgrade("c", 21)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[21].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
@@ -6732,7 +6730,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VII"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Add .01 to Polynomial base and multiply Ultraviolet base by 17"
                                         return "cbrt(max(10h, seconds played)) multiplies Ultraviolet base and add .01 to Polynomial base<br>Currently: " + format(tmp.c.upgrades[22].effect)
                                 }
@@ -6763,7 +6761,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon VIII"
                         },
                         description(){
-                                if (!shiftDown) return "Change token buyable cost scaling from exponential to linear"
+                                if (!player.shiftAlias) return "Change token buyable cost scaling from exponential to linear"
                                 if (hasUpgrade("c", 23)) return ""
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
@@ -6780,7 +6778,7 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon IX"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Halve the Double-exponential divider"
                                         return "Add 1000 to Carbon VII and halve the Double-exponential divider"
                                 }
@@ -6800,9 +6798,9 @@ addLayer("c", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Carbon X"
                         },
                         description(){
-                                if (!shiftDown) return "Halve the Double-exponential divider and add .01 to Polynomial base"
+                                if (!player.shiftAlias) return "Halve the Double-exponential divider and add .01 to Polynomial base"
                                 if (hasUpgrade("c", 25)) return ""
-                                return "" + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(2e229)
@@ -6899,7 +6897,7 @@ addLayer("c", {
                         content: ["main-display",
                                 ["display-text",
                                         function(){
-                                                if (shiftDown) return "Your best Carbon is " + format(player.c.best) + " and you are netting " + format(tmp.c.getResetGain.sub(tmp.c.getLossRate.times(player.c.points))) + " Carbon per second"
+                                                if (player.shiftAlias) return "Your best Carbon is " + format(player.c.best) + " and you are netting " + format(tmp.c.getResetGain.sub(tmp.c.getLossRate.times(player.c.points))) + " Carbon per second"
                                                 return "You are gaining " + format(tmp.c.getResetGain) + " Carbon per second"
                                         }
                                 ],
@@ -7084,7 +7082,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen I"
                         },
                         description(){
-                                if (!shiftDown) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
+                                if (!player.shiftAlias) return "Begin Production of Oxygen, but vastly increase the cost of Carbon I"
                                 a = "(log2(log2(Life Points))-9)^2<br>*multipliers"
                                 if (hasUpgrade("tokens", 21))   a = a.replace("^2", "^6")
                                 if (hasMilestone("tokens", 17)) a = a.replace("^6", "^18")
@@ -7107,7 +7105,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen II"
                         },
                         description(){
-                                if (!shiftDown) return "Multiply oxygen gain by log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7"
+                                if (!player.shiftAlias) return "Multiply oxygen gain by log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7"
                                 a = "log10(Atomic Hydrogen)*<br>log10(Deuterium)/10^7"
                                 if (hasUpgrade("o", 12)) return a
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[12].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
@@ -7131,7 +7129,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen III"
                         },
                         description(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         if (player.extremeMode) return "Each upgrade raises B Point and Life Point gain ^1.02 and unlock Oxygen Science"
                                         return "Each upgrade raises B Point and Life Point gain ^1.02"
                                 }
@@ -7155,7 +7153,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IV"
                         },
                         description(){
-                                if (!shiftDown) return "ln(Oxygen) multiplies Oxygen gain"
+                                if (!player.shiftAlias) return "ln(Oxygen) multiplies Oxygen gain"
                                 a = "ln(Oxygen)"
                                 if (hasUpgrade("o", 15))        a = "(ln(Oxygen))^2"
                                 if (hasMilestone("tokens", 13)) a = a.replace("^2", "^4")
@@ -7185,7 +7183,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen V"
                         },
                         description(){
-                                if (!shiftDown) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
+                                if (!player.shiftAlias) return "Oxygen^upgrades multiplies Life Point gain and square Oxygen IV"
                                 a = "min(1ee6, Oxygen) ^[upgrades]"
                                 if (hasMilestone("tokens", 10)) a = "min(1ee6, Oxygen) ^[upgrades]<sup>2</sup>"
                                 if (hasUpgrade("tokens", 11)) a = a.replace("[upgrades]","([upgrades]+3)")
@@ -7216,7 +7214,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VI"
                         },
                         description(){
-                                if (!shiftDown) return "Oxygen multiplies Hydrogen gain and Hydrogen multiplies B Point gain"
+                                if (!player.shiftAlias) return "Oxygen multiplies Hydrogen gain and Hydrogen multiplies B Point gain"
                                 if (hasUpgrade("o", 21)) return ""
                                 return "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[21].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -7230,7 +7228,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VII"
                         },
                         description(){
-                                if (!shiftDown) return "Multiply Gamma Ray base by log10(Life Points) and double coin gain"
+                                if (!player.shiftAlias) return "Multiply Gamma Ray base by log10(Life Points) and double coin gain"
                                 if (hasUpgrade("o", 22)) return ""
                                 return "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[22].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -7244,7 +7242,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen VIII"
                         },
                         description(){
-                                if (!shiftDown) return "<bdi style='font-size: 80%'>Multiply Near-ultraviolet base by log10(Life Points) and Infrared and Visible effects are raised to [tokens]^3"
+                                if (!player.shiftAlias) return "<bdi style='font-size: 80%'>Multiply Near-ultraviolet base by log10(Life Points) and Infrared and Visible effects are raised to [tokens]^3"
                                 if (hasUpgrade("o", 23)) return "log10(Life Points)"
                                 return "log10(Life Points)<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[23].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -7266,7 +7264,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IX"
                         },
                         description(){
-                                if (!shiftDown) return "Multiply Radio Wave base by log10(Life Points) and square it"
+                                if (!player.shiftAlias) return "Multiply Radio Wave base by log10(Life Points) and square it"
                                 if (hasUpgrade("o", 24)) return "log10(Life Points)"
                                 return "log10(Life Points)<br>Estimated time: " + logisticTimeUntil(tmp.o.upgrades[24].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -7289,7 +7287,7 @@ addLayer("o", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen X"
                         },
                         description(){
-                                if (!shiftDown) return "Multiply and then exponentiate X-Ray base by the number of upgrades*pi"
+                                if (!player.shiftAlias) return "Multiply and then exponentiate X-Ray base by the number of upgrades*pi"
                                 if (hasUpgrade("o", 25)) return ""
                                 return "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[25].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
                         },
@@ -7376,7 +7374,7 @@ addLayer("o", {
                         content: ["main-display",
                                 ["display-text",
                                         function(){
-                                                if (shiftDown) return "Your best Oxygen is " + format(player.o.best) + " and you are netting " + format(tmp.o.getResetGain.sub(tmp.o.getLossRate.times(player.o.points))) + " Oxygen per second"
+                                                if (player.shiftAlias) return "Your best Oxygen is " + format(player.o.best) + " and you are netting " + format(tmp.o.getResetGain.sub(tmp.o.getLossRate.times(player.o.points))) + " Oxygen per second"
                                                 return "You are gaining " + format(tmp.o.getResetGain) + " Oxygen per second"
                                         }
                                 ],
@@ -7568,7 +7566,7 @@ addLayer("n", {
                 let amt = "You can reset for <br>" + formatWhole(gain) + " Nitrogen"
                 let nxt = ""
                 if (gain.lt(1000)) nxt = br + "You need " + format(nextAt) + br + "Life Points for the next"
-                if (player.n.time > 1 && gain.lt(1e6) && gain.gt(1) && shiftDown) nxt += br + format(gain.div(player.n.time)) + "/s"
+                if (player.n.time > 1 && gain.lt(1e6) && gain.gt(1) && player.shiftAlias) nxt += br + format(gain.div(player.n.time)) + "/s"
                 return amt + nxt
         },
         canReset(){
@@ -7582,7 +7580,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen I"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         if (player.extremeMode) return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, Science, and Coins"
                                         return "Life Points, Hydrogen, Oxygen, Carbon, A Points, B Points, C Points, and Coins"
                                 }
@@ -7685,7 +7683,7 @@ addLayer("n", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nitrogen IX"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "ln(Max(e,Nitrogen))"
                                         if (hasMilestone("n", 15)) a += " ^[challenges]"
                                         return a
@@ -8491,7 +8489,7 @@ addLayer("n", {
                                 ["prestige-button", "", function (){ return hasMilestone("n", 13) ? {'display': 'none'} : {}}],
                                 ["display-text",
                                         function(){
-                                                if (shiftDown) return "Your best Nitrogen is " + format(player.n.best)
+                                                if (player.shiftAlias) return "Your best Nitrogen is " + format(player.n.best)
                                                 if (hasMilestone("n", 13)) return "You are gaining " + format(tmp.n.getResetGain, 3) + " Nitrogen per second"
                                         }
                                 ],
@@ -8932,7 +8930,7 @@ addLayer("p", {
                 let amt = "You can reset for " + br + formatWhole(gain) + " base Phosphorus/s"
                 let nxt = ""
                 if (gain.lt(1000)) nxt = br + "You need " + format(nextAt) + br + "Nitrogen for the next"
-                if (player.p.time > 1 && gain.lt(1e6) && gain.gt(1) && shiftDown) nxt += br + format(gain.div(player.p.time)) + "/s"
+                if (player.p.time > 1 && gain.lt(1e6) && gain.gt(1) && player.shiftAlias) nxt += br + format(gain.div(player.p.time)) + "/s"
                 return amt + nxt
         },
         canReset(){
@@ -8946,7 +8944,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus I"
                         },
                         description(){
-                                if (shiftDown) return "What is the imaginary period of exponential speed on two? Dm me: pg132#7975"
+                                if (player.shiftAlias) return "What is the imaginary period of exponential speed on two? Dm me: pg132#7975"
                                 return "Gain .5 Nitrogen per second and you have one less token for prestige purposes"
                         },
                         cost:() => new Decimal(25000),
@@ -8959,7 +8957,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphorus II"
                         },
                         description(){
-                                if (shiftDown) return "Hint: There are generally an even number, and you should depress your shift key."
+                                if (player.shiftAlias) return "Hint: There are generally an even number, and you should depress your shift key."
                                 return "Tire affects E Point gain"
                         },
                         cost:() => new Decimal(player.hardMode ? 5e8 : 1e8),
@@ -9604,10 +9602,7 @@ addLayer("p", {
                                         ["prestige-button", "", function (){ return hasUpgrade("p", 13) ? {'display': 'none'} : {}}],
                                         ["display-text",
                                                 function(){
-                                                        if (shiftDown) {
-                                                                let b = "Your best Phosphorus is " + format(player.p.best)
-                                                                return b + " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
-                                                        }
+                                                        if (player.shiftAlias) return "Your best Phosphorus is " + format(player.p.best) + " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
                                                         let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
                                                         if (!hasUpgrade("p", 13)) return "You are gaining " + format(x, 3) + " Phosphorus/s"
                                                         return "You are gaining " + format(x, 3) + " Phosphorus/s and " + format(tmp.p.getResetGain) + " base Phosphorus/s<sup>2</sup>"
@@ -10026,7 +10021,7 @@ addLayer("mu", {
         effectDescription(){
                 if (inChallenge("l", 71) || hasChallenge("l", 71)) return ""
                 let eff = tmp.mu.effect
-                if (shiftDown) {
+                if (player.shiftAlias) {
                         let a = "effect formula: .01*x"
 
                         if (player.mu.points.gt(35)) a += " (softcapped)"
@@ -10065,7 +10060,7 @@ addLayer("mu", {
         },
         row: 2, 
         prestigeButtonText(){
-                if (shiftDown) {
+                if (player.shiftAlias) {
                         let p1 = "Formula:" + br + format(tmp.mu.requires, 0) + "*"
                         p1 += formatWhole(tmp.mu.base) + "^(x<sup>" + formatWhole(tmp.mu.exponent)
                         p1 += "</sup>)"
@@ -10882,7 +10877,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mu.buyables[11].effect) + " to Phosphorus gain</b><br>"
@@ -10943,7 +10938,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[12].base.pow(player.mu.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mu.buyables[12].effect) + " to Phosphorus gain</b><br>"
@@ -11009,7 +11004,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[13].base.times(player.mu.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mu.buyables[13].effect) + " to prior exponent dividers</b><br>"
@@ -11071,7 +11066,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[21].base.pow(player.mu.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mu.buyables[21].effect) + " to Phosphorus gain</b><br>"
@@ -11134,7 +11129,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[22].base.times(player.mu.buyables[22])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mu.buyables[22].effect) + " to µ → ΔP base</b><br>"
@@ -11191,7 +11186,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[23].base.times(player.mu.buyables[23])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mu.buyables[23].effect) + " to prior exponent dividers</b><br>"
@@ -11280,7 +11275,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[31].base.pow(player.mu.buyables[31]).min("ee20")
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[31]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mu.buyables[31].effect) + " to Phosphorus</b><br>"
@@ -11374,7 +11369,7 @@ addLayer("mu", {
                                 return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.5)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: -"
                                         let eff2 = format(tmp.mu.buyables[32].effect, 4) + " to µ cost exp</b><br>"
@@ -11448,7 +11443,7 @@ addLayer("mu", {
                                 return ret
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[33]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: /"
                                         let eff2 = format(tmp.mu.buyables[33].effect) + " to N → ΔP cost</b><br>"
@@ -11502,7 +11497,7 @@ addLayer("mu", {
                         content: ["main-display",
                                 ["display-text", function(){
                                         if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.sub(1).times(20)) + " µ/s"
-                                        if (shiftDown) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
+                                        if (player.shiftAlias) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
                                 ["buyables", [1,2,3]],
@@ -12974,7 +12969,7 @@ addLayer("l", {
                                 return tmp.l.buyables[11].base.pow(player.l.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
@@ -13085,7 +13080,7 @@ addLayer("l", {
                                 return tmp.l.buyables[12].base.pow(player.l.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[12].effect) + " to Life gain</b><br>"
@@ -13192,7 +13187,7 @@ addLayer("l", {
                                 return tmp.l.buyables[13].base.times(player.l.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.l.buyables[13].effect, 4) + " to prior exp dividers and Life gain exp</b><br>"
@@ -13297,7 +13292,7 @@ addLayer("l", {
                                 return tmp.l.buyables[21].base.pow(player.l.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[21].effect) + " to Life gain</b><br>"
@@ -13397,7 +13392,7 @@ addLayer("l", {
                                 return tmp.l.buyables[22].base.pow(player.l.buyables[22])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[22].effect) + " to Life gain</b><br>"
@@ -13496,7 +13491,7 @@ addLayer("l", {
                                 return tmp.l.buyables[23].base.times(player.l.buyables[23])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.l.buyables[23].effect, 4) + " to prior exp dividers</b><br>"
@@ -13593,7 +13588,7 @@ addLayer("l", {
                                 return tmp.l.buyables[31].base.pow(player.l.buyables[31])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[31]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
@@ -13690,7 +13685,7 @@ addLayer("l", {
                                 return tmp.l.buyables[32].base.pow(player.l.buyables[32])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.l.buyables[32].effect) + " to Life gain</b><br>"
@@ -13804,7 +13799,7 @@ addLayer("l", {
                                 return tmp.l.buyables[33].base.times(player.l.buyables[33])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[33]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.l.buyables[33].effect, 4) + " to prior exp dividers</b><br>"
@@ -13865,7 +13860,7 @@ addLayer("l", {
                 11: {
                         name: "Dilation",
                         challengeDescription(){
-                                if (shiftDown) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
+                                if (player.shiftAlias) return "Affects all currencies in the info tab except coins. Go into info tab to see what Dilation does."
 
                                 let a = "All prior currencies are dilated<br>^" 
                                 let e = tmp.l.challenges[11].challengeEffect
@@ -13951,7 +13946,7 @@ addLayer("l", {
                         canComplete: () => player.points.gte(tmp.l.challenges[11].goal),
                         rewardDescription(){
                                 let a = "Each tenth challenge unlocks a buyable and boost life gain"
-                                if (shiftDown) return a
+                                if (player.shiftAlias) return a
                                 let b = "Currently: *" + format(tmp.l.challenges[11].rewardEffect)
                                 let c = "You have completed this challenge<br>" 
                                 c += formatWhole(player.l.challenges[11]) + "/110 times"
@@ -17693,7 +17688,7 @@ addLayer("a", {
                                                 let expectBoost = tRNABoost.times(mRNABoost)
                                                 oomps = expectBoost.log10().times(20) // cause 20 ticks per second
                                         }
-                                        if (!shiftDown || !tmp.a.buyables[13].unlocked || player.a.protein.points.lt(10)) {
+                                        if (!player.shiftAlias || !tmp.a.buyables[13].unlocked || player.a.protein.points.lt(10)) {
                                                 let a = "Current time to buy a buyable is approximately " + formatTime(timePerBuyable) + br
                                                 // Math.log(10*5)/(2*Math.log(5))
                                                 return a + "and you are gaining approximately " + format(oomps) + " OoM of protein per second"
@@ -21673,7 +21668,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[11].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
@@ -21770,7 +21765,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[12].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[12].effect) + " to Stem Cell gain</b><br>"
@@ -21864,7 +21859,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[13].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
@@ -21950,7 +21945,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[21].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[21].effect) + " to Stem Cell gain</b><br>"
@@ -22016,7 +22011,7 @@ addLayer("cells", {
                                 return init.plus(amt.div(20).sin().times(30))
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
@@ -22082,7 +22077,7 @@ addLayer("cells", {
                                 return base.pow(amt.sub(amt.div(20).sin().times(10)))
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[112]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[112].effect) + " to Mu gain</b><br>"
@@ -22149,7 +22144,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[411].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[411]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[411].effect) + " to Iota gain</b><br>"
@@ -22215,7 +22210,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[412].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[412]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[412].effect) + " to Iota gain</b><br>"
@@ -22281,7 +22276,7 @@ addLayer("cells", {
                                 return tmp.cells.buyables[413].base.pow(amt)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[413]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[413].effect) + " to Iota gain</b><br>"
@@ -23809,7 +23804,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXII"
                         },
                         description(){
-                                if (shiftDown) return "Gives you ten tissue resets on purchase"
+                                if (player.shiftAlias) return "Gives you ten tissue resets on purchase"
                                 return "Gain 99% of Tissue gained on reset per second but you can no longer reset for Tissues"
                         },
                         onPurchase(){
@@ -25397,7 +25392,7 @@ addLayer("mc", {
                                 return tmp.mc.buyables[11].base.pow(player.mc.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mc.buyables[11].effect) + " to Micro gain</b><br>"
@@ -25448,7 +25443,7 @@ addLayer("mc", {
                                 return tmp.mc.buyables[12].base.pow(player.mc.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mc.buyables[12].effect) + " to Micro gain</b><br>"
@@ -25491,7 +25486,7 @@ addLayer("mc", {
                                 return player.mc.buyables[12].gt(2)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: -"
                                         let eff2 = formatWhole(player.mc.buyables[13]) + " to base Micro gain log's base</b><br>"
@@ -26069,12 +26064,12 @@ addLayer("ach", {
                                 return true
                         },
                         canClick(){
-                                if (shiftDown) return true
+                                if (player.shiftAlias) return true
                                 return player.ach.hiddenRows < Object.keys(PROGRESSION_MILESTONES).length/7
                         },
                         onClick(){
                                 if (!this.canClick()) return 
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         player.ach.hiddenRows ++
                                         return
                                 }
@@ -26105,7 +26100,7 @@ addLayer("ach", {
                         },
                         onClick(){
                                 if (!this.canClick()) return 
-                                if (shiftDown) player.ach.hiddenRows = 0
+                                if (player.shiftAlias) player.ach.hiddenRows = 0
                                 else player.ach.hiddenRows --
                         },
                 },
@@ -26957,7 +26952,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[11].base.pow(player.mini.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[11]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27017,7 +27012,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[12].base.pow(player.mini.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[12]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27072,7 +27067,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[13].base.pow(player.mini.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[13]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27141,7 +27136,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[21].base.times(player.mini.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[21]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
@@ -27203,7 +27198,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[23].base.times(player.mini.buyables[23])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[23]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
@@ -27267,7 +27262,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[61].base.pow(player.mini.buyables[61])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[61]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[61]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27330,7 +27325,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[62].base.pow(player.mini.buyables[62])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[62]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[62]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27396,7 +27391,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[63].base.pow(player.mini.buyables[63])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[63]) + "</b><br>"
                                         let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[63]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
@@ -27459,7 +27454,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[31].base.pow(player.mini.buyables[31])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[31]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
@@ -27515,7 +27510,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[32].base.pow(player.mini.buyables[32])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[32].effect) + " to B Points gain</b><br>"
@@ -27572,7 +27567,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[33].base.times(player.mini.buyables[33])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[33]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[33].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -27628,7 +27623,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[41].base.pow(player.mini.buyables[41])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[41]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[41].effect) + " to B Points gain</b><br>"
@@ -27684,7 +27679,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[42].base.pow(player.mini.buyables[42])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[42]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[42].effect) + " to B Points and Hydrogen gain</b><br>"
@@ -27740,7 +27735,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[43].base.times(player.mini.buyables[43])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[43]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[43].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -27796,7 +27791,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[51].base.pow(player.mini.buyables[51])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[51]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[51].effect) + " to A Point gain</b><br>"
@@ -27857,7 +27852,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[52].base.times(player.mini.buyables[52])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[52]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[52].effect) + " to Violet base</b><br>"
@@ -27915,7 +27910,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[53].base.times(player.mini.buyables[53])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[53]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
@@ -27966,7 +27961,7 @@ addLayer("mini", {
                                 return true
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[71]) + "</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
 
@@ -28028,7 +28023,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[72].base.pow(player.mini.buyables[72])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[72]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[72].effect) + " to C Point</b><br>"
@@ -28088,7 +28083,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[73].base.pow(player.mini.buyables[73])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[73]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[73].effect) + " to C Point</b><br>"
@@ -28155,7 +28150,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[81].base.times(player.mini.buyables[81])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[81]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -28216,7 +28211,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[82].base.pow(player.mini.buyables[82])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[82]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[82].effect) + " to C Point gain</b><br>"
@@ -28280,7 +28275,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[83].base.pow(player.mini.buyables[83])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
@@ -28340,7 +28335,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[91].base.times(player.mini.buyables[91])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -28401,7 +28396,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[92].base.pow(player.mini.buyables[92])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[92].effect) + " to C Point gain</b><br>"
@@ -28467,7 +28462,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[93].base.pow(player.mini.buyables[93])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[93].effect) + " to C Point gain</b><br>"
@@ -28527,7 +28522,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[101].base.pow(player.mini.buyables[101])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[101]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[101].effect) + " to Carbon gain</b><br>"
@@ -28589,7 +28584,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[102].base.pow(player.mini.buyables[102])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[102]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[102].effect) + " to C Point gain</b><br>"
@@ -28648,7 +28643,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[103].base.pow(player.mini.buyables[103])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[103]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[103].effect) + " to C Point gain</b><br>"
@@ -28705,7 +28700,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[111].base.times(player.mini.buyables[111])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[111]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[111].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
@@ -28766,7 +28761,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[112].base.pow(player.mini.buyables[112])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[112]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[112].effect) + " to C Point gain</b><br>"
@@ -28828,7 +28823,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[113].base.pow(player.mini.buyables[113])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[113]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[113].effect) + " to C Point gain</b><br>"
@@ -28896,7 +28891,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[121].base.times(player.mini.buyables[121])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[121]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[121].effect) + " to Linear speed coefficient</b><br>"
@@ -28953,7 +28948,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[122].base.pow(player.mini.buyables[122])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[122]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[122].effect) + " to Maximum Fuel</b><br>"
@@ -29011,7 +29006,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[123].base.pow(player.mini.buyables[123])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[123]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[123].effect) + " to Maximum Fuel</b><br>"
@@ -29074,7 +29069,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[131].base.times(player.mini.buyables[131])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coefficient and Fuel Increase 1 base</b><br>"
@@ -29138,7 +29133,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[132].base.times(player.mini.buyables[132])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[132]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[132].effect, 4) + " to exponential speed base</b><br>"
@@ -29197,7 +29192,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[133].base.times(player.mini.buyables[133])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[133]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[133].effect, 4) + " to square rooting factor</b><br>"
@@ -29255,7 +29250,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[151].base.pow(player.mini.buyables[151])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[151]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[151].effect) + " to D Point gain</b><br>"
@@ -29314,7 +29309,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[152].base.pow(player.mini.buyables[152])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[152]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[152].effect) + " to D Point gain</b><br>"
@@ -29371,7 +29366,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[153].base.pow(player.mini.buyables[153])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[153]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[153].effect) + " to D Point gain</b><br>"
@@ -29430,7 +29425,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[161].base.pow(player.mini.buyables[161])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[161]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[161].effect) + " to D Point gain</b><br>"
@@ -29490,7 +29485,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[162].base.pow(player.mini.buyables[162])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[162]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[162].effect) + " to D Point gain</b><br>"
@@ -29549,7 +29544,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[163].base.pow(player.mini.buyables[163])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[163]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[163].effect) + " to D Point gain</b><br>"
@@ -29608,7 +29603,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[171].base.pow(player.mini.buyables[171])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[171]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[171].effect) + " to D Point gain</b><br>"
@@ -29667,7 +29662,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[172].base.pow(player.mini.buyables[172])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[172]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[172].effect) + " to D Point gain</b><br>"
@@ -29730,7 +29725,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[173].base.pow(player.mini.buyables[173])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[173]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[173].effect) + " to D Point gain</b><br>"
@@ -29790,7 +29785,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[181].base.pow(player.mini.buyables[181])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[181]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[181].effect) + " to D Point gain</b><br>"
@@ -29849,7 +29844,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[182].base.pow(player.mini.buyables[182])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[182]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[182].effect) + " to D Point gain</b><br>"
@@ -29901,7 +29896,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[183].base.pow(player.mini.buyables[183])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[183]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[183].effect) + " to D Point gain</b><br>"
@@ -29945,7 +29940,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 201)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " iterations</b><br>"
@@ -30007,7 +30002,7 @@ addLayer("mini", {
                                 return ret                                                                                                                  
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[202]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
@@ -30067,7 +30062,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[203].base.times(player.mini.buyables[203])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[203]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[203].effect) + " to " + makeBlue("c") + "</b><br>"
@@ -30141,7 +30136,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[211].base.times(player.mini.buyables[211])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[211]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
@@ -30203,7 +30198,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[212].base.times(player.mini.buyables[212])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[212]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[212].effect, 4) + " to Linear base per Quadratic</b><br>"
@@ -30269,7 +30264,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[213].base.pow(player.mini.buyables[213])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[213]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[213].effect) + " to E Point gain</b><br>"
@@ -30337,7 +30332,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[221].base.times(player.mini.buyables[221])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[221]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[221].effect, 4) + " to Constant base per Constant</b><br>"
@@ -30394,7 +30389,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[222].base.times(player.mini.buyables[222])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[222]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[222].effect, 4) + " to respecting scalar and Quadratic base</b><br>"
@@ -30461,7 +30456,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[223].base.pow(player.mini.buyables[223])                                                                                                                     
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[223]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[223].effect) + " to E Point gain</b><br>"
@@ -30532,7 +30527,7 @@ addLayer("mini", {
                                 return data.base.times(player.mini.buyables[231].pow(data.levelExp)).plus(1)                                                                                                               
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[231]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[231].effect) + " to " + makeBlue("c") + "</b><br>"
@@ -30598,7 +30593,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[232].base.times(player.mini.buyables[232])                                                                                                            
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[232]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.mini.buyables[232].effect) + " to " + makeRed("E") + " and addition is associative base</b><br>"
@@ -30657,7 +30652,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[233].base.pow(player.mini.buyables[233])                                                                                                            
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[233]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[233].effect) + " to E Point gain</b><br>"
@@ -30714,7 +30709,7 @@ addLayer("mini", {
                                 return tmp.mini.buyables[241].base.pow(player.mini.buyables[241])                                                                                                            
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[241]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.mini.buyables[241].effect) + " to E Point gain</b><br>"
@@ -31233,7 +31228,7 @@ addLayer("mini", {
                                                                 return 10
                         },
                         description(){
-                                if (shiftDown) return "Warning! May cause lag if this tab is not active in your browser."
+                                if (player.shiftAlias) return "Warning! May cause lag if this tab is not active in your browser."
                                 let timeNeed = tmp.mini.upgrades[12].timeNeeded
                                 let a = "Automatically gamble if you have not gambled in the last "
                                 a += formatWhole(timeNeed) + " seconds<br>"
@@ -31544,7 +31539,7 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Arthritis cure</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "Next in: " + formatTime(Math.max(0, 11-player.mini.d_points.fuelTimer2))
+                                if (player.shiftAlias) return "Next in: " + formatTime(Math.max(0, 11-player.mini.d_points.fuelTimer2))
                                 return "<bdi style='font-size: 100%'> Once per 11 seconds gain fuel, unlock an autobuyer for Speed buyables, and double D Point gain</bdi>"
                         },
                         cost:() => Decimal.pow(10, 125),
@@ -31726,7 +31721,7 @@ addLayer("mini", {
                 },
                 74: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF0000'>Cass129</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF0000'>Cass129</bdi>"
                                 return "<bdi style='color: #FF0000'>Supper</bdi>"
                         },
                         description(){
@@ -31880,7 +31875,7 @@ addLayer("mini", {
                                                 let b3 = format(data.getExp1, 4) + "<sup>cbrt()/100</sup>"
                                                 let c = ""
 
-                                                if (shiftDown) {
+                                                if (player.shiftAlias) {
                                                         c += br
                                                         c += redx + "=" + format(data.getEffectiveFuel) + "  "
                                                         c += redy + "=" + format(data.getEffectiveFuelAux) + br
@@ -31939,7 +31934,7 @@ addLayer("mini", {
                                                                 if (a.eq(data[id].cost)) num = id
                                                         }
                                                         let start = "The cheapest buyable (" + (num-140) + ") costs " + format(a) + "."
-                                                        if (!shiftDown) return start
+                                                        if (!player.shiftAlias) return start
                                                         let mid = " You have " 
                                                         let pts = player.mini.d_points.points
                                                         let end = ""
@@ -32037,7 +32032,7 @@ addLayer("mini", {
                                                         if (a.eq(data[id].cost)) num = id
                                                 }
                                                 let start = "The cheapest buyable (" + (num-60) + ") costs " + format(a) + "."
-                                                if (!shiftDown) return start
+                                                if (!player.shiftAlias) return start
                                                 let mid = " You have " 
                                                 let pts = player.mini.c_points.points
                                                 let end = ""
@@ -32285,7 +32280,7 @@ addLayer("mini", {
                                 }],
                                 ["display-text", "Each color produces the next color clockwise!"],
                                 ["display-text", function(){
-                                        if (!shiftDown) return ""
+                                        if (!player.shiftAlias) return ""
                                         let mid = hasUpgrade("h", 45) ? "log10(9+log10(10+B Points))*" : ""
                                         let end = "*2<sup>levels</sup>*" + mid + "multipliers"
                                         let exp = tmp.mini.a_points.getColorGainExp
@@ -32365,7 +32360,7 @@ addLayer("mini", {
                                         let a = "You can refuel the car by clicking. The car goes faster based on how much fuel it has."
 
                                         let b = "<br>Point gain is based on speed (which is based on fuel), but you lose 1% of your fuel every second."
-                                        if (shiftDown) {
+                                        if (player.shiftAlias) {
                                                 b += "<br>Multipliers: x" + format(tmp.mini.d_points.getGainMult)
                                                 b += "   Multiplier from fuel: x" + format(tmp.mini.d_points.getFuelMultiplier)
                                                 b += "<br>Gain per second: " + format(tmp.mini.d_points.getPointProduction)
@@ -32425,7 +32420,7 @@ addLayer("mini", {
                                         c += "</sup>(0) times multipliers"
                                         // getRecursionValue
 
-                                        if (shiftDown) {
+                                        if (player.shiftAlias) {
                                                 b += "Function formula: f(x)=" + mb("a") + "x<sup>3</sup>/1e4+" + mb("b") + "x<sup>2</sup>+"
                                                 b += mb("c") + "x+" + mb("d") + br
                                                 b += mb("a") + "=" + format(data.getA) + " "
@@ -32943,7 +32938,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[11].base.pow(player.tokens.buyables[11])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
@@ -32992,7 +32987,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[12].base.pow(player.tokens.buyables[12])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[12]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
@@ -33037,7 +33032,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[13].base.pow(player.tokens.buyables[13])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
@@ -33094,7 +33089,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[21].base.pow(player.tokens.buyables[21])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[21]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
@@ -33151,7 +33146,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[22].base.pow(player.tokens.buyables[22])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
@@ -33200,7 +33195,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[23].base.pow(player.tokens.buyables[23])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[23]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
@@ -33251,7 +33246,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[31].base.pow(player.tokens.buyables[31])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[31]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
@@ -33296,7 +33291,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[32].base.pow(player.tokens.buyables[32])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[32]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
@@ -33343,7 +33338,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[33].base.pow(player.tokens.buyables[33])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[33]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
@@ -33407,7 +33402,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[41].base.pow(player.tokens.buyables[41])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[41]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
@@ -33454,7 +33449,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[42].base.pow(player.tokens.buyables[42])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[42]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
@@ -33500,7 +33495,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[43].base.pow(player.tokens.buyables[43])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[43]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
@@ -33544,7 +33539,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[51].base.pow(player.tokens.buyables[51])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[51]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
@@ -33591,7 +33586,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[52].base.pow(player.tokens.buyables[52])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[52]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
@@ -33638,7 +33633,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[53].base.pow(player.tokens.buyables[53])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[53]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
@@ -33684,7 +33679,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[61].base.pow(player.tokens.buyables[61])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[61]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
@@ -33730,7 +33725,7 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[62].base.pow(player.tokens.buyables[62])
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[62]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
                                         let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
@@ -33777,7 +33772,7 @@ addLayer("tokens", {
                                 return player.tokens.buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                         },
                         display(){
-                                if (!shiftDown) {
+                                if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[63]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
                                         let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
@@ -34350,7 +34345,7 @@ addLayer("tokens", {
                                         a = "Reward: Raise Radio Wave effect to the total number of tokens and autobuy 13.6 eV.<br>"
                                 }
                                 let b = "Currently: " + format(tmp.tokens.milestones[1].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: [total tokens]"
                                         return a + formula
                                 }
@@ -34380,7 +34375,7 @@ addLayer("tokens", {
                                         a = "Reward: Raise Microwaves effect to the total number of tokens, keep Hydrogen XI and XII, and autobuy α ~ 1/147.<br>"
                                 }
                                 let b = "Currently: " + format(tmp.tokens.milestones[2].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: [total tokens]"
                                         return a + formula
                                 }
@@ -34409,7 +34404,7 @@ addLayer("tokens", {
                                 if (!player.extremeMode) a += " Multiply Oxygen and Carbon gain by the number of achievements.<br>"  
                                 else a += " Multiply Oxygen and Carbon gain by the number of achievements and autobuy 1/n^2.<br>"   
                                 let b = "Currently: " + format(tmp.tokens.milestones[3].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: [total tokens]"
                                         return a + formula
                                 }
@@ -34480,7 +34475,7 @@ addLayer("tokens", {
                                 else a += " raise Gamma Ray effect to the number of tokens, and autobuy 6 D" + "e" + "caseconds.<br>"
 
                                 let b = "Currently: ^" + format(tmp.tokens.milestones[6].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: [total tokens]"
                                         return a + formula
                                 }
@@ -34511,7 +34506,7 @@ addLayer("tokens", {
                                 else a += "ln(A Points) multiplies Radio Waves' base, keep Hydrogen Science upgrades, and autobuy 21%.<br>"
                                 
                                 let b = "Currently: *" + format(tmp.tokens.milestones[7].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: max(1,ln(A Points+1))"
                                         return a + formula
                                 }
@@ -34581,7 +34576,7 @@ addLayer("tokens", {
                                 else a += "ln(B Points) multiplies Microwaves' base and autobuy Artificial.<br>"
                                                 
                                 let b = "Currently: *" + format(tmp.tokens.milestones[10].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: max(1,ln(B Points+1))"
                                         return a + formula
                                 }
@@ -34689,7 +34684,7 @@ addLayer("tokens", {
                         effectDescription(){
                                 let a = "Reward: ln(tokens)^[tokens-17] multiplies coin gain (capped at 1000).<br>"                     
                                 let b = "Currently: *" + format(tmp.tokens.milestones[16].effect)
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let formula = "Formula: ln(tokens)^[tokens-17]"
                                         return a + formula
                                 }
@@ -34892,7 +34887,7 @@ addLayer("tokens", {
                 cols: 5,
                 11: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 11</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 11</bdi>"
                                 return "<bdi style='color: #FF0000'>Start here!</bdi>"
                         },
                         description(){
@@ -34913,11 +34908,11 @@ addLayer("tokens", {
                 },
                 21: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 21</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 21</bdi>"
                                 return "<bdi style='color: #FF0000'>You get one</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 22</bdi>"
                                         let b = "<br>Current requirement:<br>!22"
                                         if (tmp.tokens.upgrades[42].unlocked) b += "||42"
@@ -34941,11 +34936,11 @@ addLayer("tokens", {
                 },
                 22: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 22</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 22</bdi>"
                                 return "<bdi style='color: #FF0000'>on this row.</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 21</bdi>"
                                         let b = "<br>Current requirement:<br>!21"
                                         if (tmp.tokens.upgrades[42].unlocked) b += "||42"
@@ -34969,11 +34964,11 @@ addLayer("tokens", {
                 },
                 31: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 31</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 31</bdi>"
                                 return "<bdi style='color: #FF0000'>An old silent pond /</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 32</bdi>"
                                         let b = "<br>Current requirement:<br>!32"
                                         if (tmp.tokens.upgrades[61].unlocked) b += "||61"
@@ -34997,11 +34992,11 @@ addLayer("tokens", {
                 },
                 32: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 32</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 32</bdi>"
                                 return "<bdi style='color: #FF0000'>A frog jumps into</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 31</bdi>"
                                         let b = "<br>Current requirement:<br>!31"
                                         if (tmp.tokens.upgrades[61].unlocked) b += "||61"
@@ -35025,11 +35020,11 @@ addLayer("tokens", {
                 },
                 33: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 33</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 33</bdi>"
                                 return "<bdi style='color: #FF0000'>the pond— /</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 34</bdi>"
                                         let b = "<br>Current requirement:<br>!34"
                                         if (tmp.tokens.upgrades[61].unlocked) b += "||61"
@@ -35053,11 +35048,11 @@ addLayer("tokens", {
                 },
                 34: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 34</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 34</bdi>"
                                 return "<bdi style='color: #FF0000'>Splash! Silence</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 33</bdi>"
                                         let b = "<br>Current requirement:<br>!33"
                                         if (tmp.tokens.upgrades[61].unlocked) b += "||61"
@@ -35081,11 +35076,11 @@ addLayer("tokens", {
                 },
                 41: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 41</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 41</bdi>"
                                 return "<bdi style='color: #FF0000'>again.</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "Square X-Rays<br>base"
                         },
                         canAfford(){
@@ -35103,11 +35098,11 @@ addLayer("tokens", {
                 },
                 42: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 42</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 42</bdi>"
                                 return "<bdi style='color: #FF0000'>by Matsuo Bashō</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "Re-unlock upgrade 21 and 22"
                         },
                         canAfford(){
@@ -35125,11 +35120,11 @@ addLayer("tokens", {
                 },
                 51: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 51</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 51</bdi>"
                                 return "<bdi style='color: #FF0000'>Tau</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 52</bdi>"
                                         let b = "<br>Current requirement:<br>!52"
                                         if (tmp.tokens.upgrades[62].unlocked) b += "||62"
@@ -35155,11 +35150,11 @@ addLayer("tokens", {
                 },
                 52: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 52</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 52</bdi>"
                                 return "<bdi style='color: #FF0000'>Rhenium</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks Upgrade 51</bdi>"
                                         let b = "<br>Current requirement:<br>!51"
                                         if (tmp.tokens.upgrades[62].unlocked) b += "||62"
@@ -35185,11 +35180,11 @@ addLayer("tokens", {
                 },
                 61: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 61</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 61</bdi>"
                                 return "<bdi style='color: #FF0000'>Electron</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 if (player.extremeMode) return "Re-unlocks the third row of upgrades and unlock an Oxygen science upgrade"
                                 return "Re-unlocks the third row of upgrades"
                         },
@@ -35208,11 +35203,11 @@ addLayer("tokens", {
                 },
                 62: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 62</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 62</bdi>"
                                 return "<bdi style='color: #FF0000'>Oxygen</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "Re-unlocks the fifth row of upgrades"
                         },
                         canAfford(){
@@ -35230,11 +35225,11 @@ addLayer("tokens", {
                 },
                 71: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 71</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 71</bdi>"
                                 return "<bdi style='color: #FF0000'>Fluorine</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 72 and 73</bdi>"
                                         let b = "<br>Current requirement:<br>!72 && !73"
 
@@ -35262,11 +35257,11 @@ addLayer("tokens", {
                 },
                 72: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 72</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 72</bdi>"
                                 return "<bdi style='color: #FF0000'>Lithium</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 71 and 73</bdi>"
                                         let b = "<br>Current requirement:<br>!71 && !73"
 
@@ -35294,11 +35289,11 @@ addLayer("tokens", {
                 },
                 73: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 73</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 73</bdi>"
                                 return "<bdi style='color: #FF0000'>Iron</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 71 and 72</bdi>"
                                         let b = "<br>Current requirement:<br>!71 && !72"
 
@@ -35326,11 +35321,11 @@ addLayer("tokens", {
                 },
                 81: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 81</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 81</bdi>"
                                 return "<bdi style='color: #FF0000'>The Easter</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 82</bdi>"
                                         let b = "<br>Current requirement:<br>!82"
                                         if (hasUpgrade("mini", 31)) {
@@ -35358,11 +35353,11 @@ addLayer("tokens", {
                 },
                 82: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 82</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 82</bdi>"
                                 return "<bdi style='color: #FF0000'>Egg is here.</bdi>"
                         },
                         description(){
-                                if (shiftDown) {
+                                if (player.shiftAlias) {
                                         let a = "<bdi style='color: #863813'>Locks upgrades 81</bdi>"
                                         let b = "<br>Current requirement:<br>!81"
                                         if (hasUpgrade("mini", 31)) {
@@ -35390,11 +35385,11 @@ addLayer("tokens", {
                 },
                 91: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 91</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 91</bdi>"
                                 return "<bdi style='color: #FF0000'>Once Upon</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "C Point Gain 1's log10 is buffed to ln (upgrades in this row are never repealed)"
                         },
                         canAfford(){
@@ -35412,11 +35407,11 @@ addLayer("tokens", {
                 },
                 92: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 92</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 92</bdi>"
                                 return "<bdi style='color: #FF0000'>A Time</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "You can (automatically) gamble four times a second and apply Cod again"
                         },
                         canAfford(){
@@ -35434,11 +35429,11 @@ addLayer("tokens", {
                 },
                 93: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 93</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 93</bdi>"
                                 return "<bdi style='color: #FF0000'>In a galaxy</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "C Point gain 6's outer log10 becomes a ln and gain 81x coins"
                         },
                         canAfford(){
@@ -35456,11 +35451,11 @@ addLayer("tokens", {
                 },
                 94: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 94</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 94</bdi>"
                                 return "<bdi style='color: #FF0000'>rather near</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "C Point gain 6's inner log10 becomes a ln and Unlock a slot base is 10"
                         },
                         canAfford(){
@@ -35478,11 +35473,11 @@ addLayer("tokens", {
                 },
                 95: {
                         title(){
-                                if (shiftDown) return "<bdi style='color: #FF00FF'>Upgrade 95</bdi>"
+                                if (player.shiftAlias) return "<bdi style='color: #FF00FF'>Upgrade 95</bdi>"
                                 return "<bdi style='color: #FF0000'>here...</bdi>"
                         },
                         description(){
-                                if (shiftDown) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
+                                if (player.shiftAlias) return "<bdi style='color: #863813'></bdi><br>Current requirement:<br>"
                                 return "The autobuyer can buy each buyable once per trigger"
                         },
                         canAfford(){
@@ -35621,7 +35616,7 @@ addLayer("tokens", {
                         content: [
                                 ["secondary-display", "coins"],
                                 ["display-text", function(){
-                                        if (!shiftDown) return "You passively gain coins. Hold shift to see upgrade numbers and when upgrades get locked.<br>At any time you can remove all upgrades, but you do NOT get coins back."
+                                        if (!player.shiftAlias) return "You passively gain coins. Hold shift to see upgrade numbers and when upgrades get locked.<br>At any time you can remove all upgrades, but you do NOT get coins back."
                                         let b = "Formula: " + format(tmp.tokens.coins.getGainMult) + "/(1+coins)"
                                         let c = "<br>You are currently gaining " + format(tmp.tokens.coins.getGainMult.div(player.tokens.coins.points.plus(1))) + " coins per second."
                                         return b + c
