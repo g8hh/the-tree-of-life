@@ -320,7 +320,7 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         407: "\"Universe\" is universal<br>x>1330",
         507: "Add to DNA gain exponent<br>x/1000",
         607: "DNA gain per non-0 gem<br>(x+1)<sup>.25</sup>",
-        701: "Remove the /2 in the DNA gain formula<br>x>1330",
+        701: "Bulk 2x Life buyables<br>x>1330",
         702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
         703: "Protein Science per non-0 gem<br>1+x",
         704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/500",
@@ -8875,7 +8875,7 @@ addLayer("p", {
 
                 if (hasMilestone("p", 2))       ret = ret.times(tmp.p.milestones[2].effect)
                 if (hasUpgrade("mu", 11))       ret = ret.times(tmp.n.upgrades[35].effect)
-                let forceee150 = player.extremeMode && hasChallenge("l", 71) && !player.l.activeChallenge
+                let forceee150 = player.extremeMode && hasChallenge("l", 22) && !player.l.activeChallenge
                 // in extreme, has anti-upsilon, and no active challenge
                 if (hasUpgrade("mu", 12) && !forceee150) {
                         let init = player.mu.points.div(100).plus(1).pow(getBuyableAmount("mini", 241).sqrt())
@@ -12941,10 +12941,13 @@ addLayer("l", {
                         return ret
                 }, // tmp.l.buyables.getBuyableExponent
                 getMaxBulk(){
-                        let maxBulk = 20
+                        let maxBulk = player.extremeMode ? 10 : 20
 
                         if (layers.l.grid.getGemEffect(507) || player.extremeMode) {
                                                         maxBulk *= 50
+                        }
+                        if (layers.l.grid.getGemEffect(701) && player.extremeMode) {
+                                                        maxBulk *= 2
                         }
                         if (hasUpgrade("cells", 11))    maxBulk *= 50
                         if (hasMilestone("cells", 27))  maxBulk *= 20
@@ -14372,7 +14375,7 @@ addLayer("l", {
                                 let b = "Goal: e1e266,000 Points"
                                 if (player.extremeMode) b = b.replace("266,000", "368,900")
                                 let c = "Reward: Uncap C43 effect, and per Anti- challenge you have one less token for prestige purposes, but nullify Phosphorus effect"
-                                let d = "Currently: -" + format(tmp.l.challenges[52].reward)
+                                let d = "Currently: -" + formatWhole(tmp.l.challenges[52].reward)
 
                                 return a + br + b + br + c + br + d
                         },
@@ -14416,7 +14419,7 @@ addLayer("l", {
                 }, // inChallenge("l", 61) hasChallenge("l", 61)
                 62: {
                         name: "Anti-Phi",
-                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 518500 : 423e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 446e3 : 423e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[62].goal)
@@ -14425,7 +14428,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .18 from the Dilation exponent"
                                 let b = "Goal: e1e423,000 Points"
-                                if (player.extremeMode) b = b.replace("423,000", "518,500")
+                                if (player.extremeMode) b = b.replace("423,000", "446,000")
                                 let c = "Reward: Unlock the next set of challenges"
 
                                 return a + br + b + br + c 
@@ -18109,7 +18112,7 @@ addLayer("d", {
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
-                if (layers.l.grid.getGemEffect(701)) v1 = v1.div(2)
+                if (!layers.l.grid.getGemEffect(701) || player.extremeMode) v1 = v1.div(2)
                 return v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
         },
         getBaseGainAddition(){
@@ -18715,7 +18718,7 @@ addLayer("d", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: You can bulk up to 1,000 Life buyables."
+                                if (player.extremeMode) return "Reward: You can bulk up to 500 Life buyables."
                                 return "Reward: You can bulk up to 20 Life buyables."
                         },
                 }, // hasMilestone("d", 19)
@@ -18900,7 +18903,7 @@ addLayer("d", {
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
                                         a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
-                                        if (layers.l.grid.getGemEffect(701)) a2 = a2.replace("/2", "")
+                                        if (layers.l.grid.getGemEffect(701) && !player.extremeMode) a2 = a2.replace("/2", "")
                                         if (layers.l.grid.getGemEffect(408)) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
                                                 a2 = a2.replace("sqrt(", "")
@@ -27536,7 +27539,7 @@ addLayer("mini", {
                                         let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
 
-                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x"
