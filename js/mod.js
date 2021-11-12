@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.180.1",
+	num: "1.181",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,27 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.sci.dna_science.points.gte("1e168")
+	if (player.extremeMode) return player.sci.dna_science.points.gte("1e643")
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.180)<br><br>
+		Reaching the endgame screen (updated as of v1.181)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.181</h3><br>
+		- Balanced until 1e643 DNA Science.<br>
+		- Added six DNA Science upgrades.<br>
+		- Added two DNA Science buyables.<br>
+		- Various extreme mode changes.<br>
+		- Added Stem Cell amount to Cell tooltip.<br>
+		- Improved DNA Science tab display.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.180.1</h3><br>
 		- Fixed various bugs.<br>
 		- Added a custom save.<br>
