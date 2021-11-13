@@ -19368,7 +19368,7 @@ addLayer("cells", {
         baseAmount(){return player.d.points},
         type: "custom",
         tooltip(){
-                if (player.cells.stem_cells.points.eq(0)) return formatWhole(player.cells.points) + " Cells"
+                if (player.cells.stem_cells.points.eq(0) || tmp.mc.layerShown) return formatWhole(player.cells.points) + " Cells"
                 return formatWhole(player.cells.points) + " Cells and " + formatCurrency(player.cells.stem_cells.points) + " Stem Cells"
         },
         getResetGain(){
@@ -19980,7 +19980,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e5293"),
                         unlocked(){
-                                return hasUpgrade("t", 105)
+                                return hasUpgrade("t", 105) || player.or.unlocked
                         }, // hasUpgrade("cells", 15)
                 },
                 21: {
@@ -19992,7 +19992,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("5e5363"),
                         unlocked(){
-                                return hasUpgrade("cells", 15)
+                                return hasUpgrade("cells", 15) || player.or.unlocked
                         }, // hasUpgrade("cells", 21)
                 },
                 22: {
@@ -20004,7 +20004,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("4e5696"),
                         unlocked(){
-                                return hasUpgrade("cells", 21)
+                                return hasUpgrade("cells", 21) || player.or.unlocked
                         }, // hasUpgrade("cells", 22)
                 },
                 23: {
@@ -20016,7 +20016,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e6066"),
                         unlocked(){
-                                return hasUpgrade("cells", 22)
+                                return hasUpgrade("cells", 22) || player.or.unlocked
                         }, // hasUpgrade("cells", 23)
                 },
                 24: {
@@ -20028,7 +20028,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e6479"),
                         unlocked(){
-                                return hasUpgrade("cells", 23)
+                                return hasUpgrade("cells", 23) || player.or.unlocked
                         }, // hasUpgrade("cells", 24)
                 },
                 25: {
@@ -20040,7 +20040,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e6941"),
                         unlocked(){
-                                return hasUpgrade("cells", 24)
+                                return hasUpgrade("cells", 24) || player.or.unlocked
                         }, // hasUpgrade("cells", 25)
                 },
                 31: {
@@ -20052,7 +20052,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e7377"),
                         unlocked(){
-                                return hasUpgrade("cells", 25)
+                                return hasUpgrade("cells", 25) || player.or.unlocked
                         }, // hasUpgrade("cells", 31)
                 },
                 32: {
@@ -20064,7 +20064,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("5e7850"),
                         unlocked(){
-                                return hasUpgrade("cells", 31)
+                                return hasUpgrade("cells", 31) || player.or.unlocked
                         }, // hasUpgrade("cells", 32)
                 },
                 33: {
@@ -20076,7 +20076,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e8431"),
                         unlocked(){
-                                return hasUpgrade("cells", 32)
+                                return hasUpgrade("cells", 32) || player.or.unlocked
                         }, // hasUpgrade("cells", 33)
                 },
                 34: {
@@ -20088,7 +20088,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e8884"),
                         unlocked(){
-                                return hasUpgrade("cells", 33)
+                                return hasUpgrade("cells", 33) || player.or.unlocked
                         }, // hasUpgrade("cells", 34)
                 },
                 35: {
@@ -20100,7 +20100,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("6e9512"),
                         unlocked(){
-                                return hasUpgrade("cells", 34)
+                                return hasUpgrade("cells", 34) || player.or.unlocked
                         }, // hasUpgrade("cells", 35)
                 },
                 41: {
@@ -20112,7 +20112,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("2e9746"),
                         unlocked(){
-                                return hasUpgrade("cells", 35)
+                                return hasUpgrade("cells", 35) || player.or.unlocked
                         }, // hasUpgrade("cells", 41)
                 },
                 42: {
@@ -20126,11 +20126,12 @@ addLayer("cells", {
                                 player.tokens.buyables[11] = decimalZero
                                 player.tokens.points = player.tokens.total
                                 player.subtabs.tokens.mainTabs = "II"
+                                if (player.or.unlocked) return 
                                 player.tab = "tokens"
                         },
                         cost:() => new Decimal("9e10301"),
                         unlocked(){
-                                return hasUpgrade("cells", 41)
+                                return hasUpgrade("cells", 41) || player.or.unlocked
                         }, // hasUpgrade("cells", 42)
                 },
                 43: {
@@ -20142,7 +20143,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("2e12664"),
                         unlocked(){
-                                return player.tokens.total.gt(500) && hasUpgrade("cells", 42)
+                                return player.tokens.total.gt(500) && hasUpgrade("cells", 42) || player.or.unlocked
                         }, // hasUpgrade("cells", 43)
                 },
                 44: {
@@ -20154,7 +20155,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e12973"),
                         unlocked(){
-                                return hasUpgrade("cells", 43)
+                                return hasUpgrade("cells", 43) || player.or.unlocked
                         }, // hasUpgrade("cells", 44)
                 },
                 45: {
@@ -20166,7 +20167,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e13236"),
                         unlocked(){
-                                return hasUpgrade("cells", 44)
+                                return hasUpgrade("cells", 44) || player.or.unlocked
                         }, // hasUpgrade("cells", 45)
                 },
                 51: {
@@ -20178,7 +20179,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e13440"),
                         unlocked(){
-                                return hasUpgrade("cells", 45)
+                                return hasUpgrade("cells", 45) || player.or.unlocked
                         }, // hasUpgrade("cells", 51)
                 },
                 52: {
@@ -20186,11 +20187,11 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXII"
                         },
                         description(){
-                                return "Token II via Cells' scaling is twice as easy and per Token II log10(Cells) multiply Stem Cell gain"
+                                return "Token II via Cell's scaling is twice as easy and per Token II log10(Cells) multiply Stem Cell gain"
                         },
                         cost:() => new Decimal("1e13639"),
                         unlocked(){
-                                return hasUpgrade("cells", 51)
+                                return hasUpgrade("cells", 51) || player.or.unlocked
                         }, // hasUpgrade("cells", 52)
                 },
                 53: {
@@ -20202,7 +20203,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("5e14023"),
                         unlocked(){
-                                return hasUpgrade("cells", 52)
+                                return hasUpgrade("cells", 52) || player.or.unlocked
                         }, // hasUpgrade("cells", 53)
                 },
                 54: {
@@ -20217,7 +20218,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e14272"),
                         unlocked(){
-                                return hasUpgrade("cells", 53)
+                                return hasUpgrade("cells", 53) || player.or.unlocked
                         }, // hasUpgrade("cells", 54)
                 },
                 55: {
@@ -20229,7 +20230,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e14491"),
                         unlocked(){
-                                return hasUpgrade("cells", 54)
+                                return hasUpgrade("cells", 54) || player.or.unlocked
                         }, // hasUpgrade("cells", 55)
                 },
                 61: {
@@ -20241,7 +20242,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e22305"),
                         unlocked(){
-                                return player.cells.challenges[11] >= 24
+                                return player.cells.challenges[11] >= 24 || player.or.unlocked
                         }, // hasUpgrade("cells", 61)
                 },
                 62: {
@@ -20253,7 +20254,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e36963"),
                         unlocked(){
-                                return hasUpgrade("t", 145)
+                                return hasUpgrade("t", 145) || player.or.unlocked
                         }, // hasUpgrade("cells", 62)
                 },
                 63: {
@@ -20265,7 +20266,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e37682"),
                         unlocked(){
-                                return hasUpgrade("cells", 62)
+                                return hasUpgrade("cells", 62) || player.or.unlocked
                         }, // hasUpgrade("cells", 63)
                 },
                 64: {
@@ -20290,7 +20291,7 @@ addLayer("cells", {
                                 if (player.subtabs.l.mainTabs == "Buyables") player.subtabs.l.mainTabs = "Info"
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 63)
+                                return hasUpgrade("cells", 63) || player.or.unlocked
                         }, // hasUpgrade("cells", 64)
                 },
                 65: {
@@ -20302,7 +20303,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e38590"),
                         unlocked(){
-                                return hasUpgrade("cells", 64)
+                                return hasUpgrade("cells", 64) || player.or.unlocked
                         }, // hasUpgrade("cells", 65)
                 },
                 111: {
@@ -23530,7 +23531,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return hasMilestone("t", 6)
+                                return hasMilestone("t", 6) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 61)
                 },
                 62: {
@@ -23548,7 +23549,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("t", 61)
+                                return hasUpgrade("t", 61) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 62)
                 },
                 63: {
@@ -23566,7 +23567,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("t", 62)
+                                return hasUpgrade("t", 62) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 63)
                 },
                 64: {
@@ -23584,7 +23585,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("t", 63)
+                                return hasUpgrade("t", 63) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 64)
                 },
                 65: {
@@ -23596,7 +23597,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
-                                return hasUpgrade("t", 64)
+                                return hasUpgrade("t", 64) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 65)
                 },
                 71: {
@@ -23614,7 +23615,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("t", 65)
+                                return hasUpgrade("t", 65) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 71)
                 },
                 72: {
@@ -23632,7 +23633,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("t", 71)
+                                return hasUpgrade("t", 71) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 72)
                 },
                 73: {
@@ -23650,7 +23651,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("t", 72)
+                                return hasUpgrade("t", 72) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 73)
                 },
                 74: {
@@ -23668,7 +23669,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("t", 73)
+                                return hasUpgrade("t", 73) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 74)
                 },
                 75: {
@@ -23686,7 +23687,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(20),
                         unlocked(){
-                                return hasUpgrade("t", 74)
+                                return hasUpgrade("t", 74) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 75)
                 },
                 81: {
@@ -23704,7 +23705,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("t", 75)
+                                return hasUpgrade("t", 75) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 81)
                 },
                 82: {
@@ -23722,7 +23723,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("t", 81)
+                                return hasUpgrade("t", 81) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 82)
                 },
                 83: {
@@ -23740,7 +23741,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("t", 82)
+                                return hasUpgrade("t", 82) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 83)
                 },
                 84: {
@@ -23758,7 +23759,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("t", 83)
+                                return hasUpgrade("t", 83) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 84)
                 },
                 85: {
@@ -23776,7 +23777,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(200),
                         unlocked(){
-                                return hasUpgrade("t", 84)
+                                return hasUpgrade("t", 84) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 85)
                 },
                 91: {
@@ -23794,7 +23795,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
-                                return hasMilestone("t", 13)
+                                return hasMilestone("t", 13) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 91)
                 },
                 92: {
@@ -23812,7 +23813,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
-                                return hasUpgrade("t", 91)
+                                return hasUpgrade("t", 91) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 92)
                 },
                 93: {
@@ -23830,7 +23831,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
-                                return hasUpgrade("t", 92)
+                                return hasUpgrade("t", 92) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 93)
                 },
                 94: {
@@ -23848,7 +23849,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
-                                return hasUpgrade("t", 93)
+                                return hasUpgrade("t", 93) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 94)
                 },
                 95: {
@@ -23866,7 +23867,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
-                                return hasUpgrade("t", 94)
+                                return hasUpgrade("t", 94) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 95)
                 },
                 101: {
@@ -23884,7 +23885,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
-                                return hasUpgrade("t", 95)
+                                return hasUpgrade("t", 95) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 101)
                 },
                 102: {
@@ -23902,7 +23903,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
-                                return hasUpgrade("t", 101)
+                                return hasUpgrade("t", 101) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 102)
                 },
                 103: {
@@ -23920,7 +23921,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
-                                return hasUpgrade("t", 102)
+                                return hasUpgrade("t", 102) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 103)
                 },
                 104: {
@@ -23938,7 +23939,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
-                                return hasUpgrade("t", 103)
+                                return hasUpgrade("t", 103) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 104)
                 },
                 105: {
@@ -23956,7 +23957,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e5),
                         unlocked(){
-                                return hasUpgrade("t", 104)
+                                return hasUpgrade("t", 104) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 105)
                 },
                 endUpgradeAmount(){
@@ -23981,7 +23982,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e18),
                         unlocked(){
-                                return hasUpgrade("cells", 55)
+                                return hasUpgrade("cells", 55) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 111)
                 },
                 112: {
@@ -23999,7 +24000,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e19),
                         unlocked(){
-                                return hasUpgrade("t", 111)
+                                return hasUpgrade("t", 111) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 112)
                 },
                 113: {
@@ -24017,7 +24018,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e19),
                         unlocked(){
-                                return hasUpgrade("t", 112)
+                                return hasUpgrade("t", 112) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 113)
                 },
                 114: {
@@ -24035,7 +24036,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(4e19),
                         unlocked(){
-                                return hasUpgrade("t", 113)
+                                return hasUpgrade("t", 113) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 114)
                 },
                 115: {
@@ -24053,7 +24054,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e20),
                         unlocked(){
-                                return hasUpgrade("t", 114)
+                                return hasUpgrade("t", 114) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 115)
                 },
                 121: {
@@ -24071,7 +24072,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e20),
                         unlocked(){
-                                return hasUpgrade("t", 115)
+                                return hasUpgrade("t", 115) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 121)
                 },
                 122: {
@@ -24089,7 +24090,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(5e20),
                         unlocked(){
-                                return hasUpgrade("t", 121)
+                                return hasUpgrade("t", 121) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 122)
                 },
                 123: {
@@ -24107,7 +24108,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e22),
                         unlocked(){
-                                return hasUpgrade("t", 122)
+                                return hasUpgrade("t", 122) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 123)
                 },
                 124: {
@@ -24125,7 +24126,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(3e22),
                         unlocked(){
-                                return hasUpgrade("t", 123)
+                                return hasUpgrade("t", 123) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 124)
                 },
                 125: {
@@ -24143,7 +24144,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(5e22),
                         unlocked(){
-                                return hasUpgrade("t", 124)
+                                return hasUpgrade("t", 124) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 125)
                 },
                 131: {
@@ -24161,7 +24162,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(3e24),
                         unlocked(){
-                                return hasUpgrade("t", 125)
+                                return hasUpgrade("t", 125) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 131)
                 },
                 132: {
@@ -24177,7 +24178,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e28),
                         unlocked(){
-                                return hasUpgrade("t", 131)
+                                return hasUpgrade("t", 131) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 132)
                 },
                 133: {
@@ -24189,7 +24190,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(5e30),
                         unlocked(){
-                                return hasUpgrade("t", 132)
+                                return hasUpgrade("t", 132) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 133)
                 },
                 134: {
@@ -24201,7 +24202,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e32),
                         unlocked(){
-                                return hasUpgrade("t", 133)
+                                return hasUpgrade("t", 133) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 134)
                 },
                 135: {
@@ -24217,7 +24218,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e33),
                         unlocked(){
-                                return hasUpgrade("t", 134)
+                                return hasUpgrade("t", 134) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 135)
                 },
                 141: {
@@ -24229,7 +24230,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e35),
                         unlocked(){
-                                return hasUpgrade("t", 135)
+                                return hasUpgrade("t", 135) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 141)
                 },
                 142: {
@@ -24241,7 +24242,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e36),
                         unlocked(){
-                                return hasUpgrade("t", 141)
+                                return hasUpgrade("t", 141) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 142)
                 },
                 143: {
@@ -24253,7 +24254,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e40),
                         unlocked(){
-                                return hasUpgrade("t", 142)
+                                return hasUpgrade("t", 142) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 143)
                 },
                 144: {
@@ -24265,7 +24266,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(2e42),
                         unlocked(){
-                                return hasUpgrade("t", 143)
+                                return hasUpgrade("t", 143) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 144)
                 },
                 145: {
@@ -24277,7 +24278,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(5e58),
                         unlocked(){
-                                return hasUpgrade("t", 144)
+                                return hasUpgrade("t", 144) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 145)
                 },
                 151: {
@@ -24296,11 +24297,15 @@ addLayer("t", {
                                 player.mu.points = decimalZero
                                 player.p.currentGainPerSec = decimalZero
                                 player.p.best_over_amino = decimalZero
+                                tmp.mu.deactivated = true
+                                tmp.mu.layerShown = false
+                                tmp.p.deactivated = true
+                                tmp.p.layerShown = false
                                 updateTemp()
                         }, // the only thing that is changed is hasMilestone("cells", 39)
                         cost:() => new Decimal(5e64),
                         unlocked(){
-                                return hasUpgrade("cells", 65) || hasUpgrade("t", 151)
+                                return hasUpgrade("cells", 65) || hasUpgrade("t", 151) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 151)
                 },
                 152: {
@@ -24312,7 +24317,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e67),
                         unlocked(){
-                                return hasUpgrade("t", 151)
+                                return hasUpgrade("t", 151) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 152)
                 },
                 153: {
@@ -24324,7 +24329,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(1e75),
                         unlocked(){
-                                return hasUpgrade("t", 152)
+                                return hasUpgrade("t", 152) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 153)
                 },
                 154: {
@@ -24336,7 +24341,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(3e82),
                         unlocked(){
-                                return hasUpgrade("t", 153)
+                                return hasUpgrade("t", 153) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 154)
                 },
                 155: {
@@ -24348,7 +24353,7 @@ addLayer("t", {
                         },
                         cost:() => new Decimal(5e95),
                         unlocked(){
-                                return hasUpgrade("t", 154)
+                                return hasUpgrade("t", 154) || hasMilestone("or", 9)
                         }, // hasUpgrade("t", 155)
                 },
         },
@@ -24707,7 +24712,7 @@ addLayer("t", {
                                   ["upgrades", [6,7,8,9,10]],
                                 ],
                         unlocked(){
-                                return hasMilestone("t", 6)
+                                return hasMilestone("t", 6) || hasMilestone("or", 9)
                         },
                 },
                 "End": {
@@ -24718,7 +24723,7 @@ addLayer("t", {
                                   ["upgrades", [11,12,13,14,15]],
                                 ],
                         unlocked(){
-                                return hasUpgrade("cells", 55)
+                                return hasUpgrade("cells", 55) || hasMilestone("or", 9)
                         },
                 },
                 "Milestones": {
@@ -25163,6 +25168,29 @@ addLayer("or", {
                         }
                 }
 
+                if (hasMilestone("or", 6)) {
+                        if (tmp.tokens.buyables[191].unlocked) {
+                                if (tmp.tokens.buyables[191].canAfford) {
+                                        layers.tokens.buyables[191].buy()
+                                }
+                        }
+                }
+                if (hasMilestone("or", 7)) {
+                        if (tmp.tokens.buyables[192].unlocked) {
+                                if (tmp.tokens.buyables[192].canAfford) {
+                                        layers.tokens.buyables[192].buy()
+                                }
+                        }
+                }
+
+                if (hasMilestone("or", 8)) {
+                        if (tmp.tokens.buyables[193].unlocked) {
+                                if (tmp.tokens.buyables[193].canAfford) {
+                                        layers.tokens.buyables[193].buy()
+                                }
+                        }
+                }
+
                 if (!data.milestone2Ever) data.milestone2Ever = hasMilestone("or", 2)
                 if (!data.milestone3Ever) data.milestone3Ever = hasMilestone("or", 3)
         },
@@ -25224,7 +25252,7 @@ addLayer("or", {
                         },
                         toggles:() => [["or", "autobuyd"]],
                         effectDescription(){
-                                return "Reward: Bulk buy tokens, token tetrational base is 9.7, permanently bulk Omnipotent, and autobuy DNA upgrades."
+                                return "Reward: Bulk buy tokens, token tetrational base is 9.5, permanently bulk Omnipotent, and autobuy DNA upgrades."
                         },
                 }, // hasMilestone("or", 2)
                 3: {
@@ -25268,9 +25296,65 @@ addLayer("or", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Bulk 5x Primary, keep best Down Quark amount, and token tetrational base is 9.5."
+                                return "Reward: Bulk 5x Primary, keep best Down Quark amount, and token tetrational base is 9."
                         },
                 }, // hasMilestone("or", 5)
+                6: {
+                        requirementDescription(){
+                                return "6 Organ resets"
+                        },
+                        done(){
+                                return player.or.times >= 6
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy Token II via Token and keep a Tissue reset per Organ reset<sup>2</sup>."
+                        },
+                }, // hasMilestone("or", 6)
+                7: {
+                        requirementDescription(){
+                                return "7 Organ resets"
+                        },
+                        done(){
+                                return player.or.times >= 7
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy Token II via Stem Cell and Top Quark effect becomes 4C<sup>.7</sup>*x."
+                        },
+                }, // hasMilestone("or", 7)
+                8: {
+                        requirementDescription(){
+                                return "8 Organ resets"
+                        },
+                        done(){
+                                return player.or.times >= 8
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy Token II via Cell and Bottom Quark base becomes 6+C."
+                        },
+                }, // hasMilestone("or", 8)
+                9: {
+                        requirementDescription(){
+                                return "9 Organ resets"
+                        },
+                        done(){
+                                return player.or.times >= 9
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep a Tissue milestone per reset and Down Quark initial base becomes tokens<sup>sqrt(1+C)</sup>."
+                        },
+                }, // hasMilestone("or", 9)
         },
         tabFormat: {
                 "Upgrades": {
@@ -25347,6 +25431,7 @@ addLayer("or", {
                 // 1 Tissue content
                 if (!false) {
                         let tKeptMilestones = 0
+                        if (hasMilestone("or", 9)) tKeptMilestones += player.or.times
                         if (!false) {
                                 sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, tKeptMilestones)
@@ -25360,6 +25445,7 @@ addLayer("or", {
                         }
 
                         let tKeptTimes = 0
+                        if (hasMilestone("or", 6)) tKeptTimes += player.or.times ** 2
                         if (!false) data1.times = Math.min(data1.times, tKeptTimes)
                 }
 
@@ -26804,8 +26890,9 @@ addLayer("mini", {
 
                 if (tmp.tokens.buyables[11].canAfford) {
                         let buy = player.cells.unlocked
-                        if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) buy = true
-                        if (layers.l.grid.getGemEffect(803) && !hasUpgrade("cells", 42)) buy = true
+                        if (player.tokens.autobuyradio && hasMilestone("n", 7)) buy = true
+                        if (layers.l.grid.getGemEffect(803)) buy = true
+                        if (hasUpgrade("cells", 42)) buy = false
                         if (buy) layers.tokens.buyables[11].buy(true)
                 }
 
@@ -32943,8 +33030,8 @@ addLayer("tokens", {
         type: "custom",
         getResetGain(){
                 if (hasMilestone("or", 2) && tmp.tokens.getNextAt.slog().gt(4)) {
-                        let tetBase = 9.7
-                        if (hasMilestone("or", 5)) tetBase = 9.5
+                        let tetBase = 9.5
+                        if (hasMilestone("or", 5)) tetBase = 9
 
                         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
 
@@ -33403,13 +33490,13 @@ addLayer("tokens", {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
+                                        if (hasMilestone("cells", 25)) eff2 = eff2.replace("Atomic Hydrogen", "shRNA base")
                                         let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x"
-                                if (hasMilestone("cells", 25)) eff2 = eff2.replace("Atomic Hydrogen", "shRNA base")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -34303,6 +34390,7 @@ addLayer("tokens", {
                                 let c = tmp.tokens.buyables.getCol2Total
 
                                 let ret = c.sub(r.sqrt()).times(50).plus(player.tokens.total).max(1)
+                                if (hasMilestone("or", 9)) ret = player.tokens.total.max(1).pow(c.plus(1).sqrt())
                                 if (hasUpgrade("t", 134)) ret = ret.times(tmp.tokens.buyables[102].coefficient)
 
                                 return ret
@@ -34327,7 +34415,9 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
-                                if (hasUpgrade("t", 134)) eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + eformula.slice(0,29) + ")" + eformula.slice(29,)
+                                if (hasMilestone("or", 9)) eformula = eformula.replace("+50(C-R<sup>.5</sup>)", "<sup>sqrt(1+C)</sup>")
+                                let sliced = eformula.split("<sup>x</sup>")
+                                if (hasUpgrade("t", 134)) eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + sliced[0] + ")<sup>x</sup>" + sliced[1]
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -34487,6 +34577,8 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("or", 7)) return c.pow(.7).times(4)
+
                                 return c.plus(100).div(r.plus(50)).times(c.pow(.6)).times(2)
                         },
                         effect(){
@@ -34511,6 +34603,7 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = "2C<sup>.6</sup>(100+C)/(50+R)*x<br>" 
+                                if (hasMilestone("or", 7)) eformula = "4C<sup>.7</sup>*x<br>"
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -34550,6 +34643,8 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
+                                if (hasMilestone("or", 8)) return c.plus(6)
+
                                 return c.times(30).plus(100).div(r.plus(20))
                         },
                         effect(){
@@ -34574,6 +34669,7 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = "(100+30C)/(20+R)^x<br>" 
+                                if (hasMilestone("or", 8)) eformula = "(6+C)^x<br>"
                                 eformula += format(tmp.tokens.buyables[122].base, 4) + "^x" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -34608,7 +34704,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 
-                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -34630,14 +34726,14 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
                                 
-                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
                         },
                 },
                 193: {
-                        title: "Token II via Cells",
+                        title: "Token II via Cell",
                         cost:() => player.tokens.buyables[193].div(tmp.tokens.buyables[193].div).plus(4).pow10().pow10(),
                         div:() => new Decimal(hasUpgrade("cells", 52) ? 20 : 10),
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
@@ -34654,9 +34750,9 @@ addLayer("tokens", {
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[193]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193)) + " Cells</b><br>"
-                                let eformula = "10^10^((4+x/" + formatWhole(tmp.tokens.buyables[193].div) + "))"
+                                let eformula = "10^10^(4+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
                                 
-                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -35882,7 +35978,10 @@ addLayer("tokens", {
                                         let a = "Current tetrational scaling formula: "
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
                                         let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + TOKEN_COSTS.length)
-                                        return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>10"
+                                        let baseStr = "10"
+                                        if (hasMilestone("or", 2)) baseStr = "9.5"
+                                        if (hasMilestone("or", 5)) baseStr = "9"
+                                        return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>" + baseStr
                                 }],
                         ],
                         unlocked(){
