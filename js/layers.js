@@ -21920,6 +21920,8 @@ addLayer("cells", {
                                         d += "Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
                                 } else if (player.cells.challenges[21] == 1) {
                                         d += "Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain"
+                                } else if (player.cells.challenges[21] == 2) {
+                                        d += "Unlock Heart and another Cell buyable [not yet] [not yet]"
                                 } else {
                                         d += "not a thing yet"
                                 }
@@ -21933,7 +21935,7 @@ addLayer("cells", {
                         onEnter(){
                                 layers.cells.challenges.onEnter()
                         },
-                        completionLimit: 9,
+                        completionLimit: 4,
                         countsAs: [],
                 }, // inChallenge("cells", 21) hasChallenge("cells", 21)
         },
@@ -22839,11 +22841,13 @@ addLayer("cells", {
 
                                         let tertReward = br2 + "Current Tertiary rewards:" + br
                                         if (player.cells.challenges[21] >= 1) {
-                                                tertReward += "1: Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
-                                                tertReward += br
+                                                tertReward += "1: Per Cell upgrade log10(log10(Points)) multiplies DNA gain" + br
                                         }
                                         if (player.cells.challenges[21] >= 2) {
-                                                tertReward += "2: Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain"
+                                                tertReward += "2: Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain" + br
+                                        }
+                                        if (player.cells.challenges[21] >= 3) {
+                                                tertReward += "3: Unlock Heart and another Cell buyable" + br
                                         }
 
                                         tertReward += br + "Note that Tertiary completions are never reset"
@@ -23064,6 +23068,7 @@ addLayer("t", {
                 }
                 if (hasUpgrade("t", 155))       ret = ret.times(Decimal.pow(1.11, player.tokens.tokens2.total))
                                                 ret = ret.times(tmp.or.effect)
+                if (hasMilestone("or", 10))     ret = ret.times(Decimal.pow(2, player.or.milestones.length))
                 if (player.easyMode)            ret = ret.times(2)
 
                 return ret.max(1)
@@ -23126,6 +23131,9 @@ addLayer("t", {
                         if (hasUpgrade("t", 133))       per = .18
                         if (hasUpgrade("t", 134))       per = .19
                                                 ret = ret.plus(per * player.t.upgrades.length)
+                        if (hasMilestone("or", 13)) {
+                                                ret = ret.plus(per * player.or.milestones.length * .75)
+                        }
                 }
                 if (hasUpgrade("t", 81))        ret = ret.plus(.5)
                 if (hasMilestone("t", 13))      ret = ret.plus(.03 * player.t.milestones.length)
@@ -25355,6 +25363,62 @@ addLayer("or", {
                                 return "Reward: Keep a Tissue milestone per reset and Down Quark initial base becomes tokens<sup>sqrt(1+C)</sup>."
                         },
                 }, // hasMilestone("or", 9)
+                10: {
+                        requirementDescription(){
+                                return "10 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(10)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Strange Quark initial base is C<sup>.8</sup> and per milestone double Tissue gain."
+                        },
+                }, // hasMilestone("or", 10)
+                11: {
+                        requirementDescription(){
+                                return "15 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(15)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Charm Quark base is .1(C<sup>.6</sup>) and Token II buyables' cost formula is x."
+                        },
+                }, // hasMilestone("or", 11)
+                12: {
+                        requirementDescription(){
+                                return "20 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(20)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Up Quark base is (1+C)<sup>.5</sup>/40 and keep Token II content."
+                        },
+                }, // hasMilestone("or", 12)
+                13: {
+                        requirementDescription(){
+                                return "50 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(50)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Organ milestones count towards Tissues IX."
+                        },
+                }, // hasMilestone("or", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -25455,7 +25519,7 @@ addLayer("or", {
                 data1.bestOnReset = decimalZero
 
                 // 1.5 Token II content
-                if (!false) {
+                if (!hasMilestone("or", 12)) {
                         let d = player.tokens
                         let d2 = d.tokens2
                         d.total = decimalZero
@@ -26338,12 +26402,19 @@ addLayer("ach", {
                                 return tmp.n.layerShown
                         },
                 },
-                {key: "shift+O", description: "Shift+O: Go to Oxygen", onPress(){
+                {key: "shift+O", description(){
+                                return player.or.unlocked ? "Shift+O: Go to Organ" : "Shift+D: Go to Oxygen"
+                        }, 
+                        onPress(){
+                                if (tmp.or.layerShown) {
+                                        showTab("or")
+                                        return 
+                                }
                                 if (!tmp.o.layerShown) return
                                 showTab("o")
                         },
                         unlocked(){
-                                return tmp.o.layerShown
+                                return tmp.o.layerShown || tmp.or.layerShown
                         },
                 },
                 {key: "shift+P", description: "Shift+P: Go to Phosphorus", onPress(){
@@ -26430,6 +26501,13 @@ addLayer("ach", {
                         },
                         unlocked(){
                                 return tmp.n.layerShown
+                        },
+                },
+                {key: "o", description: "O: Reset for Organ", onPress(){
+                                if (canReset("or")) doReset("or")
+                        },
+                        unlocked(){
+                                return tmp.or.layerShown
                         },
                 },
                 {key: "p", description: "P: Reset for Phosphorus", onPress(){
@@ -33281,7 +33359,7 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula2(x){
-                        if (false)                      return x.plus(1).pow(.8).floor()
+                        if (hasMilestone("or", 11))     return x
                         return x.plus(1)
                 },
                 costFormula(x){
@@ -33322,7 +33400,7 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText2(){
-                        if (false)                      return "floor((x+1)<sup>.8</sup>)"
+                        if (hasMilestone("or", 11))     return "x"
                         return "1+x"
                 },
                 costFormulaText(){
@@ -34334,6 +34412,8 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("or", 12)) return c.plus(1).sqrt().div(40)
+
                                 return c.plus(1).sqrt().div(r.plus(40))
                         },
                         effect(){
@@ -34353,6 +34433,7 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = "(1+C)<sup>.5</sup>/(40+R)*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
+                                if (hasMilestone("or", 12)) eformula = eformula.replace("(40+R)", "40")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -34447,6 +34528,8 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("or", 11)) return c.pow(.6).times(.1)
+
                                 return c.sqrt().times(3).sub(r.root(4)).times(.04).max(0)
                         },
                         effect(){
@@ -34469,7 +34552,7 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
-                                
+                                if (hasMilestone("or", 11)) eformula = eformula.replace(".04(3C<sup>.5</sup>-R<sup>.25</sup>)", ".1(C<sup>.6</sup>)")
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -34513,6 +34596,8 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
+                                if (hasMilestone("or", 10)) return c.pow(.8).times(tmp.tokens.buyables[112].coefficient)
+
                                 return c.pow(.8).sub(r.sqrt()).max(0).times(tmp.tokens.buyables[112].coefficient)
                         },
                         effect(){
@@ -34538,6 +34623,7 @@ addLayer("tokens", {
 
                                 let eformula = format(tmp.tokens.buyables[112].coefficient)
                                 eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
+                                if (hasMilestone("or", 10)) eformula = eformula.replace("-R<sup>.5</sup>", "")
                                 eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
