@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.184",
+	num: "1.185",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.sci.dna_science.points.gte("1e852")
+	if (player.extremeMode) return player.sci.dna_science.points.gte("1e1084")
 	return player.cells.challenges[21] >= 3
 }
 
@@ -33,7 +33,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.183</h3><br>
+	<br><h3 style='color: #CC0000'>v1.185</h3><br>
+		- Various extreme mode changes.<br>
+		- Balanced extreme mode until 1e1084 DNA Science.<br>
+		- Added three DNA Science upgrades.<br>
+		- Various display fixes and improvements.<br>
+	<br><h3 style='color: #CC0000'>v1.184</h3><br>
 		- Various extreme mode changes.<br>
 		- Balanced extreme mode until 1e852 DNA Science.<br>
 		- Added two DNA Science upgrades.<br>
