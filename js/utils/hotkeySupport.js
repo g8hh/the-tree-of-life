@@ -42,6 +42,13 @@ function fixHotkeyCode(s){
 	return s
 }
 
+function getDescriptionFromKey(id){
+        let d = id.description
+        
+        if (isFunction(d)) return d()
+        return d
+}
+
 var logHotkey = false
 var qForClear = false
 

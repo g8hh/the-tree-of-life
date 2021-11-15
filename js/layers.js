@@ -77,12 +77,8 @@ function getPointExponentiation(){
                                         exp = exp.times(c34base.pow(getBuyableAmount("mu", 32)))
                 let c65base = layers.l.grid.getGemEffect(605)
                                         exp = exp.times(c65base.pow(getBuyableAmount("l", 11)))
-                let c17base = layers.l.grid.getGemEffect(107)
-                                        exp = exp.times(c17base.pow(getBuyableAmount("a", 32)))
                 let c73base = layers.l.grid.getGemEffect(703)
                                         exp = exp.times(c73base.pow(getBuyableAmount("a", 21)))
-                let c18base = layers.l.grid.getGemEffect(108)
-                                        exp = exp.times(c18base.pow(getBuyableAmount("l", 33).pow(1.8)))
                 let c38base = layers.l.grid.getGemEffect(308)
                                         exp = exp.times(c38base.pow(getBuyableAmount("l", 21)))
         } else {
@@ -94,6 +90,10 @@ function getPointExponentiation(){
                                         exp = exp.times(c54base.pow(getBuyableAmount("a", 22)))
                 let c64base = layers.l.grid.getGemEffect(604)
                                         exp = exp.times(c64base.pow(getBuyableAmount("a", 33)))
+                let c17base = layers.l.grid.getGemEffect(107)
+                                        exp = exp.times(c17base.pow(getBuyableAmount("a", 32)))
+                let c18base = layers.l.grid.getGemEffect(108)
+                                        exp = exp.times(c18base.pow(getBuyableAmount("l", 33).pow(player.extremeMode ? 1.9394 : 1.8)))
         }
         if (hasMilestone("a", 19))      exp = exp.times(tmp.a.milestones[19].effect)
         if (hasUpgrade("a", 11))        exp = exp.times(Decimal.pow(3, player.a.upgrades.length))
@@ -134,6 +134,8 @@ function getPointExponentiation(){
                                         exp = exp.times(Decimal.pow(1 + player.a.milestones.length/100, player.a.milestones.length))
         }
         if (hasUpgrade("sci", 411))     exp = exp.times(player.sci.protein_science.points.max(1))
+        if (hasUpgrade("sci", 502))     exp = exp.times(player.d.points.max(1).pow(player.a.buyables[31].plus(player.a.buyables[13])))
+        if (hasUpgrade("sci", 504))     exp = exp.times(tmp.sci.upgrades[504].effect)
         
         return exp
 }
@@ -142,28 +144,43 @@ function getPointDilationExponent(){
         let exp = decimalOne
 
         if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
-        if (inChallenge("l", 12))       {
-                let portion = decimalOne
-                let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0
-                                        portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
-                let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
+        if (inChallenge("l", 12)) {
                 let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0  
+                let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
                 let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
+
                 let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
                 let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
-                let c7Base = .023
-                if (!player.extremeMode) c7Base -= layers.l.grid.getGemEffect(706).toNumber()
+                let c7Base = player.extremeMode ? .0188 : .023
+                c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
-                                        portion = portion.times(Decimal.pow(c6Base, c6Layers))
+                                        
+
+                let portion = decimalOne
+                portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
+                portion = portion.times(Decimal.pow(c6Base, c6Layers))
 
                 let challId = player.l.activeChallengeID
-                if (challId > 801) portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
-                if (challId > 803) portion = portion.div(Decimal.pow(2.2, nCk(challId-802, 2)))
+                if (challId > 801 && !player.extremeMode) {
+                        portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
+                }
+                if (challId > 801 && player.extremeMode) {
+                        portion = portion.div(Decimal.pow(406, Math.pow(challId-801, .55)))
+                }
+                if (challId > 803) {
+                        let sub = player.extremeMode && challId > 804 ? .058 : 0
+                        portion = portion.div(Decimal.pow(2.2 - sub, nCk(challId-802, 2)))
+                }
+                if (challId > 805 && player.extremeMode) portion = portion.times(1.53)
+                if (challId > 806 && player.extremeMode) portion = portion.div(4.47)
+                if (challId > 807 && player.extremeMode) portion = portion.div(1.55)
 
                 if (hasMilestone("d", 24)) portion = portion.pow(.94)
+                if (hasMilestone("d", 25) && player.extremeMode) portion = portion.pow(.973)
+                
                 let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
-
-                let c58base = player.extremeMode ? decimalOne : layers.l.grid.getGemEffect(508)
+                let c58base = layers.l.grid.getGemEffect(508)
                 
                 portion = portion.pow(c58base.pow(c58exp))
                                         exp = exp.times(portion)
@@ -192,7 +209,7 @@ function getFullEffectDescription(layer){
 }
 
 function getResetGemIDs(){
-        if (!player.cells.milestone1Ever) return            (
+        if (!player.cells.unlocked) return (
                            ["101", "102", "103", "104", "105", "106", "107", "108", 
                             "201", "202", "203", "204", "205", "206", "207", "208", 
                             "301", "302", "303", "304", "305", "306", "307", "308", 
@@ -297,18 +314,34 @@ var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
         604: "Point gain per shRNA<br>1+x^2",
         605: "shRNA cost exponent is 1.8<br>x>1330",
         606: "DNA resets per second<br>cbrt(x)/11",
-        /* THINGS TO CONSIDER KEEPING
+        107: "Point gain per snRNA<br>1+x<sup>1.8</sup>",
+        207: "<bdi style='font-size: 80%'>Remove a log2 from α → ∂α and shRNA exponent is 1.7<br>x > 1330</bdi>",
+        307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
         407: "\"Universe\" is universal<br>x>1330",
-        507: "Bulk 50x Life buyables<br>x>1330",
+        507: "Add to DNA gain exponent<br>x/1000",
+        607: "DNA gain per non-0 gem<br>(x+1)<sup>.25</sup>",
         701: "Remove the /2 in the DNA gain formula<br>x>1330",
         702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
-        408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
+        703: "Protein Science per non-0 gem<br>1+x",
+        704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/500",
+        705: "Add .0001 to tRNA base and unlock DNA Research<br>x>1330",
+        706: "Subtract from Challenge 7 effect<br>cbrt(x)/2752",
+        707: "Add .004 to Dilation effect<br>x>1330",
+        108: "<bdi style='font-size: 80%'>Point gain per 𝛾 → ∂𝛾<sup>1.9394</sup> and DNA Science gain<br>1+x</bdi>",
+        208: "mRNA base per non-zero gem-49 (maxed at 8)<br>x/2662000",
+        308: "DNA Science per non-0 gem-48<br>log10(10+x)",
+        408: "<bdi style='font-size: 60%'>Remove the /8e315 in DNA gain formula and gain 8.315 more DNA Science<br>x>1330</bdi>",
+        508: "Customizable effect per non-0 gem-53<br>^1-cbrt(x)/100",
         608: "All µ cost reductions always work<br>x>1330",
+        708: "Reduce µ cost exponent<br>x/26620",
+        801: "Add to shRNA base per shRNA<br>x/13310",
         802: "Autobuy tokens<br>x>1330",
         803: "Autobuy Radio Waves<br>x>1330",
         804: "X-Rays effects Amino Acid<br>x>1330",
+        805: "Phosphorus gain per non-zero gem<br>1+cbrt(x)",
         806: "Remove snRNA's ln<br>x>1330",
-        */
+        807: "Life gain per N → Δµ<br>1+x/100",
+        808: "Add .0001 to tRNA's base<br>x>1330",
 }
 
 var GEM_EFFECT_DESCRIPTIONS = {
@@ -415,6 +448,34 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         604: (x) => x.pow(2).plus(1),
         605: (x) => x.gt(1330),
         606: (x) => x.cbrt().div(11),
+        107: (x) => x.pow(1.8).plus(1),
+        207: (x) => x.gt(1330),
+        307: (x) => x.plus(1),
+        407: (x) => x.gt(1330),
+        507: (x) => x.div(1000),
+        607: (x) => x.plus(1).pow(.25),
+        701: (x) => x.gt(1330),
+        702: (x) => x.cbrt().div(11).times(9).plus(1).round(),
+        703: (x) => x.plus(1),
+        704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(500).plus(1),
+        705: (x) => x.gt(1330),
+        706: (x) => x.cbrt().div(2752),
+        707: (x) => x.gt(1330),
+        108: (x) => x.plus(1),
+        208: (x) => x.div(2662000),
+        308: (x) => x.plus(10).log10(),
+        408: (x) => x.gt(1330),
+        508: (x) => Decimal.sub(1,x.cbrt().div(95)),
+        608: (x) => x.gt(1330),
+        708: (x) => x.div(26620),
+        801: (x) => x.div(13310),
+        802: (x) => x.gt(1330),
+        803: (x) => x.gt(1330),
+        804: (x) => x.gt(1330),
+        805: (x) => x.cbrt().plus(1),
+        806: (x) => x.gt(1330),
+        807: (x) => x.div(100).plus(1),
+        808: (x) => x.gt(1330),
 }
 
 var GEM_EFFECT_FORMULAS = {
@@ -516,13 +577,6 @@ function binomial(n,k) {
         return binomials[n][k];
 }
 
-function getDescriptionFromKey(id){
-        let d = id.description
-        
-        if (isFunction(d)) return d()
-        return d
-}
-
 function resetPreLifeCurrencies(){
         let data1 = player.mu
         let data2 = player.p
@@ -622,7 +676,7 @@ function makeBlue(c){
 }
 
 function makeGreen(c){
-        return "<bdi style='color:#66F200'>" + c + "</bdi>"
+        return "<bdi style='color:#66E000'>" + c + "</bdi>"
 }
                                                                                                                                                                                                                                                                         
 function filter(list, keep){
@@ -815,7 +869,7 @@ addLayer("h", {
                         let ret = decimalOne
 
                         if (hasUpgrade("h", 23))        ret = ret.times(tmp.h.upgrades[23].effect)
-                        if (hasUpgrade("h", 41))        ret = ret.times(Decimal.pow(player.h.atomic_hydrogen.points.max(3).ln(), tmp.h.upgrades[41].effect))
+                        if (hasUpgrade("h", 41))        ret = ret.times(player.h.atomic_hydrogen.points.max(3).ln().pow(tmp.h.upgrades[41].effect))
                                                         ret = ret.times(tmp.mini.buyables[13].effect)
                                                         ret = ret.times(tmp.tokens.buyables[21].effect)
                                                         ret = ret.times(tmp.l.effect)
@@ -845,7 +899,7 @@ addLayer("h", {
                 getGainMult(){
                         let ret = decimalOne
 
-                        if (hasUpgrade("h", 42))        ret = ret.times(Decimal.pow(player.h.deuterium.points.max(3).ln(), tmp.h.upgrades[42].effect))
+                        if (hasUpgrade("h", 42))        ret = ret.times(player.h.deuterium.points.max(3).ln().pow(tmp.h.upgrades[42].effect))
                                                         ret = ret.times(tmp.mini.buyables[11].effect)
                                                         ret = ret.times(tmp.tokens.buyables[13].effect)
                                                         ret = ret.times(tmp.l.effect)
@@ -959,10 +1013,8 @@ addLayer("h", {
                         cost:() => player.hardMode ? new Decimal(1700) : new Decimal(500),
                         effect(){
                                 let a1 = new Decimal(player.h.upgrades.length).max(1)
-                                if (hasUpgrade("h", 43))        ret = a1.log2().max(1)
-                                else                            ret = a1.ln().max(1)
-
-                                return ret
+                                if (hasUpgrade("h", 43)) return a1.log2().max(1)
+                                return a1.ln().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[14].effect)
@@ -977,9 +1029,8 @@ addLayer("h", {
                         },
                         description(){
                                 if (!shiftDown) return "<bdi style='font-size: 80%'>Unlock Deuterium (<sup>2</sup>H) and Atomic Hydrogen (H<sub>2</sub>) upgrades, but buying one vastly increases the price of and hides the other</bdi>"
-                                a = ""
-                                if (hasUpgrade("h", 15)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
+                                if (hasUpgrade("h", 15)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.h.upgrades[15].cost, player.h.points, tmp.h.getResetGain, tmp.h.getLossRate)
                         },
                         cost:() => player.hardMode ? new Decimal(1750) : new Decimal(1000),
                         unlocked(){
@@ -1053,9 +1104,7 @@ addLayer("h", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let ret = player.h.deuterium.best.max(1).ln().max(1)
-
-                                return ret
+                                return player.h.deuterium.best.max(1).ln().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[23].effect)
@@ -1461,9 +1510,8 @@ addLayer("h", {
                                 return player.hardMode ? Decimal.pow(2, 2100) : Decimal.pow(2, 2048)
                         },
                         effect(){
-                                let b = player.c.points.max(1)
+                                let ret = player.c.points.max(1).pow(player.h.upgrades.length)
 
-                                let ret = b.pow(player.h.upgrades.length)
                                 if (hasMilestone("tokens", 19)) ret = ret.pow(1.5)
                                 
                                 return ret
@@ -1507,9 +1555,7 @@ addLayer("h", {
                                 return player.hardMode ? Decimal.pow(2, 3250) : Decimal.pow(2, 3072)
                         },
                         effect(){
-                                let ret = player.points.max(10).log10().sqrt()
-                                
-                                return ret
+                                return player.points.max(10).log10().sqrt()
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[63].effect)
@@ -1563,7 +1609,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
                                 a = "max(5, log10(coins))"
                                 return a
                         },
@@ -1587,7 +1634,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!shiftDown) return "ln(Carbon) multiplies Near-ultraviolet base"
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (shiftDown ^ hasUpgrade("tokens", 71)) return "ln(Carbon) multiplies Near-ultraviolet base"
                                 a = "ln(Carbon + 10)"
                                 return a
                         },
@@ -1599,9 +1647,7 @@ addLayer("h", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Deuterium",
                         effect(){
-                                let ret = player.c.points.plus(10).ln()
-
-                                return ret
+                                return player.c.points.plus(10).ln()
                         },
                         effectDisplay(){
                                 return format(tmp.h.upgrades[72].effect)
@@ -1620,6 +1666,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
@@ -1642,6 +1689,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
@@ -1664,6 +1712,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 71) && !shiftDown) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
@@ -1686,9 +1735,8 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!shiftDown) return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
-                                a = ""
-                                return a
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal("1e4117e3")
@@ -1710,6 +1758,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
@@ -1732,6 +1781,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
@@ -1754,6 +1804,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
@@ -1776,6 +1827,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
+                                if (!hasUpgrade("tokens", 72) && !shiftDown) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
@@ -1795,16 +1847,17 @@ addLayer("h", {
                         title: "Introduction",
                         body(){
                                 let a = "<h1>" + makeRed("Welcome to TREE OF LIFE!") + "</h1>"
-                                let b = "There are five items of information you should be aware of:"
+                                let b = "There are six pieces of information you should be aware of:"
                                 let c = "First, this game has (currently) three modes, Easy, Hard, and Extr" + "eme, each having a different effect."
                                 let d = "To access and select modes go to the info tab (the blue i in the top left corner) and click \"Show mod selection tab\", though it is recommended to play normal mode first."
                                 let e = "Second, the game is balanced around 60 to 250 second waits (at most), so if you find yourself "
                                 e += "waiting longer than that for seemingly no reward, try something else!"
                                 let f = "Third, there is a save bank. View it by going to the info tab and clicking \"Show built in saves\" and scrolling down."
                                 let g = "Fourth, this game is designed to be played on a computer on Google Chrome. If this does not apply to you there might be some bugs or other issues you run into." 
-                                let h = "Finally, there are ways to force toggle shift and control for seeing various details in the info tab."
+                                let h = "Fifth, there are ways to force toggle shift and control for seeing various details in the info tab."
+                                let i = "Finally, you can click and drag to buy lots of upgrades at once!"
 
-                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h
+                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h + br2 + i
                         },
                 },
         },
@@ -1934,6 +1987,11 @@ addLayer("sci", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                dna_science: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
                 everhasnsci2: false,
                 everUpgrade412: false,
         }},
@@ -1948,6 +2006,7 @@ addLayer("sci", {
         type: "custom", 
         tooltip(){
                 let t = player.subtabs.sci.mainTabs
+                if (t == "DNA Research") return format(player.sci.dna_science.points) + " DNA Science"
                 if (t == "Protein Research") return format(player.sci.protein_science.points) + " Protein Science"
                 if (t == "N Research") return format(player.sci.nitrogen_science.points) + " Nitrogen Science"
                 if (t == "C Research") return format(player.sci.carbon_science.points) + " Carbon Science"
@@ -1987,7 +2046,6 @@ addLayer("sci", {
                 }
                                                 ret = ret.times(tmp.l.effect.min(1e10))
 
-                if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
                 if (player.easyMode)            ret = ret.pow(1.001)
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
 
@@ -2033,6 +2091,7 @@ addLayer("sci", {
                 if (force1 || hasUpgrade("sci", 125))   layers.sci.carbon_science.update(diff)
                 if (hasMilestone("n", 14))              layers.sci.nitrogen_science.update(diff)
                 if (hasUpgrade("a", 23))                layers.sci.protein_science.update(diff)
+                if (layers.l.grid.getGemEffect(705))    layers.sci.dna_science.update(diff)
 
 
                 let lsb = layers.sci.buyables
@@ -2354,6 +2413,7 @@ addLayer("sci", {
                                                         ret = ret.times(layers.l.grid.getGemEffect(305))
                         if (hasUpgrade("sci", 431))     ret = ret.times(Decimal.pow(2, tmp.l.getMaxedGemCount))
                         if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(1.03, getBuyableAmount("a", 22)))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(703).pow(tmp.l.getNonZeroGemCount))
 
                         return ret
                 },
@@ -2363,6 +2423,67 @@ addLayer("sci", {
                         let gain = tmp.sci.protein_science.getResetGain
                         let gainThisTick = gain.times(diff)
                         if (!hasUpgrade("sci", 405)) {
+                                data.points = data.points.plus(gainThisTick)
+                        } else if (data.points.div(gain).lt(10)) {
+                                data.points = data.points.plus(gainThisTick).min(gain.times(10))
+                        }
+                        data.total = data.total.plus(gainThisTick)
+                },
+        },
+        dna_science: {
+                getResetGain(){ // dnascigain dnasci gain dna sci gain dnascience dnasci pscience
+                        let ret = player.d.points.plus(10).log10()
+
+                        let data = player.l.challenges
+                        let comps = 0
+                        let keys = Object.keys(player.l.challenges)
+                        for (i in keys){
+                                id = keys[i]
+                                if (id == 11 || id == 12) continue
+                                comps += data[id]
+                        }
+
+                        ret = ret.times(player.sci.protein_science.points.plus(10).log10())
+                        ret = ret.times(Decimal.pow(2, player.tokens.total.sub(600)))
+                        ret = ret.times(Decimal.pow(32, comps))
+                        ret = ret.times(Decimal.pow(4, tmp.l.getNonZeroGemCount))
+                        ret = ret.times(tmp.sci.dna_science.getGainMult)
+
+                        ret = ret.pow(.75) // extreme
+
+                        return ret
+                },
+                getGainMult(){
+                        let ret = decimalOne
+
+                        if (hasUpgrade("sci", 502))     ret = ret.times(Decimal.tetrate(tmp.sci.upgrades.dnaUpgradesLength, 2))
+                                                        ret = ret.times(player.sci.dna_science.points.plus(10).log10().pow(tmp.sci.buyables[502].effect))
+                        if (hasUpgrade("sci", 503))     ret = ret.times(player.d.points.max(10).log10().log10().max(1).pow(tmp.sci.upgrades.dnaUpgradesLength))
+                                                        ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(108))
+                                                        ret = ret.times(tmp.sci.buyables[511].dna_sci_effect)
+                        if (true) {
+                                let exp = Math.max(0, tmp.l.getNonZeroGemCount - 48)
+                                                        ret = ret.times(layers.l.grid.getGemEffect(308).pow(exp))
+                        }
+                        if (hasUpgrade("sci", 505))     ret = ret.times(tmp.sci.buyables[511].effect.pow(2.3).plus(1))
+                        if (layers.l.grid.getGemEffect(408)) {
+                                                        ret = ret.times(8.315)
+                        }
+                        if (hasMilestone("d", 28))      ret = ret.times(20)
+                        if (hasUpgrade("d", 32))        ret = ret.times(Decimal.pow(2, player.d.upgrades.length))
+                                                        ret = ret.times(Decimal.pow(tmp.l.getNonZeroGemCount, tmp.sci.buyables[512].effect).max(1))
+                        if (hasMilestone("cells", 4))   ret = ret.times(Decimal.pow(2, player.cells.milestones.length))
+                        if (hasChallenge("l", 92))      ret = ret.times(tmp.l.challenges[92].reward)
+
+                        return ret
+                },
+                update(diff){
+                        let data = player.sci.dna_science
+                        data.best = data.best.max(data.points)
+                        let gain = tmp.sci.dna_science.getResetGain
+                        let gainThisTick = gain.times(diff)
+                        if (!false) {
                                 data.points = data.points.plus(gainThisTick)
                         } else if (data.points.div(gain).lt(10)) {
                                 data.points = data.points.plus(gainThisTick).min(gain.times(10))
@@ -2411,7 +2532,23 @@ addLayer("sci", {
                                    431, 432, 433, 434, 435,
                                    441, 442, 443, 444, 445,
                                    451, 452, 453, 454, 455,
-                                   461, 462, 463, 464, 465,]
+                                   /*461, 462, 463, 464, 465,*/]
+
+                        for (i in ids) {
+                                a += hasUpgrade("sci", ids[i])
+                        }
+
+                        return a
+                },
+                dnaUpgradesLength(){
+                        let a = 0
+                        let ids = [501, 502, 503, 504, 505, 
+                                   511, 512, 513, 514, 515, 
+                                   521, 522, 523, 524, 525, 
+                                   531, 532, 533, 534, 535,
+                                   541, 542, 543, 544, 545,
+                                   551, 552, 553, 554, 555,
+                                   561, 562, 563, 564, 565,]
 
                         for (i in ids) {
                                 a += hasUpgrade("sci", ids[i])
@@ -4664,6 +4801,90 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 454)
                         }, // hasUpgrade("sci", 455)
                 },
+                501: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci I"
+                        },
+                        description(){
+                                return "Each of the first nine upgrades unlocks a buyable"
+                        },
+                        cost:() => new Decimal(1000),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(705)
+                        }, // hasUpgrade("sci", 501)
+                },
+                502: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci II"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Per upgrade multiply DNA Science gain by the number of upgrades and each ncRNA and each miRNA exponentiates point gain ^DNA</bdi>"
+                        },
+                        cost:() => new Decimal(2000),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 501)
+                        }, // hasUpgrade("sci", 502)
+                },
+                503: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci III"
+                        },
+                        description(){
+                                return "Per upgrade multiply DNA Science gain by log10(log10(DNA))"
+                        },
+                        cost:() => new Decimal(3e5),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 502)
+                        }, // hasUpgrade("sci", 503)
+                },
+                504: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci IV"
+                        },
+                        description(){
+                                let func = shiftDown ? makeRed : makeGreen
+                                let a = "DNA Science<sup>" + func("ABC") + "</sup> exponentiates point gain and multiplies Life gain"
+                                return a + br + "Currently: " + format(tmp.sci.upgrades[504].effect)
+                        },
+                        effect(){
+                                let exp = tmp.sci.buyables[501].effect
+                                exp = exp.times(tmp.sci.buyables[502].effect)
+                                exp = exp.times(tmp.sci.buyables[503].effect)
+                                if (hasUpgrade("sci", 505)) exp = exp.times(tmp.sci.buyables[511].effect.pow(2.3).plus(1))
+                                return player.sci.dna_science.points.max(1).pow(exp)
+                        },
+                        cost:() => new Decimal(3e17),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 503)
+                        }, // hasUpgrade("sci", 504)
+                },
+                505: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci V"
+                        },
+                        description(){
+                                return "DNA Sci IV exponent and DNA Science gain is multiplied by 1+" + makeGreen("D") + "<sup>2.3</sup>"
+                        },
+                        cost:() => new Decimal(2e32),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 504)
+                        }, // hasUpgrade("sci", 505)
+                },
         },
         buyables: {
                 rows: 5,
@@ -4708,22 +4929,19 @@ addLayer("sci", {
                                 return tmp.sci.buyables[11].base.pow(player.sci.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Points)^x<br>" + format(tmp.sci.buyables[11].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[11].expDiv) + "</sup>)" 
@@ -4765,29 +4983,24 @@ addLayer("sci", {
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[12].cost)
                         },
                         base(){
-                                let ret = player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
-                                
-                                return ret
+                                return player.sci.hydrogen_science.points.max(10).ln().ln().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[12].base.pow(player.sci.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[12].effect) + " to Hydrogen Science and Hydrogen gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 12)) + " Hydrogen Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(ln(Hydrogen Science))^x<br>" + format(tmp.sci.buyables[12].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e6*100^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[12].expDiv) + "</sup>)" 
@@ -4840,22 +5053,19 @@ addLayer("sci", {
                                 return tmp.sci.buyables[13].base.pow(player.sci.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[13].effect) + " to Hydrogen Science gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 13)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Hydrogen)^x<br>" + format(tmp.sci.buyables[13].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e9*1,000^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[13].expDiv) + "</sup>)" 
@@ -4912,22 +5122,19 @@ addLayer("sci", {
                                 return tmp.sci.buyables[21].base.pow(player.sci.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 21)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[21].effect) + " to Hydrogen Science and Life Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 21)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(B Points)^x<br>" + format(tmp.sci.buyables[21].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e17*200^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[21].expDiv) + "</sup>)" 
@@ -4985,22 +5192,19 @@ addLayer("sci", {
                                 return tmp.sci.buyables[22].base.pow(player.sci.buyables[22])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[22]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 22)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[22].effect) + " to Hydrogen Science and A Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 22)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(A Points)^x<br>" + format(tmp.sci.buyables[22].base) + "^x"
                                 if (hasUpgrade("sci", 121)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e19*500^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[22].expDiv) + "</sup>)"
@@ -5025,8 +5229,8 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(20)
 
-                                if (hasMilestone("mini", 4)) ret = ret.plus(player.mini.milestones.length)
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                if (hasMilestone("mini", 4))    ret = ret.plus(player.mini.milestones.length)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5054,21 +5258,18 @@ addLayer("sci", {
                                 return tmp.sci.buyables[23].base.times(player.sci.buyables[23]).times(player.sci.buyables[23].plus(1).log(2))
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.sci.buyables[23].effect) + " to Blue base and prior exp dividers</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 23)) + " Hydrogen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.sci.buyables[23].effect) + " to Blue base and prior exp dividers</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 23)) + " Hydrogen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.sci.buyables[23].base) + "*x*log2(1+x)"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e291*1e10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[23].expDiv) + "</sup>)"
@@ -5092,7 +5293,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5113,37 +5314,29 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                if (hasUpgrade("sci", 305)) {
-                                        let logBase = 10
-                                        return player.sci.points.plus(logBase).log(logBase)
-                                }
+                                if (hasUpgrade("sci", 305)) return player.sci.points.plus(10).log(10)
                                 let logBase = 10
                                 if (hasUpgrade("sci", 115)) logBase = Math.E
-                                let ret = player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
-                                
-                                return ret
+                                return player.sci.hydrogen_science.points.max(10).log(logBase).log(logBase).max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[101].base.pow(player.sci.buyables[101])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[101]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 101)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[101]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[101].effect) + " to Oxygen Science and Oxygen gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 101)) + " Oxygen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(log10(H Sci))^x<br>" + format(tmp.sci.buyables[101].base) + "^x"
                                 if (hasUpgrade("sci", 115)) eformula = eformula.replaceAll("log10", "ln")
                                 if (hasUpgrade("sci", 305)) eformula = eformula.replace("ln(ln(H Sci))^x", "log10(Science)^x")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e4*10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[101].expDiv) + "</sup>)"
@@ -5168,7 +5361,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5189,29 +5382,24 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.h.points.max(10).log10().log10().max(1)
-                                
-                                return ret
+                                return player.h.points.max(10).log10().log10().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[102].base.pow(player.sci.buyables[102])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[102]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[102].effect) + " to Oxygen Science and color gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 102)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[102]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[102].effect) + " to Oxygen Science and color gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 102)) + " Oxygen Science</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(log10(Hydrogen))^x<br>" + format(tmp.sci.buyables[102].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e5*2^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[102].expDiv) + "</sup>)"
@@ -5236,7 +5424,7 @@ addLayer("sci", {
                         expDiv(){
                                 let ret = new Decimal(30)
 
-                                ret = ret.plus(tmp.sci.buyables[111].effect)
+                                                                ret = ret.plus(tmp.sci.buyables[111].effect)
                                 if (hasUpgrade("sci", 124))     ret = ret.plus(tmp.sci.upgrades[124].effect)
                                 
                                 return ret
@@ -5257,29 +5445,24 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.o.points.max(10).ln().ln().max(1)
-                                
-                                return ret
+                                return player.o.points.max(10).ln().ln().max(1)
                         },
                         effect(){
                                 return tmp.sci.buyables[103].base.pow(player.sci.buyables[103])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[103]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[103].effect) + " to Oxygen Science and Carbon gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 103)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[103]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[103].effect) + " to Oxygen Science and Carbon gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 103)) + " Oxygen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(ln(Oxygen))^x<br>" + format(tmp.sci.buyables[103].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e9*3^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[103].expDiv) + "</sup>)"
@@ -5334,21 +5517,18 @@ addLayer("sci", {
                                 return tmp.sci.buyables[111].base.times(player.sci.buyables[111])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[111]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.sci.buyables[111].effect) + " to prior exponential dividers and C -> O science exponent</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 111)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[111]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.sci.buyables[111].effect) + " to prior exponential dividers and C -> O science exponent</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 111)) + " Oxygen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.sci.buyables[111].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e19*5e3^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[111].expDiv) + "</sup>)"
@@ -5393,29 +5573,24 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.sci.oxygen_science.points.max(10).log10()
-                                
-                                return ret
+                                return player.sci.oxygen_science.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.sci.buyables[112].base.pow(player.sci.buyables[112])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[112]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[112].effect) + " to Oxygen Science and B point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 112)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[112]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[112].effect) + " to Oxygen Science and B point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 112)) + " Oxygen Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Oxygen Science)^x<br>" + format(tmp.sci.buyables[112].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "4e49*2e5^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[112].expDiv) + "</sup>)"
@@ -5460,29 +5635,24 @@ addLayer("sci", {
                                 }
                         },
                         base(){
-                                let ret = player.c.points.max(10).log10()
-                                
-                                return ret
+                                return player.c.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.sci.buyables[113].base.pow(player.sci.buyables[113])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[113]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.sci.buyables[113].effect) + " to Oxygen Science gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 113)) + " Oxygen Science</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[113]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.sci.buyables[113].effect) + " to Oxygen Science gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 113)) + " Oxygen Science</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Carbon)^x<br>" + format(tmp.sci.buyables[113].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e57*30^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[113].expDiv) + "</sup>)"
@@ -5623,6 +5793,266 @@ addLayer("sci", {
                                 return br + lvl + eff1 + eff2 + cost
                         },
                 },
+                501: {
+                        title: "Topoisomerase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 501)
+                                let init = 300
+                                let base = 2
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 501) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[501].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[501] = data.buyables[501].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[501].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return tmp.sci.buyables[501].base.times(player.sci.buyables[501])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[501]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("A") + "="
+                                        let eff2 = format(tmp.sci.buyables[501].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 501)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "DNA Science<sup>" + makeGreen("A") + "</sup> multiples Amino Acid gain"
+                                let eformula = makeGreen("A") + "=" + format(tmp.sci.buyables[501].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "300*2^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                502: {
+                        title: "DNA helicase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 502)
+                                let init = 25e3
+                                let base = 3
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 502) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[502].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[502] = data.buyables[502].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[502].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return tmp.sci.buyables[502].base.times(player.sci.buyables[502])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[502]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("B") + "="
+                                        let eff2 = format(tmp.sci.buyables[502].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 502)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "log10(DNA Science)<sup>" + makeGreen("B") + "</sup> multiples DNA Science gain"
+                                let eformula = makeGreen("B") + "=" + format(tmp.sci.buyables[502].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "25,000*3^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                503: {
+                        title: "DNA polymerase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 503)
+                                let init = 1e9
+                                let base = 4
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 503) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[503].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[503] = data.buyables[503].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[503].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return tmp.sci.buyables[503].base.times(player.sci.buyables[503])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[503]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("C") + "="
+                                        let eff2 = format(tmp.sci.buyables[503].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 503)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "µ^" + makeGreen("C") + "<sup>2</sup> multiples Protein gain and<br>"
+                                ef += "log10(log10(log10(Points)))<sup>" + makeGreen("C") + "</sup> multiplies DNA Science and DNA gain"
+                                let eformula = makeGreen("C") + "=" + format(tmp.sci.buyables[503].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "1e9*4^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                511: {
+                        title: "DNA clamp",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 511)
+                                let init = 2e19
+                                let base = 5
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 504) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[511].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[511] = data.buyables[511].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[511].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                let ret = decimalOne
+
+                                if (hasChallenge("l", 91))      ret = ret.plus(tmp.l.challenges[91].reward)
+
+                                return ret
+                        },
+                        effect(){
+                                return tmp.sci.buyables[511].base.times(player.sci.buyables[511])
+                        },
+                        dna_sci_effect(){
+                                let data = tmp.sci.buyables
+                                return data[501].effect.plus(data[502].effect).plus(data[503].effect).pow(data[511].effect)
+                        },
+                        protein_effect(){
+                                let data = tmp.sci.buyables
+                                return data[501].effect.pow(2).plus(data[502].effect.pow(2)).plus(data[503].effect.pow(2)).pow(data[511].effect.pow(2).times(100))
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[511]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("D") + "="
+                                        let eff2 = format(tmp.sci.buyables[511].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 511)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "(" + makeGreen("A") + "+" + makeGreen("B") + "+" + makeGreen("C") + ")<sup>" + makeGreen("D") + "</sup> multiples DNA Science gain and ("
+                                ef += makeGreen("A") + "<sup>2</sup>+" + makeGreen("B") + "<sup>2</sup>+" + makeGreen("C") + "<sup>2</sup>)^100" + makeGreen("D") + "<sup>2</sup> multiplies Protein gain"
+                                let eformula = makeGreen("D") + "=" + format(tmp.sci.buyables[511].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "2e19*5^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
+                512: {
+                        title: "DNA ligase",
+                        cost(){
+                                let amt = getBuyableAmount("sci", 512)
+                                let init = 2e40
+                                let base = 6
+                                return Decimal.times(init, Decimal.pow(base, amt.pow(2)))
+                        },
+                        unlocked(){
+                                return hasUpgrade("sci", 505) && hasUpgrade("sci", 501)
+                        },
+                        canAfford() {
+                                return player.sci.dna_science.points.gte(tmp.sci.buyables[512].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.sci
+                                data.buyables[512] = data.buyables[512].plus(1)
+                                if (!false) {
+                                        let c = tmp.sci.buyables[512].cost
+                                        data.dna_science.points = data.dna_science.points.sub(c)
+                                }
+                        },
+                        base(){
+                                return decimalOne
+                        },
+                        effect(){
+                                return tmp.sci.buyables[512].base.times(player.sci.buyables[512])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[512]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: " + makeGreen("E") + "="
+                                        let eff2 = format(tmp.sci.buyables[512].effect) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 512)) + " DNA Science</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let ef = "(Non-0 gem challenges)<sup>" + makeGreen("E") + "</sup> multiples DNA Science gain and (1+"
+                                ef += makeGreen("E") + ")^Non-0 gem challenges<sup>2</sup> multiplies Protein gain"
+                                let eformula = makeGreen("E") + "=" + format(tmp.sci.buyables[512].base) + "*x"
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>" + ef + br
+
+                                let costmid = "2e40*6^x<sup>2</sup>"
+                                let allCost = "<b><h2>Cost formula</h2>:<br>" + costmid + "</b><br>"
+
+                                return br + allEff + allCost
+                        },
+                },
         },
         tabFormat: {
                 "H Research": {
@@ -5701,11 +6131,28 @@ addLayer("sci", {
                                 ["display-text", function(){
                                         return "Protein Science gain is currently " + format(tmp.sci.protein_science.getResetGain, 3) + "/s "
                                 }],
-                                ["upgrades", [40,41,42,43,44,45,46]],
-                                ["buyables", [40,41]]
+                                ["upgrades", [40,41,42,43,44,45]]
                         ],
                         unlocked(){
                                 return hasUpgrade("a", 23) || player.d.unlocked
+                        },
+                        shouldNotify(){
+                                return false
+                        },
+                },
+                "DNA Research": {
+                        content: [
+                                "main-display",
+                                ["secondary-display3", "dna_science"],
+                                "blank", 
+                                ["display-text", function(){
+                                        return "DNA Science gain is currently " + format(tmp.sci.dna_science.getResetGain, 3) + "/s "
+                                }],
+                                ["upgrades", [50,51,52,53,54,55,56]],
+                                ["buyables", [50,51,52]]
+                        ],
+                        unlocked(){
+                                return layers.l.grid.getGemEffect(705) || player.cells.unlocked
                         },
                         shouldNotify(){
                                 return false
@@ -5752,7 +6199,12 @@ addLayer("sci", {
 
                                         let g = "Protein Science base gain is<br>log10(Nitrogen Science)*log10(Protein)*2<sup>tokens+4*[Non-0 gem challenges]-400</sup>"
 
-                                        if (!false) return ret2 + br2 + g
+                                        if (!layers.l.grid.getGemEffect(705) && !player.cells.unlocked) return ret2 + br2 + g
+
+                                        let h = "DNA Science base gain is<br>log10(DNA)*log10(Protein Science)<br>*2<sup>"
+                                        h += "tokens+5*[Anti- challenge completions]+2*[Non-0 gem challenges]-600"
+
+                                        return ret2 + br2 + g + br2 + h
                                 }],
                         ]
                 },
@@ -5768,7 +6220,7 @@ addLayer("sci", {
 
                 doNotDoHSciReset = layer == "tokens" && hasMilestone("tokens", 14)
                 doNotDoOSciReset = layer == "tokens" && hasMilestone("tokens", 25)
-                if (!doNotDoHSciReset) { // Hydrogen Science
+                if (!doNotDoHSciReset && !player.cells.unlocked) { // Hydrogen Science
                         let subdata = data.hydrogen_science
 
                         buyData[11] = decimalZero
@@ -5784,7 +6236,7 @@ addLayer("sci", {
                 data.hydrogen_science.best = decimalZero
                 data.hydrogen_science.points = decimalZero
 
-                if (!doNotDoOSciReset) { // Oxygen Science
+                if (!doNotDoOSciReset && !player.cells.unlocked) { // Oxygen Science
                         let subdata = data.oxygen_science
 
                         buyData[101] = decimalZero
@@ -5801,7 +6253,7 @@ addLayer("sci", {
                 data.oxygen_science.best = decimalZero
                 data.oxygen_science.points = decimalZero
 
-                if (!false) { // Carbon Science
+                if (!player.cells.unlocked) { // Carbon Science
                         let subdata = data.carbon_science
 
                         let remUpgs = [201, 202, 203, 204, 205, 
@@ -5862,7 +6314,31 @@ addLayer("sci", {
                                    431, 432, 433, 434, 435,
                                    441, 442, 443, 444, 445]
                         if (hasMilestone("d", 4)) ids = ids.slice(player.d.times, )
-                        if (!false) data.upgrades = filterOut(data.upgrades, ids)
+                        if (!player.cells.unlocked) data.upgrades = filterOut(data.upgrades, ids)
+                }
+
+                let resetDNA = true 
+                if (["tokens", "p", "l", "a", "d"].includes(layer)) resetDNA = false
+                if (resetDNA && !false) {
+                        let subdata = data.dna_science
+                        subdata.total = decimalZero
+                        subdata.best = decimalZero
+                        subdata.points = decimalZero
+                        
+                        let ids = [501, 502, 503, 504, 505, 
+                                   511, 512, 513, 514, 515, 
+                                   521, 522, 523, 524, 525, 
+                                   531, 532, 533, 534, 535,
+                                   541, 542, 543, 544, 545]
+                        if (!hasMilestone("cells", 5)) data.upgrades = filterOut(data.upgrades, ids)
+
+                        let buyIds = [501, 502, 503,
+                                      511, 512, 513, 
+                                      521, 522, 523,]
+                        for (i in buyIds) {
+                                if (hasMilestone("cells", 5)) break
+                                data.buyables[buyIds[i]] = decimalZero
+                        }
                 }
         },
         deactivated(){
@@ -5918,7 +6394,7 @@ addLayer("c", {
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
-                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 51))   {
+                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 51)) {
                                                 ret = ret.times(player.o.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
                 }
 
@@ -6059,11 +6535,7 @@ addLayer("c", {
                                 return player.hardMode ? new Decimal(130) : new Decimal(30)
                         },
                         effect(){
-                                let init = player.c.points.cbrt().div(50).plus(1)
-
-                                let ret = new Decimal(-.126).times(init.pow(-1).sub(1))
-
-                                return ret
+                                return new Decimal(-.126).times(player.c.points.cbrt().div(50).plus(1).pow(-1).sub(1))
                         },
                         effectDisplay(){
                                 return format(tmp.c.upgrades[12].effect, 4)
@@ -6147,9 +6619,7 @@ addLayer("c", {
                                 return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[21].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         effect(){
-                                let ret = tmp.h.upgrades[41].effect.max(1)
-
-                                return ret
+                                return tmp.h.upgrades[41].effect.max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.c.upgrades[21].effect)
@@ -6199,9 +6669,8 @@ addLayer("c", {
                         },
                         description(){
                                 if (!shiftDown) return "Change token buyable cost scaling from exponential to linear"
-                                a = ""
-                                if (hasUpgrade("c", 23)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 23)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[23].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(1e78)
@@ -6220,9 +6689,8 @@ addLayer("c", {
                                         if (player.extremeMode) return "Halve the Double-exponential divider"
                                         return "Add 1000 to Carbon VII and halve the Double-exponential divider"
                                 }
-                                a = ""
-                                if (hasUpgrade("c", 24)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 24)) return ""
+                                return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(7e154)
@@ -6238,9 +6706,8 @@ addLayer("c", {
                         },
                         description(){
                                 if (!shiftDown) return "Halve the Double-exponential divider and add .01 to Polynomial base"
-                                a = ""
-                                if (hasUpgrade("c", 25)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
+                                if (hasUpgrade("c", 25)) return ""
+                                return "" + br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[25].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
                                 if (player.extremeMode) return new Decimal(2e229)
@@ -6408,7 +6875,7 @@ addLayer("o", {
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
 
-                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 52))   {
+                if (!hasMilestone("mu", 8) && hasUpgrade("tokens", 52)) {
                                                 ret = ret.times(player.c.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
                 }
 
@@ -6450,9 +6917,9 @@ addLayer("o", {
         getLossRate(){ // oxygen loss
                 let ret = new Decimal(.01)
 
-                if (hasUpgrade("h", 81)) ret = ret.times(50)
-                if (hasUpgrade("n", 32)) ret = ret.times(100)
-                if (hasUpgrade("sci", 115)) ret = ret.times(20)
+                if (hasUpgrade("h", 81))        ret = ret.times(50)
+                if (hasUpgrade("n", 32))        ret = ret.times(100)
+                if (hasUpgrade("sci", 115))     ret = ret.times(20)
 
                 return ret
         },
@@ -6555,9 +7022,7 @@ addLayer("o", {
                                 let a = player.h.atomic_hydrogen.points.max(10).log10()
                                 let b = player.h.deuterium.points.max(10).log10()
 
-                                let ret = a.times(b).div(10**7).max(1)
-
-                                return ret
+                                return a.times(b).div(10**7).max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[12].effect)
@@ -6581,9 +7046,7 @@ addLayer("o", {
                         },
                         cost:() => new Decimal(player.extremeMode ? 100 : 200),
                         effect(){
-                                let ret = Decimal.pow(1.02, player.o.upgrades.length)
-
-                                return ret
+                                return Decimal.pow(1.02, player.o.upgrades.length)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[13].effect)
@@ -6609,9 +7072,9 @@ addLayer("o", {
                         effect(){
                                 let ret = player.o.points.max(1).ln().max(1)
 
-                                if (hasUpgrade("o", 15)) ret = ret.pow(2)
+                                if (hasUpgrade("o", 15))        ret = ret.pow(2)
                                 if (hasMilestone("tokens", 13)) ret = ret.pow(2)
-                                if (hasUpgrade("h", 81)) ret = ret.pow(2)
+                                if (hasUpgrade("h", 81))        ret = ret.pow(2)
 
                                 return ret
                         },
@@ -6694,9 +7157,7 @@ addLayer("o", {
                                 return new Decimal(2e48)
                         },
                         effect(){
-                                let ret = player.points.max(1).log10().max(1)
-
-                                return ret
+                                return player.points.max(1).log10().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[23].effect)
@@ -6719,9 +7180,7 @@ addLayer("o", {
                                 return new Decimal(5e155)
                         },
                         effect(){
-                                let ret = player.points.max(1).log10().max(1)
-
-                                return ret
+                                return player.points.max(1).log10().max(1)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[24].effect)
@@ -6744,9 +7203,7 @@ addLayer("o", {
                                 return new Decimal(7e209)
                         },
                         effect(){
-                                let ret = new Decimal(player.o.upgrades.length).times(Math.PI)
-
-                                return ret
+                                return new Decimal(player.o.upgrades.length).times(Math.PI)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[25].effect)
@@ -6946,14 +7403,12 @@ addLayer("n", {
                 let amt = player.n.total
 
                 let base = amt.sqrt().times(2).plus(1)
-
                 let exp = amt.plus(7).log2()
 
                 if (hasUpgrade("n", 25)) exp = exp.times(player.n.upgrades.length)
 
-                let ret = base.pow(exp)
+                return base.pow(exp)
 
-                return ret
         },
         effectDescription(){
                 if (player.shiftAlias) return "effect formula: (sqrt(x)*2+1)^log2(x+7)"
@@ -7146,9 +7601,7 @@ addLayer("n", {
                         effect(){
                                 let ret = player.n.points.max(1).ln().max(1)
 
-                                if (hasMilestone("n", 15)) {
-                                        ret = ret.pow(Math.max(1, layerChallengeCompletions("n")))
-                                }
+                                if (hasMilestone("n", 15)) ret = ret.pow(Math.max(1, layerChallengeCompletions("n")))
 
                                 return ret
                         },
@@ -7226,8 +7679,8 @@ addLayer("n", {
                         effect(){ // red e rede
                                 let ret = decimalOne
 
-                                ret = ret.plus(tmp.mini.buyables[232].effect)
-                                if (hasMilestone("mu", 3)) ret = ret.plus(getBuyableAmount("mini", 231).div(100))
+                                                                ret = ret.plus(tmp.mini.buyables[232].effect)
+                                if (hasMilestone("mu", 3))      ret = ret.plus(getBuyableAmount("mini", 231).div(100))
 
                                 return ret
                         },
@@ -7828,8 +8281,8 @@ addLayer("n", {
                         rewardEffect(){
                                 let ret = new Decimal(100)
 
-                                if (hasUpgrade("mini", 55)) ret = ret.plus(getBuyableAmount("mini", 151))
-                                if (hasUpgrade("mini", 65)) ret = ret.plus(getBuyableAmount("mini", 131))
+                                if (hasUpgrade("mini", 55))     ret = ret.plus(getBuyableAmount("mini", 151))
+                                if (hasUpgrade("mini", 65))     ret = ret.plus(getBuyableAmount("mini", 131))
 
                                 return ret
                         },
@@ -8262,10 +8715,14 @@ addLayer("p", {
 
                 if (hasMilestone("p", 2))       ret = ret.times(tmp.p.milestones[2].effect)
                 if (hasUpgrade("mu", 11))       ret = ret.times(tmp.n.upgrades[35].effect)
-                if (hasUpgrade("mu", 12))       {
+                let forceee150 = player.extremeMode && hasChallenge("l", 71) && !player.l.activeChallenge
+                // in extreme, has anti-upsilon, and no active challenge
+                if (hasUpgrade("mu", 12) && !forceee150) {
                         let init = player.mu.points.div(100).plus(1).pow(getBuyableAmount("mini", 241).sqrt())
                         if (!hasUpgrade("mu", 35)) init = init.min("1ee5")
                                                 ret = ret.times(init.min("1ee150"))
+                } else if (forceee150) {
+                                                ret = ret.times("1ee150")
                 }
                 if (hasUpgrade("p", 33))        ret = ret.times(tmp.p.upgrades[33].effect)
                 if (hasUpgrade("mu", 13))       ret = ret.times(tmp.mu.upgrades[13].effect)
@@ -8281,9 +8738,13 @@ addLayer("p", {
                                                 
                                                 ret = ret.pow(layers.l.grid.getGemEffect(403))
                 if (hasChallenge("l", 71))      ret = ret.pow(tmp.l.challenges[71].reward)
-                if (!player.extremeMode)        ret = ret.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
-                if (hasMilestone("d", 20))      ret = ret.pow(Decimal.pow(2, player.d.milestones.length+1))
-                if (!player.extremeMode)        ret = ret.pow(layers.l.grid.getGemEffect(805).pow(tmp.l.getNonZeroGemCount))
+                                                ret = ret.pow(layers.l.grid.getGemEffect(704).pow(getBuyableAmount("a", 13)))
+                if (hasMilestone("d", 20)) {
+                        let base = 2 + hasMilestone("d", 20)
+                        let exp = player.d.milestones.length + !hasMilestone("d", 20)
+                                                ret = ret.pow(Decimal.pow(base, exp))
+                }
+                                                ret = ret.pow(layers.l.grid.getGemEffect(805).pow(tmp.l.getNonZeroGemCount))
                                                 ret = ret.pow(tmp.cells.effect)
                 if (hasUpgrade("t", 25))        ret = ret.pow(tmp.t.upgrades[25].effect)
 
@@ -8302,9 +8763,7 @@ addLayer("p", {
 
                 let exp = amt.plus(1).log10().pow(exp2)
 
-                let ret = Decimal.pow(10, exp)
-
-                return ret
+                return Decimal.pow(10, exp)
         },
         effectDescription(){
                 if (inChallenge("l", 52) || hasChallenge("l", 52)) return ""
@@ -9413,6 +9872,7 @@ addLayer("mu", {
                 if (hasMilestone("mu", 19)) ret = ret.sub(1)
                 if (hasUpgrade("mu", 35) && player.extremeMode) ret = ret.sub(1)
                 if (hasMilestone("mu", 20)) ret = ret.sub(1)
+
                 return ret
         },
         gainMult(){
@@ -9426,16 +9886,16 @@ addLayer("mu", {
                         let depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
                                                 rem = rem.sub(.01 * depth)
                 }
-                if (hasMilestone("d", 16) && (inChallenge("l", 12) || (layers.l.grid.getGemEffect(608) && !player.extremeMode))) {
+                if (hasMilestone("d", 16) && (inChallenge("l", 12) || layers.l.grid.getGemEffect(608))) {
                                                 rem = rem.plus(.05)
                 }
                 if (hasMilestone("a", 5))       rem = rem.plus(.01)
                 if (hasMilestone("a", 7))       rem = rem.plus(.01)
-                if (hasUpgrade("d", 11) && (!inChallenge("l", 12) || (layers.l.grid.getGemEffect(608) && !player.extremeMode))) {
+                if (hasUpgrade("d", 11) && (!inChallenge("l", 12) || layers.l.grid.getGemEffect(608))) {
                                                 rem = rem.plus(.05)
                 }       
                 if (hasMilestone("d", 15))      rem = rem.plus(.01)
-                if (!player.extremeMode)        rem = rem.plus(layers.l.grid.getGemEffect(708))
+                                                rem = rem.plus(layers.l.grid.getGemEffect(708))
                 if (hasChallenge("l", 91))      rem = rem.plus(tmp.l.challenges[91].reward)
                 if (hasUpgrade("t", 53))        rem = rem.plus(.01)
                 
@@ -10303,6 +10763,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(10)
+
                                 ret = ret.plus(tmp.mu.buyables[13].effect)
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
                                 
@@ -10320,29 +10781,24 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.points.max(10).log10().max(10).log10()
-                                
-                                return ret
+                                return player.points.max(10).log10().max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[11].base.pow(player.mu.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mu.buyables[11].effect) + " to Phosphorus gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 11)) + " µ</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mu.buyables[11].effect) + " to Phosphorus gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 11)) + " µ</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(log10(Points))^x<br>" + format(tmp.mu.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "floor(x<sup>1+x/" + formatWhole(tmp.mu.buyables[11].expDiv) + "</sup>)" 
@@ -10365,6 +10821,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(15)
+
                                 ret = ret.plus(tmp.mu.buyables[13].effect)
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
                                 
@@ -10382,40 +10839,29 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.mu.points.max(1)
-
-                                ret = ret.plus(tmp.mu.buyables[22].effect)
-                                
-                                return ret
+                                return player.mu.points.max(1).plus(tmp.mu.buyables[22].effect)
                         },
                         baseExtra(){
-                                let ret = decimalZero
-
-                                ret = ret.plus(tmp.mu.buyables[22].effect)
-                                
-                                return ret
+                                return tmp.mu.buyables[22].effect
                         },
                         effect(){
                                 return tmp.mu.buyables[12].base.pow(player.mu.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mu.buyables[12].effect) + " to Phosphorus gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 12)) + " Phosphorus</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mu.buyables[12].effect) + " to Phosphorus gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 12)) + " Phosphorus</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "µ+" + formatWhole(tmp.mu.buyables[12].baseExtra) +  "^x<br>"
                                 eformula += format(tmp.mu.buyables[12].base) + "^x"
                                 eformula = eformula.replace("+0", "")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e159*10^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[12].expDiv) + "</sup>)" 
@@ -10440,8 +10886,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(10)
-                                ret = ret.plus(tmp.mu.buyables[23].effect)
-                                if (hasMilestone("mu", 14)) ret = ret.plus(2)
+
+                                                                ret = ret.plus(tmp.mu.buyables[23].effect)
+                                if (hasMilestone("mu", 14))     ret = ret.plus(2)
                                 
                                 return ret
                         },
@@ -10467,21 +10914,18 @@ addLayer("mu", {
                                 return tmp.mu.buyables[13].base.times(player.mu.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mu.buyables[13].effect) + " to prior exponent dividers</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 13)) + " Phosphorus</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mu.buyables[13].effect) + " to prior exponent dividers</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 13)) + " Phosphorus</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mu.buyables[13].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e281*50^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[13].expDiv) + "</sup>)" 
@@ -10509,7 +10953,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
+
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
+
                                 return ret
                         },
                         unlocked(){
@@ -10524,29 +10970,24 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = player.p.points.max(10).log10()
-                                
-                                return ret
+                                return player.p.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[21].base.pow(player.mu.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mu.buyables[21].effect) + " to Phosphorus gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 21)) + " µ</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mu.buyables[21].effect) + " to Phosphorus gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 21)) + " µ</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Phosphorus)^x<br>" + format(tmp.mu.buyables[21].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "25+x<sup>.8+x/" + formatWhole(tmp.mu.buyables[21].expDiv) + "</sup>" 
@@ -10571,7 +11012,9 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(30)
+
                                 ret = ret.plus(tmp.mu.buyables[23].effect)
+
                                 return ret
                         },
                         unlocked(){
@@ -10596,21 +11039,18 @@ addLayer("mu", {
                                 return tmp.mu.buyables[22].base.times(player.mu.buyables[22])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[22]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mu.buyables[22].effect) + " to µ → ΔP base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 22)) + " Phosphorus</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mu.buyables[22].effect) + " to µ → ΔP base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 22)) + " Phosphorus</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mu.buyables[22].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e597*20^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[22].expDiv) + "</sup>)" 
@@ -10635,6 +11075,7 @@ addLayer("mu", {
                         },
                         expDiv(){
                                 let ret = new Decimal(20)
+
                                 return ret
                         },
                         unlocked(){
@@ -10649,29 +11090,24 @@ addLayer("mu", {
                                 doReset("mu", true)
                         },
                         base(){
-                                let ret = decimalOne
-                                
-                                return ret
+                                return decimalOne
                         },
                         effect(){
                                 return tmp.mu.buyables[23].base.times(player.mu.buyables[23])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mu.buyables[23].effect) + " to prior exponent dividers</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 23)) + " Phosphorus</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mu.buyables[23].effect) + " to prior exponent dividers</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mu", 23)) + " Phosphorus</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mu.buyables[23].base) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e814*5e90^(x<sup>1+x/" + formatWhole(tmp.mu.buyables[23].expDiv) + "</sup>)" 
@@ -10724,12 +11160,16 @@ addLayer("mu", {
                                                 let x = player.mu.buyables[31].toNumber()
                                                 let diff = 20
                                                 if (hasMilestone("d", 16))      diff = 100
+                                                if (player.extremeMode && hasMilestone("cells", 1)) {
+                                                                                diff *= 10
+                                                } 
                                                 if (hasMilestone("d", 28))      diff *= 20
-                                                if (hasMilestone("cells", 4))   diff *= 10
+                                                if (hasMilestone("cells", 4) && !player.extremeMode) {
+                                                                                diff *= 10
+                                                }
                                                 if (hasChallenge("l", 101))     diff *= 50
                                                 if (hasChallenge("l", 102))     diff *= 50
-                                                
-                                                if (!player.extremeMode)        diff *= layers.l.grid.getGemEffect(702).toNumber()
+                                                                                diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                                 diff = Math.floor(diff)
                                                 y = Math.ceil(x/diff) * diff
@@ -10739,34 +11179,26 @@ addLayer("mu", {
                         },
                         base(){
                                 if (hasChallenge("l", 61)) return tmp.l.challenges[61].reward
-                                let ret = player.n.points.max(10).log10()
-                                
-                                return ret
+                                return player.n.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mu.buyables[31].base.pow(player.mu.buyables[31]).min("ee20")
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[31]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mu.buyables[31].effect) + " to Phosphorus</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 31)) + " µ</b><br>"
-                                let eformula = "log10(Nitrogen)^x<br>" + format(tmp.mu.buyables[31].base) + "^x"
-                                if (hasChallenge("l", 61)) {
-                                        eformula = eformula.slice(21,)
-                                        eff2 = eff2.replace("Phosphorus", "Protein")
-                                }
-
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[31]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mu.buyables[31].effect) + " to Phosphorus</b><br>"
+                                        if (hasChallenge("l", 61)) eff2 = eff2.replace("Phosphorus", "Protein")
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 31)) + " µ</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = "log10(Nitrogen)^x<br>" + format(tmp.mu.buyables[31].base) + "^x"
+                                if (hasChallenge("l", 61)) eformula = eformula.slice(21,)
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "65+x<sup>2+x/" + formatWhole(tmp.mu.buyables[31].expDiv) + "</sup>" 
@@ -10847,22 +11279,20 @@ addLayer("mu", {
                                 return tmp.mu.buyables[32].base.times(player.mu.buyables[32]).min(.5)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[32]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: -"
-                                let eff2 = format(tmp.mu.buyables[32].effect, 4) + " to µ cost exp</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 32)) + " µ</b><br>"
-                                let eformula = format(tmp.mu.buyables[32].base, 4)  + "*x"
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[32]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: -"
+                                        let eff2 = format(tmp.mu.buyables[32].effect, 4) + " to µ cost exp</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 32)) + " µ</b><br>"
+
                                         let end = "Shift to see details"
                                         if (!hasMilestone("l", 14)) end += "<br>Note: Can only buy while in Dilation "
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        return br + lvl + eff1 + eff2 + cost + end
                                 }
+
+                                let eformula = format(tmp.mu.buyables[32].base, 4)  + "*x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.mu.buyables[32].initialCost, 2, true) + "*"
@@ -10923,21 +11353,18 @@ addLayer("mu", {
                                 return ret
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[33]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: /"
-                                let eff2 = format(tmp.mu.buyables[33].effect) + " to N → ΔP cost</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 33)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mu.buyables[33]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: /"
+                                        let eff2 = format(tmp.mu.buyables[33].effect) + " to N → ΔP cost</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("mu", 33)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mu.buyables[33].base, 4)  + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e4*3^(x<sup>1.2</sup>)" 
@@ -10979,7 +11406,7 @@ addLayer("mu", {
                 "Buyables": {
                         content: ["main-display",
                                 ["display-text", function(){
-                                        if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.times(20)) + " µ/s"
+                                        if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.sub(1).times(20)) + " µ/s"
                                         if (shiftDown) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
@@ -11098,15 +11525,13 @@ addLayer("l", {
                         let exp = player.mu.buyables[32].sub(sub).max(0)
                                                 ret = ret.times(Decimal.pow(2, exp))
                 }
-                if (!player.extremeMode) {
-                        let base807 = layers.l.grid.getGemEffect(807)
-                                                ret = ret.times(base807.pow(getBuyableAmount("mu", 32)))
-                }
                 if (true) {
                         let base204 = layers.l.grid.getGemEffect(204)
                                                 ret = ret.times(base204.pow(tmp.l.getNonZeroGemCount))
                         let base505 = layers.l.grid.getGemEffect(505)
                                                 ret = ret.times(base505.pow(getBuyableAmount("a", 21)))
+                        let base807 = layers.l.grid.getGemEffect(807)
+                                                ret = ret.times(base807.pow(getBuyableAmount("mu", 32)))
                 }
                 if (hasUpgrade("p", 52)) {
                         let exp = new Decimal(player.l.challenges[11]).sub(90).max(0)
@@ -11132,6 +11557,7 @@ addLayer("l", {
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("l", 22))        ret = ret.times(tmp.l.upgrades[22].effect)
+                if (hasUpgrade("sci", 504))     ret = ret.times(tmp.sci.upgrades[504].effect)
 
                 return ret.max(1)
         },
@@ -11153,9 +11579,7 @@ addLayer("l", {
 
                 if (amt.gt(1e5)) amt = amt.log10().times(4).sub(10).pow(5)
 
-                let ret = Decimal.pow(10, amt)
-
-                return ret
+                return Decimal.pow(10, amt)
         },
         effectDescription(){
                 if (inChallenge("l", 51) || hasChallenge("l", 51)) return ""
@@ -11242,6 +11666,7 @@ addLayer("l", {
                                          22, 23, 31,]
                         if (hasUpgrade("p", 51) || hasMilestone("a", 5) || forceAbContent) muBuyKeys.push(33)
                         for (i in muBuyKeys) {
+                                if (!player.l.autobuymubuyables && !forceAbContent) break
                                 if (hasMilestone("cells", 13) && muBuyKeys[i] < 31) continue
                                 buyBuyable("mu", muBuyKeys[i])
                         }
@@ -11253,7 +11678,7 @@ addLayer("l", {
                         }
                 }
 
-                let universalAllowed = !inChallenge("l", 11) || (layers.l.grid.getGemEffect(407) && !player.extremeMode)
+                let universalAllowed = !inChallenge("l", 11) || layers.l.grid.getGemEffect(407)
 
                 if (hasMilestone("l", 21) && universalAllowed && data.time > 1 && !hasUpgrade("t", 151)) {
                         let str = "ee40"
@@ -11399,6 +11824,10 @@ addLayer("l", {
                         effect(){
                                 let lvls = Math.floor(player.l.challenges[11]/(hasUpgrade("l", 15) ? 1 : 2))
                                 if (hasUpgrade("l", 43)) lvls += tmp.l.getNonZeroGemCount
+                                if (hasMilestone("d", 20)) {
+                                        let exp = tmp.l.getNonZeroGemCount ** 2 * lvls
+                                        return Decimal.pow(player.d.milestones.length, exp).max(1)                               
+                                }
                                 if (hasUpgrade("sci", 453)) {
                                         let exp = lvls * tmp.sci.upgrades.proteinUpgradesLength ** 2
                                         return Decimal.pow(1.6, exp)
@@ -11729,7 +12158,7 @@ addLayer("l", {
                         unlocked(){
                                 return true
                         },
-                        toggles:() => [["l", "autobuymu"]],
+                        toggles:() => [["l", "autobuymu"], ["l", "autobuymubuyables"]],
                         effectDescription(){
                                 return "Reward: Autobuy µ upgrades, autobuy µ buyables, and keep Phosphorus III."
                         },
@@ -12357,7 +12786,7 @@ addLayer("l", {
                 getMaxBulk(){
                         let maxBulk = 20
 
-                        if (layers.l.grid.getGemEffect(507) && !player.extremeMode) {
+                        if (layers.l.grid.getGemEffect(507) || player.extremeMode) {
                                                         maxBulk *= 50
                         }
                         if (hasUpgrade("cells", 11))    maxBulk *= 50
@@ -12442,7 +12871,7 @@ addLayer("l", {
 
                                 let ret = player.points.max(10).log(logBase).max(10).log(logBase)
                                 
-                                if (!layers.l.grid.getGemEffect(207) || player.extremeMode) ret = ret.max(10).log(logBase)
+                                if (!layers.l.grid.getGemEffect(207)) ret = ret.max(10).log(logBase)
                                 
                                 return ret
                         },
@@ -12450,26 +12879,22 @@ addLayer("l", {
                                 return tmp.l.buyables[11].base.pow(player.l.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 11)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[11].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 11)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "logINS(logINS(logINS(Points)))^x<br>" + format(tmp.l.buyables[11].base) + "^x"
-                                if (layers.l.grid.getGemEffect(207) && !player.extremeMode) eformula = eformula.replace("logINS(Points)", "Points")
+                                if (layers.l.grid.getGemEffect(207)) eformula = eformula.replace("logINS(Points)", "Points")
                                 let f = "log" + formatWhole(tmp.l.buyables[11].getLogBase)
                                 if (f == "log2.72") f = "ln"
                                 eformula = eformula.replaceAll("logINS", f)
                                 
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e11*4^(x<sup>1+x/" + formatWhole(tmp.l.buyables[11].expDiv) + "</sup>)" 
@@ -12565,10 +12990,15 @@ addLayer("l", {
                                 return tmp.l.buyables[12].base.pow(player.l.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[12].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 12)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[12].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 12)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Dilation completions)^x<br>" + format(tmp.l.buyables[12].base) + "^x"
                                 if (hasMilestone("l", 27)) eformula = eformula.replace("log10", "log7")
                                 if (hasMilestone("l", 28)) eformula = eformula.replace("log7", "log5")
@@ -12578,15 +13008,7 @@ addLayer("l", {
                                 if (hasMilestone("d", 22)) eformula = eformula.replace("log2(Dilation completions)", "Dilation completions")
                                 if (hasMilestone("cells", 35)) eformula = eformula.replace("Dilation completions", "Lambda")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e16*5^(x<sup>1+x/" + formatWhole(tmp.l.buyables[12].expDiv) + "</sup>)" 
@@ -12665,7 +13087,9 @@ addLayer("l", {
 
                                 if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(202))
                                 if (hasMilestone("a", 14))      ret = ret.plus(.05)
-                                if (hasUpgrade("d", 24))        ret = ret.plus(.1375)
+                                if (hasUpgrade("d", 24) && !player.extremeMode) {
+                                                                ret = ret.plus(.1375)
+                                }
                                 
                                 return ret
                         },
@@ -12673,22 +13097,19 @@ addLayer("l", {
                                 return tmp.l.buyables[13].base.times(player.l.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[13].effect, 4) + " to prior exp dividers and Life gain exp</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 13)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.l.buyables[13].effect, 4) + " to prior exp dividers and Life gain exp</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 13)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.l.buyables[13].base, 4) + "*x"
                                 if (inChallenge("l", 112) || hasChallenge("l", 112)) eff2 = eff2.replace("prior exp dividers and ", "")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e21*10^(x<sup>1+x/" + formatWhole(tmp.l.buyables[13].expDiv) + "</sup>)" 
@@ -12763,17 +13184,17 @@ addLayer("l", {
                         base(){
                                 let ret = player.tokens.total.max(10).log10()
 
-                                if (hasMilestone("l", 38)) ret = ret.times(Math.log(10)/Math.log(8))
-                                if (hasMilestone("l", 39)) ret = ret.times(Math.log(8)/Math.log(6))
-                                if (hasMilestone("l", 40)) ret = ret.times(Math.log(6)/Math.log(5))
-                                if (hasMilestone("l", 41)) ret = ret.times(Math.log(5)/Math.log(4))
-                                if (hasMilestone("l", 42)) ret = ret.times(Math.log(4)/Math.log(3))
-                                if (hasMilestone("a", 13)) ret = ret.times(Math.log(3))
-                                if (hasMilestone("a", 14)) ret = ret.div(Math.log(2))
+                                if (hasMilestone("l", 38))      ret = ret.times(Math.log(10)/Math.log(8))
+                                if (hasMilestone("l", 39))      ret = ret.times(Math.log(8)/Math.log(6))
+                                if (hasMilestone("l", 40))      ret = ret.times(Math.log(6)/Math.log(5))
+                                if (hasMilestone("l", 41))      ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("l", 42))      ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("a", 13))      ret = ret.times(Math.log(3))
+                                if (hasMilestone("a", 14))      ret = ret.div(Math.log(2))
 
-                                if (hasChallenge("l", 72)) ret = player.tokens.total.max(1)
+                                if (hasChallenge("l", 72))      ret = player.tokens.total.max(1)
 
-                                if (hasMilestone("cells", 36)) ret = Decimal.pow(2, ret)
+                                if (hasMilestone("cells", 36))  ret = Decimal.pow(2, ret)
                                 
                                 return ret
                         },
@@ -12781,10 +13202,15 @@ addLayer("l", {
                                 return tmp.l.buyables[21].base.pow(player.l.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[21].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 21)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[21].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 21)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(tokens)^x<br>" + format(tmp.l.buyables[21].base) + "^x"
                                 if (hasMilestone("l", 38)) eformula = eformula.replace("log10", "log8")
                                 if (hasMilestone("l", 39)) eformula = eformula.replace("log8", "log6")
@@ -12796,15 +13222,7 @@ addLayer("l", {
                                 if (hasChallenge("l", 72)) eformula = eformula.replace("log2(tokens)", "tokens")
                                 if (hasMilestone("cells", 36)) eformula = eformula.replace("tokens", "(2<sup>tokens</sup>)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2.4e26*2^(x<sup>1+x/" + formatWhole(tmp.l.buyables[21].expDiv) + "</sup>)" 
@@ -12878,30 +13296,25 @@ addLayer("l", {
                         },
                         base(){
                                 if (hasUpgrade("cells", 31)) return player.cells.kappa.points.max(1)
-                                let ret = tmp.tokens.buyables[41].effect
-                                
-                                return ret
+                                return tmp.tokens.buyables[41].effect
                         },
                         effect(){
                                 return tmp.l.buyables[22].base.pow(player.l.buyables[22])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[22]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[22].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 22)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[22].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 22)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "Constant effect^x<br>" + format(tmp.l.buyables[22].base) + "^x"
                                 if (hasUpgrade("cells", 31)) eformula = eformula.replace("Constant effect", "Kappa")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e34*30^(x<sup>1+x/" + formatWhole(tmp.l.buyables[22].expDiv) + "</sup>)" 
@@ -12988,26 +13401,23 @@ addLayer("l", {
                                 return tmp.l.buyables[23].base.times(player.l.buyables[23])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[23].effect, 4) + " to prior exp dividers</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 23)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.l.buyables[23].effect, 4) + " to prior exp dividers</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 23)) + " Lives</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.l.buyables[23].base, 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.l.buyables[23].init) + "*200^(x<sup>1+x/" + formatWhole(tmp.l.buyables[23].expDiv) + "</sup>)"
                                 if (cost2.split("1.00*")[0] == "") cost2 = cost2.slice(5,) 
-                                // if the cost is 1 remove some the first two characters
+                                // if the cost is 1 remove the first characters
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500")
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -13088,24 +13498,21 @@ addLayer("l", {
                                 return tmp.l.buyables[31].base.pow(player.l.buyables[31])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[31]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 31)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[31]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[31].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 31)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Lives)^x<br>" + format(tmp.l.buyables[31].base) + "^x"
                                 if (hasMilestone("l", 25)) eformula = eformula.replace("log10", "ln")
                                 if (hasMilestone("l", 26)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 54)) eformula = eformula.replace("log2(Lives)", "Lambda")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "7e84*158^(x<sup>1+x/" + formatWhole(tmp.l.buyables[31].expDiv) + "</sup>)"
@@ -13180,35 +13587,28 @@ addLayer("l", {
                                 }
                         },
                         base(){
-                                if (hasUpgrade("t", 94)) {
-                                        return player.cells.stem_cells.points.max(1)
-                                }
+                                if (hasUpgrade("t", 94)) return player.cells.stem_cells.points.max(1)
                                 if (hasMilestone("cells", 39)) return tmp.tokens.buyables[22].effect
-                                let ret = player.l.buyables[11]
-                                
-                                return ret
+                                return player.l.buyables[11]
                         },
                         effect(){
                                 return tmp.l.buyables[32].base.pow(player.l.buyables[32])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[32]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.l.buyables[32].effect) + " to Life gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 32)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[32]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.l.buyables[32].effect) + " to Life gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 32)) + " Lives</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+                                
                                 let eformula = "(α → ∂α levels)^x<br>" + format(tmp.l.buyables[32].base) + "^x"
                                 if (hasMilestone("cells", 39))  eformula = eformula.replace("(α → ∂α levels)", "Near-ultraviolet")
                                 if (hasUpgrade("t", 94))        eformula = eformula.replace("Near-ultraviolet", "Stem Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e166*1600^(x<sup>1+x/" + formatWhole(tmp.l.buyables[32].expDiv) + "</sup>)"
@@ -13232,10 +13632,14 @@ addLayer("l", {
                         title: "𝛾 → ∂𝛾",
                         cost(){
                                 let init = new Decimal(player.extremeMode ? 3e241 : 3e281)
-                                let base = new Decimal(player.extremeMode ? 3e15 : 2e16)
-                                if (hasChallenge("l", 101)) base = new Decimal(2468)
-                                if (hasMilestone("cells", 34)) base = new Decimal(2)
+                                let base = player.extremeMode ? 3e15 : 2e16
+                                if (hasMilestone("d", 17) && player.extremeMode) base = 1e5
+                                if (hasChallenge("l", 101)) base = 2467
+                                if (hasMilestone("cells", 34)) base = 2
                                 if (hasMilestone("l", 40)) init = decimalOne
+
+                                base = new Decimal(base)
+
                                 let id = 33
                                 let expDiv = tmp.l.buyables[id].expDiv
                                 let amt = getBuyableAmount("l", id)
@@ -13251,6 +13655,7 @@ addLayer("l", {
                                 let pts = player.l.points
                                 let init = player.extremeMode ? 3e241 : 3e281
                                 let base = player.extremeMode ? 3e15 : 2e16
+                                if (hasMilestone("d", 17) && player.extremeMode) base = 1e5
                                 if (hasChallenge("l", 101)) base = 2468
                                 if (hasMilestone("cells", 34)) base = 2
                                 if (hasMilestone("l", 40)) init = 1
@@ -13294,6 +13699,9 @@ addLayer("l", {
                                 if (hasMilestone("a", 4))       ret = ret.plus(.005 * player.a.milestones.length)
                                 if (hasChallenge("l", 41))      ret = ret.plus(tmp.l.challenges[41].reward)
                                 if (hasUpgrade("sci", 421))     ret = ret.plus(.025 * tmp.sci.upgrades.proteinUpgradesLength)
+                                if (hasMilestone("d", 17) && player.extremeMode) {
+                                                                ret = ret.plus(player.d.milestones.length/30)
+                                }
                                 
                                 return ret
                         },
@@ -13301,21 +13709,18 @@ addLayer("l", {
                                 return tmp.l.buyables[33].base.times(player.l.buyables[33])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[33]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.l.buyables[33].effect, 4) + " to prior exp dividers</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 33)) + " Lives</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.l.buyables[33]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.l.buyables[33].effect, 4) + " to prior exp dividers</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("l", 33)) + " Lives</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.l.buyables[33].base, 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3e281*2e16^(x<sup>1+x/" + formatWhole(tmp.l.buyables[33].expDiv) + "</sup>)" 
@@ -13327,6 +13732,7 @@ addLayer("l", {
                                         cost2 = cost2.replace("</sup>)", ")")
                                         cost2 = cost2.replace("2e16", "2468")
                                 }
+                                if (hasMilestone("d", 17) && player.extremeMode) cost2 = cost2.replace("3e15", "1e5")
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34)) cost2 = cost2.replace("2468", "2")
                                 let cost3 = "</b><br>"
@@ -13435,7 +13841,7 @@ addLayer("l", {
                                 if (inChallenge("l", 81))       init = init.sub(.24)
                                 if (inChallenge("l", 82))       init = init.sub(.26)
 
-                                if (layers.l.grid.getGemEffect(707) && !player.extremeMode) {
+                                if (layers.l.grid.getGemEffect(707)) {
                                                                 init = init.plus(.004)
                                 }
                                 
@@ -13541,10 +13947,12 @@ addLayer("l", {
                                 let d5 = (h >= 5) + (h >= 5) + (u >= 5)
                                 let d6 = (h >= 6) + (h >= 6) + (u >= 6)
                                 let d7 = (h >= 7) + (h >= 7) + (u >= 7)
-                                let d8Eff = d8 == 0 ? 1 : (3.3 + d8*.5)
+                                let c8multiplier = player.extremeMode ? 2.36 : 3.3
+                                let d8Eff = d8 == 0 ? 1 : (c8multiplier + d8*.5)
+                                let c2d8Eff = player.extremeMode ? d8Eff : (d8 == 0 ? 1 : (.5 + d8/2))
                                 return [0, 
                                         0, 
-                                        (2*h+u-3) * (d8 == 0 ? 1 : (.5 + d8/2)), 
+                                        (2*h+u-3) * c2d8Eff, 
                                         d3*d8Eff,
                                         d4*d8Eff,
                                         d5*d8Eff,
@@ -13566,8 +13974,7 @@ addLayer("l", {
                                 }
                                 let nz = tmp.l.getNonZeroGemCount
                                 let base = player.a.points.max(10).log10()
-                                let ret = base.pow(nz).pow(comps || 1)
-                                return ret
+                                return base.pow(nz).pow(comps || 1)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 277340 : 140.4e3)),
                         canComplete(){ 
@@ -13602,8 +14009,7 @@ addLayer("l", {
                                 }
                                 let base = player.d.points.max(10).log10()
                                 if (hasMilestone("cells", 7)) base = base.times(Math.log2(10))
-                                let ret = base.pow(comps)
-                                return ret
+                                return base.pow(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 275540 : 145.1e3)),
                         canComplete(){ 
@@ -13637,9 +14043,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(player.extremeMode ? 100 : 117)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(player.extremeMode ? 100 : 117).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 271950 : 149.1e3)),
                         canComplete(){ 
@@ -13676,9 +14080,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.5)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.5).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 268.8e3 : 151.5e3)),
                         canComplete(){ 
@@ -13713,9 +14115,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.2)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.2).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 343565 : 204700)),
                         canComplete(){ 
@@ -13748,9 +14148,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.01)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.01).times(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 379500 : 256.3e3)),
                         canComplete(){ 
@@ -13804,9 +14202,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = decimalOne
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(comps)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 368.9e3 : 266e3)),
                         canComplete(){ 
@@ -13839,9 +14235,7 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.1)
-                                let ret = base.times(comps).plus(1)
-                                return ret
+                                return new Decimal(.1).times(comps).plus(1)
                         },
                         goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 354453 : 274e3)),
                         canComplete(){ 
@@ -13902,10 +14296,9 @@ addLayer("l", {
                                 if (hasMilestone("cells", 5)) base = base.times(Math.log(5))
                                 if (hasMilestone("cells", 7)) base = base.div(Math.log(2))
 
-                                let ret = base.pow(comps)
-                                return ret
+                                return base.pow(comps)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 579200)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 675900 : 579200)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[71].goal)
@@ -13914,6 +14307,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions, subtract .2 from the Dilation exponent, and nullify µ effect"
                                 let b = "Goal: e1e579,200 Points"
+                                if (player.extremeMode) b = b.replace("579,200", "675,900")
                                 let c = "Reward: Per Anti- challenge exponentiate Phosphorus gain ^ log10(miRNA) but nullify µ effect"
                                 let d = "Currently: " + format(tmp.l.challenges[71].reward)
 
@@ -13931,7 +14325,7 @@ addLayer("l", {
                 }, // inChallenge("l", 71) hasChallenge("l", 71)
                 72: {
                         name: "Anti-Tau", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 641300)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 698896 : 641300)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[72].goal)
@@ -13940,6 +14334,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .22 from the Dilation exponent"
                                 let b = "Goal: e1e641,300 Points"
+                                if (player.extremeMode) b = b.replace("641,300", "698,896")
                                 let c = "Reward: β → ∂α's log2 is removed and Anti-Nitrogen effects β → ∂𝛾"
 
                                 return a + br + b + br + c
@@ -13951,7 +14346,7 @@ addLayer("l", {
                 }, // inChallenge("l", 72) hasChallenge("l", 72)
                 81: {
                         name: "Anti-Sigma", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 701700)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 915000 : 701700)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[81].goal)
@@ -13960,7 +14355,8 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .24 from the Dilation exponent"
                                 let b = "Goal: e1e701,700 Points"
-                                let c = "Reward: For all Lives buyables the base of the exponent is 500"
+                                if (player.extremeMode) b = b.replace("701,700", "915,000")
+                                let c = "Reward: All Life buyables exponent bases are 500"
 
                                 return a + br + b + br + c
                         },
@@ -13971,7 +14367,7 @@ addLayer("l", {
                 }, // inChallenge("l", 81) hasChallenge("l", 81)
                 82: {
                         name: "Anti-Rho", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 1989e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 1981e3 : 1989e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 return player.points.gt(tmp.l.challenges[82].goal)
@@ -13980,6 +14376,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Dilation at 110 completions and subtract .26 from the Dilation exponent"
                                 let b = "Goal: e1e1,989,000 Points"
+                                if (player.extremeMode) b = b.replace("989", "981")
                                 let c = "Reward: Add .0001 to tRNA base"
 
                                 return a + br + b + br + c
@@ -14000,11 +14397,9 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let base = new Decimal(.01)
-                                let ret = base.times(comps)
-                                return ret
+                                return new Decimal(.01).times(comps)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 312100)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 27100 : 312100)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14014,7 +14409,9 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
+                                if (player.extremeMode) b = b.replace("312,100", "27,100")
                                 let c = "Reward: Per Anti- challenge subtract .01 to µ cost exponent but µ III's µ becomes µ^.95"
+                                if (player.extremeMode) c= c.replace("but", "and add .01 to " + makeGreen("D") + " base but")
                                 let d = "Currently: " + format(tmp.l.challenges[91].reward)
 
                                 return a + br + b + br + c + br + d
@@ -14035,10 +14432,9 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let ret = new Decimal(comps).pow(1.5)
-                                return ret
+                                return new Decimal(comps).pow(1.5)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 397000)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 27630 : 397000)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14048,7 +14444,9 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
                                 let b = "Goal: e1e397,000 Points"
+                                if (player.extremeMode) b = b.replace("397,000", "27,630")
                                 let c = "Reward: Raise Constant base to Anti- challenge completions<sup>1.5</sup> but nullify Phosphorus IV's effect"
+                                if (player.extremeMode) c = c.replace("to", "to and multiply DNA Science gain by")
                                 let d = "Currently: " + format(tmp.l.challenges[92].reward)
 
                                 return a + br + b + br + c + br + d
@@ -14060,7 +14458,7 @@ addLayer("l", {
                 }, // inChallenge("l", 92) hasChallenge("l", 92)
                 101: {
                         name: "Anti-Xi", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 396600)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 23500 : 396600)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14070,6 +14468,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
                                 let b = "Goal: e1e396,600 Points"
+                                if (player.extremeMode) b = b.replace("396,600", "23,500")
                                 let c = "Reward: Change Life buyables exponent from 500<sup>1+x/DIV</sup> to x<sup>2.5</sup>/DIV, 𝛾 → ∂𝛾's primary base is 2468, and bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
@@ -14090,10 +14489,9 @@ addLayer("l", {
                                         if (id == 11 || id == 12) continue
                                         comps += data[id]
                                 }
-                                let ret = new Decimal(comps).pow(1.5)
-                                return ret
+                                return new Decimal(comps).pow(1.5)
                         },
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 28900e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 124700 : 28900e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -14103,6 +14501,7 @@ addLayer("l", {
                         fullDisplay(){
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.4"
                                 let b = "Goal: e1e28,900,000 Points"
+                                if (player.extremeMode) b = b.replace("28,900,000", "124,700")
                                 let c = "Reward: Unlock a new feature in Cells! Bulk 50x N → Δµ"
 
                                 return a + br + b + br + c
@@ -14294,7 +14693,7 @@ addLayer("l", {
                                 return GEM_EFFECT_DESCRIPTIONS[id]
                         }
                         id2 = id + (player.extremeMode ? 1000 : 0)
-                        if ([203, 208, 1203].includes(id2)) {
+                        if ([203, 208, 1203, 1706, 706, 1801, 801].includes(id2)) {
                                 let f = format(layers.l.grid.getGemEffect(id).times(100), 4)
                                 return "Currently:<br>" + f + "/100"
                         }
@@ -14309,7 +14708,13 @@ addLayer("l", {
                         if ([303, 404, 1301, 1303].includes(id2)) {
                                 return "Currently:<br>" + formatWhole(layers.l.grid.getGemEffect(id))
                         }
-                        if ([1603, 1605, 603, 207, 407, 507, 701, 705, 707, 408, 608, 802, 803, 804, 806, 808].includes(id2)) {
+                        let booleans = [1603, 1605, 603, 1207, 207, 
+                                        1407, 407, 507, 1701, 701, 
+                                        1705, 705, 1707, 707, 408, 
+                                        608, 802, 803, 804, 806, 
+                                        808, 1408, 1608, 1803, 1802,
+                                        1804, 1806, 1808]
+                        if (booleans.includes(id2)) {
                                 return "Currently:<br>" + layers.l.grid.getGemEffect(id)
                         }
                         return "Currently:<br>" + format(layers.l.grid.getGemEffect(id), 4)
@@ -14380,18 +14785,14 @@ addLayer("l", {
                                                         c5 = c5.replace(".665", ".713")
                                                         c6 = c6.replace(".96", ".951")
                                                         c6 = c6.replace("1/8", "1/10")
+                                                        c7 = c7.replace(".023", ".0188")
+                                                        c8 = "Challenge 8: Challenge 2 to 7 depths are 2.36 + depths/2 times more"
                                                 }
                                                 let challs = challStart + c2 + br + c3 + br + c4 + br + c5 + br + c6 + br + c7 + br + c8
 
                                                 let q = "Note: Effect gem amounts above 10,000 are hardcapped and<br>above 1,000 are softcapped x → (7+log10(x))<sup>3</sup>"
                                                 
                                                 let step2 = step1 + br2 + challs + br2 + q
-
-                                                if (hasMilestone("d", 23)) {
-                                                        step2 += br + "Note 3: In challenges to the right of C81,"
-                                                        step2 += "point gain is dilated to<br>200^[steps to the right]<sup>.57</sup>"
-                                                        step2 += br + " and an additional 2.2x in [per steps to the right-1] choose 2"
-                                                } // pg-132's constant (e-2)/1331
 
                                                 if (!hasMilestone("d", 14) && !player.cells.unlocked) return step2
 
@@ -14472,6 +14873,10 @@ addLayer("l", {
                                         let f = "A Points, B Points, C Points, D Points, and E Points"
                                         let step0 = a + b + c + d + e + f + "."
                                         if (player.extremeMode) step0 += br2 + "<sup>**</sup>Capped at 1e10 and not affected by Life milestone 1"
+                                        if (hasUpgrade("l", 11)) {
+                                                step0 = step0.replace("Nitrogen Science<sup>**</sup>,", "Nitrogen Science<sup>*3</sup>")
+                                                step0 += br + "<sup>*3</sup>Capped a 1e10"
+                                        }
 
                                         if (!tmp.l.challenges[11].unlocked) return step0
 
@@ -14837,11 +15242,7 @@ addLayer("a", {
                 return init.cbrt().sub(7).pow(tmp.a.getGainExp)
         },
         getGainExp(){
-                let ret = new Decimal(2)
-
-                ret = ret.plus(layers.l.grid.getGemEffect(502))
-
-                return ret
+                return new Decimal(2).plus(layers.l.grid.getGemEffect(502))
         },
         getGainMult(){ // amino gain aminogain again a gain acidgain amino acid gain aminoacidgain
                 let ret = decimalOne
@@ -14856,7 +15257,7 @@ addLayer("a", {
                                                 ret = ret.times(tmp.a.buyables[33].effect)
                                                 ret = ret.times(tmp.d.effect[1-hasUpgrade("t", 92)] || 1)
                 if (hasChallenge("l", 21))      ret = ret.times(tmp.l.challenges[21].reward)
-                if (layers.l.grid.getGemEffect(804) && !player.extremeMode) {
+                if (layers.l.grid.getGemEffect(804)) {
                                                 ret = ret.times(tmp.tokens.buyables[31].effect)
                 }
                 if (hasMilestone("cells", 10))  ret = ret.times(player.cells.total13.max(1))
@@ -14865,6 +15266,7 @@ addLayer("a", {
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 403))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
                 if (hasUpgrade("sci", 434))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.proteinUpgradesLength))
+                                                ret = ret.times(player.sci.dna_science.points.max(1).pow(tmp.sci.buyables[501].effect))
 
                 return ret
         },
@@ -14890,9 +15292,7 @@ addLayer("a", {
                 let exp = amt.sqrt().min(10)
                 exp = exp.plus(layers.l.grid.getGemEffect(104))
 
-                let ret = amt.plus(1).pow(exp)
-
-                return ret
+                return amt.plus(1).pow(exp)
         },
         effectDescription(){
                 if (player.shiftAlias) return " (x+1)<sup>min(10, sqrt(x))</sup>"
@@ -15151,10 +15551,10 @@ addLayer("a", {
                         if (hasMilestone("a", 29))      ret = ret.times(getBuyableAmount("a", 13).div(100).plus(1).pow(getBuyableAmount("a", 22)))
                         if (hasMilestone("a", 31))      ret = ret.times(player.a.points.min(player.extremeMode ? 1e50 : 1e25).max(1))
                                                         ret = ret.times(tmp.a.protein.getAMilestoneBase.pow(player.a.milestones.length))
-                                                        ret = ret.times(Decimal.pow(layers.l.grid.getGemEffect(406), player.d.milestones.length))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(406).pow(player.d.milestones.length))
                         if (hasMilestone("d", 14))      ret = ret.times(player.d.points.max(1))
                         if (hasChallenge("l", 61))      ret = ret.times(tmp.mu.buyables[31].effect)
-                        if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
+                                                        ret = ret.times(layers.l.grid.getGemEffect(307).pow(getBuyableAmount("l", 33)))
                         if (hasMilestone("d", 18))      ret = ret.times(player.d.points.max(1).pow(tmp.l.getNonZeroGemCount))
                         
                                                         ret = ret.times(layers.l.grid.getGemEffect(105))
@@ -15170,6 +15570,12 @@ addLayer("a", {
                                                         ret = ret.times(tmp.sci.buyables[302].base)
                         }
                         if (hasUpgrade("sci", 435))     ret = ret.times(tmp.sci.upgrades[435].effect)
+                        if (hasMilestone("d", 20) && player.extremeMode) {
+                                                        ret = ret.times(player.mu.points.plus(1).pow(player.d.milestones.length))
+                        }
+                                                        ret = ret.times(player.mu.points.plus(1).pow(tmp.sci.buyables[503].effect.pow(2)))
+                                                        ret = ret.times(tmp.sci.buyables[511].protein_effect)
+                                                        ret = ret.times(Decimal.pow(tmp.sci.buyables[512].effect.plus(1), tmp.l.getNonZeroGemCount ** 2))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -16347,7 +16753,6 @@ addLayer("a", {
                                 return "5e62 Amino Acid"
                         },
                         done(){
-                                if (player.extremeMode) return false
                                 return player.a.points.gte(5e62)
                         },
                         unlocked(){
@@ -16439,7 +16844,7 @@ addLayer("a", {
                                 if (hasUpgrade("a", 61))        ret = ret.plus(.0003)
                                 if (hasUpgrade("a", 62))        ret = ret.plus(.0004)
                                 if (hasChallenge("l", 82))      ret = ret.plus(.0001)
-                                if (layers.l.grid.getGemEffect(705) && !player.extremeMode) {
+                                if (layers.l.grid.getGemEffect(705)) {
                                                                 ret = ret.plus(.0001)
                                 }
                                 if (hasMilestone("d", 21))      ret = ret.plus(.0001)
@@ -16447,10 +16852,10 @@ addLayer("a", {
                                 if (hasMilestone("d", 25))      ret = ret.plus(.0003)
                                 if (hasMilestone("d", 26))      ret = ret.plus(.0003)
                                 if (hasUpgrade("d", 32))        ret = ret.plus(.0004)
-                                if (layers.l.grid.getGemEffect(808) && !player.extremeMode) {
-                                                                ret = ret.plus(.0006)
+                                if (layers.l.grid.getGemEffect(808)) {
+                                                                ret = ret.plus(player.extremeMode ? .0001 : .0006)
                                 }
-                                if (hasUpgrade("d", 35))        ret = ret.plus(.001)
+                                if (hasUpgrade("d", 35))        ret = ret.plus(player.extremeMode ? .0005 : .001)
                                 if (hasMilestone("cells", 6) && tmp.cells.milestones[6].effect.lt(1)) {
                                                                 ret = ret.plus(tmp.cells.milestones[6].effect)
                                 }
@@ -16469,21 +16874,18 @@ addLayer("a", {
                                 return tmp.a.buyables[11].base.pow(player.a.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[11].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 11)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[11].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 11)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.a.buyables[11].base, 4) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.a.buyables[11].baseCost, 2, true) + "*5^x"
@@ -16541,7 +16943,7 @@ addLayer("a", {
                                 if (hasMilestone("a", 35))      ret = ret.plus(.001)
 
                                 let lvls = Math.max(0, tmp.l.getNonZeroGemCount - 49)
-                                if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
+                                                                ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
                                 
                                 return ret
                         },
@@ -16549,21 +16951,18 @@ addLayer("a", {
                                 return tmp.a.buyables[12].base.pow(player.a.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[12].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 12)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[12].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 12)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.a.buyables[12].base, 4) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = format(tmp.a.buyables[12].baseCost, 2, true) + "*10^x"
@@ -16619,15 +17018,15 @@ addLayer("a", {
                                 if (hasMilestone("cells", 29)) return player.mu.points.max(1)
                                 let ret = player.l.points.max(10).log10()
 
-                                if (hasMilestone("d", 3)) ret = ret.times(Math.log(10)/Math.log(9))
-                                if (hasMilestone("d", 6)) ret = ret.times(Math.log(9)/Math.log(8))
-                                if (hasMilestone("d", 7)) ret = ret.times(Math.log(8)/Math.log(7))
-                                if (hasMilestone("d", 8)) ret = ret.times(Math.log(7)/Math.log(6))
-                                if (hasMilestone("d", 9)) ret = ret.times(Math.log(6)/Math.log(5))
-                                if (hasMilestone("d", 10)) ret = ret.times(Math.log(5)/Math.log(4))
-                                if (hasMilestone("d", 11)) ret = ret.times(Math.log(4)/Math.log(3))
-                                if (hasMilestone("d", 12)) ret = ret.times(Math.log(3))
-                                if (hasMilestone("d", 13)) ret = ret.div(Math.log(2))
+                                if (hasMilestone("d", 3))       ret = ret.times(Math.log(10)/Math.log(9))
+                                if (hasMilestone("d", 6))       ret = ret.times(Math.log(9)/Math.log(8))
+                                if (hasMilestone("d", 7))       ret = ret.times(Math.log(8)/Math.log(7))
+                                if (hasMilestone("d", 8))       ret = ret.times(Math.log(7)/Math.log(6))
+                                if (hasMilestone("d", 9))       ret = ret.times(Math.log(6)/Math.log(5))
+                                if (hasMilestone("d", 10))      ret = ret.times(Math.log(5)/Math.log(4))
+                                if (hasMilestone("d", 11))      ret = ret.times(Math.log(4)/Math.log(3))
+                                if (hasMilestone("d", 12))      ret = ret.times(Math.log(3))
+                                if (hasMilestone("d", 13))      ret = ret.div(Math.log(2))
                                 
                                 return ret
                         },
@@ -16635,10 +17034,15 @@ addLayer("a", {
                                 return tmp.a.buyables[13].base.pow(player.a.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 13)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[13].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 13)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Lives)^x<br>" + format(tmp.a.buyables[13].base) + "^x"
                                 if (hasMilestone("d", 3)) eformula = eformula.replace("log10", "log9")
                                 if (hasMilestone("d", 6)) eformula = eformula.replace("log9", "log8")
@@ -16652,15 +17056,7 @@ addLayer("a", {
                                 if (hasMilestone("cells", 29)) eformula = eformula.replace("log2(Lives)", "µ")
                                 if (hasUpgrade("t", 151)) eformula = eformula.replace("µ", "e1e13")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1450*1e500^x<sup>2</sup>"
@@ -16710,21 +17106,17 @@ addLayer("a", {
                                         let base = player.tokens.total.max(1)
                                         let exp = player.tokens.tokens2.total
 
-                                        let ret = base.pow(exp)
-
-                                        return ret
+                                        return base.pow(exp)
                                 }
                                 if (hasMilestone("cells", 54)){
-                                        let ret = player.l.points.max(10).log10()
-
-                                        return ret
+                                        return player.l.points.max(10).log10()
                                 }
                                 let ret = new Decimal(tmp.l.getNonZeroGemCount).max(1)
 
                                 if (hasMilestone("cells", 18)) {
                                         if (!hasMilestone("cells", 35)) {
-                                                ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
-                                        } else ret = ret.times(getBuyableAmount("cells", 11).max(1))
+                                                return ret.plus(getBuyableAmount("cells", 11).sqrt())
+                                        } else return ret.times(getBuyableAmount("cells", 11).max(1))
                                 }
                                 
                                 return ret
@@ -16733,27 +17125,22 @@ addLayer("a", {
                                 return tmp.a.buyables[21].base.pow(player.a.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 21)) + " Protein</b><br>"
-                                let eformula = "[Non zero gem challenges]^x<br>" + format(tmp.a.buyables[21].base) + "^x"
-                                if (hasMilestone("cells", 18)) {
-                                        eformula = eformula.replace("[Non zero gem challenges]", "64+sqrt(Omnipotent)")
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[21].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 21)) + " Protein</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = "[Non zero gem challenges]^x<br>" + format(tmp.a.buyables[21].base) + "^x"
+                                if (hasMilestone("cells", 18)) eformula = eformula.replace("[Non zero gem challenges]", "64+sqrt(Omnipotent)")
                                 if (hasMilestone("cells", 35))  eformula = eformula.replace("+sqrt(Omnipotent)", "*Omnipotent")
                                 if (hasMilestone("cells", 54))  eformula = eformula.replace("64*Omnipotent", "log10(Lives)")
                                 if (hasUpgrade("cells", 63))    eformula = eformula.replace("log10(Lives)", "(Tokens<sup>Tokens II</sup>)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e7350*1e200^x<sup>1.2</sup>"
@@ -16811,25 +17198,23 @@ addLayer("a", {
                                 return ret
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[22]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.a.buyables[22].effect) + " to Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 22)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.a.buyables[22].effect) + " to Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 22)) + " Protein</b><br>"
+
+                                        let end = "<br>Note: hardcapped at 1e125 in Customizable"
+                                        if (hasUpgrade("d", 24)) end = ""
+                                        if (player.extremeMode) end = end.replace("125", "100")
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" + br + end
+                                }
+
                                 let eformula = "log10(Protein)^x<br>" + format(tmp.a.buyables[22].base) + "^x"
                                 if (hasUpgrade("a", 54)) eformula = eformula.replace("log10", "log2")
                                 if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(Protein)", "Stem Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "<br>Note: hardcapped at 1e125 in Customizable"
-                                        if (hasUpgrade("d", 24)) end = ""
-                                        if (player.extremeMode) end = end.replace("125", "100")
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + "Shift to see details" + br + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e35,000*1e100^x<sup>1.2</sup>"
@@ -16885,28 +17270,24 @@ addLayer("a", {
                                 return ret
                         },
                         effect(){
-                                let ret = tmp.a.buyables[23].base.pow(player.a.buyables[23])
-                                return ret
+                                return tmp.a.buyables[23].base.pow(player.a.buyables[23])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[23].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 23)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[23].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 23)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
+                                }
+
                                 let eformula = "log10(Amino Acid)^x<br>" + format(tmp.a.buyables[23].base) + "^x"
                                 if (hasMilestone("a", 36)) eformula = eformula.replace("log10", "ln")
                                 if (hasMilestone("a", 37)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("cells", 25)) eformula = eformula.replace("log2(Amino Acid)", "sqrt(Cells)")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e257,000*1e2000^x<sup>1.2</sup>"
@@ -16965,14 +17346,18 @@ addLayer("a", {
                                 return ret.max(1)
                         },
                         effect(){
-                                let ret = tmp.a.buyables[31].base.pow(player.a.buyables[31])
-                                return ret
+                                return tmp.a.buyables[31].base.pow(player.a.buyables[31])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[31]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[31].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 31)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[31]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[31].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 31)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
+                                }
+
                                 let eformula = "log10(log10(Points))^x<br>" + format(tmp.a.buyables[31].base) + "^x"
                                 if (hasUpgrade("d", 14)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("d", 15)) eformula = eformula.replace("log10", "ln")
@@ -16980,15 +17365,7 @@ addLayer("a", {
                                 if (hasUpgrade("d", 22)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 19)) eformula = eformula.replace("log2(log2(Points))", "Cells")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e702,000*1e6,000^x<sup>1.2</sup>"
@@ -17031,33 +17408,27 @@ addLayer("a", {
                         },
                         base(){
                                 if (hasUpgrade("cells", 63))    return player.points.max(10).log10().max(10).log10()
-                                if (layers.l.grid.getGemEffect(806) && !player.extremeMode) return getBuyableAmount("a", 22).max(1)
-                                let ret = getBuyableAmount("a", 22).max(Math.E).ln()
-                                
-                                return ret
+                                if (layers.l.grid.getGemEffect(806)) return getBuyableAmount("a", 22).max(1)
+                                return getBuyableAmount("a", 22).max(Math.E).ln()
                         },
                         effect(){
-                                let ret = tmp.a.buyables[32].base.pow(player.a.buyables[32])
-                                return ret
+                                return tmp.a.buyables[32].base.pow(player.a.buyables[32])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[32]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[32].effect) + " to Protein gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 32)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[32]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[32].effect) + " to Protein gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 32)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
+                                }
+
                                 let eformula = "ln(siRNA levels)^x<br>" + format(tmp.a.buyables[32].base) + "^x"
                                 if (layers.l.grid.getGemEffect(806) && !player.extremeMode) eformula = eformula.replace("ln", "")
                                 if (hasUpgrade("cells", 63)) eformula = eformula.replace("siRNA levels", "log10(log10(Points))")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,012,000*1e5,000^x<sup>1.1</sup>"
@@ -17078,6 +17449,7 @@ addLayer("a", {
                                 let exp = 2
                                 if (hasChallenge("l", 32) && player.extremeMode) exp = 1.9
                                 if (layers.l.grid.getGemEffect(605) && player.extremeMode) exp = 1.8
+                                if (layers.l.grid.getGemEffect(207) && player.extremeMode) exp = 1.7
                                 return baseCost.times(Decimal.pow("1e7000", amt.pow(exp)))
                         },
                         unlocked(){
@@ -17090,6 +17462,7 @@ addLayer("a", {
                                 let exp = 2
                                 if (hasChallenge("l", 32) && player.extremeMode) exp = 1.9
                                 if (layers.l.grid.getGemEffect(605) && player.extremeMode) exp = 1.8
+                                if (layers.l.grid.getGemEffect(207) && player.extremeMode) exp = 1.7
                                 return pts.div(init).log("1e7000").root(exp).plus(1).floor()
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[33].cost),
@@ -17108,7 +17481,7 @@ addLayer("a", {
                                 let ret = new Decimal(10)
 
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(106))
-                                if (!player.extremeMode)        ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
+                                                                ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
                                 
                                 if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1)
                                 if (hasMilestone("cells", 25))  ret = ret.times(tmp.tokens.buyables[13].effect)
@@ -17116,26 +17489,22 @@ addLayer("a", {
                                 return ret
                         },
                         effect(){
-                                let ret = tmp.a.buyables[33].base.pow(player.a.buyables[33])
-                                return ret
+                                return tmp.a.buyables[33].base.pow(player.a.buyables[33])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[33]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.a.buyables[33].effect) + " to Amino Acid gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 33)) + " Protein</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[33]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.a.buyables[33].effect) + " to Amino Acid gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 33)) + " Protein</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details" 
+                                }
+
                                 let eformula = format(tmp.a.buyables[33].base) + "^x"
                                 if (hasUpgrade("cells", 115)) eformula = "(Mu*Infrared)^x" + br + eformula
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end 
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e9,484,000*1e7,000^x<sup>2</sup>"
@@ -17144,6 +17513,7 @@ addLayer("a", {
                                 let expPortion = "2<"
                                 if (hasChallenge("l", 32) && player.extremeMode) expPortion = "1.9<"
                                 if (layers.l.grid.getGemEffect(605) && player.extremeMode) expPortion = "1.8<"
+                                if (layers.l.grid.getGemEffect(207) && player.extremeMode) expPortion = "1.7<"
                                 cost2 = cost2.replace("2<", expPortion)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
@@ -17202,8 +17572,8 @@ addLayer("a", {
                                         if (!hasMilestone("a", 32)) { // 175e3 milestone
                                                 let init = tmp.a.protein.getAllOtherGain
                                                 let exp = tmp.a.protein.mRNAtRNABoostExp
-                                                let tRNAFactor = Decimal.pow(tmp.a.buyables[11].baseCost, tmp.a.buyables[11].base.log(5))
-                                                let mRNAFactor = Decimal.pow(tmp.a.buyables[12].baseCost, tmp.a.buyables[12].base.log(10))
+                                                let tRNAFactor = tmp.a.buyables[11].baseCost.pow(tmp.a.buyables[11].base.log(5))
+                                                let mRNAFactor = tmp.a.buyables[12].baseCost.pow(tmp.a.buyables[12].base.log(10))
                                                 let mult = mRNAFactor.times(tRNAFactor).pow(-1).times(.001)
                                                 let start = "For buyables to take 1ms to be affordable, you would have "
                                                 return start + format(init.times(mult).pow(exp)) + " protein"
@@ -17215,7 +17585,7 @@ addLayer("a", {
                                         // sqr(base1 * base2) is the expected multiplier per buyable, weighted cause theyre costs scale differently
                                         let oomps 
                                         if (timePerBuyable.gte(.05)) {
-                                                oomps = Decimal.pow(base1.times(base2).sqrt(), timePerBuyable.pow(-1)).log10()
+                                                oomps = base1.times(base2).sqrt().pow(timePerBuyable.pow(-1)).log10()
                                                 // we expect to buy timePerBuyable.pow(-1) per second at base1.times(base2).sqrt() multiplier each
                                                 // take log10 because its orders of magnitude
                                         } else {
@@ -17383,7 +17753,7 @@ addLayer("a", {
                                                 if (getBuyableAmount("a", 13).lt(1e8)) {
                                                         m29mi = new Decimal(.01).div(base).plus(1).pow(exp)
                                                 } else { // the second order term is -.5/miRNA levels compared to the primary
-                                                        m29mi = Decimal.pow(Math.E, exp.times(.01).div(base))
+                                                        m29mi = Decimal.exp(exp.times(.01).div(base))
                                                 }
 
                                                 j += "<br>Milestone 29 makes the next siRNA give a " + doEndingFormula(base)
@@ -17500,7 +17870,7 @@ addLayer("a", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data1.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.unlocked) data1.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data1.times = 0
@@ -17577,14 +17947,12 @@ addLayer("d", {
         getBaseGain(){
                 let pts = player.a.points
                 let init = pts.div(player.extremeMode ? "8e315" : 4.4e144).max(1).log10()
-                if (layers.l.grid.getGemEffect(408)) {
-                        if (!player.extremeMode) init = init.plus(144.6434526764861874) 
-                }
+                if (layers.l.grid.getGemEffect(408)) init = init.plus(144.6434526764861874) 
                 if (init.lt(25)) return decimalZero
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
-                if (!(layers.l.grid.getGemEffect(701) && !player.extremeMode)) v1 = v1.div(2)
+                if (layers.l.grid.getGemEffect(701)) v1 = v1.div(2)
                 return v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
         },
         getBaseGainAddition(){
@@ -17611,14 +17979,14 @@ addLayer("d", {
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
                                                 ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000"))
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
-                if (hasMilestone("d", 18))      {
+                if (hasMilestone("d", 18)) {
                         let base = 2
-                        if (hasUpgrade("d", 24)) base *= 2
+                        if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                         if (hasUpgrade("d", 25)) base *= 2
                         if (hasUpgrade("d", 31)) base *= 2
                                                 ret = ret.times(Decimal.pow(base, player.d.milestones.length))
                 }
-                if (!player.extremeMode)        ret = ret.times(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount))
+                                                ret = ret.times(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount))
                 if (hasUpgrade("d", 35))        ret = ret.times(Decimal.pow(1.01, getBuyableAmount("a", 33)).min("e2e5"))
                                                 ret = ret.times(tmp.cells.effect)
                 if (hasUpgrade("cells", 113))   ret = ret.times(tmp.cells.upgrades[113].effect)
@@ -17635,6 +18003,7 @@ addLayer("d", {
                 }
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
+                                                ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
 
                 return ret.max(1)
         },
@@ -17644,6 +18013,8 @@ addLayer("d", {
                 if (hasChallenge("l", 32))      ret = ret.plus(tmp.l.challenges[32].reward)
                 if (hasUpgrade("d", 33))        ret = ret.plus(player.d.upgrades.length)
                 if (hasMilestone("cells", 18))  ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
+                if (player.extremeMode)         ret = ret.plus(layers.l.grid.getGemEffect(507))
+
                 if (hasUpgrade("t", 74))        ret = ret.times(player.t.upgrades.length)
 
                 return ret
@@ -17821,9 +18192,10 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA IX"
                         },
                         description(){
+                                if (player.extremeMode) return "siRNA is no longer hardcapped"
                                 return "Add .1375 to α → ∂𝛾's base, per milestone double DNA gain, and siRNA is no longer hardcapped"
                         },
-                        cost:() => new Decimal(8e101),
+                        cost:() => new Decimal(player.extremeMode ? 1.8e102 : 8e101),
                         unlocked(){
                                 return hasMilestone("d", 22) || player.cells.unlocked
                         }, // hasUpgrade("d", 24)
@@ -17833,11 +18205,12 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA X"
                         },
                         description(){
+                                if (player.extremeMode) return "Remove the 69+ and 2+ in the N → Δµ formula and per milestone double DNA gain"
                                 return "Remove the 65+ and 2+ in the N → Δµ formula and per milestone double DNA gain"
                         },
-                        cost:() => new Decimal(1e156),
+                        cost:() => new Decimal(player.extremeMode ? "3.33e333" : 1e156),
                         unlocked(){
-                                return (layers.l.grid.getGemEffect(803) && !player.extremeMode) || player.cells.unlocked
+                                return layers.l.grid.getGemEffect(803) || player.cells.unlocked
                         }, // hasUpgrade("d", 25)
                 },
                 31: {
@@ -17847,7 +18220,7 @@ addLayer("d", {
                         description(){
                                 return "Make N → Δµ base 100,000 and per milestone double DNA gain"
                         },
-                        cost:() => new Decimal(2e166),
+                        cost:() => new Decimal(player.extremeMode ? "1.7e345" : 2e166),
                         unlocked(){
                                 return hasUpgrade("d", 25) || player.cells.unlocked
                         }, // hasUpgrade("d", 31)
@@ -17857,9 +18230,10 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA XII"
                         },
                         description(){
+                                if (player.extremeMode) return "Per upgrade double DNA Science gain and add .0004 to tRNA's base"
                                 return "Add .0004 to tRNA's base"
                         },
-                        cost:() => new Decimal(1e238),
+                        cost:() => new Decimal(player.extremeMode ? "4e619" : 1e238),
                         unlocked(){
                                 return hasUpgrade("d", 31) || player.cells.unlocked
                         }, // hasUpgrade("d", 32)
@@ -17871,7 +18245,7 @@ addLayer("d", {
                         description(){
                                 return "Per upgrade you have one less token for prestige purposes and add 1 to DNA gain exponent"
                         },
-                        cost:() => new Decimal(4.64e283),
+                        cost:() => new Decimal(player.extremeMode ? "9.79e979" : 4.64e283),
                         unlocked(){
                                 return hasUpgrade("d", 32) || player.cells.unlocked
                         }, // hasUpgrade("d", 33)
@@ -17883,7 +18257,7 @@ addLayer("d", {
                         description(){
                                 return "Per upgrade per α → ∂α exponentiate point gain to the number of α → ∂α's"
                         },
-                        cost:() => new Decimal("5.010e322"),
+                        cost:() => new Decimal(player.extremeMode ? "1.5e1007" : "5.010e322"),
                         unlocked(){
                                 return hasUpgrade("d", 33) || player.cells.unlocked
                         }, // hasUpgrade("d", 34)
@@ -17893,9 +18267,10 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA XV"
                         },
                         description(){
+                                if (player.extremeMode) return "Add .0005 to tRNA's base and each 𝛾 → ∂𝛾 multiplies DNA gain by 1.01 (up to e2e5), and unlock Cells"
                                 return "Add .001 to tRNA's base and each 𝛾 → ∂𝛾 multiplies DNA gain by 1.01 (up to e2e5), and unlock Cells"
                         },
-                        cost:() => new Decimal("1e449"),
+                        cost:() => new Decimal(player.extremeMode ? "4e1010" : "1e449"),
                         unlocked(){
                                 return hasUpgrade("d", 34) || player.cells.unlocked
                         }, // hasUpgrade("d", 35)
@@ -18110,7 +18485,7 @@ addLayer("d", {
                                 return "18,100 N → Δµ"
                         },
                         done(){
-                                if (hasMilestone("cells", 1)) return true 
+                                if (player.cells.milestone1Ever) return true 
                                 if (player.extremeMode) return player.a.protein.points.max(10).log10().gt(89012345)
                                 return getBuyableAmount("mu", 31).gte(18100)
                         },
@@ -18124,10 +18499,11 @@ addLayer("d", {
                 }, // hasMilestone("d", 15)
                 16: {
                         requirementDescription(){
-                                return "8e48 DNA"
+                                if (player.extremeMode) return "2.80e45 DNA"
+                                return "8.00e48 DNA"
                         },
                         done(){
-                                return player.d.points.gte(8e48)
+                                return player.d.points.gte(player.extremeMode ? 2.8e45 : 8e48)
                         },
                         unlocked(){
                                 return true
@@ -18138,23 +18514,28 @@ addLayer("d", {
                 }, // hasMilestone("d", 16)
                 17: {
                         requirementDescription(){
-                                return "1.3e49 DNA"
+                                if (player.extremeMode) return "8.70e49 DNA"
+                                return "1.30e49 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(8.7e49)
                                 return player.d.points.gte(1.3e49)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: N → ΔN effect is no longer softcapped in dilation, 𝛾 → ∂𝛾 cost base is 1e5, and add 1/30 to its base per milestone."
                                 return "Reward: N → ΔN effect is no longer softcapped in dilation."
                         },
                 }, // hasMilestone("d", 17)
                 18: {
                         requirementDescription(){
-                                return "2.3e49 DNA"
+                                if (player.extremeMode) return "4.10e51 DNA"
+                                return "2.30e49 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(4.1e51)
                                 return player.d.points.gte(2.3e49)
                         },
                         unlocked(){
@@ -18166,38 +18547,45 @@ addLayer("d", {
                 }, // hasMilestone("d", 18)
                 19: {
                         requirementDescription(){
-                                return "1e65 DNA"
+                                if (player.extremeMode) return "1.00e68 DNA"
+                                return "1.00e65 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(1e68)
                                 return player.d.points.gte(1e65)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: You can bulk up to 1,000 Life buyables."
                                 return "Reward: You can bulk up to 20 Life buyables."
                         },
                 }, // hasMilestone("d", 19)
                 20: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1.20e72 DNA"
                                 return "e6e136 Phosphorus"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.d.points.gte(1.2e72)
                                 return player.p.points.gte("e6e136")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per milestone + 1 square Phosphorus gain."
+                                if (player.extremeMode) return "Reward: Per milestone cube Phosphorus gain and multiply Protein gain by µ+1 and Life IV base is [milestones]^(non-zero gems)<sup>2</sup>."
+                                return "Reward: Per milestone + 1 square Phosphorus gain." 
                         },
                 }, // hasMilestone("d", 20)
                 21: {
                         requirementDescription(){
-                                return "3e100 DNA"
+                                if (player.extremeMode) return "1.70e99 DNA"
+                                return "3.00e100 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(1.7e99)
                                 return player.d.points.gte(3e100)
                         },
                         unlocked(){
@@ -18209,9 +18597,11 @@ addLayer("d", {
                 }, // hasMilestone("d", 21)
                 22: {
                         requirementDescription(){
-                                return "1.6e101 DNA"
+                                if (player.extremeMode) return "4.40e100 DNA"
+                                return "1.60e101 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte(4.4e100)
                                 return player.d.points.gte(1.6e101)
                         },
                         unlocked(){
@@ -18237,9 +18627,11 @@ addLayer("d", {
                 }, // hasMilestone("d", 23)
                 24: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e9647 Amino Acids"
                                 return "e1e9 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.points.gte("1e9647")
                                 return player.a.protein.points.gte("e1e9")
                         },
                         unlocked(){
@@ -18251,23 +18643,28 @@ addLayer("d", {
                 }, // hasMilestone("d", 24)
                 25: {
                         requirementDescription(){
+                                if (player.extremeMode) return "e1,605,000,000 Protein"
                                 return "e2e9 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("e1605e6")
                                 return player.a.protein.points.gte("e2e9")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) "Reward: Add .0003 to tRNA's base and Dilation effect from Customizable is raised ^.973."
                                 return "Reward: Add .0003 to tRNA's base."
                         },
                 }, // hasMilestone("d", 25)
                 26: {
                         requirementDescription(){
+                                if (player.extremeMode) return "e6,418,000,000 Protein"
                                 return "e3e9 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("e6418e6")
                                 return player.a.protein.points.gte("e3e9")
                         },
                         unlocked(){
@@ -18279,9 +18676,11 @@ addLayer("d", {
                 }, // hasMilestone("d", 26)
                 27: {
                         requirementDescription(){
+                                if (player.extremeMode) return "e1.53e10 Protein"
                                 return "e4.8e9 Protein"
                         },
                         done(){
+                                if (player.extremeMode) return player.a.protein.points.gte("e1.53e10")
                                 return player.a.protein.points.gte("e4.8e9")
                         },
                         unlocked(){
@@ -18296,15 +18695,18 @@ addLayer("d", {
                 }, // hasMilestone("d", 27)
                 28: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e328 DNA"
                                 return "4e153 DNA"
                         },
                         done(){
+                                if (player.extremeMode) return player.d.points.gte("1e328")
                                 return player.d.points.gte("4e153")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: N → Δµ rounding is 20x more and gain 20x DNA Science gain."
                                 return "Reward: N → Δµ rounding is 20x more."
                         },
                 }, // hasMilestone("d", 28)
@@ -18341,8 +18743,8 @@ addLayer("d", {
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
                                         a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
-                                        if (layers.l.grid.getGemEffect(701) && !player.extremeMode) a2 = a2.replace("/2", "")
-                                        if (layers.l.grid.getGemEffect(408) && !player.extremeMode) a2 = a2.replace("/" + div, "")
+                                        if (layers.l.grid.getGemEffect(701)) a2 = a2.replace("/2", "")
+                                        if (layers.l.grid.getGemEffect(408)) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
                                                 a2 = a2.replace("sqrt(", "")
                                                 a2 = a2.replace(")+0.00", "")
@@ -18459,7 +18861,7 @@ addLayer("d", {
                         }
 
                         //challenges
-                        if (!hasMilestone("a", 9) && !player.cells.milestone1Ever) data2.challenges[11] = 0
+                        if (!hasMilestone("a", 9) && !player.cells.unlocked) data2.challenges[11] = 0
 
                         //reset times
                         if (!hasMilestone("a", 9)) data2.times = 0
@@ -18564,7 +18966,7 @@ addLayer("cells", {
         }},
         color: "#99E21D",
         branches: [],
-        requires:() => new Decimal("1e1172"),
+        requires:() => new Decimal(player.extremeMode ? "1e1818" : "1e1172"),
         resource: "Cells", 
         baseResource: "DNA", 
         baseAmount(){return player.d.points},
@@ -18578,7 +18980,7 @@ addLayer("cells", {
         },
         getBaseGain(){
                 let pts = player.d.points
-                let init = pts.div("1e582").max(1)
+                let init = pts.div(player.extremeMode ? "1e1228" : "1e582").max(1)
                 if (init.lt("1e590")) return decimalZero
 
                 return init.pow(tmp.cells.getGainExp).sub(1).max(0)
@@ -18627,7 +19029,7 @@ addLayer("cells", {
                 if (player.extremeMode) gain = gain.root(.75)
 
                 let reqInit = gain.div(tmp.cells.getGainMult).max(1)
-                return reqInit.plus(1).root(tmp.cells.getGainExp).times("1e582")
+                return reqInit.plus(1).root(tmp.cells.getGainExp).times(player.extremeMode ? "1e1228" : "1e582")
         },
         canReset(){
                 return tmp.cells.getResetGain.gt(0) && !hasMilestone("cells", 14)
@@ -18646,9 +19048,7 @@ addLayer("cells", {
                                                 exp = exp.plus(eff)
                 }
 
-                let ret = base.pow(exp)
-
-                return ret
+                return base.pow(exp)
         },
         effectDescription(){
                 let start = " multiplying DNA, Life, and Protein gain and exponentiating Phosphorus gain by " 
@@ -18720,7 +19120,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 111))   ret = ret.times(tmp.cells.upgrades[111].effect)
                         if (hasUpgrade("cells", 212))   ret = ret.times(tmp.cells.upgrades[212].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total12.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -18762,7 +19162,7 @@ addLayer("cells", {
 
                         if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total13.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -18810,7 +19210,7 @@ addLayer("cells", {
                         if (hasUpgrade("cells", 412))   ret = ret.times(tmp.cells.upgrades[412].effect)
                         if (hasUpgrade("cells", 312))   ret = ret.times(tmp.cells.upgrades[312].effect)
                         if (hasUpgrade("cells", 313))   ret = ret.times(tmp.cells.upgrades[313].effect)
-                        if (hasUpgrade("cells", 112))   {
+                        if (hasUpgrade("cells", 112)) {
                                 let mult = player.cells.total14.pow(.1).max(1)
                                 if (!hasMilestone("t", 5)) mult = mult.min(1e50)
                                                         ret = ret.times(mult)
@@ -19824,8 +20224,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Mu</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Mu minigame" + br + "Total points: " + format(player.cells.total11)
@@ -19846,8 +20245,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Lambda</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Lambda minigame" + br + "Total points: " + format(player.cells.total12)
@@ -19868,8 +20266,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Kappa</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Kappa minigame" + br + "Total points: " + format(player.cells.total13)
@@ -19890,8 +20287,7 @@ addLayer("cells", {
                                 return "<h3 style='color: #0033FF'>Iota</h3>"
                         },
                         maxTimes(){
-                                let ret = 60
-                                return ret
+                                return 60
                         },
                         display(){
                                 return "Unlock the Iota minigame" + br + "Total points: " + format(player.cells.total14)
@@ -19961,7 +20357,8 @@ addLayer("cells", {
                                 player.cells.milestone1Ever = true
                         },
                         effectDescription(){
-                                return "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, permanently keep C55 and easier gems, permanently keep Dilation completions, and get DNA milestone 15."
+                                if (player.extremeMode) return "Reward: Per reset keep a DNA milestone, bulk 10x N → Δµ, always start with 500 of each Life buyable, and permanently get DNA milestone 15."
+                                return "Reward: Per reset keep a DNA milestone, always start with 500 of each Life buyable, and permanently get DNA milestone 15."
                         },
                 }, // hasMilestone("cells", 1)
                 2: {
@@ -20006,6 +20403,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per milestone double DNA Science gain and Anti-Upsilon's log7 becomes log5."
                                 return "Reward: You can bulk 10x more N → Δµ and Anti-Upsilon's log7 becomes log5."
                         },
                 }, // hasMilestone("cells", 4)
@@ -20020,6 +20418,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per reset keep a DNA upgrade, keep DNA Science buyables and upgrades, and Anti-Upsilon's log5 becomes ln."
                                 return "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
                         },
                 }, // hasMilestone("cells", 5)
@@ -20034,9 +20433,11 @@ addLayer("cells", {
                                 return true
                         },
                         effect(){
+                                if (player.extremeMode) return new Decimal(player.cells.milestones.length).div(2).floor().min(10).div(1e4)
                                 return new Decimal(Math.min(10, player.cells.milestones.length)).div(1e4)
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Every other milestone (up to 20) add .0001 to tRNA's base." + br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                                 return "Reward: Per milestone (up to 10) add .0001 to tRNA's base." + br + "Currently: " + format(tmp.cells.milestones[6].effect, 4)
                         },
                 }, // hasMilestone("cells", 6)
@@ -21165,22 +21566,19 @@ addLayer("cells", {
                                 return tmp.cells.buyables[11].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 11)) + " Stem Cells</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[11].effect) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 11)) + " Stem Cells</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.cells.buyables[11].baseConstant, 3) + "+log10(log10(Cells)^x<br>" 
                                 eformula += format(tmp.cells.buyables[11].base, 3) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10*10^(x<sup>1.05</sup>)" 
@@ -21265,25 +21663,22 @@ addLayer("cells", {
                                 return tmp.cells.buyables[12].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[12].effect) + " to Stem Cell gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 12)) + " Stem Cells</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[12].effect) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 12)) + " Stem Cells</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Stem Cells)^x<br>" + format(tmp.cells.buyables[12].base) + "^x"
                                 if (hasMilestone("cells", 41)) eformula = eformula.replace("10", "6")
                                 if (hasMilestone("cells", 42)) eformula = eformula.replace("6", "4")
                                 if (hasMilestone("cells", 43)) eformula = eformula.replace("log4", "ln")
                                 if (hasMilestone("cells", 44)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e28*1e10^(x<sup>1.1</sup>)" 
@@ -21362,23 +21757,20 @@ addLayer("cells", {
                                 return tmp.cells.buyables[13].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[13].effect) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 13)) + " Stem Cells</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Tissues XXIX)^x<br>" + format(tmp.cells.buyables[13].base) + "^x"
                                 if (hasUpgrade("t", 81)) eformula = eformula.replace("log10", "log4")
                                 if (hasUpgrade("t", 82)) eformula = eformula.replace("log4", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e100*1e30^(x<sup>1.1</sup>)" 
@@ -21451,21 +21843,18 @@ addLayer("cells", {
                                 return tmp.cells.buyables[21].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[21].effect) + " to Stem Cell gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 21)) + " Stem Cells</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[21].effect) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 21)) + " Stem Cells</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "Tokens II^x<br>" + format(tmp.cells.buyables[21].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,120,000*1e40^(x<sup>1.05</sup>)" 
@@ -21520,24 +21909,21 @@ addLayer("cells", {
                                 return init.plus(amt.div(20).sin().times(30))
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 111)) + " Mu</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 111)) + " Mu</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "x+sin(x/20)*30<br>"
                                 if (hasUpgrade("cells", 114)) eformula = eformula.replace("x", "2x")
                                 if (hasMilestone("cells", 13)) eformula = "x^sqrt(Cell milestones)"
                                 if (hasUpgrade("cells", 115)) eformula = "x^Cell milestones"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*1.1^(x<sup>1.1</sup>)" 
@@ -21589,21 +21975,18 @@ addLayer("cells", {
                                 return base.pow(amt.sub(amt.div(20).sin().times(10)))
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[112]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[112].effect) + " to Mu gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 112)) + " Mu</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[112]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[112].effect) + " to Mu gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 112)) + " Mu</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(DNA)^(x-sin(x/20)*10)<br>" + format(tmp.cells.buyables[112].base) + "^(x-sin(x/20)*10)"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e15*1e3^(x<sup>1.1</sup>)" 
@@ -21659,21 +22042,18 @@ addLayer("cells", {
                                 return tmp.cells.buyables[411].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[411]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[411].effect) + " to Iota gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 411)) + " Iota</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[411]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[411].effect) + " to Iota gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 411)) + " Iota</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(2 if time = prime, .8 otherwise)^x<br>" + format(tmp.cells.buyables[411].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*2^(x<sup>1.1</sup>)" 
@@ -21728,21 +22108,18 @@ addLayer("cells", {
                                 return tmp.cells.buyables[412].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[412]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[412].effect) + " to Iota gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 412)) + " Iota</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[412]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[412].effect) + " to Iota gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 412)) + " Iota</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(2.5 if time = even, .8 otherwise)^x<br>" + format(tmp.cells.buyables[412].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*2^(x<sup>1.2</sup>)" 
@@ -21797,21 +22174,18 @@ addLayer("cells", {
                                 return tmp.cells.buyables[413].base.pow(amt)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[413]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.cells.buyables[413].effect) + " to Iota gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 413)) + " Iota</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[413]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[413].effect) + " to Iota gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 413)) + " Iota</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(2 if time = odd, .8 otherwise)^x<br>" + format(tmp.cells.buyables[413].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5*4^(x<sup>1.1</sup>)" 
@@ -21971,10 +22345,14 @@ addLayer("cells", {
                                         let a2 = "Current Cells gain: (DNA/1e582)^(1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
                                         a2 += ")"
                                         let a = a1 + br + a2
+                                        if (player.extremeMode) a = a.replaceAll("582", "1228")
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
-                                        let c = "Note that Anti- challenges are never reset."
+                                        b += br + "Note that Anti- challenges are never reset."
+                                        let c = "For unlocking Cells permanently keep Dilation completions<br>and gems from C55 and easier challenges."
+                                        if (player.extremeMode) c = c.replace("completions", "completions, protein science upgrades,")
+                                        c += br + "Additionally, you permanently autobuy tokens and Radio Waves."
 
-                                        let part1 = a + br2 + b + br + c
+                                        let part1 = a + br2 + b + br2 + c
 
                                         if (!hasChallenge("l", 102)) return part1
 
@@ -22234,9 +22612,7 @@ addLayer("t", {
                         ret = ret.sub(amt)
                 }
 
-                ret = ret.pow(-1)
-
-                return ret
+                return ret.pow(-1)
         },
         getNextAt(){
                 let gain = tmp.t.getResetGain.plus(1)
@@ -22293,11 +22669,11 @@ addLayer("t", {
         effectAmt(){
                 if (hasUpgrade("t", 131)) {
                         return tmp.t.getResetGain.max(player.t.bestOnReset)
-                } else if (hasUpgrade("t", 64)) {
-                        return tmp.t.getResetGain.max(player.t.bestOnReset).times(100)
-                } else {
-                        return player.t.total
                 }
+                if (hasUpgrade("t", 64)) {
+                        return tmp.t.getResetGain.max(player.t.bestOnReset).times(100)
+                }
+                return player.t.total
         },
         effect(){
                 let data = tmp.t
@@ -24914,21 +25290,18 @@ addLayer("mc", {
                                 return tmp.mc.buyables[11].base.pow(player.mc.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mc.buyables[11].effect) + " to Micro gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 11)) + " Micro</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mc.buyables[11].effect) + " to Micro gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 11)) + " Micro</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mc.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2^x<sup>2</sup>" 
@@ -24968,21 +25341,18 @@ addLayer("mc", {
                                 return tmp.mc.buyables[12].base.pow(player.mc.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mc.buyables[12].effect) + " to Micro gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 12)) + " Micro</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mc.buyables[12].effect) + " to Micro gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 12)) + " Micro</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Tokens)^x<br>" + format(tmp.mc.buyables[12].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10*10^x<sup>1.3</sup>" 
@@ -25014,21 +25384,18 @@ addLayer("mc", {
                                 return player.mc.buyables[12].gt(2)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: -"
-                                let eff2 = formatWhole(player.mc.buyables[13]) + " to base Micro gain log's base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 13)) + " Micro</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: -"
+                                        let eff2 = formatWhole(player.mc.buyables[13]) + " to base Micro gain log's base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 13)) + " Micro</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "10-x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e4*1e4^x" 
@@ -25307,7 +25674,6 @@ addLayer("ach", {
                                 return tmp.mini.layerShown
                         },
                 },
-                
                 {key: "shift+#", description: "Shift+3: Go to tokens", 
                         onPress(){
                                 if (!tmp.tokens.layerShown) return
@@ -25452,8 +25818,6 @@ addLayer("ach", {
                                 return tmp.t.layerShown
                         },
                 },
-
-                
                 {
                         key: "THIS SHOULD NOT BE POSSIBLE3",
                         description: br + makeBlue("<b>Prestige</b>:"),
@@ -25464,7 +25828,6 @@ addLayer("ach", {
                                 return player.n.unlocked
                         },
                 },
-                
                 {key: "a", description: "A: Reset for Amino Acid", onPress(){
                                 if (canReset("a")) doReset("a")
                         },
@@ -25972,11 +26335,11 @@ addLayer("mini", {
                         }
                 }
 
-                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) {
-                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
-                }
-                if (layers.l.grid.getGemEffect(803) && !player.extremeMode && !hasUpgrade("cells", 42)) {
-                        if (tmp.tokens.buyables[11].canAfford) layers.tokens.buyables[11].buy(true)
+                if (tmp.tokens.buyables[11].canAfford) {
+                        let buy = player.cells.unlocked
+                        if (player.tokens.autobuyradio && hasMilestone("n", 7) && !hasUpgrade("cells", 42)) buy = true
+                        if (layers.l.grid.getGemEffect(803) && !hasUpgrade("cells", 42)) buy = true
+                        if (buy) layers.tokens.buyables[11].buy(true)
                 }
 
                 if (tmp.mini.tabFormat.D.unlocked) {
@@ -26282,11 +26645,8 @@ addLayer("mini", {
                         return ret
                 },
                 getLin(){
-                        let ret = decimalOne
-                        
-                        ret = ret.plus(tmp.mini.buyables[121].effect)
+                        return decimalOne.plus(tmp.mini.buyables[121].effect)
 
-                        return ret
                 },
                 getQuad(){
                         let ret = decimalZero
@@ -26295,11 +26655,7 @@ addLayer("mini", {
                         return ret
                 },
                 getExp1(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[132].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[132].effect)
                 },
                 getFuelMultiplier(){
                         let data = tmp.mini.d_points
@@ -26369,7 +26725,7 @@ addLayer("mini", {
                         if (hasUpgrade("mini", 84))     ret = ret.times(Decimal.pow(1.02, getBuyableAmount("mini", 222)))
                                                         ret = ret.times(tmp.p.effect.min("1ee6"))
                         if (hasMilestone("p", 3))       ret = ret.times(player.mini.e_points.points.max(1).pow(.001))
-                        if (hasUpgrade("p", 23))        {
+                        if (hasUpgrade("p", 23)) {
                                 let base = 1 + player.p.upgrades.length/10
                                 let exp = getBuyableAmount("mini", 212)
                                                         ret = ret.times(Decimal.pow(base, exp))
@@ -26446,20 +26802,10 @@ addLayer("mini", {
                         return ret
                 },
                 getC(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[203].effect)
-
-                        ret = ret.times(tmp.mini.buyables[231].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[203].effect).times(tmp.mini.buyables[231].effect)
                 },
                 getD(){
-                        let ret = decimalOne
-
-                        ret = ret.plus(tmp.mini.buyables[202].effect)
-
-                        return ret
+                        return decimalOne.plus(tmp.mini.buyables[202].effect)
                 },
                 getMaxInterations(){
                         let ret = 1
@@ -26498,30 +26844,25 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[11].base.pow(player.mini.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[11]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[11].effect) + " to Atomic Hydrogen gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 11)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[11]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[11].effect) + " to Atomic Hydrogen gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 11)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[11].base) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(20)*(1e3^x<sup>1.2</sup>)" 
@@ -26563,30 +26904,25 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[12].base.pow(player.mini.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[12]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[12].effect) + " to A Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 12)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[12]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[12].effect) + " to A Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 12)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[12].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e20)*(1e9^x<sup>1.1</sup>)" 
@@ -26623,30 +26959,25 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 11)) return decimalOne
-                                let ret = new Decimal(2)
-                                ret = ret.plus(tmp.mini.buyables[23].effect)
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[23].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[13].base.pow(player.mini.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[13]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[13].effect) + " to Deuterium</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 13)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[13]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[13].effect) + " to Deuterium</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 13)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[13].base) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e6)*(1e6^x<sup>1.2</sup>)" 
@@ -26703,26 +27034,23 @@ addLayer("mini", {
                                 return tmp.mini.buyables[21].base.times(player.mini.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[21]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[21].effect) + " to <bdi style='color:#CC0033'>A</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 21)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[21]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[21].effect) + " to <bdi style='color:#CC0033'>A</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 21)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "2*x"
                                 if (hasUpgrade("h", 53)) eformula = "2*x*ln(x)"
                                 if (hasUpgrade("h", 64)) eformula = "2*x*(ln(x))^2"
 
                                 eformula = eformula.replace("2", format(tmp.mini.buyables[21].initBase))
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e300)*(1e30^x<sup>1.1</sup>)" 
@@ -26768,23 +27096,20 @@ addLayer("mini", {
                                 return tmp.mini.buyables[23].base.times(player.mini.buyables[23])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[23]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[23].effect) + " to Red, Orange, and Yellow base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 23)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[23]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[23].effect) + " to Red, Orange, and Yellow base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 23)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "x"
                                 if (hasUpgrade("h", 64)) eformula = "log10(x)*x<br>" + format(getBuyableBase("mini", 23)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e31)*(1e11^x<sup>1.1</sup>)" 
@@ -26835,22 +27160,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[61].base.pow(player.mini.buyables[61])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[61]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[61]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[61].effect) + " to Life Points</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 61)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[61]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[61]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[61].effect) + " to Life Points</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 61)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[61].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e15)*(1e10^x<sup>1.1</sup>)"
@@ -26901,23 +27223,20 @@ addLayer("mini", {
                                 return tmp.mini.buyables[62].base.pow(player.mini.buyables[62])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[62]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[62]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[62].effect) + " to A Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 62)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[62]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[62]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[62].effect) + " to A Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 62)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(10+[A Points])^x<br>" + format(tmp.mini.buyables[62].base) + "^x" 
                                 if (hasUpgrade("c", 14)) eformula = eformula.replace("ln", "log2")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e33)*(2e3^x<sup>1.15</sup>)" 
@@ -26970,22 +27289,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[63].base.pow(player.mini.buyables[63])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[63]) + "</b><br>"
-                                let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[63]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[63].effect) + " to Hydrogen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 63)) + " A Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mini.buyables[63]) + "</b><br>"
+                                        let amt = "<b><h2>Amount</h2>: " + format(player.mini.a_points.extras[63]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[63].effect) + " to Hydrogen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 63)) + " A Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[63].base) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e10)*(1e8^x<sup>1.1</sup>)" 
@@ -27036,21 +27352,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[31].base.pow(player.mini.buyables[31])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[31]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[31]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[31].effect) + " to B Points gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 31)) + " B Points</b><br>"
+
+                                        return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10([Life Points] + 10)^x<br>" + format(getBuyableBase("mini", 31)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(10)*(20^x<sup>1.1</sup>)" 
@@ -27095,21 +27408,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[32].base.pow(player.mini.buyables[32])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[32]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[32].effect) + " to B Points gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 32)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[32]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[32].effect) + " to B Points gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 32)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log2([B Points] + 10)^x<br>" + format(getBuyableBase("mini", 32)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(3e6)*(5e5^x<sup>1.2</sup>)" 
@@ -27155,21 +27465,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[33].base.times(player.mini.buyables[33])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[33]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[33].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 33)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[33]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[33].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 33)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = ".1*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e25)*(100^x<sup>" + (player.extremeMode ? 1.1 : 1.2) + "</sup>)" 
@@ -27214,21 +27521,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[41].base.pow(player.mini.buyables[41])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[41]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[41].effect) + " to B Points gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 41)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[41]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[41].effect) + " to B Points gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 41)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "<bdi style='color:#CC0033'>B</bdi>^x<br>" + format(getBuyableBase("mini", 41)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e33)*(10^x<sup>1.5</sup>)" 
@@ -27273,21 +27577,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[42].base.pow(player.mini.buyables[42])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[42]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[42].effect) + " to B Points and Hydrogen gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 42)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[42]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[42].effect) + " to B Points and Hydrogen gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 42)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(log8([B points]))^x<br>" + format(getBuyableBase("mini", 42)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5e237)*(2e10^x<sup>1.35</sup>)" 
@@ -27332,21 +27633,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[43].base.times(player.mini.buyables[43])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[43]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[43].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 43)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[43]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[43].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 43)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+                                
                                 let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 43), 3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e425)*(1e15^x<sup>1.2</sup>)"
@@ -27391,21 +27689,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[51].base.pow(player.mini.buyables[51])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[51]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[51].effect) + " to A Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 51)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[51]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[51].effect) + " to A Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 51)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(ln([B Points]))^x<br>" + format(getBuyableBase("mini", 51), 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e5600)*(1e8^x<sup>1.3</sup>)" 
@@ -27455,22 +27750,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[52].base.times(player.mini.buyables[52])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[52]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[52].effect) + " to Violet base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 52)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[52]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[52].effect) + " to Violet base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 52)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = ".01*x"
                                 if (hasUpgrade("c", 13)) eformula = ".01*ln(e+sqrt(x)/10)*x<br>" + format(getBuyableBase("mini", 52), 4) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e18650)*(1e4^x<sup>1.1</sup>)" 
@@ -27516,21 +27808,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[53].base.times(player.mini.buyables[53])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[53]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 53)) + " B Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[53]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[53].effect) + " to <bdi style='color:#CC0033'>B</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 53)) + " B Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(1+x/30)*x<br>" + format(getBuyableBase("mini", 53)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
@@ -27570,28 +27859,26 @@ addLayer("mini", {
                                 return true
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[71]) + "</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[71]) + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 71)) + " C Points</b><br>"
+
+                                        return br + lvl + cost + "Shift to see details"
                                 }
-                                let comp1 = "(x+1)"
-                                if (hasUpgrade("mini", 25)) comp1 = "x"
+                                
+                                let expBase = "(x+1)"
+                                if (hasUpgrade("mini", 25)) expBase = "x"
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let base = "100"
                                 if (hasUpgrade("mini", 35)) base = "50"
                                 if (hasUpgrade("tokens", 94)) base = "10"
                                 let exp = "x/2+3"
                                 if (hasUpgrade("mini", 42)) exp = "6"
-                                let cost2 = "(" + base + ")^(" + comp1 + "<sup>" + exp + "</sup>)" 
+                                let cost2 = "(" + base + ")^(" + expBase + "<sup>" + exp + "</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
-                                let end = allCost + "<br>You can only have 15 slots"
-                                return br + end 
+                                return br + allCost + "<br>You can only have 15 slots" 
                         },
                 },
                 72: {
@@ -27628,32 +27915,26 @@ addLayer("mini", {
                                 if (hasUpgrade("tokens", 91))   base = Math.E
                                 if (hasUpgrade("sci", 235))     base = 2
 
-                                let ret = player.mini.c_points.points.max(10).log(base)
-
-                                return ret
+                                return player.mini.c_points.points.max(base).log(base)
                         },
                         effect(){
                                 return tmp.mini.buyables[72].base.pow(player.mini.buyables[72])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[72]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[72].effect) + " to C Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 72)) + " C Points</b><br>"
-                                let init = "log10(C Points)<sup>x</sup>"
-                                if (hasUpgrade("tokens", 91)) init = "ln(C Points)<sup>x</sup>"
-                                if (hasUpgrade("sci", 235)) init = "log2(C Points)<sup>x</sup>"
-                                let eformula = init + br + format(getBuyableBase("mini", 72)) + "^x"
-                                
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[72]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[72].effect) + " to C Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 72)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = "log10(C Points)<sup>x</sup>" + br + format(getBuyableBase("mini", 72)) + "^x"
+                                if (hasUpgrade("sci", 235)) eformula = eformula.replace("log10", "log2")
+                                if (hasUpgrade("tokens", 91)) eformula = eformula.replace("log10", "ln")
+                                
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1000)*(100^x<sup>1.3</sup>)" 
@@ -27700,21 +27981,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[73].base.pow(player.mini.buyables[73])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[73]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[73].effect) + " to C Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 73)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[73]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[73].effect) + " to C Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 73)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "tokens<sup>x</sup><br>" + format(getBuyableBase("mini", 73)) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5000)*(200^x<sup>1.1</sup>)" 
@@ -27770,21 +28048,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[81].base.times(player.mini.buyables[81])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[81]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 81)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[81]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[81].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 81)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 81), 3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e90)*(1e5^x<sup>1.2</sup>)" 
@@ -27834,23 +28109,20 @@ addLayer("mini", {
                                 return tmp.mini.buyables[82].base.pow(player.mini.buyables[82])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[82]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[82].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 82)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[82]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[82].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 82)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let baseStr = "<bdi style='color:#CC0033'>C</bdi>"
                                 if (hasUpgrade("mini", 43)) baseStr = "(" + baseStr + " + x)"
                                 let eformula = baseStr + "<sup>x</sup><br>" + format(getBuyableBase("mini", 82)) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e180)*(1e4^x<sup>1.2</sup>)" 
@@ -27901,23 +28173,20 @@ addLayer("mini", {
                                 return tmp.mini.buyables[83].base.pow(player.mini.buyables[83])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 83)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[83]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[83].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 83)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Oxygen))<sup>x</sup><br>" + format(getBuyableBase("mini", 83)) + "^x"
                                 if (hasUpgrade("mini", 23)) eformula = eformula.replace("log10", "ln")
                                 if (hasMilestone("tokens", 24)) eformula = eformula.replace("ln", "log2")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e225)*(1e10^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
@@ -27958,30 +28227,24 @@ addLayer("mini", {
                         },
                         base(){
                                 if (inChallenge("n", 22)) return decimalZero
-                                let amt = player.mini.buyables[91]
-                                let ret = amt.div(100).plus(1.2).ln()
-                                
-                                return ret
+                                return player.mini.buyables[91].div(100).plus(1.2).ln()
                         },
                         effect(){
                                 return tmp.mini.buyables[91].base.times(player.mini.buyables[91])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 91)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[91]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[91].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 91)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(1.2+x/100)*x<br>" + format(getBuyableBase("mini", 91)) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1300)*(1e8^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
@@ -28031,22 +28294,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[92].base.pow(player.mini.buyables[92])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[92].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 92)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[92]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[92].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 92)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Life Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 92)) + "^x"
                                 if (hasMilestone("n", 14)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1900)*(1e50^x<sup>1.3</sup>)" 
@@ -28100,24 +28360,21 @@ addLayer("mini", {
                                 return tmp.mini.buyables[93].base.pow(player.mini.buyables[93])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[93].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 93)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[93]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[93].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 93)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(log10(A Points)))<sup>x</sup><br>" + format(getBuyableBase("mini", 93)) + "^x"
                                 if (hasUpgrade("tokens", 93)) eformula = eformula.replace("log10", "ln") //only replaces the first one
                                 if (hasUpgrade("tokens", 94)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 44)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e6350)*(1e6^x<sup>1.1</sup>)" 
@@ -28157,29 +28414,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 92).gt(60)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 92).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 92).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[101].base.pow(player.mini.buyables[101])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[101]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[101].effect) + " to Carbon gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 101)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[101]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[101].effect) + " to Carbon gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 101)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(C Point gain 5 buyables)<sup>x</sup><br>" + format(getBuyableBase("mini", 101)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e13000)*(100^x<sup>1.4</sup>)" 
@@ -28230,23 +28482,20 @@ addLayer("mini", {
                                 return tmp.mini.buyables[102].base.pow(player.mini.buyables[102])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[102]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[102].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 102)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[102]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[102].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 102)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Carbon))<sup>x</sup><br>" + format(getBuyableBase("mini", 102)) + "^x"
                                 if (hasUpgrade("mini", 41)) eformula = eformula.replace("log10", "log2")
                                 if (hasChallenge("n", 22)) eformula = eformula.replace("(","(log10(Nitrogen)*")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e19590)*(1e23^x<sup>1.2</sup>)" 
@@ -28286,29 +28535,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 92).gt(118)
                         },
                         base(){
-                                let ret = tmp.tokens.buyables[61].effect
-
-                                return ret
+                                return tmp.tokens.buyables[61].effect
                         },
                         effect(){
                                 return tmp.mini.buyables[103].base.pow(player.mini.buyables[103])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[103]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[103].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 103)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[103]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[103].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 103)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(Semi-exponential effect)<sup>x</sup><br>" + format(getBuyableBase("mini", 103)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e27000)*(20^x<sup>1.2</sup>)" 
@@ -28348,30 +28592,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 102).gt(470)
                         },
                         base(){
-                                let amt = player.mini.buyables[111]
-                                let ret = amt.div(500).plus(1)
-
-                                return ret
+                                return player.mini.buyables[111].div(500).plus(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[111].base.times(player.mini.buyables[111])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[111]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[111].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 111)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[111]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[111].effect) + " to <bdi style='color:#CC0033'>C</bdi></b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 111)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(1+x/500)*x<br>" + format(getBuyableBase("mini", 111),3) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e56700)*(1e11^x<sup>1.3</sup>)" 
@@ -28421,22 +28659,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[112].base.pow(player.mini.buyables[112])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[112]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[112].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 112)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[112]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[112].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 112)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Hydrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 112)) + "^x"
                                 if (hasChallenge("n", 12)) eformula = eformula.replace("log10", "ln")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e72175)*(1e100^x<sup>1.1</sup>)" 
@@ -28486,22 +28721,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[113].base.pow(player.mini.buyables[113])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[113]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[113].effect) + " to C Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 113)) + " C Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[113]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[113].effect) + " to C Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 113)) + " C Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(B Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 113)) + "^x"
                                 if (hasMilestone("n", 16)) eformula = eformula.replace("(l", "(x*l")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e80870)*(1.80e308^x<sup>1.1</sup>)" 
@@ -28557,22 +28789,19 @@ addLayer("mini", {
                                 return tmp.mini.buyables[121].base.times(player.mini.buyables[121])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[121]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[121].effect) + " to Linear speed coefficient</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 121)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[121]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[121].effect) + " to Linear speed coefficient</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 121)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 121)) + "*x"
                                 if (hasUpgrade("mini", 61)) eformula = "log8(x)<sup>2*upgrades</sup>*x<br>" + eformula
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(150)*(1.2^x<sup>1.1</sup>)" 
@@ -28611,31 +28840,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(7)
                         },
                         base(){
-                                let ret = new Decimal(2)
-
-                                ret = ret.plus(tmp.mini.buyables[131].effect)
-
-                                return ret
+                                return new Decimal(2).plus(tmp.mini.buyables[131].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[122].base.pow(player.mini.buyables[122])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[122]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[122].effect) + " to Maximum Fuel</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 122)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[122]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[122].effect) + " to Maximum Fuel</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 122)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 122)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e19)*(3^x<sup>1.1</sup>)" 
@@ -28676,29 +28898,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(78)
                         },
                         base(){
-                                let ret = player.points.max(10).log10().log10().max(1)
-
-                                return ret
+                                return player.points.max(10).log10().log10().max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[123].base.pow(player.mini.buyables[123])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[123]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[123].effect) + " to Maximum Fuel</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 123)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[123]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[123].effect) + " to Maximum Fuel</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 123)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(log10(Points))^x<br>" + format(getBuyableBase("mini", 123)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e383)*(5^x<sup>1.2</sup>)" 
@@ -28744,30 +28961,25 @@ addLayer("mini", {
 
                                 if (hasUpgrade("mini", 62)) ret = ret.pow(player.extremeMode && !hasUpgrade("sci", 335) ? 2 : 3)
 
-                                ret = ret.div(100)
-
-                                return ret
+                                return ret.div(100)
                         },
                         effect(){
                                 return tmp.mini.buyables[131].base.times(player.mini.buyables[131])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coefficient and Fuel Increase 1 base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 131)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[131]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[131].effect) + " to Quadratic speed coefficient and Fuel Increase 1 base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 131)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "[upgrades]/100*x<br>" + format(getBuyableBase("mini", 131)) + "*x"
                                 if (hasUpgrade("mini", 62)) eformula = eformula.replace("]", "]^" + (player.extremeMode && !hasUpgrade("sci", 335) ? "2" : "3"))
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1140)*(10^x<sup>1.2</sup>)" 
@@ -28819,21 +29031,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[132].base.times(player.mini.buyables[132])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[132]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[132].effect, 4) + " to exponential speed base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 132)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[132]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[132].effect, 4) + " to exponential speed base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 132)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 132), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e6415)*(1e38^x<sup>1.4</sup>)" 
@@ -28875,29 +29084,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2400)
                         },
                         base(){
-                                let ret = new Decimal(.01)
-
-                                return ret
+                                return new Decimal(.01)
                         },
                         effect(){
                                 return tmp.mini.buyables[133].base.times(player.mini.buyables[133])
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[133]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[133].effect, 4) + " to square rooting factor</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 133)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[133]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[133].effect, 4) + " to square rooting factor</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 133)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 133), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e32717)*(1e8^x<sup>1.5</sup>)" 
@@ -28938,29 +29142,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(12)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 121).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 121).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[151].base.pow(player.mini.buyables[151])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[151]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[151].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 151)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[151]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[151].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 151)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(Linear Increase 1 buyables)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 151)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5000)*(20^x<sup>1.3</sup>)" 
@@ -29002,29 +29201,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(210)
                         },
                         base(){
-                                let ret = player.n.points.max(10).log10()
-
-                                return ret
+                                return player.n.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[152].base.pow(player.mini.buyables[152])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[152]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[152].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 152)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[152]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[152].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 152)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Nitrogen))<sup>x</sup><br>" + format(getBuyableBase("mini", 152)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(5e32)*(1e3^x<sup>1.2</sup>)" 
@@ -29064,29 +29258,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(880)
                         },
                         base(){
-                                let ret = player.mini.d_points.fuel.max(10).log10()
-
-                                return ret
+                                return player.mini.d_points.fuel.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[153].base.pow(player.mini.buyables[153])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[153]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[153].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 153)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[153]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[153].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 153)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(Fuel))<sup>x</sup><br>" + format(getBuyableBase("mini", 153)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e140)*(1e10^x<sup>1.3</sup>)" 
@@ -29128,29 +29317,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 121).gte(1290)
                         },
                         base(){
-                                let ret = player.mini.d_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.d_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[161].base.pow(player.mini.buyables[161])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[161]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[161].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 161)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[161]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[161].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 161)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(log10(D Points))<sup>x</sup><br>" + format(getBuyableBase("mini", 161)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e213)*(1e20^x<sup>1.2</sup>)" 
@@ -29193,29 +29377,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(120)
                         },
                         base(){
-                                let ret = new Decimal(tmp.mini.d_points.getUpgrades).max(1)
-
-                                return ret
+                                return new Decimal(tmp.mini.d_points.getUpgrades).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[162].base.pow(player.mini.buyables[162])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[162]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[162].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 162)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[162]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[162].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 162)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(Upgrades)<sup>x</sup><br>" + formatWhole(getBuyableBase("mini", 162)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e654)*(100^x<sup>1.2</sup>)"
@@ -29257,29 +29436,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(207)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 131).max(1)
-
-                                return ret
+                                return getBuyableAmount("mini", 131).max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[163].base.pow(player.mini.buyables[163])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[163]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[163].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 163)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[163]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[163].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 163)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(Quadratic Increase levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 163)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1344)*(1e24^x<sup>1.1</sup>)" 
@@ -29321,29 +29495,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(380)
                         },
                         base(){
-                                let ret = getBuyableAmount("mini", 151)
-
-                                return ret
+                                return getBuyableAmount("mini", 151)
                         },
                         effect(){
                                 return tmp.mini.buyables[171].base.pow(player.mini.buyables[171])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[171]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[171].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 171)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[171]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[171].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 171)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(Gas Pedal levels)<sup>x</sup><br>" + format(getBuyableBase("mini", 171)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e3020)*(1e30^x<sup>1.1</sup>)" 
@@ -29385,29 +29554,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(550)
                         },
                         base(){
-                                let ret = tmp.n.challenges[32].rewardEffect
-
-                                return ret
+                                return tmp.n.challenges[32].rewardEffect
                         },
                         effect(){
                                 return tmp.mini.buyables[172].base.pow(player.mini.buyables[172])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[172]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[172].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 172)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[172]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[172].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 172)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "<bdi style='color:#CC0033'>D</bdi><sup>x</sup><br>" + format(getBuyableBase("mini", 172)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e4751)*(1e20^x<sup>1.4</sup>)" 
@@ -29453,29 +29617,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2150)
                         },
                         base(){
-                                let ret = tmp.mini.d_points.getEffectiveFuelAux
-
-                                return ret
+                                return tmp.mini.d_points.getEffectiveFuelAux
                         },
                         effect(){
                                 return tmp.mini.buyables[173].base.pow(player.mini.buyables[173])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[173]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[173].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 173)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[173]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[173].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 173)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = makeRed("y") + "<sup>x</sup><br>" + format(getBuyableBase("mini", 173)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e32284)*(1e30^x<sup>1.1</sup>)" 
@@ -29518,29 +29677,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 151).gte(2888)
                         },
                         base(){
-                                let ret = player.mini.c_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.c_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[181].base.pow(player.mini.buyables[181])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[181]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[181].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 181)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[181]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[181].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 181)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(C Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 181)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e41025)*(1e35^x<sup>1.3</sup>)" 
@@ -29582,29 +29736,24 @@ addLayer("mini", {
                                 return hasUpgrade("c", 33)
                         },
                         base(){
-                                let ret = player.mini.e_points.points.max(10).log10()
-
-                                return ret
+                                return player.mini.e_points.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[182].base.pow(player.mini.buyables[182])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[182]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[182].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 182)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[182]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[182].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 182)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(E Points)<sup>x</sup><br>" + format(getBuyableBase("mini", 182)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e193300)*(1e19^x<sup>1.1</sup>)" 
@@ -29639,29 +29788,24 @@ addLayer("mini", {
                                 return hasMilestone("p", 3)
                         },
                         base(){
-                                let ret = player.p.points.max(1)
-
-                                return ret
+                                return player.p.points.max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[183].base.pow(player.mini.buyables[183])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[183]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[183].effect) + " to D Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 183)) + " D Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[183]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[183].effect) + " to D Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 183)) + " D Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "Phosphorus<sup>x</sup><br>" + format(getBuyableBase("mini", 183)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(3e14159)*(265358^x<sup>2</sup>)" 
@@ -29694,15 +29838,13 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 201)
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " iterations</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[201]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = formatWhole(tmp.mini.buyables[201].effect) + " iterations</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 201)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -29752,26 +29894,25 @@ addLayer("mini", {
                         },
                         effect(){
                                 let ret = tmp.mini.buyables[202].base.times(player.mini.buyables[202])   
+                                
                                 if (hasUpgrade("c", 35)) ret = ret.times(player.mini.buyables[202].max(1).ln().max(1))
+
                                 return ret                                                                                                                  
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[202]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 202)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[202]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[202].effect) + " to " + makeBlue("d") + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 202)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 202)) + "*x"
                                 if (hasUpgrade("c", 35)) eformula = eformula.replace("*x", "*ln(x)*x")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(30)*(1.5^x<sup>1.1</sup>)" 
@@ -29813,31 +29954,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 202).gte(3)
                         },
                         base(){
-                                let ret = decimalOne
-
-                                ret = ret.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
-
-                                return ret
+                                return decimalOne.plus(tmp.mini.buyables[212].effect.times(getBuyableAmount("mini", 211)))
                         },
                         effect(){
                                 return tmp.mini.buyables[203].base.times(player.mini.buyables[203])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[203]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[203].effect) + " to " + makeBlue("c") + "</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 203)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[203]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[203].effect) + " to " + makeBlue("c") + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 203)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 203)) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(250)*(2^x<sup>1.2</sup>)" 
@@ -29900,24 +30034,21 @@ addLayer("mini", {
                                 return tmp.mini.buyables[211].base.times(player.mini.buyables[211])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[211]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 211)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[211]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[211].effect) + " to " + makeBlue("b") + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 211)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.mini.buyables[211].baseInit) + "*x<br>"
                                 eformula += format(getBuyableBase("mini", 211)) + "*x" 
                                 if (hasUpgrade("n", 43)) eformula = eformula.replace("*x", "*ln(x)*x")
                                 if (hasUpgrade("c", 34)) eformula = eformula.replace(")", ")<sup>2</sup>")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e4)*(4^x<sup>1.2</sup>)" 
@@ -29959,31 +30090,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 202).gte(25)
                         },
                         base(){
-                                let ret = new Decimal(.3)
-
-                                ret = ret.plus(tmp.mini.buyables[222].effect)
-
-                                return ret
+                                return new Decimal(.3).plus(tmp.mini.buyables[222].effect)
                         },
                         effect(){
                                 return tmp.mini.buyables[212].base.times(player.mini.buyables[212])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[212]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[212].effect, 4) + " to Linear base per Quadratic</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 212)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[212]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[212].effect, 4) + " to Linear base per Quadratic</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 212)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 212), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e8)*(7^x<sup>1.2</sup>)" 
@@ -30038,10 +30162,15 @@ addLayer("mini", {
                                 return tmp.mini.buyables[213].base.pow(player.mini.buyables[213])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[213]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[213].effect) + " to E Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 213)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[213]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[213].effect) + " to E Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 213)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "ln(Linear levels)^x<br>" + format(getBuyableBase("mini", 213)) + "^x"
                                 if (hasUpgrade("c", 32)) {
                                         let init = format(tmp.c.upgrades[32].effect,1)
@@ -30049,15 +30178,7 @@ addLayer("mini", {
                                         eformula = eformula.replace("ln", "log" + init)
                                 }
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e9)*(5^x<sup>1.1</sup>)"
@@ -30103,29 +30224,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 212).gte(66)
                         },
                         base(){
-                                let ret = new Decimal(.001)
-
-                                return ret
+                                return new Decimal(.001)
                         },
                         effect(){
                                 return tmp.mini.buyables[221].base.times(player.mini.buyables[221])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[221]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[221].effect, 4) + " to Constant base per Constant</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 221)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[221]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[221].effect, 4) + " to Constant base per Constant</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 221)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 221), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e138)*(30^x<sup>1.3</sup>)" 
@@ -30165,29 +30281,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 212).gte(82)
                         },
                         base(){
-                                let ret = new Decimal(.02)
-
-                                return ret
+                                return new Decimal(.02)
                         },
                         effect(){
                                 return tmp.mini.buyables[222].base.times(player.mini.buyables[222])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[222]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[222].effect, 4) + " to respecting scalar and Quadratic base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 222)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[222]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[222].effect, 4) + " to respecting scalar and Quadratic base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 222)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 222), 4) + "*x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e176)*(3^x<sup>1.2</sup>)" 
@@ -30243,25 +30354,22 @@ addLayer("mini", {
                                 return tmp.mini.buyables[223].base.pow(player.mini.buyables[223])                                                                                                                     
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[223]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[223].effect) + " to E Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 223)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[223]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[223].effect) + " to E Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 223)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(log10(E Points))^x<br>" + format(getBuyableBase("mini", 223)) + "^x"
                                 if (hasUpgrade("o", 34)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("mini", 83)) eformula = eformula.replace("log10", "ln")
                                 if (hasUpgrade("p", 15)) eformula = eformula.replace("ln", "log2")
                                 if (hasUpgrade("p", 25)) eformula = eformula.replace("ln", "log2")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1507)*(8^x<sup>1.2</sup>)" 
@@ -30303,11 +30411,7 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 221).gte(865)
                         },
                         base(){
-                                let ret = new Decimal(2.5)
-
-                                ret = ret.plus(tmp.mini.buyables[232].effect)
-
-                                return ret
+                                return new Decimal(2.5).plus(tmp.mini.buyables[232].effect)
                         },
                         levelExp(){
                                 let ret = decimalOne
@@ -30321,23 +30425,20 @@ addLayer("mini", {
                                 return data.base.times(player.mini.buyables[231].pow(data.levelExp)).plus(1)                                                                                                               
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[231]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[231].effect) + " to " + makeBlue("c") + "</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 231)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[231]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[231].effect) + " to " + makeBlue("c") + "</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 231)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 231)) + "*x+1"
                                 let lvle = tmp.mini.buyables[231].levelExp
                                 if (lvle.neq(1)) eformula = eformula.replace("*x", "*x<sup>" + formatWhole(lvle) + "</sup>")
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e9864)*(8^x<sup>1.1</sup>)" 
@@ -30390,21 +30491,18 @@ addLayer("mini", {
                                 return tmp.mini.buyables[232].base.times(player.mini.buyables[232])                                                                                                            
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[232]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.mini.buyables[232].effect) + " to " + makeRed("E") + " and addition is associative base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 232)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[232]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.mini.buyables[232].effect) + " to " + makeRed("E") + " and addition is associative base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 232)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(getBuyableBase("mini", 232)) + "*x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e34464)*(6^x<sup>1.3</sup>)" 
@@ -30446,29 +30544,24 @@ addLayer("mini", {
                                 return getBuyableAmount("mini", 221).gte(2300)
                         },
                         base(){
-                                let ret = tmp.n.upgrades[35].effect.max(1)
-
-                                return ret
+                                return tmp.n.upgrades[35].effect.max(1)
                         },
                         effect(){
                                 return tmp.mini.buyables[233].base.pow(player.mini.buyables[233])                                                                                                            
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[233]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[233].effect) + " to E Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 233)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[233]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[233].effect) + " to E Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 233)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = makeRed("E") + "^x<br>" + format(getBuyableBase("mini", 233)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e34833)*(100^x<sup>1.3</sup>)" 
@@ -30508,29 +30601,24 @@ addLayer("mini", {
                                 return hasMilestone("mu", 2)
                         },
                         base(){
-                                let ret = player.p.points.max(10).log10()
-
-                                return ret
+                                return player.p.points.max(10).log10()
                         },
                         effect(){
                                 return tmp.mini.buyables[241].base.pow(player.mini.buyables[241])                                                                                                            
                         },
                         display(){
-                                let amt = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[241]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.mini.buyables[241].effect) + " to E Point gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 241)) + " E Points</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Amount</h2>: " + formatWhole(player.mini.buyables[241]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mini.buyables[241].effect) + " to E Point gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mini", 241)) + " E Points</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "log10(Phosphorus)^x<br>" + format(getBuyableBase("mini", 241)) + "^x"
 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = amt + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(1e1,220,000)*(1e5^x<sup>1.1</sup>)" 
@@ -32418,7 +32506,7 @@ addLayer("tokens", {
                 if ((player.tokens.autobuytokens || player.dev.autobuytokens) && hasMilestone("n", 4)) {
                         return true
                 }
-                return layers.l.grid.getGemEffect(802) && !player.extremeMode
+                return layers.l.grid.getGemEffect(802) || player.cells.unlocked
         },
         effect(){
                 if (!player.extremeMode) return decimalOne
@@ -32625,9 +32713,9 @@ addLayer("tokens", {
                         if (needSpec) end = br + "Need Respec"
                 } 
                 if (!player.a.unlocked) return init + end
-                let mid = makeRed("<b>(" + formatWhole(player.tokens.best_buyables[11]) + ")</b>")
-                if (player.cells.unlocked) return mid + end
-                return init + br + mid + end 
+                let mid = "<b>" + formatWhole(player.tokens.best_buyables[11]) + "</b>"
+                if (player.cells.unlocked) return formatWhole(data.total, true) + " " + makeRed(mid) + end
+                return init + br + makeRed("(" + mid + ")") + end 
         },
         buyables: {
                 rows: 15,
@@ -32748,21 +32836,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[11].base.pow(player.tokens.buyables[11])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[11]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[11]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[11].effect) + " to Life Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 11)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[11].base, 3) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -32800,21 +32885,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[12].base.pow(player.tokens.buyables[12])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[12]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[12]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[12].effect) + " to Hydrogen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 12)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[12].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -32848,22 +32930,19 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[13].base.pow(player.tokens.buyables[13])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[13]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[13].effect) + " to Atomic Hydrogen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 13)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[13].base, 3) + "^x"
                                 if (hasMilestone("cells", 25)) eff2 = eff2.replace("Atomic Hydrogen", "shRNA base")
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -32908,24 +32987,21 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[21].base.pow(player.tokens.buyables[21])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[21]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 21)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[21]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[21].effect) + " to Deuterium</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 21)) + " Tokens</b><br>"
+                                
+                                        if (hasMilestone("cells", 24)) eff2 = eff2.replace("Deuterium", "Stem Cell")
+                                        if (hasUpgrade("t", 62)) eff2 = eff2.replace("ll", "lls and Cells")
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[21].base, 3) + "^x"
 
-                                if (hasMilestone("cells", 24)) eff2 = eff2.replace("Deuterium", "Stem Cell")
-                                if (hasUpgrade("t", 62)) eff2 = eff2.replace("ll", "lls and Cells")
-                                
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -32968,22 +33044,20 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[22].base.pow(player.tokens.buyables[22])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[22]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 22)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x"
-                                if (hasMilestone("cells", 39)) eff2 = eff2.replace("Carbon", "𝛾 → ∂β base")
-                                
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[22].effect) + " to Carbon</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 22)) + " Tokens</b><br>"
+                                        
+                                        if (hasMilestone("cells", 39)) eff2 = eff2.replace("Carbon", "𝛾 → ∂β base")
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = format(tmp.tokens.buyables[22].base, 3) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33019,21 +33093,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[23].base.pow(player.tokens.buyables[23])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[23]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[23]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[23].effect) + " to Oxygen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 23)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[23].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33073,21 +33144,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[31].base.pow(player.tokens.buyables[31])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[31]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[31]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[31].effect) + " to A Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 31)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[31].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33121,21 +33189,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[32].base.pow(player.tokens.buyables[32])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[32]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[32]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[32].effect) + " to B Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 32)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[32].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33171,21 +33236,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[33].base.pow(player.tokens.buyables[33])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[33]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 33)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[33]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[33].effect) + " to Color Production</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 33)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[33].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33238,21 +33300,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[41].base.pow(player.tokens.buyables[41])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[41]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[41]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[41].effect) + " to Life Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 41)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[41].base, 4) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33288,22 +33347,20 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[42].base.pow(player.tokens.buyables[42])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[42]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 42)) + " Tokens</b><br>"
-                                let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x"
-                                if (hasMilestone("cells", 31)) eff2 = eff2.replace("Hydrogen", "crRNA")
-                                
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[42]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[42].effect) + " to Hydrogen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 42)) + " Tokens</b><br>"
+                                        
+                                        if (hasMilestone("cells", 31)) eff2 = eff2.replace("Hydrogen", "crRNA")
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = format(tmp.tokens.buyables[42].base, 3) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33336,21 +33393,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[43].base.pow(player.tokens.buyables[43])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[43]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 43)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[43]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[43].effect) + " to Atomic Hydrogen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 43)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[43].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33383,21 +33437,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[51].base.pow(player.tokens.buyables[51])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[51]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 51)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[51]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[51].effect) + " to Deuterium</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 51)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[51].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33433,21 +33484,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[52].base.pow(player.tokens.buyables[52])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[52]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 52)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[52]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[52].effect) + " to Carbon</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 52)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[52].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33483,21 +33531,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[53].base.pow(player.tokens.buyables[53])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[53]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 53)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[53]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[53].effect) + " to Oxygen</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 53)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[53].base, 3, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33532,21 +33577,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[61].base.pow(player.tokens.buyables[61])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[61]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 61)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[61]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[61].effect) + " to A Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 61)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[61].base, 3) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33581,21 +33623,18 @@ addLayer("tokens", {
                                 return tmp.tokens.buyables[62].base.pow(player.tokens.buyables[62])
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[62]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: ^"
-                                let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 62)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[62]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: ^"
+                                        let eff2 = format(tmp.tokens.buyables[62].effect) + " to B Point</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 62)) + " Tokens</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[62].base, 3) + "^x"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33631,26 +33670,24 @@ addLayer("tokens", {
                                 return player.tokens.buyables[63].div(div).plus(1).pow(-1).sub(1).times(-.2)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[63]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 63)) + " Tokens</b><br>"
+                                if (!shiftDown) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[63]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.tokens.buyables[63].effect, 4) + " to Color Production Exponent</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("tokens", 63)) + " Tokens</b><br>"
+
+                                        if (hasMilestone("cells", 50)) eff2 = eff2.replace("Color Production Exponent", "Omnipotent base")
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = ".2-.2/(1+x/20)"
                                 if (hasUpgrade("c", 24)) eformula = eformula.replace("20", "10")
                                 if (hasUpgrade("c", 25)) eformula = eformula.replace("10", "5")
                                 if (hasUpgrade("n", 25)) eformula = eformula.replace("x/5", "x")
-                                if (hasMilestone("cells", 50)) eff2 = eff2.replace("Color Production Exponent", "Omnipotent base")
                                 if (hasMilestone("cells", 51)) eformula = "x/500"
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!shiftDown) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
@@ -33750,21 +33787,18 @@ addLayer("tokens", {
                                 return true
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[101]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.tokens.buyables[101].effect, 4) + " to Omnipotent base</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 101)) + " Token II</b><br>"
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[101]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.tokens.buyables[101].effect, 4) + " to Omnipotent base</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 101)) + " Token II</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(1+C)<sup>.5</sup>/(40+R)*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -33814,24 +33848,19 @@ addLayer("tokens", {
                                 return true
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[102]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to Stem Cell gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 102)) + " Token II</b><br>"
-                                let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
-                                if (hasUpgrade("t", 134)) {
-                                        eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + eformula.slice(0,29) + ")" + eformula.slice(29,)
-                                }
-
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
                                 if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[102]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[102].effect, 4) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 102)) + " Token II</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
+
+                                let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
+                                if (hasUpgrade("t", 134)) eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + eformula.slice(0,29) + ")" + eformula.slice(29,)
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -33871,21 +33900,18 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 45)
                         },
                         display(){
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[111]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.tokens.buyables[111].effect, 4) + " to Tissue effect exponent</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 111)) + " Token II</b><br>"
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[111]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.tokens.buyables[111].effect, 4) + " to Tissue effect exponent</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 111)) + " Token II</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -33942,23 +33968,20 @@ addLayer("tokens", {
                         display(){
                                 if (!player.tokens.tokens2Unl.includes(112)) return "<br>You need 5e13435 Cells to unlock this buyable"
 
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[112]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: -"
-                                let eff2 = format(tmp.tokens.buyables[112].effect, 4) + " to effective Tokens</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 112)) + " Token II</b><br>"
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[112]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: -"
+                                        let eff2 = format(tmp.tokens.buyables[112].effect, 4) + " to effective Tokens</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 112)) + " Token II</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = format(tmp.tokens.buyables[112].coefficient)
                                 eformula += "(C<sup>.8</sup>-R<sup>.5</sup>)*x<br>" 
                                 eformula += format(tmp.tokens.buyables[112].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -34009,22 +34032,19 @@ addLayer("tokens", {
                         display(){
                                 if (!player.tokens.tokens2Unl.includes(121)) return "<br>You need 1e30400 Cells to unlock this buyable"
 
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[121]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: +"
-                                let eff2 = format(tmp.tokens.buyables[121].effect, 4) + " to Token tetrational divider</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 121)) + " Token II</b><br>"
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[121]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: +"
+                                        let eff2 = format(tmp.tokens.buyables[121].effect, 4) + " to Token tetrational divider</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 121)) + " Token II</b><br>"
+                                        
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "2C<sup>.6</sup>(100+C)/(50+R)*x<br>" 
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -34075,22 +34095,19 @@ addLayer("tokens", {
                         display(){
                                 if (!player.tokens.tokens2Unl.includes(122)) return "<br>You need 1e30942 Cells to unlock this buyable"
                                 
-                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[122]) + "</b><br>"
-                                let eff1 = "<b><h2>Effect</h2>: *"
-                                let eff2 = format(tmp.tokens.buyables[122].effect, 4) + " to Tissue gain</b><br>"
-                                let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 122)) + " Token II</b><br>"
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[122]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.tokens.buyables[122].effect, 4) + " to Tissue gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 122)) + " Token II</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
                                 let eformula = "(100+30C)/(20+R)^x<br>" 
                                 eformula += format(tmp.tokens.buyables[122].base, 4) + "^x" 
                                 
-                                let ef1 = "<b><h2>Effect formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
-
-                                if (!player.shiftAlias) {
-                                        let end = "Shift to see details"
-                                        let start = lvl + eff1 + eff2 + cost
-                                        return br + start + end
-                                }
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
@@ -34122,9 +34139,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -34146,9 +34161,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -34174,9 +34187,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193)) + " Cells</b><br>"
                                 let eformula = "10^10^((4+x/" + formatWhole(tmp.tokens.buyables[193].div) + "))"
                                 
-                                let ef1 = "<b><h2>Cost formula</h2>:<br>"
-                                let ef2 = "</b><br>"
-                                let allEff = ef1 + eformula + ef2
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let start = lvl + cost
                                 return br + start + allEff
@@ -35631,8 +35642,3 @@ addLayer("tokens", {
                 if (player.extremeMode) layers.sci.doReset("tokens")
         },
 })
-
-
-
-
-

@@ -634,7 +634,8 @@ function loadVue() {
 		<div class="savePopup" v-if="!(!player.saveMenuOpen)">
 			<div class="savePopupBlocker" onclick="player.saveMenuOpen = false;"></div>
 			<div class="savePopup-content">
-				(Click anywhere outside this popup to make it disappear)
+				Click anywhere outside this popup to make it disappear.
+				<div v-if="!options.autosave">Note that changing any save in any way will save the game.</div>
 				<div class="upgRow" style="width: 100%;" v-for="(data, name) in allSaves" v-if="name!='set' && data!==undefined">
 					<div v-bind:class="{ activeSave: (allSaves.set==name), widthLock: true }">{{name}}</div>
 					<button v-on:click="save(); loadSave(name);" class="savePopupBtn can">Load</button>

@@ -396,18 +396,19 @@ function runInterval(){
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
 	let trueDiff = diff
-	if (!paused && !player.paused) {
-		if (player.offTime !== undefined) {
-			if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
-			if (player.offTime.remain > 0) {
-				let offlineDiff = Math.max(player.offTime.remain / 10, diff)
-				player.offTime.remain -= offlineDiff
-				diff += offlineDiff
-			}
-			if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
+
+	if (player.offTime !== undefined) {
+		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
+		if (player.offTime.remain > 0) {
+			let offlineDiff = Math.max(player.offTime.remain / 10, diff)
+			player.offTime.remain -= offlineDiff
+			diff += offlineDiff
 		}
-	} else diff = 0
+		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
+	}
+	if (paused || player.paused) diff = 0
 	if (player.devSpeed != undefined) diff *= player.devSpeed
+	
 	player.time = now
 	player.shiftAlias = shiftDown
 	player.controlAlias = controlDown

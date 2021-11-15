@@ -73,7 +73,7 @@ function deleteSave(name) {
 	resetSaveMenu()
 }
 
-function newSave() {
+function newSave(mode) {
 	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
@@ -86,7 +86,18 @@ function newSave() {
 		alert("这个名字太长了！")
 		return
 	} else {
-		allSaves[newName] = getStartPlayer()
+		startPlayer = getStartPlayer()
+		if (mode == "easy") startPlayer.easyMode = true 
+		if (mode == "hard") {
+			startPlayer.hardMode = true
+			startPlayer.hardFromBeginning = true
+		}
+		if (mode == "extreme") {
+			startPlayer.extremeMode = true
+			startPlayer.extremeFromBeginning = true
+		}
+
+		allSaves[newName] = startPlayer
 		loadSave(newName)
 	}
 }
