@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.173",
+	num: "1.178.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,75 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return hasChallenge("l", 62)
+	if (player.extremeMode) return hasChallenge("l", 102)
 	return player.or.total.gt(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.173)<br><br>
+		Reaching the endgame screen (updated as of v1.178.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.178.1</h3><br>
+		- Made the second row of Atomic Hydrogen and Deuterium upgrades display that they need coin upgrades.<br>
+		- Added a custom save.<br>
+		- Made changing modes ask you if you want to create a new save.<br>
+		- Various wording fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.178</h3><br>
+		- Balanced until the second set of minigames unlocked.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.177</h3><br>
+		- Balanced until 5 cell resets.<br>
+		- Various extreme mode changes.<br>
+		- Various wording and other small changes.<br>
+	<br><h3 style='color: #CC0000'>v1.176</h3><br>
+		- Added 13 gems.<br>
+		- Balanced until Cells unlock.<br>
+		- Various extreme mode changes.<br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+		- Added two custom saves.<br>
+		- Various wording changes.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.175.2</h3><br>
+		- Balanced until 1e26 DNA Science.<br>
+		- Added a gem.<br>
+	<br><h3 style='color: #CC0000'>v1.175.1</h3><br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+		- Balanced until 5e23 DNA Science.<br>
+	<br><h3 style='color: #CC0000'>v1.175</h3><br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+		- Added two gems.<br>
+		- Balanced until 8 Topoisomerase.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.174.4</h3><br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+		- Added a gem.<br>
+		- Various wording fixes.<br>
+		- Balanced until C76 Gems.<br>
+	<br><h3 style='color: #CC0000'>v1.174.3</h3><br>
+	 	- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.174.2</h3><br>
+		- Added DNA Science.<br>
+		- Added a DNA Science upgrade.<br>
+		- Added a DNA Science buyable.<br>
+	<br><h3 style='color: #CC0000'>v1.174.1</h3><br>
+		- Balanced until C75 Gems.<br>
+		- Added six gems.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.174</h3><br>
+		- Balanced until C57 Gems.<br>
+		- Added five gems.<br>
+		- Various extreme mode changes.<br>
+		- Various rewording changes.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.173</h3><br>
 		- Balanced until Anti-Phi.<br>
 		- Various extreme mode changes.<br>
@@ -1595,8 +1651,8 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
-		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
+		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
@@ -1733,8 +1789,14 @@ function enterHardMode(){
 	if (player.extremeMode) {
 		if (!confirm("您已经处于极限模式，不建议这样做。" + s)) return 
 	}
-	player.hardMode = true
-	if (player.h.best.lt(10)) player.hardFromBeginning = true
+	if (confirm("Would you like to apply that to this save [cancel] or create a new save [okay]?")) {
+		// this means you said okay so create a new save
+		newSave("hard")
+	} else {
+		// apply to this save
+		player.hardMode = true
+		if (player.h.best.lt(10) && !player.o.unlocked && !player.c.unlocked) player.hardFromBeginning = true
+	}
 }
 
 function enterExtremeMode(){
@@ -1743,14 +1805,26 @@ function enterExtremeMode(){
 	if (player.hardmode) {
 		if (!confirm("您已经处于困难模式，不建议这样做。" + s)) return 
 	}
-	player.extremeMode = true
-	if (player.h.best.lt(10)) player.hardFromBeginning = true
+	if (confirm("Would you like to apply that to this save [cancel] or create a new save [okay]?")) {
+		// this means you said okay so create a new save
+		newSave("extreme")
+	} else {
+		// apply to this save
+		player.extremeMode = true
+		if (player.h.best.lt(10) && !player.o.unlocked && !player.c.unlocked) player.extremeFromBeginning = true
+	}
 }
 
 function enterEasyMode(){
 	let s = "您确定要进入简单模式吗？ 这不能被撤消。"
 	if (!confirm(s)) return 
-	player.easyMode = true
+	if (confirm("Would you like to apply that to this save [cancel] or create a new save [okay]?")) {
+		// this means you said okay so create a new save
+		newSave("easy")
+	} else {
+		// apply to this save
+		player.easyMode = true
+	}
 }
 
 function toggleArrowHotkeys(){

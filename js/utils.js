@@ -17,6 +17,7 @@ function combineStrings(l){
 // ***************************
 
 function improveName(s){
+	if (s == "dna_science") return "DNA Science"
 	x = s.split("_")
 	l = x.length
 	ret = ""
