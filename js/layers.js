@@ -5147,7 +5147,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXI"
                         },
                         description(){
-                                return "Remove Squeeze base cost"
+                                return "Squeeze cost exponent is 1.09"
                         },
                         cost:() => new Decimal("3e1330"),
                         currencyLocation:() => player.sci.dna_science,
@@ -5156,6 +5156,43 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 535)
                         }, // hasUpgrade("sci", 541)
+                },
+                542: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXII"
+                        },
+                        description(){
+                                if (player.shiftAlias) return "Softcapped at 1e100 in challenges<br>x -> log10(x)<sup>50</sup>"
+                                return "Each DNA Science buyable after 650 doubles Stem Cell gain<br>Currently: " + format(tmp.sci.upgrades[542].effect)
+                        },
+                        effect(){
+                                let exp = tmp.sci.buyables.dnaBuyablesTotal.sub(650).max(1)
+                                let ret = Decimal.pow(2, exp)
+                                if (ret.gt(1e100) && player.cells.activeChallenge) ret = ret.log10().pow(50)
+                                return ret
+                        },
+                        cost:() => new Decimal("1e3796"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 541)
+                        }, // hasUpgrade("sci", 542)
+                },
+                543: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXIII"
+                        },
+                        description(){
+                                return "Uncap DNA Sci XVIII and the number of upgrades multiplies Stem Cell gain"
+                        },
+                        cost:() => new Decimal("1e3944"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 542)
+                        }, // hasUpgrade("sci", 543)
                 },
         },
         buyables: {
@@ -6548,7 +6585,11 @@ addLayer("sci", {
                         base(){
                                 let ret = decimalOne
 
-                                if (hasUpgrade("sci", 533)) ret = ret.plus(.04 * Math.min(5, player.cells.challenges[12]))
+                                if (hasUpgrade("sci", 533)) {
+                                        let lvls = player.cells.challenges[12]
+                                        if (!hasUpgrade("sci", 543)) lvls = Math.min(5, lvls)
+                                        ret = ret.plus(.04 * lvls)
+                                }
 
                                 return ret
                         },
@@ -11716,6 +11757,9 @@ addLayer("mu", {
                                                 if (hasChallenge("l", 101))     diff *= 50
                                                 if (hasChallenge("l", 102))     diff *= 50
                                                 if (hasUpgrade("sci", 534))     diff *= 100
+                                                if (hasMilestone("cells", 49) && player.extremeMode) {
+                                                                                diff *= 100
+                                                }
                                                                                 diff *= layers.l.grid.getGemEffect(702).toNumber()
 
                                                 diff = Math.floor(diff)
@@ -19962,6 +20006,8 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 534))     ret = ret.times(tmp.sci.buyables[522].effect.max(1))
                         if (hasUpgrade("sci", 535))     ret = ret.times(tmp.sci.buyables[523].effect.max(1))
                         if (hasUpgrade("sci", 535))     ret = ret.times(Decimal.pow(1.01, tmp.sci.buyables.dnaBuyablesTotal))
+                        if (hasUpgrade("sci", 542))     ret = ret.times(tmp.sci.upgrades[542].effect)
+                        if (hasUpgrade("sci", 543))     ret = ret.times(tmp.sci.upgrades.dnaUpgradesLength)
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
@@ -21721,24 +21767,27 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 48)
                 49: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e9,768 Stem Cells"
                                 return "1e11,666 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e11666")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e9768" : "1e11666")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Secondary base is (1+x)<sup>3</sup> as opposed to 1+x<sup>2</sup> and bulk 100x N → Δµ but nullify µ III."
                                 return "Reward: Secondary base is (1+x)<sup>3</sup> as opposed to 1+x<sup>2</sup> but nullify µ III."
                         },
                 }, // hasMilestone("cells", 49)
                 50: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e10,527 Stem Cells"
                                 return "1e12,127 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e12127")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e10527" : "1e12127")
                         },
                         unlocked(){
                                 return true
@@ -21749,10 +21798,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 50)
                 51: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e11,819 Stem Cells"
                                 return "1e15,500 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e15500")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e11819" : "1e15500")
                         },
                         unlocked(){
                                 return true
