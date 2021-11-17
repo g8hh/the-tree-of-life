@@ -19929,7 +19929,8 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.cells.buyables[12].effect)
                                                         ret = ret.times(tmp.cells.buyables[13].effect)
                                                         ret = ret.times(tmp.cells.buyables[21].effect)
-                                                        //ret = ret.times(tmp.cells.buyables[22].effect)
+                                                        ret = ret.times(tmp.cells.buyables[22].effect)
+                                                        //ret = ret.times(tmp.cells.buyables[23].effect)
                         if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
                         if (hasMilestone("cells", 12)) {
                                 let exp = player.extremeMode ? 2.5 : 1
@@ -22595,6 +22596,72 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 152)) cost2 = "1e60^(x<sup>1.05</sup>)"
                                 if (hasUpgrade("t", 153)) cost2 = cost2.replace("60", "50")
                                 if (hasUpgrade("t", 154)) cost2 = cost2.replace("50", "40")
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                22: {
+                        title: "Oligopotent",
+                        cost(){
+                                let amt = getBuyableAmount("cells", 22)
+                                let exp = amt.pow(1.05)
+                                let base = new Decimal(1e100)
+                                let init = new Decimal("1e5283e3")
+                                return init.times(base.pow(exp))
+                        },
+                        unlocked(){
+                                return player.cells.challenges[21] >= 3
+                        },
+                        canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[22].cost),
+                        maxAfford(){
+                                let init = new Decimal("1e5283e3")
+                                let pts = player.cells.stem_cells.points
+                                if (pts.lt(init)) return decimalZero
+                                let base = new Decimal(1e100)
+                                return pts.div(init).log(base).root(1.05).plus(1).floor()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.cells
+                                let data2 = data.stem_cells
+                                let id = 22
+
+                                let ma = tmp.cells.buyables[id].maxAfford
+                                let up = hasMilestone("t", 23) || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
+                                data.buyables[id] = data.buyables[id].plus(up)
+                                if (!hasMilestone("t", 23)) {
+                                        data2.points = data2.points.sub(tmp.cells.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                if (player.cells.challenges[21] >= 4 && inChallenge("cells", 21)) return decimalOne
+                                let init = new Decimal(player.cells.challenges[21]).plus(1)
+
+                                return init
+                        },
+                        effect(){
+                                let amt = getBuyableAmount("cells", 22)
+                                return tmp.cells.buyables[22].base.pow(amt)
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[22]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.cells.buyables[22].effect) + " to Stem Cell gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 22)) + " Stem Cells</b><br>"
+
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "(Tertiary Completions + 1)^x<br>" + format(tmp.cells.buyables[22].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e5,283,000*1e100^(x<sup>1.05</sup>)" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -25300,6 +25367,16 @@ addLayer("or", {
                 passiveTime: 0,
                 milestone2Ever: false,
                 milestone3Ever: false,
+                oxygenated_blood: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
+                deoxygenated_blood: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
         }},
         color: "#F8C4F0",
         branches: [],
@@ -25470,6 +25547,8 @@ addLayer("or", {
 
                 if (!data.milestone2Ever) data.milestone2Ever = hasMilestone("or", 2)
                 if (!data.milestone3Ever) data.milestone3Ever = hasMilestone("or", 3)
+
+                if (player.cells.challenges[21] >= 3) layers.or.heart.update(diff)
         },
         row: 2, 
         prestigeButtonText(){
@@ -25481,6 +25560,41 @@ addLayer("or", {
         layerShown(){
                 if (tmp.or.deactivated) return false
                 return hasUpgrade("t", 155) || player.or.unlocked
+        },
+        heart: {
+                update(diff){
+                        let beatingIn = tmp.or.bars.heart.beatingIn
+                        let data = player.or
+                        let dbData = data.deoxygenated_blood
+                        let obData = data.oxygenated_blood
+
+                        if (beatingIn) { // gain OB
+                                let gain = tmp.or.heart.getOBGain
+                                let netgain = gain.times(diff)
+                                obData.points = obData.points.plus(netgain)
+                                obData.total = obData.total.plus(netgain)
+                                
+                        } else { // gain DB
+                                let gain = tmp.or.heart.getDBGain
+                                let netgain = gain.times(diff)
+                                dbData.points = dbData.points.plus(netgain)
+                                dbData.total = dbData.total.plus(netgain)
+                        }
+                        dbData.best = dbData.best.max(dbData.points)
+                        obData.best = obData.best.max(obData.points)
+                },
+                getOBGain(){ // ob gain oxygenated gain obgain oxygenatedgain
+                        let ret = decimalOne
+
+                        if (player.extremeMode) ret = ret.pow(.75)
+                        return ret
+                },
+                getDBGain(){ // db gain deoxygenated gain dbgain deoxygenatedgain
+                        let ret = decimalOne
+
+                        if (player.extremeMode) ret = ret.pow(.75)
+                        return ret
+                },
         },
         upgrades: {
                 rows: 10,
@@ -25689,6 +25803,71 @@ addLayer("or", {
                         },
                 }, // hasMilestone("or", 13)
         },
+        bars: {
+                heart: {
+                        direction: RIGHT,
+                        width: 600,
+                        height: 60,
+                        progress(){
+                                return Math.sin(player.timePlayed / 30 * Math.PI) ** 2
+                        },
+                        beatingIn(){
+                                return Math.sin(player.timePlayed / 30 * Math.PI * 2) > 0
+                        },
+                        display(){
+                                return tmp.or.bars.heart.beatingIn ? "Heart beating in" : "Heart beating out"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        fillStyle(){
+                                return {
+                                        "background": "#94B938"
+                                }
+                        },
+                        textStyle(){
+                                return {
+                                        "color": "#940038"
+                                }
+                        },
+                }
+        },
+        microtabs: {
+                organ_content: {
+                        "Heart": { 
+                                content: [
+                                        ["bar", "heart"],
+                                        ["display-text", 
+                                                function (){
+                                                        if (player.or.deoxygenated_blood.points.gt(1e100)) return ""
+                                                        let a = "When your heart is beating in you gain " + makeGreen("Oxygenated Blood") 
+                                                        a += " (" + makeGreen("OB") + ") and while your heart is beating out you gain "
+                                                        return a + makeBlue("Deoxygenated Blood") + " (" + makeBlue("DB") + ")"
+                                                }
+                                        ],
+                                        "secondary-display-blood",
+                                        ["display-text", 
+                                                function (){
+                                                        let a = "You can potentially gain " + format(tmp.or.heart.getOBGain)
+                                                        a += " " + makeGreen("OB") + " and " + format(tmp.or.heart.getDBGain)
+                                                        return a + " " + makeBlue("DB") + " per second"
+                                                }
+                                        ],
+                                        ["upgrades", [10, 11, 12, 13, 14]],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Liver": { 
+                                content: [
+                                ],
+                                unlocked(){
+                                        return false
+                                },
+                        },
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: ["main-display",
@@ -25707,9 +25886,17 @@ addLayer("or", {
                                         return "You have done " + formatWhole(player.or.times) + " Organ resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Organs": {
+                        content: ["main-display",
+                                ["microtabs", "organ_content"],
+                        ],
+                        unlocked(){
+                                return player.cells.challenges[21] >= 3
                         },
                 },
                 "Info": {

@@ -38,6 +38,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a custom save.<br>
 		- Balanced extreme mode until 1e4927 DNA Science.<br>
 		- Added two DNA Science upgrades.<br>
+		- Initially added Heart.<br>
+		- Added a Stem Cell buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.186</h3><br>
 		- Added a custom save.<br>
 		- Various extreme mode changes.<br>
