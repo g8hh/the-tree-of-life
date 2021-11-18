@@ -1895,7 +1895,7 @@ addLayer("h", {
                                                 if (hasMilestone("mu", 2)) return ""
                                                 if (player.shiftAlias) {
                                                         t1 = tmp.h.deuterium
-                                                        return "Your best Deuterium is " + format(player.h.deuterium.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Deuterium per second"
+                                                        return "Your best Deuterium is " + format(player.h.deuterium.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(player.h.deuterium.points))) + " Deuterium per second"
                                                 }
                                                 return "You are gaining " + format(tmp.h.deuterium.getResetGain) + " Deuterium per second"
                                         }
@@ -1922,7 +1922,7 @@ addLayer("h", {
                                                 if (hasMilestone("mu", 2)) return "" 
                                                 if (player.shiftAlias) {
                                                         t1 = tmp.h.atomic_hydrogen
-                                                        return "Your best Atomic Hydrogen is " + format(player.h.atomic_hydrogen.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(p1.points))) + " Atomic Hydrogen per second"
+                                                        return "Your best Atomic Hydrogen is " + format(player.h.atomic_hydrogen.best) + " and you are netting " + format(t1.getResetGain.sub(t1.getLossRate.times(player.h.atomic_hydrogen.points))) + " Atomic Hydrogen per second"
                                                 }
                                                 return "You are gaining " + format(tmp.h.atomic_hydrogen.getResetGain) + " Atomic Hydrogen per second"
                                         }
@@ -19674,6 +19674,9 @@ addLayer("cells", {
                 if (data.currentMinigame != undefined) data.timeInMinigame += diff
                 if (data.timeInMinigame > layers.cells.getMinigameMaximum()) {
                         layers.cells.exitMinigame()
+                        tmp.cells.buyables[411].unlocked = false
+                        tmp.cells.buyables[412].unlocked = false
+                        tmp.cells.buyables[413].unlocked = false // to prevent autobuying
                         // do stuff for exiting
                         data.currentMinigame = undefined
                         if (["Iota", "Kappa", "Mu", "Lambda"].includes(player.subtabs.cells.mainTabs)) {
