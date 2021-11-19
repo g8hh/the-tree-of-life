@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.187",
+	num: "1.188",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,25 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.sci.dna_science.points.gte("1e4927")
-	return player.cells.challenges[21] >= 3
+	return player.or.deoxygenated_blood.points.gte(5e11)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.187)<br><br>
+		Reaching the endgame screen (updated as of v1.188)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.188</h3><br>
+		- Balanced until 5e11 Deoxygenated Blood.<br>
+		- Added thirteen Heart upgrades.<br>
+		- Added a custom save.<br>
+		- Made green letters purple for better visibility.<br>
+		- Various code clean up and display fixes.<br>
+		- Added 1 to point gain if you have Cells unlocked (tell me why for bonus points)!<br>
 	<br><h3 style='color: #CC0000'>v1.187</h3><br>
 		- Various extreme mode changes.<br>
 		- Added a custom save.<br>

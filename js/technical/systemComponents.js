@@ -213,11 +213,14 @@ var systemComponents = {
 		<span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><span v-html="getDescriptionFromKey(key)"></span><br></span>
 		<br><br>
 
-		<span v-if="player.showBuiltInSaves">
+		<h2 style='color: #7D5D9E'>Acknowledgements</h2><br>
+		Thank you to <b>Jacorb</b> for letting me use his multi save code!<br>
+		Thank you to <b>Digiprime</b> for the idea for the Organ layer!<br>
+
+		<br><br><span v-if="player.showBuiltInSaves">
 			<h2 style='color: #00FF99'>Built in saves</h2><br>
 			To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
-			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br>
-			<bdi style='color: #664949'>Consider hard resetting before importing the save.</bdi><br><br>
+			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
 			<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
 		</span>
 		<br><br>
