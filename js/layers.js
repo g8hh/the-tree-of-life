@@ -26467,7 +26467,7 @@ addLayer("or", {
                         for (i in resetIds){
                                 let id = resetIds[i]
                                 d.buyables[id] = decimalZero
-                                if (id < 70) d.best_buyables[id] = decimalZero
+                                if (resetbbids.includes(id)) d.best_buyables[id] = decimalZero
                         }
 
                         player.subtabs.tokens.mainTabs = "Milestones"

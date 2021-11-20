@@ -39,7 +39,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a Organ upgrade.<br>
 		- Added two Organ milestones.<br>
 		- Added three rows of achievements.<br>
-		- Various display changes, display fixes and code cleanup.<br>
+		- Various display changes, display fixes, bug fixes, and code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.188</h3><br>
 		- Balanced until 5e11 Deoxygenated Blood.<br>
 		- Added thirteen Heart upgrades.<br>
