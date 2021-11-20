@@ -1954,6 +1954,7 @@ addLayer("h", {
         },
         doReset(layer){},
         deactivated(){
+                if (hasUpgrade("or", 135)) return true
                 return inChallenge("l", 21) || hasChallenge("l", 21)
         },
 })
@@ -7417,6 +7418,7 @@ addLayer("c", {
         },
         doReset(layer){},
         deactivated(){
+                if (hasUpgrade("or", 135)) return true
                 return inChallenge("l", 31) || hasChallenge("l", 31)
         },
 })
@@ -7894,6 +7896,7 @@ addLayer("o", {
         },
         doReset(layer){},
         deactivated(){
+                if (hasUpgrade("or", 135)) return true
                 return inChallenge("l", 32) || hasChallenge("l", 32)
         },
 })
@@ -9203,6 +9206,7 @@ addLayer("n", {
                 // make the display update
         },
         deactivated(){
+                if (hasUpgrade("or", 135)) return true
                 return inChallenge("l", 41) || hasChallenge("l", 41)
         },
 })
@@ -12168,7 +12172,7 @@ addLayer("l", {
                 return Decimal.pow(2, Decimal.pow(2, v1)).pow10()
         },
         canReset(){
-                return tmp.l.getResetGain.gt(0)
+                return tmp.l.getResetGain.gt(0) && !hasUpgrade("or", 135)
         },
         effect(){
                 if (inChallenge("l", 51) || hasChallenge("l", 51)) return decimalOne
@@ -12362,6 +12366,9 @@ addLayer("l", {
                 if (tmp.l.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.l.getNextAt) + " points."
 
                 return "Reset for <b>" + formatWhole(tmp.l.getResetGain) + "</b> Lives" + b
+        },
+        deactivated(){
+                return hasUpgrade("or", 135)
         },
         layerShown(){
                 if (tmp.l.deactivated) return false
@@ -14530,6 +14537,7 @@ addLayer("l", {
                                 return a + br + b + c + br + d
                         },
                         unlocked(){
+                                if (hasUpgrade("or", 134)) return false
                                 return player.l.challenges[11] >= 110 || player.a.unlocked
                         },
                         countsAs: [11],
@@ -15352,6 +15360,7 @@ addLayer("l", {
                 getGemEffect(id) {
                         let g = player.l.grid[id].gems.floor()
                         if (g.gt(1e3)) g = g.min(1e4).log10().plus(7).pow(3) 
+                        if (hasUpgrade("or", 134)) g = decimalZero 
                         if (player.extremeMode) {
                                 if (GEM_EFFECT_FORMULAS_EXTREME[id] == undefined) return decimalZero
                                 return GEM_EFFECT_FORMULAS_EXTREME[id](g)  
@@ -15865,6 +15874,7 @@ addLayer("a", {
                 return ret.floor()
         },
         getBaseGain(){
+                if (hasUpgrade("or", 135)) return decimalOne
                 let pts = player.l.points
                 let init = pts.max(10).log(2).sub(player.extremeMode ? 1300 : 1368)
                 if (init.lt(512)) return decimalZero
@@ -17477,7 +17487,8 @@ addLayer("a", {
                                 if (hasChallenge("l", 82) && !hasMilestone("or", 15)) {
                                                                 ret = ret.plus(.0001)
                                 }
-                                if (layers.l.grid.getGemEffect(705)) {
+                                if (hasUpgrade("or", 134))      ret = ret.plus(.0002)
+                                else if (layers.l.grid.getGemEffect(705)) {
                                                                 ret = ret.plus(.0001)
                                 }
                                 if (hasMilestone("d", 21))      ret = ret.plus(.0001)
@@ -18615,7 +18626,7 @@ addLayer("d", {
                                                 ret = ret.times(Decimal.pow(base, player.d.upgrades.length))
                 }       
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
-                                                ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000"))
+                if (!hasUpgrade("or", 133))     ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000"))
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
                 if (hasMilestone("d", 18)) {
                         let base = 2
@@ -22228,6 +22239,7 @@ addLayer("cells", {
                                 let exp = new Decimal(167)
 
                                 let c = player.cells.challenges[21]
+                                if (c >= 3) c ++
 
                                 exp = exp.times(Decimal.pow(5, c)).plus(6508)
 
@@ -25472,6 +25484,7 @@ addLayer("or", {
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("or", 124))      ret = ret.times(tmp.or.upgrades[124].effect)
                 if (hasUpgrade("or", 131))      ret = ret.times(player.or.milestones.length)
+                if (hasUpgrade("or", 135))      ret = ret.times(player.or.upgrades.length)
 
                 return ret.max(1)
         },
@@ -25731,6 +25744,18 @@ addLayer("or", {
                         unlocked(){
                                 return hasMilestone("or", 14)
                         }, // hasUpgrade("or", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs III"
+                        },
+                        description(){
+                                return "Oligopotent cost base is 1e90 [not yet, will cost 17e6]"
+                        },
+                        cost:() => new Decimal(17e16),
+                        unlocked(){
+                                return hasMilestone("or", 135)
+                        }, // hasUpgrade("or", 13)
                 },
                 101: {
                         title(){
@@ -26027,7 +26052,7 @@ addLayer("or", {
                 },
                 132: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>XVII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XVII"
                         },
                         description(){
                                 return "Per upgrade you have three less tokens for prestige purposes but disable C33, C54, C64, C17, C73, and C18 gems"
@@ -26041,6 +26066,66 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 131)
                         }, // hasUpgrade("or", 132)
+                },
+                133: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XVIII"
+                        },
+                        description(){
+                                return "Down Quark base becomes Tokens<sup>C</sup> but disable C61 Gems"
+                        },
+                        cost(){
+                                return new Decimal(5e18)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 132)
+                        }, // hasUpgrade("or", 133)
+                },
+                134: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XIX"
+                        },
+                        description(){
+                                return "Add .0002 to tRNA's base but remove Gems, Customizable, and Selection"
+                        },
+                        cost(){
+                                return new Decimal(1e19)
+                        },
+                        onPurchase(){
+                                player.l.activeChallenge = null
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 133)
+                        }, // hasUpgrade("or", 134)
+                },
+                135: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XX"
+                        },
+                        description(){
+                                if (player.shiftAlias) return "<sup>*</sup>Base Amino Acid gain is 1"
+                                return "The number of upgrades multiplies Organ gain but remove Lives<sup>*</sup>"
+                        },
+                        cost(){
+                                return new Decimal(2e22)
+                        },
+                        onPurchase(){
+                                player.l.activeChallenge = null
+                                tmp.l.deactivated = true
+                                tmp.l.layerShown = false
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 134)
+                        }, // hasUpgrade("or", 135)
                 },
         },
         milestones: {
@@ -33954,6 +34039,7 @@ addLayer("mini", {
                 bpts.best = decimalZero
         },
         deactivated(){
+                if (hasUpgrade("or", 135)) return true
                 return inChallenge("l", 22) || hasChallenge("l", 22)
         },
 })
@@ -35399,6 +35485,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
+                                if (hasUpgrade("or", 133)) return player.tokens.total.max(1).pow(c)
                                 let ret = c.sub(r.sqrt()).times(50).plus(player.tokens.total).max(1)
                                 if (hasMilestone("or", 9)) ret = player.tokens.total.max(1).pow(c.plus(1).sqrt())
                                 if (hasUpgrade("t", 134)) ret = ret.times(tmp.tokens.buyables[102].coefficient)
@@ -35425,9 +35512,13 @@ addLayer("tokens", {
                                 }
 
                                 let eformula = "(Tokens+50(C-R<sup>.5</sup>))<sup>x</sup><br>" + format(tmp.tokens.buyables[102].base, 4) + "^x" 
-                                if (hasMilestone("or", 9)) eformula = eformula.replace("+50(C-R<sup>.5</sup>)", "<sup>sqrt(1+C)</sup>")
-                                let sliced = eformula.split("<sup>x</sup>")
-                                if (hasUpgrade("t", 134)) eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + sliced[0] + ")<sup>x</sup>" + sliced[1]
+                                if (!hasUpgrade("or", 133)) {
+                                        if (hasMilestone("or", 9)) eformula = eformula.replace("+50(C-R<sup>.5</sup>)", "<sup>sqrt(1+C)</sup>")
+                                        let sliced = eformula.split("<sup>x</sup>")
+                                        if (hasUpgrade("t", 134)) eformula = "(" + format(tmp.tokens.buyables[102].coefficient) + sliced[0] + ")<sup>x</sup>" + sliced[1]
+                                } else { // hasUpgrade("or", 133) = true
+                                        eformula = eformula.replace("(Tokens+50(C-R<sup>.5</sup>))", "(Tokens<sup>C</sup>)")
+                                }
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.189",
+	num: "1.190",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.sci.dna_science.points.gte("1e4927")
-	return player.or.deoxygenated_blood.points.gte(3e18)
+	return player.or.deoxygenated_blood.points.gte(5e22)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,6 +33,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.190</h3><br>
+		- Balanced until 5e22 Deoxygenated Blood.<br>
+		- Added three Heart upgrades.<br>
+		- Added an Organ upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.189</h3><br>
 		- Balanced until 3e18 Deoxygenated Blood.<br>
 		- Added four Heart upgrades.<br>
