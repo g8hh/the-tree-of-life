@@ -80,15 +80,17 @@ function getPointExponentiation(){
                                         exp = exp.times(c34base.pow(getBuyableAmount("mu", 32)))
                 let c65base = layers.l.grid.getGemEffect(605)
                                         exp = exp.times(c65base.pow(getBuyableAmount("l", 11)))
-                let c73base = layers.l.grid.getGemEffect(703)
+                if (!hasUpgrade("or", 132)) {
+                        let c73base = layers.l.grid.getGemEffect(703)
                                         exp = exp.times(c73base.pow(getBuyableAmount("a", 21)))
+                }
                 let c38base = layers.l.grid.getGemEffect(308)
                                         exp = exp.times(c38base.pow(getBuyableAmount("l", 21)))
         } else {
                 let c34base = layers.l.grid.getGemEffect(304)
                                         exp = exp.times(c34base.pow(getBuyableAmount("l", 33)))
         }
-        if (true) {
+        if (!hasUpgrade("or", 132)) {
                 let c54base = layers.l.grid.getGemEffect(504)
                                         exp = exp.times(c54base.pow(getBuyableAmount("a", 22)))
                 let c64base = layers.l.grid.getGemEffect(604)
@@ -429,7 +431,7 @@ var GEM_EFFECT_FORMULAS_EXTREME = {
         304: (x) => x.plus(10).log10(),
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) ? 0.005 : 0), x).min(hasChallenge("l", 52) ? 1e100 : 10),
+        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) && !hasMilestone("or", 14) ? 0.005 : 0), x).min(hasChallenge("l", 52) && !hasMilestone("or", 14) ? 1e100 : 10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
         105: (x) => x.plus(10).log10().pow(2),
         205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
@@ -496,7 +498,7 @@ var GEM_EFFECT_FORMULAS = {
         304: (x) => x.pow(.8).plus(10).log10(),
         401: (x) => x.div(100),
         402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) ? 0.005 : 0), x).min(hasChallenge("l", 52) ? 1e100 : 10),
+        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) && !hasMilestone("or", 14) ? 0.005 : 0), x).min(hasChallenge("l", 52) && !hasMilestone("or", 14) ? 1e100 : 10),
         404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
         105: (x) => x.plus(10).log10(),
         205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
@@ -8940,8 +8942,7 @@ addLayer("n", {
                 challenge_content: {
                         "All": {
                                 content: [
-                                        ["challenges", [1,2,3,4,5,6,7]],
-                                        
+                                        ["challenges", [1,2,3,4,5,6,7]],  
                                 ],
                                 unlocked(){
                                         return true
@@ -8991,7 +8992,6 @@ addLayer("n", {
                                                 if (hasMilestone("n", 13)) return "You are gaining " + format(tmp.n.getResetGain, 3) + " Nitrogen per second"
                                         }
                                 ],
-
                                 "blank", 
                                 ["upgrades", [1,2,3,4,5,6,7]]],
                         unlocked(){
@@ -12085,9 +12085,9 @@ addLayer("l", {
                 let pts = player.points
                 let init = pts.max(10).log(10).log(2)
                 if (init.lt(10)) return decimalZero
-                if (init.lt(1024) && !hasChallenge("l", 51)) return decimalZero
+                if (init.lt(1024) && !(hasChallenge("l", 51) && !hasMilestone("or", 14))) return decimalZero
 
-                if (!hasChallenge("l", 51)) init = init.log(2)
+                if (!hasChallenge("l", 51) || hasMilestone("or", 14)) init = init.log(2)
 
                 return init.sub(tmp.l.getBaseSubAmount).pow(tmp.l.getGainExp)
         },
@@ -14584,6 +14584,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 121)) return makeRed("<h3>Disables Hydrogen</h3>")
                                 let a = "Dilation at 110 completions and all hydrogen content is disabled"
                                 let b = "Goal: " + (player.extremeMode ? "e1e277,340" : "e1e140,400") + " Points"
                                 let c = "Reward: Per Anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
@@ -14620,6 +14621,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 122)) return makeRed("<h3>Disables Minigames</h3>")
                                 let a = "Dilation at 110 completions, all minigame content is disabled, and subtract .02 from the Dilation exponent"
                                 let b = "Goal: e1e145,100 Points"
                                 if (player.extremeMode) b = b.replace("145,100", "275,540")
@@ -14637,6 +14639,7 @@ addLayer("l", {
                 31: {
                         name: "Anti-Carbon", 
                         reward(){
+                                if (hasUpgrade("or", 123)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14654,6 +14657,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 123)) return makeRed("<h3>Disables Carbon</h3>")
                                 let a = "Dilation at 110 completions, all carbon content is disabled, and subtract .04 from the Dilation exponent"
                                 let b = "Goal: e1e149,100 Points"
                                 let c = "Reward: Per Anti- challenge<br> add 117 to 𝛾 → ∂𝛾's exponential divider but disable carbon content"
@@ -14674,6 +14678,7 @@ addLayer("l", {
                 32: {
                         name: "Anti-Oxygen",
                         reward(){
+                                if (hasUpgrade("or", 124)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14691,6 +14696,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 124)) return makeRed("<h3>Disables Oxygen</h3>")
                                 let a = "Dilation at 110 completions, all oxygen content is disabled, and subtract .06 from the Dilation exponent"
                                 let b = "Goal: e1e151,500 Points"
                                 let c = "Reward: Per Anti- challenge<br> add .5 to DNA gain exponent but disable oxygen content"
@@ -14709,6 +14715,7 @@ addLayer("l", {
                 41: {
                         name: "Anti-Nitrogen", 
                         reward(){
+                                if (hasUpgrade("or", 125)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14726,6 +14733,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 125)) return makeRed("<h3>Disables Nitrogen</h3>")
                                 let a = "Dilation at 110 completions, all nitrogen content is disabled<sup>*</sup>, and subtract .08 from the Dilation exponent"
                                 let b = "Goal: e1e204,700 Points"
                                 if (player.extremeMode) b = b.replace("204,700", "343,565")
@@ -14742,6 +14750,7 @@ addLayer("l", {
                 42: {
                         name: "Anti-Inflammatory", 
                         reward(){
+                                if (hasMilestone("or", 14)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14759,6 +14768,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions, and subtract .1 from the Dilation exponent"
                                 let b = "Goal: e1e256,300 Points"
                                 if (player.extremeMode) b = b.replace("256,300", "379,500")
@@ -14781,6 +14791,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Nullifies Life effect</h3>")
                                 let a = "Dilation at 110 completions, nullify Life effect, and subtract .12 from the Dilation exponent"
                                 let b = "Goal: e1e267,300 Points"
                                 if (player.extremeMode) b = b.replace("267,300", "381,381")
@@ -14796,6 +14807,7 @@ addLayer("l", {
                 52: {
                         name: "Anti-Psi", 
                         reward(){
+                                if (hasMilestone("or", 14)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14813,6 +14825,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions, nullify Phosphorus effect, and subtract .14 from the Dilation exponent"
                                 let b = "Goal: e1e266,000 Points"
                                 if (player.extremeMode) b = b.replace("266,000", "368,900")
@@ -14846,6 +14859,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions and subtract .16 from the Dilation exponent"
                                 let b = "Goal: e1e274,000 Points"
                                 if (player.extremeMode) b = b.replace("274,000", "354,453")
@@ -14883,6 +14897,7 @@ addLayer("l", {
                 71: {
                         name: "Anti-Upsilon", 
                         reward(){
+                                if (hasMilestone("or", 14)) return decimalOne
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -14907,6 +14922,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions, subtract .2 from the Dilation exponent, and nullify µ effect"
                                 let b = "Goal: e1e579,200 Points"
                                 if (player.extremeMode) b = b.replace("579,200", "675,900")
@@ -14934,6 +14950,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions and subtract .22 from the Dilation exponent"
                                 let b = "Goal: e1e641,300 Points"
                                 if (player.extremeMode) b = b.replace("641,300", "698,896")
@@ -14955,6 +14972,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 14)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions and subtract .24 from the Dilation exponent"
                                 let b = "Goal: e1e701,700 Points"
                                 if (player.extremeMode) b = b.replace("701,700", "915,000")
@@ -14976,6 +14994,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Dilation at 110 completions and subtract .26 from the Dilation exponent"
                                 let b = "Goal: e1e1,989,000 Points"
                                 if (player.extremeMode) b = b.replace("989", "981")
@@ -14991,6 +15010,7 @@ addLayer("l", {
                 91: {
                         name: "Anti-Pi", 
                         reward(){
+                                if (hasUpgrade("or", 131)) return decimalZero
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -15009,6 +15029,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasUpgrade("or", 131)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Requires being in C88. Customizable and nullify µ III's effect"
                                 let b = "Goal: e1e312,100 Points"
                                 if (player.extremeMode) b = b.replace("312,100", "27,100")
@@ -15026,6 +15047,7 @@ addLayer("l", {
                 92: {
                         name: "Anti-Omicron", 
                         reward(){
+                                if (hasMilestone("or", 15)) return decimalOne
                                 let data = player.l.challenges
                                 let comps = 0
                                 let keys = Object.keys(player.l.challenges)
@@ -15044,6 +15066,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Requires being in C88. Customizable and nullify Phosphorus IV's effect"
                                 let b = "Goal: e1e397,000 Points"
                                 if (player.extremeMode) b = b.replace("397,000", "27,630")
@@ -15068,6 +15091,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^1.2"
                                 let b = "Goal: e1e396,600 Points"
                                 if (player.extremeMode) b = b.replace("396,600", "23,500")
@@ -15123,6 +15147,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Requires being in C88. Customizable and raise dilation effect ^60"
                                 let b = "Goal: e1e2,544,000 Points"
                                 let c = "Reward: Anti-Hydrogen effects DNA and Anti-Minigame effects Cells each at most ^1.5, and Anti-Carbon effect multiplies Stem Cell gain if you have over 15 Secondary completions"
@@ -15144,6 +15169,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Requires being in C88. Customizable, α → ∂𝛾 doesn't effect prior exponent dividers and raise dilation effect ^60"
                                 let b = "Goal: e1e9,949,000 Points"
                                 let c = "Reward: Anti-Inflammatory effects Visible, add .0003 to tRNA's base, and Secondary is 1e4x easier but α → ∂𝛾 doesn't effect prior exponent dividers"
@@ -15163,6 +15189,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Free!"
                                 let b = "Goal: 1 Point"
                                 let c = "Reward: Satisfaction!"
@@ -15182,6 +15209,7 @@ addLayer("l", {
                         },
                         completionLimit: 1,
                         fullDisplay(){
+                                if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
                                 let a = "Free!"
                                 let b = "Goal: 1 Point"
                                 let c = "Reward: Bliss."
@@ -15942,6 +15970,7 @@ addLayer("a", {
                 } else data.passiveTime = 0
 
                 let gainportion = layers.l.grid.getGemEffect(401)
+                if (hasUpgrade("or", 12)) gainportion = gainportion.plus(1)
                 if (!hasUpgrade("a", 63)) {
                         if (gainportion.gt(0)) {
                                 let gainAmt = tmp.a.getResetGain.times(diff).times(gainportion)
@@ -17445,7 +17474,9 @@ addLayer("a", {
                                 if (hasUpgrade("a", 55))        ret = ret.plus(.0002)
                                 if (hasUpgrade("a", 61))        ret = ret.plus(.0003)
                                 if (hasUpgrade("a", 62))        ret = ret.plus(.0004)
-                                if (hasChallenge("l", 82))      ret = ret.plus(.0001)
+                                if (hasChallenge("l", 82) && !hasMilestone("or", 15)) {
+                                                                ret = ret.plus(.0001)
+                                }
                                 if (layers.l.grid.getGemEffect(705)) {
                                                                 ret = ret.plus(.0001)
                                 }
@@ -17454,7 +17485,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 25))      ret = ret.plus(.0003)
                                 if (hasMilestone("d", 26))      ret = ret.plus(.0003)
                                 if (hasUpgrade("d", 32))        ret = ret.plus(.0004)
-                                if (layers.l.grid.getGemEffect(808)) {
+                                if (layers.l.grid.getGemEffect(808) && !hasUpgrade("or", 12)) {
                                                                 ret = ret.plus(player.extremeMode ? .0001 : .0006)
                                 }
                                 if (hasUpgrade("d", 35))        ret = ret.plus(player.extremeMode ? .0005 : .001)
@@ -17468,7 +17499,10 @@ addLayer("a", {
                                 if (hasMilestone("cells", 56))  ret = ret.plus(.0001)
                                 if (hasMilestone("cells", 57))  ret = ret.plus(.0001)
                                 if (hasMilestone("cells", 58))  ret = ret.plus(.0001)
-                                if (hasChallenge("l", 112))     ret = ret.plus(.0003)
+                                if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
+                                                                ret = ret.plus(.0003)
+                                }
+                                if (hasMilestone("or", 15))     ret = ret.plus(.0005)
                                 
                                 return ret
                         },
@@ -17543,9 +17577,10 @@ addLayer("a", {
                                 if (hasMilestone("a", 27))      ret = ret.plus(.001)
                                 if (hasUpgrade("a", 44))        ret = ret.plus(.001)
                                 if (hasMilestone("a", 35))      ret = ret.plus(.001)
+                                if (hasUpgrade("or", 12))       ret = ret.plus(.0053)
 
                                 let lvls = Math.max(0, tmp.l.getNonZeroGemCount - 49)
-                                                                ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
+                                if (!hasUpgrade("or", 12))      ret = ret.plus(layers.l.grid.getGemEffect(208).times(Math.min(8, lvls)))
                                 
                                 return ret
                         },
@@ -18632,7 +18667,7 @@ addLayer("d", {
                 return baseGain.max(1).root(tmp.d.getGainExp).sub(tmp.d.getBaseGainAddition).times(2).pow(2).pow10().times(player.extremeMode ? "8e315" : 4.4e144)
         },
         canReset(){
-                return tmp.d.getResetGain.gt(0)
+                return tmp.d.getResetGain.gt(0) && !hasUpgrade("or", 125)
         },
         effect(){
                 let amt = player.d.best
@@ -18661,6 +18696,7 @@ addLayer("d", {
                 data.best = data.best.max(data.points)
 
                 let gainPercentage = layers.l.grid.getGemEffect(306).times(diff)
+                if (hasUpgrade("or", 12)) gainPercentage = gainPercentage.plus(diff)
                 data.total = data.total.plus(tmp.d.getResetGain.times(gainPercentage))
                 if (!hasUpgrade("d", 23)) {
                         data.points = data.points.plus(tmp.d.getResetGain.times(gainPercentage))
@@ -18672,6 +18708,7 @@ addLayer("d", {
 
                 data.time += diff
                 data.passiveTime += layers.l.grid.getGemEffect(606).toNumber() * diff
+                if (hasUpgrade("or", 123)) data.passiveTime += diff
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
                         data.times ++
@@ -19316,11 +19353,17 @@ addLayer("d", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
-                                  ["prestige-button", ""],
-                                  "blank", 
-                                  ["upgrades", [1,2,3,4,5,6,7]],
-                                  "blank",
+                        content: [
+                                        "main-display",
+                                        ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
+                                        ["display-text",
+                                                function(){
+                                                        if (hasUpgrade("or", 125)) return "You are gaining " + format(tmp.d.getResetGain) + " DNA per second"
+                                                }
+                                        ],
+                                        "blank", 
+                                        ["upgrades", [1,2,3,4,5,6,7]],
+                                        "blank",
                                 ],
                         unlocked(){
                                 return true
@@ -19967,10 +20010,10 @@ addLayer("cells", {
                         if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
                         if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
                         if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : 50))
-                        if (hasMilestone("cells", 41)) ret = ret.times(player.tokens.buyables[11].max(1))
+                        if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
                         if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
                         if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15) {
-                                                        ret = ret.times(tmp.l.challenges[31].reward)
+                                                        ret = ret.times(tmp.l.challenges[31].reward.max(1))
                         }
                         if (hasMilestone("cells", 59))  ret = ret.times(layerChallengeCompletions("cells") ** 2)
                         if (hasUpgrade("t", 31))        ret = ret.times(3)
@@ -22027,7 +22070,9 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 101)) {
                                         if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
                                         if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
-                                        if (hasChallenge("l", 112))     exp -= 4
+                                        if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
+                                                                        exp -= 4
+                                        }
                                         if (hasUpgrade("t", 101))       exp -= player.cells.challenges[11]
                                         if (hasUpgrade("cells", 51))    exp -= 2
                                         if (hasUpgrade("t", 121)) {
@@ -22118,7 +22163,9 @@ addLayer("cells", {
                                 
                                 if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
                                 if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
-                                if (hasChallenge("l", 112))     exp -= 4
+                                if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
+                                                                exp -= 4
+                                }
                                 if (hasUpgrade("t", 55))        exp -= 6
                                 if (hasUpgrade("t", 101))       exp -= player.cells.challenges[11]
                                 if (hasUpgrade("cells", 51))    exp -= 2
@@ -23486,7 +23533,7 @@ addLayer("t", {
                         if (hasUpgrade("or", 122))      per = .2
 
                         let count = player.t.upgrades.length
-                        if (hasMilestone("or", 13)) count += player.or.milestones.length * .75
+                        if (hasMilestone("or", 13)) count += player.or.milestones.length * (hasMilestone("or", 14) ? 1 : .75)
                         if (hasUpgrade("or", 104))  count += player.or.upgrades.length
                                                 ret = ret.plus(per * count)
                 }
@@ -25423,6 +25470,8 @@ addLayer("or", {
                 let ret = decimalOne
 
                 if (player.easyMode)            ret = ret.times(2)
+                if (hasUpgrade("or", 124))      ret = ret.times(tmp.or.upgrades[124].effect)
+                if (hasUpgrade("or", 131))      ret = ret.times(player.or.milestones.length)
 
                 return ret.max(1)
         },
@@ -25443,7 +25492,7 @@ addLayer("or", {
                 return reqInit.plus(9).root(tmp.or.getGainExp).pow10()
         },
         canReset(){
-                return tmp.or.getResetGain.gt(0) && hasUpgrade("t", 155) && hasUpgrade("t", 151) && !false
+                return tmp.or.getResetGain.gt(0) && hasUpgrade("t", 155) && hasUpgrade("t", 151) && !hasUpgrade("or", 125)
         },
         effect(){
                 let pts = player.or.total
@@ -25467,6 +25516,7 @@ addLayer("or", {
                 data.best = data.best.max(data.points)
 
                 data.time += diff
+                if (hasUpgrade("or", 123)) data.passiveTime += diff
 
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
@@ -25475,13 +25525,15 @@ addLayer("or", {
                 if (data.passiveTime > 10) data.passiveTime = 10
 
                 if (hasUpgrade("or", 105)) {
-                        let gainPercentage = new Decimal(false ? 1 : .1)
-                        if (!false) { // normal gain
+                        let gainPercentage = new Decimal(hasUpgrade("or", 125) ? 1 : .1)
+                        if (!hasUpgrade("or", 124)) { // normal gain
                                 let gain = tmp.or.getResetGain.times(gainPercentage).times(diff)
                                 data.points = data.points.plus(gain)
                                 data.total = data.total.plus(gain)
-                        } else {
-                                // eh idk yet
+                        } else if (player.or.points.div(10).lt(tmp.or.getResetGain)) {
+                                let gain = tmp.or.getResetGain.times(gainPercentage).times(diff)
+                                data.points = data.points.plus(gain).min(tmp.or.getResetGain.times(10))
+                                data.total = data.total.plus(gain)
                         }
                 }
 
@@ -25624,7 +25676,6 @@ addLayer("or", {
                                 let netDBgain = gainDB.times(diff).times(.01 * player.or.upgrades.length)
                                 dbData.points = dbData.points.plus(netDBgain)
                                 dbData.total = dbData.total.plus(netDBgain)
-                                console.log(netDBgain.toString())
                         }
                         dbData.best = dbData.best.max(dbData.points)
                         obData.best = obData.best.max(obData.points)
@@ -25668,6 +25719,18 @@ addLayer("or", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("or", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs II"
+                        },
+                        description(){
+                                return "Add .0053 to tRNA's base and gain 100% of DNA and Amino Acid per second but disable C28 and C88"
+                        },
+                        cost:() => new Decimal(13050),
+                        unlocked(){
+                                return hasMilestone("or", 14)
+                        }, // hasUpgrade("or", 12)
                 },
                 101: {
                         title(){
@@ -25891,8 +25954,8 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Carbon" : "Heart XIII")
                         },
                         description(){
-                                return "Gain a Organ reset per second but disable Anti-Carbon's positive effects [not yet]"
-                        }, // 124: 2x Or per this row upg, max passive gain at 10x. 125: no prestige but gain 90%/s
+                                return "Gain an DNA and Organ reset per second but disable Anti-Carbon's positive effects"
+                        }, 
                         cost(){
                                 return new Decimal(5e11)
                         },
@@ -25902,6 +25965,82 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 122)
                         }, // hasUpgrade("or", 123)
+                },
+                124: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Oxygen" : "Heart XIV")
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Double Organ gain per this row upgrade but max passive gain at 10x of Organs on reset and disable Anti-Oxygen's positive effects</bdi>"
+                        },
+                        cost(){
+                                return new Decimal(5e14)
+                        },
+                        effect(){
+                                let a = 1
+                                if (hasUpgrade("or", 121)) a ++ 
+                                if (hasUpgrade("or", 122)) a ++ 
+                                if (hasUpgrade("or", 123)) a ++ 
+                                if (hasUpgrade("or", 125)) a ++ 
+                                return Decimal.pow(2, a)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 123)
+                        }, // hasUpgrade("or", 124)
+                },
+                125: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Nitrogen" : "Heart XV")
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Gain 90% of your Organs on reset per second but remove the ability to DNA or Organ reset and disable Anti-Nitrogen's positive effects</bdi>"
+                        },
+                        cost(){
+                                return new Decimal(2e13)
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 124)
+                        }, // hasUpgrade("or", 125)
+                },
+                131: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Pi" : "Heart XVI")
+                        },
+                        description(){
+                                return "The number of milestones multiplies Organ gain but remove Anti-Pi's positive effects"
+                        }, // EFFECTS DNA CLAMP SO BE CAREFUL ABOUT THIS NERFING THINGS
+                        cost(){
+                                return new Decimal(4e16)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 12)
+                        }, // hasUpgrade("or", 131)
+                },
+                132: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>XVII"
+                        },
+                        description(){
+                                return "Per upgrade you have three less tokens for prestige purposes but disable C33, C54, C64, C17, C73, and C18 gems"
+                        },
+                        cost(){
+                                return new Decimal(5e17)
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 131)
+                        }, // hasUpgrade("or", 132)
                 },
         },
         milestones: {
@@ -26088,9 +26227,37 @@ addLayer("or", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Organ milestones<sup>.75</sup> count towards Tissues IX."
+                                return "Reward: Organ milestones*.75 count towards Tissues IX."
                         },
                 }, // hasMilestone("or", 13)
+                14: {
+                        requirementDescription(){
+                                return "13,000 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(13e3)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Milestone 13 becomes Organ milestones and per milestone you have three less tokens for prestige purposes but disable the positive effects of Anti-Inflammatory, Anti-Omega, Anti-Psi, Anti-Chi, Anti-Upsilon, Anti-Tau, and Anti-Sigma."
+                        },
+                }, // hasMilestone("or", 14)
+                15: {
+                        requirementDescription(){
+                                return "280,000 Organs"
+                        },
+                        done(){
+                                return player.or.points.gte(28e4)
+                        }, // WATCH OUT FOR ANTI-OMICRON
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Add .0005 to tRNA's base but disable the positive effects of Anti-Rho, Anti-Omicron, Anti-Xi, Anti-Theta, Anti-Eta, Anti-Hard, and Anti-Difficult."
+                        },
+                }, // hasMilestone("or", 15)
         },
         bars: {
                 heart: {
@@ -26160,8 +26327,8 @@ addLayer("or", {
         tabFormat: {
                 "Upgrades": {
                         content: ["main-display",
-                                  ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return false ? "You can reset for " + format(tmp.or.getResetGain) + " Organs" : ""}], 
+                                  ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
+                                  ["display-text", function (){ return hasUpgrade("or", 125) ? "You can reset for " + format(tmp.or.getResetGain) + " Organs" : ""}], 
                                   "blank",
                                   ["upgrades", [1,2,3,4,5]],
                                 ],
@@ -33909,7 +34076,7 @@ addLayer("tokens", {
                 if (hasUpgrade("mu", 24))       a += 1
                 if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/(player.extremeMode ? 1 : 2))
                 if (hasUpgrade("p", 41))        a += player.extremeMode ? 3 : 1
-                                                a += layers.l.grid.getGemEffect(303).toNumber()
+                if (!hasUpgrade("or", 132))     a += layers.l.grid.getGemEffect(303).toNumber()
                 if (hasMilestone("l", 41))      a += player.extremeMode ? tmp.l.getNonZeroGemCount :  1
                 if (hasChallenge("l", 52))      a += tmp.l.challenges[52].reward.toNumber()
                 if (hasUpgrade("d", 33))        a += player.d.upgrades.length
@@ -33924,7 +34091,8 @@ addLayer("tokens", {
                 if (hasUpgrade("sci", 244))     a += Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5)
                                                 a += tmp.sci.buyables[303].effect.toNumber()
                 if (hasUpgrade("l", 12))        a += player.l.upgrades.length
-
+                if (hasMilestone("or", 14))     a += player.or.milestones.length * 3
+                if (hasUpgrade("or", 132))      a += player.or.upgrades.length * 3
                 if (hasUpgrade("sci", 203))     a += 1
                 if (hasUpgrade("sci", 303))     a += 1
                 if (hasUpgrade("p", 113))       a += 1
