@@ -19700,7 +19700,6 @@ addLayer("cells", {
         effect(){
                 let amt = player.cells.best
 
-                let base = amt.plus(9)
                 let exp = amt.cbrt().min(10)
 
                 if (hasMilestone("cells", 11))  exp = exp.plus(player.cells.upgrades.length)
@@ -19708,11 +19707,10 @@ addLayer("cells", {
                 if (hasUpgrade("t", 95)) {
                         let upgs = player.t.upgrades.length
                         let mile = player.t.milestones.length
-                        let eff = Math.min(.05 * upgs * mile, 100)
-                                                exp = exp.plus(eff)
+                                                exp = exp.plus(Math.min(.05 * upgs * mile, 100))
                 }
 
-                return base.pow(exp)
+                return amt.plus(9).pow(exp)
         },
         effectDescription(){
                 let start = " multiplying DNA, Life, and Protein gain and exponentiating Phosphorus gain by " 
