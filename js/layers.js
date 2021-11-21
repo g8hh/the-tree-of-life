@@ -14454,8 +14454,8 @@ addLayer("l", {
                                 
                                 if (inChallenge("l", 101))      init = init.pow(1.2)
                                 if (inChallenge("l", 102))      init = init.pow(1.4)
-                                if (inChallenge("l", 111))      init = init.pow(60)
-                                if (inChallenge("l", 112))      init = init.pow(60)
+                                if (inChallenge("l", 111))      init = init.pow(player.extremeMode ? 30 : 60)
+                                if (inChallenge("l", 112))      init = init.pow(player.extremeMode ? 30 : 60)
 
                                 return init.min(1)
                         },
@@ -15147,7 +15147,7 @@ addLayer("l", {
                 }, // inChallenge("l", 102) hasChallenge("l", 102)
                 111: {
                         name: "Anti-Theta", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 2544e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 4088 : 2544e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -15156,9 +15156,14 @@ addLayer("l", {
                         completionLimit: 1,
                         fullDisplay(){
                                 if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
-                                let a = "Requires being in C88. Customizable and raise dilation effect ^60"
+                                let a = "Requires being in C88 and Customizable and raise dilation effect ^60"
                                 let b = "Goal: e1e2,544,000 Points"
                                 let c = "Reward: Anti-Hydrogen effects DNA and Anti-Minigame effects Cells each at most ^1.5, and Anti-Carbon effect multiplies Stem Cell gain if you have over 15 Secondary completions"
+                                if (player.extremeMode) {
+                                        c = "Reward: Anti-Hydrogen effects DNA and Anti-Minigame effects Cells each at most ^1.5"
+                                        a = a.replace("60", "30")
+                                        b = b.replace("2,544,000", "4,088")
+                                }
 
                                 return a + br + b + br + c
                         },
@@ -15169,7 +15174,7 @@ addLayer("l", {
                 }, // inChallenge("l", 111) hasChallenge("l", 111)
                 112: {
                         name: "Anti-Eta", 
-                        goal: () => Decimal.pow(10, Decimal.pow(10, 9949e3)),
+                        goal: () => Decimal.pow(10, Decimal.pow(10, player.extremeMode ? 5742 : 9949e3)),
                         canComplete(){ 
                                 if (player.l.challenges[11] < 110) return false
                                 if (player.l.activeChallengeID != 808) return false
@@ -15178,9 +15183,14 @@ addLayer("l", {
                         completionLimit: 1,
                         fullDisplay(){
                                 if (hasMilestone("or", 15)) return makeRed("<h3>Ineffective</h3>")
-                                let a = "Requires being in C88. Customizable, α → ∂𝛾 doesn't effect prior exponent dividers and raise dilation effect ^60"
+                                let a = "Requires being in C88 and Customizable, α → ∂𝛾 doesn't effect prior exponent dividers and raise dilation effect ^60"
                                 let b = "Goal: e1e9,949,000 Points"
                                 let c = "Reward: Anti-Inflammatory effects Visible, add .0003 to tRNA's base, and Secondary is 1e4x easier but α → ∂𝛾 doesn't effect prior exponent dividers"
+                                if (player.extremeMode) {
+                                        c = "Reward: Add .0003 to tRNA's base and Secondary is 1e4x easier but α → ∂𝛾 doesn't effect prior exponent dividers"
+                                        a = a.replace("60", "30")
+                                        b = b.replace("9,949,000", "5,742")
+                                }
 
                                 return a + br + b + br + c
                         },
@@ -17510,6 +17520,9 @@ addLayer("a", {
                                 if (hasMilestone("cells", 56))  ret = ret.plus(.0001)
                                 if (hasMilestone("cells", 57))  ret = ret.plus(.0001)
                                 if (hasMilestone("cells", 58))  ret = ret.plus(.0001)
+                                if (hasMilestone("cells", 59) && player.extremeMode) {
+                                                                ret = ret.plus(.0001)
+                                }
                                 if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
                                                                 ret = ret.plus(.0003)
                                 }
@@ -18132,7 +18145,7 @@ addLayer("a", {
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(106))
                                                                 ret = ret.plus(layers.l.grid.getGemEffect(801).times(player.a.buyables[33]))
                                 
-                                if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1)
+                                if (hasUpgrade("cells", 115))   ret = player.cells.mu.points.max(1).pow(player.extremeMode ? .5 : 1)
                                 if (hasMilestone("cells", 25))  ret = ret.times(tmp.tokens.buyables[13].effect)
                                 
                                 return ret
@@ -18152,6 +18165,7 @@ addLayer("a", {
 
                                 let eformula = format(tmp.a.buyables[33].base) + "^x"
                                 if (hasUpgrade("cells", 115)) eformula = "(Mu*Infrared)^x" + br + eformula
+                                if (player.extremeMode) eformula = eformula.replace("Mu", "sqrt(Mu)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -20021,10 +20035,12 @@ addLayer("cells", {
                         if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : 50))
                         if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
                         if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
-                        if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15) {
+                        if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
                                                         ret = ret.times(tmp.l.challenges[31].reward.max(1))
                         }
-                        if (hasMilestone("cells", 59))  ret = ret.times(layerChallengeCompletions("cells") ** 2)
+                        if (hasMilestone("cells", 59) && !player.extremeMode) {
+                                                        ret = ret.times(layerChallengeCompletions("cells") ** 2)
+                        }
                         if (hasUpgrade("t", 31))        ret = ret.times(3)
                         if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
                                                         ret = ret.times(10)
@@ -20661,9 +20677,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Mu V"
                         },
                         description(){
+                                if (player.extremeMode) return "Sinusoidal exponent is not square rooted and shRNA base is sqrt(Mu)"
                                 return "Sinusoidal exponent is not square rooted and shRNA base is Mu"
                         },
-                        cost:() => new Decimal("e1253"),
+                        cost:() => new Decimal(player.extremeMode ? "3e761" : "e1253"),
                         unlocked(){
                                 return hasChallenge("l", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 115)
@@ -20752,7 +20769,7 @@ addLayer("cells", {
                         description(){
                                 return "<bdi style='font-size: 80%'>log10(Lambda) multiplies Near-ultraviolet base, and Life buyables exponents are 2 but α → ∂𝛾, β → ∂𝛾 and 𝛾 → ∂𝛾's bases are 1</bdi>"
                         },
-                        cost:() => new Decimal("e1315"),
+                        cost:() => new Decimal(player.extremeMode ? "3.9e798" : "e1315"),
                         unlocked(){
                                 return hasUpgrade("cells", 115) || player.t.unlocked
                         }, // hasUpgrade("cells", 215)
@@ -20838,9 +20855,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa V"
                         },
                         description(){
+                                if (player.extremeMode) return "Tokens multiply Infrared base and dilate point gain"
                                 return "Tokens exponentiates Infrared base and dilate point gain"
                         },
-                        cost:() => new Decimal("e1377"),
+                        cost:() => new Decimal(player.extremeMode ? "3e809" : "e1377"),
                         unlocked(){
                                 return hasUpgrade("cells", 215) || player.t.unlocked
                         }, // hasUpgrade("cells", 315)
@@ -20924,7 +20942,7 @@ addLayer("cells", {
                         description(){
                                 return "Unlock Tissues and Odd is always activated"
                         },
-                        cost:() => new Decimal("e1381"),
+                        cost:() => new Decimal(player.extremeMode ? "1.3e811" : "e1381"),
                         unlocked(){
                                 return hasUpgrade("cells", 315) || player.t.unlocked
                         }, // hasUpgrade("cells", 415)
@@ -21880,24 +21898,27 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 51)
                 52: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e12,725 Stem Cells"
                                 return "1e16,011 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e16011")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e12725" : "1e16011")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Add .0001 to tRNA base and per Cell challenge completion add .005 to Visible base."
                                 return "Reward: Add .0001 to tRNA base and per Cell challenge completion add .015 to Visible base."
                         },
                 }, // hasMilestone("cells", 52)
                 53: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e13,037 Stem Cells"
                                 return "1e16,471 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e16471")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e13037" : "1e16471")
                         },
                         unlocked(){
                                 return true
@@ -21915,38 +21936,43 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 53)
                 54: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e13,416 Stem Cells"
                                 return "1e16,895 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e16895")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e13416" : "1e16895")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Add .0001 to tRNA base, token exponent is .39, per Secondary completion secondary's goal is 1000x less, rRNA base is log10(Lives) and 𝛾 → ∂α's base is Lambda."
+                                if (player.extremeMode) return "Reward: Add .0001 to tRNA base, token exponent is .39, rRNA base is log10(Lives) and 𝛾 → ∂α's base is Lambda."
+                                return "Reward: Add .0001 to tRNA base, token exponent is .39, per Secondary completion it's goal is 1000x less, rRNA base is log10(Lives) and 𝛾 → ∂α's base is Lambda."
                         },
                 }, // hasMilestone("cells", 54)
                 55: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e13,605 Stem Cells"
                                 return "1e17,301 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e17301") 
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e13605" : "1e17301") 
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Add .0001 to tRNA base, token exponent is .38, and Life buyable exponents are 2.2."
                                 return "Reward: Add .0001 to tRNA base, token exponent is .38, Life buyable exponents are 2.2, and per challenge completion Secondary's goal is 10x less."
                         },
                 }, // hasMilestone("cells", 55)
                 56: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e14,212 Stem Cells"
                                 return "1e18,131 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e18131")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e14212" : "1e18131")
                         },
                         unlocked(){
                                 return true
@@ -21964,10 +21990,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 56)
                 57: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e14,403 Stem Cells"
                                 return "1e18,364 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e18364")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e14403" : "1e18364")
                         },
                         unlocked(){
                                 return true
@@ -21978,10 +22005,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 57)
                 58: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e14,577 Stem Cells"
                                 return "1e19,289 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e19289")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e14577" : "1e19289")
                         },
                         unlocked(){
                                 return true
@@ -21992,24 +22020,27 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 58)
                 59: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e15,471 Stem Cells"
                                 return "1e21,555 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e21555")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e15471" : "1e21555")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Add .0001 to tRNA base, buy max Life buyables, and token exponent is .34."
                                 return "Reward: Buy max Life buyables, token exponent is .34, and the number of challenge completions squared multiplies Stem Cell gain."
                         },
                 }, // hasMilestone("cells", 59)
                 60: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e15,853 Stem Cells"
                                 return "1e22,621 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e22621")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e15853" : "1e22621")
                         },
                         unlocked(){
                                 return true
@@ -22020,10 +22051,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 60)
                 61: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e16,241 Stem Cells"
                                 return "1e22,984 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e22984") 
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e16241" : "1e22984") 
                         },
                         unlocked(){
                                 return true
@@ -22034,10 +22066,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 61)
                 62: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e16,751 Stem Cells"
                                 return "1e23,309 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e23309")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e16751" : "1e23309")
                         },
                         unlocked(){
                                 return true
@@ -22077,8 +22110,12 @@ addLayer("cells", {
 
                                 if (hasUpgrade("t", 55)) exp -= 6
                                 if (hasUpgrade("t", 101)) {
-                                        if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
-                                        if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
+                                        if (hasMilestone("cells", 54) && !player.extremeMode) {
+                                                                        exp -= 3 * player.cells.challenges[12]
+                                        }
+                                        if (hasMilestone("cells", 55) && !player.extremeMode) {
+                                                                        exp -= layerChallengeCompletions("cells")
+                                        }
                                         if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
                                                                         exp -= 4
                                         }
@@ -22159,6 +22196,7 @@ addLayer("cells", {
                         name: "Secondary",
                         goal(){
                                 let exp = 916
+                                let comps = player.cells.challenges[12]
 
                                 if (player.extremeMode) {
                                         exp = 897
@@ -22168,10 +22206,15 @@ addLayer("cells", {
                                         if (hasMilestone("cells", 46)) exp += 23
                                         if (hasMilestone("cells", 47)) exp += 42
                                         if (hasMilestone("cells", 48)) exp = 891
+                                        if (comps >= 20) exp += 3 * (comps - 19)
                                 }
                                 
-                                if (hasMilestone("cells", 54))  exp -= 3 * player.cells.challenges[12]
-                                if (hasMilestone("cells", 55))  exp -= layerChallengeCompletions("cells")
+                                if (hasMilestone("cells", 54) && !player.extremeMode) {
+                                                                exp -= 3 * comps
+                                }
+                                if (hasMilestone("cells", 55) && !player.extremeMode) {
+                                                                exp -= layerChallengeCompletions("cells")
+                                }
                                 if (hasChallenge("l", 112) && !hasMilestone("or", 15)) {
                                                                 exp -= 4
                                 }
@@ -22185,7 +22228,7 @@ addLayer("cells", {
                                         if (hasUpgrade("t", 124)) exp -= 6
                                         if (hasUpgrade("t", 125)) exp -= 6
                                 }
-                                if (hasMilestone("t", 22) && player.cells.challenges[12] == 94) {
+                                if (hasMilestone("t", 22) && comps == 94) {
                                                                 exp -= 15
                                 }
 
@@ -34573,7 +34616,10 @@ addLayer("tokens", {
                                 if (hasUpgrade("t", 92)) return decimalOne
                                 let ret = new Decimal(20)
                                 if (hasUpgrade("o", 23)) ret = ret.pow(player.tokens.total.max(1).pow(3))
-                                if (hasUpgrade("cells", 315)) ret = ret.pow(player.tokens.total.max(1))
+                                if (hasUpgrade("cells", 315)) {
+                                        if (!player.extremeMode) ret = ret.pow(player.tokens.total.max(1))
+                                        else ret = ret.times(player.tokens.total.max(1))
+                                }
                                 return ret
                         },
                         effect(){
@@ -34622,8 +34668,13 @@ addLayer("tokens", {
                                         ret = new Decimal(player.extremeMode ? 1.03 : 1.11)
 
                                         if (hasMilestone("cells", 26))  ret = ret.plus((player.extremeMode ? .001 : .002) * player.cells.milestones.length)
-                                        if (hasMilestone("cells", 52))  ret = ret.plus(.015 * layerChallengeCompletions("cells"))
-                                        if (hasChallenge("l", 112))     ret = ret.plus(tmp.l.challenges[42].reward)
+                                        if (hasMilestone("cells", 52)) {
+                                                let per = player.extremeMode ? .005 : .015
+                                                                        ret = ret.plus(per * layerChallengeCompletions("cells"))
+                                        }
+                                        if (hasChallenge("l", 112) && !player.extremeMode) {
+                                                                        ret = ret.plus(tmp.l.challenges[42].reward)
+                                        }
                                         if (hasUpgrade("t", 74))        ret = ret.plus(.101)
                                         if (hasMilestone("t", 8))       ret = ret.plus(.1 * Math.max(0, player.cells.challenges[11]-10))
 
