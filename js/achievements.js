@@ -732,6 +732,13 @@ PROGRESSION_MILESTONES = {
         607: () => player.or.oxygenated_blood.points.gte(1e16),
         608: () => player.or.oxygenated_blood.points.gte(1e32),
         609: () => player.or.oxygenated_blood.points.gte(1e64),
+        610: () => player.tokens.tokens2.total.gte(115),
+        611: () => player.tokens.tokens2.total.gte(120),
+        612: () => player.tokens.tokens2.total.gte(125),
+        613: () => player.tokens.tokens2.total.gte(130),
+        614: () => player.tokens.tokens2.total.gte(135),
+        615: () => player.tokens.tokens2.total.gte(140),
+        616: () => player.tokens.tokens2.total.gte(145),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1344,6 +1351,13 @@ PROGRESSION_MILESTONES_TEXT = {
         607: "1e16 Oxygenated Blood",
         608: "1e32 Oxygenated Blood",
         609: "1e64 Oxygenated Blood",
+        610: "115 Token II",
+        611: "120 Token II",
+        612: "125 Token II",
+        613: "130 Token II",
+        614: "135 Token II",
+        615: "140 Token II",
+        616: "145 Token II",
 }
 
 

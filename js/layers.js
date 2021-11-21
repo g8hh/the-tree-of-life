@@ -20946,7 +20946,7 @@ addLayer("cells", {
                                 return "Unlock the Mu minigame" + br + "Total points: " + format(player.cells.total11)
                         },
                         unlocked(){
-                                return hasChallenge("l", 102)
+                                return hasChallenge("l", 102) || hasUpgrade("or", 135)
                         },
                         canClick(){
                                 return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
@@ -20967,7 +20967,7 @@ addLayer("cells", {
                                 return "Unlock the Lambda minigame" + br + "Total points: " + format(player.cells.total12)
                         },
                         unlocked(){
-                                return hasChallenge("l", 102)
+                                return hasChallenge("l", 102) || hasUpgrade("or", 135)
                         },
                         canClick(){
                                 return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 32) || hasMilestone("or", 4))
@@ -20988,7 +20988,7 @@ addLayer("cells", {
                                 return "Unlock the Kappa minigame" + br + "Total points: " + format(player.cells.total13)
                         },
                         unlocked(){
-                                return hasChallenge("l", 102)
+                                return hasChallenge("l", 102) || hasUpgrade("or", 135)
                         },
                         canClick(){
                                 return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 37) || hasMilestone("or", 4))
@@ -21009,7 +21009,7 @@ addLayer("cells", {
                                 return "Unlock the Iota minigame" + br + "Total points: " + format(player.cells.total14)
                         },
                         unlocked(){
-                                return hasChallenge("l", 102)
+                                return hasChallenge("l", 102) || hasUpgrade("or", 135)
                         },
                         canClick(){
                                 return player.cells.currentMinigame == undefined && !(hasMilestone("cells", 38) || hasMilestone("or", 4))
@@ -22239,7 +22239,6 @@ addLayer("cells", {
                                 let exp = new Decimal(167)
 
                                 let c = player.cells.challenges[21]
-                                if (c >= 3) c ++
 
                                 exp = exp.times(Decimal.pow(5, c)).plus(6508)
 
@@ -22259,10 +22258,12 @@ addLayer("cells", {
                                         d += "Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain"
                                 } else if (player.cells.challenges[21] == 2) {
                                         d += "Unlock Heart and another Cell buyable"
+                                } else if (player.cells.challenges[21] == 3) {
+                                        d += "Tokens II buyables' cost is ceil(x<sup>.9</sup>)"
                                 } else {
                                         d += "not a thing yet"
                                 }
-                                let e = br + "Completion count: " + player.cells.challenges[21] + "/9"
+                                let e = br + "Completion count: " + player.cells.challenges[21] + "/" + formatWhole(tmp.cells.challenges[21].completionLimit)
                                 
                                 return a + br + b + br + c + br + d + e
                         },
@@ -22272,7 +22273,9 @@ addLayer("cells", {
                         onEnter(){
                                 layers.cells.challenges.onEnter()
                         },
-                        completionLimit: 4,
+                        completionLimit(){
+                                return hasUpgrade("or", 13) ? 9 : 3
+                        },
                         countsAs: [],
                 }, // inChallenge("cells", 21) hasChallenge("cells", 21)
         },
@@ -22682,6 +22685,7 @@ addLayer("cells", {
                                 let amt = getBuyableAmount("cells", 22)
                                 let exp = amt.pow(1.05)
                                 let base = new Decimal(1e100)
+                                if (hasUpgrade("or", 13)) base = new Decimal(1e90)
                                 let init = new Decimal("1e5283e3")
                                 if (hasUpgrade("or", 114)) init = decimalOne
                                 return init.times(base.pow(exp))
@@ -22696,6 +22700,7 @@ addLayer("cells", {
                                 let pts = player.cells.stem_cells.points
                                 if (pts.lt(init)) return decimalZero
                                 let base = new Decimal(1e100)
+                                if (hasUpgrade("or", 13)) base = new Decimal(1e90)
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         buy(){
@@ -22738,6 +22743,7 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e5,283,000*1e100^(x<sup>1.05</sup>)" 
                                 if (hasUpgrade("or", 114)) cost2 = "1e100^(x<sup>1.05</sup>)"
+                                if (hasUpgrade("or", 13)) cost2 = cost2.replace("100", "90")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -23234,14 +23240,14 @@ addLayer("cells", {
 
                                         let part1 = a + br2 + b + br2 + c
 
-                                        if (!hasChallenge("l", 102)) return part1
+                                        if (!hasChallenge("l", 102) && !hasUpgrade("or", 135)) return part1
 
                                         let d = "Entering a minigame unlocks a tab for said minigame."
                                         let e = "The only thing kept upon resetting a minigame is upgrades, unless otherwise stated."
                                         let f = "Initially there is a 60 second timer for the minigame,<br>at which point your progress is reset and you are kicked out of the tab."
                                         let g = "Your total point gain in each minigame is kept track of, and the basis of some upgrades."
 
-                                        let part3 = part1 + br2 + d + br + e + br + f + br + g
+                                        let part3 = part1 + (player.or.unlocked ? "" : br2 + d + br + e + br + f + br + g)
 
                                         if (!hasUpgrade("cells", 13)) return part3
 
@@ -23260,6 +23266,9 @@ addLayer("cells", {
                                         }
                                         if (player.cells.challenges[21] >= 3) {
                                                 tertReward += "3: Unlock Heart and another Cell buyable" + br
+                                        }
+                                        if (player.cells.challenges[21] >= 4) {
+                                                tertReward += "4: Tokens II buyables' cost is ceil(x<sup>.9</sup>)" + br
                                         }
 
                                         tertReward += br + "Note that Tertiary completions are never reset"
@@ -25750,11 +25759,11 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs III"
                         },
                         description(){
-                                return "Oligopotent cost base is 1e90 [not yet, will cost 17e6]"
+                                return "Oligopotent cost base is 1e90 and you can complete Tertiary 9 times"
                         },
-                        cost:() => new Decimal(17e16),
+                        cost:() => new Decimal(17e6),
                         unlocked(){
-                                return hasMilestone("or", 135)
+                                return hasUpgrade("or", 135)
                         }, // hasUpgrade("or", 13)
                 },
                 101: {
@@ -34325,6 +34334,7 @@ addLayer("tokens", {
         },
         canReset(){ // tokens canReset
                 if (tmp.tokens.getResetGain.eq(0)) return false
+                if (hasUpgrade("or", 135)) return true
                 return (hasUpgrade("h", 55) || hasChallenge("l", 21)) && (!inChallenge("n", 31) || player.tokens.total.lt(50))
         },
         tooltip(){
@@ -34366,6 +34376,8 @@ addLayer("tokens", {
                         return layers.tokens.buyables.costFormula(getBuyableAmount("tokens", id))
                 },
                 costFormula2(x){
+                        let tertComps = player.cells.challenges[21]
+                        if (tertComps >= 4)             return x.pow(.9).ceil()
                         if (hasMilestone("or", 11))     return x
                         return x.plus(1)
                 },
@@ -34407,6 +34419,8 @@ addLayer("tokens", {
                         return Decimal.pow(2, x)
                 },
                 costFormulaText2(){
+                        let tertComps = player.cells.challenges[21]
+                        if (tertComps >= 4)             return "ceil(x<sup>.9</sup>)"
                         if (hasMilestone("or", 11))     return "x"
                         return "1+x"
                 },
@@ -37124,7 +37138,8 @@ addLayer("tokens", {
                                 ["display-text", function(){
                                         let a = "Current tetrational scaling formula: "
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
-                                        let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + TOKEN_COSTS.length)
+                                        let add = player.extremeMode ? TOKEN_COSTS_EXTREME.length : TOKEN_COSTS.length
+                                        let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + add)
                                         let baseStr = "10"
                                         if (hasMilestone("or", 2)) baseStr = "9.5"
                                         if (hasMilestone("or", 5)) baseStr = "9"
