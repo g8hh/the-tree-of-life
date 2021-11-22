@@ -20702,7 +20702,7 @@ addLayer("cells", {
                         description(){
                                 return "Double the linear component of Sinusoidal and Squeeze levels multiply Stem Cell gain"
                         },
-                        cost:() => new Decimal(player.extremeMode ? 1e28 : 1e25),
+                        cost:() => new Decimal(player.extremeMode ? 1e27 : 1e25),
                         currencyLocation:() => player.cells.mu,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
@@ -21262,11 +21262,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 9)
                 10: {
                         requirementDescription(){
-                                if (player.extremeMode) return "1e31 Kappa and 5e141 DNA Science"
+                                if (player.extremeMode) return "1e30 Kappa and 5e141 DNA Science"
                                 return "1e100 Kappa"
                         },
                         done(){
-                                if (player.extremeMode) return player.cells.kappa.points.gte(1e31) && player.sci.dna_science.points.gte("5e141")
+                                if (player.extremeMode) return player.cells.kappa.points.gte(1e30) && player.sci.dna_science.points.gte("5e141")
                                 return player.cells.kappa.points.gte(1e100)
                         },
                         unlocked(){
@@ -21279,11 +21279,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 10)
                 11: {
                         requirementDescription(){
-                                if (player.extremeMode) return "1e88 Kappa"
+                                if (player.extremeMode) return "1e86 Kappa"
                                 return "1e140 Kappa"
                         },
                         done(){
-                                if (player.extremeMode) return player.cells.kappa.points.gte(1e88)
+                                if (player.extremeMode) return player.cells.kappa.points.gte(1e86)
                                 return player.cells.kappa.points.gte(1e140)
                         },
                         unlocked(){
@@ -21296,11 +21296,11 @@ addLayer("cells", {
                 }, // hasMilestone("cells", 11)
                 12: {
                         requirementDescription(){
-                                if (player.extremeMode) return "1e36 Mu"
+                                if (player.extremeMode) return "1e35 Mu"
                                 return "1e28 Mu"
                         },
                         done(){
-                                return player.cells.mu.points.gte(player.extremeMode ? 1e36 : 1e28)
+                                return player.cells.mu.points.gte(player.extremeMode ? 1e35 : 1e28)
                         },
                         unlocked(){
                                 return true
