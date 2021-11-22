@@ -2093,12 +2093,13 @@ addLayer("sci", {
                 
                 data.time += diff
 
-                let force1 = player.n.unlocked || false
+                let force1 = player.n.unlocked
+                let force2 = player.t.unlocked
                 if (force1 || hasUpgrade("sci", 11))    layers.sci.hydrogen_science.update(diff)
                 if (force1 || hasUpgrade("o", 13))      layers.sci.oxygen_science.update(diff)
                 if (force1 || hasUpgrade("sci", 125))   layers.sci.carbon_science.update(diff)
                 if (hasMilestone("n", 14))              layers.sci.nitrogen_science.update(diff)
-                if (hasUpgrade("a", 23))                layers.sci.protein_science.update(diff)
+                if (hasUpgrade("a", 23) || force2)      layers.sci.protein_science.update(diff)
                 if (layers.l.grid.getGemEffect(705))    layers.sci.dna_science.update(diff)
 
 
@@ -2140,6 +2141,34 @@ addLayer("sci", {
                 if (data.autobuysci113 && hasMilestone("tokens", 12) || hasMilestone("n", 2)) {
                         if (tsb[113].unlocked) lsb[113].buy()
                 }
+                if (hasUpgrade("t", 11)) {
+                        if (tsb[501].unlocked) lsb[501].buy()
+                }
+                if (hasUpgrade("t", 13)) {
+                        if (tsb[502].unlocked) lsb[502].buy()
+                }
+                if (hasUpgrade("t", 14)) {
+                        if (tsb[503].unlocked) lsb[503].buy()
+                }
+                if (hasUpgrade("t", 21)) {
+                        if (tsb[511].unlocked) lsb[511].buy()
+                }
+                if (hasUpgrade("t", 25)) {
+                        if (tsb[512].unlocked) lsb[512].buy()
+                }
+                if (hasUpgrade("t", 31)) {
+                        if (tsb[513].unlocked) lsb[513].buy()
+                }
+                if (hasUpgrade("t", 32)) {
+                        if (tsb[521].unlocked) lsb[521].buy()
+                }
+                if (hasUpgrade("t", 41)) {
+                        if (tsb[522].unlocked) lsb[522].buy()
+                }
+                if (hasUpgrade("t", 42)) {
+                        if (tsb[523].unlocked) lsb[523].buy()
+                }
+
                 if (data.autobuyhsciupg && hasMilestone("n", 3)) {
                         let boughtYet = false
                         let hSciKeys = ["11", "12", "13", "14", "15", 
@@ -2422,6 +2451,7 @@ addLayer("sci", {
                         if (hasUpgrade("sci", 431))     ret = ret.times(Decimal.pow(2, tmp.l.getMaxedGemCount))
                         if (hasUpgrade("a", 43))        ret = ret.times(Decimal.pow(1.03, getBuyableAmount("a", 22)))
                                                         ret = ret.times(layers.l.grid.getGemEffect(703).pow(tmp.l.getNonZeroGemCount))
+                                                        ret = ret.times(tmp.t.effect)
 
                         return ret
                 },
@@ -2497,6 +2527,7 @@ addLayer("sci", {
                                                         ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
                         }
                         if (hasMilestone("cells", 31))  ret = ret.times(Decimal.pow(1.1, player.tokens.total))
+                                                        ret = ret.times(tmp.t.effect)
 
                         return ret
                 },
@@ -5175,7 +5206,7 @@ addLayer("sci", {
                                 return "Each DNA Science buyable after 650 doubles Stem Cell gain<br>Currently: " + format(tmp.sci.upgrades[542].effect)
                         },
                         effect(){
-                                let exp = tmp.sci.buyables.dnaBuyablesTotal.sub(650).max(1)
+                                let exp = tmp.sci.buyables.dnaBuyablesTotal.sub(650).max(0)
                                 let ret = Decimal.pow(2, exp)
                                 if (ret.gt(1e100) && player.cells.activeChallenge) ret = ret.log10().pow(50)
                                 return ret
@@ -6805,6 +6836,10 @@ addLayer("sci", {
         },
         doReset(layer){
                 // reset sci stuffs
+
+                // do sci reset do science reset doscireset do scireset
+
+
                 let data = player.sci
                 let buyData = data.buyables
 
@@ -6896,7 +6931,7 @@ addLayer("sci", {
 
                 let resetProtein = true 
                 if (["tokens", "p", "l", "a"].includes(layer)) resetProtein = false
-                if (resetProtein && !false) {
+                if (resetProtein && !player.cells.everMilestone60) {
                         let subdata = data.protein_science
                         subdata.total = decimalZero
                         subdata.best = decimalZero
@@ -6924,13 +6959,16 @@ addLayer("sci", {
                                    521, 522, 523, 524, 525, 
                                    531, 532, 533, 534, 535,
                                    541, 542, 543, 544, 545]
-                        if (!hasMilestone("cells", 5)) data.upgrades = filterOut(data.upgrades, ids)
+                        let resetContent = true 
+                        if (layer == "cells" && hasMilestone("cells", 5)) resetContent = false
+                        if (hasMilestone("cells", 33)) resetContent = false
+                        if (resetContent) data.upgrades = filterOut(data.upgrades, ids)
 
                         let buyIds = [501, 502, 503,
                                       511, 512, 513, 
                                       521, 522, 523,]
                         for (i in buyIds) {
-                                if (hasMilestone("cells", 5)) break
+                                if (!resetContent) break
                                 data.buyables[buyIds[i]] = decimalZero
                         }
                 }
@@ -21150,7 +21188,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Per reset keep a DNA upgrade, keep DNA Science buyables and upgrades, and Anti-Upsilon's log5 becomes ln."
+                                if (player.extremeMode) return "Reward: Per reset keep a DNA upgrade, keep DNA Science buyables and upgrades on Cell reset, and Anti-Upsilon's log5 becomes ln."
                                 return "Reward: Per reset keep a DNA upgrade and Anti-Upsilon's log5 becomes ln."
                         },
                 }, // hasMilestone("cells", 5)
@@ -21611,9 +21649,10 @@ addLayer("cells", {
                                 return tmp.l.buyables[23].effect.max(10).log10().sub(7).max(1).log10().max(0)
                         },
                         effectDescription(){
-                                let a = "Reward: log10(log10(β → ∂𝛾)-7) adds to Omnipotent base."
+                                let a = "Reward: log10(log10(β → ∂𝛾)-7) adds to Omnipotent base"
+                                if (player.extremeMode) a += " and keep DNA Science upgrades and buyables"
                                 let b = br + "Currently: " + format(tmp.cells.milestones[33].effect)
-                                return a + b
+                                return a + "." + b
                         },
                 }, // hasMilestone("cells", 33)
                 34: {
@@ -22045,7 +22084,11 @@ addLayer("cells", {
                         unlocked(){
                                 return true
                         },
+                        onComplete(){
+                                player.cells.everMilestone60 = true
+                        },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Double Primary base and permanently keep Protein Science upgrades."
                                 return "Reward: Double Primary base."
                         },
                 }, // hasMilestone("cells", 60)
@@ -22207,6 +22250,7 @@ addLayer("cells", {
                                         if (hasMilestone("cells", 47)) exp += 42
                                         if (hasMilestone("cells", 48)) exp = 891
                                         if (comps >= 20) exp += 3 * (comps - 19)
+                                        if (comps >= 25) exp += 3 * (comps - 19)
                                 }
                                 
                                 if (hasMilestone("cells", 54) && !player.extremeMode) {
@@ -23494,7 +23538,7 @@ addLayer("t", {
         }},
         color: "#A82450",
         branches: [],
-        requires:() => new Decimal("1e1385"), 
+        requires:() => new Decimal(player.extremeMode ? "1e813" : "1e1385"), 
         resource: "Tissues", 
         baseResource: "Cells", 
         baseAmount(){return player.cells.points},
@@ -23508,11 +23552,11 @@ addLayer("t", {
         },
         getBaseGain(){
                 let pts = player.cells.points
-                if (pts.lt("1e1385")) return decimalZero
+                if (pts.lt(player.extremeMode ? "1e813" : "1e1385")) return decimalZero
 
                 if (hasUpgrade("t", 71)) return pts.pow(tmp.t.getGainExp)
 
-                return pts.times("1e615").pow(tmp.t.getGainExp).sub(9).max(0)
+                return pts.times(player.extremeMode ? "1e1187" : "1e615").pow(tmp.t.getGainExp).sub(9).max(0)
         },
         getGainMult(){ // t gain tissuegain tgain tissue gain tissuesgain tissues gain
                 let ret = decimalOne
@@ -23555,8 +23599,8 @@ addLayer("t", {
                 if (player.extremeMode) gain = gain.root(.75)
 
                 let reqInit = gain.div(tmp.t.getGainMult).max(1)
-                if (hasUpgrade("t", 71)) return reqInit.root(tmp.t.getGainExp).max("1e1385")
-                return reqInit.plus(9).root(tmp.t.getGainExp).div("1e615")
+                if (hasUpgrade("t", 71)) return reqInit.root(tmp.t.getGainExp).max(player.extremeMode ? "1e813" : "1e1385")
+                return reqInit.plus(9).root(tmp.t.getGainExp).div(player.extremeMode ? "1e1187" : "1e615")
         },
         canReset(){
                 return tmp.t.getResetGain.gt(0) && !hasUpgrade("t", 132) && player.cells.challenges[12] >= 25
@@ -23676,6 +23720,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues I"
                         },
                         description(){
+                                if (player.extremeMode) return "All minigame gain ^1.01 and autobuy Topoisomerase"
                                 return "All minigame gain ^1.01"
                         },
                         cost:() => decimalOne,
@@ -23700,6 +23745,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues III"
                         },
                         description(){
+                                if (player.extremeMode) return "Gain 100x Lambda and autobuy DNA helicase"
                                 return "Gain 100x Lambda"
                         },
                         cost:() => decimalOne,
@@ -23712,6 +23758,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues IV"
                         },
                         description(){
+                                if (player.extremeMode) return "Gain 100x Kappa and autobuy DNA polymerase"
                                 return "Gain 100x Kappa"
                         },
                         cost:() => decimalOne,
@@ -23736,6 +23783,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues VI"
                         },
                         description(){
+                                if (player.extremeMode) return "Add 2 to base Tissue effect and autobuy DNA clamp"
                                 return "Add 2 to base Tissue effect"
                         },
                         cost:() => decimalOne,
@@ -23784,6 +23832,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues X"
                         },
                         description(){
+                                if (player.extremeMode) return "Per upgrade Tissues effect exponentiates Phosphorus gain and autobuy DNA ligase"
                                 return "Per upgrade Tissues effect exponentiates Phosphorus gain"
                         },
                         effect(){
@@ -23799,6 +23848,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XI"
                         },
                         description(){
+                                if (player.extremeMode) return "Gain 3x Stem Cells and autobuy primase"
                                 return "Gain 3x Stem Cells"
                         },
                         cost:() => decimalOne,
@@ -23811,6 +23861,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XII"
                         },
                         description(){
+                                if (player.extremeMode) return "Gain 10x Stem Cells in challenges and autobuy DNA gyrase"
                                 return "Gain 10x Stem Cells in challenges"
                         },
                         cost:() => decimalOne,
@@ -23862,6 +23913,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XVI"
                         },
                         description(){
+                                if (player.extremeMode) return "Keep a Cell milestone per Tissue reset and autobuy Telomerase"
                                 return "Keep a Cell milestone per Tissue reset"
                         },
                         cost:() => decimalOne,
@@ -23874,6 +23926,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XVII"
                         },
                         description(){
+                                if (player.extremeMode) return "Keep a Cell upgrade per Tissue upgrade and autobuy Single-strand DNA-binding protein"
                                 return "Keep a Cell upgrade per Tissue upgrade"
                         },
                         cost:() => decimalOne,
@@ -23937,11 +23990,12 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXII"
                         },
                         description(){
+                                if (player.extremeMode) return "Multiply Cell gain exponent by 100/99<br>Requires: 1e850 Cells"
                                 return "Multiply Cell gain exponent by 100/99<br>Requires: 1e1441 Cells"
                         },
                         cost:() => decimalOne,
                         canAfford(){
-                                return player.cells.points.gte("1e1441")
+                                return player.cells.points.gte(player.extremeMode ? "1e850" : "1e1441")
                         },
                         unlocked(){
                                 return true
@@ -25220,6 +25274,10 @@ addLayer("t", {
                                                 a2 = a2.replace("*1e615", "")
                                                 a2 = a2.replace("-9", "")
                                         }
+                                        if (player.extremeMode) {
+                                                a1 = a1.replace("615", "1187")
+                                                a2 = a2.replace("615", "1187")
+                                        }
                                         let a3 = "Initial Tissue effect: (Tissues+1)^1"
                                         let a4 = "Current Tissue effect: (" + format(tmp.t.effectMult) 
                                         a4 += "*Tissues+" + format(tmp.t.effectAdd) + ")^" + format(tmp.t.effectExp, 3)
@@ -25229,6 +25287,10 @@ addLayer("t", {
                                         let c = "Note that Anti- challenges and gems are never reset anymore."
                                         let d1 = "Tissue effect effects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Mu, Lambda, Kappa, and Iota gain."
+                                        if (player.extremeMode) {
+                                                d1 += " DNA Science,"
+                                                d2 = "Protein Science, " + d2 
+                                        }
                                         let d = d1 + br + d2
 
                                         let part1 = a + br2 + b + br + c + br2 + d
@@ -25476,6 +25538,8 @@ addLayer("t", {
                 player.mu.buyables[33] = decimalZero
 
                 player.p.best_over_amino = decimalZero
+
+                if (player.extremeMode) layers.sci.doReset("t")
 
                 resetPreLifeCurrencies()
         },

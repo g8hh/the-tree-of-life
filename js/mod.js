@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.192",
+	num: "1.193",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.t.unlocked
+	if (player.extremeMode) return player.t.total.gte(33)
 	return player.or.deoxygenated_blood.points.gte(1e24)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.192)<br><br>
+		Reaching the endgame screen (updated at least as of v1.193)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.193</h3><br>
+		- Balanced until 33 total Tissues.<br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
 	<br><h3 style='color: #CC0000'>v1.192</h3><br>
 		- Balanced extreme mode until Tissue unlock.<br>
 		- Various code clean up and extreme mode changes.<br>
@@ -1769,6 +1773,9 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "1.167") {
 		player.sci.everUpgrade412 = player.sci.upgrades.includes(412)
+	}
+	if (player.version < "1.192") {
+		player.cells.everMilestone60 = player.t.unlocked || player.cells.milestones.includes("60")
 	}
 }
 
