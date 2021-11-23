@@ -2528,6 +2528,7 @@ addLayer("sci", {
                         }
                         if (hasMilestone("cells", 31))  ret = ret.times(Decimal.pow(1.1, player.tokens.total))
                                                         ret = ret.times(tmp.t.effect)
+                        if (hasUpgrade("sci", 545))     ret = ret.times(tmp.cells.buyables[111].effect)
 
                         return ret
                 },
@@ -5233,6 +5234,36 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 542)
                         }, // hasUpgrade("sci", 543)
+                },
+                544: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXIV"
+                        },
+                        description(){
+                                return "Tokens exponentiate Infrared base and miRNA base is µ"
+                        },
+                        cost:() => new Decimal("1e7794"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasMilestone("t", 5)
+                        }, // hasUpgrade("sci", 544)
+                },
+                545: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXV"
+                        },
+                        description(){
+                                return "Sinusoidal effects DNA Science gain and Squeeze effect is log2(DNA)^x"
+                        },
+                        cost:() => new Decimal("1e7890"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 544)
+                        }, // hasUpgrade("sci", 545)
                 },
         },
         buyables: {
@@ -17714,7 +17745,7 @@ addLayer("a", {
                         },
                         base(){
                                 if (hasUpgrade("t", 151)) return new Decimal("ee13")
-                                if (hasMilestone("cells", 29)) return player.mu.points.max(1).pow(player.extremeMode ? .1 : 1)
+                                if (hasMilestone("cells", 29)) return player.mu.points.max(1).pow(player.extremeMode && !hasUpgrade("sci", 544) ? .1 : 1)
                                 let ret = player.l.points.max(10).log10()
 
                                 if (hasMilestone("d", 3))       ret = ret.times(Math.log(10)/Math.log(9))
@@ -17754,7 +17785,7 @@ addLayer("a", {
                                 if (hasMilestone("d", 13)) eformula = eformula.replace("ln", "log2")
                                 if (hasMilestone("cells", 29)) eformula = eformula.replace("log2(Lives)", "µ")
                                 if (hasUpgrade("t", 151)) eformula = eformula.replace("µ", "e1e13")
-                                if (player.extremeMode) eformula = eformula.replace("µ^x", "(µ<sup>.1</sup>)^x")
+                                if (player.extremeMode && !hasUpgrade("sci", 544)) eformula = eformula.replace("µ^x", "(µ<sup>.1</sup>)^x")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -18125,7 +18156,7 @@ addLayer("a", {
                                 }
 
                                 let eformula = "ln(siRNA levels)^x<br>" + format(tmp.a.buyables[32].base) + "^x"
-                                if (layers.l.grid.getGemEffect(806) && !player.extremeMode) eformula = eformula.replace("ln", "")
+                                if (layers.l.grid.getGemEffect(806)) eformula = eformula.replace("ln", "")
                                 if (hasUpgrade("cells", 63)) eformula = eformula.replace("siRNA levels", "log10(log10(Points))")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -22387,7 +22418,7 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 35))    base = new Decimal(9.1)
                                 if (hasUpgrade("cells", 41))    base = new Decimal(9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(9)
-                                if (hasMilestone("cells", 20)) init = decimalOne
+                                if (hasMilestone("cells", 20))  init = decimalOne
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -22451,13 +22482,10 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 0 && inChallenge("cells", 21)) return decimalOne
-                                let init = player.cells.points.max(10).log10().log10().plus(tmp.cells.buyables[11].baseConstant)
-
-                                return init
+                                return player.cells.points.max(10).log10().log10().plus(tmp.cells.buyables[11].baseConstant)
                         },
                         effect(){
-                                let amt = getBuyableAmount("cells", 11)
-                                return tmp.cells.buyables[11].base.pow(amt)
+                                return tmp.cells.buyables[11].base.pow(getBuyableAmount("cells", 11))
                         },
                         display(){
                                 if (!player.shiftAlias) {
@@ -22881,6 +22909,7 @@ addLayer("cells", {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.cells.buyables[111]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.cells.buyables[111].effect) + " to Mu gain</b><br>"
+                                        if (hasUpgrade("sci", 545)) eff2 = eff2.replace("Mu", "Mu and DNA Science")
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("cells", 111)) + " Mu</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
@@ -22942,6 +22971,8 @@ addLayer("cells", {
                                 let amt = getBuyableAmount("cells", 112)
                                 let base = tmp.cells.buyables[112].base
                                 if (base.eq(1)) return decimalOne
+                                if (hasUpgrade("sci", 545)) return base.times(3.321928094887362).pow(amt)
+                                // 3.321928094887362 = Math.log2(10)
                                 return base.pow(amt.sub(amt.div(20).sin().times(10)))
                         },
                         display(){
@@ -22955,6 +22986,10 @@ addLayer("cells", {
                                 }
 
                                 let eformula = "log10(DNA)^(x-sin(x/20)*10)<br>" + format(tmp.cells.buyables[112].base) + "^(x-sin(x/20)*10)"
+                                if (hasUpgrade("sci", 545)) {
+                                        eformula = eformula.replaceAll("(x-sin(x/20)*10)", "x")
+                                        eformula = eformula.replace("10", "2")
+                                }
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -24068,11 +24103,12 @@ addLayer("t", {
                         description(){
                                 let a = "Visible effects Cells and Primary base is 105"
                                 let b = "<br>Requires: e6.598e23 Protein<br>(" + format(player.a.protein.points,4) + ")"
+                                if (player.extremeMode) b = b.replace("6.598e23", "6.407e20")
                                 if (!hasUpgrade("t", 62)) return a + b
                                 return a
                         },
                         canAfford(){
-                                return player.a.protein.points.gte("e6.598e23")
+                                return player.a.protein.points.gte(player.extremeMode ? "e6.407e20" : "e6.598e23")
                         },
                         cost:() => new Decimal(10),
                         unlocked(){
@@ -24084,7 +24120,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XXVIII"
                         },
                         description(){
-                                let a = "Tissue additionally affects Stem cell after Secondary nerf"
+                                let a = "Tissue effect additionally affects Stem cell after Secondary nerf"
                                 let b = "<br>Requires: 28 Secondary completions"
                                 if (!hasUpgrade("t", 63)) return a + b
                                 return a
@@ -24954,10 +24990,11 @@ addLayer("t", {
                 }, // hasMilestone("t", 4)
                 5: {
                         requirementDescription(){
+                                if (player.extremeMode) return "8e863 Cells"
                                 return "5e1435 Cells"
                         },
                         done(){
-                                return player.cells.points.gte("5e1435")
+                                return player.cells.points.gte(player.extremeMode ? "8e863" : "5e1435")
                         },
                         unlocked(){
                                 return true
@@ -24968,10 +25005,11 @@ addLayer("t", {
                 }, // hasMilestone("t", 5)
                 6: {
                         requirementDescription(){
+                                if (player.extremeMode) return "2.9e875 Cells"
                                 return "1e1469 Cells"
                         },
                         done(){
-                                return player.cells.points.gte("1e1469")
+                                return player.cells.points.gte(player.extremeMode ? "2.9e875" : "1e1469")
                         },
                         unlocked(){
                                 return true
@@ -24991,7 +25029,7 @@ addLayer("t", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per cbrt(Pluripotent) add .05 to Omnipotent's base."
+                                return "Reward: Add cbrt(Pluripotent)/20 to Omnipotent's base."
                         },
                 }, // hasMilestone("t", 7)
                 8: {
@@ -34684,6 +34722,7 @@ addLayer("tokens", {
                                         if (!player.extremeMode) ret = ret.pow(player.tokens.total.max(1))
                                         else ret = ret.times(player.tokens.total.max(1))
                                 }
+                                if (hasUpgrade("sci", 544)) ret = ret.pow(player.tokens.total.max(1))
                                 return ret
                         },
                         effect(){
