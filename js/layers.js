@@ -34724,7 +34724,9 @@ addLayer("tokens", {
                                 if (hasUpgrade("cells", 25)) return decimalOne
                                 let ret = new Decimal(1.01)
 
-                                if (hasMilestone("cells", 31))  ret = decimalOne
+                                if (hasMilestone("cells", 31) && player.extremeMode) {
+                                                                ret = decimalOne
+                                }
                                 if (hasUpgrade("tokens", 31))   ret = ret.plus(.01)
                                 if (hasUpgrade("t", 61))        ret = ret.plus(.011)
 
