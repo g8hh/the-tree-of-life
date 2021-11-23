@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.195",
+	num: "1.196",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return hasUpg("t", 75)
+	if (player.extremeMode) return hasUpg("t", 83)
 	return player.or.deoxygenated_blood.points.gte(1e24)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.195)<br><br>
+		Reaching the endgame screen (updated at least as of v1.196)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.196</h3><br>
+		- Balanced until Tissues XXXVIII.<br>
+		- Various extreme mode changes.<br>
+		- Added a DNA Science upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.195</h3><br>
 		- Balanced until Tissues XXXV.<br>
 		- Various extreme mode changes, and display fixes.<br>
