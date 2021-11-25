@@ -179,7 +179,8 @@ function loadVue() {
 				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
 				<span v-html="tmp[layer].upgrades[data].description"></span>
 				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
-				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} 
+				<span v-html="tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource"></span>
 			</span>
 			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
 
@@ -252,6 +253,13 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div><span v-if="player[layer][data].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{formatCurrency(player[layer][data].points)}}</h2> {{improveName(data)}}<br><br></div>
+		`
+	})
+
+	Vue.component('secondary-display-blood', {
+		props: ['layer'],
+		template: `
+		<div><span v-if="player.or.deoxygenated_blood.points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp.or.color, 'text-shadow': '0px 0px 10px ' + tmp.or.color}">{{formatCurrency(player.or.oxygenated_blood.points)}}</h2> <bdi style='color:#66297D'>{{"OB"}}</bdi> and </span><h2 v-bind:style="{'color': tmp.or.color, 'text-shadow': '0px 0px 10px ' + tmp.or.color}">{{formatCurrency(player.or.deoxygenated_blood.points)}}</h2> <bdi style='color:#3379E3'>{{"DB"}}</bdi><br></div>
 		`
 	})
 
@@ -458,6 +466,22 @@ function loadVue() {
 
 	// data = id of microtab family
 	Vue.component('microtabs', {
+		props: ['layer', 'data'],
+		computed: {
+			currentTab() {return player.subtabs[layer][data]}
+		},
+		template: `
+		<div v-if="tmp[layer].microtabs" :style="{'border-style': 'solid'}">
+			<div class="upgTable instant">
+				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" v-bind:style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
+			</div>
+			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
+
+			<column v-else v-bind:style="tmp[layer].microtabs[data][player.subtabs[layer][data]].style" :layer="layer" :data="tmp[layer].microtabs[data][player.subtabs[layer][data]].content"></column>
+		</div>
+		`
+	})
+	Vue.component('microtab', { // copy it
 		props: ['layer', 'data'],
 		computed: {
 			currentTab() {return player.subtabs[layer][data]}
