@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.180.1",
+	num: "1.188",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,63 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.sci.dna_science.points.gte("1e168")
-	return player.or.total.gt(4)
+	if (player.extremeMode) return player.sci.dna_science.points.gte("1e4927")
+	return player.or.deoxygenated_blood.points.gte(5e11)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.180)<br><br>
+		Reaching the endgame screen (updated as of v1.188)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.188</h3><br>
+		- Balanced until 5e11 Deoxygenated Blood.<br>
+		- Added thirteen Heart upgrades.<br>
+		- Added a custom save.<br>
+		- Made green letters purple for better visibility.<br>
+		- Various code clean up and display fixes.<br>
+		- Added 1 to point gain if you have Cells unlocked (tell me why for bonus points)!<br>
+	<br><h3 style='color: #CC0000'>v1.187</h3><br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
+		- Balanced extreme mode until 1e4927 DNA Science.<br>
+		- Added two DNA Science upgrades.<br>
+		- Initially added Heart.<br>
+		- Added a Stem Cell buyable.<br>
+	<br><h3 style='color: #CC0000'>v1.186</h3><br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
+		- Balanced extreme mode until 1e3796 DNA Science.<br>
+		- Added three DNA Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.185</h3><br>
+		- Various extreme mode changes.<br>
+		- Balanced extreme mode until 1e1084 DNA Science.<br>
+		- Added three DNA Science upgrades.<br>
+		- Various display fixes and improvements.<br>
+	<br><h3 style='color: #CC0000'>v1.184</h3><br>
+		- Various extreme mode changes.<br>
+		- Balanced extreme mode until 1e852 DNA Science.<br>
+		- Added two DNA Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.183</h3><br>
+		- Balanced normal mode until 3 Tertiary completions.<br>
+		- Added four Organ milestones.<br>
+	<br><h3 style='color: #CC0000'>v1.182</h3><br>
+		- Balanced normal mode until 10 Organs.<br>
+		- Various extreme mode changes.<br>
+		- Various bugfixes.<br>
+		- Various display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.181</h3><br>
+		- Balanced until 1e643 DNA Science.<br>
+		- Added six DNA Science upgrades.<br>
+		- Added two DNA Science buyables.<br>
+		- Various extreme mode changes.<br>
+		- Added Stem Cell amount to Cell tooltip.<br>
+		- Improved DNA Science tab display.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.180.1</h3><br>
 		- Fixed various bugs.<br>
 		- Added a custom save.<br>
