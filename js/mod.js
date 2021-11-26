@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.197",
+	num: "1.197.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,19 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.197)<br><br>
+		Reaching the endgame screen (updated at least as of v1.197.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.197.1</h3><br>
+		- Various code cleanup.<br>
+		- Rebalanced 1000-1e7 Organ Era.<br>
+		- Added a display for cheapest DNA Science buyable.<br>
+		- Added a display for next at for Organ gain.<br>
+		- Made the 7e242 Life milestone only require 2.5e242.<br>
 	<br><h3 style='color: #CC0000'>v1.197</h3><br>
 		- Balanced until Tissues XL.<br>
 		- Various extreme mode changes.<br>

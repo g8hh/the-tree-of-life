@@ -31,7 +31,6 @@ function getPointMultiplier(){
                                         gain = gain.times(tmp.sci.buyables[21].effect)
         if (hasUpgrade("sci", 202))     gain = gain.times(tmp.sci.upgrades[202].effect)
         if (hasUpgrade("sci", 302))     gain = gain.times(tmp.sci.upgrades[302].effect)
-
         if (player.easyMode)            gain = gain.times(4)
 
         return gain
@@ -42,7 +41,6 @@ function getPointExponentiation(){
 
         if (player.easyMode)            exp = exp.times(1.001)
         if (player.extremeMode)         exp = exp.times(.75)
-        
         if (hasUpgrade("h", 25))        exp = exp.times(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        exp = exp.times(tmp.o.upgrades[13].effect)
                                         exp = exp.times(tmp.tokens.buyables[41].effect)
@@ -160,13 +158,11 @@ function getPointDilationExponent(){
                 let c7Base = player.extremeMode ? .0188 : .023
                 c7Base -= layers.l.grid.getGemEffect(706).toNumber()
                 c6Base -= c7Base * c7depth ** .56
-                                        
 
                 let portion = decimalOne
+                let challId = player.l.activeChallengeID
                 portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
                 portion = portion.times(Decimal.pow(c6Base, c6Layers))
-
-                let challId = player.l.activeChallengeID
                 if (challId > 801 && !player.extremeMode) {
                         portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
                 }
@@ -1872,7 +1868,8 @@ addLayer("h", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
@@ -1887,7 +1884,6 @@ addLayer("h", {
                                                 return "You are losing " + format(tmp.h.getLossRate.times(100)) + "% of your Hydrogen per second"
                                         },
                                 ],
-
                                 "blank", 
                                 ["upgrades", [1,2,3,4,5,6,7,8,9]],
                                 "blank",
@@ -1898,7 +1894,8 @@ addLayer("h", {
                         },
                 },
                 "Deuterium": {
-                        content: [["secondary-display", "deuterium"],
+                        content: [
+                                ["secondary-display", "deuterium"],
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return ""
@@ -1916,16 +1913,16 @@ addLayer("h", {
                                                 return "You are losing " + format(tmp.h.deuterium.getLossRate.times(100)) + "% of your Deuterium per second"
                                         },
                                 ],
-
                                 "blank", 
                                 ["upgrades", [2,7]]
-                                ],
+                        ],
                         unlocked(){
                                 return hasUpgrade("h", 21)
                         },
                 },
                 "Atomic Hydrogen": {
-                        content: [["secondary-display", "atomic_hydrogen"],
+                        content: [
+                                ["secondary-display", "atomic_hydrogen"],
                                 ["display-text",
                                         function(){
                                                 if (hasMilestone("mu", 2)) return "" 
@@ -1943,10 +1940,9 @@ addLayer("h", {
                                                 return "You are losing " + format(tmp.h.atomic_hydrogen.getLossRate.times(100)) + "% of your Atomic Hydrogen per second"
                                         },
                                 ],
-
                                 "blank", 
                                 ["upgrades", [3,8]]
-                                ],
+                        ],
                         unlocked(){
                                 return hasUpgrade("h", 31)
                         },
@@ -6798,6 +6794,17 @@ addLayer("sci", {
                                         ["display-text", function(){
                                                 return "You have a total of " + formatWhole(tmp.sci.buyables.dnaBuyablesTotal) + " DNA Science buyables"
                                         }],
+                                        ["display-text", function(){
+                                                let data = tmp.sci.buyables
+                                                let minCost = data[501].cost
+                                                let ids = [502, 503, 511, 512, 513, 521, 522, 523]
+                                                let idMin = 501
+                                                for (i in ids) {
+                                                        if (data[ids[i]].unlocked) minCost = minCost.min(data[ids[i]].cost)
+                                                        if (minCost.eq(data[ids[i]].cost)) idMin = ids[i]
+                                                }
+                                                return "The cheapest buyable (" + (idMin-490) + ") costs " + formatWhole(minCost)
+                                        }],
                                         ["buyables", [50,51,52]]
                                 ]
                         }
@@ -7556,7 +7563,8 @@ addLayer("c", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text",
                                         function(){
                                                 if (player.shiftAlias) return "Your best Carbon is " + format(player.c.best) + " and you are netting " + format(tmp.c.getResetGain.sub(tmp.c.getLossRate.times(player.c.points))) + " Carbon per second"
@@ -7569,9 +7577,9 @@ addLayer("c", {
                                                 return "You are losing " + format(tmp.c.getLossRate.times(100)) + "% of your Carbon per second"
                                         },
                                 ],
-
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7]]],
+                                ["upgrades", [1,2,3,4,5,6,7]]
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -8034,7 +8042,8 @@ addLayer("o", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text",
                                         function(){
                                                 if (player.shiftAlias) return "Your best Oxygen is " + format(player.o.best) + " and you are netting " + format(tmp.o.getResetGain.sub(tmp.o.getLossRate.times(player.o.points))) + " Oxygen per second"
@@ -8047,9 +8056,9 @@ addLayer("o", {
                                                 return "You are losing " + format(tmp.o.getLossRate.times(100)) + "% of your Oxygen per second"
                                         },
                                 ],
-
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7]]],
+                                ["upgrades", [1,2,3,4,5,6,7]]
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -9148,7 +9157,8 @@ addLayer("n", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["prestige-button", "", function (){ return hasMilestone("n", 13) ? {'display': 'none'} : {}}],
                                 ["display-text",
                                         function(){
@@ -9157,25 +9167,29 @@ addLayer("n", {
                                         }
                                 ],
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7]]],
+                                ["upgrades", [1,2,3,4,5,6,7]]
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Challenges": {
-                        content: ["main-display",
-                                ["microtabs", "challenge_content"]],
+                        content: [
+                                "main-display",
+                                ["microtabs", "challenge_content"]
+                        ],
                         unlocked(){
                                 return hasMilestone("n", 14)
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.n.times) + " Nitrogen resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -10266,30 +10280,31 @@ addLayer("p", {
         tabFormat: {
                 "Upgrades": {
                         content: [
-                                        "main-display",
-                                        ["prestige-button", "", function (){ return hasUpgrade("p", 13) ? {'display': 'none'} : {}}],
-                                        ["display-text",
-                                                function(){
-                                                        if (player.shiftAlias) return "Your best Phosphorus is " + format(player.p.best) + " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
-                                                        let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
-                                                        if (!hasUpgrade("p", 13)) return "You are gaining " + format(x, 3) + " Phosphorus/s"
-                                                        return "You are gaining " + format(x, 3) + " Phosphorus/s and " + format(tmp.p.getResetGain) + " base Phosphorus/s<sup>2</sup>"
-                                                }
-                                        ],
-                                        "blank", 
-                                        ["upgrades", [1,2,3,4,5,6,7,10,11]]
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("p", 13) ? {'display': 'none'} : {}}],
+                                ["display-text",
+                                        function(){
+                                                if (player.shiftAlias) return "Your best Phosphorus is " + format(player.p.best) + " and your base Phosphorus/s is " + format(player.p.currentGainPerSec)
+                                                let x = player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult)
+                                                if (!hasUpgrade("p", 13)) return "You are gaining " + format(x, 3) + " Phosphorus/s"
+                                                return "You are gaining " + format(x, 3) + " Phosphorus/s and " + format(tmp.p.getResetGain) + " base Phosphorus/s<sup>2</sup>"
+                                        }
                                 ],
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7,10,11]]
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.p.times) + " Phosphorus resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -12144,7 +12159,8 @@ addLayer("mu", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["prestige-button", ""],
                                 ["display-text",
                                         function(){
@@ -12152,28 +12168,31 @@ addLayer("mu", {
                                         }
                                 ],
                                 "blank", 
-                                ["upgrades", [1,2,3,4,5,6,7]]],
+                                ["upgrades", [1,2,3,4,5,6,7]]
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Buyables": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         if (player.mu.points.gt(1e10)) return "You are gaining an estimated " + format(tmp.mu.resetGain.sub(1).times(20)) + " µ/s"
                                         if (player.shiftAlias) return " " + format(player.p.currentGainPerSec.times(tmp.p.getPassiveGainMult), 3) + " Phosphorus/s"
                                         return "You have " + format(player.p.points) + " Phosphorus"
                                 }],
                                 ["buyables", [1,2,3]],
-                                ],
+                        ],
                         unlocked(){
                                 return hasUpgrade("mu", 21) || player.a.unlocked
                         },
@@ -13367,11 +13386,11 @@ addLayer("l", {
                 33: {
                         requirementDescription(){
                                 if (player.extremeMode) return "1.00e214 Lives"
-                                return "7.00e242 Lives"
+                                return "2.50e242 Lives"
                         },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(1e214)
-                                return player.l.points.gte(7e242)
+                                return player.l.points.gte(2.5e242)
                         },
                         unlocked(){
                                 return true
@@ -15619,41 +15638,45 @@ addLayer("l", {
         },
         tabFormat: {
                 "Challenges": {
-                        content: ["main-display",
-                                  ["prestige-button", ""],
-                                  "blank", 
-                                  function(){return tmp.l.challenges[11].unlocked ? ["microtabs", "challenge_content"] : "blank"},
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", ""],
+                                "blank", 
+                                function(){return tmp.l.challenges[11].unlocked ? ["microtabs", "challenge_content"] : "blank"},
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Upgrades": {
-                        content: ["main-display",
-                                  ["prestige-button", ""],
-                                  "blank", 
-                                  "upgrades",
+                        content: [
+                                "main-display",
+                                ["prestige-button", ""],
+                                "blank", 
+                                "upgrades",
                                 ],
                         unlocked(){
                                 return player.extremeMode && hasMilestone("l", 8)
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.l.times) + " Life resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Buyables": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 "blank",
                                 ["buyables", [1,2,3]],
-                                ],
+                        ],
                         unlocked(){
                                 return (player.l.challenges[11] >= 30 || player.a.unlocked) && !hasUpgrade("cells", 64)
                         },
@@ -15671,7 +15694,8 @@ addLayer("l", {
                         }
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         let a = "Initial life gain: sqrt(log2(log2(log10(Life Points)))-9)" + br2 
                                         let b = "Life resets reset everything before Life except achievements" + br2
@@ -15709,7 +15733,7 @@ addLayer("l", {
 
                                         return step1 + br2 + i + br + h + br2 + j
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -18349,12 +18373,13 @@ addLayer("a", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
-                                  ["prestige-button", ""],
-                                  "blank", 
-                                  ["upgrades", [1,2,3,4,5,6,7]],
-                                  "blank",
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", ""],
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7]],
+                                "blank",
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -18375,18 +18400,20 @@ addLayer("a", {
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.a.times) + " Amino Acid resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Protein": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display3", "protein"],
                                 ["display-text", function(){
                                         if (player.cells.times > 11) return ""
@@ -18452,13 +18479,14 @@ addLayer("a", {
                                 }],
                                 "blank",
                                 ["buyables", [1,2,3]],
-                                ],
+                        ],
                         unlocked(){
                                 return hasUpgrade("a", 11)
                         },
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         if (player.or.unlocked) return ""
 
@@ -18627,7 +18655,7 @@ addLayer("a", {
 
                                         return part3
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return !player.or.unlocked
                         },
@@ -19541,34 +19569,36 @@ addLayer("d", {
         tabFormat: {
                 "Upgrades": {
                         content: [
-                                        "main-display",
-                                        ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
-                                        ["display-text",
-                                                function(){
-                                                        if (hasUpgrade("or", 125)) return "You are gaining " + format(tmp.d.getResetGain) + " DNA per second"
-                                                }
-                                        ],
-                                        "blank", 
-                                        ["upgrades", [1,2,3,4,5,6,7]],
-                                        "blank",
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
+                                ["display-text",
+                                        function(){
+                                                if (hasUpgrade("or", 125)) return "You are gaining " + format(tmp.d.getResetGain) + " DNA per second"
+                                        }
                                 ],
+                                "blank", 
+                                ["upgrades", [1,2,3,4,5,6,7]],
+                                "blank",
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.d.times) + " DNA resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         let div = player.extremeMode ? "8e315" : "4.4e144"
                                         let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2-1.50)<sup>2</sup>"
@@ -19588,7 +19618,7 @@ addLayer("d", {
 
                                         return a1 + br + a2 + br2 + b + br + c
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -23344,69 +23374,75 @@ addLayer("cells", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
-                                  ["prestige-button", "", function (){ return hasMilestone("cells", 14) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasMilestone("cells", 14) ? "Cell gain is capped at " + format(tmp.cells.getResetGain) : ""}], 
-                                  ["upgrades", [1,2,3,4,5,6,7]],
-                                  "blank",
-                                  ["clickables", function(){return hasMilestone("cells", 21) || hasMilestone("or", 4) ? [] : [1]}],
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasMilestone("cells", 14) ? {'display': 'none'} : {}}],
+                                ["display-text", function (){ return hasMilestone("cells", 14) ? "Cell gain is capped at " + format(tmp.cells.getResetGain) : ""}], 
+                                ["upgrades", [1,2,3,4,5,6,7]],
+                                "blank",
+                                ["clickables", function(){return hasMilestone("cells", 21) || hasMilestone("or", 4) ? [] : [1]}],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.cells.times) + " Cell resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Mu": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display", "mu"],
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.mu.getResetGain) + " Mu per second"
                                 }],
                                 ["upgrades", [11, 12]],
                                 ["buyables", [11]],
-                                ],
+                        ],
                         unlocked(){
                                 return player.cells.currentMinigame == 11 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Lambda": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display", "lambda"],
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.lambda.getResetGain) + " Lambda per second"
                                 }],
                                 ["upgrades", [21, 22]],
                                 ["clickables", [21]],
-                                ],
+                        ],
                         unlocked(){
                                 return player.cells.currentMinigame == 12 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Kappa": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display", "kappa"],
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.cells.kappa.getResetGain) + " Kappa per second"
                                 }],
                                 ["bar", "kappa"],
                                 ["upgrades", [31, 32]],
-                                ],
+                        ],
                         unlocked(){
                                 return player.cells.currentMinigame == 13 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Iota": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display", "iota"],
                                 ["display-text", function(){
                                         return "You have spent " + formatTime(player.cells.timeInMinigame) + " in Iota"
@@ -23416,20 +23452,20 @@ addLayer("cells", {
                                 }],
                                 ["upgrades", [41, 42]],
                                 ["buyables", [41]],
-                                ],
+                        ],
                         unlocked(){
                                 return player.cells.currentMinigame == 14 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
                 "Stem": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["secondary-display", "stem_cells"],
                                 ["display-text", function(){
                                         return "Currently you are gaining " + format(tmp.cells.stem_cells.getResetGain) + " Stem Cells/s"
                                 }],
                                 ["microtabs", "stem_content"],
-                                
-                                ],
+                        ],
                         unlocked(){
                                 return hasUpgrade("cells", 13) || player.t.unlocked
                         },
@@ -23450,7 +23486,8 @@ addLayer("cells", {
                         },
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         let a1 = "Initial Cells gain: (DNA/1e582)^(1/1,960)"
                                         let a2 = "Current Cells gain: (DNA/1e582)^(1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
@@ -23502,7 +23539,7 @@ addLayer("cells", {
 
                                         return part4
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -25379,51 +25416,56 @@ addLayer("t", {
         },
         tabFormat: {
                 "Start": {
-                        content: ["main-display",
-                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
-                                  "blank",
-                                  ["upgrades", [1,2,3,4,5]],
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + formatWhole(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                "blank",
+                                ["upgrades", [1,2,3,4,5]],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Middle": {
-                        content: ["main-display",
-                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
-                                  "blank",
-                                  ["upgrades", [6,7,8,9,10]],
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + formatWhole(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                "blank",
+                                ["upgrades", [6,7,8,9,10]],
+                        ],
                         unlocked(){
                                 return hasMilestone("t", 6) || hasMilestone("or", 9)
                         },
                 },
                 "End": {
-                        content: ["main-display",
-                                  ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + format(tmp.t.getResetGain) + " Tissues" : ""}], 
-                                  "blank",
-                                  ["upgrades", [11,12,13,14,15]],
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("t", 132) ? {'display': 'none'} : {}}],
+                                ["display-text", function (){ return hasUpgrade("t", 132) ? "You can reset for " + formatWhole(tmp.t.getResetGain) + " Tissues" : ""}], 
+                                "blank",
+                                ["upgrades", [11,12,13,14,15]],
+                        ],
                         unlocked(){
                                 return hasUpgrade("cells", 55) || hasMilestone("or", 9)
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.t.times) + " Tissue resets"
                                 }],
                                 "milestones",
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         let a1 = "Initial Tissue gain: (Cells*1e615)^(1/2,000)-9"
                                         let a2 = "Current Tissue gain: (Cells*1e615)^(1/"
@@ -25465,7 +25507,7 @@ addLayer("t", {
 
                                         return part2
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -26012,7 +26054,7 @@ addLayer("or", {
                         description(){
                                 return "Add .0053 to tRNA's base and gain 100% of DNA and Amino Acid per second but disable C28 and C88"
                         },
-                        cost:() => new Decimal(13050),
+                        cost:() => new Decimal(12345),
                         unlocked(){
                                 return hasMilestone("or", 14)
                         }, // hasUpgrade("or", 12)
@@ -26313,7 +26355,7 @@ addLayer("or", {
                                 return "The number of milestones multiplies Organ gain but remove Anti-Pi's positive effects"
                         }, // EFFECTS DNA CLAMP SO BE CAREFUL ABOUT THIS NERFING THINGS
                         cost(){
-                                return new Decimal(4e16)
+                                return new Decimal(2e16)
                         },
                         currencyLocation:() => player.or.oxygenated_blood,
                         currencyInternalName:() => "points",
@@ -26364,7 +26406,7 @@ addLayer("or", {
                                 return "Add .0002 to tRNA's base but remove Gems, Customizable, and Selection"
                         },
                         cost(){
-                                return new Decimal(1e19)
+                                return new Decimal(5e18)
                         },
                         onPurchase(){
                                 player.l.activeChallenge = null
@@ -26385,7 +26427,7 @@ addLayer("or", {
                                 return "The number of upgrades multiplies Organ gain but remove Lives<sup>*</sup>"
                         },
                         cost(){
-                                return new Decimal(2e22)
+                                return new Decimal(1e22)
                         },
                         onPurchase(){
                                 player.l.activeChallenge = null
@@ -26589,10 +26631,10 @@ addLayer("or", {
                 }, // hasMilestone("or", 13)
                 14: {
                         requirementDescription(){
-                                return "13,000 Organs"
+                                return "12,200 Organs"
                         },
                         done(){
-                                return player.or.points.gte(13e3)
+                                return player.or.points.gte(12200)
                         },
                         unlocked(){
                                 return true
@@ -26683,18 +26725,25 @@ addLayer("or", {
         },
         tabFormat: {
                 "Upgrades": {
-                        content: ["main-display",
-                                  ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
-                                  ["display-text", function (){ return hasUpgrade("or", 125) ? "You can reset for " + format(tmp.or.getResetGain) + " Organs" : ""}], 
-                                  "blank",
-                                  ["upgrades", [1,2,3,4,5]],
-                                ],
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
+                                ["display-text", function (){
+                                        if (!hasUpgrade("or", 125)) return ""
+                                        let init = "You can reset for " + formatWhole(tmp.or.getResetGain) + " Organs. "
+                                        if (tmp.or.getResetGain.gt(1e5)) return init 
+                                        return init + " Next at: " + format(tmp.or.getNextAt) + " Tissues"
+                                }], 
+                                "blank",
+                                ["upgrades", [1,2,3,4,5]],
+                        ],
                         unlocked(){
                                 return true
                         },
                 },
                 "Milestones": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         return "You have done " + formatWhole(player.or.times) + " Organ resets"
                                 }],
@@ -26705,7 +26754,8 @@ addLayer("or", {
                         },
                 },
                 "Organs": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["microtabs", "organ_content"],
                         ],
                         unlocked(){
@@ -26713,7 +26763,8 @@ addLayer("or", {
                         },
                 },
                 "Info": {
-                        content: ["main-display",
+                        content: [
+                                "main-display",
                                 ["display-text", function(){
                                         let a1 = "Initial Organ gain: (log10(Tissue))^(0.50)-9"
                                         let a2 = "Current Organ gain: (log10(Tissue))^("
@@ -26731,7 +26782,7 @@ addLayer("or", {
 
                                         return part1
                                 }],
-                                ],
+                        ],
                         unlocked(){
                                 return true
                         },
@@ -27405,7 +27456,6 @@ addLayer("mc", {
                 },
                 "Micro": {
                         content: [
-                                
                                 "main-display",
                                 ["display-text", function(){
                                         return "You are getting " + format(tmp.mc.getResetGain) + " Micro per second"
