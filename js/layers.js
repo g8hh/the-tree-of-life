@@ -26120,7 +26120,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart III"
                         },
                         description(){
-                                return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II effects are based on best amount of levels"
+                                return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II effect amounts are based on best levels"
                         },
                         ob_effect(){
                                 return Decimal.pow(2, player.tokens.tokens2.total.sub(73))
