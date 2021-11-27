@@ -22490,6 +22490,7 @@ addLayer("cells", {
                                 let c = player.cells.challenges[21]
 
                                 exp = exp.times(Decimal.pow(5, c)).plus(6508)
+                                if (c >= 4) exp = Decimal.pow(10, c+2)
 
                                 return Decimal.pow(10, exp)
                         },
@@ -25799,6 +25800,7 @@ addLayer("or", {
                 if (hasUpgrade("or", 124))      ret = ret.times(tmp.or.upgrades[124].effect)
                 if (hasUpgrade("or", 131))      ret = ret.times(player.or.milestones.length)
                 if (hasUpgrade("or", 135))      ret = ret.times(player.or.upgrades.length)
+                if (hasUpgrade("or", 14))       ret = ret.times(player.tokens.tokens2.total.max(1))
 
                 return ret.max(1)
         },
@@ -25823,12 +25825,11 @@ addLayer("or", {
         },
         effect(){
                 let pts = player.or.total
-
-                let base = pts.plus(1)
+                if (hasUpgrade("or", 14)) pts = player.or.best
 
                 let exp = pts.cbrt().div(5).min(99).plus(1)
 
-                let ret = base.pow(exp)
+                let ret = pts.plus(1).pow(exp)
 
                 return ret.max(1)
         },
@@ -26070,6 +26071,18 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 135)
                         }, // hasUpgrade("or", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs IV"
+                        },
+                        description(){
+                                return "Tokens II multiplies Organ gain and unlock Liver, but Organ effect is based on best"
+                        },
+                        cost:() => new Decimal(21.2e6),
+                        unlocked(){
+                                return hasUpgrade("or", 13)
+                        }, // hasUpgrade("or", 14)
                 },
                 101: {
                         title(){
@@ -37492,7 +37505,7 @@ addLayer("tokens", {
                                 ["secondary-display-tokens2", "tokens2"],
                                 ["buyables", [10,11,12,19]],
                                 ["clickables", [1]],
-                                ["display-text", "<br><br><br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R)"],
+                                ["display-text", "<br>Buying a Token II buyable buffs all the other buyables in its column (denoted by C),<br> and nerfs the buyables in its row (denoted by R)<br><br><br>"],
                         ],
                         unlocked(){
                                 return hasUpgrade("cells", 42)
