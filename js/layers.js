@@ -19883,6 +19883,9 @@ addLayer("cells", {
                 if (hasMilestone("cells", 14))  ret = ret.times(2)
                 if (hasMilestone("cells", 20))  ret = ret.times(49/25)
                 if (hasUpgrade("t", 52))        ret = ret.times(100/99)
+                if (hasUpgrade("or", 211) && !player.or.filterLeftKidney) {
+                                                ret = ret.times(99/98)
+                }
 
                 return ret
         },
@@ -23755,6 +23758,7 @@ addLayer("t", {
                 if (hasMilestone("or", 10))     ret = ret.times(Decimal.pow(2, player.or.milestones.length))
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 552))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[552].lvls))
+                if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
                 
                 return ret.max(1)
         },
@@ -25804,6 +25808,10 @@ addLayer("or", {
                 if (hasUpgrade("or", 131))      ret = ret.times(player.or.milestones.length)
                 if (hasUpgrade("or", 135))      ret = ret.times(player.or.upgrades.length)
                 if (hasUpgrade("or", 14))       ret = ret.times(player.tokens.tokens2.total.max(1))
+                if (hasUpgrade("or", 141)) {
+                        let lvls = Math.max(0, player.or.upgrades.length - 30)
+                                                ret = ret.times(player.or.buyables[201].plus(10).log10().pow(lvls))
+                }
 
                 return ret.max(1)
         },
@@ -26003,6 +26011,8 @@ addLayer("or", {
                         let abKeys = []
                         if (hasUpgrade("or", 204)) abKeys.push(201)
                         if (hasUpgrade("or", 205)) abKeys.push(202)
+                        if (hasUpgrade("or", 211)) abKeys.push(203)
+                        if (hasUpgrade("or", 142)) abKeys.push(211)
 
                         for (i in abKeys) {
                                 let id = abKeys[i]
@@ -26019,7 +26029,10 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[203].effect)
                                                         ret = ret.times(tmp.or.buyables[211].effect)
                                                         ret = ret.times(tmp.or.buyables[212].effect)
-                                                        //ret = ret.times(tmp.or.buyables[213].effect)
+                                                        ret = ret.times(tmp.or.buyables[213].effect)
+                                                        //ret = ret.times(tmp.or.buyables[221].effect)
+                        if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
+                        if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -26517,6 +26530,58 @@ addLayer("or", {
                                 return hasUpgrade("or", 134)
                         }, // hasUpgrade("or", 135)
                 },
+                141: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXI"
+                        },
+                        description(){
+                                return "Per Organ upgrade - 30 mutliply Organ gain by log10(10 + I'm levels)"
+                        },
+                        cost(){
+                                return new Decimal(1e56)
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 211)
+                        }, // hasUpgrade("or", 141)
+                },
+                142: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXII"
+                        },
+                        description(){
+                                return "Organ multiply Contaminant gain and autobuy him"
+                        },
+                        cost(){
+                                return new Decimal(1e42)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 141)
+                        }, // hasUpgrade("or", 142)
+                },
+                143: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXIII"
+                        },
+                        description(){
+                                return "Per Organ upgrade gonna levels multiply Contaminant and Tissue gain"
+                        },
+                        cost(){
+                                return new Decimal(2e59)
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 142)
+                        }, // hasUpgrade("or", 143)
+                },
+
                 201: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney I"
@@ -26601,6 +26666,23 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 204)
                         }, // hasUpgrade("or", 205)
+                },
+                211: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney VI"
+                        },
+                        description(){
+                                return "Autobuy make and if you are filtering from your right kidney, then raise base Cell gain ^(99/98)"
+                        },
+                        cost(){
+                                return new Decimal("1e6031")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 205)
+                        }, // hasUpgrade("or", 211)
                 },
         },
         clickables: {
@@ -26894,6 +26976,57 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e3486*x<sup>16x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                213: {
+                        title: "offer", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 213)
+                                let base = new Decimal("1e17147")
+                                let exp = new Decimal(32)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 211) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[213].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[213] = data.buyables[213].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[213].cost)
+                        },
+                        base(){
+                                let ret = player.or.buyables[212].max(1).sqrt()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[213].base.pow(player.or.buyables[213])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[213]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[213].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 213)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "sqrt(an levels)^x<br>" + format(tmp.or.buyables[213].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e17147*x<sup>32x</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
