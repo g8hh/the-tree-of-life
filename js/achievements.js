@@ -739,6 +739,20 @@ PROGRESSION_MILESTONES = {
         614: () => player.tokens.tokens2.total.gte(135),
         615: () => player.tokens.tokens2.total.gte(140),
         616: () => player.tokens.tokens2.total.gte(145),
+        617: () => player.or.contaminants.points.gte(Decimal.pow(2, 0).pow10()),
+        618: () => player.or.contaminants.points.gte(Decimal.pow(2, 1).pow10()),
+        619: () => player.or.contaminants.points.gte(Decimal.pow(2, 2).pow10()),
+        620: () => player.or.contaminants.points.gte(Decimal.pow(2, 3).pow10()),
+        621: () => player.or.contaminants.points.gte(Decimal.pow(2, 4).pow10()),
+        622: () => player.or.contaminants.points.gte(Decimal.pow(2, 5).pow10()),
+        623: () => player.or.contaminants.points.gte(Decimal.pow(2, 6).pow10()),
+        624: () => player.or.contaminants.points.gte(Decimal.pow(2, 7).pow10()),
+        625: () => player.or.contaminants.points.gte(Decimal.pow(2, 8).pow10()),
+        626: () => player.or.contaminants.points.gte(Decimal.pow(2, 9).pow10()),
+        627: () => player.or.contaminants.points.gte(Decimal.pow(2, 10).pow10()),
+        628: () => player.or.contaminants.points.gte(Decimal.pow(2, 11).pow10()),
+        629: () => player.or.contaminants.points.gte(Decimal.pow(2, 12).pow10()),
+        630: () => player.or.contaminants.points.gte(Decimal.pow(2, 13).pow10()),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1358,6 +1372,20 @@ PROGRESSION_MILESTONES_TEXT = {
         614: "135 Token II",
         615: "140 Token II",
         616: "145 Token II",
+        617: "10 Contaminants",
+        618: "100 Contaminants",
+        619: "10,000 Contaminants",
+        620: "100,000,000 Contaminants",
+        621: "1e16 Contaminants",
+        622: "1e32 Contaminants",
+        623: "1e64 Contaminants",
+        624: "1e128 Contaminants",
+        625: "1e256 Contaminants",
+        626: "1e512 Contaminants",
+        627: "1e1024 Contaminants",
+        628: "1e2048 Contaminants",
+        629: "1e4096 Contaminants",
+        630: "1e8192 Contaminants",
 }
 
 

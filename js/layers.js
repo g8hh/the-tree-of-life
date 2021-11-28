@@ -6980,8 +6980,6 @@ addLayer("sci", {
                 doNotDoHSciReset = layer == "tokens" && hasMilestone("tokens", 14)
                 doNotDoOSciReset = layer == "tokens" && hasMilestone("tokens", 25)
                 if (!doNotDoHSciReset && !player.cells.unlocked) { // Hydrogen Science
-                        let subdata = data.hydrogen_science
-
                         buyData[11] = decimalZero
                         buyData[12] = decimalZero
                         buyData[13] = decimalZero
@@ -6996,8 +6994,6 @@ addLayer("sci", {
                 data.hydrogen_science.points = decimalZero
 
                 if (!doNotDoOSciReset && !player.cells.unlocked) { // Oxygen Science
-                        let subdata = data.oxygen_science
-
                         buyData[101] = decimalZero
                         buyData[102] = decimalZero
                         buyData[103] = decimalZero
@@ -7013,8 +7009,6 @@ addLayer("sci", {
                 data.oxygen_science.points = decimalZero
 
                 if (!player.cells.unlocked) { // Carbon Science
-                        let subdata = data.carbon_science
-
                         let remUpgs = [201, 202, 203, 204, 205, 
                                        211, 212, 213, 214, 215, 
                                        221, 222, 223, 224, 225, 
@@ -20300,6 +20294,9 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 513))     ret = ret.pow(tmp.sci.upgrades[513].effect)
                         if (hasUpgrade("sci", 525))     ret = ret.pow(1.01)
                         if (player.extremeMode)         ret = ret.pow(.75)
+                        if (hasUpgrade("or", 205) && player.or.filterLeftKidney) {
+                                                        ret = ret.pow(1.001)
+                        }
 
                         if (player.hardMode)            ret = ret.times(.25)
 
@@ -25771,6 +25768,12 @@ addLayer("or", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                filterLeftKidney: false,
+                contaminants: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
         }},
         color: "#F8C4F0",
         branches: [],
@@ -25963,7 +25966,8 @@ addLayer("or", {
                 if (!data.milestone2Ever) data.milestone2Ever = hasMilestone("or", 2)
                 if (!data.milestone3Ever) data.milestone3Ever = hasMilestone("or", 3)
 
-                if (player.cells.challenges[21] >= 3) layers.or.heart.update(diff)
+                if (player.cells.challenges[21] >= 3)   layers.or.heart.update(diff)
+                if (hasUpgrade("or", 14))               layers.or.kidney.update(diff)
         },
         row: 2, 
         prestigeButtonText(){
@@ -25975,6 +25979,52 @@ addLayer("or", {
         layerShown(){
                 if (tmp.or.deactivated) return false
                 return hasUpgrade("t", 155) || player.or.unlocked
+        },
+        kidney: {
+                update(diff){
+                        let filterLeft = player.or.filterLeftKidney
+                        let data = player.or
+                        let dbData = data.deoxygenated_blood
+                        let obData = data.oxygenated_blood
+                        let subdata = data.contaminants
+
+                        if (filterLeft) {
+                                dbData.points = dbData.points.times(Decimal.pow(.95, diff))
+                        } else {
+                                obData.points = obData.points.times(Decimal.pow(.95, diff))
+                        }
+
+                        let gain = tmp.or.kidney.getResetGain.times(diff)
+
+                        subdata.points = subdata.points.plus(gain)
+                        subdata.total = subdata.total.plus(gain)
+                        subdata.best = subdata.best.max(subdata.points)
+
+                        let abKeys = []
+                        if (hasUpgrade("or", 204)) abKeys.push(201)
+                        if (hasUpgrade("or", 205)) abKeys.push(202)
+
+                        for (i in abKeys) {
+                                let id = abKeys[i]
+                                if (tmp.or.buyables[id].unlocked) layers.or.buyables[id].buy()
+                        }
+
+                },
+                getResetGain(){ // contaminant gain contaminantgain cgain contgain antgain cont gain
+                        let ret = decimalOne
+
+                        if (hasUpgrade("or", 201))      ret = ret.times(Decimal.pow(2, tmp.or.upgrades.kidneyUpgradesLength))
+                                                        ret = ret.times(tmp.or.buyables[201].effect)
+                                                        ret = ret.times(tmp.or.buyables[202].effect)
+                                                        ret = ret.times(tmp.or.buyables[203].effect)
+                                                        ret = ret.times(tmp.or.buyables[211].effect)
+                                                        ret = ret.times(tmp.or.buyables[212].effect)
+                                                        //ret = ret.times(tmp.or.buyables[213].effect)
+
+                        if (player.extremeMode) ret = ret.pow(.75) 
+                        
+                        return ret
+                },
         },
         heart: {
                 update(diff){
@@ -26013,6 +26063,7 @@ addLayer("or", {
 
                         if (hasUpgrade("or", 101))      ret = ret.times(tmp.or.upgrades[101].base.pow(player.or.upgrades.length))
                         if (hasUpgrade("or", 103))      ret = ret.times(tmp.or.upgrades[103].ob_effect)
+                        if (hasUpgrade("or", 202))      ret = ret.times(player.or.deoxygenated_blood.points.max(1).pow(.1))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -26024,6 +26075,8 @@ addLayer("or", {
                         if (hasUpgrade("or", 101))      ret = ret.times(tmp.or.upgrades[101].base.pow(player.or.upgrades.length))
                         if (hasUpgrade("or", 105))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 115))      ret = ret.times(player.t.points.max(10).log10())
+                        if (hasUpgrade("or", 202))      ret = ret.times(player.or.oxygenated_blood.points.max(1).pow(.1))
+                        if (hasUpgrade("or", 203))      ret = ret.times(player.or.buyables[201].max(1).pow(tmp.or.upgrades.kidneyUpgradesLength))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
                         
@@ -26033,6 +26086,16 @@ addLayer("or", {
         upgrades: {
                 rows: 10,
                 cols: 5,
+                kidneyUpgradesLength(){
+                        let ids = [201, 202, 203, 204, 205, 
+                                   211, 212, 213, 214, 215,]
+                        let a = 0
+                        for (i in ids) {
+                                if (hasUpgrade("or", ids[i])) a ++ 
+                        }
+                        if (a >= 10) console.log("update me please")
+                        return a
+                },
                 11: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs I"
@@ -26077,7 +26140,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs IV"
                         },
                         description(){
-                                return "Tokens II multiplies Organ gain and unlock Liver, but Organ effect is based on best"
+                                return "Tokens II multiplies Organ gain and unlock Kidneys, but Organ effect is based on best"
                         },
                         cost:() => new Decimal(21.2e6),
                         unlocked(){
@@ -26089,7 +26152,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart I"
                         },
                         description(){
-                                let a = "Per upgrade multiply " + makePurple("OB") + " and " + makeBlue("DB") + " gain by log10(log10(Tissues))"
+                                let a = "Per Organ upgrade multiply " + makePurple("OB") + " and " + makeBlue("DB") + " gain by log10(log10(Tissues))"
                                 return a + br + " Currently: *" + format(tmp.or.upgrades[101].base) + " per upgrade"
                         },
                         base(){
@@ -26110,7 +26173,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart II"
                         },
                         description(){
-                                return "Per upgrade " + makePurple("OB") + " multiplies Cell gain and " + makeBlue("DB") + " multiplies Stem Cell gain" 
+                                return "Per Organ upgrade " + makePurple("OB") + " multiplies Cell gain and " + makeBlue("DB") + " multiplies Stem Cell gain" 
                         },
                         stem_cell_effect(){
                                 return player.or.deoxygenated_blood.points.max(1).pow(player.or.upgrades.length)
@@ -26204,7 +26267,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart VII"
                         },
                         description(){
-                                return "Per upgrade add .01 to Organ gain exponent and best Token II amounts are synchronized" 
+                                return "Per Organ upgrade add .01 to Organ gain exponent and best Token II amounts are synchronized" 
                         },
                         cost(){
                                 return new Decimal(1e6)
@@ -26255,7 +26318,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart X"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>log10(Tissues) multiplies " + makeBlue("DB") + " gain and per upgrade you gain 1% of your " + makePurple("OB") + "/s while beating out and 1% of your " + makeBlue("DB") + "/s while beating in</bdi>"
+                                return "<bdi style='font-size: 80%'>log10(Tissues) multiplies " + makeBlue("DB") + " gain and per Organ upgrade you gain 1% of your " + makePurple("OB") + "/s while beating out and 1% of your " + makeBlue("DB") + "/s while beating in</bdi>"
                         },
                         cost(){
                                 return new Decimal(2e12)
@@ -26272,7 +26335,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Hydrogen" : "Heart XI")
                         },
                         description(){
-                                return "Per upgrade add 1 to Cell effect exponent but disable Anti-Hydrogen's positive effects"
+                                return "Per Organ upgrade add 1 to Cell effect exponent but disable Anti-Hydrogen's positive effects"
                         },
                         cost(){
                                 return new Decimal(4e10)
@@ -26382,7 +26445,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XVII"
                         },
                         description(){
-                                return "Per upgrade you have three less tokens for prestige purposes but disable C33, C54, C64, C17, C73, and C18 gems"
+                                return "Per Organ upgrade you have three less tokens for prestige purposes but disable C33, C54, C64, C17, C73, and C18 gems"
                         },
                         cost(){
                                 return new Decimal(5e17)
@@ -26437,7 +26500,7 @@ addLayer("or", {
                         },
                         description(){
                                 if (player.shiftAlias) return "<sup>*</sup>Base Amino Acid gain is 1"
-                                return "The number of upgrades multiplies Organ gain but remove Lives<sup>*</sup>"
+                                return "The number of Organ upgrades multiplies Organ gain but remove Lives<sup>*</sup>"
                         },
                         cost(){
                                 return new Decimal(1e22)
@@ -26453,6 +26516,390 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 134)
                         }, // hasUpgrade("or", 135)
+                },
+                201: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney I"
+                        },
+                        description(){
+                                return "Per Kidney upgrade double Contaminant gain and unlock a buyable"
+                        },
+                        cost(){
+                                return new Decimal(30)
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("or", 201)
+                },
+                202: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney II"
+                        },
+                        description(){
+                                return makePurple("OB") + "<sup>.1</sup> multiplies " + makeBlue("DB") + " gain and " + makeBlue("DB") + "<sup>.1</sup> multiplies " + makePurple("OB") + " gain"
+                        },
+                        cost(){
+                                return new Decimal(1000)
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 201)
+                        }, // hasUpgrade("or", 202)
+                },
+                203: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney III"
+                        },
+                        description(){
+                                return "Per Kidney upgrade I'm levels multiply " + makeBlue("DB") + " gain"
+                        },
+                        cost(){
+                                return new Decimal(1e21)
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 202)
+                        }, // hasUpgrade("or", 203)
+                },
+                204: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney IV"
+                        },
+                        description(){
+                                return "Autobuy I'm and Token II buyables' cost exponent is .85"
+                        },
+                        cost(){
+                                return new Decimal(1e149)
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 203)
+                        }, // hasUpgrade("or", 204)
+                },
+                205: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney V"
+                        },
+                        description(){
+                                return "Autobuy gonna and if you are filtering from your left kidney, then gain ^1.001 Stem Cells"
+                        },
+                        cost(){
+                                return new Decimal("1e1276")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 204)
+                        }, // hasUpgrade("or", 205)
+                },
+        },
+        clickables: {
+                201: {
+                        title(){
+                                return "Filter from your LEFT Kidney"
+                        },
+                        display(){
+                                if (player.shiftAlias) return "Costs 5% of your " + makeBlue("DB") + "/s"
+                                let x = player.or.filterLeftKidney
+                                if (x) return "Filtering"
+                                return "Not filtering"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.or.filterLeftKidney = true
+                        },
+                },
+                202: {
+                        title(){
+                                return "Filter from your RIGHT Kidney"
+                        },
+                        display(){
+                                if (player.shiftAlias) return "Costs 5% of your " + makePurple("OB") + "/s"
+                                let x = player.or.filterLeftKidney
+                                if (!x) return "Filtering"
+                                return "Not filtering"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.or.filterLeftKidney = false
+                        },
+                },
+        },
+        buyables: {
+                201: {
+                        title: "I'm",
+                        cost(){
+                                let amt = getBuyableAmount("or", 201)
+                                let base = new Decimal(100)
+                                let exp = decimalOne
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 201) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[201].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[201] = data.buyables[201].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[201].cost)
+                        },
+                        base(){
+                                let ret = new Decimal(tmp.or.upgrades.kidneyUpgradesLength).plus(1)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[201].base.pow(player.or.buyables[201])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[201]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[201].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 201)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "(Kidney upgrades + 1)^x<br>" + format(tmp.or.buyables[201].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "100*x<sup>x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                202: {
+                        title: "gonna",
+                        cost(){
+                                let amt = getBuyableAmount("or", 202)
+                                let base = new Decimal(5e4)
+                                let exp = new Decimal(2)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 202) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[202].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[202] = data.buyables[202].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[202].cost)
+                        },
+                        base(){
+                                let ret = player.or.buyables[201].max(1)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[202].base.pow(player.or.buyables[202])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[202]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[202].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 202)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "(I'm levels)^x<br>" + format(tmp.or.buyables[202].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "50,000*x<sup>2x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                203: {
+                        title: "make", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 203)
+                                let base = new Decimal(5e45)
+                                let exp = new Decimal(4)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 203) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[203].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[203] = data.buyables[203].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[203].cost)
+                        },
+                        base(){
+                                let ret = player.or.buyables[202].max(1).sqrt()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[203].base.pow(player.or.buyables[203])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[203]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[203].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 203)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "sqrt(gonna levels)^x<br>" + format(tmp.or.buyables[203].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "5e45*x<sup>4x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                211: {
+                        title: "him", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 211)
+                                let base = new Decimal("5e442")
+                                let exp = new Decimal(8)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 204) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[211].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[211] = data.buyables[211].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[211].cost)
+                        },
+                        base(){
+                                let ret = player.or.buyables[203].max(1).sqrt()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[211].base.pow(player.or.buyables[211])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[211]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[211].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 211)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "sqrt(make levels)^x<br>" + format(tmp.or.buyables[211].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "5e442*x<sup>8x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                212: {
+                        title: "an", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 212)
+                                let base = new Decimal("1e3486")
+                                let exp = new Decimal(16)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 205) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[212].cost)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                data.buyables[212] = data.buyables[212].plus(1)
+                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[212].cost)
+                        },
+                        base(){
+                                let ret = player.or.buyables[211].max(1).sqrt()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[212].base.pow(player.or.buyables[212])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[212]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[212].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 212)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "sqrt(him levels)^x<br>" + format(tmp.or.buyables[212].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e3486*x<sup>16x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
                 },
         },
         milestones: {
@@ -26727,11 +27174,20 @@ addLayer("or", {
                                         return true
                                 },
                         },
-                        "Liver": { 
+                        "Kidney": { 
                                 content: [
+                                        ["secondary-display", "contaminants"],
+                                        ["display-text", function(){
+                                                let a = "Choose to filter " + makeBlue("DB") + " via your left Kidney, or filter " + makePurple("OB") + " by your right Kidney."
+                                                let b = "You are gaining " + format(tmp.or.kidney.getResetGain) + " Contaminants/s"
+                                                return a + br + b
+                                        }],
+                                        ["clickables", [20]],
+                                        ["upgrades", [20, 21]],
+                                        ["buyables", [20, 21, 22]],
                                 ],
                                 unlocked(){
-                                        return false
+                                        return hasUpgrade("or", 14)
                                 },
                         },
                 },
@@ -34703,6 +35159,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 204))      return x.pow(.85).ceil()
                         if (tertComps >= 4)             return x.pow(.9).ceil()
                         if (hasMilestone("or", 11))     return x
                         return x.plus(1)
@@ -34746,6 +35203,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 204))      return "ceil(x<sup>.85</sup>)"
                         if (tertComps >= 4)             return "ceil(x<sup>.9</sup>)"
                         if (hasMilestone("or", 11))     return "x"
                         return "1+x"

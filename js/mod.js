@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.197.1",
+	num: "1.198",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,28 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return hasUpg("t", 85)
-	return player.or.deoxygenated_blood.points.gte(1e24)
+	return player.or.contaminants.points.gte("1e6000")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.197.1)<br><br>
+		Reaching the endgame screen (updated at least as of v1.198)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.198</h3><br>
+		- Added Kidney.<br>
+		- Added five Kidney upgrades.<br>
+		- Added five Kidney buyables.<br>
+		- Balanced until 1e6000 Contaminants.<br>
+		- Various wording fixes and code cleanup.<br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.197.2</h3><br>
+		- Added a Organ upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.197.1</h3><br>
 		- Various code cleanup.<br>
 		- Rebalanced 1000-1e7 Organ Era.<br>
