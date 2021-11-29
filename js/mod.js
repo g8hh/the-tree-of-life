@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.200",
+	num: "1.200.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,16 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.199)<br><br>
+		Reaching the endgame screen (updated at least as of v1.200.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.200.1</h3><br>
+		- Fixed the bug where you hold a buyable and then switch tabs to keep it autobuying.<br>
+		- Thank you so much to Lordshinjo for helping report and fix the issue.<br>
 	<br><h3 style='color: #CC0000'>v1.200</h3><br>
 		- Balanced until 1e67,900 Contaminants.<br>
 		- Added a Kidney upgrade.<br>
