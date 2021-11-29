@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.199",
+	num: "1.200",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return hasUpg("t", 85)
-	return player.or.contaminants.points.gte("1e29600")
+	return player.or.contaminants.points.gte("1e67900")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,10 +33,19 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.200</h3><br>
+		- Balanced until 1e67,900 Contaminants.<br>
+		- Added a Kidney upgrade.<br>
+		- Added a Kidney buyable.<br>
+		- Added two Heart upgrades.<br>
+		- Added three rows of achievements.<br>
+		- Added a custom save.<br>
+		- Various wording fixes.<br>
+		- 200! Let's go! Here's to 200 more patches!<br>
 	<br><h3 style='color: #CC0000'>v1.199</h3><br>
 		- Added a Kidney upgrade.<br>
 		- Added a Kidney buyable.<br>
-		- Balanced until 1e29600 Contaminants.<br>
+		- Balanced until 1e29,600 Contaminants.<br>
 		- Added three Heart upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.198</h3><br>
 		- Added Kidney.<br>

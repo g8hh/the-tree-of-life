@@ -18793,12 +18793,13 @@ addLayer("d", {
         getBaseGain(){
                 let pts = player.a.points
                 let init = pts.div(player.extremeMode ? "8e315" : 4.4e144).max(1).log10()
-                if (layers.l.grid.getGemEffect(408)) init = init.plus(144.6434526764861874) 
+                if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) init = init.plus(144.6434526764861874) 
                 if (init.lt(25)) return decimalZero
 
                 let v1 = init
                 if (!hasMilestone("cells", 31)) v1 = v1.sqrt()
-                if (!layers.l.grid.getGemEffect(701) || player.extremeMode) v1 = v1.div(2)
+                if (player.extremeMode) v1 = v1.div(2)
+                else if (!layers.l.grid.getGemEffect(701) && !hasUpgrade("or", 145)) v1 = v1.div(2)
                 return v1.plus(tmp.d.getBaseGainAddition).pow(tmp.d.getGainExp)
         },
         getBaseGainAddition(){
@@ -18861,8 +18862,9 @@ addLayer("d", {
                 if (hasUpgrade("d", 33))        ret = ret.plus(player.d.upgrades.length)
                 if (hasMilestone("cells", 18))  ret = ret.plus(getBuyableAmount("cells", 11).sqrt())
                 if (player.extremeMode)         ret = ret.plus(layers.l.grid.getGemEffect(507))
-
+                
                 if (hasUpgrade("t", 74))        ret = ret.times(player.t.upgrades.length)
+                if (hasUpgrade("or", 145))      ret = ret.times(2)
 
                 return ret
         },
@@ -19600,15 +19602,15 @@ addLayer("d", {
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
                                         a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
-                                        if (layers.l.grid.getGemEffect(701) && !player.extremeMode) a2 = a2.replace("/2", "")
-                                        if (layers.l.grid.getGemEffect(408)) a2 = a2.replace("/" + div, "")
+                                        if ((layers.l.grid.getGemEffect(701) || hasUpgrade("or", 145)) && !player.extremeMode) a2 = a2.replace("/2", "")
+                                        if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
                                                 a2 = a2.replace("sqrt(", "")
                                                 a2 = a2.replace(")+0.00", "")
                                         }
 
                                         let b = "DNA resets (in order) Amino Acid content, Life content,"
-                                        let c = " the last two rows of Phosphorus and mu upgrades."
+                                        let c = " the last two rows of Phosphorus and µ upgrades."
 
                                         return a1 + br + a2 + br2 + b + br + c
                                 }],
@@ -26030,7 +26032,8 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[211].effect)
                                                         ret = ret.times(tmp.or.buyables[212].effect)
                                                         ret = ret.times(tmp.or.buyables[213].effect)
-                                                        //ret = ret.times(tmp.or.buyables[221].effect)
+                                                        ret = ret.times(tmp.or.buyables[221].effect)
+                                                        //ret = ret.times(tmp.or.buyables[222].effect)
                         if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
 
@@ -26212,7 +26215,7 @@ addLayer("or", {
                                 return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II effect amounts are based on best levels"
                         },
                         ob_effect(){
-                                return Decimal.pow(2, player.tokens.tokens2.total.sub(73))
+                                return Decimal.pow(2, player.tokens.tokens2.total.sub(hasUpgrade("or", 212) ? 0 : 73))
                         },
                         cost(){
                                 return new Decimal(350)
@@ -26535,7 +26538,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXI"
                         },
                         description(){
-                                return "Per Organ upgrade - 30 mutliply Organ gain by log10(10 + I'm levels)"
+                                return "Per Organ upgrade - 30 multiply Organ gain by log10(10 + I'm levels)"
                         },
                         cost(){
                                 return new Decimal(1e56)
@@ -26552,7 +26555,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXII"
                         },
                         description(){
-                                return "Organ multiply Contaminant gain and autobuy him"
+                                return "Organs multiply Contaminant gain and autobuy him"
                         },
                         cost(){
                                 return new Decimal(1e42)
@@ -26581,13 +26584,47 @@ addLayer("or", {
                                 return hasUpgrade("or", 142)
                         }, // hasUpgrade("or", 143)
                 },
+                144: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXIV"
+                        },
+                        description(){
+                                return "Add .03 * Organ upgrades to I'm's base but remove the +1 from I'm base"
+                        },
+                        cost(){
+                                return new Decimal(2e44)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 143)
+                        }, // hasUpgrade("or", 144)
+                },
+                145: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXV"
+                        },
+                        description(){
+                                return "Square DNA gain exponent and DNA base gain is log10(Amino Acid)"
+                        },
+                        cost(){
+                                return new Decimal(1e73)
+                        },
+                        currencyLocation:() => player.or.deoxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makeBlue("DB"),
+                        unlocked(){
+                                return hasUpgrade("or", 144)
+                        }, // hasUpgrade("or", 145)
+                },
 
                 201: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney I"
                         },
                         description(){
-                                return "Per Kidney upgrade double Contaminant gain and unlock a buyable"
+                                return "Per Kidney upgrade double Contaminant gain and unlock a buyable (up to 9)"
                         },
                         cost(){
                                 return new Decimal(30)
@@ -26684,6 +26721,23 @@ addLayer("or", {
                                 return hasUpgrade("or", 205)
                         }, // hasUpgrade("or", 211)
                 },
+                212: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney VII"
+                        },
+                        description(){
+                                return "Heart III counts every Token II and bulk up to 10 Kidney buyables"
+                        },
+                        cost(){
+                                return new Decimal("1e30480")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 144)
+                        }, // hasUpgrade("or", 212)
+                },
         },
         clickables: {
                 201: {
@@ -26728,6 +26782,11 @@ addLayer("or", {
                 },
         },
         buyables: {
+                getMaxBulk(){
+                        let ret = decimalOne
+                        if (hasUpgrade("or", 212))      ret = ret.times(10)
+                        return ret
+                }, // tmp.or.buyables.getMaxBulk
                 201: {
                         title: "I'm",
                         cost(){
@@ -26742,14 +26801,31 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[201].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div(100)
+                                if (pts.lt(1)) return decimalZero
+                                let exp = decimalOne // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[201] = data.buyables[201].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[201].cost)
+                                let id = 201
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = new Decimal(tmp.or.upgrades.kidneyUpgradesLength).plus(1)
+
+                                if (hasUpgrade("or", 144) && player.or.upgrades.length > 33) {
+                                        ret = ret.plus(player.or.upgrades.length * .03 - 1)
+                                }
                                 
                                 return ret
                         },
@@ -26767,6 +26843,7 @@ addLayer("or", {
                                 }
 
                                 let eformula = "(Kidney upgrades + 1)^x<br>" + format(tmp.or.buyables[201].base) + "^x"
+                                if (hasUpgrade("or", 144)) eformula = eformula.replace("1", ".03 * Organ upgrades")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -26793,11 +26870,24 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[202].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div(5e4)
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(2) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[202] = data.buyables[202].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[202].cost)
+                                let id = 202
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = player.or.buyables[201].max(1)
@@ -26831,7 +26921,7 @@ addLayer("or", {
                         },
                 },
                 203: {
-                        title: "make", // "I'm gonna make him an offer he can't refuse."
+                        title: "make",
                         cost(){
                                 let amt = getBuyableAmount("or", 203)
                                 let base = new Decimal(5e45)
@@ -26844,11 +26934,24 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[203].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div(5e45)
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(4) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[203] = data.buyables[203].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[203].cost)
+                                let id = 203
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = player.or.buyables[202].max(1).sqrt()
@@ -26882,7 +26985,7 @@ addLayer("or", {
                         },
                 },
                 211: {
-                        title: "him", // "I'm gonna make him an offer he can't refuse."
+                        title: "him",
                         cost(){
                                 let amt = getBuyableAmount("or", 211)
                                 let base = new Decimal("5e442")
@@ -26895,11 +26998,24 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[211].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div("5e442")
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(8) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[211] = data.buyables[211].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[211].cost)
+                                let id = 211
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = player.or.buyables[203].max(1).sqrt()
@@ -26933,7 +27049,7 @@ addLayer("or", {
                         },
                 },
                 212: {
-                        title: "an", // "I'm gonna make him an offer he can't refuse."
+                        title: "an",
                         cost(){
                                 let amt = getBuyableAmount("or", 212)
                                 let base = new Decimal("1e3486")
@@ -26946,11 +27062,24 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[212].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div("1e3486")
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(16) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[212] = data.buyables[212].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[212].cost)
+                                let id = 212
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = player.or.buyables[211].max(1).sqrt()
@@ -26975,7 +27104,7 @@ addLayer("or", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e3486*x<sup>16x</sup>" 
+                                let cost2 = "1e3,486*x<sup>16x</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -26997,11 +27126,24 @@ addLayer("or", {
                         canAfford() {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[213].cost)
                         },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div("1e17147")
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(32) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return 
                                 let data = player.or
-                                data.buyables[213] = data.buyables[213].plus(1)
-                                data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[213].cost)
+                                let id = 213
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
                         },
                         base(){
                                 let ret = player.or.buyables[212].max(1).sqrt()
@@ -27026,7 +27168,71 @@ addLayer("or", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e17147*x<sup>32x</sup>" 
+                                let cost2 = "1e17,147*x<sup>32x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                221: {
+                        title: "he", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 221)
+                                let base = new Decimal("1e64100")
+                                let exp = new Decimal(64)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 212) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[221].cost)
+                        },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div("1e64100")
+                                if (pts.lt(1)) return decimalZero
+                                let exp = new Decimal(64) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                let id = 221
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let ret = player.or.buyables[213].max(1).sqrt()
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[221].base.pow(player.or.buyables[221])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[221]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[221].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 221)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "sqrt(offer levels)^x<br>" + format(tmp.or.buyables[221].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e64,100*x<sup>64x</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27332,7 +27538,7 @@ addLayer("or", {
                                 ["prestige-button", "", function (){ return hasUpgrade("or", 125) ? {'display': 'none'} : {}}],
                                 ["display-text", function (){
                                         if (!hasUpgrade("or", 125)) return ""
-                                        let init = "You can reset for " + formatWhole(tmp.or.getResetGain) + " Organs. "
+                                        let init = "You can reset for " + formatWhole(tmp.or.getResetGain, false, 3) + " Organs. "
                                         if (tmp.or.getResetGain.gt(1e5)) return init 
                                         return init + " Next at: " + format(tmp.or.getNextAt) + " Tissues"
                                 }], 

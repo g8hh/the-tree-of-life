@@ -81,11 +81,11 @@ function formatCurrency(decimal){
         return format(decimal, 0)
 }
 
-function formatWhole(decimal, forceWhole) {
+function formatWhole(decimal, forceWhole, digits = 2) {
         decimal = new Decimal(decimal)
-        if (decimal.gte(1e9)) return format(decimal, 2)
+        if (decimal.gte(1e9)) return format(decimal, digits)
         if (forceWhole) decimal = decimal.round()
-        if (decimal.lte(10) && decimal.neq(decimal.floor())) return format(decimal, 2)
+        if (decimal.lte(10) && decimal.neq(decimal.floor())) return format(decimal, digits)
         return format(decimal, 0)
 }
 
