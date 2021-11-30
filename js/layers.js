@@ -35131,7 +35131,7 @@ addLayer("mini", {
                                         let a = "You have spelled " + formatWhole(player.wordsSpelled)
                                         let b = " words correctly!"
                                         let c = "<br><br><br><br><br><br>"
-                                        let d = "<br>Press space to get a new word. This is just a minigame :)"
+                                        let d = "<br>Press space to get a new word.<br>This is just a minigame, so you can safely ignore it :)"
                                         return c + c + a + b + d
                                 }],
                         ],
