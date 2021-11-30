@@ -1,11 +1,5 @@
 function getPointGen(){
-	let gain = new Decimal(.1)
-        
-        if (hasChallenge("l", 21) && !hasUpgrade("or", 121)) {
-                                        gain = gain.plus(1.9)
-        }
-        if (player.cells.unlocked)      gain = gain.plus(1)
-        
+	let gain = getPointConstant()
         gain = gain.times(getPointMultiplier())
         gain = gain.pow(getPointExponentiation())
         gain = dilate(gain, getPointDilationExponent())
@@ -13,34 +7,44 @@ function getPointGen(){
 	return gain
 }
 
+function getPointConstant(){
+        let ret = new Decimal(.1)
+        
+        if (hasChallenge("l", 21) && !hasUpgrade("or", 121)) {
+                                        ret = ret.plus(1.9)
+        }
+        if (player.cells.unlocked)      ret = ret.plus(1)
+
+        return ret
+}
+
 function getPointMultiplier(){
-        gain = decimalOne
+        let ret = decimalOne
 
-        if (hasUpgrade("h", 11))        gain = gain.times(tmp.h.upgrades[11].effect)
-        if (hasUpgrade("h", 22))        gain = gain.times(tmp.h.upgrades[22].effect)
-        if (hasUpgrade("h", 34))        gain = gain.times(tmp.h.upgrades[13].effect)
-                                        gain = gain.times(tmp.mini.buyables[61].effect)
-        if (hasUpgrade("o", 15))        gain = gain.times(tmp.o.upgrades[15].effect)
-        if (hasUpgrade("h", 61))        gain = gain.times(tmp.h.upgrades[61].effect)
-                                        gain = gain.times(tmp.tokens.buyables[11].effect)
-                                        gain = gain.times(tmp.n.effect)
-                                        gain = gain.times(tmp.l.effect)
-        if (hasUpgrade("mu", 44))       gain = gain.times(player.o.points.max(1))
-                                        gain = gain.times(tmp.sci.effect)
-                                        gain = gain.times(tmp.sci.buyables[11].effect)
-                                        gain = gain.times(tmp.sci.buyables[21].effect)
-        if (hasUpgrade("sci", 202))     gain = gain.times(tmp.sci.upgrades[202].effect)
-        if (hasUpgrade("sci", 302))     gain = gain.times(tmp.sci.upgrades[302].effect)
-        if (player.easyMode)            gain = gain.times(4)
+        if (hasUpgrade("h", 11))        ret = ret.times(tmp.h.upgrades[11].effect)
+        if (hasUpgrade("h", 22))        ret = ret.times(tmp.h.upgrades[22].effect)
+        if (hasUpgrade("h", 34))        ret = ret.times(tmp.h.upgrades[13].effect)
+                                        ret = ret.times(tmp.mini.buyables[61].effect)
+        if (hasUpgrade("o", 15))        ret = ret.times(tmp.o.upgrades[15].effect)
+        if (hasUpgrade("h", 61))        ret = ret.times(tmp.h.upgrades[61].effect)
+                                        ret = ret.times(tmp.tokens.buyables[11].effect)
+                                        ret = ret.times(tmp.n.effect)
+                                        ret = ret.times(tmp.l.effect)
+        if (hasUpgrade("mu", 44))       ret = ret.times(player.o.points.max(1))
+                                        ret = ret.times(tmp.sci.effect)
+                                        ret = ret.times(tmp.sci.buyables[11].effect)
+                                        ret = ret.times(tmp.sci.buyables[21].effect)
+        if (hasUpgrade("sci", 202))     ret = ret.times(tmp.sci.upgrades[202].effect)
+        if (hasUpgrade("sci", 302))     ret = ret.times(tmp.sci.upgrades[302].effect)
+        if (player.easyMode)            ret = ret.times(4)
 
-        return gain
+        return ret
 }
 
 function getPointExponentiation(){
         let exp = decimalOne
 
         if (player.easyMode)            exp = exp.times(1.001)
-        if (player.extremeMode)         exp = exp.times(.75)
         if (hasUpgrade("h", 25))        exp = exp.times(tmp.h.upgrades[25].effect)
         if (hasUpgrade("o", 13))        exp = exp.times(tmp.o.upgrades[13].effect)
                                         exp = exp.times(tmp.tokens.buyables[41].effect)
@@ -67,9 +71,6 @@ function getPointExponentiation(){
                                         exp = exp.times(Decimal.pow(l33base, l33exp))
         }
                                         exp = exp.times(layers.l.grid.getGemEffect(102))
-        if (hasMilestone("l", 36) && !player.extremeMode) {
-                                        exp = exp.times(1.1)
-        }
         if (hasMilestone("a", 18))      exp = exp.times(Decimal.pow(3, getBuyableAmount("l", 23)))
         if (!player.extremeMode) {
                 let c31base = layers.l.grid.getGemEffect(301)
@@ -84,9 +85,14 @@ function getPointExponentiation(){
                 }
                 let c38base = layers.l.grid.getGemEffect(308)
                                         exp = exp.times(c38base.pow(getBuyableAmount("l", 21)))
+                if (hasMile("l", 36))   exp = exp.times(1.1)
         } else {
                 let c34base = layers.l.grid.getGemEffect(304)
                                         exp = exp.times(c34base.pow(getBuyableAmount("l", 33)))
+                if (hasUpg("p", 43))    exp = exp.times(Decimal.pow(2, player.p.upgrades.length))
+                if (hasMile("a", 17))   exp = exp.times(Decimal.pow(3, player.a.milestones.length))
+                if (hasMile("a", 22))   exp = exp.times(Decimal.pow(1 + player.a.milestones.length/100, player.a.milestones.length))
+                                        exp = exp.times(.75)
         }
         if (!hasUpgrade("or", 132)) {
                 let c54base = layers.l.grid.getGemEffect(504)
@@ -126,16 +132,7 @@ function getPointExponentiation(){
         }
         if (hasMilestone("d", 27))      exp = exp.times(tmp.d.milestones[27].effect)
         if (hasUpgrade("l", 14))        exp = exp.times(tmp.l.upgrades[14].effect)
-        if (hasUpgrade("p", 43) && player.extremeMode) {
-                                        exp = exp.times(Decimal.pow(2, player.p.upgrades.length))
-        }
         if (hasUpgrade("l", 45))        exp = exp.times(player.l.buyables[22].max(1))
-        if (hasMilestone("a", 17) && player.extremeMode) {
-                                        exp = exp.times(Decimal.pow(3, player.a.milestones.length))
-        }
-        if (hasMilestone("a", 22) && player.extremeMode) {
-                                        exp = exp.times(Decimal.pow(1 + player.a.milestones.length/100, player.a.milestones.length))
-        }
         if (hasUpgrade("sci", 411))     exp = exp.times(player.sci.protein_science.points.max(1))
         if (hasUpgrade("sci", 502))     exp = exp.times(player.d.points.max(1).pow(player.a.buyables[31].plus(player.a.buyables[13])))
         if (hasUpgrade("sci", 504))     exp = exp.times(tmp.sci.upgrades[504].effect)
@@ -35233,7 +35230,8 @@ addLayer("tokens", {
                         points: decimalZero,
                         best: decimalZero
                 },
-                lastRespecDisplayFormula: "2<sup>x</sup>"
+                lastRespecDisplayFormula: "2<sup>x</sup>",
+                lastRespecDisplayFormula2ID: 0,
         }},
         color: "#7DC71C",
         branches: [],
@@ -35350,8 +35348,8 @@ addLayer("tokens", {
 
                 if (amt >= len) {
                         let tetBase = 10
-                        if (hasMilestone("or", 2)) tetBase = 9.7
-                        if (hasMilestone("or", 5)) tetBase = 9.5
+                        if (hasMilestone("or", 2)) tetBase = 9.5
+                        if (hasMilestone("or", 5)) tetBase = 9
                         return Decimal.tetrate(tetBase, 4 + (amt - len) / tmp.tokens.getTetrationScalingDivisor)
                 }
                 let additional = player.hardMode ? 1e4 : 1
@@ -35468,15 +35466,18 @@ addLayer("tokens", {
         tooltip(){
                 let data = player.tokens
                 if (hasUpgrade("cells", 42)){
+                        let end = ""
+                        if (player.tokens.lastRespecDisplayFormula2ID < tmp.tokens.buyables.costFormulaText2ID) {
+                                end = br + "Need Respec"
+                        }
                         let data2 = data.tokens2
-                        return formatWhole(data2.points, true) + "/" + formatWhole(data2.total) + " Token II"
+                        return formatWhole(data2.points, true) + "/" + formatWhole(data2.total) + " Token II" + end
                 }
-                let init = formatWhole(data.points, true) + "/" + formatWhole(data.total) + " tokens"
-                let end = ""
+                let start = formatWhole(data.points, true) + "/" + formatWhole(data.total) + " tokens"
                 let lrdf = player.tokens.lastRespecDisplayFormula
                 let cft = tmp.tokens.buyables.costFormulaText
+                let needSpec = false
                 if (lrdf != cft && typeof(cft) == "string" && typeof(lrdf) == "string"){
-                        let needSpec = false 
                         if (cft == "2<sup>x</sup>") needSpec = false
                         else if (lrdf == "2<sup>x</sup>") needSpec = true
                         else if (cft == "x") needSpec = false
@@ -35489,12 +35490,16 @@ addLayer("tokens", {
                         if (lrdf.includes("ceil") && cft.includes("round")) needSpec = true
                         if (lrdf.includes("round") && cft.includes("floor")) needSpec = true
                         if (!lrdf.includes("max") && cft.includes("max"))   needSpec = true
-                        if (needSpec) end = br + "Need Respec"
-                } 
-                if (!player.a.unlocked) return init + end
+                }
+                
+
+                let end = ""
+                if (needSpec) end = br + "Need Respec"
+
+                if (!player.a.unlocked) return start + end
                 let mid = "<b>" + formatWhole(player.tokens.best_buyables[11]) + "</b>"
                 if (player.cells.unlocked) return formatWhole(data.total, true) + " " + makeRed(mid) + end
-                return init + br + makeRed("(" + mid + ")") + end 
+                return start + br + makeRed("(" + mid + ")") + end 
         },
         buyables: {
                 rows: 15,
@@ -35553,6 +35558,13 @@ addLayer("tokens", {
                         if (tertComps >= 4)             return "ceil(x<sup>.9</sup>)"
                         if (hasMilestone("or", 11))     return "x"
                         return "1+x"
+                },
+                costFormulaText2ID(){
+                        let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 204))      return 3
+                        if (tertComps >= 4)             return 2
+                        if (hasMilestone("or", 11))     return 1
+                        return 0
                 },
                 costFormulaText(){
                         if (false)                      return "max(floor(x<sup>.24</sup>)-1, 0)"
@@ -37092,6 +37104,7 @@ addLayer("tokens", {
                                 for (i in ids){
                                         data.buyables[ids[i]] = decimalZero
                                 }
+                                data.lastRespecDisplayFormula2ID = Math.max(data.lastRespecDisplayFormula2ID, tmp.tokens.buyables.costFormulaText2ID)
                         },
                 },
         },
