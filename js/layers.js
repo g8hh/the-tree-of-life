@@ -26804,6 +26804,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div(100)
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = decimalOne // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -26873,6 +26874,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div(5e4)
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(2) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -26937,6 +26939,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div(5e45)
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(4) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -27001,6 +27004,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div("5e442")
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(8) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -27065,6 +27069,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div("1e3486")
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(16) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -27129,6 +27134,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div("1e17147")
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(32) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
@@ -27193,6 +27199,7 @@ addLayer("or", {
                         getMaxAfford() {
                                 let pts = player.or.contaminants.points.div("1e64100")
                                 if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(64) // if y^y = e^x then y = x/W(x)
                                 let logPts = pts.root(exp).ln()
                                 return logPts.div(logPts.lambertw()).ceil()
