@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.201",
+	num: "1.202",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,23 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return hasUpg("t", 85)
-	return player.or.contaminants.points.gte("1e152996")
+	return player.or.contaminants.points.gte("1e538e3")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.201)<br><br>
+		Reaching the endgame screen (updated at least as of v1.202)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.202</h3><br>
+		- Balanced until 1e538,000 Contaminants.<br>
+		- Added two Kidney upgrades.<br>
+		- Added a Kidney buyable.<br>
+		- Added a Organ milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.201</h3><br>
 		- Balanced until 1e152,996 Contaminants.<br>
 		- Added a way to slow the game down by 100x for five real seconds.<br>

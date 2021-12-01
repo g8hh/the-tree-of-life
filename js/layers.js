@@ -20273,6 +20273,9 @@ addLayer("cells", {
                         if (hasUpgrade("or", 205) && player.or.filterLeftKidney) {
                                                         ret = ret.pow(1.001)
                         }
+                        if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
+                                                        ret = ret.pow(1.001)
+                        }
 
                         if (player.hardMode)            ret = ret.times(.25)
 
@@ -25763,6 +25766,7 @@ addLayer("or", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                kidneyABTime: 0,
         }},
         color: "#F8C4F0",
         branches: [],
@@ -25993,20 +25997,27 @@ addLayer("or", {
                         subdata.total = subdata.total.plus(gain)
                         subdata.best = subdata.best.max(subdata.points)
 
-                        let abKeys = []
-                        if (hasUpgrade("or", 204)) abKeys.push(201)
-                        if (hasUpgrade("or", 205)) abKeys.push(202)
-                        if (hasUpgrade("or", 211)) abKeys.push(203)
-                        if (hasUpgrade("or", 142)) abKeys.push(211)
-                        if (hasUpgrade("or", 213)) abKeys.push(212)
+                        data.kidneyABTime += diff * 20 // 20 times per second
 
-                        for (i in abKeys) {
-                                let id = abKeys[i]
-                                if (tmp.or.buyables[id].unlocked) {
-                                        if (tmp.or.buyables[id].canAfford) layers.or.buyables[id].buy()
+                        if (data.kidneyABTime > 1) {
+                                data.kidneyABTime += -1
+                                if (data.kidneyABTime > 10) data.kidneyABTime = 10
+                                let abKeys = []
+                                if (hasUpgrade("or", 204)) abKeys.push(201)
+                                if (hasUpgrade("or", 205)) abKeys.push(202)
+                                if (hasUpgrade("or", 211)) abKeys.push(203)
+                                if (hasUpgrade("or", 142)) abKeys.push(211)
+                                if (hasUpgrade("or", 213)) abKeys.push(212)
+                                if (hasUpgrade("or", 214)) abKeys.push(213)
+                                if (hasUpgrade("or", 215)) abKeys.push(221)
+
+                                for (i in abKeys) {
+                                        let id = abKeys[i]
+                                        if (tmp.or.buyables[id].unlocked) {
+                                                if (tmp.or.buyables[id].canAfford) layers.or.buyables[id].buy()
+                                        }
                                 }
-                        }
-
+                        } 
                 },
                 getResetGain(){ // contaminant gain contaminantgain cgain contgain antgain cont gain
                         let ret = decimalOne
@@ -26020,9 +26031,10 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[213].effect)
                                                         ret = ret.times(tmp.or.buyables[221].effect)
                                                         ret = ret.times(tmp.or.buyables[222].effect)
-                                                        //ret = ret.times(tmp.or.buyables[223].effect)
+                                                        ret = ret.times(tmp.or.buyables[223].effect)
                         if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
+                        if (hasMilestone("or", 16))     ret = ret.times(player.or.deoxygenated_blood.points.max(1))
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -26709,7 +26721,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney V"
                         },
                         description(){
-                                return "Autobuy gonna and if you are filtering from your left kidney, then gain ^1.001 Stem Cells"
+                                return "Autobuy gonna and if you are filtering from your left kidney then gain ^1.001 Stem Cells"
                         },
                         cost(){
                                 return new Decimal("1e1276")
@@ -26726,7 +26738,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney VI"
                         },
                         description(){
-                                return "Autobuy make and if you are filtering from your right kidney, then raise base Cell gain ^(99/98)"
+                                return "Autobuy make and if you are filtering from your right kidney then raise base Cell gain ^(99/98)"
                         },
                         cost(){
                                 return new Decimal("1e6031")
@@ -26771,6 +26783,40 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 15)
                         }, // hasUpgrade("or", 213)
+                },
+                214: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney IX"
+                        },
+                        description(){
+                                return "Autobuy offer and if you are filtering from you right kidney then gain ^1.001 Stem Cells"
+                        },
+                        cost(){
+                                return new Decimal("1e153016")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 213)
+                        }, // hasUpgrade("or", 214)
+                },
+                215: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney X"
+                        },
+                        description(){
+                                return "Autobuy he and unlock Lungs [not yet]"
+                        },
+                        cost(){
+                                return new Decimal("1e299600")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 214)
+                        }, // hasUpgrade("or", 215)
                 },
         },
         clickables: {
@@ -27334,12 +27380,77 @@ addLayer("or", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "sqrt(offer levels)^x<br>" + format(tmp.or.buyables[222].base) + "^x"
+                                let eformula = "sqrt(he levels)^x<br>" + format(tmp.or.buyables[222].base) + "^x"
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e148,127*x<sup>128x</sup>" 
+                                let cost3 = "</b><br>"
+                                let allCost = cost1 + cost2 + cost3
+
+                                let end = allEff + allCost
+                                return br + end
+                        },
+                },
+                223: {
+                        title: "refuse", // "I'm gonna make him an offer he can't refuse."
+                        cost(){
+                                let amt = getBuyableAmount("or", 223)
+                                let base = new Decimal("1e289805")
+                                let exp = new Decimal(256)
+                                return amt.pow(amt.times(exp)).times(base)
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 214) && hasUpgrade("or", 201)
+                        },
+                        canAfford() {
+                                return player.or.contaminants.points.gte(tmp.or.buyables[223].cost)
+                        },
+                        getMaxAfford() {
+                                let pts = player.or.contaminants.points.div("1e289805")
+                                if (pts.lt(1)) return decimalZero
+                                if (pts.eq(1)) return new Decimal(2)
+                                let exp = new Decimal(256) // if y^y = e^x then y = x/W(x)
+                                let logPts = pts.root(exp).ln()
+                                return logPts.div(logPts.lambertw()).ceil()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return 
+                                let data = player.or
+                                let id = 223
+                                let ma = tmp.or.buyables[id].getMaxAfford
+                                let maxBulk = tmp.or.buyables.getMaxBulk
+                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                data.buyables[id] = data.buyables[id].plus(up.max(0))
+                                if (!false && up.gt(0)) {
+                                        data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
+                                }
+                        },
+                        base(){
+                                let ret = player.or.buyables[222].max(1)
+                                
+                                return ret
+                        },
+                        effect(){
+                                return tmp.or.buyables[223].base.pow(player.or.buyables[223])
+                        },
+                        display(){
+                                if (!player.shiftAlias) {
+                                        let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.or.buyables[223]) + "</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.or.buyables[223].effect) + " to Contaminant gain</b><br>"
+                                        let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", 223)) + " Contaminants</b><br>"
+                                
+                                        return br + lvl + eff1 + eff2 + cost + "Shift to see details"
+                                }
+
+                                let eformula = "can't levels^x<br>" + format(tmp.or.buyables[223].base) + "^x"
+
+                                let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
+
+                                let cost1 = "<b><h2>Cost formula</h2>:<br>"
+                                let cost2 = "1e259,805*x<sup>256x</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -27563,6 +27674,20 @@ addLayer("or", {
                                 return "Reward: Add .0005 to tRNA's base but disable the positive effects of Anti-Rho, Anti-Omicron, Anti-Xi, Anti-Theta, Anti-Eta, Anti-Hard, and Anti-Difficult."
                         },
                 }, // hasMilestone("or", 15)
+                16: {
+                        requirementDescription(){
+                                return "1e290,418 Contaminants"
+                        },
+                        done(){
+                                return player.or.contaminants.points.gte("1e290418")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: " + makeBlue("DB") + " multiplies Contaminant gain."
+                        },
+                }, // hasMilestone("or", 16)
         },
         bars: {
                 heart: {
