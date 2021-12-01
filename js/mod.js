@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.200.2",
+	num: "1.201",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,25 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return hasUpg("t", 85)
-	return player.or.contaminants.points.gte("1e67900")
+	return player.or.contaminants.points.gte("1e152996")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.200.2)<br><br>
+		Reaching the endgame screen (updated at least as of v1.201)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.201</h3><br>
+		- Balanced until 1e152,996 Contaminants.<br>
+		- Added a way to slow the game down by 100x for five real seconds.<br>
+		- Added a Heart upgrade.<br>
+		- Added an Organ upgrade.<br>
+		- Added a Kidney upgrade.<br>
+		- Added a Kidney buyable.<br>
 	<br><h3 style='color: #CC0000'>v1.200.2</h3><br>
 		- Fixed a bug with having the exact right amount of Contaminants.<br>
 		- Various code clean up.<br>
@@ -1787,6 +1794,7 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (player.cells.slowTime > 0) return "For the next " + makeGreen(formatTime(player.cells.slowTime)) + " real seconds,<br>the game will tick 100x slower"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"

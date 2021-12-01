@@ -407,6 +407,11 @@ function runInterval(){
 		if (!player.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
 	}
 	if (paused || player.paused) diff = 0
+	if (player.cells.slowTime > 0) {
+		player.cells.slowTime -= diff 
+		if (player.cells.slowTime < 0) player.cells.slowTime = 0
+		diff *= .01
+	}
 	if (player.devSpeed != undefined) diff *= player.devSpeed
 	
 	player.time = now
