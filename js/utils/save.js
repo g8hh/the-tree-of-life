@@ -188,13 +188,11 @@ function loadOptions() {
 		options = getStartOptions()
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
-
 }
 
 function setupModInfo() {
 	modInfo.changelog = changelog
 	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`
-
 }
 
 function fixNaNs() {
@@ -259,7 +257,6 @@ function importSave(imported = undefined, forced = false) {
 		if (!notbugged) return 
 		save()
 		loadSave(allSaves.set)
-		
 	} catch (e) {
 		console.log(e)
 		return;
@@ -287,21 +284,16 @@ function versionCheck() {
 }
 
 var saveInterval = setInterval(function () {
-	if (player === undefined)
-		return;
-	if (tmp.gameEnded && !player.keepGoing)
-		return;
-	if (options.autosave)
-		save();
+	if (player === undefined) return;
+	if (tmp.gameEnded && !player.keepGoing) return;
+	if (options.autosave) save();
 }, 5000);
 
 window.onbeforeunload = () => {
-    if (player.autosave) {
-        save();
-    }
+	if (player.autosave) {
+		save();
+	}
 };
-
-
 
 function startPlayerBase() {
 	return {
@@ -351,26 +343,19 @@ function getStartPlayer() {
 			for (item in layers[layer].infoboxes)
 				playerdata.infoboxes[layer][item] = false;
 		}
-
 	}
 	return playerdata;
 }
 
 function getStartLayerData(layer) {
 	layerdata = {};
-	if (layers[layer].startData)
-		layerdata = layers[layer].startData();
+	if (layers[layer].startData) layerdata = layers[layer].startData();
 
-	if (layerdata.unlocked === undefined)
-		layerdata.unlocked = true;
-	if (layerdata.total === undefined)
-		layerdata.total = decimalZero;
-	if (layerdata.best === undefined)
-		layerdata.best = decimalZero;
-	if (layerdata.resetTime === undefined)
-		layerdata.resetTime = 0;
-	if (layerdata.forceTooltip === undefined)
-		layerdata.forceTooltip = false;
+	if (layerdata.unlocked === undefined) layerdata.unlocked = true;
+	if (layerdata.total === undefined) layerdata.total = decimalZero;
+	if (layerdata.best === undefined) layerdata.best = decimalZero;
+	if (layerdata.resetTime === undefined) layerdata.resetTime = 0;
+	if (layerdata.forceTooltip === undefined) layerdata.forceTooltip = false;
 
 	layerdata.buyables = getStartBuyables(layer);
 	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false

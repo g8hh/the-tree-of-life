@@ -109,10 +109,8 @@ function getPointExponentiation(){
         if (hasUpgrade("a", 13))        exp = exp.times(getBuyableAmount("a", 11).max(1))
         if (hasUpgrade("a", 15))        exp = exp.times(getBuyableAmount("a", 12).max(1))
         if (hasUpgrade("a", 33))        exp = exp.times(Decimal.pow(100, getBuyableAmount("a", 13)))
-
         let logProteinTimes = hasUpgrade("a", 34) + hasUpgrade("a", 35)
                                         exp = exp.times(player.a.protein.points.max(10).log10().pow(logProteinTimes))
-                                        
         if (hasMilestone("a", 24))      exp = exp.times(tmp.a.milestones[24].effect)
                                         exp = exp.times(tmp.a.buyables[22].effect)
         if (hasUpgrade("d", 12)) {
@@ -274,306 +272,6 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
                                  1885e4,19324e3,38092e3,46173e3,47211e3,
                                 61738e3,82413e3,17889e4,18704e4, 2624e5,
                                  3068e5,37352e4,  675e6]
-
-var GEM_EFFECT_DESCRIPTIONS_EXTREME = {
-        101: "Boost life gain<br>*1+x",
-        102: "Boost point gain<br>^1+x<sup>2</sup>",
-        201: "Divide N → ΔP initial cost<br>10^cbrt(x)",
-        202: "Reduce β → ∂𝛾 base cost<br>1e5^cbrt(x)",
-        103: "Add to N → ΔN base<br>cbrt(x)/5",
-        203: "Add to Constant base<br>log10(1+x)/200",
-        301: "Add to Life Milestone 1 limit<br>⌊cbrt(x)⌋",
-        302: "Add to all Life exponential dividers<br>cbrt(x)/3",
-        303: "Less tokens for prestige<br>⌊log2(1+x)⌋",
-        104: "Add to Amino effect exponent<br>sqrt(x)",
-        204: "Life gain per non-0 gem<br>(x+1)^x<sup>.2</sup>",
-        304: "Point gain per 𝛾 → ∂𝛾<br>log10(10+x)",
-        401: "Passive Amino Acid gain<br>x%/s",
-        402: "Add to base of base life gain<br>sqrt(x)",
-        403: "Phosphorus gain<br>^min(10,<wbr>1.02<sup>x</sup>)",
-        404: "Unlock Amino upgrades<br>⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋",
-        105: "Protein gain<br>log10(10+x)<sup>2</sup>",
-        205: "Passive gem gain when completeable<br>10*ln(1+x)%/s",
-        305: "Protein Science gain<br>sqrt(1+x)",
-        405: "tRNA is cheaper<br>10^cbrt(x)",
-        501: "mRNA is cheaper<br>100^cbrt(x)",
-        502: "Amino gain exp<br>cbrt(x)/2",
-        503: "Protein per Amino Acid upgrade<br>log10(10+x<sup>.5</sup>)",
-        504: "Point gain per siRNA<br>log10(10+x)",
-        505: "Life gain per rRNA<br>1+x/300",
-        106: "Add to shRNA base<br>cbrt(x)",
-        206: "Multiply DNA gain<br>log10(10+x)<sup>3</sup>",
-        306: "Passive DNA gain<br>x/11%/s",
-        406: "Protein gain per DNA milestone<br>1+x",
-        506: "Add to base DNA gain<br>x/100",
-        601: "DNA gain per shRNA<br>1+x/1e4",
-        602: "Gem gain<br>1+cbrt(x)",
-        603: "Autobuy shRNA<br>x>1330",
-        604: "Point gain per shRNA<br>1+x^2",
-        605: "shRNA cost exponent is 1.8<br>x>1330",
-        606: "DNA resets per second<br>cbrt(x)/11",
-        107: "Point gain per snRNA<br>1+x<sup>1.8</sup>",
-        207: "<bdi style='font-size: 80%'>Remove a log2 from α → ∂α and shRNA exponent is 1.7<br>x > 1330</bdi>",
-        307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
-        407: "\"Universe\" is universal<br>x>1330",
-        507: "Add to DNA gain exponent<br>x/1000",
-        607: "DNA gain per non-0 gem<br>(x+1)<sup>.25</sup>",
-        701: "Bulk 2x Life buyables<br>x>1330",
-        702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
-        703: "Protein Science per non-0 gem<br>1+x",
-        704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/500",
-        705: "Add .0001 to tRNA base and unlock DNA Research<br>x>1330",
-        706: "Subtract from Challenge 7 effect<br>cbrt(x)/2752",
-        707: "Add .004 to Dilation effect<br>x>1330",
-        108: "<bdi style='font-size: 80%'>Point gain per 𝛾 → ∂𝛾<sup>1.9394</sup> and DNA Science gain<br>1+x</bdi>",
-        208: "mRNA base per non-zero gem-49 (maxed at 8)<br>x/2662000",
-        308: "DNA Science per non-0 gem-48<br>log10(10+x)",
-        408: "<bdi style='font-size: 60%'>Remove the /8e315 in DNA gain formula and gain 8.315 more DNA Science<br>x>1330</bdi>",
-        508: "Customizable effect per non-0 gem-53<br>^1-cbrt(x)/100",
-        608: "All µ cost reductions always work<br>x>1330",
-        708: "Reduce µ cost exponent<br>x/26620",
-        801: "Add to shRNA base per shRNA<br>x/13310",
-        802: "Autobuy tokens<br>x>1330",
-        803: "Autobuy Radio Waves<br>x>1330",
-        804: "X-Rays effects Amino Acid<br>x>1330",
-        805: "Phosphorus gain per non-zero gem<br>1+cbrt(x)",
-        806: "Remove snRNA's ln<br>x>1330",
-        807: "Life gain per N → Δµ<br>1+x/100",
-        808: "Add .0001 to tRNA's base<br>x>1330",
-}
-
-var GEM_EFFECT_DESCRIPTIONS = {
-        101: "Boost life gain<br>*1+sqrt(x)",
-        102: "Boost point gain<br>^1+cbrt(x)",
-        201: "Divide N → ΔP initial cost<br>10^cbrt(x)",
-        202: "Add to α → ∂𝛾 base<br>log10(1+x)/10",
-        103: "Add to N → ΔN base<br>sqrt(x)/10+<wbr>cbrt(x)/5",
-        203: "Add to Constant base<br>log10(1+x)/200",
-        301: "Boost point gain per non-0 gem count<br>ln(e+x)",
-        302: "Add to β → ∂𝛾 base<br>log10(1+x)/10",
-        303: "Less tokens for prestige<br>⌊log2<wbr>(log2(2+2x))⌋",
-        104: "Add to Amino effect exponent<br>cbrt(x)",
-        204: "Life gain per non-0 gem<br>(x+1)^<wbr>log100(100+x)",
-        304: "Point gain per N → ΔP<br>log10(10+x<sup>.8</sup>)",
-        401: "Passive Amino Acid gain<br>x%/s",
-        402: "Add to base of base life gain<br>sqrt(x)", 
-        403: "Phosphorus gain<br>^min(10,<wbr>1.02<sup>x</sup>)",
-        404: "Unlock Amino upgrades<br>⌊log3(<wbr>2+x<sup>1.5</sup>/3)⌋",
-        105: "Protein gain<br>log10(10+x)",
-        205: "Passive gem gain when completeable<br>10*ln(1+x)%/s",
-        305: "Amino Acid gain<br>sqrt(1+8*x)",
-        405: "tRNA is cheaper<br>10^cbrt(x)",
-        501: "mRNA is cheaper<br>100^cbrt(x)",
-        502: "Amino gain exp<br>cbrt(x/10)",
-        503: "Protein per Amino Acid upgrade<br>log10(10+x<sup>.5</sup>)",
-        504: "Point gain per siRNA<br>log10(10+x)",
-        505: "Life gain per rRNA<br>log100(100+x)",
-        106: "Add to shRNA base<br>cbrt(x)/1.1",
-        206: "Multiply DNA gain<br>log10(10+x)<sup>2</sup>",
-        306: "Passive DNA gain<br>x/11%/s",
-        406: "Protein gain per DNA milestone<br>1+x",
-        506: "Add to base DNA gain<br>log2(1+x)",
-        601: "DNA gain per shRNA<br>1+<wbr>log10(10+x)/50",
-        602: "Gem gain<br>1+cbrt(x)",
-        603: "Autobuy shRNA<br>x>1330",
-        604: "Point gain per shRNA<br>1+x",
-        605: "Point gain per α → ∂α<br>(1+x)^<wbr>log2(10+x)/4",
-        606: "DNA resets per second<br>cbrt(x)/11",
-        107: "Point gain per snRNA<br>1+x",
-        207: "Remove a log2 from α → ∂α<br>x > 1330",
-        307: "Protein gain per 𝛾 → ∂𝛾<br>1+x",
-        407: "\"Universe\" is universal<br>x>1330",
-        507: "Bulk 50x Life buyables<br>x>1330",
-        607: "DNA gain per non-0 gem<br>log10(10+x)",
-        701: "Remove the /2 in the DNA gain formula<br>x>1330",
-        702: "Bulk more N → Δµ<br>round(1+<wbr>cbrt(x)*9/11)",
-        703: "Point gain per rRNA<br>1+cbrt(x)",
-        704: "Phosphorus gain per miRNA<br>1+<wbr>log10(1+x)/100",
-        705: "Add .0001 to tRNA base<br>x>1330",
-        706: "Subtract from Challenge 7 effect<br>cbrt(x)/2200",
-        707: "Add .004 to Dilation effect<br>x>1330",
-        108: "Point gain per 𝛾 → ∂𝛾<sup>1.8</sup><br>1+x",
-        208: "mRNA base per non-zero gem-49 (maxed at 8)<br>x/2662000",
-        308: "Point gain per β → ∂α<br>1+x^<wbr>log10(DNA)/100",
-        408: "Remove the /4.4e144 in DNA gain formula<br>x>1330",
-        508: "Customizable effect per non-0 gem-53<br>^1-cbrt(x)/97",
-        608: "All µ cost reductions always work<br>x>1330",
-        708: "Reduce µ cost exponent<br>x/26620",
-        801: "Add to shRNA base per shRNA<br>x/13310",
-        802: "Autobuy tokens<br>x>1330",
-        803: "Autobuy Radio Waves<br>x>1330",
-        804: "X-Rays effects Amino Acid<br>x>1330",
-        805: "Phosphorus gain per non-zero gem<br>1+cbrt(x)",
-        806: "Remove snRNA's ln<br>x>1330",
-        807: "Life gain per N → Δµ<br>1+x/13",
-        808: "Add .0006 to tRNA's base<br>x>1330",
-}
-
-var GEM_EFFECT_FORMULAS_EXTREME = {
-        101: (x) => x.plus(1),
-        102: (x) => x.pow(2).plus(1),
-        201: (x) => x.cbrt().pow10(),
-        202: (x) => new Decimal(1e5).pow(x.cbrt()),
-        103: (x) => x.cbrt().div(5),
-        203: (x) => x.plus(1).log10().div(200),
-        301: (x) => Math.floor(Math.cbrt(x.toNumber())),
-        302: (x) => x.cbrt().div(3),
-        303: (x) => x.plus(1).log(2).floor(),
-        104: (x) => x.sqrt(),
-        204: (x) => x.plus(1).pow(x.pow(.2)),
-        304: (x) => x.plus(10).log10(),
-        401: (x) => x.div(100),
-        402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) && !hasMilestone("or", 14) ? 0.005 : 0), x).min(hasChallenge("l", 52) && !hasMilestone("or", 14) ? 1e100 : 10),
-        404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
-        105: (x) => x.plus(10).log10().pow(2),
-        205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
-        305: (x) => x.plus(1).sqrt(),
-        405: (x) => x.cbrt().pow10(),
-        501: (x) => x.cbrt().pow10().pow(2),
-        502: (x) => x.cbrt().div(2),
-        503: (x) => x.sqrt().plus(10).log10(),
-        504: (x) => x.plus(10).log10(),
-        505: (x) => x.div(300).plus(1),
-        106: (x) => x.cbrt(),
-        206: (x) => x.plus(10).log10().pow(3),
-        306: (x) => x.div(1100),
-        406: (x) => x.plus(1),
-        506: (x) => x.div(100),
-        601: (x) => x.div(1e4).plus(1),
-        602: (x) => x.cbrt().plus(1),
-        603: (x) => x.gt(1330),
-        604: (x) => x.pow(2).plus(1),
-        605: (x) => x.gt(1330),
-        606: (x) => x.cbrt().div(11),
-        107: (x) => x.pow(1.8).plus(1),
-        207: (x) => x.gt(1330),
-        307: (x) => x.plus(1),
-        407: (x) => x.gt(1330),
-        507: (x) => x.div(1000),
-        607: (x) => x.plus(1).pow(.25),
-        701: (x) => x.gt(1330),
-        702: (x) => x.cbrt().div(11).times(9).plus(1).round(),
-        703: (x) => x.plus(1),
-        704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(500).plus(1),
-        705: (x) => x.gt(1330),
-        706: (x) => x.cbrt().div(2752),
-        707: (x) => x.gt(1330),
-        108: (x) => x.plus(1),
-        208: (x) => x.div(2662000),
-        308: (x) => x.plus(10).log10(),
-        408: (x) => x.gt(1330),
-        508: (x) => Decimal.sub(1,x.cbrt().div(95)),
-        608: (x) => x.gt(1330),
-        708: (x) => x.div(26620),
-        801: (x) => x.div(13310),
-        802: (x) => x.gt(1330),
-        803: (x) => x.gt(1330),
-        804: (x) => x.gt(1330),
-        805: (x) => x.cbrt().plus(1),
-        806: (x) => x.gt(1330),
-        807: (x) => x.div(100).plus(1),
-        808: (x) => x.gt(1330),
-}
-
-var GEM_EFFECT_FORMULAS = {
-        101: (x) => x.sqrt().plus(1),
-        102: (x) => x.cbrt().plus(1),
-        201: (x) => x.cbrt().pow10(),
-        202: (x) => x.plus(1).log10().div(10),
-        103: (x) => x.sqrt().div(10).plus(x.cbrt().div(5)),
-        203: (x) => x.plus(1).log10().div(200),
-        301: (x) => x.plus(Math.E).ln(),
-        302: (x) => x.plus(1).log10().div(10),
-        303: (x) => x.times(2).plus(2).log(2).log(2).floor(),
-        104: (x) => x.cbrt(),
-        204: (x) => x.plus(1).pow(x.plus(100).log(100).min(2)),
-        304: (x) => x.pow(.8).plus(10).log10(),
-        401: (x) => x.div(100),
-        402: (x) => x.sqrt(),
-        403: (x) => Decimal.pow(1.02 + (hasChallenge("l", 51) && !hasMilestone("or", 14) ? 0.005 : 0), x).min(hasChallenge("l", 52) && !hasMilestone("or", 14) ? 1e100 : 10),
-        404: (x) => x.pow(1.5).div(3).plus(2).log(3).floor(),
-        105: (x) => x.plus(10).log10(),
-        205: (x) => x.plus(1).ln().div(10).plus(hasUpgrade("d", 11) ? 1 : 0),
-        305: (x) => x.times(8).plus(1).sqrt(),
-        405: (x) => x.cbrt().pow10(),
-        501: (x) => x.cbrt().pow10().pow(2),
-        502: (x) => x.div(10).cbrt(),
-        503: (x) => x.sqrt().plus(10).log10(),
-        504: (x) => x.plus(10).log10(),
-        505: (x) => x.plus(100).log(100),
-        106: (x) => x.cbrt().div(1.1),
-        206: (x) => x.plus(10).log10().pow(2),
-        306: (x) => x.div(1100),
-        406: (x) => x.plus(1),
-        506: (x) => x.plus(1).log(2),
-        601: (x) => x.plus(10).log10().div(50).plus(1),
-        602: (x) => x.cbrt().plus(1),
-        603: (x) => x.gt(1330),
-        604: (x) => x.plus(1),
-        605: (x) => x.plus(1).pow(x.plus(10).log(16)),
-        606: (x) => x.cbrt().div(11),
-        107: (x) => x.plus(1),
-        207: (x) => x.gt(1330),
-        307: (x) => x.plus(1),
-        407: (x) => x.gt(1330),
-        507: (x) => x.gt(1330),
-        607: (x) => x.plus(10).log10(),
-        701: (x) => x.gt(1330),
-        702: (x) => x.cbrt().div(11).times(9).plus(1).round(),
-        703: (x) => x.cbrt().plus(1),
-        704: (x) => hasUpgrade("cells", 64) ? new Decimal(1.04) : x.plus(1).log10().div(100).plus(1),
-        705: (x) => x.gt(1330),
-        706: (x) => x.cbrt().div(2200),
-        707: (x) => x.gt(1330),
-        108: (x) => x.plus(1),
-        208: (x) => x.div(2662000),
-        308: (x) => x.plus(1).pow(player.d.points.max(1).log10().div(100)),
-        408: (x) => x.gt(1330),
-        508: (x) => Decimal.sub(1,x.cbrt().div(97)),
-        608: (x) => x.gt(1330),
-        708: (x) => x.div(26620),
-        801: (x) => x.div(13310),
-        802: (x) => x.gt(1330),
-        803: (x) => x.gt(1330),
-        804: (x) => x.gt(1330),
-        805: (x) => x.cbrt().plus(1),
-        806: (x) => x.gt(1330),
-        807: (x) => x.div(13).plus(1),
-        808: (x) => x.gt(1330),
-}
-
-function nCk(n, k){
-        return binomial(n, k)
-}
-
-var binomials = [ // step 1: small cases
-        [1],
-        [1,1],
-        [1,2,1],
-        [1,3,3,1],
-        [1,4,6,4,1],
-        [1,5,10,10,5,1],
-        [1,6,15,20,15,6,1],
-        [1,7,21,35,35,21,7,1],
-        [1,8,28,56,70,56,28,8,1],
-];
-
-// step 2: a function that builds out the LUT if it needs to.
-function binomial(n,k) {
-        if (n > 30) return 
-        while (n >= binomials.length) {
-                let s = binomials.length;
-                let nextRow = [];
-                nextRow[0] = 1;
-                for (let i = 1, prev = s - 1; i < s; i++) {
-                        nextRow[i] = binomials[prev][i-1] + binomials[prev][i];
-                }
-                nextRow[s] = 1;
-                binomials.push(nextRow);
-        }
-        return binomials[n][k];
-}
 
 function resetPreLifeCurrencies(){
         let data1 = player.mu
@@ -1605,7 +1303,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 71)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
                                 a = "max(5, log10(coins))"
                                 return a
@@ -1630,7 +1328,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 72)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "ln(Carbon) multiplies Near-ultraviolet base"
                                 a = "ln(Carbon + 10)"
                                 return a
@@ -1662,7 +1360,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 73)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Add .01 to Constant base and you can buy all 3 row 7 coin upgrades"
                         },
                         cost(){
@@ -1685,7 +1383,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 74)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Square Oxygen I and remove the -9"
                         },
                         cost(){
@@ -1708,7 +1406,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 71)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias) return "Requires token Upgrade 71<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 75)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 return "Change token buyable costs from ceiling to rounding"
                         },
                         cost(){
@@ -1731,7 +1429,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias && !hasUpgrade("h", 81)) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Square Oxygen IV but you lose 50 times more Carbon and Oxygen per second"
                         },
                         cost(){
@@ -1754,7 +1452,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias && !hasUpgrade("h", 82)) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Per token per upgrade multiply Microwave base by 1.01"
                         },
                         cost(){
@@ -1777,7 +1475,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias && !hasUpgrade("h", 83)) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Raise token buyable costs ^.9 (ceilinged)"
                         },
                         cost(){
@@ -1800,7 +1498,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias && !hasUpgrade("h", 84)) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .8"
                         },
                         cost(){
@@ -1823,7 +1521,7 @@ addLayer("h", {
                                 return hasUpgrade("tokens", 72)
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias) return "Requires token Upgrade 72<br>Hold shift for effect"
+                                if (!hasUpgrade("tokens", 72) && !player.shiftAlias && !hasUpgrade("h", 85)) return "Requires token Upgrade 72<br>Hold shift for effect"
                                 return "Change token buyable exponent to .7"
                         },
                         cost(){
@@ -2088,7 +1786,6 @@ addLayer("sci", {
                 if (hasMilestone("n", 14))              layers.sci.nitrogen_science.update(diff)
                 if (hasUpgrade("a", 23) || force2)      layers.sci.protein_science.update(diff)
                 if (layers.l.grid.getGemEffect(705))    layers.sci.dna_science.update(diff)
-
 
                 let lsb = layers.sci.buyables
                 let tsb = tmp.sci.buyables
@@ -7438,7 +7135,7 @@ addLayer("c", {
                                 return br + "Estimated time: " + logisticTimeUntil(tmp.c.upgrades[24].cost, player.c.points, tmp.c.getResetGain, tmp.c.getLossRate)
                         },
                         cost(){
-                                if (player.extremeMode) return new Decimal(7e154)
+                                if (player.extremeMode) return new Decimal(player.hardMode ? 6e154 : 7e154)
                                 return player.hardMode ? new Decimal(8.1e155) : new Decimal(4.6e155)
                         },
                         unlocked(){
@@ -26103,12 +25800,13 @@ addLayer("or", {
                 cols: 5,
                 kidneyUpgradesLength(){
                         let ids = [201, 202, 203, 204, 205, 
-                                   211, 212, 213, 214, 215,]
+                                   211, 212, 213, 214, 215,
+                                   220, 221, 222, 223, 224]
                         let a = 0
                         for (i in ids) {
                                 if (hasUpgrade("or", ids[i])) a ++ 
                         }
-                        if (a >= 10) console.log("update me please")
+                        if (a >= 15) console.log("update me please")
                         return a
                 },
                 11: {
@@ -28621,6 +28319,12 @@ addLayer("ach", {
                 {key: "shift+Control+S", description: "Shift+Control+S: Save", 
                         onPress(){
                                 save()
+                        }
+                },
+                {key: "shift+Control+E", description: "Force endgame",
+                        onPress(){ // forces the endgame screen to pop up 
+                                forceEndgame = true
+                                player.keepGoing = false
                         }
                 },
                 {key: " ", description: "Space: Toggle Pause", 
