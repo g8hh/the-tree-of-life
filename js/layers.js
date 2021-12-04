@@ -4955,14 +4955,17 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXVI"
                         },
                         description(){
-                                return "Per upgrade in this row log10(DNA Science) multiplies Cell gain and Secondary is 1e9x easier"
+                                return "Per upgrade in this tab log10(DNA Science) multiplies Cell gain and Secondary is 1e9x easier"
                         },
                         lvls(){
-                                let a = 1
-                                if (hasUpgrade("sci", 552)) a ++ 
-                                if (hasUpgrade("sci", 553)) a ++ 
-                                if (hasUpgrade("sci", 554)) a ++ 
-                                if (hasUpgrade("sci", 555)) a ++ 
+                                let ids = [551, 552, 553, 554, 555, 
+                                           561, 562, 563, 564, 565,
+                                           571, 572, 573, 574, 575,]
+                                let a = 0
+                                for (i in ids) {
+                                        if (hasUpg("sci", ids[i])) a ++
+                                }
+                                if (a >= 15) console.log("hi")
                                 return a
                         },
                         cost:() => new Decimal("1e8674"),
@@ -5040,6 +5043,21 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 554)
                         }, // hasUpgrade("sci", 555)
+                },
+                561: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXI"
+                        },
+                        description(){
+                                return makePurple("B") + " multiplies Cell gain and per upgrade add .01 to DNA helicase base and double Stem Cell gain"
+                        },
+                        cost:() => new Decimal("1e27196"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 555)
+                        }, // hasUpgrade("sci", 561)
                 },
         },
         buyables: {
@@ -6036,7 +6054,8 @@ addLayer("sci", {
                         base(){
                                 let ret = decimalOne
 
-                                if (hasUpgrade("cells", 13)) ret = ret.plus(.1)
+                                if (hasUpgrade("cells", 13))    ret = ret.plus(.1)
+                                if (hasUpgrade("sci", 561))     ret = ret.plus(.01 * tmp.sci.upgrades.dnaUpgradesLength)
 
                                 return ret
                         },
@@ -6474,8 +6493,16 @@ addLayer("sci", {
                 dna_content: {
                         "Upgrades": {
                                 content: [
-                                        ["upgrades", [50,51,52,53,54,55,56]],
+                                        ["upgrades", [50,51,52,53,54]],
                                 ]
+                        },
+                        "Upgrades II": {
+                                content: [
+                                        ["upgrades", [55,56,57,58,59]],
+                                ],
+                                unlocked(){
+                                        return tmp.sci.upgrades[551].unlocked
+                                },
                         },
                         "Buyables": {
                                 content: [
@@ -19537,7 +19564,8 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                 if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
                 if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
-                if (hasUpgrade("sci", 555))     ret = ret.times(tmp.sci.buyables[501].effect)
+                if (hasUpgrade("sci", 555))     ret = ret.times(tmp.sci.buyables[501].effect.max(1))
+                if (hasUpgrade("sci", 561))     ret = ret.times(tmp.sci.buyables[502].effect.max(1))
                 if (hasChallenge("l", 111))     ret = ret.times(tmp.l.challenges[22].reward.min(ret.sqrt()))
                                                 ret = ret.times(tmp.or.effect)
                 if (player.easyMode)            ret = ret.times(2)
@@ -19955,6 +19983,7 @@ addLayer("cells", {
                                                         ret = ret.times(player.cells.points.max(10).log10())
                         }
                         if (hasUpgrade("sci", 553))     ret = ret.times(player.tokens.total.max(1))
+                        if (hasUpgrade("sci", 561))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.dnaUpgradesLength))
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
@@ -22015,7 +22044,10 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 125))               exp -= 951
                                 if (hasUpgrade("t", 133))               exp = Math.min(8500, exp)
                                 if (hasUpgrade("sci", 554))             exp -= tmp.sci.upgrades.dnaUpgradesLength * 6.698970004336019 // Math.log10(5e6)
-                                if (hasUpgrade("t", 84))                exp -= player.t.upgrades.length * 2.6989700043360187 // Math.log10(500)
+                                if (player.extremeMode) {
+                                        if (hasMilestone("t", 12))      exp -= player.t.milestones.length ** 2
+                                        if (hasUpgrade("t", 84))        exp -= player.t.upgrades.length * 2.6989700043360187 // Math.log10(500)
+                                }
                                 
                                 return Decimal.pow(10, exp)
                         },
@@ -22275,7 +22307,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 50))  ret = ret.plus(tmp.tokens.buyables[63].effect)
                                 if (hasMilestone("t", 7))       ret = ret.plus(getBuyableAmount("cells", 13).cbrt().times(.05))
                                 if (hasMilestone("t", 12)) {
-                                        let per = .03
+                                        let per = player.extremeMode ? .001 * layerChallengeCompletions("cells") : .03
                                         if (hasUpgrade("t", 94)) per += .02
                                                                 ret = ret.plus(per * player.t.milestones.length)
                                 }
@@ -23512,7 +23544,10 @@ addLayer("t", {
                                                 ret = ret.plus(per * count)
                 }
                 if (hasUpgrade("t", 81))        ret = ret.plus(player.extremeMode ? 1 : .5)
-                if (hasMilestone("t", 13))      ret = ret.plus(.03 * player.t.milestones.length)
+                if (hasMilestone("t", 13)) {
+                        let per = player.extremeMode ? .12 : .03
+                                                ret = ret.plus(per * player.t.milestones.length)
+                }
                                                 ret = ret.plus(tmp.tokens.buyables[111].effect)
                 if (hasUpgrade("cells", 53))    ret = ret.plus(player.cells.upgrades.length * .008)
 
@@ -24906,10 +24941,11 @@ addLayer("t", {
                 }, // hasMilestone("t", 9)
                 10: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e60,600 Stem Cells"
                                 return "1e76,571 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e76571")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e60600" : "1e76571")
                         },
                         unlocked(){
                                 return true
@@ -24920,44 +24956,50 @@ addLayer("t", {
                 }, // hasMilestone("t", 10)
                 11: {
                         requirementDescription(){
-                                return "1e78,906 Stem Cells"
+                                if (player.extremeMode) return "1e62,130 Stem Cells"
+                                return "1e78,096 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e78096")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e62130" : "1e78096")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Add .004 to Visible base per Cell challenge completion and per milestone Pluripotent levels multiply Stem Cell gain."
                                 return "Reward: Per milestone Pluripotent levels multiply Stem Cell gain."
                         },
                 }, // hasMilestone("t", 11)
                 12: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e63,718 Stem Cells"
                                 return "1e80,289 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e80289")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e63718" : "1e80289")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) return "Reward: Per milestone per Cell challenge completion add .001 to Omnipotent's base and per milestone Primary is 10x easier."
                                 return "Reward: Per milestone add .03 to Omnipotent's base."
                         },
                 }, // hasMilestone("t", 12)
                 13: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e88,229 Stem Cells"
                                 return "1e96,384 Stem Cells"
                         },
                         done(){
-                                return player.cells.stem_cells.points.gte("1e96384")
+                                return player.cells.stem_cells.points.gte(player.extremeMode ? "1e88229" : "1e96384")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Token cost exponent is .26 and each milestone adds .02 to Tissue effect exponent but nullify Radio Waves."
+                                if (player.extremeMode) return "Reward: Token cost exponent is .26 and each milestone adds .12 to Tissue effect exponent but nullify Radio Waves."
+                                return "Reward: Token cost exponent is .26 and each milestone adds .03 to Tissue effect exponent but nullify Radio Waves."
                         },
                 }, // hasMilestone("t", 13)
                 14: {
@@ -35711,6 +35753,9 @@ addLayer("tokens", {
                                         }
                                         if (hasMilestone("cells", 52)) {
                                                 let per = player.extremeMode ? .005 : .015
+                                                if (hasMilestone("t", 11) && player.extremeMode) {
+                                                        per += .004
+                                                }
                                                         ret = ret.plus(per * layerChallengeCompletions("cells"))
                                         }
                                         if (hasChallenge("l", 112) && !player.extremeMode) {
