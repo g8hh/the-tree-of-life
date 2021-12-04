@@ -262,7 +262,7 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
                                   21650,  28375,  32975,  35000,  35150,
                                   35600,  38500,  45678,  49494,  60125,
                                   61616,  69030,  77177,  77550,  77940,
-                                  83720,  87040,  87420, 107270, 120066,
+                                  83680,  87040,  87420, 107270, 120066,
                                  120630, 132275, 149300, 151925, 153460,
                                  194050, 220254, 225947, 260888, 265010,
                                  267200, 275375, 276940, 359037, 599599,
@@ -22260,7 +22260,7 @@ addLayer("cells", {
                                 let id = 11
 
                                 let ma = tmp.cells.buyables[id].maxAfford
-                                let canBulk = hasMilestone("cells", 37) || hasMilestone("t", 3) || player.or.milestone3Ever
+                                let canBulk = hasMilestone("cells", 37) || hasMilestone("t", 3) || player.or.milestone2Ever
                                 let up = canBulk || player.easyMode ? ma.sub(data.buyables[id]).max(1) : 1
                                 data.buyables[id] = data.buyables[id].plus(up)
                                 if (!hasMilestone("cells", 29)) {
@@ -25843,7 +25843,7 @@ addLayer("or", {
                         description(){
                                 return "Oligopotent cost base is 1e90 and you can complete Tertiary 9 times"
                         },
-                        cost:() => new Decimal(1068e4),
+                        cost:() => new Decimal(1098e4),
                         unlocked(){
                                 return hasUpgrade("or", 135)
                         }, // hasUpgrade("or", 13)
@@ -25855,7 +25855,7 @@ addLayer("or", {
                         description(){
                                 return "Tokens II multiplies Organ gain and unlock Kidneys"
                         },
-                        cost:() => new Decimal(21.2e6),
+                        cost:() => new Decimal(13.44e6),
                         unlocked(){
                                 return hasUpgrade("or", 13)
                         }, // hasUpgrade("or", 14)
