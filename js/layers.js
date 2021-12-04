@@ -261,7 +261,7 @@ var TOKEN_COSTS_EXTREME = [        6395,   7600,   7650,   8735,   9060,
                                   15260,  16000,  16280,  18000,  20740,
                                   21650,  28375,  32975,  35000,  35150,
                                   35600,  38500,  45678,  49494,  60125,
-                                  61730,  69111,  77210,  77600,  78000,
+                                  61616,  69030,  77177,  77550,  77940,
                                   83720,  87040,  87420, 107270, 120066,
                                  120630, 132275, 149300, 151925, 153460,
                                  194050, 220254, 225947, 260888, 265010,
@@ -1305,7 +1305,7 @@ addLayer("h", {
                         description(){
                                 if (!hasUpgrade("tokens", 71) && !player.shiftAlias && !hasUpgrade("h", 71)) return "Requires token Upgrade 71<br>Hold shift for effect"
                                 if (player.shiftAlias ^ hasUpgrade("tokens", 71)) return "Gain 10x coins and max(5, log10(coins)) multiplies Oxygen per upgrade"
-                                a = "max(5, log10(coins))"
+                                a = "min(5, log10(coins))"
                                 return a
                         },
                         cost(){
@@ -12947,11 +12947,11 @@ addLayer("l", {
                 26: {
                         requirementDescription(){
                                 if (player.extremeMode) return "9.75e126 Lives"
-                                return "3.00e125 Lives"
+                                return "2.50e125 Lives"
                         },
                         done(){
                                 if (player.extremeMode) return player.l.points.gte(9.75e126)
-                                return player.l.points.gte(3e125)
+                                return player.l.points.gte(2.5e125)
                         },
                         unlocked(){
                                 return true
@@ -25522,7 +25522,7 @@ addLayer("or", {
         },
         effect(){
                 let pts = player.or.total
-                if (hasUpgrade("or", 14)) pts = player.or.best
+                if (hasUpgrade("or", 124)) pts = player.or.best
 
                 let exp = pts.cbrt().div(5).min(99).plus(1)
 
@@ -25831,7 +25831,7 @@ addLayer("or", {
                         description(){
                                 return "Add .0053 to tRNA's base and gain 100% of DNA and Amino Acid per second but disable C28 and C88"
                         },
-                        cost:() => new Decimal(12345),
+                        cost:() => new Decimal(12240),
                         unlocked(){
                                 return hasMilestone("or", 14)
                         }, // hasUpgrade("or", 12)
@@ -25843,7 +25843,7 @@ addLayer("or", {
                         description(){
                                 return "Oligopotent cost base is 1e90 and you can complete Tertiary 9 times"
                         },
-                        cost:() => new Decimal(17e6),
+                        cost:() => new Decimal(1068e4),
                         unlocked(){
                                 return hasUpgrade("or", 135)
                         }, // hasUpgrade("or", 13)
@@ -25853,7 +25853,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs IV"
                         },
                         description(){
-                                return "Tokens II multiplies Organ gain and unlock Kidneys, but Organ effect is based on best"
+                                return "Tokens II multiplies Organ gain and unlock Kidneys"
                         },
                         cost:() => new Decimal(21.2e6),
                         unlocked(){
@@ -26112,7 +26112,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>" + (player.shiftAlias ? "Pro-Oxygen" : "Heart XIV")
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Double Organ gain per this row upgrade but max passive gain at 10x of Organs on reset and disable Anti-Oxygen's positive effects</bdi>"
+                                return "<bdi style='font-size: 70%'>Double Organ gain per this row upgrade but max passive gain at 10x of Organs on reset, effect is based on best, and disable Anti-Oxygen's positive effects</bdi>"
                         },
                         cost(){
                                 return new Decimal(5e14)
@@ -26140,7 +26140,7 @@ addLayer("or", {
                                 return "<bdi style='font-size: 80%'>Gain 90% of your Organs on reset per second but remove the ability to DNA or Organ reset and disable Anti-Nitrogen's positive effects</bdi>"
                         },
                         cost(){
-                                return new Decimal(2e13)
+                                return new Decimal(1e13)
                         },
                         currencyLocation:() => player.or.deoxygenated_blood,
                         currencyInternalName:() => "points",
@@ -26174,7 +26174,7 @@ addLayer("or", {
                                 return "Per Organ upgrade you have three less tokens for prestige purposes but disable C33, C54, C64, C17, C73, and C18 gems"
                         },
                         cost(){
-                                return new Decimal(5e17)
+                                return new Decimal(5e16)
                         },
                         currencyLocation:() => player.or.deoxygenated_blood,
                         currencyInternalName:() => "points",
@@ -26191,7 +26191,7 @@ addLayer("or", {
                                 return "Down Quark base becomes Tokens<sup>C</sup> but disable C61 Gems"
                         },
                         cost(){
-                                return new Decimal(5e18)
+                                return new Decimal(5e17)
                         },
                         currencyLocation:() => player.or.oxygenated_blood,
                         currencyInternalName:() => "points",
@@ -26208,7 +26208,7 @@ addLayer("or", {
                                 return "Add .0002 to tRNA's base but remove Gems, Customizable, and Selection"
                         },
                         cost(){
-                                return new Decimal(5e18)
+                                return new Decimal(5e17)
                         },
                         onPurchase(){
                                 player.l.activeChallenge = null
@@ -26229,7 +26229,7 @@ addLayer("or", {
                                 return "The number of Organ upgrades multiplies Organ gain but remove Lives<sup>*</sup>"
                         },
                         cost(){
-                                return new Decimal(1e22)
+                                return new Decimal(3e18)
                         },
                         onPurchase(){
                                 player.l.activeChallenge = null
@@ -27360,10 +27360,10 @@ addLayer("or", {
                 }, // hasMilestone("or", 14)
                 15: {
                         requirementDescription(){
-                                return "280,000 Organs"
+                                return "221,300 Organs"
                         },
                         done(){
-                                return player.or.points.gte(28e4)
+                                return player.or.points.gte(221300)
                         }, // WATCH OUT FOR ANTI-OMICRON
                         unlocked(){
                                 return true
