@@ -5059,6 +5059,21 @@ addLayer("sci", {
                                 return hasUpgrade("sci", 555)
                         }, // hasUpgrade("sci", 561)
                 },
+                562: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXII"
+                        },
+                        description(){
+                                return "Token cost exponent is .25 and per this tab upgrade " + makePurple("G") + " multiplies Stem Cell gain"
+                        },
+                        cost:() => new Decimal("1e29301"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 561)
+                        }, // hasUpgrade("sci", 562)
+                },
         },
         buyables: {
                 rows: 5,
@@ -6001,7 +6016,13 @@ addLayer("sci", {
                         base(){
                                 let ret = decimalOne
 
-                                ret = ret.plus(tmp.sci.buyables[521].green_a_effect)
+                                                                ret = ret.plus(tmp.sci.buyables[521].green_a_effect)
+                                if (hasUpgrade("t", 95)) {
+                                        let upgs = player.t.upgrades.length
+                                        let mile = player.t.milestones.length
+                                        let per = player.extremeMode ? .08 : .05
+                                                                ret = ret.plus(per * upgs * mile)
+                                }
                                 
                                 return ret
                         },
@@ -19608,7 +19629,8 @@ addLayer("cells", {
                 if (hasUpgrade("t", 95)) {
                         let upgs = player.t.upgrades.length
                         let mile = player.t.milestones.length
-                                                exp = exp.plus(Math.min(.05 * upgs * mile, 100))
+                        let per = player.extremeMode ? .08 : .05
+                                                exp = exp.plus(per * upgs * mile)
                 }
 
                 return amt.plus(9).pow(exp)
@@ -19984,6 +20006,8 @@ addLayer("cells", {
                         }
                         if (hasUpgrade("sci", 553))     ret = ret.times(player.tokens.total.max(1))
                         if (hasUpgrade("sci", 561))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades.dnaUpgradesLength))
+                        if (hasUpgrade("sci", 562))     ret = ret.times(tmp.sci.buyables[521].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
+                        if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
@@ -22081,7 +22105,7 @@ addLayer("cells", {
                                 return tmp.cells.challenges[11].rewardBase.pow(comps)
                         },
                         rewardBase(){
-                                if (hasUpgrade("t", 93))        return new Decimal(1e4)
+                                if (hasUpgrade("t", 93))        return new Decimal(player.extremeMode ? 12e3 : 1e4)
                                 if (hasUpgrade("t", 73))        return new Decimal(200)
                                 if (hasUpgrade("t", 65))        return new Decimal(140)
                                 if (hasUpgrade("t", 62))        return new Decimal(105)
@@ -22173,7 +22197,10 @@ addLayer("cells", {
                                         let add = 1
                                         if (hasMilestone("t", 6)) add = 5
                                         let exp = 3
-                                        if (hasUpgrade("t", 93)) exp = (amt-5)/10
+                                        if (hasUpgrade("t", 93)) {
+                                                exp = (amt-5)/10
+                                                if (player.extremeMode) exp ++
+                                        }
                                         return new Decimal(amt).plus(add).pow(exp)
                                 }
                                 return new Decimal(amt).pow(2).plus(1)
@@ -22308,7 +22335,7 @@ addLayer("cells", {
                                 if (hasMilestone("t", 7))       ret = ret.plus(getBuyableAmount("cells", 13).cbrt().times(.05))
                                 if (hasMilestone("t", 12)) {
                                         let per = player.extremeMode ? .001 * layerChallengeCompletions("cells") : .03
-                                        if (hasUpgrade("t", 94)) per += .02
+                                        if (hasUpgrade("t", 94) && !player.extremeMode) per += .02
                                                                 ret = ret.plus(per * player.t.milestones.length)
                                 }
                                 if (hasMilestone("t", 15))      ret = ret.plus(.013 * player.t.upgrades.length)
@@ -24224,12 +24251,22 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "Pluripotent cost base is 1e27 but nullify Microwaves"
+                                if (player.extremeMode) a = a.replace("27", "27 and per this row upgrade per upgrade gain 4.4x Stem Cells")
                                 let b = "<br>Requires: 46 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 91)) return a + b
                                 return a + "</bdi>"
                         },
                         canAfford(){
                                 return player.cells.challenges[12] >= 46
+                        },
+                        effect(){
+                                if (!player.extremeMode) return decimalOne
+                                let a = 1
+                                if (hasUpg("t", 92)) a ++
+                                if (hasUpg("t", 93)) a ++
+                                if (hasUpg("t", 94)) a ++
+                                if (hasUpg("t", 95)) a ++
+                                return Decimal.pow(4.4, player.t.upgrades.length * a)
                         },
                         cost:() => new Decimal(2000),
                         unlocked(){
@@ -24260,6 +24297,10 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "Primary base is 1e4, Secondary base is (x+5)<sup>(x-5)/10</sup> and Tissues IX is .16 per but nullify Visible"
+                                if (player.extremeMode) {
+                                        a = a.replace("1e4", "12e3")
+                                        a = a.replace("-", "+")
+                                }
                                 let b = "<br>Requires: 48 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 93)) return a + b
                                 return a + "</bdi>"
@@ -24278,6 +24319,7 @@ addLayer("t", {
                         },
                         description(){
                                 let a = "𝛾 → ∂β base is Stem Cells and add .02 to Tissue exponent per milestone but nullify Near-ultraviolet"
+                                if (player.extremeMode) a = a.replace("and add .02 to Tissue exponent per milestone", "")
                                 let b = "<br>Requires: 49 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 94)) return a + b
                                 return a + "</bdi>"
@@ -24295,7 +24337,11 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues XLV"
                         },
                         description(){
-                                let a = "Per upgrade per milestone add .05 to Cell effect formula but nullify Ultraviolet"
+                                let a = "<bdi style='font-size: 80%'>Per upgrade per milestone add .05 to Cell effect formula exponent but nullify Ultraviolet</bdi>"
+                                if (player.extremeMode) {
+                                        a = a.replace("exponent", "exponent and Topoisomerase base")
+                                        a = a.replace(".05", ".08")
+                                }
                                 let b = "<br>Requires: 50 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 95)) return a + b
                                 return a + "</bdi>"
@@ -35491,6 +35537,7 @@ addLayer("tokens", {
                         return x.plus(1)
                 },
                 costFormula(x){
+                        if (hasUpgrade("sci", 562))     return x.pow(.25).floor().sub(1).max(0)
                         if (hasMilestone("t", 13))      return x.pow(.26).floor().sub(1).max(0)
                         if (hasMilestone("t", 10))      return x.pow(.27).floor().sub(1).max(0)
                         if (hasMilestone("t", 9))       return x.pow(.28).floor().sub(1).max(0)
@@ -35547,7 +35594,7 @@ addLayer("tokens", {
                 },
                 costFormulaText(){
                         if (false)                      return "max(floor(x<sup>.24</sup>)-1, 0)"
-                        if (false)                      return "max(floor(x<sup>.25</sup>)-1, 0)"
+                        if (hasUpgrade("sci", 562))     return "max(floor(x<sup>.25</sup>)-1, 0)"
                         if (hasMilestone("t", 13))      return "max(floor(x<sup>.26</sup>)-1, 0)"
                         if (hasMilestone("t", 10))      return "max(floor(x<sup>.27</sup>)-1, 0)"
                         if (hasMilestone("t", 9))       return "max(floor(x<sup>.28</sup>)-1, 0)"
