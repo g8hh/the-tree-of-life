@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.204",
+	num: "1.205",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,23 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.cells.challenges[12] >= 51
+	if (player.extremeMode) return player.cells.challenges[12] >= 59
 	return player.or.contaminants.points.gte("1e538e3")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.204)<br><br>
+		Reaching the endgame screen (updated at least as of v1.205)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.205</h3><br>
+		- Balanced until 59 Secondary completions.<br>
+		- Various extreme mode changes.<br>
+		- Added two DNA Science upgrades.<br>
 	<br><h3 style='color: #CC0000'>v1.204</h3><br>
 		- Balanced until 51 Secondary completions.<br>
 		- Various extreme mode changes.<br>
