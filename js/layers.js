@@ -11459,7 +11459,6 @@ addLayer("mu", {
                                         cost2 = cost2.replace("281*50", "293*1e4")
                                 }
                                 if (hasMilestone("mu", 14)) cost2 = cost2.slice(6,)
-                                if (false) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -35662,7 +35661,6 @@ addLayer("tokens", {
                         return 0
                 },
                 costFormulaText(){
-                        if (false)                      return "max(floor(x<sup>.24</sup>)-1, 0)"
                         if (hasUpgrade("sci", 562))     return "max(floor(x<sup>.25</sup>)-1, 0)"
                         if (hasMilestone("t", 13))      return "max(floor(x<sup>.26</sup>)-1, 0)"
                         if (hasMilestone("t", 10))      return "max(floor(x<sup>.27</sup>)-1, 0)"
