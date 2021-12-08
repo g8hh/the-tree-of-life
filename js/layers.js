@@ -20068,6 +20068,7 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 563))     ret = ret.times(tmp.sci.buyables[512].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("sci", 564))     ret = ret.times(tmp.sci.buyables[522].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
+                                                        ret = ret.times(tmp.or.challenges[12].reward)
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
@@ -25671,7 +25672,24 @@ addLayer("or", {
                         best: decimalZero,
                         total: decimalZero,
                 },
+                air: {
+                        points: decimalZero,
+                        best: decimalZero,
+                        total: decimalZero,
+                },
                 kidneyABTime: 0,
+                lungChallengesUnlocked: 0,
+                bankedAir: {
+                        11: decimalZero,
+                        12: decimalZero,
+                        21: decimalZero,
+                        22: decimalZero,
+                        31: decimalZero,
+                        32: decimalZero,
+                        41: decimalZero,
+                        42: decimalZero,
+                },
+                challengeAir: decimalZero,
         }},
         color: "#F8C4F0",
         branches: [],
@@ -25870,6 +25888,7 @@ addLayer("or", {
 
                 if (player.cells.challenges[21] >= 3)   layers.or.heart.update(diff)
                 if (hasUpgrade("or", 14))               layers.or.kidney.update(diff)
+                if (hasUpgrade("or", 215))              layers.or.lungs.update(diff)
         },
         row: 2, 
         prestigeButtonText(){
@@ -25881,6 +25900,41 @@ addLayer("or", {
         layerShown(){
                 if (tmp.or.deactivated) return false
                 return hasUpgrade("t", 155) || player.or.unlocked
+        },
+        lungs: {
+                update(diff){
+                        let data = player.or
+                        let subdata = data.air
+
+                        let gain = tmp.or.lungs.getResetGain.times(diff)
+
+                        subdata.points = subdata.points.plus(gain)
+                        subdata.total = subdata.total.plus(gain)
+                        subdata.best = subdata.best.max(subdata.points)
+                        if (player.or.activeChallenge) data.challengeAir = data.challengeAir.plus(gain)
+
+                        let reqs = tmp.or.lungs.reqs
+                        if (subdata.points.gte(reqs[data.lungChallengesUnlocked])) {
+                                if (data.lungChallengesUnlocked < reqs.length) {
+                                        data.lungChallengesUnlocked ++
+                                }
+                        }
+                },
+                reqs(){
+                        return ["10", "1e5", ]
+                },
+                getResetGain(){ // air gain airgain again airgain a gain air gain a gain
+                        let ret = decimalOne
+
+                                                        ret = ret.times(tmp.or.challenges[11].reward)
+                                                        ret = ret.times(tmp.or.challenges[12].reward)
+                                                        //ret = ret.times(tmp.or.challenges[21].reward)
+                        if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
+
+                        if (player.extremeMode) ret = ret.pow(.75) 
+                        
+                        return ret
+                },
         },
         kidney: {
                 update(diff){
@@ -25898,9 +25952,11 @@ addLayer("or", {
 
                         let gain = tmp.or.kidney.getResetGain.times(diff)
 
-                        subdata.points = subdata.points.plus(gain)
-                        subdata.total = subdata.total.plus(gain)
-                        subdata.best = subdata.best.max(subdata.points)
+                        if (!player.or.activeChallenge) {
+                                subdata.points = subdata.points.plus(gain)
+                                subdata.total = subdata.total.plus(gain)
+                                subdata.best = subdata.best.max(subdata.points)
+                        }
 
                         data.kidneyABTime += diff * 20 // 20 times per second
 
@@ -25937,6 +25993,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[221].effect)
                                                         ret = ret.times(tmp.or.buyables[222].effect)
                                                         ret = ret.times(tmp.or.buyables[223].effect)
+                                                        ret = ret.times(tmp.or.challenges[11].reward)
                         if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
                         if (hasMilestone("or", 16))     ret = ret.times(player.or.deoxygenated_blood.points.max(1))
@@ -25953,28 +26010,32 @@ addLayer("or", {
                         let dbData = data.deoxygenated_blood
                         let obData = data.oxygenated_blood
 
-                        if (beatingIn) { // gain OB
-                                let gain = tmp.or.heart.getOBGain
-                                let netgain = gain.times(diff)
-                                obData.points = obData.points.plus(netgain)
-                                obData.total = obData.total.plus(netgain)
-                        } else { // gain DB
-                                let gain = tmp.or.heart.getDBGain
-                                let netgain = gain.times(diff)
-                                dbData.points = dbData.points.plus(netgain)
-                                dbData.total = dbData.total.plus(netgain)
-                        }
-                        if (hasUpgrade("or", 115)) {
-                                let gainOB = tmp.or.heart.getOBGain
-                                let netOBgain = gainOB.times(diff).times(.01 * player.or.upgrades.length)
-                                obData.points = obData.points.plus(netOBgain)
-                                obData.total = obData.total.plus(netOBgain)
+                        if (!player.or.activeChallenge) {
+                                if (beatingIn) { // gain OB
+                                        let gain = tmp.or.heart.getOBGain
+                                        let netgain = gain.times(diff)
+                                        obData.points = obData.points.plus(netgain)
+                                        obData.total = obData.total.plus(netgain)
+                                } else { // gain DB
+                                        let gain = tmp.or.heart.getDBGain
+                                        let netgain = gain.times(diff)
+                                        dbData.points = dbData.points.plus(netgain)
+                                        dbData.total = dbData.total.plus(netgain)
+                                }
+                        
+                                if (hasUpgrade("or", 115)) {
+                                        let gainOB = tmp.or.heart.getOBGain
+                                        let netOBgain = gainOB.times(diff).times(.01 * player.or.upgrades.length)
+                                        obData.points = obData.points.plus(netOBgain)
+                                        obData.total = obData.total.plus(netOBgain)
 
-                                let gainDB = tmp.or.heart.getDBGain
-                                let netDBgain = gainDB.times(diff).times(.01 * player.or.upgrades.length)
-                                dbData.points = dbData.points.plus(netDBgain)
-                                dbData.total = dbData.total.plus(netDBgain)
+                                        let gainDB = tmp.or.heart.getDBGain
+                                        let netDBgain = gainDB.times(diff).times(.01 * player.or.upgrades.length)
+                                        dbData.points = dbData.points.plus(netDBgain)
+                                        dbData.total = dbData.total.plus(netDBgain)
+                                }
                         }
+                        
                         dbData.best = dbData.best.max(dbData.points)
                         obData.best = obData.best.max(obData.points)
                 },
@@ -26002,6 +26063,84 @@ addLayer("or", {
                         
                         return ret
                 },
+        },
+        challenges: {
+                onEnter(){
+                        player.or.air.points = decimalZero
+                },
+                11: {
+                        name: "Larynx", 
+                        canComplete(){ 
+                                return true
+                        },
+                        reward(){
+                                let pts = player.or.bankedAir[11]
+                                if (hasMilestone("or", 18)) return pts.max(10).log10().times(pts.plus(1).root(2))
+                                return pts.plus(1).root(2)
+                        },
+                        onEnter(){
+                                layers.or.challenges.onEnter()
+                        },
+                        onComplete(){
+                                let data = player.or
+                                data.challenges[11] = 0
+                                data.bankedAir[11] = data.bankedAir[11].plus(data.challengeAir)
+                                data.challengeAir = decimalZero
+                                data.air.points = decimalZero
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.or.challenges[11]
+                                let a = "Air gained in this challenge boosts Air and Contaminant gain"
+                                let b = "Effect formula: (1+x)<sup>.5</sup>"
+                                if (hasMilestone("or", 18)) b += "log10(x)"
+                                let c = "Effect: " + format(tmp.or.challenges[11].reward)
+                                let d = "Total Air in this challenge: " + format(player.or.bankedAir[11])
+                                let e = "Note: You bank Air gained in this challenge only when completing it"
+
+                                if (!false) return a + br + b + br + c + br + d + br2 + e
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 1
+                        },
+                }, // inChallenge("or", 11)
+                12: {
+                        name: "Trachea", 
+                        canComplete(){ 
+                                return true
+                        },
+                        reward(){
+                                return player.or.bankedAir[12].plus(1).root(4)
+                        },
+                        onEnter(){
+                                layers.or.challenges.onEnter()
+                        },
+                        onComplete(){
+                                let data = player.or
+                                data.challenges[12] = 0
+                                data.bankedAir[12] = data.bankedAir[12].plus(data.challengeAir)
+                                data.challengeAir = decimalZero
+                                data.air.points = decimalZero
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.or.challenges[12]
+                                let a = "Air gained in this challenge boosts Air and Stem Cell gain"
+                                let b = "Effect formula: (1+x)<sup>.25</sup>"
+                                let c = "Effect: " + format(tmp.or.challenges[12].reward)
+                                let d = "Total Air in this challenge: " + format(player.or.bankedAir[12])
+                                let e = "Note: You bank Air gained in this challenge only when completing it"
+
+                                if (!false) return a + br + b + br + c + br + d + br2 + e
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 2
+                        },
+                }, // inChallenge("or", 12)
         },
         upgrades: {
                 rows: 10,
@@ -27594,6 +27733,34 @@ addLayer("or", {
                                 return "Reward: " + makeBlue("DB") + " multiplies Contaminant gain."
                         },
                 }, // hasMilestone("or", 16)
+                17: {
+                        requirementDescription(){
+                                return "1e538,064 Contaminants"
+                        },
+                        done(){
+                                return player.or.contaminants.points.gte("1e538064")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The number of milestones mulitiplies Air gain."
+                        },
+                }, // hasMilestone("or", 17)
+                18: {
+                        requirementDescription(){
+                                return "1e9 Air"
+                        },
+                        done(){
+                                return player.or.air.points.gte("1e9")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Add a log10(x) term to Larynx effect."
+                        },
+                }, // hasMilestone("or", 18)
         },
         bars: {
                 heart: {
@@ -27650,6 +27817,21 @@ addLayer("or", {
                                 unlocked(){
                                         return true
                                 },
+                                shouldNotify(){
+                                        let ids = [101, 102, 103, 104, 105, 
+                                                   111, 112, 113, 114, 115, 
+                                                   121, 122, 123, 124, 125, 
+                                                   131, 132, 133, 134, 135, 
+                                                   141, 142, 143, 144, 145, 
+                                                   151, 152, 153, 154, 155]
+                                        for (i in ids){
+                                                let id = ids[i]
+                                                if (!layers.or.upgrades[id]) continue
+                                                if (hasUpgrade("or", id)) continue 
+                                                if (!tmp.or.upgrades[id].unlocked) continue
+                                                if (canAffordUpgrade("or", id)) return true
+                                        }
+                                },
                         },
                         "Kidney": { 
                                 content: [
@@ -27660,11 +27842,44 @@ addLayer("or", {
                                                 return a + br + b
                                         }],
                                         ["clickables", [20]],
-                                        ["upgrades", [20, 21]],
+                                        ["upgrades", [20, 21, 22, 23]],
                                         ["buyables", [20, 21, 22]],
                                 ],
                                 unlocked(){
                                         return hasUpgrade("or", 14)
+                                },
+                                shouldNotify(){
+                                        let ids = [201, 202, 203, 204, 205, 
+                                                   211, 212, 213, 214, 215, 
+                                                   221, 222, 223, 224, 225, 
+                                                   231, 232, 233, 234, 235, 
+                                                   241, 242, 243, 244, 245, 
+                                                   251, 252, 253, 254, 255]
+                                        for (i in ids){
+                                                let id = ids[i]
+                                                if (!layers.or.upgrades[id]) continue
+                                                if (hasUpgrade("or", id)) continue 
+                                                if (!tmp.or.upgrades[id].unlocked) continue
+                                                if (canAffordUpgrade("or", id)) return true
+                                        }
+                                },
+                        },
+                        "Lungs": { 
+                                content: [
+                                        ["secondary-display", "air"],
+                                        ["display-text", function(){//Entering a challenge resets air. 
+                                                let a = "While in a challenge you do not gain Contaminants, " + makeBlue("DB") + ", or " + makePurple("OB") + "." 
+                                                let b = "You are gaining " + format(tmp.or.lungs.getResetGain) + " Air/s"
+                                                if (tmp.or.lungs.reqs.length > player.or.lungChallengesUnlocked) {
+                                                        return a + br + b + br + "Get " + format(tmp.or.lungs.reqs[player.or.lungChallengesUnlocked]) + " Air to unlock the next challenge"
+                                                }
+                                                return a + br + b
+                                        }],
+                                        ["challenges", [1, 2, 3]],
+                                        ["upgrades", [30, 31]],
+                                ],
+                                unlocked(){
+                                        return hasUpgrade("or", 215)
                                 },
                         },
                 },
