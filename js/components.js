@@ -332,7 +332,14 @@ function loadVue() {
 						if(this.time >= 5)
 							buyBuyable(this.layer, this.data)
 						this.time = this.time+1
-					}).bind(this), 50)}
+						let data = this.$options.propsData // grab the data
+						if (!document.getElementById("buyable-" + data.layer + "-" + data.data)) {
+							clearInterval(this.interval) // if the object isnt displayed, then clear 
+							this.interval = false
+							this.time = 0
+						}
+					}).bind(this), 50)
+				}
 			},
 			stop() {
 				clearInterval(this.interval)

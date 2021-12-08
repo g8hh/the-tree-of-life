@@ -21,6 +21,10 @@ function hasMilestone(layer, id) {
 	return (player[layer].milestones.includes(toNumber(id)) || player[layer].milestones.includes(id.toString())) && !tmp[layer].deactivated
 }
 
+function hasMile(layer, id) {
+	return hasMilestone(layer, id)
+}
+
 function milestoneEffect(layer, id) {
 	return tmp[layer].milestones[id].effect
 }
