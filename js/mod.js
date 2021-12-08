@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.188",
+	num: "1.201",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,103 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.sci.dna_science.points.gte("1e4927")
-	return player.or.deoxygenated_blood.points.gte(5e11)
+	if (player.extremeMode) return hasUpg("t", 85)
+	return player.or.contaminants.points.gte("1e152996")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated as of v1.188)<br><br>
+		Reaching the endgame screen (updated at least as of v1.201)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.201</h3><br>
+		- Balanced until 1e152,996 Contaminants.<br>
+		- Added a way to slow the game down by 100x for five real seconds.<br>
+		- Added a Heart upgrade.<br>
+		- Added an Organ upgrade.<br>
+		- Added a Kidney upgrade.<br>
+		- Added a Kidney buyable.<br>
+	<br><h3 style='color: #CC0000'>v1.200.2</h3><br>
+		- Fixed a bug with having the exact right amount of Contaminants.<br>
+		- Various code clean up.<br>
+		- Added a display to respec for Token II.<br>
+	<br><h3 style='color: #CC0000'>v1.200.1</h3><br>
+		- Fixed the bug where you hold a buyable and then switch tabs to keep it autobuying.<br>
+		- Thank you so much to Lordshinjo for helping report and fix the issue.<br>
+	<br><h3 style='color: #CC0000'>v1.200</h3><br>
+		- Balanced until 1e67,900 Contaminants.<br>
+		- Added a Kidney upgrade.<br>
+		- Added a Kidney buyable.<br>
+		- Added two Heart upgrades.<br>
+		- Added three rows of achievements.<br>
+		- Added a custom save.<br>
+		- Various wording fixes.<br>
+		- 200! Let's go! Here's to 200 more patches!<br>
+	<br><h3 style='color: #CC0000'>v1.199</h3><br>
+		- Added a Kidney upgrade.<br>
+		- Added a Kidney buyable.<br>
+		- Balanced until 1e29,600 Contaminants.<br>
+		- Added three Heart upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.198</h3><br>
+		- Added Kidney.<br>
+		- Added five Kidney upgrades.<br>
+		- Added five Kidney buyables.<br>
+		- Balanced until 1e6000 Contaminants.<br>
+		- Various wording fixes and code cleanup.<br>
+		- Added two rows of achievements.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.197.2</h3><br>
+		- Added a Organ upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.197.1</h3><br>
+		- Various code cleanup.<br>
+		- Rebalanced 1000-1e7 Organ Era.<br>
+		- Added a display for cheapest DNA Science buyable.<br>
+		- Added a display for next at for Organ gain.<br>
+		- Made the 7e242 Life milestone only require 2.5e242.<br>
+	<br><h3 style='color: #CC0000'>v1.197</h3><br>
+		- Balanced until Tissues XL.<br>
+		- Various extreme mode changes.<br>
+		- Various wording changes and code clean up.<br>
+		- Added a DNA Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.196</h3><br>
+		- Balanced until Tissues XXXVIII.<br>
+		- Various extreme mode changes.<br>
+		- Added a DNA Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.195</h3><br>
+		- Balanced until Tissues XXXV.<br>
+		- Various extreme mode changes, and display fixes.<br>
+		- Added a custom save.<br>
+		- Added three DNA Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.194</h3><br>
+		- Balanced until Tissues XXX.<br>
+		- Various extreme mode changes, bugfixes, code cleanup, and display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.193</h3><br>
+		- Balanced until 33 total Tissues.<br>
+		- Added a custom save.<br>
+		- Various extreme mode changes.<br>
+	<br><h3 style='color: #CC0000'>v1.192</h3><br>
+		- Balanced extreme mode until Tissue unlock.<br>
+		- Various code clean up and extreme mode changes.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.191</h3><br>
+		- Balanced until 1e24 Deoxygenated Blood.<br>
+		- Various bugfixes and code clean up.<br>
+		- Implemented the 4th Tertiary completion.<br>
+	<br><h3 style='color: #CC0000'>v1.190</h3><br>
+		- Balanced until 5e22 Deoxygenated Blood.<br>
+		- Added three Heart upgrades.<br>
+		- Added an Organ upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.189</h3><br>
+		- Balanced until 3e18 Deoxygenated Blood.<br>
+		- Added four Heart upgrades.<br>
+		- Added a Organ upgrade.<br>
+		- Added two Organ milestones.<br>
+		- Added three rows of achievements.<br>
+		- Various display changes, display fixes, bug fixes, and code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.188</h3><br>
 		- Balanced until 5e11 Deoxygenated Blood.<br>
 		- Added thirteen Heart upgrades.<br>
@@ -1710,6 +1794,7 @@ var displayThings = [
 	}, 
 	function(){
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
+		if (player.cells.slowTime > 0) return "For the next " + makeGreen(formatTime(player.cells.slowTime)) + " real seconds,<br>the game will tick 100x slower"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
 		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"
@@ -1750,6 +1835,9 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "1.167") {
 		player.sci.everUpgrade412 = player.sci.upgrades.includes(412)
+	}
+	if (player.version < "1.192") {
+		player.cells.everMilestone60 = player.t.unlocked || player.cells.milestones.includes("60")
 	}
 }
 
