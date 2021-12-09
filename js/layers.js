@@ -19643,6 +19643,7 @@ addLayer("cells", {
                         let exp = player.extremeMode ? player.cells.upgrades.length + 3 : 0
                                                 ret = ret.times(Decimal.pow(player.cells.upgrades.length, exp))
                 }
+                                                ret = ret.times(tmp.or.challenges[21].reward)
 
                 return ret.max(1)
         },
@@ -25913,6 +25914,15 @@ addLayer("or", {
                         subdata.best = subdata.best.max(subdata.points)
                         if (player.or.activeChallenge) data.challengeAir = data.challengeAir.plus(gain)
 
+                        let otherIds = []
+                        if (hasUpgrade("or", 302)) otherIds.push(11)
+                        if (hasUpgrade("or", 303)) otherIds.push(12)
+
+                        for (i in otherIds) {
+                                let id = otherIds[i]
+                                data.bankedAir[id] = data.bankedAir[id].plus(gain)
+                        }
+
                         let reqs = tmp.or.lungs.reqs
                         if (subdata.points.gte(reqs[data.lungChallengesUnlocked])) {
                                 if (data.lungChallengesUnlocked < reqs.length) {
@@ -25921,15 +25931,18 @@ addLayer("or", {
                         }
                 },
                 reqs(){
-                        return ["10", "1e5", ]
+                        return ["10", "1e5", "1e13", "1e43", "1e54321"]
                 },
                 getResetGain(){ // air gain airgain again airgain a gain air gain a gain
                         let ret = decimalOne
 
                                                         ret = ret.times(tmp.or.challenges[11].reward)
                                                         ret = ret.times(tmp.or.challenges[12].reward)
-                                                        //ret = ret.times(tmp.or.challenges[21].reward)
+                                                        ret = ret.times(tmp.or.challenges[21].reward)
+                                                        ret = ret.times(tmp.or.challenges[22].reward)
+                                                        //ret = ret.times(tmp.or.challenges[31].reward)
                         if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
+                        if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -25971,6 +25984,8 @@ addLayer("or", {
                                 if (hasUpgrade("or", 213)) abKeys.push(212)
                                 if (hasUpgrade("or", 214)) abKeys.push(213)
                                 if (hasUpgrade("or", 215)) abKeys.push(221)
+                                if (hasUpgrade("or", 301)) abKeys.push(222)
+                                if (hasUpgrade("or", 302)) abKeys.push(223)
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -26045,6 +26060,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 101))      ret = ret.times(tmp.or.upgrades[101].base.pow(player.or.upgrades.length))
                         if (hasUpgrade("or", 103))      ret = ret.times(tmp.or.upgrades[103].ob_effect)
                         if (hasUpgrade("or", 202))      ret = ret.times(player.or.deoxygenated_blood.points.max(1).pow(.1))
+                                                        ret = ret.times(tmp.or.challenges[22].reward)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -26075,6 +26091,7 @@ addLayer("or", {
                         },
                         reward(){
                                 let pts = player.or.bankedAir[11]
+                                if (hasUpgrade("or", 303)) return pts.max(10).log10().pow(Math.log2(tmp.or.upgrades.lungUpgradesLength)).times(pts.plus(1).root(2))
                                 if (hasMilestone("or", 18)) return pts.max(10).log10().times(pts.plus(1).root(2))
                                 return pts.plus(1).root(2)
                         },
@@ -26083,7 +26100,7 @@ addLayer("or", {
                         },
                         onComplete(){
                                 let data = player.or
-                                data.challenges[11] = 0
+                                data.challenges[11] = hasUpgrade("or", 302)
                                 data.bankedAir[11] = data.bankedAir[11].plus(data.challengeAir)
                                 data.challengeAir = decimalZero
                                 data.air.points = decimalZero
@@ -26092,13 +26109,14 @@ addLayer("or", {
                         fullDisplay(){
                                 let data = tmp.or.challenges[11]
                                 let a = "Air gained in this challenge boosts Air and Contaminant gain"
-                                let b = "Effect formula: (1+x)<sup>.5</sup>"
+                                let b = "Effect formula:<br>(1+x)<sup>.5</sup>"
                                 if (hasMilestone("or", 18)) b += "log10(x)"
+                                if (hasUpgrade("or", 303)) b = b.replace("10", "10<sup>log2(Lung upgrades)</sup>")
                                 let c = "Effect: " + format(tmp.or.challenges[11].reward)
                                 let d = "Total Air in this challenge: " + format(player.or.bankedAir[11])
                                 let e = "Note: You bank Air gained in this challenge only when completing it"
 
-                                if (!false) return a + br + b + br + c + br + d + br2 + e
+                                if (!hasUpgrade("or", 302)) return a + br + b + br + c + br + d + br2 + e
 
                                 return a + br + b + br + c + br + d
                         },
@@ -26119,7 +26137,7 @@ addLayer("or", {
                         },
                         onComplete(){
                                 let data = player.or
-                                data.challenges[12] = 0
+                                data.challenges[12] = hasUpgrade("or", 303)
                                 data.bankedAir[12] = data.bankedAir[12].plus(data.challengeAir)
                                 data.challengeAir = decimalZero
                                 data.air.points = decimalZero
@@ -26133,7 +26151,7 @@ addLayer("or", {
                                 let d = "Total Air in this challenge: " + format(player.or.bankedAir[12])
                                 let e = "Note: You bank Air gained in this challenge only when completing it"
 
-                                if (!false) return a + br + b + br + c + br + d + br2 + e
+                                if (!hasUpgrade("or", 303)) return a + br + b + br + c + br + d + br2 + e
 
                                 return a + br + b + br + c + br + d
                         },
@@ -26141,6 +26159,76 @@ addLayer("or", {
                                 return player.or.lungChallengesUnlocked >= 2
                         },
                 }, // inChallenge("or", 12)
+                21: {
+                        name: "Primary Bronchi", 
+                        canComplete(){ 
+                                return true
+                        },
+                        reward(){
+                                return player.or.bankedAir[21].plus(1).root(8)
+                        },
+                        onEnter(){
+                                layers.or.challenges.onEnter()
+                        },
+                        onComplete(){
+                                let data = player.or
+                                data.challenges[21] = 0
+                                data.bankedAir[21] = data.bankedAir[21].plus(data.challengeAir)
+                                data.challengeAir = decimalZero
+                                data.air.points = decimalZero
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.or.challenges[21]
+                                let a = "Air gained in this challenge boosts Air and Cell gain"
+                                let b = "Effect formula: (1+x)<sup>.125</sup>"
+                                let c = "Effect: " + format(tmp.or.challenges[21].reward)
+                                let d = "Total Air in this challenge: " + format(player.or.bankedAir[21])
+                                let e = "Note: You bank Air gained in this challenge only when completing it"
+
+                                if (!false) return a + br + b + br + c + br + d + br2 + e
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 3
+                        },
+                }, // inChallenge("or", 21)
+                22: {
+                        name: "Secondary Bronchi", 
+                        canComplete(){ 
+                                return true
+                        },
+                        reward(){
+                                return player.or.bankedAir[22].plus(1).pow(.062)
+                        },
+                        onEnter(){
+                                layers.or.challenges.onEnter()
+                        },
+                        onComplete(){
+                                let data = player.or
+                                data.challenges[22] = 0
+                                data.bankedAir[22] = data.bankedAir[22].plus(data.challengeAir)
+                                data.challengeAir = decimalZero
+                                data.air.points = decimalZero
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let data = tmp.or.challenges[21]
+                                let a = "Air gained in this challenge boosts Air and " + makePurple("OB") + " gain"
+                                let b = "Effect formula: (1+x)<sup>.062</sup>"
+                                let c = "Effect: " + format(tmp.or.challenges[22].reward)
+                                let d = "Total Air in this challenge: " + format(player.or.bankedAir[22])
+                                let e = "Note: You bank Air gained in this challenge only when completing it"
+
+                                if (!false) return a + br + b + br + c + br + d + br2 + e
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 3
+                        },
+                }, // inChallenge("or", 21)
         },
         upgrades: {
                 rows: 10,
@@ -26148,7 +26236,18 @@ addLayer("or", {
                 kidneyUpgradesLength(){
                         let ids = [201, 202, 203, 204, 205, 
                                    211, 212, 213, 214, 215,
-                                   220, 221, 222, 223, 224]
+                                   221, 222, 223, 224, 225]
+                        let a = 0
+                        for (i in ids) {
+                                if (hasUpgrade("or", ids[i])) a ++ 
+                        }
+                        if (a >= 15) console.log("update me please")
+                        return a
+                },
+                lungUpgradesLength(){
+                        let ids = [301, 302, 303, 304, 305, 
+                                   311, 312, 313, 314, 315,
+                                   321, 322, 323, 324, 325]
                         let a = 0
                         for (i in ids) {
                                 if (hasUpgrade("or", ids[i])) a ++ 
@@ -26851,7 +26950,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney X"
                         },
                         description(){
-                                return "Autobuy he and unlock Lungs [not yet]"
+                                return "Autobuy he and unlock Lungs"
                         },
                         cost(){
                                 return new Decimal("1e299600")
@@ -26862,6 +26961,61 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 214)
                         }, // hasUpgrade("or", 215)
+                },
+                301: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung I"
+                        },
+                        description(){
+                                return "Per lung upgrade log10(<wbr>log10(Contaiminants)) multiplies Air gain and autobuy can't"
+                        },
+                        cost(){
+                                return new Decimal("1e25")
+                        },
+                        effect(){
+                                let base = player.or.contaminants.points.max(10).log10().max(10).log10()
+                                return base.pow(tmp.or.upgrades.lungUpgradesLength)
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 3
+                        }, // hasUpgrade("or", 301)
+                },
+                302: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung II"
+                        },
+                        description(){
+                                return "You always bank air to Larynx and autobuy refuse"
+                        },
+                        cost(){
+                                return new Decimal("1e33")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 301)
+                        }, // hasUpgrade("or", 302)
+                },
+                303: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung III"
+                        },
+                        description(){
+                                return "You always bank air to Trachea and Larynx's log10 is rasied to log2(Lung upgrades)"
+                        },
+                        cost(){
+                                return new Decimal("1e79")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 302)
+                        }, // hasUpgrade("or", 303)
                 },
         },
         clickables: {
