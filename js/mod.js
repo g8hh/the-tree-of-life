@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.208",
+	num: "1.209",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.challenges[12] >= 63
-	return player.or.air.points.gte("1e117")
+	return player.or.air.points.gte("1e366")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,6 +33,11 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.209</h3><br>
+		- Added a Lung challenge.<br>
+		- Added two Lung upgrades.<br>
+		- Added a Heart upgrade.<br>
+		- Balanced until 1e366 Air.<br>
 	<br><h3 style='color: #CC0000'>v1.208</h3><br>
 		- Added two Lung challenges.<br>
 		- Added three Lung upgrades.<br>
