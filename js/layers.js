@@ -1699,13 +1699,13 @@ addLayer("sci", {
         type: "custom", 
         tooltip(){
                 let t = player.subtabs.sci.mainTabs
-                if (t == "DNA Research") return format(player.sci.dna_science.points) + " DNA Science"
-                if (t == "Protein Research") return format(player.sci.protein_science.points) + " Protein Science"
-                if (t == "N Research") return format(player.sci.nitrogen_science.points) + " Nitrogen Science"
-                if (t == "C Research") return format(player.sci.carbon_science.points) + " Carbon Science"
-                if (t == "O Research") return format(player.sci.oxygen_science.points) + " Oxygen Science"
-                if (t == "H Research") return format(player.sci.hydrogen_science.points) + " Hydrogen Science"
-                if (t == "Info") return format(player.sci.points) + " Science"
+                if (t == "DNA Research")        return format(player.sci.dna_science.points) + " DNA Science"
+                if (t == "Protein Research")    return format(player.sci.protein_science.points) + " Protein Science"
+                if (t == "N Research")          return format(player.sci.nitrogen_science.points) + " Nitrogen Science"
+                if (t == "C Research")          return format(player.sci.carbon_science.points) + " Carbon Science"
+                if (t == "O Research")          return format(player.sci.oxygen_science.points) + " Oxygen Science"
+                if (t == "H Research")          return format(player.sci.hydrogen_science.points) + " Hydrogen Science"
+                if (t == "Info")                return format(player.sci.points) + " Science"
         },
         getBaseGain(){
                 let amt = tmp.sci.baseAmount
@@ -1746,7 +1746,7 @@ addLayer("sci", {
         },
         prestigeNotify(){
                 if (!player.p.unlocked) {
-                        let buyIds = [   11,  12,  13,
+                        let buyIds = [  11,  12,  13,
                                         21,  22,  23,
                                         101, 102, 103,
                                         111, 112, 113]
@@ -2270,8 +2270,7 @@ addLayer("sci", {
                                    421, 422, 423, 424, 425, 
                                    431, 432, 433, 434, 435,
                                    441, 442, 443, 444, 445,
-                                   451, 452, 453, 454, 455,
-                                   /*461, 462, 463, 464, 465,*/]
+                                   451, 452, 453, 454, 455,]
 
                         for (i in ids) {
                                 a += hasUpgrade("sci", ids[i])
@@ -2287,11 +2286,13 @@ addLayer("sci", {
                                    531, 532, 533, 534, 535,
                                    541, 542, 543, 544, 545,
                                    551, 552, 553, 554, 555,
-                                   561, 562, 563, 564, 565,]
+                                   561, 562, 563, 564, 565,
+                                   571, 572, 573, 574, 575,]
 
                         for (i in ids) {
                                 a += hasUpgrade("sci", ids[i])
                         }
+                        if (a >= 35) console.log(a)
 
                         return a
                 },
@@ -2331,11 +2332,8 @@ addLayer("sci", {
                         },
                         cost:() => new Decimal(1e9),
                         effect(){
-                                let a = decimalZero
-                                a = a.plus(getBuyableAmount("sci", 11))
-                                a = a.plus(getBuyableAmount("sci", 12))
-                                a = a.plus(getBuyableAmount("sci", 13))
-                                a = a.plus(getBuyableAmount("sci", 21))
+                                let a = new Decimal(getBuyableAmount("sci", 11)).plus(getBuyableAmount("sci", 12))
+                                a = a.plus(getBuyableAmount("sci", 13)).plus(getBuyableAmount("sci", 21))
 
                                 if (hasMilestone("mini", 3)) a = a.times(2)
 
@@ -2371,7 +2369,6 @@ addLayer("sci", {
                                 let exp = 1 + !hasUpgrade("h", 44)
                                 for (i in ids){
                                         id = ids[i]
-                                        if (player.sci.buyables[id] == undefined) continue
                                         ret = ret.times(player.sci.buyables[id].pow(exp).plus(1))
                                 }
                                 return ret
@@ -6066,8 +6063,7 @@ addLayer("sci", {
                                 if (hasUpgrade("t", 95)) {
                                         let upgs = player.t.upgrades.length
                                         let mile = player.t.milestones.length
-                                        let per = player.extremeMode ? .08 : .05
-                                                                ret = ret.plus(per * upgs * mile)
+                                                                ret = ret.plus(.08 * upgs * mile)
                                 }
                                 
                                 return ret
@@ -20332,7 +20328,7 @@ addLayer("cells", {
                         },
                         description(){
                                 if (player.extremeMode) return "Omnipotent cost base is 9.4, crRNA's base is sqrt(Cells) but nullify Logarithmic"
-                                return "Omnipotent cost base is 9.42, crRNA's base is sqrt(Cells) but nullify Logarithmic"
+                                return "Omnipotent cost base is 9.42 and crRNA's base is sqrt(Cells) but nullify Logarithmic"
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e4973" : "3e6941"),
                         unlocked(){
@@ -20344,7 +20340,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XI"
                         },
                         description(){
-                                return "Omnipotent cost base is 9.34, β → ∂β's base is Kappa but nullify Constant"
+                                return "Omnipotent cost base is 9.34 and β → ∂β's base is Kappa but nullify Constant"
                         },
                         cost:() => new Decimal("3e7377"),
                         unlocked(){
