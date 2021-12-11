@@ -18560,6 +18560,7 @@ addLayer("d", {
                 return ret.floor()
         },
         getBaseGain(){
+                if (hasUpgrade("or", 222)) return Decimal.pow(2, player.tokens.tokens2.total).pow(tmp.d.getGainExp)
                 let pts = player.a.points
                 let init = pts.div(player.extremeMode ? "8e315" : 4.4e144).max(1).log10()
                 if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) init = init.plus(144.6434526764861874) 
@@ -19364,8 +19365,10 @@ addLayer("d", {
                                         let a1 = "Initial DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2-1.50)<sup>2</sup>"
                                         if (player.extremeMode) a1 = a1.replace("1.50", "4.00")
                                         let char = tmp.d.getBaseGainAddition.gte(0) ? "+" : "-"
+                                        let exp = "<sup>" + format(tmp.d.getGainExp) + "</sup>"
                                         let a2 = "Current DNA gain: (sqrt(log10(Amino Acid/" + div + "))/2" + char + format(tmp.d.getBaseGainAddition.abs())
-                                        a2 += ")<sup>" + format(tmp.d.getGainExp) + "</sup>"
+                                        a2 += ")" + exp 
+                                        if (hasUpgrade("or", 222)) a2 = "Current DNA gain: (2^[Tokens II])" + exp
                                         if ((layers.l.grid.getGemEffect(701) || hasUpgrade("or", 145)) && !player.extremeMode) a2 = a2.replace("/2", "")
                                         if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
@@ -23610,6 +23613,7 @@ addLayer("t", {
                 if (hasUpgrade("sci", 552))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[552].lvls))
                 if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
                 if (hasUpgrade("sci", 563))     ret = ret.times(2)
+                                                ret = ret.times(tmp.or.challenges[32].reward)
                 
                 return ret.max(1)
         },
@@ -25919,6 +25923,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 303)) otherIds.push(12)
                         if (hasUpgrade("or", 304)) otherIds.push(21)
                         if (hasUpgrade("or", 305)) otherIds.push(22)
+                        if (hasUpgrade("or", 222)) otherIds.push(31)
 
                         for (i in otherIds) {
                                 let id = otherIds[i]
@@ -25933,7 +25938,8 @@ addLayer("or", {
                         }
                 },
                 reqs(){
-                        return ["10", "1e5", "1e13", "1e43", "1e117", "1e350", "1e54321"]
+                        return ["10", "1e5", "1e13", "1e43", 
+                                "1e117", "1e369", "1e54321"]
                 },
                 getResetGain(){ // air gain airgain again airgain a gain air gain a gain
                         let ret = decimalOne
@@ -25943,9 +25949,11 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.challenges[21].reward)
                                                         ret = ret.times(tmp.or.challenges[22].reward)
                                                         ret = ret.times(tmp.or.challenges[31].reward)
-                                                        //ret = ret.times(tmp.or.challenges[32].reward)
+                                                        ret = ret.times(tmp.or.challenges[32].reward)
+                                                        //ret = ret.times(tmp.or.challenges[41].reward)
                         if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
                         if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
+                        if (hasUpgrade("or", 221))      ret = ret.times(player.t.points.max(10).log10())
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -26245,7 +26253,7 @@ addLayer("or", {
                         },
                         onComplete(){
                                 let data = player.or
-                                data.challenges[31] = 0
+                                data.challenges[31] = hasUpgrade("or", 222)
                                 data.bankedAir[31] = data.bankedAir[31].plus(data.challengeAir)
                                 data.challengeAir = decimalZero
                                 data.air.points = decimalZero
@@ -26258,7 +26266,7 @@ addLayer("or", {
                                 let d = "Total Air in this challenge: " + format(player.or.bankedAir[31])
                                 let e = "Note: You bank Air gained in this challenge only when completing it"
 
-                                if (!false) return a + br + b + br + c + br + d + br2 + e
+                                if (!hasUpgrade("or", 222)) return a + br + b + br + c + br + d + br2 + e
 
                                 return a + br + b + br + c + br + d
                         },
@@ -26266,6 +26274,40 @@ addLayer("or", {
                                 return player.or.lungChallengesUnlocked >= 4
                         },
                 }, // inChallenge("or", 31)
+                32: {
+                        name: "Bronchioles", 
+                        canComplete(){ 
+                                return true
+                        },
+                        reward(){
+                                return player.or.bankedAir[32].plus(1).pow(.015)
+                        },
+                        onEnter(){
+                                layers.or.challenges.onEnter()
+                        },
+                        onComplete(){
+                                let data = player.or
+                                data.challenges[32] = 0
+                                data.bankedAir[32] = data.bankedAir[32].plus(data.challengeAir)
+                                data.challengeAir = decimalZero
+                                data.air.points = decimalZero
+                        },
+                        completionLimit: 1,
+                        fullDisplay(){
+                                let a = "Air gained in this challenge boosts Air and Tissue gain"
+                                let b = "Effect formula: (1+x)<sup>.015</sup>"
+                                let c = "Effect: " + format(tmp.or.challenges[32].reward)
+                                let d = "Total Air in this challenge: " + format(player.or.bankedAir[32])
+                                let e = "Note: You bank Air gained in this challenge only when completing it"
+
+                                if (!false) return a + br + b + br + c + br + d + br2 + e
+
+                                return a + br + b + br + c + br + d
+                        },
+                        unlocked(){
+                                return player.or.lungChallengesUnlocked >= 5
+                        },
+                }, // inChallenge("or", 32)
         },
         upgrades: {
                 rows: 10,
@@ -27004,7 +27046,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney X"
                         },
                         description(){
-                                return "Autobuy he and unlock Lungs"
+                                return "Autobuy he, bulk 4x Kidney buyables, and unlock Lungs"
                         },
                         cost(){
                                 return new Decimal("1e299600")
@@ -27016,6 +27058,41 @@ addLayer("or", {
                                 return hasUpgrade("or", 214)
                         }, // hasUpgrade("or", 215)
                 },
+                221: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney XI"
+                        },
+                        description(){
+                                return "Token II buyables' costs are rounded instead of ceiled and log10(Tissues) multiplies Air gain"
+                        },
+                        cost(){
+                                return new Decimal("1e750500")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 305)
+                        }, // hasUpgrade("or", 221)
+                },
+                222: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney XII"
+                        },
+                        description(){
+                                return "Base DNA gain is 2^[Token II] and you always bank air to Tertiary Bronchi"
+                        }, // care DNA Science
+                        cost(){
+                                return new Decimal("1e1170e3")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 221)
+                        }, // hasUpgrade("or", 222)
+                },
+
                 301: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung I"
@@ -27153,6 +27230,7 @@ addLayer("or", {
                         let ret = decimalOne
                         if (hasUpgrade("or", 212))      ret = ret.times(10)
                         if (hasUpgrade("or", 213))      ret = ret.times(5)
+                        if (hasUpgrade("or", 215))      ret = ret.times(4)
                         return ret
                 }, // tmp.or.buyables.getMaxBulk
                 201: {
@@ -28509,7 +28587,7 @@ addLayer("mc", {
                 total: decimalZero,
         }},
         color: "#42006D",
-        branches: [],
+        branches: ["cells"],
         requires:() => decimalZero, 
         resource: "Micro", 
         baseResource: "points", 
@@ -36108,6 +36186,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 221))      return x.pow(.7).round()
                         if (hasUpgrade("or", 304))      return x.pow(.7).ceil()
                         if (hasUpgrade("or", 151))      return x.pow(.75).ceil()
                         if (hasUpgrade("or", 15))       return x.pow(.8).ceil()
@@ -36156,6 +36235,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 221))      return "round(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 304))      return "ceil(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 151))      return "ceil(x<sup>.75</sup>)"
                         if (hasUpgrade("or", 15))       return "ceil(x<sup>.8</sup>)"
@@ -36166,6 +36246,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 221))      return 7
                         if (hasUpgrade("or", 304))      return 6
                         if (hasUpgrade("or", 151))      return 5
                         if (hasUpgrade("or", 15))       return 4
