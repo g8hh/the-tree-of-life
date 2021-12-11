@@ -26350,7 +26350,7 @@ addLayer("or", {
                         description(){
                                 return "Token II buyables' cost exponent is .8"
                         },
-                        cost:() => new Decimal(1.08e14),
+                        cost:() => new Decimal(1.07e14),
                         unlocked(){
                                 return hasUpgrade("or", 145)
                         }, // hasUpgrade("or", 15)
