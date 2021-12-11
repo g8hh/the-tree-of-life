@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.210",
+	num: "1.210.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,6 +33,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.210.1</h3><br>
+		- Added three rows of achievements.<br>
+		- Made the 91st row of achievements slihgtly easier.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.210</h3><br>
 		- Added a Lung challenge.<br>
 		- Added a Lung upgrades.<br>
