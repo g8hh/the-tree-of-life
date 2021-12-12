@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.210.1",
+	num: "1.211",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,7 +20,7 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.cells.challenges[12] >= 63
+	if (player.extremeMode) return player.tokens.tokens2.total.gt(0)
 	return player.or.air.points.gte("1e960")
 }
 
@@ -33,6 +33,10 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.211</h3><br>
+		- Balanced until 1 token II.<br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.210.1</h3><br>
 		- Added three rows of achievements.<br>
 		- Made the 91st row of achievements slihgtly easier.<br>
