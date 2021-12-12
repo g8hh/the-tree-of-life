@@ -15894,6 +15894,7 @@ addLayer("a", {
                 return " multiply Life gain by " + format(tmp.a.effect) + "."
         },
         update(diff){
+                if (tmp.a.deactivated) return 
                 let data = player.a
                 
                 if (player.l.grid[303].gems.gt(0)) data.unlocked = true
@@ -16086,8 +16087,10 @@ addLayer("a", {
                 return "Reset for <b>" + formatWhole(tmp.a.getResetGain) + "</b> Amino Acids" + b
         },
         layerShown(){
-                if (tmp.a.deactivated) return false
-                return player.a.unlocked
+                return player.a.unlocked && !tmp.a.deactivated
+        },
+        deactivated(){
+                return hasUpgrade("or", 223)
         },
         protein: {
                 getAUpgBase(){
@@ -19653,6 +19656,9 @@ addLayer("cells", {
                 if (hasMilestone("cells", 20))  ret = ret.times(49/25)
                 if (hasUpgrade("t", 52))        ret = ret.times(100/99)
                 if (hasUpgrade("or", 211) && !player.or.filterLeftKidney) {
+                                                ret = ret.times(99/98)
+                }
+                if (hasMilestone("or", 19) && player.or.filterLeftKidney) {
                                                 ret = ret.times(99/98)
                 }
 
@@ -25923,7 +25929,21 @@ addLayer("or", {
                         let data = player.or
                         let subdata = data.air
 
-                        let gain = tmp.or.lungs.getResetGain.times(diff)
+                        let resetGain = tmp.or.lungs.getResetGain
+                        let gain = resetGain.times(diff)
+                        if (hasUpgrade("or", 311) && resetGain.times(20).gt(subdata.points)) {
+                                // first find how much 10x production we have left
+                                if (resetGain.gt(0)) {
+                                        let boostTime = Decimal.sub(2, resetGain.div(subdata.points).div(10))
+                                        if (boostTime.gte(diff) && boostTime.gt(0)) {
+                                                gain = gain.times(10) // we have enough 10x time left
+                                        } else if (boostTime.gt(0)) {
+                                                // we gain 10x for boostTime and 1x for diff-boostTime
+                                                // so 9xboostTime + diff 
+                                                gain = gain.plus(boostTime.times(resetGain).times(9))
+                                        }
+                                }
+                        }
 
                         subdata.points = subdata.points.plus(gain)
                         subdata.total = subdata.total.plus(gain)
@@ -25962,12 +25982,12 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.challenges[22].reward)
                                                         ret = ret.times(tmp.or.challenges[31].reward)
                                                         ret = ret.times(tmp.or.challenges[32].reward)
-                                                        //ret = ret.times(tmp.or.challenges[41].reward)
+                        if (hasUpgrade("or", 224))      ret = ret.times(tmp.or.upgrades[224].effect)
                         if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
                         if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
                         if (hasUpgrade("or", 221))      ret = ret.times(player.t.points.max(10).log10())
 
-                        if (player.extremeMode) ret = ret.pow(.75) 
+                        if (player.extremeMode)         ret = ret.pow(.75) 
                         
                         return ret
                 },
@@ -27104,6 +27124,56 @@ addLayer("or", {
                                 return hasUpgrade("or", 221)
                         }, // hasUpgrade("or", 222)
                 },
+                223: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney XIII"
+                        },
+                        description(){
+                                return "Token II buyable costs are floored instead of rounded and unlock 3 new layers but remove Amino Acid"
+                        }, // care DNA Science again
+                        cost(){
+                                return new Decimal("1e1715e3")
+                        },
+                        onPurchase(){
+                                tmp.a.layerShown = false 
+                                tmp.a.deactivated = true
+                                let data = player.a
+                                data.points = decimalZero
+                                data.total = decimalZero
+                                data.best = decimalZero
+                                data.protein.points = decimalZero
+                                data.protein.total = decimalZero
+                                data.protein.best = decimalZero
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 222)
+                        }, // hasUpgrade("or", 223)
+                },
+                224: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Kidney XIV"
+                        },
+                        description(){
+                                let a = "Per Organ upgrade - 50 log10(Token II) multiplies Air gain and bulk 5x Kidney buyables"
+                                return a + br + "Currently: " + format(tmp.or.upgrades[224].effect)
+                        },
+                        effect(){
+                                let upgs = Math.max(0, player.or.upgrades.length - 50)
+                                return player.tokens.tokens2.total.max(10).log10().pow(upgs)
+                        },
+                        cost(){
+                                return new Decimal("1e2415e3")
+                        },
+                        currencyLocation:() => player.or.contaminants,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Contaminants",
+                        unlocked(){
+                                return hasUpgrade("or", 223)
+                        }, // hasUpgrade("or", 224)
+                },
 
                 301: {
                         title(){
@@ -27194,6 +27264,23 @@ addLayer("or", {
                                 return hasUpgrade("or", 304)
                         }, // hasUpgrade("or", 305)
                 },
+                311: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung VI"
+                        },
+                        description(){
+                                return "If you have 20 seconds or less of Air production, gain 10x more Air"
+                        },
+                        cost(){
+                                return new Decimal("9e1009")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasMilestone("or", 19)
+                        }, // hasUpgrade("or", 311)
+                },
         },
         clickables: {
                 201: {
@@ -27243,6 +27330,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 212))      ret = ret.times(10)
                         if (hasUpgrade("or", 213))      ret = ret.times(5)
                         if (hasUpgrade("or", 215))      ret = ret.times(4)
+                        if (hasUpgrade("or", 224))      ret = ret.times(5)
                         return ret
                 }, // tmp.or.buyables.getMaxBulk
                 201: {
@@ -28095,6 +28183,20 @@ addLayer("or", {
                                 return "Reward: Add a log10(x) term to Larynx effect."
                         },
                 }, // hasMilestone("or", 18)
+                19: {
+                        requirementDescription(){
+                                return "1e999 Air"
+                        },
+                        done(){
+                                return player.or.air.points.gte("1e999")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: If you are filtering from your left Kidney then raise Cell gain ^(99/98) and Token II via Cell cost formula is 10^10^(5+x/40)."
+                        },
+                }, // hasMilestone("or", 19)
         },
         bars: {
                 heart: {
@@ -28198,7 +28300,7 @@ addLayer("or", {
                                         }
                                 },
                         },
-                        "Lungs": { 
+                        "Lung": { 
                                 content: [
                                         ["secondary-display", "air"],
                                         ["display-text", function(){//Entering a challenge resets air. 
@@ -28214,6 +28316,21 @@ addLayer("or", {
                                 ],
                                 unlocked(){
                                         return hasUpgrade("or", 215)
+                                },
+                                shouldNotify(){
+                                        let ids = [301, 302, 303, 304, 305, 
+                                                311, 312, 313, 314, 315, 
+                                                321, 322, 323, 324, 325, 
+                                                331, 332, 333, 334, 335, 
+                                                341, 342, 343, 344, 345, 
+                                                351, 352, 353, 354, 355]
+                                        for (i in ids){
+                                                let id = ids[i]
+                                                if (!layers.or.upgrades[id]) continue
+                                                if (hasUpgrade("or", id)) continue 
+                                                if (!tmp.or.upgrades[id].unlocked) continue
+                                                if (canAffordUpgrade("or", id)) return true
+                                        }
                                 },
                         },
                 },
@@ -28611,7 +28728,6 @@ addLayer("mc", {
         getBaseGain(){
                 let pts = player.points
                 let logbase = new Decimal(10)
-                logbase = logbase.sub(player.mc.buyables[13])
                 
                 let ret = pts.max(logbase).log(logbase).max(logbase).log(logbase)
                 if (!false) ret = ret.max(logbase).log(logbase)
@@ -28633,7 +28749,7 @@ addLayer("mc", {
 
                 ret = ret.times(tmp.mc.buyables[11].effect)
                 ret = ret.times(tmp.mc.buyables[12].effect)
-                //ret = ret.times(tmp.mc.buyables[13].effect)
+                ret = ret.times(tmp.mc.buyables[13].effect)
 
                 return ret
         },
@@ -28798,8 +28914,8 @@ addLayer("mc", {
                 },
                 13: {
                         title: "...phone",
-                        cost: () => new Decimal(1e4).pow(getBuyableAmount("mc", 13).plus(1)),
-                        canAfford:() => player.mc.points.gte(tmp.mc.buyables[13].cost) && getBuyableAmount("mc", 13).lt(8),
+                        cost: () => new Decimal(1e2).pow(getBuyableAmount("mc", 13).pow(1.1).plus(2)),
+                        canAfford:() => player.mc.points.gte(tmp.mc.buyables[13].cost),
                         buy(){
                                 if (!this.canAfford()) return 
                                 player.mc.buyables[13] = player.mc.buyables[13].plus(1)
@@ -28807,8 +28923,8 @@ addLayer("mc", {
                         },
                         maxAfford(){
                                 let div = new Decimal(1e4)
-                                let base = 1e4
-                                let exp = 1
+                                let base = 100
+                                let exp = 1.1
                                 let pts = player.mc.points
                                 if (pts.lt(div)) return decimalZero
                                 return pts.div(div).log(base).root(exp).floor().plus(1).min(8)
@@ -28816,22 +28932,25 @@ addLayer("mc", {
                         unlocked(){
                                 return player.mc.buyables[12].gt(2)
                         },
+                        effect(){
+                                return player.cells.points.max(10).log10().max(10).log10().pow(player.mc.buyables[13])
+                        },
                         display(){
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.mc.buyables[13]) + "</b><br>"
-                                        let eff1 = "<b><h2>Effect</h2>: -"
-                                        let eff2 = formatWhole(player.mc.buyables[13]) + " to base Micro gain log's base</b><br>"
+                                        let eff1 = "<b><h2>Effect</h2>: *"
+                                        let eff2 = format(tmp.mc.buyables[13].effect) + " to Micro gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + format(getBuyableCost("mc", 13)) + " Micro</b><br>"
 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "10-x"
+                                let eformula = "log10(log10(Cells))^x"
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "1e4*1e4^x" 
+                                let cost2 = "1e4*100^x<sup>1.1</sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -28968,6 +29087,327 @@ addLayer("mc", {
                                 return true
                         },
                 }
+        },
+        doReset(){
+                // do nothing
+        },
+})
+
+addLayer("mh", {
+        name: "mh", 
+        symbol: "M<sub>H</sub>", 
+        position: 4, 
+        startData(){ return {
+                unlocked: true,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+        }},
+        color: "#A7A200",
+        branches: ["or"],
+        requires:() => decimalZero, 
+        resource: "Micro", 
+        baseResource: "points", 
+        baseAmount(){return player.points},
+        type: "custom",
+        tooltip(){
+                let a = format(player.or.deoxygenated_blood.points) + makeBlue(" DB") + " and "
+                return a + format(player.or.oxygenated_blood.points) + makePurple(" OB")
+        },
+        getResetGain(){
+                return decimalOne
+        },
+        getNextAt(){
+                return decimalOne
+        },
+        canReset(){
+                return false
+        },
+        update(diff){},
+        row: 3, 
+        prestigeButtonText(){
+                return br
+        },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return makeBlue("Jump to Organs")
+                        },
+                        display(){
+                                return ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.tab = "or"
+                        },
+                },
+        },
+        layerShown(){return hasUpgrade("or", 223)},
+        tabFormat: {
+                "Heart": {
+                        content: [
+                                ["layer-proxy", 
+                                        ["or",
+                                        [
+                                                ["bar", "heart"],
+                                                ["display-text", 
+                                                        function (){
+                                                                if (player.or.deoxygenated_blood.points.gt(1e100)) return ""
+                                                                let a = "When your heart is beating in you gain " + makePurple("Oxygenated Blood") 
+                                                                a += " (" + makePurple("OB") + ") and while your heart is beating out you gain "
+                                                                return a + makeBlue("Deoxygenated Blood") + " (" + makeBlue("DB") + ")"
+                                                        }
+                                                ],
+                                                "secondary-display-blood",
+                                                ["display-text", 
+                                                        function (){
+                                                                let a = "You can potentially gain " + format(tmp.or.heart.getOBGain)
+                                                                a += " " + makePurple("OB") + " and " + format(tmp.or.heart.getDBGain)
+                                                                return a + " " + makeBlue("DB") + " per second"
+                                                        }
+                                                ],
+                                                ["upgrades", [10, 11, 12, 13, 14, 15]],
+                                        ]
+                                        ]
+                                ],
+                                "blank",
+                                "clickables",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                        shouldNotify(){
+                                let ids = [101, 102, 103, 104, 105, 
+                                                111, 112, 113, 114, 115, 
+                                                121, 122, 123, 124, 125, 
+                                                131, 132, 133, 134, 135, 
+                                                141, 142, 143, 144, 145, 
+                                                151, 152, 153, 154, 155]
+                                for (i in ids){
+                                        let id = ids[i]
+                                        if (!layers.or.upgrades[id]) continue
+                                        if (hasUpgrade("or", id)) continue 
+                                        if (!tmp.or.upgrades[id].unlocked) continue
+                                        if (canAffordUpgrade("or", id)) return true
+                                }
+                        },
+                },
+        },
+        doReset(){
+                // do nothing
+        },
+})
+
+addLayer("mk", {
+        name: "mk", 
+        symbol: "M<sub>K</sub>", 
+        position: 5, 
+        startData(){ return {
+                unlocked: true,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+        }},
+        color: "#DA6B46",
+        branches: ["or"],
+        requires:() => decimalZero, 
+        resource: "Micro", 
+        baseResource: "points", 
+        baseAmount(){return player.points},
+        type: "custom",
+        tooltip(){
+                return format(player.or.contaminants.points) + " Contaminants"
+        },
+        getResetGain(){
+                return decimalOne
+        },
+        getNextAt(){
+                return decimalOne
+        },
+        canReset(){
+                return false
+        },
+        update(diff){},
+        row: 3, 
+        prestigeButtonText(){
+                return br
+        },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return makePurple("Jump to Organs")
+                        },
+                        display(){
+                                return ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.tab = "or"
+                        },
+                },
+        },
+        layerShown(){return hasUpgrade("or", 223)},
+        tabFormat: {
+                "Kidney": {
+                        content: [
+                                ["layer-proxy", 
+                                        ["or",
+                                        [
+                                                ["secondary-display", "contaminants"],
+                                                ["display-text", function(){
+                                                        let a = "Choose to filter " + makeBlue("DB") + " via your left Kidney, or filter " + makePurple("OB") + " by your right Kidney."
+                                                        let b = "You are gaining " + format(tmp.or.kidney.getResetGain) + " Contaminants/s"
+                                                        return a + br + b
+                                                }],
+                                                ["clickables", [20]],
+                                                ["upgrades", [20, 21, 22, 23]],
+                                                ["buyables", [20, 21, 22]],
+                                        ]
+                                        ]
+                                ],
+                                "blank",
+                                "clickables",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                        shouldNotify(){
+                                let ids = [201, 202, 203, 204, 205, 
+                                           211, 212, 213, 214, 215, 
+                                           221, 222, 223, 224, 225, 
+                                           231, 232, 233, 234, 235, 
+                                           241, 242, 243, 244, 245, 
+                                           251, 252, 253, 254, 255]
+                                for (i in ids){
+                                        let id = ids[i]
+                                        if (!layers.or.upgrades[id]) continue
+                                        if (hasUpgrade("or", id)) continue 
+                                        if (!tmp.or.upgrades[id].unlocked) continue
+                                        if (canAffordUpgrade("or", id)) return true
+                                }
+                        },
+                },
+        },
+        doReset(){
+                // do nothing
+        },
+})
+
+addLayer("ml", {
+        name: "ml", 
+        symbol: "M<sub>L</sub>", 
+        position: 6, 
+        startData(){ return {
+                unlocked: true,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+        }},
+        color: "#6F4FD1",
+        branches: ["or"],
+        requires:() => decimalZero, 
+        resource: "Micro", 
+        baseResource: "points", 
+        baseAmount(){return player.points},
+        type: "custom",
+        tooltip(){
+                return format(player.or.air.points) + " Air"
+        },
+        getResetGain(){
+                return decimalOne
+        },
+        getNextAt(){
+                return decimalOne
+        },
+        canReset(){
+                return false
+        },
+        update(diff){},
+        row: 3, 
+        prestigeButtonText(){
+                return br
+        },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return makeGreen("Jump to Organs")
+                        },
+                        display(){
+                                return ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.tab = "or"
+                        },
+                },
+        },
+        layerShown(){return hasUpgrade("or", 223)},
+        tabFormat: {
+                "Lung": {
+                        content: [
+                                ["layer-proxy", 
+                                        ["or",
+                                        [
+                                                ["secondary-display", "air"],
+                                                ["display-text", function(){//Entering a challenge resets air. 
+                                                        let a = "While in a challenge you do not gain Contaminants, " + makeBlue("DB") + ", or " + makePurple("OB") + "." 
+                                                        let b = "You are gaining " + format(tmp.or.lungs.getResetGain) + " Air/s"
+                                                        if (tmp.or.lungs.reqs.length > player.or.lungChallengesUnlocked) {
+                                                                return a + br + b + br + "Get " + format(tmp.or.lungs.reqs[player.or.lungChallengesUnlocked]) + " Air to unlock the next challenge"
+                                                        }
+                                                        return a + br + b
+                                                }],
+                                                ["challenges", [1, 2, 3]],
+                                                ["upgrades", [30, 31]],
+                                        ]
+                                        ]
+                                ],
+                                "blank",
+                                "clickables",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                        shouldNotify(){
+                                let ids = [301, 302, 303, 304, 305, 
+                                           311, 312, 313, 314, 315, 
+                                           321, 322, 323, 324, 325, 
+                                           331, 332, 333, 334, 335, 
+                                           341, 342, 343, 344, 345, 
+                                           351, 352, 353, 354, 355]
+                                for (i in ids){
+                                        let id = ids[i]
+                                        if (!layers.or.upgrades[id]) continue
+                                        if (hasUpgrade("or", id)) continue 
+                                        if (!tmp.or.upgrades[id].unlocked) continue
+                                        if (canAffordUpgrade("or", id)) return true
+                                }
+                        },
+                },
+        },
+        doReset(){
+                // do nothing
         },
 })
 
@@ -36198,6 +36638,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 223))      return x.pow(.7).floor()
                         if (hasUpgrade("or", 221))      return x.pow(.7).round()
                         if (hasUpgrade("or", 304))      return x.pow(.7).ceil()
                         if (hasUpgrade("or", 151))      return x.pow(.75).ceil()
@@ -36247,6 +36688,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 223))      return "floor(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 221))      return "round(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 304))      return "ceil(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 151))      return "ceil(x<sup>.75</sup>)"
@@ -36258,6 +36700,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 223))      return 8
                         if (hasUpgrade("or", 221))      return 7
                         if (hasUpgrade("or", 304))      return 6
                         if (hasUpgrade("or", 151))      return 5
@@ -37762,8 +38205,15 @@ addLayer("tokens", {
                 },
                 193: {
                         title: "Token II via Cell",
-                        cost:() => player.tokens.buyables[193].div(tmp.tokens.buyables[193].div).plus(4).pow10().pow10(),
-                        div:() => new Decimal(hasUpgrade("cells", 52) ? 20 : 10),
+                        cost(){
+                                let add = hasMilestone("or", 19) ? 5 : 4
+                                let div = tmp.tokens.buyables[193].div
+                                return player.tokens.buyables[193].div(div).plus(add).pow10().pow10()
+                        },
+                        div(){
+                                if (hasMilestone("or", 19)) return new Decimal(40)
+                                return new Decimal(hasUpgrade("cells", 52) ? 20 : 10)
+                        },
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -37779,6 +38229,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[193]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193)) + " Cells</b><br>"
                                 let eformula = "10^10^(4+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
+                                if (hasMilestone("or", 19)) eformula = eformula.replace("4", "5")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
