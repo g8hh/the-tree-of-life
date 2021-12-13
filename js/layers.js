@@ -23654,6 +23654,9 @@ addLayer("t", {
         canReset(){
                 return tmp.t.getResetGain.gt(0) && !hasUpgrade("t", 132) && player.cells.challenges[12] >= 25
         },
+        resetsNothing(){
+                return hasUpgrade("or", 153)
+        },
         effectAdd(){
                 if (hasUpgrade("cells", 44)) return decimalZero
                 let ret = decimalOne
@@ -25747,6 +25750,7 @@ addLayer("or", {
                         let lvls = Math.max(0, player.or.upgrades.length - 30)
                                                 ret = ret.times(player.or.buyables[201].plus(10).log10().pow(lvls))
                 }
+                if (hasUpgrade("or", 313))      ret = ret.times(player.or.air.points.max(10).log10())
 
                 return ret.max(1)
         },
@@ -25768,6 +25772,9 @@ addLayer("or", {
         },
         canReset(){
                 return tmp.or.getResetGain.gt(0) && hasUpgrade("t", 155) && hasUpgrade("t", 151) && !hasUpgrade("or", 125)
+        },
+        resetsNothing(){
+                return hasUpgrade("or", 153)
         },
         effect(){
                 let pts = player.or.total
@@ -25986,6 +25993,7 @@ addLayer("or", {
                         if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
                         if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
                         if (hasUpgrade("or", 221))      ret = ret.times(player.t.points.max(10).log10())
+                        if (hasUpgrade("or", 312))      ret = ret.times(Decimal.pow(3, player.tokens.best_buyables[101].sub(30)).max(1))
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
                         
@@ -26107,6 +26115,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 202))      ret = ret.times(player.or.deoxygenated_blood.points.max(1).pow(.1))
                                                         ret = ret.times(tmp.or.challenges[22].reward)
                         if (hasUpgrade("or", 305))      ret = ret.times(player.or.air.points.max(10).log10().pow(tmp.or.upgrades.lungUpgradesLength))
+                        if (hasUpgrade("or", 312))      ret = ret.times(tmp.or.challenges[31].reward)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -26121,6 +26130,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 202))      ret = ret.times(player.or.oxygenated_blood.points.max(1).pow(.1))
                         if (hasUpgrade("or", 203))      ret = ret.times(player.or.buyables[201].max(1).pow(tmp.or.upgrades.kidneyUpgradesLength))
                                                         ret = ret.times(tmp.or.challenges[31].reward)
+                        if (hasUpgrade("or", 314))      ret = ret.times(tmp.or.challenges[22].reward)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
                         
@@ -26919,6 +26929,23 @@ addLayer("or", {
                                 return hasUpgrade("or", 151)
                         }, // hasUpgrade("or", 152)
                 },
+                153: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXVII"
+                        },
+                        description(){
+                                return "Organs and Tissues reset nothing and Token II via Token cost formula is x<sup>2</sup>"
+                        },
+                        cost(){
+                                return new Decimal(1e300)
+                        },
+                        currencyLocation:() => player.or.oxygenated_blood,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => makePurple("OB"),
+                        unlocked(){
+                                return hasUpgrade("or", 152)
+                        }, // hasUpgrade("or", 153)
+                },
 
                 201: {
                         title(){
@@ -27280,6 +27307,57 @@ addLayer("or", {
                         unlocked(){
                                 return hasMilestone("or", 19)
                         }, // hasUpgrade("or", 311)
+                },
+                312: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung VII"
+                        },
+                        description(){
+                                return "Per best Up Quark - 30 (max 0) triple Air gain and Tertiary Bronchi effect affects " + makePurple("OB") + " gain" 
+                        },
+                        cost(){
+                                return new Decimal("1e1150")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 311)
+                        }, // hasUpgrade("or", 312)
+                },
+                313: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung VIII"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 90%'>Token II via Stem Cell cost double exponent is (50+x/5)<sup>.5</sup> and log10(Air) multiplies Organ gain</bdi>" 
+                        },
+                        cost(){
+                                return new Decimal("1e1400")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 312)
+                        }, // hasUpgrade("or", 313)
+                },
+                314: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung IX"
+                        },
+                        description(){
+                                return "Secondary Bronchi multiplies " + makeBlue("DB") + " gain and Token II buyables' cost exponent is .66"  
+                        },
+                        cost(){
+                                return new Decimal("1e1725")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 313)
+                        }, // hasUpgrade("or", 314)
                 },
         },
         clickables: {
@@ -28932,8 +29010,11 @@ addLayer("mc", {
                         unlocked(){
                                 return player.mc.buyables[12].gt(2)
                         },
+                        base(){
+                                return player.cells.points.max(10).log10().max(10).log10()
+                        },
                         effect(){
-                                return player.cells.points.max(10).log10().max(10).log10().pow(player.mc.buyables[13])
+                                return tmp.mc.buyables[13].base.pow(player.mc.buyables[13])
                         },
                         display(){
                                 if (!player.shiftAlias) {
@@ -28945,7 +29026,7 @@ addLayer("mc", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "log10(log10(Cells))^x"
+                                let eformula = "log10(log10(Cells))^x<br>" + format(tmp.mc.buyables[13].base) + "^x"
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -36638,6 +36719,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 314))      return x.pow(.66).floor()
                         if (hasUpgrade("or", 223))      return x.pow(.7).floor()
                         if (hasUpgrade("or", 221))      return x.pow(.7).round()
                         if (hasUpgrade("or", 304))      return x.pow(.7).ceil()
@@ -36688,6 +36770,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 314))      return "floor(x<sup>.66</sup>)"
                         if (hasUpgrade("or", 223))      return "floor(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 221))      return "round(x<sup>.7</sup>)"
                         if (hasUpgrade("or", 304))      return "ceil(x<sup>.7</sup>)"
@@ -36700,6 +36783,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 314))      return 9
                         if (hasUpgrade("or", 223))      return 8
                         if (hasUpgrade("or", 221))      return 7
                         if (hasUpgrade("or", 304))      return 6
@@ -38159,7 +38243,10 @@ addLayer("tokens", {
                 },
                 191: {
                         title: "Token II via Token",
-                        cost:() => player.tokens.buyables[191].plus(player.extremeMode ? 25 : 21).pow(2).sub(.0001),
+                        cost(){
+                                let add = hasUpgrade("or", 153) ? 0 : (player.extremeMode ? 25 : 21)
+                                return player.tokens.buyables[191].plus(add).pow(2).sub(.0001)
+                        },
                         canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -38173,6 +38260,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 if (player.extremeMode) eformula = eformula.replace("21", "25")
+                                if (hasUpgrade("or", 153)) eformula = "x<sup>2</sup>"
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -38182,7 +38270,11 @@ addLayer("tokens", {
                 },
                 192: {
                         title: "Token II via Stem Cell",
-                        cost:() => player.tokens.buyables[192].div(1+hasUpgrade("t", 111)).plus(player.extremeMode ? 36 : 33).sqrt().pow10().pow10(),
+                        cost(){
+                                let div = hasUpgrade("or", 313) ? 5 : (1+hasUpgrade("t", 111))
+                                let add = hasUpgrade("or", 313) ? 50 : (player.extremeMode ? 36 : 33)
+                                return player.tokens.buyables[192].div(div).plus(add).sqrt().pow10().pow10()
+                        },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
                                 if (!this.canAfford()) return 
@@ -38196,6 +38288,10 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
                                 if (player.extremeMode) eformula = eformula.replace("33", "36")
+                                if (hasUpgrade("or", 313)) {
+                                        eformula = eformula.replace("33", "50")
+                                        eformula = eformula.replace("2", "5")
+                                }
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 

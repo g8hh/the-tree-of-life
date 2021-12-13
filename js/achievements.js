@@ -95,7 +95,7 @@ function getAchStuffFromNumber(n){
         } else if (n <= Infinity) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
-                        return hasUpgrade("m", 23) || hasUnlockedPast("m")
+                        return false
                 }
         } 
         return {name: name, done: done, tooltip: tooltip, unlocked: unlocked, style: style}
@@ -795,6 +795,34 @@ PROGRESSION_MILESTONES = {
         670: () => player.or.air.points.gte(Decimal.pow(2, 11).pow10()),
         671: () => player.or.air.points.gte(Decimal.pow(2, 12).pow10()),
         672: () => player.or.air.points.gte(Decimal.pow(2, 13).pow10()),
+        673: () => player.or.contaminants.points.gte(Decimal.pow10(2e6)),
+        674: () => player.or.contaminants.points.gte(Decimal.pow10(5e6)),
+        675: () => player.or.contaminants.points.gte(Decimal.pow10(1e7)),
+        676: () => player.or.contaminants.points.gte(Decimal.pow10(2e7)),
+        677: () => player.or.contaminants.points.gte(Decimal.pow10(5e7)),
+        678: () => player.or.contaminants.points.gte(Decimal.pow10(1e8)),
+        679: () => player.or.contaminants.points.gte(Decimal.pow10(2e8)),
+        680: () => player.tokens.tokens2.total.gte(220),
+        681: () => player.tokens.tokens2.total.gte(230),
+        682: () => player.tokens.tokens2.total.gte(240),
+        683: () => player.tokens.tokens2.total.gte(250),
+        684: () => player.tokens.tokens2.total.gte(260),
+        685: () => player.tokens.tokens2.total.gte(270),
+        686: () => player.tokens.tokens2.total.gte(280),
+        687: () => player.tokens.tokens2.total.gte(290),
+        688: () => player.tokens.tokens2.total.gte(300),
+        689: () => player.tokens.tokens2.total.gte(310),
+        690: () => player.tokens.tokens2.total.gte(320),
+        691: () => player.tokens.tokens2.total.gte(330),
+        692: () => player.tokens.tokens2.total.gte(340),
+        693: () => player.tokens.tokens2.total.gte(350),
+        694: () => player.tokens.tokens2.total.gte(360),
+        695: () => player.tokens.tokens2.total.gte(370),
+        696: () => player.tokens.tokens2.total.gte(380),
+        697: () => player.tokens.tokens2.total.gte(390),
+        698: () => player.tokens.tokens2.total.gte(400),
+        699: () => player.tokens.tokens2.total.gte(410),
+        700: () => player.tokens.tokens2.total.gte(420),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1470,6 +1498,34 @@ PROGRESSION_MILESTONES_TEXT = {
         670: "1e2,048 Air",
         671: "1e4,096 Air",
         672: "1e8,192 Air",
+        673: "1e2,000,000 Contaminants",
+        674: "1e5,000,000 Contaminants",
+        675: "1e10,000,000 Contaminants",
+        676: "1e20,000,000 Contaminants",
+        677: "1e50,000,000 Contaminants",
+        678: "1e100,000,000 Contaminants",
+        679: "1e200,000,000 Contaminants",
+        680: "220 Token II",
+        681: "230 Token II",
+        682: "240 Token II",
+        683: "250 Token II",
+        684: "260 Token II",
+        685: "270 Token II",
+        686: "280 Token II",
+        687: "290 Token II",
+        688: "300 Token II",
+        689: "310 Token II",
+        690: "320 Token II",
+        691: "330 Token II",
+        692: "340 Token II",
+        693: "350 Token II",
+        694: "360 Token II",
+        695: "370 Token II",
+        696: "380 Token II",
+        697: "390 Token II",
+        698: "400 Token II",
+        699: "410 Token II",
+        700: "420 Token II",
 }
 
 
