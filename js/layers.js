@@ -29518,7 +29518,7 @@ addLayer("ach", {
                                 save()
                         }
                 },
-                {key: "shift+Control+E", description: "Force endgame",
+                {key: "shift+Control+E", description: "Shift+Control+E: Force endgame",
                         onPress(){ // forces the endgame screen to pop up 
                                 forceEndgame = true
                                 player.keepGoing = false
