@@ -21247,8 +21247,8 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Total kappa multiplies DNA gain and DNA Sci VI uses upgrades."
-                                return "Reward: Total kappa multiplies DNA gain."
+                                if (player.extremeMode) return "Reward: Total kappa multiplies Amino Acid gain and DNA Sci VI uses upgrades."
+                                return "Reward: Total kappa multiplies Amino Acid gain."
                         },
                 }, // hasMilestone("cells", 10)
                 11: {
@@ -25991,6 +25991,9 @@ addLayer("or", {
                                                         ret = ret.times(data[411].plus(1))
                                                         ret = ret.times(data[412].plus(1))
                                                         ret = ret.times(data[413].plus(1))
+                                                        ret = ret.times(data[421].plus(1))
+                                                        ret = ret.times(data[422].plus(1))
+                                                        ret = ret.times(data[423].plus(1))
                         if (hasMilestone("or", 20))     ret = ret.times(player.or.milestones.length)
                         if (hasUpgrade("or", 21))       ret = ret.times(player.d.points.max(10).log10())
 
@@ -29265,7 +29268,17 @@ addLayer("or", {
 
                                         let part1 = a + br2 + b + br + c + br2 + d
 
-                                        return part1
+                                        if (player.cells.challenges[21] <= 2) return part1
+
+                                        let e1 = ["You have " + formatWhole(player.or.upgrades.length) + " Organ upgrades"]
+                                        if (hasUpgrade("or", 14)) e1.push(br + formatWhole(tmp.or.upgrades.kidneyUpgradesLength) + " Kidney upgrades")
+                                        if (hasUpgrade("or", 215)) e1.push(br + formatWhole(tmp.or.upgrades.lungUpgradesLength) + " Lung upgrades")
+                                        let e
+                                        if (e1.length == 1) e = e1[0] + "."
+                                        if (e1.length == 2) e = e1[0] + " and " + e1[1] + "."
+                                        if (e1.length == 3) e = e1[0] + "," + e1[1] + " and " + e1[2] + "."
+
+                                        return part1 + br2 + e
                                 }],
                         ],
                         unlocked(){
