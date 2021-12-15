@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.216",
+	num: "1.217",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,26 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.tokens.tokens2.total.gt(0)
-	return player.or.energy.points.gte("1e2948")
+	return player.or.points.gte("1e100")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.216)<br><br>
+		Reaching the endgame screen (updated at least as of v1.217)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.217</h3><br>
+		- Balanced until 1e100 Organs.<br>
+		- Added 3 Organ upgrades.<br>
+		- Added 3 Kidney upgrades.<br>
+		- Added 4 Lung upgrades.<br>
+		- Added 3 Organ milestones.<br>
+		- Various code and display clean up.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.216</h3><br>
 		- Balanced until 1e2948 Energy.<br>
 		- Added three Organ upgrades.<br>
