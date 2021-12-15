@@ -457,6 +457,7 @@ addLayer("h", {
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getResetGain(){
                 let base = player.points.ln().min(tmp.h.getDefaultMaximum)
+                if (base.lt(0)) return decimalZero
                 let mult = tmp.h.getGainMult
 
                 let ret = base.times(mult)
@@ -10486,7 +10487,7 @@ addLayer("mu", {
                 return " multiplying Phosphorus gain by Phosphorus<sup>" + effstr + "</sup>."
         },
         autoPrestige(){
-                return hasUpgrade("mu", 35) || hasMilestone("or", 1)
+                return hasUpgrade("mu", 35) || player.or.unlocked
         },
         deactivated(){
                 return hasUpgrade("t", 151)
@@ -11978,7 +11979,7 @@ addLayer("mu", {
                 },
         },
         resetsNothing(){
-                return hasUpgrade("mu", 34) || hasMilestone("l", 2) || hasMilestone("or", 1)
+                return hasUpgrade("mu", 34) || hasMilestone("l", 2) || player.or.unlocked
         },
         doReset(layer){
                 if (layer != "mu") return 
@@ -18623,6 +18624,7 @@ addLayer("d", {
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 553))     ret = ret.times(tmp.cells.buyables[13].effect)
                                                 ret = ret.times(player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect))
+                                                ret = ret.times(tmp.an.effect)
 
                 return ret.max(1)
         },
@@ -19652,6 +19654,7 @@ addLayer("cells", {
                                                 ret = ret.times(Decimal.pow(player.cells.upgrades.length, exp))
                 }
                                                 ret = ret.times(tmp.or.challenges[21].reward)
+                                                ret = ret.times(tmp.an.effect)
 
                 return ret.max(1)
         },
@@ -19785,6 +19788,7 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
                                                         ret = ret.times(tmp.sci.buyables[513].minigame_effect)
                         if (hasUpgrade("sci", 521))     ret = ret.times(player.sci.dna_science.points.max(10).log10())
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
                         if (hasUpgrade("sci", 512))     ret = ret.pow(hasMilestone("cells", 11) ? 1.3 : 1.28)
@@ -19832,6 +19836,7 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
                                                         ret = ret.times(tmp.sci.buyables[513].minigame_effect)
                         if (hasUpgrade("sci", 522))     ret = ret.times(player.sci.dna_science.points.max(10).log10())
+                                                        ret = ret.times(tmp.an.effect)
                         
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
                         if (hasUpgrade("sci", 512))     ret = ret.pow(hasMilestone("cells", 11) ? 1.3 : 1.28)
@@ -19885,6 +19890,7 @@ addLayer("cells", {
                                                         ret = ret.times(tmp.sci.buyables[513].minigame_effect)
                         if (hasUpgrade("sci", 515))     ret = ret.times(player.sci.dna_science.points.max(10).log10())
                         if (hasUpgrade("sci", 523))     ret = ret.times(player.sci.dna_science.points.max(10).log10())
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
                         if (hasUpgrade("sci", 512))     ret = ret.pow(hasMilestone("cells", 11) ? 1.3 : 1.28)
@@ -19941,6 +19947,7 @@ addLayer("cells", {
                         if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
                                                         ret = ret.times(tmp.sci.buyables[513].minigame_effect)
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (hasUpgrade("t", 11))        ret = ret.pow(1.01)
                         if (hasUpgrade("sci", 512))     ret = ret.pow(hasMilestone("cells", 11) ? 1.3 : 1.28)
@@ -20082,6 +20089,7 @@ addLayer("cells", {
                         if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
                                                         ret = ret.times(tmp.or.challenges[12].reward)
                         if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01).pow(player.or.upgrades.length))
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
 
@@ -23363,10 +23371,9 @@ addLayer("cells", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a1 = "Initial Cells gain: (DNA/1e582)^(1/1,960)"
-                                        let a2 = "Current Cells gain: (DNA/1e582)^(1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
-                                        a2 += ")"
-                                        let a = a1 + br + a2
+                                        let a1 = "Initial Cell gain: (DNA/1e582)<sup>1/1,960</sup>"
+                                        let a2 = "Current Cell gain: (DNA/1e582)<sup>1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
+                                        let a = a1 + br + a2 + "</sup>"
                                         if (player.extremeMode) a = a.replaceAll("582", "1228")
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
                                         b += br + "Note that Anti- challenges are never reset."
@@ -23628,6 +23635,7 @@ addLayer("t", {
                 }
                 if (hasUpgrade("t", 155))       ret = ret.times(Decimal.pow(1.11, player.tokens.tokens2.total))
                                                 ret = ret.times(tmp.or.effect)
+                                                ret = ret.times(tmp.an.effect)
                 if (hasMilestone("or", 10))     ret = ret.times(Decimal.pow(2, player.or.milestones.length))
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 552))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[552].lvls))
@@ -25403,25 +25411,25 @@ addLayer("t", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a1 = "Initial Tissue gain: (Cells*1e615)^(1/2,000)-9"
-                                        let a2 = "Current Tissue gain: (Cells*1e615)^(1/"
-                                        a2 += formatWhole(tmp.t.getGainExp.pow(-1)) + ")-9"
+                                        let a1 = "Initial Tissue gain: (Cells*1e615)<sup>1/2,000</sup>-9"
+                                        let a2 = "Current Tissue gain: (Cells*1e615)<sup>1/"
+                                        a2 += formatWhole(tmp.t.getGainExp.pow(-1)) + "</sup>-9"
                                         if (hasUpgrade("t", 71)) {
-                                                a2 = a2.replace("*1e615", "")
+                                                a2 = a2.replace("(Cells*1e615)", "Cells")
                                                 a2 = a2.replace("-9", "")
                                         }
                                         if (player.extremeMode) {
                                                 a1 = a1.replace("615", "1187")
                                                 a2 = a2.replace("615", "1187")
                                         }
-                                        let a3 = "Initial Tissue effect: (Tissues+1)^1"
+                                        let a3 = "Initial Tissue effect: Tissues+1"
                                         let a4 = "Current Tissue effect: (" + format(tmp.t.effectMult) 
-                                        a4 += "*Tissues+" + format(tmp.t.effectAdd) + ")^" + format(tmp.t.effectExp, 3)
-                                        a4 = a4.replace("1.00*Tissues+0.00", "Tissues")
+                                        a4 += "*Tissues+" + format(tmp.t.effectAdd) + ")<sup>" + format(tmp.t.effectExp, 3) + "</sup>"
+                                        a4 = a4.replace("(1.00*Tissues+0.00)", "Tissues")
                                         let a = a1 + br + a2 + br2 + a3 + br + a4
                                         let b = "Tissue resets all prior content that is not permanently kept."
                                         let c = "Note that Anti- challenges and gems are never reset anymore."
-                                        let d1 = "Tissue effect effects Phosphorus, Life, Amino Acid, Protein,"
+                                        let d1 = "Tissue effect affects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Mu, Lambda, Kappa, and Iota gain."
                                         if (player.extremeMode) {
                                                 d1 += " DNA Science,"
@@ -25787,6 +25795,7 @@ addLayer("or", {
                 if (hasMilestone("or", 20))     ret = ret.times(player.or.energy.points.max(10).log10())
                                                 ret = ret.times(tmp.or.buyables[423].effect)
                 if (hasUpgrade("or", 31))       ret = ret.times(Decimal.pow(1.03, player.tokens.tokens2.total))
+                                                ret = ret.times(tmp.an.effect)
 
                 return ret.max(1)
         },
@@ -26038,9 +26047,9 @@ addLayer("or", {
                         if (hasUpgrade("or", 21))       ret = ret.times(player.d.points.max(10).log10())
                         if (hasUpgrade("or", 23))       ret = ret.times(tmp.or.upgrades[23].effect)
                         if (hasUpgrade("or", 323))      ret = ret.times(tmp.or.upgrades[323].effect)
+                                                        ret = ret.times(tmp.an.effect)
 
-                        
-
+                        // BELOW IS EXPONENTIAL THINGS
                         if (player.extremeMode)         ret = ret.pow(.75) 
                         if (hasMilestone("or", 21)) {
                                 let a = hasUpgrade("or", 151) + hasUpgrade("or", 152) + hasUpgrade("or", 153)
@@ -26120,6 +26129,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 225))      ret = ret.times(tmp.or.buyables[412].effect)
                         if (hasUpgrade("or", 23))       ret = ret.times(tmp.or.upgrades[23].effect)
                         if (hasUpgrade("or", 233))      ret = ret.times(tmp.or.upgrades[323].effect)
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
                         
@@ -26193,6 +26203,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 143))      ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
                         if (hasMilestone("or", 16))     ret = ret.times(player.or.deoxygenated_blood.points.max(1))
                         if (hasUpgrade("or", 225))      ret = ret.times(player.or.energy.points.max(1).div(1e200).pow(player.or.upgrades.length))
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -26245,6 +26256,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.challenges[22].reward)
                         if (hasUpgrade("or", 305))      ret = ret.times(player.or.air.points.max(10).log10().pow(tmp.or.upgrades.lungUpgradesLength))
                         if (hasUpgrade("or", 312))      ret = ret.times(tmp.or.challenges[31].reward)
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -26261,6 +26273,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 203))      ret = ret.times(player.or.buyables[201].max(1).pow(tmp.or.upgrades.kidneyUpgradesLength))
                                                         ret = ret.times(tmp.or.challenges[31].reward)
                         if (hasUpgrade("or", 314))      ret = ret.times(tmp.or.challenges[22].reward)
+                                                        ret = ret.times(tmp.an.effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
                         
@@ -26523,7 +26536,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs I"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>You bulk 5x Secondary completions, gain 3x Tissue and Cell resets, gain 1e10x of each minigame amount, and disable coins</bdi>"
+                                return "You bulk 5x Secondary completions and gain 1e10x of each minigame amount but disable coins"
                         },
                         cost:() => decimalOne,
                         onPurchase(){
@@ -29478,7 +29491,9 @@ addLayer("or", {
                         },
                         toggles:() => [["or", "autobuya"]],
                         effectDescription(){
-                                return "Reward: Keep all prior automation, µ resets nothing and automatically prestiges, and autobuy Amino Acid upgrades."
+                                let a = "Reward: Keep all prior automation, gain 3x Tissue and Cell resets, and autobuy Amino Acid upgrades.<sup>*</sup>"
+                                if (!player.shiftAlias) return a 
+                                return "<sup>*</sup>The first four Organ milestones are always kept."
                         },
                 }, // hasMilestone("or", 1)
                 2: {
@@ -30075,19 +30090,20 @@ addLayer("or", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a1 = "Initial Organ gain: (log10(Tissue))^(0.50)-9"
-                                        let a2 = "Current Organ gain: (log10(Tissue))^("
-                                        a2 += formatWhole(tmp.or.getGainExp) + ")-9"
+                                        let a1 = "Initial Organ gain: log10(Tissue)<sup>0.5</sup>-9"
+                                        let a2 = "Current Organ gain: (log10(Tissue))<sup>"
+                                        a2 += formatWhole(tmp.or.getGainExp) + "</sup>-9"
                                         if (hasUpgrade("or", 114)) a2 = a2.replace("-9", "")
-                                        if (hasUpgrade("or", 154)) a2 = a2.replace("log10(Tissue)", "10^(log10(Tissue)<sup>.2</sup>)")
+                                        if (hasUpgrade("or", 154)) a2 = a2.replace("log10(Tissue)", "10<sup>log10(Tissue)<sup>.2</sup></sup>")
                                         if (hasUpgrade("or", 235)) a2 = a2.replace(".2", ".25")
-                                        let a3 = "Initial Organ effect: (Organs+1)^(min(100, 1+cbrt(Organs)/5))"
+                                        let a3 = "Initial Organ effect: (Organs+1)<sup>min(100, 1+cbrt(Organs)/5)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Organ resets all prior content that is not permanently kept, including Token content."
                                         let c = "Note that Anti- challenges, Anti- gems, and Tertiary completions are never reset."
-                                        let d1 = "Organ effect effects Phosphorus, Life, Amino Acid, Protein,"
+                                        let d1 = "Organ effect affects Phosphorus, Life, Amino Acid, Protein,"
                                         let d2 = "DNA, Cell, Stem Cell, Tissue, Mu, Lambda, Kappa, and Iota gain."
-                                        let d = d1 + br + d2
+                                        let d3 = "For unlocking Organs, µ permanently resets nothing and automatically prestiges."
+                                        let d = d1 + br + d2 + br2 + d3
 
                                         let part1 = a + br2 + b + br + c + br2 + d
 
@@ -30392,6 +30408,515 @@ addLayer("or", {
 
                         //reset times
                         if (!hasMilestone("a", 9) && !hasMilestone("cells", 2)) data5.times = 0
+                }
+
+                data5.points = decimalZero
+                data5.best = decimalZero
+                data5.total = decimalZero
+
+                player.mu.buyables[11] = decimalZero
+                player.mu.buyables[12] = decimalZero
+                player.mu.buyables[13] = decimalZero
+                player.mu.buyables[21] = decimalZero
+                player.mu.buyables[22] = decimalZero
+                player.mu.buyables[23] = decimalZero
+                player.mu.buyables[31] = decimalZero // buyables
+                player.mu.buyables[32] = decimalZero
+                player.mu.buyables[33] = decimalZero
+
+                player.p.best_over_amino = decimalZero
+
+                resetPreLifeCurrencies()
+        },
+})
+
+
+addLayer("an", {
+        name: "Animals", 
+        symbol: "A", 
+        position: 2, 
+        startData(){ return {
+                unlocked: false,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+                abtime: 0,
+                time: 0,
+                times: 0,
+                passiveTime: 0,
+        }},
+        color: "#FFEC13",
+        branches: [],
+        requires:() => new Decimal("1e100"), 
+        resource: "Animals", 
+        baseResource: "Organs", 
+        baseAmount(){return player.or.points},
+        type: "custom",
+        getResetGain(){
+                let ret = tmp.an.getBaseGain.times(tmp.an.getGainMult)
+                
+                if (player.extremeMode) ret = ret.pow(.75)
+                
+                return ret.floor()
+        },
+        getBaseGain(){
+                let pts = player.or.points
+                if (pts.lt("1e100")) return decimalZero
+                let exp = tmp.an.getGainExp
+
+                return pts.log10().sub(99).pow(exp)
+        },
+        getGainMult(){ // a gain animalgain again animal gain animalsgain animals gain
+                let ret = decimalOne
+
+                return ret.max(1)
+        },
+        getGainExp(){
+                let ret = new Decimal(1/3)
+
+                return ret
+        },
+        getNextAt(){
+                let gain = tmp.an.getResetGain.plus(1)
+
+                if (player.extremeMode) gain = gain.root(.75)
+
+                let reqInit = gain.div(tmp.an.getGainMult).max(1)
+                return reqInit.root(tmp.an.getGainExp).plus(99).pow10()
+        },
+        canReset(){
+                return tmp.an.getResetGain.gt(0) && hasUpgrade("or", 32) && !false
+        },
+        resetsNothing(){
+                return false
+        },
+        effect(){
+                let pts = player.an.total
+
+                let exp = pts.plus(99).log10().min(20)
+
+                let ret = pts.plus(1).pow(exp)
+
+                return ret.max(1)
+        },
+        effectDescription(){
+                let start = " multiplying all prior currency gain by " 
+                return start + format(tmp.an.effect) + "."
+        },
+        update(diff){
+                let data = player.an
+                
+                if (data.points.gt(0) || hasUpgrade("or", 32)) data.unlocked = true
+                data.best = data.best.max(data.points)
+
+                data.time += diff
+                if (false) data.passiveTime += diff
+
+                if (data.passiveTime > 1) {
+                        data.passiveTime += -1
+                        data.times ++
+                }
+                if (data.passiveTime > 10) data.passiveTime = 10
+        },
+        row: 0, 
+        prestigeButtonText(){
+                let b = ""
+                if (tmp.an.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.an.getNextAt) + " Organs."
+
+                return "Reset for <b>" + formatWhole(tmp.an.getResetGain) + "</b> Animals" + b
+        },
+        layerShown(){
+                if (tmp.an.deactivated) return false
+                return hasUpgrade("or", 32) || player.an.unlocked
+        },
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals I"
+                        },
+                        description(){
+                                return "idk yet"
+                        },
+                        cost:() => decimalOne,
+                        onPurchase(){
+                                player.tokens.upgrades = []
+                        },
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("an", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                return "1 Animal reset"
+                        },
+                        done(){
+                                return player.an.times >= 1
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep all prior automation and the first four Organ milestones."
+                        },
+                }, // hasMilestone("an", 1)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                ["display-text", function (){
+                                        if (!false) return ""
+                                        let a = "You can reset for " + formatWhole(tmp.an.getResetGain, false, 3) + " Animals. "
+                                        if (tmp.an.getResetGain.gt(1e5)) return a 
+                                        return a + " Next at: " + format(tmp.an.getNextAt) + " Organs"
+                                }], 
+                                "blank",
+                                ["upgrades", [1,2,3,4,5]],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        return "You have done " + formatWhole(player.an.times) + " Animals resets"
+                                }],
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a1 = "Initial Animal gain: cbrt(log10(Organs)-99)"
+                                        let a2 = "Current Animal gain: cbrt(log10(Organs)-99)"
+                                        let a3 = "Initial Animal effect: (Animals+1)<sup>min(20, log10(99+Animals))</sup>"
+                                        let a = a1 + br + a2 + br2 + a3
+                                        let b = "Animals resets all prior content that is not permanently kept, including Token content."
+                                        let c = "Note that Tertiary completions are never reset."
+                                        let d1 = "Animal effect affects DNA, Cell, Stem Cell, Tissue, Mu, Lambda, Kappa, Iota, "
+                                        let d2 = "Organs, Energy, Air, Contaminants, " + makeBlue("DB")
+                                        d2 += " and, " + makePurple("OB") + " gain."
+                                        let d = d1 + br + d2
+
+                                        let part1 = a + br2 + b + br + c + br2 + d
+
+                                        if (!false) return part1
+
+                                        return part1
+                                }],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        onPrestige(g){
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                player.an.times += timesAdd
+                player.an.time = 0
+        },
+        doReset(layer){
+                if (layer != "an") return 
+                player.an.time = 0
+
+                /*
+                1. Organ content
+                1a. DB/OB
+                1b. Contaminant
+                1c. Air
+                1d. Energy
+                2. Tissue content
+                3. token II content
+                4. Cells content
+                5. DNA content
+                */
+
+                
+                let data1 = player.or 
+                let data2 = player.t 
+                let data3 = player.tokens 
+                let data4 = player.cells
+                let data5 = player.d
+                
+                // 1. Organ content
+                if (!false) {
+                        let oKeptMilestones = 4
+                        if (false) oKeptMilestones += player.an.times 
+                        if (!false) {
+                                sortStrings(data1.milestones)
+                                data1.milestones = data1.milestones.slice(0, oKeptMilestones)
+                        }
+
+                        let oKeptUpgrades = 0
+                        if (false) oKeptUpgrades += player.an.times 
+                        if (!false) {
+                                //sortStrings(data1.upgrades)
+                                //commented out on purpose, if it breaks this you can add it back
+                                data1.upgrades = data1.upgrades.slice(0, oKeptUpgrades)
+                        }
+
+                        let oKeptTimes = 0
+                        if (false) oKeptTimes += player.an.times * 2
+                        if (!false) data1.times = Math.min(data1.times, oKeptTimes)
+
+                        // 1b
+                        if (!false) {
+                                let data = data1.buyables 
+                                data[201] = decimalZero
+                                data[202] = decimalZero
+                                data[203] = decimalZero
+                                data[211] = decimalZero
+                                data[212] = decimalZero
+                                data[213] = decimalZero
+                                data[221] = decimalZero
+                                data[222] = decimalZero
+                                data[223] = decimalZero
+                        }
+
+                        // 1c
+                        if (!false) {
+                                let data = data1.bankedAir
+                                data[11] = decimalZero
+                                data[12] = decimalZero
+                                data[21] = decimalZero
+                                data[22] = decimalZero
+                                data[31] = decimalZero
+                                data[32] = decimalZero
+                        }
+
+                        // 1d
+                        if (!false) {
+                                let data = data1.buyables 
+                                data[401] = decimalZero
+                                data[402] = decimalZero
+                                data[403] = decimalZero
+                                data[411] = decimalZero
+                                data[412] = decimalZero
+                                data[413] = decimalZero
+                                data[421] = decimalZero
+                                data[422] = decimalZero
+                                data[423] = decimalZero
+                                let dataAlt = data1.extras 
+                                dataAlt[401] = decimalZero
+                                dataAlt[402] = decimalZero
+                                dataAlt[403] = decimalZero
+                                dataAlt[411] = decimalZero
+                                dataAlt[412] = decimalZero
+                                dataAlt[413] = decimalZero
+                                dataAlt[421] = decimalZero
+                                dataAlt[422] = decimalZero
+                                dataAlt[423] = decimalZero
+                        }
+                }
+                
+                data1.points = decimalZero
+                data1.total = decimalZero
+                data1.best = decimalZero
+                data1.deoxygenated_blood.points = decimalZero
+                data1.deoxygenated_blood.total = decimalZero
+                data1.deoxygenated_blood.best = decimalZero
+                data1.oxygenated_blood.points = decimalZero
+                data1.oxygenated_blood.total = decimalZero
+                data1.oxygenated_blood.best = decimalZero
+                data1.air.points = decimalZero
+                data1.air.total = decimalZero
+                data1.air.best = decimalZero
+                data1.contaminants.points = decimalZero
+                data1.contaminants.total = decimalZero
+                data1.contaminants.best = decimalZero
+                data1.energy.points = decimalZero
+                data1.energy.total = decimalZero
+                data1.energy.best = decimalZero
+
+                // 2. Tissue content
+                if (!false) {
+                        let tKeptMilestones = 0
+                        if (hasMilestone("or", 9)) tKeptMilestones += player.or.times
+                        if (!false) {
+                                sortStrings(data2.milestones)
+                                data2.milestones = data2.milestones.slice(0, tKeptMilestones)
+                        }
+
+                        let tKeptUpgrades = 0
+                        if (hasMilestone("or", 4)) tKeptUpgrades += player.or.times * 2
+                        if (!false) {
+                                sortStrings(data2.upgrades)
+                                data2.upgrades = data2.upgrades.slice(0, tKeptUpgrades)
+                        }
+
+                        let tKeptTimes = 0
+                        if (hasMilestone("or", 6)) tKeptTimes += player.or.times ** 2
+                        if (!false) data2.times = Math.min(data2.times, tKeptTimes)
+                }
+
+                data2.points = decimalZero
+                data2.best = decimalZero
+                data2.total = decimalZero
+                data2.bestOnReset = decimalZero
+
+                // 3. Token II content
+                if (!hasMilestone("or", 12)) {
+                        data3.total = decimalZero
+                        data3.points = decimalZero
+                        data3.tokens2.total = decimalZero
+                        data3.tokens2.points = decimalZero
+
+                        player.tokens.lastRespecDisplayFormula = "2<sup>x</sup>"
+
+                        let resetIds = [
+                                11, 12, 13,
+                                21, 22, 23,
+                                31, 32, 33,
+                                41, 42, 43,
+                                51, 52, 53, 
+                                61, 62, 63,
+                                101, 102,
+                                111, 112,
+                                121, 122,
+                                191,192,193,]
+                                
+                        let resetbbids = [
+                                11, 12, 13,
+                                21, 22, 23,
+                                31, 32, 33,
+                                41, 42, 43,
+                                51, 52, 53, 
+                                61, 62, 63,
+                                101, 102,
+                                111, 112,
+                                121, 122,]
+
+                        for (i in resetIds){
+                                let id = resetIds[i]
+                                data3.buyables[id] = decimalZero
+                                if (resetbbids.includes(id)) data3.best_buyables[id] = decimalZero
+                        }
+
+                        player.subtabs.tokens.mainTabs = "Milestones"
+
+                        data3.bestStrange = decimalZero
+                        data3.bestTop = decimalZero
+                        data3.bestBottom = decimalOne
+                        data3.bestCharm = decimalZero
+
+                        data3.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
+                }
+                
+                // 4 cell content
+                if (!false) {
+                        let cKeptMilestones = 0
+                        if (hasUpgrade("t", 41)) cKeptMilestones += player.t.times
+                        if (hasUpgrade("t", 43)) {
+                                if (hasUpgrade("t", 13)) cKeptMilestones += 3
+                                if (hasUpgrade("t", 23)) cKeptMilestones += 3
+                                if (hasUpgrade("t", 33)) cKeptMilestones += 3
+                                if (hasUpgrade("t", 43)) cKeptMilestones += 3
+                                if (hasUpgrade("t", 53)) cKeptMilestones += 3
+                        }
+                        if (!false) {
+                                sortStrings(data4.milestones)
+                                data4.milestones = data4.milestones.slice(0, cKeptMilestones)
+                        }
+
+                        let cKeptUpgrades = 0
+                        if (hasUpgrade("t", 42)) cKeptUpgrades += player.t.upgrades.length
+                        if (hasMilestone("or", 3)) cKeptUpgrades += player.or.times
+                        if (!false) {
+                                sortStrings(data4.upgrades)
+                                data4.upgrades = data4.upgrades.slice(0, cKeptUpgrades)
+                        }
+
+                        let cKeptTimes = 0
+                        if (hasUpgrade("t", 44)) cKeptTimes += player.t.times
+                        if (!false) data4.times = Math.min(data4.times, cKeptTimes)
+
+                        // 2a: Stem
+                        let cKeptChallenges = 0
+                        if (hasUpgrade("t", 45)) cKeptChallenges += player.t.times
+                        if (!false) {
+                                let chData = data4.challenges
+                                if (cKeptChallenges < chData[11]) {
+                                        chData[11] = cKeptChallenges
+                                        chData[12] = 0
+                                } else {
+                                        chData[12] = Math.min(chData[12], cKeptChallenges-chData[11])
+                                }
+                        }
+                        // 2b: minigames
+                        if (!false) {
+                                // Mu:
+                                data4.mu.points = decimalZero
+                                data4.mu.best = decimalZero
+                                data4.buyables[111] = decimalZero
+                                data4.buyables[112] = decimalZero
+                                data4.total11 = decimalZero
+
+                                // Lambda:
+                                data4.lambda.points = decimalZero
+                                data4.lambda.best = decimalZero
+                                data4.lambda.sacrificed = decimalZero
+                                data4.total12 = decimalZero
+
+                                // Kappa: 
+                                data4.kappa.points = decimalZero
+                                data4.kappa.best = decimalZero
+                                data4.kappa.currentBarValue = decimalOne
+                                data4.kappa.currentTime = 0
+                                data4.total13 = decimalZero
+
+                                // Iota:
+                                data4.iota.points = decimalZero
+                                data4.iota.best = decimalZero
+                                data4.buyables[411] = decimalZero
+                                data4.buyables[412] = decimalZero
+                                data4.buyables[413] = decimalZero
+                                data4.total14 = decimalZero
+                        }
+                }
+                data4.buyables[11] = decimalZero
+                data4.buyables[12] = decimalZero
+                data4.buyables[13] = decimalZero
+                data4.buyables[21] = decimalZero
+                data4.buyables[22] = decimalZero
+                data4.stem_cells.points = decimalZero
+                data4.stem_cells.best = decimalZero
+                data4.points = decimalZero
+                data4.best = decimalZero
+                data4.total = decimalZero
+                data4.timeInMinigame = 0
+                data4.currentMinigame = undefined
+
+                // 5 DNA content
+                if (!false) {
+                        let dKeptMilestones = 0
+                        if (hasMilestone("cells", 1)) dKeptMilestones += player.cells.times
+                        if (!false) {
+                                sortStrings(data5.milestones)
+                                data5.milestones = data5.milestones.slice(0, dKeptMilestones)
+                        }
+
+                        let dKeptUpgrades = 0
+                        if (hasMilestone("cells", 5)) dKeptUpgrades += player.cells.times
+                        if (!false) {
+                                sortStrings(data5.upgrades)
+                                data5.upgrades = data5.upgrades.slice(0, dKeptUpgrades)
+                        }
+
+                        let dKeptTimes = 0
+                        if (hasMilestone("cells", 3)) dKeptTimes += player.cells.times
+                        if (!false) data5.times = Math.min(data5.times, dKeptTimes)
                 }
 
                 data5.points = decimalZero
@@ -38184,7 +38709,7 @@ addLayer("tokens", {
         baseAmount(){return player.points.floor()},
         type: "custom",
         getResetGain(){
-                if (hasMilestone("or", 2) && tmp.tokens.getNextAt.slog().gt(4)) {
+                if (hasMilestone("or", 2) && player.points.slog().gt(4)) {
                         let tetBase = 9.5
                         if (hasMilestone("or", 5)) tetBase = 9
                         if (hasUpgrade("or", 231)) tetBase = 8.5
