@@ -87,10 +87,40 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return true
                 }
-        } else if (n <= 1111) {
+        } else if (n <= 161) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.tokens.unlocked
+                }
+        } else if (n <= 189) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.p.unlocked
+                }
+        } else if (n <= 301) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.l.unlocked
+                }
+        } else if (n <= 385) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.d.unlocked
+                }
+        } else if (n <= 532) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.cells.unlocked
+                }
+        } else if (n <= 595) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.t.unlocked
+                }
+        } else if (n <= 1111) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.or.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
