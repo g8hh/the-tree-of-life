@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.201",
+	num: "1.213",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,91 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return hasUpg("t", 85)
-	return player.or.contaminants.points.gte("1e152996")
+	if (player.extremeMode) return player.tokens.tokens2.total.gt(0)
+	return player.or.air.points.gte("1e2050")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.201)<br><br>
+		Reaching the endgame screen (updated at least as of v1.213)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.213</h3><br>
+		- Added a Heart upgrade.<br>
+		- Added three Lung upgrades.<br>
+		- Added a custom save.<br>
+		- Balanced until 1e2050 Air.<br>
+		- Added four rows of achievements (up to 100)!<br>
+	<br><h3 style='color: #CC0000'>v1.212</h3><br>
+		- Added two Kidney upgrades.<br>
+		- Added a Lung upgrade.<br>
+		- Added a Organ milestone.<br>
+		- Added three new layers.<br>
+		- Fixed the order of a custom save.<br>
+		- Balanced until 1e1150 Air.<br>
+	<br><h3 style='color: #CC0000'>v1.211</h3><br>
+		- Balanced until 1 token II.<br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.210.1</h3><br>
+		- Added three rows of achievements.<br>
+		- Made the 91st row of achievements slihgtly easier.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.210</h3><br>
+		- Added a Lung challenge.<br>
+		- Added a Lung upgrades.<br>
+		- Added two Kidney upgrades.<br>
+		- Balanced until 1e960 Air.<br>
+		- Next patch will remove Amino Acid and have three (3!!) new layers.<br>
+	<br><h3 style='color: #CC0000'>v1.209</h3><br>
+		- Added a Lung challenge.<br>
+		- Added two Lung upgrades.<br>
+		- Added a Heart upgrade.<br>
+		- Balanced until 1e366 Air.<br>
+	<br><h3 style='color: #CC0000'>v1.208</h3><br>
+		- Added two Lung challenges.<br>
+		- Added three Lung upgrades.<br>
+		- Balanced until 1e117 Air.<br>
+	<br><h3 style='color: #CC0000'>v1.207</h3><br>
+		- Added Air and Lungs.<br>
+		- Added two Lung challenges.<br>
+		- Added two Organ milestones.<br>
+		- Added a custom save.<br>
+		- Balanced until 1e13 Air.<br>
+	<br><h3 style='color: #CC0000'>v1.206</h3><br>
+		- Balanced until 63 Secondary completions.<br>
+		- Various extreme mode changes.<br>
+		- Added a custom save.<br>
+		- Added a DNA Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.205</h3><br>
+		- Balanced until 59 Secondary completions.<br>
+		- Various extreme mode changes.<br>
+		- Added two DNA Science upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.204</h3><br>
+		- Balanced until 51 Secondary completions.<br>
+		- Various extreme mode changes.<br>
+		- Added a DNA Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.203</h3><br>
+		- Balanced until 45 Secondary completions.<br>
+		- Various extreme mode changes.<br>
+		- Various display fixes.<br>
+		- Added Upgrades II for DNA Science, and changed XXVI.<br>
+	<br><h3 style='color: #CC0000'>v1.202.2</h3><br>
+		- Various balance changes.<br>
+		- Fixed a bug with Omnipotent needing Organ milestone 3, not 2 to bulk.<br>
+	<br><h3 style='color: #CC0000'>v1.202.1</h3><br>
+		- Added a hotkey for forcing the endgame screen (shift+control+e).<br>
+		- Various code cleanup.<br>
+		- New file! js/utils/gemSupport.js!<br>
+	<br><h3 style='color: #CC0000'>v1.202</h3><br>
+		- Balanced until 1e538,000 Contaminants.<br>
+		- Added two Kidney upgrades.<br>
+		- Added a Kidney buyable.<br>
+		- Added a Organ milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.201</h3><br>
 		- Balanced until 1e152,996 Contaminants.<br>
 		- Added a way to slow the game down by 100x for five real seconds.<br>
