@@ -19670,6 +19670,7 @@ addLayer("cells", {
                 if (hasMilestone("or", 19) && player.or.filterLeftKidney) {
                                                 ret = ret.times(99/98)
                 }
+                if (hasUpgrade("or", 341))      ret = ret.times(49/48)
 
                 return ret
         },
@@ -26008,6 +26009,7 @@ addLayer("or", {
                                 if (hasMilestone("or", 21)) {
                                         let lossRate = .05
                                         if (hasMilestone("or", 24)) lossRate += .05
+                                        if (hasMilestone("an", 3)) lossRate *= 10
                                         data.extras[id] = getLogisticAmount(data.extras[id], amtGain, lossRate, diff)
                                 } else {
                                         data.extras[id] = data.extras[id].plus(amtGain.times(diff))
@@ -26024,6 +26026,8 @@ addLayer("or", {
                                 let abKeys = []
                                 if (hasUpgrade("or", 321) || hasMilestone("an", 1)) abKeys.push(401)
                                 if (hasMilestone("an", 2)) abKeys.push(402)
+                                if (hasMilestone("an", 3)) abKeys.push(403)
+                                if (hasMilestone("an", 4)) abKeys.push(411)
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -26568,8 +26572,9 @@ addLayer("or", {
                         description(){
                                 return "Add .0053 to tRNA's base and gain 100% of DNA and Amino Acid per second but disable C28 and C88"
                         },
-                        cost:() => new Decimal(12240),
+                        cost:() => new Decimal(12210),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasMilestone("or", 14)
                         }, // hasUpgrade("or", 12)
                 },
@@ -26582,6 +26587,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1098e4),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 135)
                         }, // hasUpgrade("or", 13)
                 },
@@ -26594,6 +26600,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(13.44e6),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 13)
                         }, // hasUpgrade("or", 14)
                 },
@@ -26606,6 +26613,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1.07e14),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 145)
                         }, // hasUpgrade("or", 15)
                 },
@@ -26618,6 +26626,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(2.2e44),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 154)
                         }, // hasUpgrade("or", 21)
                 },
@@ -26630,6 +26639,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(4e46),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 21)
                         }, // hasUpgrade("or", 22)
                 },
@@ -26647,6 +26657,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(2.12e52),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 22)
                         }, // hasUpgrade("or", 23)
                 },
@@ -26659,6 +26670,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1.43e60),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 23)
                         }, // hasUpgrade("or", 24)
                 },
@@ -26671,6 +26683,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1.87e70),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 24)
                         }, // hasUpgrade("or", 25)
                 },
@@ -26683,6 +26696,7 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1.3e87),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 25)
                         }, // hasUpgrade("or", 31)
                 },
@@ -26695,10 +26709,11 @@ addLayer("or", {
                         },
                         cost:() => new Decimal(1.98e98),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 31)
                         }, // hasUpgrade("or", 32)
                 },
-
+                
                 101: {
                         title(){
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart I"
@@ -26740,6 +26755,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 101)
                         }, // hasUpgrade("or", 102)
                 },
@@ -26760,6 +26776,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 102)
                         }, // hasUpgrade("or", 103)
                 },
@@ -26777,6 +26794,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 103)
                         }, // hasUpgrade("or", 104)
                 },
@@ -26794,6 +26812,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 104)
                         }, // hasUpgrade("or", 105)
                 },
@@ -26811,6 +26830,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 105)
                         }, // hasUpgrade("or", 111)
                 },
@@ -26828,6 +26848,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 111)
                         }, // hasUpgrade("or", 112)
                 },
@@ -26845,6 +26866,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 112)
                         }, // hasUpgrade("or", 113)
                 },
@@ -26862,6 +26884,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 113)
                         }, // hasUpgrade("or", 114)
                 },
@@ -26879,6 +26902,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 114)
                         }, // hasUpgrade("or", 115)
                 },
@@ -26896,6 +26920,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 115)
                         }, // hasUpgrade("or", 121)
                 },
@@ -26913,6 +26938,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 121)
                         }, // hasUpgrade("or", 122)
                 },
@@ -26930,6 +26956,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 122)
                         }, // hasUpgrade("or", 123)
                 },
@@ -26955,6 +26982,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 123)
                         }, // hasUpgrade("or", 124)
                 },
@@ -26972,6 +27000,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 124)
                         }, // hasUpgrade("or", 125)
                 },
@@ -26989,6 +27018,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 12)
                         }, // hasUpgrade("or", 131)
                 },
@@ -27006,6 +27036,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 131)
                         }, // hasUpgrade("or", 132)
                 },
@@ -27023,6 +27054,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 132)
                         }, // hasUpgrade("or", 133)
                 },
@@ -27043,6 +27075,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 133)
                         }, // hasUpgrade("or", 134)
                 },
@@ -27066,6 +27099,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 134)
                         }, // hasUpgrade("or", 135)
                 },
@@ -27083,6 +27117,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 211)
                         }, // hasUpgrade("or", 141)
                 },
@@ -27100,6 +27135,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 141)
                         }, // hasUpgrade("or", 142)
                 },
@@ -27117,6 +27153,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 142)
                         }, // hasUpgrade("or", 143)
                 },
@@ -27134,6 +27171,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 143)
                         }, // hasUpgrade("or", 144)
                 },
@@ -27151,6 +27189,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 144)
                         }, // hasUpgrade("or", 145)
                 },
@@ -27168,6 +27207,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 145)
                         }, // hasUpgrade("or", 151)
                 },
@@ -27185,6 +27225,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 151)
                         }, // hasUpgrade("or", 152)
                 },
@@ -27202,6 +27243,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 152)
                         }, // hasUpgrade("or", 153)
                 },
@@ -27219,6 +27261,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makeBlue("DB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 153)
                         }, // hasUpgrade("or", 154)
                 },
@@ -27236,6 +27279,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => makePurple("OB"),
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 154)
                         }, // hasUpgrade("or", 155)
                 },
@@ -27254,6 +27298,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return true
                         }, // hasUpgrade("or", 201)
                 },
@@ -27271,6 +27316,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 201)
                         }, // hasUpgrade("or", 202)
                 },
@@ -27288,6 +27334,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 202)
                         }, // hasUpgrade("or", 203)
                 },
@@ -27305,6 +27352,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 203)
                         }, // hasUpgrade("or", 204)
                 },
@@ -27322,6 +27370,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 204)
                         }, // hasUpgrade("or", 205)
                 },
@@ -27339,6 +27388,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 205)
                         }, // hasUpgrade("or", 211)
                 },
@@ -27356,6 +27406,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 144)
                         }, // hasUpgrade("or", 212)
                 },
@@ -27373,6 +27424,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 15)
                         }, // hasUpgrade("or", 213)
                 },
@@ -27390,6 +27442,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 213)
                         }, // hasUpgrade("or", 214)
                 },
@@ -27407,6 +27460,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 214)
                         }, // hasUpgrade("or", 215)
                 },
@@ -27424,6 +27478,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 305)
                         }, // hasUpgrade("or", 221)
                 },
@@ -27441,6 +27496,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 221)
                         }, // hasUpgrade("or", 222)
                 },
@@ -27469,6 +27525,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 222)
                         }, // hasUpgrade("or", 223)
                 },
@@ -27491,6 +27548,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 223)
                         }, // hasUpgrade("or", 224)
                 },
@@ -27512,6 +27570,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 224)
                         }, // hasUpgrade("or", 225)
                 },
@@ -27529,6 +27588,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 331)
                         }, // hasUpgrade("or", 231)
                 },
@@ -27546,6 +27606,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 231)
                         }, // hasUpgrade("or", 232)
                 },
@@ -27563,6 +27624,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 232)
                         }, // hasUpgrade("or", 233)
                 },
@@ -27580,6 +27642,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 233)
                         }, // hasUpgrade("or", 234)
                 },
@@ -27597,6 +27660,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Contaminants",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 234)
                         }, // hasUpgrade("or", 235)
                 },
@@ -27619,6 +27683,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return player.or.lungChallengesUnlocked >= 3
                         }, // hasUpgrade("or", 301)
                 },
@@ -27636,6 +27701,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 301)
                         }, // hasUpgrade("or", 302)
                 },
@@ -27653,6 +27719,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 302)
                         }, // hasUpgrade("or", 303)
                 },
@@ -27670,6 +27737,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 303)
                         }, // hasUpgrade("or", 304)
                 },
@@ -27687,6 +27755,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 304)
                         }, // hasUpgrade("or", 305)
                 },
@@ -27704,6 +27773,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasMilestone("or", 19)
                         }, // hasUpgrade("or", 311)
                 },
@@ -27721,6 +27791,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 311)
                         }, // hasUpgrade("or", 312)
                 },
@@ -27738,6 +27809,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 312)
                         }, // hasUpgrade("or", 313)
                 },
@@ -27755,6 +27827,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 313)
                         }, // hasUpgrade("or", 314)
                 },
@@ -27772,6 +27845,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 314)
                         }, // hasUpgrade("or", 315)
                 },
@@ -27789,6 +27863,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 22)
                         }, // hasUpgrade("or", 321)
                 },
@@ -27806,6 +27881,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 321)
                         }, // hasUpgrade("or", 322)
                 },
@@ -27826,6 +27902,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 322)
                         }, // hasUpgrade("or", 323)
                 },
@@ -27843,6 +27920,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 323)
                         }, // hasUpgrade("or", 324)
                 },
@@ -27860,6 +27938,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 324)
                         }, // hasUpgrade("or", 325)
                 },
@@ -27877,6 +27956,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 325)
                         }, // hasUpgrade("or", 331)
                 },
@@ -27894,6 +27974,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 331)
                         }, // hasUpgrade("or", 332)
                 },
@@ -27911,6 +27992,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 332)
                         }, // hasUpgrade("or", 333)
                 },
@@ -27928,6 +28010,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 333)
                         }, // hasUpgrade("or", 334)
                 },
@@ -27945,8 +28028,26 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
+                                if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 334)
                         }, // hasUpgrade("or", 335)
+                },
+                341: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXI"
+                        },
+                        description(){
+                                return "Raise Cell gain ^(49/48)"
+                        },
+                        cost(){
+                                return new Decimal("100")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasMilestone("an", 4)
+                        }, // hasUpgrade("or", 341)
                 },
         },
         clickables: {
@@ -28647,6 +28748,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[401].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [402, 403, 411, 421]
                                 for (i in ids) {
@@ -28751,6 +28853,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[402].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [403, 412, 422]
                                 for (i in ids) {
@@ -28856,6 +28959,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[403].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [413, 423]
                                 for (i in ids) {
@@ -28948,6 +29052,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[411].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [412, 413, 421]
                                 for (i in ids) {
@@ -29053,6 +29158,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[412].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [413, 422]
                                 for (i in ids) {
@@ -29157,6 +29263,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[413].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [423]
                                 for (i in ids) {
@@ -29249,6 +29356,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[421].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [422, 423]
                                 for (i in ids) {
@@ -29353,6 +29461,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[422].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [423]
                                 for (i in ids) {
@@ -29445,6 +29554,7 @@ addLayer("or", {
                         },
                         amountGain(){
                                 let ret = player.or.buyables[423].div(10)
+                                if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = []
                                 for (i in ids) {
@@ -29690,7 +29800,7 @@ addLayer("or", {
                                 return "12,200 Organs"
                         },
                         done(){
-                                return player.or.points.gte(12200)
+                                return player.or.points.gte(12150)
                         },
                         unlocked(){
                                 return true
@@ -30537,6 +30647,37 @@ addLayer("an", {
                         data.times ++
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
+
+                if (hasMilestone("an", 4) && player.an.autobuyor) {
+                        let orKeys = [
+                                '11', '12', '13', '14', '15', 
+                                '21', '22', '23', '24', '25', 
+                                '31', '32', 
+
+                                '101', '102', '103', '104', '105', 
+                                '111', '112', '113', '114', '115', 
+                                '121', '122', '123', '124', '125', 
+                                '131', '132', '133', '134', '135', 
+                                '141', '142', '143', '144', '145', 
+                                '151', '152', '153', '154', '155', 
+                                
+                                '201', '202', '203', '204', '205', 
+                                '211', '212', '213', '214', '215', 
+                                '221', '222', '223', '224', '225', 
+                                '231', '232', '233', '234', '235', 
+
+                                '301', '302', '303', '304', '305', 
+                                '311', '312', '313', '314', '315', 
+                                '321', '322', '323', '324', '325', 
+                                '331', '332', '333', '334', '335']
+
+                        let boughtYet = false
+                        for (i in dKeys) {
+                                if (boughtYet) break
+                                id = dKeys[i]
+                                boughtYet = buyUpg("an", id) 
+                        }
+                }
         },
         row: 0, 
         prestigeButtonText(){
@@ -30594,6 +30735,37 @@ addLayer("an", {
                                 return "Reward: Per reset keep 3 Tissue upgrades, 1 Organ upgrade, and 1 Organ reset and autobuy <u>in</u>TEStine."
                         },
                 }, // hasMilestone("an", 2)
+                3: {
+                        requirementDescription(){
+                                return "3 Animal resets"
+                        },
+                        done(){
+                                return player.an.times >= 3
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy <u>in</u>tesTINE and energy buyables extra base gain is [amount] but you decay 10x more extra amounts."
+                        },
+                }, // hasMilestone("an", 3)
+                4: {
+                        requirementDescription(){
+                                return "4 Animal resets"
+                        },
+                        done(){
+                                return player.an.times >= 4
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        toggles(){
+                                return [["an", "autobuyor"]]
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy IN<u>tes</u>tine, unlock a Lung upgrade, and autobuy Organ upgrades (only ones unlocked before Animals)."
+                        }, // unlock all upgrades
+                }, // hasMilestone("an", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -31943,9 +32115,14 @@ addLayer("ach", {
                 {
                         key: "shift+A", 
                         description(){
+                                if (player.an.unlocked) return "Shift+A: Go to Animals"
                                 return player.a.unlocked ? "Shift+A: Go to Amino Acid" : "Shift+A: Go to A"
                         },
                         onPress(){
+                                if (player.an.unlocked) {
+                                        player.tab = "an"
+                                        return 
+                                }
                                 if (!player.a.unlocked) {
                                         if (!tmp.mini.layerShown) return
                                         if (!tmp.mini.tabFormat.A.unlocked) return 
@@ -32092,8 +32269,12 @@ addLayer("ach", {
                                 return player.n.unlocked
                         },
                 },
-                {key: "a", description: "A: Reset for Amino Acid", onPress(){
-                                if (canReset("a")) doReset("a")
+                {key: "a", description(){
+                                return player.an.unlocked ? "A: Reset for Animals" : "A: Reset for Amino Acid"
+                        }, onPress(){
+                                if (player.an.unlocked) {
+                                        if (canReset("an")) doReset("an")
+                                } else if (canReset("a")) doReset("a")
                         },
                         unlocked(){
                                 return tmp.a.layerShown
