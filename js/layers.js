@@ -19757,7 +19757,9 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
 
-                if (hasUpgrade("or", 11) && !inChallenge("cells", 12)) {
+                if (hasMilestone("an", 1) && !inChallenge("cells", 12)) {
+                        if (player.cells.challenges[12] % 19 > 0) player.cells.challenges[12] ++
+                } else if (hasUpgrade("or", 11) && !inChallenge("cells", 12)) {
                         if (player.cells.challenges[12] % 5 > 0) player.cells.challenges[12] ++
                 }
 
@@ -22321,7 +22323,7 @@ addLayer("cells", {
                                 return new Decimal(amt).pow(2).plus(1)
                         },
                         unlocked(){
-                                return player.cells.challenges[11] >= 10
+                                return player.cells.challenges[11] >= 10 || player.or.unlocked
                         },
                         onEnter(){
                                 layers.cells.challenges.onEnter()
@@ -23429,7 +23431,7 @@ addLayer("cells", {
         onPrestige(){
                 let add = 1
                 if (hasMilestone("t", 1)) add *= 3
-                if (hasUpgrade("or", 11)) add *= 3
+                if (hasMilestone("or", 1)) add *= 3
                 if (player.easyMode) add *= 2
                 player.cells.times += add
                 player.cells.time = 0
@@ -23661,6 +23663,7 @@ addLayer("t", {
                         let lvls = Math.min(100, player.or.upgrades.length)
                         ret = ret.sub(lvls*2)
                 }
+                if (hasUpgrade("an", 11)) ret = ret.sub(100)
 
                 return ret.pow(-1)
         },
@@ -23671,7 +23674,7 @@ addLayer("t", {
 
                 let reqInit = gain.div(tmp.t.getGainMult).max(1)
                 if (hasUpgrade("t", 71)) return reqInit.root(tmp.t.getGainExp).max(player.extremeMode ? "1e813" : "1e1385")
-                return reqInit.plus(9).root(tmp.t.getGainExp).div(player.extremeMode ? "1e1187" : "1e615")
+                return reqInit.plus(9).root(tmp.t.getGainExp).div(player.extremeMode ? "1e1187" : "1e615").max(player.extremeMode ? "1e813" : "1e1385")
         },
         canReset(){
                 return tmp.t.getResetGain.gt(0) && !hasUpgrade("t", 132) && player.cells.challenges[12] >= 25
@@ -23724,6 +23727,7 @@ addLayer("t", {
                 }
                                                 ret = ret.plus(tmp.tokens.buyables[111].effect)
                 if (hasUpgrade("cells", 53))    ret = ret.plus(player.cells.upgrades.length * .008)
+                if (hasUpgrade("an", 11))       ret = ret.plus(5)
 
                 return ret
         },
@@ -23774,7 +23778,7 @@ addLayer("t", {
 
                 if (hasUpgrade("t", 123) || forceAbContent)     layers.cells.buyables[13].buy()
                 if (hasUpgrade("t", 145) || forceAbContent)     layers.cells.buyables[21].buy()
-                if (hasUpgrade("or", 104))                      layers.cells.buyables[22].buy()
+                if(hasUpgrade("or", 104)||hasMilestone("or", 1))layers.cells.buyables[22].buy()
         },
         row: 2, 
         prestigeButtonText(){
@@ -25460,7 +25464,7 @@ addLayer("t", {
         onPrestige(g){
                 let timesAdd = 1
                 if (player.easyMode) timesAdd *= 2
-                if (hasUpgrade("or", 11)) timesAdd *= 3
+                if (hasMilestone("or", 1)) timesAdd *= 3
                 player.t.times += timesAdd
                 player.t.time = 0
                 player.t.bestOnReset = player.t.bestOnReset.max(g)
@@ -26018,7 +26022,8 @@ addLayer("or", {
                                 data.intestineABTime += -1
                                 if (data.intestineABTime > 10) data.intestineABTime = 10
                                 let abKeys = []
-                                if (hasUpgrade("or", 321)) abKeys.push(401)
+                                if (hasUpgrade("or", 321) || hasMilestone("an", 1)) abKeys.push(401)
+                                if (hasMilestone("an", 2)) abKeys.push(402)
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -26087,12 +26092,16 @@ addLayer("or", {
                         if (player.or.activeChallenge) data.challengeAir = data.challengeAir.plus(gain)
 
                         let otherIds = []
-                        if (hasUpgrade("or", 302)) otherIds.push(11)
-                        if (hasUpgrade("or", 303)) otherIds.push(12)
-                        if (hasUpgrade("or", 304)) otherIds.push(21)
-                        if (hasUpgrade("or", 305)) otherIds.push(22)
-                        if (hasUpgrade("or", 222)) otherIds.push(31)
-                        if (hasUpgrade("or", 154)) otherIds.push(32)
+                        if (hasMilestone("an", 1)) {
+                                otherIds = [11, 12, 21, 22, 31, 32]
+                        } else {
+                                if (hasUpgrade("or", 302)) otherIds.push(11)
+                                if (hasUpgrade("or", 303)) otherIds.push(12)
+                                if (hasUpgrade("or", 304)) otherIds.push(21)
+                                if (hasUpgrade("or", 305)) otherIds.push(22)
+                                if (hasUpgrade("or", 222)) otherIds.push(31)
+                                if (hasUpgrade("or", 154)) otherIds.push(32)
+                        }
 
                         for (i in otherIds) {
                                 let id = otherIds[i]
@@ -26107,8 +26116,7 @@ addLayer("or", {
                         }
                 },
                 reqs(){
-                        return ["10", "1e5", "1e13", "1e43", 
-                                "1e117", "1e369", "1e54321"]
+                        return ["10", "1e5", "1e13", "1e43", "1e117", "1e369"]
                 },
                 getResetGain(){ // air gain airgain again airgain a gain air gain a gain
                         let ret = decimalOne
@@ -26166,15 +26174,19 @@ addLayer("or", {
                                 data.kidneyABTime += -1
                                 if (data.kidneyABTime > 10) data.kidneyABTime = 10
                                 let abKeys = []
-                                if (hasUpgrade("or", 204)) abKeys.push(201)
-                                if (hasUpgrade("or", 205)) abKeys.push(202)
-                                if (hasUpgrade("or", 211)) abKeys.push(203)
-                                if (hasUpgrade("or", 142)) abKeys.push(211)
-                                if (hasUpgrade("or", 213)) abKeys.push(212)
-                                if (hasUpgrade("or", 214)) abKeys.push(213)
-                                if (hasUpgrade("or", 215)) abKeys.push(221)
-                                if (hasUpgrade("or", 301)) abKeys.push(222)
-                                if (hasUpgrade("or", 302)) abKeys.push(223)
+                                if (hasMilestone("an", 1)) {
+                                        abKeys = [201, 202, 203, 211, 212, 213, 221, 222, 223]
+                                } else {
+                                        if (hasUpgrade("or", 204)) abKeys.push(201)
+                                        if (hasUpgrade("or", 205)) abKeys.push(202)
+                                        if (hasUpgrade("or", 211)) abKeys.push(203)
+                                        if (hasUpgrade("or", 142)) abKeys.push(211)
+                                        if (hasUpgrade("or", 213)) abKeys.push(212)
+                                        if (hasUpgrade("or", 214)) abKeys.push(213)
+                                        if (hasUpgrade("or", 215)) abKeys.push(221)
+                                        if (hasUpgrade("or", 301)) abKeys.push(222)
+                                        if (hasUpgrade("or", 302)) abKeys.push(223)
+                                }
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -26188,7 +26200,10 @@ addLayer("or", {
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
-                        if (hasUpgrade("or", 201))      ret = ret.times(Decimal.pow(2, tmp.or.upgrades.kidneyUpgradesLength))
+                        if (hasUpgrade("or", 201)) {
+                                let base = hasUpgrade("or", 321) || player.an.unlocked ? 4 : 2
+                                                        ret = ret.times(Decimal.pow(base, tmp.or.upgrades.kidneyUpgradesLength))
+                        }
                                                         ret = ret.times(tmp.or.buyables[201].effect)
                                                         ret = ret.times(tmp.or.buyables[202].effect)
                                                         ret = ret.times(tmp.or.buyables[203].effect)
@@ -26676,7 +26691,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XII"
                         },
                         description(){
-                                return "Unlock Animals [not yet, req 1e100 Organs]"
+                                return "Unlock Animals"
                         },
                         cost:() => new Decimal(1.98e98),
                         unlocked(){
@@ -26736,7 +26751,7 @@ addLayer("or", {
                                 return "Per Token II after 73 double " + makePurple("OB") + " gain and Token II effect amounts are based on best levels"
                         },
                         ob_effect(){
-                                return Decimal.pow(2, player.tokens.tokens2.total.sub(hasUpgrade("or", 212) ? 0 : 73))
+                                return Decimal.pow(2, player.tokens.tokens2.total.sub(hasUpgrade("or", 212) ? 0 : 73)).max(1)
                         },
                         cost(){
                                 return new Decimal(350)
@@ -27765,7 +27780,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XI"
                         },
                         description(){
-                                return "Autobuy <u>IN</u>testine"  
+                                return "Autobuy <u>IN</u>testine and Kidney I permanently becomes quadruple per upgrade"  
                         },
                         cost(){
                                 return new Decimal("1e5821")
@@ -27983,6 +27998,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 213))      ret = ret.times(5)
                         if (hasUpgrade("or", 215))      ret = ret.times(4)
                         if (hasUpgrade("or", 224))      ret = ret.times(5)
+                        if (hasMilestone("an", 1))      ret = new Decimal(1e3)
                         return ret
                 }, // tmp.or.buyables.getMaxBulk
                 201: {
@@ -28741,6 +28757,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[402].effect)
+                                ret = ret.times(tmp.an.effect)
 
                                 return ret
                         },
@@ -28937,6 +28954,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[411].effect)
+                                ret = ret.times(tmp.an.effect)
 
                                 return ret
                         },
@@ -30128,6 +30146,7 @@ addLayer("or", {
         onPrestige(g){
                 let timesAdd = 1
                 if (player.easyMode) timesAdd *= 2
+                if (hasMilestone("an", 1)) timesAdd *= 3
                 player.or.times += timesAdd
                 player.or.time = 0
         },
@@ -30161,6 +30180,7 @@ addLayer("or", {
 
                         let tKeptUpgrades = 0
                         if (hasMilestone("or", 4)) tKeptUpgrades += player.or.times * 2
+                        if (hasMilestone("an", 2)) tKeptUpgrades += player.an.times * 3
                         if (!false) {
                                 sortStrings(data1.upgrades)
                                 data1.upgrades = data1.upgrades.slice(0, tKeptUpgrades)
@@ -30500,7 +30520,7 @@ addLayer("an", {
                 return ret.max(1)
         },
         effectDescription(){
-                let start = " multiplying all prior currency gain by " 
+                let start = " multiplying most prior currency gain by " 
                 return start + format(tmp.an.effect) + "."
         },
         update(diff){
@@ -30537,12 +30557,9 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals I"
                         },
                         description(){
-                                return "idk yet"
+                                return "Subtract 100 from the Tissue gain exponent and add 5 to Tissue effect exponent"
                         },
                         cost:() => decimalOne,
-                        onPurchase(){
-                                player.tokens.upgrades = []
-                        },
                         unlocked(){
                                 return true
                         }, // hasUpgrade("an", 11)
@@ -30560,9 +30577,23 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep all prior automation and the first four Organ milestones."
+                                return "Reward: Keep all prior automation, bulk 19x Secondary, and gain 3x Organ resets."
                         },
                 }, // hasMilestone("an", 1)
+                2: {
+                        requirementDescription(){
+                                return "2 Animal resets"
+                        },
+                        done(){
+                                return player.an.times >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per reset keep 3 Tissue upgrades, 1 Organ upgrade, and 1 Organ reset and autobuy <u>in</u>TEStine."
+                        },
+                }, // hasMilestone("an", 2)
         },
         tabFormat: {
                 "Upgrades": {
@@ -30604,8 +30635,8 @@ addLayer("an", {
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
                                         let c = "Note that Tertiary completions are never reset."
-                                        let d1 = "Animal effect affects DNA, Cell, Stem Cell, Tissue, Mu, Lambda, Kappa, Iota, "
-                                        let d2 = "Organs, Energy, Air, Contaminants, " + makeBlue("DB")
+                                        let d1 = "Animal effect affects Organs, DNA, Cell, Stem Cell, Tissue, Mu, Lambda, Kappa, Iota, "
+                                        let d2 = "Energy, Air, <u>in</u>TEStine amount, IN<u>tes</u>tine amount, Contaminants, " + makeBlue("DB")
                                         d2 += " and, " + makePurple("OB") + " gain."
                                         let d = d1 + br + d2
 
@@ -30660,7 +30691,7 @@ addLayer("an", {
                         }
 
                         let oKeptUpgrades = 0
-                        if (false) oKeptUpgrades += player.an.times 
+                        if (hasMilestone("an", 2)) oKeptUpgrades += player.an.times 
                         if (!false) {
                                 //sortStrings(data1.upgrades)
                                 //commented out on purpose, if it breaks this you can add it back
@@ -30668,7 +30699,7 @@ addLayer("an", {
                         }
 
                         let oKeptTimes = 0
-                        if (false) oKeptTimes += player.an.times * 2
+                        if (hasMilestone("an", 2)) oKeptTimes += player.an.times
                         if (!false) data1.times = Math.min(data1.times, oKeptTimes)
 
                         // 1b
@@ -30739,6 +30770,13 @@ addLayer("an", {
                 data1.energy.points = decimalZero
                 data1.energy.total = decimalZero
                 data1.energy.best = decimalZero
+                data1.challengeAir = decimalZero
+                data1.challenges[11] = 0
+                data1.challenges[12] = 0
+                data1.challenges[21] = 0
+                data1.challenges[22] = 0
+                data1.challenges[31] = 0
+                data1.challenges[32] = 0
 
                 // 2. Tissue content
                 if (!false) {
@@ -30751,6 +30789,7 @@ addLayer("an", {
 
                         let tKeptUpgrades = 0
                         if (hasMilestone("or", 4)) tKeptUpgrades += player.or.times * 2
+                        if (hasMilestone("an", 2)) tKeptUpgrades += player.an.times * 3
                         if (!false) {
                                 sortStrings(data2.upgrades)
                                 data2.upgrades = data2.upgrades.slice(0, tKeptUpgrades)
