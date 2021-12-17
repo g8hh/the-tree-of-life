@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.219",
+	num: "1.220",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,21 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.tokens.tokens2.total.gt(0)
-	return player.an.times >= 5
+	return player.an.times >= 10
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.219)<br><br>
+		Reaching the endgame screen (updated at least as of v1.220)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.220</h3><br>
+		- Added three Animal milestones.<br>
+		- Balanced until 5 Animal resets.<br>
 	<br><h3 style='color: #CC0000'>v1.219</h3><br>
 		- Added a Lung upgrade.<br>
 		- Added three Animal milestones.<br>

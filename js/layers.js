@@ -26029,6 +26029,9 @@ addLayer("or", {
                                 if (hasMilestone("an", 3)) abKeys.push(403)
                                 if (hasMilestone("an", 4)) abKeys.push(411)
                                 if (hasMilestone("an", 5)) abKeys.push(412)
+                                if (hasMilestone("an", 6)) abKeys.push(413)
+                                if (hasMilestone("an", 7)) abKeys.push(421)
+                                if (hasMilestone("an", 8)) abKeys.push(422)
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -26224,6 +26227,7 @@ addLayer("or", {
                         if (hasMilestone("or", 16))     ret = ret.times(player.or.deoxygenated_blood.points.max(1))
                         if (hasUpgrade("or", 225))      ret = ret.times(player.or.energy.points.max(1).div(1e200).pow(player.or.upgrades.length))
                                                         ret = ret.times(tmp.an.effect)
+                        if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -29276,7 +29280,11 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
-                                let ret = player.or.energy.points.max(10).log10().max(10).log10()
+                                let logBase = new Decimal(10)
+                                if (hasMilestone("an", 6)) logBase = new Decimal(9)
+                                if (hasMilestone("an", 7)) logBase = new Decimal(8)
+                                if (hasMilestone("an", 8)) logBase = new Decimal(7)
+                                let ret = player.or.energy.points.max(logBase).log(logBase).max(logBase).log10(logBase)
                                 
                                 return ret
                         },
@@ -29297,6 +29305,12 @@ addLayer("or", {
                                 }
 
                                 let eformula = "log10(log10(Energy)^x<br>" + format(tmp.or.buyables[id].base) + "^x"
+                                let logBase = new Decimal(10)
+                                if (hasMilestone("an", 6)) logBase = new Decimal(9)
+                                if (hasMilestone("an", 7)) logBase = new Decimal(8)
+                                if (hasMilestone("an", 8)) logBase = new Decimal(7)
+                                eformula = eformula.replaceAll("10", formatWhole(logBase))
+                                eformula = eformula.replaceAll("log2.72", "ln")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -30121,7 +30135,7 @@ addLayer("or", {
                                                 return a + br + b
                                         }],
                                         ["challenges", [1, 2, 3]],
-                                        ["upgrades", [30, 31, 32, 33]],
+                                        ["upgrades", [30, 31, 32, 33, 34]],
                                 ],
                                 unlocked(){
                                         return hasUpgrade("or", 215)
@@ -30779,9 +30793,51 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy in<u>TES</u>tine and per reset keep a Organ milestone."
+                                return "Reward: Autobuy in<u>TES</u>tine, 10<sup>sqrt(log10(Contaminants))</sup> multiplies Contaminant gain, and per reset keep a Organ milestone."
                         },
                 }, // hasMilestone("an", 5)
+                6: {
+                        requirementDescription(){
+                                return "6 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte(6)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy in<u>tes</u>TINE and in<u>tes</u>TINE's log10 becomes log9."
+                        },
+                }, // hasMilestone("an", 6)
+                7: {
+                        requirementDescription(){
+                                return "7 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte(7)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy INtes<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's log9 becomes log8."
+                        },
+                }, // hasMilestone("an", 7)
+                8: {
+                        requirementDescription(){
+                                return "8 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte(8)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy inTES<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's log8 becomes log7."
+                        },
+                }, // hasMilestone("an", 8)
         },
         tabFormat: {
                 "Upgrades": {
@@ -30881,6 +30937,8 @@ addLayer("an", {
 
                         let oKeptUpgrades = 0
                         if (hasMilestone("an", 2)) oKeptUpgrades += player.an.times 
+                        if (hasMilestone("an", 7)) oKeptUpgrades += player.an.times
+                        if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (!false) {
                                 //sortStrings(data1.upgrades)
                                 //commented out on purpose, if it breaks this you can add it back
@@ -30968,7 +31026,7 @@ addLayer("an", {
                 data1.challenges[32] = 0
 
                 // 2. Tissue content
-                if (!false) {
+                if (!hasMilestone("or", 12)) {
                         let tKeptMilestones = 0
                         if (hasMilestone("or", 9)) tKeptMilestones += player.or.times
                         if (!false) {
@@ -31844,7 +31902,7 @@ addLayer("ml", {
                                                         return a + br + b
                                                 }],
                                                 ["challenges", [1, 2, 3]],
-                                                ["upgrades", [30, 31, 32, 33]],
+                                                ["upgrades", [30, 31, 32, 33, 34]],
                                         ]
                                         ]
                                 ],
