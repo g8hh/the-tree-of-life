@@ -26028,6 +26028,7 @@ addLayer("or", {
                                 if (hasMilestone("an", 2)) abKeys.push(402)
                                 if (hasMilestone("an", 3)) abKeys.push(403)
                                 if (hasMilestone("an", 4)) abKeys.push(411)
+                                if (hasMilestone("an", 5)) abKeys.push(412)
 
                                 for (i in abKeys) {
                                         let id = abKeys[i]
@@ -27782,7 +27783,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung VII"
                         },
                         description(){
-                                return "Per best Up Quark - 30 (max 0) triple Air gain and Tertiary Bronchi effect affects " + makePurple("OB") + " gain" 
+                                return "Per best Up Quark - 30 (min 0) triple Air gain and Tertiary Bronchi effect affects " + makePurple("OB") + " gain" 
                         },
                         cost(){
                                 return new Decimal("1e1150")
@@ -27929,7 +27930,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XV"
                         },
                         description(){
-                                return "<u>IN</u>testine's log8 becomes log7"  
+                                return "<u>IN</u>testine's log8 becomes log7 and bulk 5x Kidney buyables"  
                         },
                         cost(){
                                 return new Decimal("1e7143")
@@ -28046,7 +28047,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasMilestone("an", 4)
+                                return hasMilestone("an", 4) && hasUpgrade("or", 215)
                         }, // hasUpgrade("or", 341)
                 },
         },
@@ -28099,7 +28100,8 @@ addLayer("or", {
                         if (hasUpgrade("or", 213))      ret = ret.times(5)
                         if (hasUpgrade("or", 215))      ret = ret.times(4)
                         if (hasUpgrade("or", 224))      ret = ret.times(5)
-                        if (hasMilestone("an", 1))      ret = new Decimal(1e3)
+                        if (hasUpgrade("or", 325))      ret = ret.times(5)
+                        if (hasMilestone("an", 1))      ret = new Decimal(5e3)
                         return ret
                 }, // tmp.or.buyables.getMaxBulk
                 201: {
@@ -30672,10 +30674,10 @@ addLayer("an", {
                                 '331', '332', '333', '334', '335']
 
                         let boughtYet = false
-                        for (i in dKeys) {
+                        for (i in orKeys) {
                                 if (boughtYet) break
-                                id = dKeys[i]
-                                boughtYet = buyUpg("an", id) 
+                                id = orKeys[i]
+                                boughtYet = buyUpg("or", id) 
                         }
                 }
         },
@@ -30766,6 +30768,20 @@ addLayer("an", {
                                 return "Reward: Autobuy IN<u>tes</u>tine, unlock a Lung upgrade, and autobuy Organ upgrades (only ones unlocked before Animals)."
                         }, // unlock all upgrades
                 }, // hasMilestone("an", 4)
+                5: {
+                        requirementDescription(){
+                                return "5 Animal resets"
+                        },
+                        done(){
+                                return player.an.times >= 5
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Autobuy in<u>TES</u>tine and per reset keep a Organ milestone."
+                        },
+                }, // hasMilestone("an", 5)
         },
         tabFormat: {
                 "Upgrades": {
@@ -30855,9 +30871,10 @@ addLayer("an", {
                 
                 // 1. Organ content
                 if (!false) {
-                        let oKeptMilestones = 4
-                        if (false) oKeptMilestones += player.an.times 
+                        let oKeptMilestones = 0
+                        if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (!false) {
+                                oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, oKeptMilestones)
                         }
@@ -31924,7 +31941,7 @@ addLayer("mi", {
                                                 ["secondary-display", "energy"],
                                                 ["display-text", function(){
                                                         if (player.or.air.total.lt("1e2300")) return "You can begin Energy production at 1e2300 Air"
-                                                        if (player.shiftAlias) return "Base gain amount is [buyables]/10"
+                                                        if (player.shiftAlias) return "Base gain amount is [buyables]" + (hasMilestone("an", 3) ? "" : "/10")
                                                         let a = "Buyable amounts (plus 1) multiply energy gain and the production<br>of buyable amounts directly above and to the left." 
                                                         let b = "You are gaining " + format(tmp.or.intestine.getResetGain) + " Energy/s"
                                                         return a + br + b
