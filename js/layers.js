@@ -27181,7 +27181,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart XXV"
                         },
                         description(){
-                                return "Square DNA gain exponent and DNA base gain is log10(Amino Acid)"
+                                return "Double DNA gain exponent and DNA base gain is log10(Amino Acid)"
                         },
                         cost(){
                                 return new Decimal(1e73)
