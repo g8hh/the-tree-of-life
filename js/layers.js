@@ -25833,6 +25833,7 @@ addLayer("or", {
                 if (hasUpgrade("or", 124)) pts = player.or.best
 
                 let exp = pts.cbrt().div(5).min(99).plus(1)
+                if (hasUpgrade("an", 12)) exp = exp.plus(player.tokens.tokens2.total)
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -26548,12 +26549,13 @@ addLayer("or", {
                                    311, 312, 313, 314, 315,
                                    321, 322, 323, 324, 325,
                                    331, 332, 333, 334, 335,
-                                   341, 342, 343, 344, 345,]
+                                   341, 342, 343, 344, 345,
+                                   351, 352, 353, 354, 355,]
                         let a = 0
                         for (i in ids) {
                                 if (hasUpgrade("or", ids[i])) a ++ 
                         }
-                        if (a >= 25) console.log("update me please")
+                        if (a >= 30) console.log("update me please")
                         return a
                 },
                 11: {
@@ -26718,6 +26720,18 @@ addLayer("or", {
                                 if (hasMilestone("an", 4)) return true
                                 return hasUpgrade("or", 31)
                         }, // hasUpgrade("or", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XIII"
+                        },
+                        description(){
+                                return "Remove the -99 in the Animal gain formula but Animal effect is based on best"
+                        },
+                        cost:() => new Decimal(2.66e135),
+                        unlocked(){
+                                return hasUpgrade("an", 12)
+                        }, // hasUpgrade("or", 33)
                 },
                 
                 101: {
@@ -28072,6 +28086,57 @@ addLayer("or", {
                                 return hasMilestone("an", 12)
                         }, // hasUpgrade("or", 342)
                 },
+                343: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXIII"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s log8 becomes log7 and Token II via Stem Cell double exponent is (75+x/10)<sup>.5</sup>"
+                        },
+                        cost(){
+                                return new Decimal("1e25752")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 342)
+                        }, // hasUpgrade("or", 343)
+                },
+                344: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXIV"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s log7 becomes log6 and gain 100% of your Animals on reset per second"
+                        },
+                        cost(){
+                                return new Decimal("1e26789")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 343)
+                        }, // hasUpgrade("or", 344)
+                },
+                345: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXV"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s log5 becomes log4 and square offer base"
+                        },
+                        cost(){
+                                return new Decimal("1e27900")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 344)
+                        }, // hasUpgrade("or", 345)
+                },
         },
         clickables: {
                 201: {
@@ -28186,7 +28251,7 @@ addLayer("or", {
 
                                 let eformula = "(Kidney upgrades + 1)^x<br>" + format(tmp.or.buyables[201].base) + "^x"
                                 if (hasUpgrade("or", 144)) eformula = eformula.replace("1", ".03 * Organ upgrades")
-                                if (hasUpgrade("or", 333)) eformula = eformula.replace(" + .03 * Organ upgrades", "/4")
+                                if (hasUpgrade("or", 333)) eformula = eformula.replace("Kidney upgrades + .03 * Organ upgrades", "Organ upgrades/4")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -28495,6 +28560,7 @@ addLayer("or", {
                         },
                         base(){
                                 let ret = player.or.buyables[212].max(1).sqrt()
+                                if (hasUpgrade("or", 345)) ret = player.or.buyables[212].max(1)
                                 
                                 return ret
                         },
@@ -28512,6 +28578,7 @@ addLayer("or", {
                                 }
 
                                 let eformula = "sqrt(an levels)^x<br>" + format(tmp.or.buyables[213].base) + "^x"
+                                if (hasUpgrade("or", 345)) eformula = eformula.replace("sqrt(an levels)", "an levels")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -29606,6 +29673,10 @@ addLayer("or", {
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("an", 12)) logBase = new Decimal(9)
                                 if (hasUpgrade("or", 342)) logBase = new Decimal(8)
+                                if (hasUpgrade("or", 343)) logBase = new Decimal(7)
+                                if (hasUpgrade("or", 344)) logBase = new Decimal(6)
+                                if (hasMilestone("an", 13)) logBase = new Decimal(5)
+                                if (hasUpgrade("or", 345)) logBase = new Decimal(4)
                                 let ret = player.or.buyables[412].max(logBase).log(logBase)
                                 
                                 return ret
@@ -29630,6 +29701,10 @@ addLayer("or", {
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("an", 12)) logBase = new Decimal(9)
                                 if (hasUpgrade("or", 342)) logBase = new Decimal(8)
+                                if (hasUpgrade("or", 343)) logBase = new Decimal(7)
+                                if (hasUpgrade("or", 344)) logBase = new Decimal(6)
+                                if (hasMilestone("an", 13)) logBase = new Decimal(5)
+                                if (hasUpgrade("or", 345)) logBase = new Decimal(4)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
 
@@ -30636,15 +30711,20 @@ addLayer("an", {
                 if (pts.lt("1e100")) return decimalZero
                 let exp = tmp.an.getGainExp
 
+                if (hasUpgrade("or", 33)) return pts.log10().pow(exp)
                 return pts.log10().sub(99).pow(exp)
         },
         getGainMult(){ // a gain animalgain again animal gain animalsgain animals gain
                 let ret = decimalOne
 
+                if (hasMilestone("an", 13))     ret = ret.times(player.an.milestones.length)
+
                 return ret.max(1)
         },
         getGainExp(){
                 let ret = new Decimal(1/3)
+
+                if (hasUpgrade("an", 12)) ret = new Decimal(1/2)
 
                 return ret
         },
@@ -30654,6 +30734,7 @@ addLayer("an", {
                 if (player.extremeMode) gain = gain.root(.75)
 
                 let reqInit = gain.div(tmp.an.getGainMult).max(1)
+                if (hasUpgrade("or", 33)) return reqInit.root(tmp.an.getGainExp).pow10()
                 return reqInit.root(tmp.an.getGainExp).plus(99).pow10()
         },
         canReset(){
@@ -30664,6 +30745,7 @@ addLayer("an", {
         },
         effect(){
                 let pts = player.an.total
+                if (hasUpgrade("or", 33)) pts = player.an.best
 
                 let exp = pts.plus(99).log10().min(20)
 
@@ -30689,6 +30771,19 @@ addLayer("an", {
                         data.times ++
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
+
+                if (hasUpgrade("or", 344)) {
+                        let gain = tmp.an.getResetGain
+                        if (!hasMilestone("an", 13)) {
+                                let gainAmt = gain.times(diff)
+                                data.total = data.total.plus(gainAmt)
+                                data.points = data.points.plus(gainAmt)
+                        } else {
+                                let gainAmt = gain.times(diff).min(gain.times(10).sub(player.an.points)).max(0)
+                                data.total = data.total.plus(gainAmt)
+                                data.points = data.points.plus(gainAmt)
+                        }
+                }
 
                 if (hasMilestone("an", 4) && player.an.autobuyor) {
                         let orKeys = [
@@ -30746,6 +30841,18 @@ addLayer("an", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("an", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals II"
+                        },
+                        description(){
+                                return "Per Token II add 1 to the Organ effect exponent and the Animal gain formula's cbrt becomes sqrt"
+                        },
+                        cost:() => new Decimal(400),
+                        unlocked(){
+                                return hasMilestone("an", 13)
+                        }, // hasUpgrade("an", 12)
                 },
         },
         milestones: {
@@ -30920,6 +31027,21 @@ addLayer("an", {
                                 return "Reward: Keep Banked Air amounts and intes<u>TINE</u>'s log10 becomes log9."
                         },
                 }, // hasMilestone("an", 12)
+                13: {
+                        requirementDescription(){
+                                if (!hasUpgrade("or", 344)) return "Requires: Lung XXIV"
+                                return "169 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte(169) && hasUpgrade("or", 344)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The number of milestone multiplies Animal gain and intes<u>TINE</u>'s log6 becomes log5 but max passive Animal gain at 10x what you can reset for."
+                        },
+                }, // hasMilestone("an", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -30957,6 +31079,8 @@ addLayer("an", {
                                 ["display-text", function(){
                                         let a1 = "Initial Animal gain: cbrt(log10(Organs)-99)"
                                         let a2 = "Current Animal gain: cbrt(log10(Organs)-99)"
+                                        if (hasUpgrade("an", 12)) a2 = a2.replace("cbrt", "sqrt")
+                                        if (hasUpgrade("or", 33)) a2 = a2.replace("-99", "")
                                         let a3 = "Initial Animal effect: (Animals+1)<sup>min(20, log10(99+Animals))</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
@@ -31328,7 +31452,7 @@ addLayer("mc", {
         baseAmount(){return player.points},
         type: "custom",
         tooltip(){
-                return format(player.cells.stem_cells.points) + " Stem Cells"
+                return format(player.cells.stem_cells.points, 3) + " Stem Cells"
         },
         getBaseGain(){
                 let pts = player.points
@@ -40943,6 +41067,10 @@ addLayer("tokens", {
                         cost(){
                                 let div = hasUpgrade("or", 313) ? 5 : (1+hasUpgrade("t", 111))
                                 let add = hasUpgrade("or", 313) ? 50 : (player.extremeMode ? 36 : 33)
+                                if (hasUpgrade("or", 343)) {
+                                        div = 10
+                                        add = 75
+                                }
                                 return player.tokens.buyables[192].div(div).plus(add).sqrt().pow10().pow10()
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
@@ -40955,13 +41083,23 @@ addLayer("tokens", {
                         },
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
-                                let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192)) + " Stem Cells</b><br>"
-                                let eformula = "10^10^((33+x" + (hasUpgrade("t", 111) ? "/2" : "") + ")<sup>.5</sup>)"
-                                if (player.extremeMode) eformula = eformula.replace("33", "36")
+                                let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192), 3) + " Stem Cells</b><br>"
+                                let eformula = "10^10^((ADD+x/DIV)<sup>.5</sup>)"
+                                let add = "33"
+                                let div = "1"
+                                if (hasUpgrade("t", 111)) div = "2"
+                                if (player.extremeMode) add = "36"
                                 if (hasUpgrade("or", 313)) {
-                                        eformula = eformula.replace("33", "50")
-                                        eformula = eformula.replace("2", "5")
+                                        add = "50"
+                                        div = "5"
                                 }
+                                if (hasUpgrade("or", 343)) {
+                                        add = "75"
+                                        div = "10"
+                                }
+                                eformula = eformula.replace("ADD", add)
+                                eformula = eformula.replace("DIV", div)
+                                eformula = eformula.replace("x/1)", "x)")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
