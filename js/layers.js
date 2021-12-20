@@ -22564,6 +22564,8 @@ addLayer("cells", {
                                 if (player.cells.challenges[21] >= 1 && inChallenge("cells", 21)) return decimalOne
                                 let ret = player.cells.stem_cells.points.max(10).log10()
 
+                                if (hasMilestone("an", 15)) return ret
+
                                 if (hasMilestone("cells", 41)) ret = ret.div(Math.log10(6))
                                 if (hasMilestone("cells", 42)) ret = ret.times(Math.log10(6)/Math.log10(4))
                                 if (hasMilestone("cells", 43)) ret = ret.times(Math.log10(4)/Math.log10(Math.E))
@@ -22587,10 +22589,12 @@ addLayer("cells", {
                                 }
 
                                 let eformula = "log10(Stem Cells)^x<br>" + format(tmp.cells.buyables[12].base) + "^x"
-                                if (hasMilestone("cells", 41)) eformula = eformula.replace("10", "6")
-                                if (hasMilestone("cells", 42)) eformula = eformula.replace("6", "4")
-                                if (hasMilestone("cells", 43)) eformula = eformula.replace("log4", "ln")
-                                if (hasMilestone("cells", 44)) eformula = eformula.replace("ln", "log2")
+                                if (!hasMilestone("an", 15)) {
+                                        if (hasMilestone("cells", 41)) eformula = eformula.replace("10", "6")
+                                        if (hasMilestone("cells", 42)) eformula = eformula.replace("6", "4")
+                                        if (hasMilestone("cells", 43)) eformula = eformula.replace("log4", "ln")
+                                        if (hasMilestone("cells", 44)) eformula = eformula.replace("ln", "log2")
+                                }
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -22672,6 +22676,8 @@ addLayer("cells", {
                                 if (player.cells.challenges[21] >= 2 && inChallenge("cells", 21)) return decimalOne
                                 let ret = tmp.t.effectAmt.max(10).log10()
 
+                                if (hasMilestone("an", 15)) return ret
+
                                 if (hasUpgrade("t", 81))        ret = ret.times(Math.log(10)/Math.log(4))
                                 if (hasUpgrade("t", 82))        ret = ret.times(2)
 
@@ -22696,6 +22702,7 @@ addLayer("cells", {
                                 let eformula = "log10(Tissues XXIX)^x<br>" + format(tmp.cells.buyables[13].base) + "^x"
                                 if (hasUpgrade("t", 81)) eformula = eformula.replace("log10", "log4")
                                 if (hasUpgrade("t", 82)) eformula = eformula.replace("log4", "log2")
+                                if (hasMilestone("an", 15)) eformula = eformula.replace("log2", "log10")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -22837,6 +22844,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 4 && inChallenge("cells", 21)) return decimalOne
+                                if (hasMilestone("an", 15)) return player.or.air.points.max(10).log10()
                                 if (hasUpgrade("or", 234)) return Decimal.pow(3, player.cells.challenges[21])
                                 return new Decimal(player.cells.challenges[21]).plus(1)
                         },
@@ -22856,6 +22864,7 @@ addLayer("cells", {
 
                                 let eformula = "(Tertiary Completions + 1)^x<br>" + format(tmp.cells.buyables[22].base) + "^x"
                                 if (hasUpgrade("or", 234)) eformula = eformula.replace("Tertiary Completions + 1", "3^Tertiary Completions")
+                                if (hasMilestone("an", 15)) eformula = eformula.replace("3^Tertiary Completions", "log10(Air)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -23728,7 +23737,7 @@ addLayer("t", {
                         let per = player.extremeMode ? .12 : .03
                                                 ret = ret.plus(per * player.t.milestones.length)
                 }
-                                                ret = ret.plus(tmp.tokens.buyables[111].effect)
+                                                ret = ret.plus(tmp.tokens.buyables[111].effect.min(100))
                 if (hasUpgrade("cells", 53))    ret = ret.plus(player.cells.upgrades.length * .008)
                 if (hasUpgrade("an", 11))       ret = ret.plus(5)
 
@@ -26733,6 +26742,30 @@ addLayer("or", {
                                 return hasUpgrade("an", 12)
                         }, // hasUpgrade("or", 33)
                 },
+                34: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XIV"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s log4 becomes log3 and Token tetrational cost base is 7.5"
+                        },
+                        cost:() => new Decimal(1.6e138),
+                        unlocked(){
+                                return hasUpgrade("or", 33)
+                        }, // hasUpgrade("or", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XV"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s log3 becomes ln and Token tetrational cost base is 7"
+                        },
+                        cost:() => new Decimal(2.54e145),
+                        unlocked(){
+                                return hasUpgrade("or", 34)
+                        }, // hasUpgrade("or", 35)
+                },
                 
                 101: {
                         title(){
@@ -28136,6 +28169,23 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 344)
                         }, // hasUpgrade("or", 345)
+                },
+                351: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXVI"
+                        },
+                        description(){
+                                return "intes<u>TINE</u>'s ln becomes log2 and per this row upgrade double Animal gain"
+                        },
+                        cost(){
+                                return new Decimal("1e32023")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 35)
+                        }, // hasUpgrade("or", 351)
                 },
         },
         clickables: {
@@ -29677,6 +29727,9 @@ addLayer("or", {
                                 if (hasUpgrade("or", 344)) logBase = new Decimal(6)
                                 if (hasMilestone("an", 13)) logBase = new Decimal(5)
                                 if (hasUpgrade("or", 345)) logBase = new Decimal(4)
+                                if (hasUpgrade("or", 34)) logBase = new Decimal(3)
+                                if (hasUpgrade("or", 35)) logBase = new Decimal(Math.E)
+                                if (hasUpgrade("or", 351)) logBase = new Decimal(2)
                                 let ret = player.or.buyables[412].max(logBase).log(logBase)
                                 
                                 return ret
@@ -29705,6 +29758,9 @@ addLayer("or", {
                                 if (hasUpgrade("or", 344)) logBase = new Decimal(6)
                                 if (hasMilestone("an", 13)) logBase = new Decimal(5)
                                 if (hasUpgrade("or", 345)) logBase = new Decimal(4)
+                                if (hasUpgrade("or", 34)) logBase = new Decimal(3)
+                                if (hasUpgrade("or", 35)) logBase = new Decimal(Math.E)
+                                if (hasUpgrade("or", 351)) logBase = new Decimal(2)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
 
@@ -30236,7 +30292,7 @@ addLayer("or", {
                                                 return a + br + b
                                         }],
                                         ["challenges", [1, 2, 3]],
-                                        ["upgrades", [30, 31, 32, 33, 34]],
+                                        ["upgrades", [30, 31, 32, 33, 34, 35, 36]],
                                 ],
                                 unlocked(){
                                         return hasUpgrade("or", 215)
@@ -30718,6 +30774,14 @@ addLayer("an", {
                 let ret = decimalOne
 
                 if (hasMilestone("an", 13))     ret = ret.times(player.an.milestones.length)
+                if (hasUpgrade("or", 351)) {
+                        let a = 1
+                        if (hasUpgrade("or", 352)) a ++
+                        if (hasUpgrade("or", 353)) a ++
+                        if (hasUpgrade("or", 354)) a ++
+                        if (hasUpgrade("or", 355)) a ++
+                                                ret = ret.times(Decimal.pow(2, a))
+                }
 
                 return ret.max(1)
         },
@@ -31042,6 +31106,34 @@ addLayer("an", {
                                 return "Reward: The number of milestone multiplies Animal gain and intes<u>TINE</u>'s log6 becomes log5 but max passive Animal gain at 10x what you can reset for."
                         },
                 }, // hasMilestone("an", 13)
+                14: {
+                        requirementDescription(){
+                                return "1e5676 Energy"
+                        },
+                        done(){
+                                return player.or.energy.points.gte("1e5676")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Charm Quark effect becomes .07(C*x)<sup>.6</sup>."
+                        },
+                }, // hasMilestone("an", 14)
+                15: {
+                        requirementDescription(){
+                                return "1e33133 Air"
+                        },
+                        done(){
+                                return player.or.air.points.gte("1e33133")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Oligopotent's base is log10(Air) and Token II buyables' cost exponent is .52 but Totipotent's base log2 becomes log10 and Pluripotent base becomes log10(Tissues)."
+                        },
+                }, // hasMilestone("an", 15)
         },
         tabFormat: {
                 "Upgrades": {
@@ -32111,7 +32203,7 @@ addLayer("ml", {
                                                         return a + br + b
                                                 }],
                                                 ["challenges", [1, 2, 3]],
-                                                ["upgrades", [30, 31, 32, 33, 34]],
+                                                ["upgrades", [30, 31, 32, 33, 34, 35, 36]],
                                         ]
                                         ]
                                 ],
@@ -39218,6 +39310,8 @@ addLayer("tokens", {
                         if (hasMilestone("or", 5)) tetBase = 9
                         if (hasUpgrade("or", 231)) tetBase = 8.5
                         if (hasUpgrade("or", 232)) tetBase = 8
+                        if (hasUpgrade("or", 34))  tetBase = 7.5
+                        if (hasUpgrade("or", 35))  tetBase = 7
 
                         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
 
@@ -39326,6 +39420,8 @@ addLayer("tokens", {
                         if (hasMilestone("or", 5)) tetBase = 9
                         if (hasUpgrade("or", 231)) tetBase = 8.5
                         if (hasUpgrade("or", 232)) tetBase = 8
+                        if (hasUpgrade("or", 34))  tetBase = 7.5
+                        if (hasUpgrade("or", 35))  tetBase = 7
                         return Decimal.tetrate(tetBase, 4 + (amt - len) / tmp.tokens.getTetrationScalingDivisor)
                 }
                 let additional = player.hardMode ? 1e4 : 1
@@ -39486,6 +39582,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("an", 15))     return x.pow(.52).floor().sub(1).max(0)
                         if (hasMilestone("an", 11))     return x.pow(.53).floor().sub(1).max(0)
                         if (hasMilestone("or", 25))     return x.pow(.54).floor().sub(1).max(0)
                         if (hasUpgrade("or", 335))      return x.pow(.55).floor().sub(1).max(0)
@@ -39505,6 +39602,52 @@ addLayer("tokens", {
                         if (tertComps >= 4)             return x.pow(.9).ceil()
                         if (hasMilestone("or", 11))     return x
                         return x.plus(1)
+                },
+                costFormulaText2(){
+                        let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("an", 15))     return "max(floor(x<sup>.52</sup>)-1, 0)"
+                        if (hasMilestone("an", 11))     return "max(floor(x<sup>.53</sup>)-1, 0)"
+                        if (hasMilestone("or", 25))     return "max(floor(x<sup>.54</sup>)-1, 0)"
+                        if (hasUpgrade("or", 335))      return "max(floor(x<sup>.55</sup>)-1, 0)"
+                        if (hasUpgrade("or", 25))       return "max(floor(x<sup>.56</sup>)-1, 0)"
+                        if (hasUpgrade("or", 334))      return "max(floor(x<sup>.57</sup>)-1, 0)"
+                        if (hasUpgrade("or", 24))       return "max(floor(x<sup>.58</sup>)-1, 0)"
+                        if (hasUpgrade("or", 22))       return "max(floor(x<sup>.6</sup>)-1, 0)"
+                        if (hasMilestone("or", 21))     return "floor(x<sup>.6</sup>)"
+                        if (hasUpgrade("or", 315))      return "floor(x<sup>.63</sup>)"
+                        if (hasUpgrade("or", 314))      return "floor(x<sup>.66</sup>)"
+                        if (hasUpgrade("or", 223))      return "floor(x<sup>.7</sup>)"
+                        if (hasUpgrade("or", 221))      return "round(x<sup>.7</sup>)"
+                        if (hasUpgrade("or", 304))      return "ceil(x<sup>.7</sup>)"
+                        if (hasUpgrade("or", 151))      return "ceil(x<sup>.75</sup>)"
+                        if (hasUpgrade("or", 15))       return "ceil(x<sup>.8</sup>)"
+                        if (hasUpgrade("or", 204))      return "ceil(x<sup>.85</sup>)"
+                        if (tertComps >= 4)             return "ceil(x<sup>.9</sup>)"
+                        if (hasMilestone("or", 11))     return "x"
+                        return "1+x"
+                },
+                costFormulaText2ID(){
+                        let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("an", 15))     return 19
+                        if (hasMilestone("an", 11))     return 18
+                        if (hasMilestone("or", 25))     return 17
+                        if (hasUpgrade("or", 335))      return 16
+                        if (hasUpgrade("or", 25))       return 15
+                        if (hasUpgrade("or", 334))      return 14
+                        if (hasUpgrade("or", 24))       return 13
+                        if (hasUpgrade("or", 22))       return 12
+                        if (hasMilestone("or", 21))     return 11
+                        if (hasUpgrade("or", 315))      return 10
+                        if (hasUpgrade("or", 314))      return 9
+                        if (hasUpgrade("or", 223))      return 8
+                        if (hasUpgrade("or", 221))      return 7
+                        if (hasUpgrade("or", 304))      return 6
+                        if (hasUpgrade("or", 151))      return 5
+                        if (hasUpgrade("or", 15))       return 4
+                        if (hasUpgrade("or", 204))      return 3
+                        if (tertComps >= 4)             return 2
+                        if (hasMilestone("or", 11))     return 1
+                        return 0
                 },
                 costFormula(x){
                         if (hasUpgrade("sci", 562))     return x.pow(.25).floor().sub(1).max(0)
@@ -39543,50 +39686,6 @@ addLayer("tokens", {
                         if (hasUpgrade("h", 83))        return x.pow(.9).ceil()
                         if (hasUpgrade("c", 23))        return x
                         return Decimal.pow(2, x)
-                },
-                costFormulaText2(){
-                        let tertComps = player.cells.challenges[21]
-                        if (hasMilestone("an", 11))     return "max(floor(x<sup>.53</sup>)-1, 0)"
-                        if (hasMilestone("or", 25))     return "max(floor(x<sup>.54</sup>)-1, 0)"
-                        if (hasUpgrade("or", 335))      return "max(floor(x<sup>.55</sup>)-1, 0)"
-                        if (hasUpgrade("or", 25))       return "max(floor(x<sup>.56</sup>)-1, 0)"
-                        if (hasUpgrade("or", 334))      return "max(floor(x<sup>.57</sup>)-1, 0)"
-                        if (hasUpgrade("or", 24))       return "max(floor(x<sup>.58</sup>)-1, 0)"
-                        if (hasUpgrade("or", 22))       return "max(floor(x<sup>.6</sup>)-1, 0)"
-                        if (hasMilestone("or", 21))     return "floor(x<sup>.6</sup>)"
-                        if (hasUpgrade("or", 315))      return "floor(x<sup>.63</sup>)"
-                        if (hasUpgrade("or", 314))      return "floor(x<sup>.66</sup>)"
-                        if (hasUpgrade("or", 223))      return "floor(x<sup>.7</sup>)"
-                        if (hasUpgrade("or", 221))      return "round(x<sup>.7</sup>)"
-                        if (hasUpgrade("or", 304))      return "ceil(x<sup>.7</sup>)"
-                        if (hasUpgrade("or", 151))      return "ceil(x<sup>.75</sup>)"
-                        if (hasUpgrade("or", 15))       return "ceil(x<sup>.8</sup>)"
-                        if (hasUpgrade("or", 204))      return "ceil(x<sup>.85</sup>)"
-                        if (tertComps >= 4)             return "ceil(x<sup>.9</sup>)"
-                        if (hasMilestone("or", 11))     return "x"
-                        return "1+x"
-                },
-                costFormulaText2ID(){
-                        let tertComps = player.cells.challenges[21]
-                        if (hasMilestone("an", 11))     return 18
-                        if (hasMilestone("or", 25))     return 17
-                        if (hasUpgrade("or", 335))      return 16
-                        if (hasUpgrade("or", 25))       return 15
-                        if (hasUpgrade("or", 334))      return 14
-                        if (hasUpgrade("or", 24))       return 13
-                        if (hasUpgrade("or", 22))       return 12
-                        if (hasMilestone("or", 21))     return 11
-                        if (hasUpgrade("or", 315))      return 10
-                        if (hasUpgrade("or", 314))      return 9
-                        if (hasUpgrade("or", 223))      return 8
-                        if (hasUpgrade("or", 221))      return 7
-                        if (hasUpgrade("or", 304))      return 6
-                        if (hasUpgrade("or", 151))      return 5
-                        if (hasUpgrade("or", 15))       return 4
-                        if (hasUpgrade("or", 204))      return 3
-                        if (tertComps >= 4)             return 2
-                        if (hasMilestone("or", 11))     return 1
-                        return 0
                 },
                 costFormulaText(){
                         if (hasUpgrade("sci", 562))     return "max(floor(x<sup>.25</sup>)-1, 0)"
@@ -40748,12 +40847,16 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("an", 14)) return c.pow(.6).times(.07)
                                 if (hasMilestone("or", 11)) return c.pow(.6).times(.1)
 
                                 return c.sqrt().times(3).sub(r.root(4)).times(.04).max(0)
                         },
                         initialEffect(){
                                 let base = tmp.tokens.buyables[111].base
+                                if (hasMilestone("an", 14)) {
+                                        return base.times(player.tokens.best_buyables[111].pow(.6))
+                                }
                                 if (hasUpgrade("or", 103)) {
                                         return base.times(player.tokens.best_buyables[111].sqrt())
                                 }
@@ -40761,6 +40864,9 @@ addLayer("tokens", {
                         },
                         effect(){
                                 let base = tmp.tokens.buyables[111].base
+                                if (hasMilestone("an", 14)) {
+                                        return base.times(player.tokens.best_buyables[111].pow(.6)).max(player.tokens.bestCharm)
+                                }
                                 if (hasUpgrade("or", 103)) {
                                         return base.times(player.tokens.best_buyables[111].sqrt()).max(player.tokens.bestCharm)
                                 }
@@ -40784,6 +40890,8 @@ addLayer("tokens", {
 
                                 let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
                                 if (hasMilestone("or", 11)) eformula = eformula.replace(".04(3C<sup>.5</sup>-R<sup>.25</sup>)", ".1(C<sup>.6</sup>)")
+                                if (hasMilestone("an", 14)) eformula = eformula.replace(".1(C<sup>.6</sup>)*sqrt(x)", ".07(C*x)<sup>.6</sup>")
+
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
@@ -40797,7 +40905,7 @@ addLayer("tokens", {
                                 let bestDisplay = "Currently: " + format(tmp.tokens.buyables[111].initialEffect) 
                                 bestDisplay += "/" + format(player.tokens.bestCharm)
 
-                                return br + end + br + bestDisplay
+                                return br + end + br + bestDisplay + br + "Note: Maxed at 100 for Tissue effect exponent"
                         },
                 },
                 112: {
@@ -42371,6 +42479,8 @@ addLayer("tokens", {
                                         if (hasMilestone("or", 5)) baseStr = "9"
                                         if (hasUpgrade("or", 231)) baseStr = "8.5"
                                         if (hasUpgrade("or", 232)) baseStr = "8"
+                                        if (hasUpgrade("or", 34))  baseStr = "7.5"
+                                        if (hasUpgrade("or", 35))  baseStr = "7"
                                         return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>" + baseStr
                                 }],
                         ],
