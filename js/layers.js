@@ -14166,7 +14166,7 @@ addLayer("l", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e166*1600^(x<sup>1+x/" + formatWhole(tmp.l.buyables[32].expDiv) + "</sup>)"
                                 if (player.extremeMode) cost2 = cost2.replace("1e166*1600", "1.5e145*250")
-                                if (hasMilestone("l", 39)) cost2 = cost2.slice(8,)
+                                if (hasMilestone("l", 39) && player.extremeMode) cost2 = cost2.slice(8,)
                                 if (hasChallenge("l", 81)) cost2 = cost2.replace("(x", "(500") 
                                 if (hasChallenge("l", 101)) {
                                         cost2 = cost2.replace("500<sup>1+x", "x<sup>2.5</sup>")
@@ -21343,7 +21343,7 @@ addLayer("cells", {
                                 return "1 Cell challenge completion"
                         },
                         done(){
-                                return hasChallenge("cells", 11) 
+                                return layerChallengeCompletions("cells") >= 1
                         },
                         unlocked(){
                                 return true
