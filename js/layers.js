@@ -1157,7 +1157,7 @@ addLayer("h", {
                         },
                         description(){
                                 if (!player.shiftAlias) {
-                                        if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 D" + "ec" + "aseconds base cost"
+                                        if (player.extremeMode) return "^.5 in the color production formula becomes ^.52 and remove 6 D" + "ec" + "aseconds' base cost"
                                         return "^.5 in the color production formula becomes ^.52"
                                 }
                                 if (hasUpgrade("h", 54)) return ""
@@ -2409,7 +2409,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VI"
                         },
                         description(){
-                                return "Remove 60 Seconds base cost"
+                                return "Remove 60 Seconds' base cost"
                         },
                         cost:() => new Decimal(1e152),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2424,7 +2424,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VII"
                         },
                         description(){
-                                return "Remove Orange base cost and each Orange doubles Hydrogen Science gain"
+                                return "Remove Orange's base cost and each Orange doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e168),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2439,7 +2439,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci VIII"
                         },
                         description(){
-                                return "Remove Indigo base cost and each Indigo doubles Hydrogen Science gain"
+                                return "Remove Indigo's base cost and each Indigo doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e198),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2454,7 +2454,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci IX"
                         },
                         description(){
-                                return "Remove White base cost and each White doubles Hydrogen Science gain"
+                                return "Remove White's base cost and each White doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e240),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2469,7 +2469,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>H Sci X"
                         },
                         description(){
-                                return "Remove Red base cost and each Red doubles Hydrogen Science gain"
+                                return "Remove Red's base cost and each Red doubles Hydrogen Science gain"
                         },
                         cost:() => new Decimal(1e269),
                         currencyLocation:() => player.sci.hydrogen_science,
@@ -2484,7 +2484,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci I"
                         },
                         description(){
-                                return "Science effects Oxygen gain and remove B21 base cost"
+                                return "Science effects Oxygen gain and remove B21's base cost"
                         },
                         cost:() => new Decimal(1e5),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2500,7 +2500,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci II"
                         },
                         description(){
-                                return "Unlock three buyables and remove B31 base cost"
+                                return "Unlock three buyables and remove B31's base cost"
                         },
                         cost:() => new Decimal(1e5),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2516,7 +2516,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci III"
                         },
                         description(){
-                                return "Unlock a buyable and remove B32 base cost"
+                                return "Unlock a buyable and remove B32's base cost"
                         },
                         cost:() => new Decimal(1e19),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2532,7 +2532,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IV"
                         },
                         description(){
-                                return "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21% base cost"
+                                return "Oxygen Science multiplies B Point and color gain, quadruple Oxygen Science gain, and remove 21%'s base cost"
                         },
                         cost:() => new Decimal(1e30),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2548,7 +2548,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci V"
                         },
                         description(){
-                                return "Remove Artificial base cost"
+                                return "Remove Artificial's base cost"
                         },
                         cost:() => new Decimal(1e36),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2564,7 +2564,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VI"
                         },
                         description(){
-                                return "Remove Cyclic base cost"
+                                return "Remove Cyclic's base cost"
                         },
                         cost:() => new Decimal(5e74),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2580,7 +2580,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VII"
                         },
                         description(){
-                                return "Remove Atomic and B33 base cost"
+                                return "Remove Atomic and B33's base cost"
                         },
                         cost:() => new Decimal(5e94),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2596,7 +2596,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci VIII"
                         },
                         description(){
-                                return "Remove Chemistry base cost"
+                                return "Remove Chemistry's base cost"
                         },
                         cost:() => new Decimal(5e97),
                         currencyLocation:() => player.sci.oxygen_science,
@@ -2612,7 +2612,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>O Sci IX"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Remove Natural base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
+                                return "<bdi style='font-size: 80%'>Remove Natural's base cost and per token squared multiply Oxygen Science gain by 1.05</bdi>"
                         },
                         effect(){
                                 return Decimal.pow(1.05, player.tokens.total.pow(2))
@@ -2824,7 +2824,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 204) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e41 C Points<br>Shift for effect"
-                                return "Remove C Point Gain 1 base cost"
+                                return "Remove C Point Gain 1's base cost"
                         },
                         effect(){
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -2867,7 +2867,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 211) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e54 C Points<br>Shift for effect"
-                                return "Remove C Point Gain 2 base cost"
+                                return "Remove C Point Gain 2's base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e54) || hasMilestone("n", 3)
@@ -2973,7 +2973,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 221) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 2e187 C Points<br>Shift for effect"
-                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1 base cost"
+                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 1's base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(2e187) || hasMilestone("n", 3)
@@ -3013,7 +3013,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 223) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e230 C Points<br>Shift for effect"
-                                return "Remove the C Point Gain 3 base cost but square root the character effect on C point gain"
+                                return "Remove the C Point Gain 3's base cost but square root the character effect on C point gain"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte(1e230) || hasMilestone("n", 3)
@@ -3113,7 +3113,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 233) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e1425 C Points<br>Shift for effect"
-                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2 base cost"
+                                return "Remove <bdi style='color:#CC0033'>C</bdi> Increase 2's base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e1425") || hasMilestone("n", 3)
@@ -3173,7 +3173,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 241) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e42,540 C Points<br>Shift for effect"
-                                return "Remove C Point Gain 5 base cost"
+                                return "Remove C Point Gain 5's base cost"
                         },
                         canAfford(){
                                 return player.mini.c_points.points.gte("1e42540") || hasMilestone("n", 3)
@@ -3192,7 +3192,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXII"
                         },
                         description(){
-                                return "Remove C Point Gain 6 base cost"
+                                return "Remove C Point Gain 6's base cost"
                         },
                         cost:() => new Decimal(9.28e42),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3208,7 +3208,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXIII"
                         },
                         description(){
-                                return "Remove Carbon Increase base cost"
+                                return "Remove Carbon Increase's base cost"
                         },
                         cost:() => new Decimal(2.31e45),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3240,7 +3240,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>C Sci XXV"
                         },
                         description(){
-                                return "Remove C Point gain 7 base cost"
+                                return "Remove C Point gain 7's base cost"
                         },
                         cost:() => new Decimal(3.49e51),
                         currencyLocation:() => player.sci.carbon_science,
@@ -3256,7 +3256,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci I"
                         },
                         description(){
-                                return "Remove C Point gain 9 base cost and per upgrade multiply A Point gain by 1e5,000"
+                                return "Remove C Point gain 9's base cost and per upgrade multiply A Point gain by 1e5,000"
                         },
                         cost:() => new Decimal(100),
                         effect(){
@@ -3277,7 +3277,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci II"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
+                                return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable's base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
                         },
                         onPurchase(){
                                 player.sci.everhasnsci2 = true
@@ -3394,7 +3394,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 312) && !player.shiftAlias) return "Requires: 1e8 D Points<br>Shift for effect"
-                                return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1 base cost"
+                                return "Per upgrade squared multiply D Point gain by 1.01 and remove Linear Increase 1's base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e8) || false
@@ -3417,7 +3417,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 313) && !player.shiftAlias) return "Requires: 3e10 D Points<br>Shift for effect"
-                                return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal base cost"
+                                return "Per upgrade multiply Nitrogen Science gain by 1.4 and remove Gas Pedal's base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(3e10) || false
@@ -3480,7 +3480,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 321) && !player.shiftAlias) return "Requires: 1e105 D Points<br>Shift for effect"
-                                return "Remove Fuel Increase 1 base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
+                                return "Remove Fuel Increase 1's base cost, Linear Increase 1 does not cost anything, and per upgrade double D Point gain"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e105) || false
@@ -3503,7 +3503,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 322) && !player.shiftAlias) return "Requires: 1e194 D Points<br>Shift for effect"
-                                return "Remove Engine base cost"
+                                return "Remove Engine's base cost"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte(1e194) || false
@@ -3527,7 +3527,7 @@ addLayer("sci", {
                         description(){
                                 if (!hasUpgrade("sci", 323) && !player.shiftAlias) return "Requires: 1e4046 D Points<br>Shift for effect"
                                 if (player.shiftAlias && hasUpgrade("sci", 323)) return "Note: Formula softcaps at a 1e100 multiplier x -> log10(x)<sup>50</sup>" + br + "Hardcapped at 1e800"
-                                return "<bdi style='font-size: 70%'>Remove Fuel Gauage base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
+                                return "<bdi style='font-size: 70%'>Remove Fuel Gauage's base cost, D Points<sup>.001</sup> multiplies Nitrogen Science gain, but you can only get ten seconds of Nitrogen Science production</bdi>"
                         },
                         canAfford(){
                                 return player.mini.d_points.points.gte("1e4046") || false
@@ -3551,7 +3551,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIV"
                         },
                         description(){
-                                return "Remove Accelerometer base cost"
+                                return "Remove Accelerometer's base cost"
                         },
                         cost:() => new Decimal(7.33e53),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3567,7 +3567,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XV"
                         },
                         description(){
-                                return "Remove Steering Wheel base cost"
+                                return "Remove Steering Wheel's base cost"
                         },
                         cost:() => new Decimal(3.52e54),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3583,7 +3583,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVI"
                         },
                         description(){
-                                return "Remove Exponential Increase base cost"
+                                return "Remove Exponential Increase's base cost"
                         },
                         cost:() => new Decimal(7.87e55),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3599,7 +3599,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVII"
                         },
                         description(){
-                                return "Remove Quadratic Increase and Fuel Increase 2 base cost"
+                                return "Remove Quadratic Increase and Fuel Increase 2's base cost"
                         },
                         cost:() => new Decimal(8.48e69),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3615,7 +3615,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XVIII"
                         },
                         description(){
-                                return "Remove Air Conditioning and Fuel Efficiency base cost"
+                                return "Remove Air Conditioning and Fuel Efficiency's base cost"
                         },
                         cost:() => new Decimal(1.3e70),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3631,7 +3631,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XIX"
                         },
                         description(){
-                                return "Remove Brake Pedal base cost and Sixteen becomes .03 per challenge"
+                                return "Remove Brake Pedal's base cost and Sixteen becomes .03 per challenge"
                         },
                         cost:() => new Decimal(1.3e79),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3647,7 +3647,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XX"
                         },
                         description(){
-                                return "Remove Gas Gauge base cost and Quadratic Increase base is multiplied by upgrades"
+                                return "Remove Gas Gauge's base cost and Quadratic Increase base is multiplied by upgrades"
                         },
                         cost:() => new Decimal(2.43e81),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3664,7 +3664,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (player.shiftAlias) return "Hardcapped at 1e50"
-                                return "<bdi style='font-size: 80%'>Remove Seat Belt base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
+                                return "<bdi style='font-size: 80%'>Remove Seat Belt's base cost and log10(Nitrogen) multiplies Nitrogen Science gain and log10(Nitrogen Science) multiplies Nitrogen gain</bdi>"
                         },
                         cost:() => new Decimal(4.84e91),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3696,7 +3696,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci XXIII"
                         },
                         description(){
-                                return "Remove Parking Brake base cost and its cost exponent is 1.2"
+                                return "Remove Parking Brake's base cost and its cost exponent is 1.2"
                         },
                         cost:() => new Decimal(1.17e100),
                         currencyLocation:() => player.sci.nitrogen_science,
@@ -3713,7 +3713,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 344) && !player.shiftAlias) return "Requires: 400 E Points<br>Shift for effect"
-                                return "Remove Constant base cost and ln(ln(ln(D Points))) multiplies E Point gain"
+                                return "Remove Constant's base cost and ln(ln(ln(D Points))) multiplies E Point gain"
                         },
                         canAfford(){
                                 return player.mini.e_points.points.gte(400) || false
@@ -3733,7 +3733,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 345) && !player.shiftAlias) return "Requires: 25 Constant levels<br>Shift for effect"
-                                return "Remove Linear base cost and Constant costs nothing"
+                                return "Remove Linear's base cost and Constant costs nothing"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(25) || false
@@ -3753,7 +3753,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 351) && !player.shiftAlias) return "Requires: 31 Constant levels<br>Shift for effect"
-                                return "Remove Quadratic base cost and Linear cost exponent is 1.15"
+                                return "Remove Quadratic's base cost and Linear cost exponent is 1.15"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(31) || false
@@ -3821,7 +3821,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 354) && !player.shiftAlias) return "Requires: 29 Linear levels<br>Shift for effect"
-                                return "Remove respecting scalar multiplication base cost and double Nitrogen gain"
+                                return "Remove respecting scalar multiplication's base cost and double Nitrogen gain"
                         },
                         canAfford(){
                                 return player.mini.buyables[203].gte(29) || false
@@ -3841,8 +3841,8 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 355) && !player.shiftAlias) return "Requires: 71 Constant levels<br>Shift for effect"
-                                if (player.p.unlocked) return "Remove respecting addition base cost"
-                                return "Remove respecting addition base cost but gain 20x less E Points"
+                                if (player.p.unlocked) return "Remove respecting addition's base cost"
+                                return "Remove respecting addition's base cost but gain 20x less E Points"
                         },
                         canAfford(){
                                 return player.mini.buyables[202].gte(71) || false
@@ -4076,7 +4076,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 411) && !player.shiftAlias) return "Requires: 1.00e7654 Protein<br>Shift for effect"
-                                return "Remove miRNA base cost and Protein Science exponentiates point gain"
+                                return "Remove miRNA's base cost and Protein Science exponentiates point gain"
                         },
                         canAfford(){
                                 return player.a.protein.points.gte("1e7654") || false
@@ -4205,7 +4205,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 422) && !player.shiftAlias) return "Requires: 1.00e51515 Protein<br>Shift for effect"
-                                return "Remove rRNA base cost"
+                                return "Remove rRNA's base cost"
                         },
                         canAfford(){
                                 return player.a.protein.points.gte("1e51515") || false
@@ -4262,7 +4262,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 425) && !player.shiftAlias) return "Requires: 1.00e73037 Protein<br>Shift for effect"
-                                return "Remove siRNA base cost and Lives multiply Nitrogen Science gain"
+                                return "Remove siRNA's base cost and Lives multiply Nitrogen Science gain"
                         },
                         canAfford(){
                                 return player.a.protein.points.gte("1e73037") || false
@@ -4437,7 +4437,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXV"
                         },
                         description(){
-                                return "Remove crRNA base cost"
+                                return "Remove crRNA's base cost"
                         },
                         cost:() => new Decimal("9.73e379"),
                         currencyLocation:() => player.sci.protein_science,
@@ -4529,7 +4529,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Protein Sci XXX"
                         },
                         description(){
-                                return "Remove shRNA base cost and DNA III's effect exponent is multiplied by the number of DNA upgrades"
+                                return "Remove shRNA's base cost and DNA III's effect exponent is multiplied by the number of DNA upgrades"
                         },
                         cost:() => new Decimal("3e686"),
                         currencyLocation:() => player.sci.protein_science,
@@ -7086,7 +7086,7 @@ addLayer("c", {
                         },
                         description(){
                                 if (!player.shiftAlias) {
-                                        if (player.extremeMode) return "Add a ln(e+sqrt(x)/10) term to B32, double Carbon gain, and remove B22 and B23 base cost"
+                                        if (player.extremeMode) return "Add a ln(e+sqrt(x)/10) term to B32, double Carbon gain, and remove B22 and B23's base cost"
                                         return "Add a ln(e+sqrt(x)/10) term to B32"
                                 }
                                 a = "ln(e+sqrt(x)/10)"
@@ -9761,7 +9761,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate II"
                         },
                         description(){
-                                return "Remove Gas Tank base cost"
+                                return "Remove Gas Tank's base cost"
                         },
                         cost:() => new Decimal(5e34),
                         unlocked(){
@@ -9797,7 +9797,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate V"
                         },
                         description(){
-                                return "Remove µ → ΔP base cost"
+                                return "Remove µ → ΔP's base cost"
                         },
                         cost:() => new Decimal(1e185),
                         unlocked(){
@@ -9851,7 +9851,7 @@ addLayer("p", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Phosphate VIII"
                         },
                         description(){
-                                return "You have one less effective tokens for prestige purposes and µ base cost is 1e5x less"
+                                return "You have one less effective tokens for prestige purposes and µ's base cost is 1e5x less"
                         },
                         cost:() => new Decimal("5e672"),
                         unlocked(){
@@ -10832,7 +10832,7 @@ addLayer("mu", {
                         },
                         description(){
                                 let a = "µ resets no longer do anything"
-                                if (player.extremeMode) a += ", remove P → ΔP and P → ΔN  base costs,"
+                                if (player.extremeMode) a += ", remove P → ΔP and P → ΔN's base costs,"
                                 return a + " and you bulk 100x minigame buyables"
                         },
                         cost:() => new Decimal(player.extremeMode ? 115 : 240),
@@ -11091,7 +11091,7 @@ addLayer("mu", {
                         },
                         effectDescription(){
                                 let a = "µ cost exponent is 1.93"
-                                if (player.extremeMode) a += ", µ base cost is 100x less,"
+                                if (player.extremeMode) a += ", µ's base cost is 100x less,"
                                 return a + " and unlock a buyable"
                         },
                 }, // hasMilestone("mu", 7)
@@ -11122,7 +11122,7 @@ addLayer("mu", {
                         },
                         effectDescription(){
                                 let a = "Each µ adds .001 to the Cubic base"
-                                if (player.extremeMode) a += ", µ base cost is 100x less,"
+                                if (player.extremeMode) a += ", µ's base cost is 100x less,"
                                 return a + " and µ cost exponent is 1.92"
                         },
                 }, // hasMilestone("mu", 9)
@@ -11154,7 +11154,7 @@ addLayer("mu", {
                         },
                         effectDescription(){
                                 let a = "Add 1 to µ → ΔN base" 
-                                if (player.extremeMode) a += ", µ base cost is 100x less,"
+                                if (player.extremeMode) a += ", µ's base cost is 100x less,"
                                 return a + " and µ cost exponent is 1.91"
                         },
                 }, // hasMilestone("mu", 11)
@@ -11200,7 +11200,7 @@ addLayer("mu", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Remove µ → ΔN base cost and add 2 to its exponential divisor"
+                                return "Remove µ → ΔN's base cost and add 2 to its exponential divisor"
                         },
                 }, // hasMilestone("mu", 14)
                 15: {
@@ -11214,7 +11214,7 @@ addLayer("mu", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Remove P → Δµ base cost"
+                                return "Remove P → Δµ's base cost"
                         },
                 }, // hasMilestone("mu", 15)
                 16: {
@@ -11228,7 +11228,7 @@ addLayer("mu", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Remove µ base cost"
+                                return "Remove µ's base cost"
                         },
                 }, // hasMilestone("mu", 16)
                 17: {
@@ -12407,7 +12407,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life VI"
                         },
                         description(){
-                                return "Remove N → ΔN base cost"
+                                return "Remove N → ΔN's base cost"
                         },
                         cost:() => new Decimal(713e5),
                         unlocked(){
@@ -12464,7 +12464,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life X"
                         },
                         description(){
-                                return "Remove α → ∂α base cost"
+                                return "Remove α → ∂α's base cost"
                         },
                         cost:() => new Decimal(3.75e17),
                         unlocked(){
@@ -12477,7 +12477,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life XI"
                         },
                         description(){
-                                return "Remove α → ∂β base cost"
+                                return "Remove α → ∂β's base cost"
                         },
                         cost:() => new Decimal(8.73e28),
                         unlocked(){
@@ -12542,7 +12542,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life XVI"
                         },
                         description(){
-                                return "Remove α → ∂𝛾 base cost and add 10 to its exponential divider"
+                                return "Remove α → ∂𝛾's base cost and add 10 to its exponential divider"
                         },
                         cost:() => new Decimal(1.8e261),
                         unlocked(){
@@ -12555,7 +12555,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life XVII"
                         },
                         description(){
-                                return "Remove β → ∂α base cost and add .011 to Constant's base"
+                                return "Remove β → ∂α's base cost and add .011 to Constant's base"
                         },
                         cost:() => new Decimal(5e267),
                         unlocked(){
@@ -12568,7 +12568,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life XVIII"
                         },
                         description(){
-                                return "Add 1 to base Life gain, remove β → ∂β base cost, and Life IV counts non-0 gems"
+                                return "Add 1 to base Life gain, remove β → ∂β's base cost, and Life IV counts non-0 gems"
                         },
                         cost:() => new Decimal("5e336"),
                         unlocked(){
@@ -13246,7 +13246,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: β → ∂α's log10 becomes log8 and remove 𝛾 → ∂α base cost."
+                                if (player.extremeMode) return "Reward: β → ∂α's log10 becomes log8 and remove 𝛾 → ∂α's base cost."
                                 return "Reward: β → ∂α's log10 becomes log8."
                         },
                 }, // hasMilestone("l", 38)
@@ -13263,7 +13263,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: β → ∂α's log8 becomes log6 and remove 𝛾 → ∂β base cost."
+                                if (player.extremeMode) return "Reward: β → ∂α's log8 becomes log6 and remove 𝛾 → ∂β's base cost."
                                 return "Reward: β → ∂α's log8 becomes log6."
                         },
                 }, // hasMilestone("l", 39)
@@ -13280,7 +13280,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: β → ∂α's log6 becomes log5 and remove 𝛾 → ∂𝛾 base cost."
+                                if (player.extremeMode) return "Reward: β → ∂α's log6 becomes log5 and remove 𝛾 → ∂𝛾's base cost."
                                 return "Reward: β → ∂α's log6 becomes log5."
                         },
                 }, // hasMilestone("l", 40)
@@ -17111,8 +17111,8 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Amino Acid up to e50 multiplies Protein gain but mRNA and tRNA base cost is set to 1."
-                                return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA base cost is set to 1."
+                                if (player.extremeMode) return "Reward: Amino Acid up to e50 multiplies Protein gain but mRNA and tRNA's base costs are set to 1."
+                                return "Reward: Amino Acid up to e25 multiplies Protein gain but mRNA and tRNA's base costs are set to 1."
                         },
                 }, // hasMilestone("a", 31)
                 32: {
@@ -19055,7 +19055,7 @@ addLayer("d", {
                         },
                         effectDescription(){
                                 let a = "Reward: miRNA's log4 becomes log3, "
-                                if (player.extremeMode) a += "remove snRNA base cost, "
+                                if (player.extremeMode) a += "remove snRNA's base cost, "
                                 return a + "gain C54 gems passively, and gain 10x gems."
                         },
                 }, // hasMilestone("d", 11)
@@ -19071,7 +19071,7 @@ addLayer("d", {
                         },
                         effectDescription(){
                                 let a = "Reward: miRNA's log3 becomes ln, gain C55 gems passively, "
-                                if (player.extremeMode) a += "remove ncRNA base cost, "
+                                if (player.extremeMode) a += "remove ncRNA's base cost, "
                                 return a + "keep gems, and autobuy miRNA."
                         },
                 }, // hasMilestone("d", 12)
@@ -20256,8 +20256,8 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells IV"
                         },
                         description(){
-                                if (player.extremeMode) return "<bdi style='font-size: 80%'>Each totipotent adds 1 to DNA effect exponent and N → ΔP base cost is " + formatSmall(Decimal.pow(.1, 2e9)) + " but remove N → ΔN</bdi>"
-                                return "<bdi style='font-size: 80%'>Each totipotent adds 1 to DNA effect exponent and N → ΔP base cost is " + formatSmall(Decimal.pow(.1, 1e9)) + " but remove N → ΔN</bdi>"
+                                if (player.extremeMode) return "<bdi style='font-size: 80%'>Each totipotent adds 1 to DNA effect exponent and N → ΔP's base cost is " + formatSmall(Decimal.pow(.1, 2e9)) + " but remove N → ΔN</bdi>"
+                                return "<bdi style='font-size: 80%'>Each totipotent adds 1 to DNA effect exponent and N → ΔP's base cost is " + formatSmall(Decimal.pow(.1, 1e9)) + " but remove N → ΔN</bdi>"
                         },
                         canAfford(){
                                 return tmp.cells.getResetGain.gte(6e11)
@@ -21431,7 +21431,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Remove Omnipotent base cost and Cells gain exponent is 1/500."
+                                return "Reward: Remove Omnipotent's base cost and Cells gain exponent is 1/500."
                         },
                 }, // hasMilestone("cells", 20)
                 21: {
@@ -21542,7 +21542,7 @@ addLayer("cells", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Remove Totipotent base cost and bulk buy 20x Life buyables."
+                                return "Reward: Remove Totipotent's base cost and bulk buy 20x Life buyables."
                         },
                 }, // hasMilestone("cells", 27)
                 28: {
@@ -24969,7 +24969,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LXXII"
                         },
                         description(){
-                                return "Remove Multipotent base cost but its cost base is 1e60"
+                                return "Remove Multipotent's base cost but its cost base is 1e60"
                         },
                         cost:() => new Decimal(1e67),
                         unlocked(){
@@ -25137,8 +25137,8 @@ addLayer("t", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Remove Pluripotent base cost and token cost exponent is .29."
-                                return "Reward: Remove Pluripotent base cost, each Primary completion after 10 adds .1 to Visible base, and token cost exponent is .29."
+                                if (player.extremeMode) return "Reward: Remove Pluripotent's base cost and token cost exponent is .29."
+                                return "Reward: Remove Pluripotent's base cost, each Primary completion after 10 adds .1 to Visible base, and token cost exponent is .29."
                         },
                 }, // hasMilestone("t", 8)
                 9: {
@@ -26928,7 +26928,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Heart IX"
                         },
                         description(){
-                                return "Remove Oligopotent base cost and remove the -9 from the Organ base gain formula" 
+                                return "Remove Oligopotent's base cost and remove the -9 from the Organ base gain formula" 
                         },
                         cost(){
                                 return new Decimal(2e7)
@@ -31131,7 +31131,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Oligopotent's base is log10(Air) and Token II buyables' cost exponent is .52 but Totipotent's base log2 becomes log10 and Pluripotent base becomes log10(Tissues)."
+                                return "Reward: Oligopotent's base is log10(Air) and Token II buyables' cost exponent is .52 but Totipotent's base log2 becomes log10 and Pluripotent's base becomes log10(Tissues)."
                         },
                 }, // hasMilestone("an", 15)
         },
@@ -38066,7 +38066,7 @@ addLayer("mini", {
                                 return "<bdi style='color: #FF0000'>Chicken</bdi>"
                         },
                         description(){
-                                if (player.extremeMode) return "Unlock a new symbol, remove C Point gain 4 base cost, and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
+                                if (player.extremeMode) return "Unlock a new symbol, remove C Point gain 4's base cost, and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
                                 return "Unlock a new symbol and add .05 to <bdi style='color:#CC0033'>C</bdi> increase 1 base"
                         },
                         cost(){
@@ -38936,7 +38936,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove Blue base cost and each Blue doubles Hydrogen Science gain.<br>"
+                                return "Reward: Remove Blue's base cost and each Blue doubles Hydrogen Science gain.<br>"
                         },
                 }, // hasMilestone("mini", 8)
                 9: {
@@ -38950,7 +38950,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove Yellow base cost and each Yellow doubles Hydrogen Science gain.<br>"
+                                return "Reward: Remove Yellow's base cost and each Yellow doubles Hydrogen Science gain.<br>"
                         },
                 }, // hasMilestone("mini", 9)
                 10: {
@@ -38964,7 +38964,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove Violet base cost and each Violet doubles Hydrogen Science gain.<br>"
+                                return "Reward: Remove Violet's base cost and each Violet doubles Hydrogen Science gain.<br>"
                         },
                 }, // hasMilestone("mini", 10)
                 11: {
@@ -38978,7 +38978,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove Green base cost and each Green doubles Hydrogen Science gain.<br>"
+                                return "Reward: Remove Green's base cost and each Green doubles Hydrogen Science gain.<br>"
                         },
                 }, // hasMilestone("mini", 11)
                 12: {
@@ -38992,7 +38992,7 @@ addLayer("mini", {
                                 return player.extremeMode
                         },
                         effectDescription(){
-                                return "Reward: Remove 1 Minute base cost.<br>"
+                                return "Reward: Remove 1 Minute's base cost.<br>"
                         },
                 }, // hasMilestone("mini", 12)
         },
@@ -41822,7 +41822,7 @@ addLayer("tokens", {
                                 return player.extremeMode && hasMilestone("tokens", 26)
                         },
                         effectDescription(){
-                                return "Reward: Remove C Point gain 8 base cost"  
+                                return "Reward: Remove C Point gain 8's base cost"  
                         },
                 }, // hasMilestone("tokens", 27)
                 28: {
@@ -41836,7 +41836,7 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 27)
                         },
                         effectDescription(){
-                                return "Reward: Remove <bdi style='color:#CC0033'>C</bdi> Increase 3 base cost"  
+                                return "Reward: Remove <bdi style='color:#CC0033'>C</bdi> Increase 3's base cost"  
                         },
                 }, // hasMilestone("tokens", 28)
         },
