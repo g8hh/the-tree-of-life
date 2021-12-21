@@ -237,7 +237,7 @@ function exportSave() {
 }
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("Paste your save here")
+	if (imported === undefined) imported = prompt("这个这里粘贴你的存档")
 	try {
 		let confirmString = "这个存档似乎是针对不同的模组！ 您确定要导入吗？"
 		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
