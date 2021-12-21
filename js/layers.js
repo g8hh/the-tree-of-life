@@ -2216,6 +2216,7 @@ addLayer("sci", {
                         if (hasMilestone("cells", 31))  ret = ret.times(Decimal.pow(1.1, player.tokens.total))
                                                         ret = ret.times(tmp.t.effect)
                         if (hasUpgrade("sci", 545))     ret = ret.times(tmp.cells.buyables[111].effect)
+                        if (hasUpgrade("cells", 42))    ret = ret.times(Decimal.pow("1e1000", player.tokens.tokens2.total))
 
                         return ret
                 },
@@ -5118,6 +5119,21 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 564)
                         }, // hasUpgrade("sci", 565)
+                },
+                571: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci XXXVI"
+                        },
+                        description(){
+                                return "Token II via Token's 25 becomes 24 and Secondary is 1e15x easier per Tissue milestone - 15" 
+                        },
+                        cost:() => new Decimal("1e249680"),
+                        currencyLocation:() => player.sci.dna_science,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "DNA Science",
+                        unlocked(){
+                                return hasUpgrade("sci", 565)
+                        }, // hasUpgrade("sci", 571)
                 },
         },
         buyables: {
@@ -20055,7 +20071,7 @@ addLayer("cells", {
                         }
                                                         ret = ret.times(tmp.tokens.buyables[102].effect)
                         if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
-                        if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(47.19363281906435)) // log1.05(10)
+                        if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) // log1.05(10)
                         if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
                         if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                         if (hasUpgrade("t", 111))       ret = ret.times(5)
@@ -20444,8 +20460,8 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XVII"
                         },
                         description(){
-                                if (player.extremeMode) return "Unlock Tokens II, but remove most token content"
-                                return "Omnipotent cost base is 9 and unlock Tokens II"
+                                if (player.extremeMode) return "Unlock Tokens II and per Token II gain 1e1000x DNA Science but remove most token content"
+                                return "Omnipotent cost base is 9 and unlock Tokens II but remove most token content"
                         },
                         onPurchase(){
                                 player.tokens.buyables[11] = decimalZero
@@ -20464,9 +20480,10 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XVIII"
                         },
                         description(){
+                                if (player.extremeMode) return "Per Token II dilate point gain ^13 and Secondary is 1e40x easier"
                                 return "Per Token II dilate point gain ^13"
                         },
-                        cost:() => new Decimal("2e12664"),
+                        cost:() => new Decimal(player.extremeMode ? "5e12521" : "2e12664"),
                         unlocked(){
                                 return player.tokens.total.gt(500) && hasUpgrade("cells", 42) || player.or.unlocked
                         }, // hasUpgrade("cells", 43)
@@ -20478,7 +20495,7 @@ addLayer("cells", {
                         description(){
                                 return "Tissues effect base is Tissues but Token II multiplies Tissue gain"
                         },
-                        cost:() => new Decimal("1e12973"),
+                        cost:() => new Decimal(player.extremeMode ? "1e114545" : "1e12973"),
                         unlocked(){
                                 return hasUpgrade("cells", 43) || player.or.unlocked
                         }, // hasUpgrade("cells", 44)
@@ -22288,6 +22305,11 @@ addLayer("cells", {
                                 if (hasUpgrade("sci", 565))     exp += 5
                                 if (hasUpgrade("cells", 31))    exp += 7
                                 if (hasUpgrade("cells", 41))    exp -= 26
+                                if (hasUpgrade("sci", 571))     exp -= 15 * (player.t.milestones.length - 15)
+                                if (hasMilestone("t", 17))      exp -= 1
+                                if (hasUpgrade("cells", 43) && player.extremeMode) {
+                                                                exp -= 40
+                                }
 
                                 return Decimal.pow(10, exp)
                         },
@@ -22702,7 +22724,10 @@ addLayer("cells", {
                                 let eformula = "log10(Tissues XXIX)^x<br>" + format(tmp.cells.buyables[13].base) + "^x"
                                 if (hasUpgrade("t", 81)) eformula = eformula.replace("log10", "log4")
                                 if (hasUpgrade("t", 82)) eformula = eformula.replace("log4", "log2")
-                                if (hasMilestone("an", 15)) eformula = eformula.replace("log2", "log10")
+                                if (hasMilestone("an", 15)) {
+                                        eformula = eformula.replace("log2", "log10")
+                                        eformula = eformula.replace("Tissues XXIX", "Tissues")
+                                }
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -25270,40 +25295,45 @@ addLayer("t", {
                 }, // hasMilestone("t", 16)
                 17: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e11,228 Cells"
                                 return "1e560,130 Stem Cells"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.cells.points.gte("1e11228")
                                 return player.cells.stem_cells.points.gte("1e560130")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
+                                if (player.extremeMode) "Reward: Per milestone multiply Cell and Stem Cell gain by total Token II, Secondary is 10x easier, and unlock a new way to gain Token II."
                                 return "Reward: Per milestone multiply Cell and Stem Cell gain by total Token II and unlock a new way to gain Token II."
                         },
                 }, // hasMilestone("t", 17)
                 18: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e11,954 Cells"
                                 return "1e592,633 Stem Cells"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.cells.points.gte("1e11954")
                                 return player.cells.stem_cells.points.gte("1e592633")
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Token costs scale 1 + milestones / 50 times slower (up to 1.5x) and per token gain 1.05x Stem Cells."
+                                if (player.extremeMode) return "Reward: Token costs scale 1 + milestones / 50 times slower and per token gain 1.08x Stem Cells."
+                                return "Reward: Token costs scale 1 + milestones / 50 times slower and per token gain 1.05x Stem Cells."
                         },
                 }, // hasMilestone("t", 18)
                 19: {
                         requirementDescription(){
+                                if (player.extremeMode) return "1e12,918 Cells"
                                 return "1e611,726 Stem Cells"
                         },
                         done(){
-                                if (player.extremeMode) return false
+                                if (player.extremeMode) return player.cells.points.gte("1e12918")
                                 return player.cells.stem_cells.points.gte("1e611726")
                         },
                         unlocked(){
@@ -39397,7 +39427,7 @@ addLayer("tokens", {
 
                 if (hasMilestone("cells", 36))  ret *= 20
                 if (hasMilestone("cells", 51))  ret *= 3
-                if (hasMilestone("t", 18))      ret *= 1 + Math.min(25, player.t.milestones.length) / 50
+                if (hasMilestone("t", 18))      ret *= 1 + player.t.milestones.length / 50
 
                                                 ret += tmp.tokens.buyables[121].effect.toNumber()
                 
@@ -41147,6 +41177,7 @@ addLayer("tokens", {
                         title: "Token II via Token",
                         cost(){
                                 let add = hasUpgrade("or", 153) ? 0 : (player.extremeMode ? 25 : 21)
+                                if (hasUpgrade("sci", 571) && add > 0) add = 24
                                 return player.tokens.buyables[191].plus(add).pow(2).sub(.0001)
                         },
                         canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
@@ -41162,6 +41193,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 if (player.extremeMode) eformula = eformula.replace("21", "25")
+                                if (hasUpgrade("sci", 571)) eformula = eformula.replace("25", "24")
                                 if (hasUpgrade("or", 153)) eformula = "x<sup>2</sup>"
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
