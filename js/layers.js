@@ -23802,7 +23802,7 @@ addLayer("t", {
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
 
-                if (hasUpgrade("t", 105)) {
+                if (hasUpgrade("t", 105) || hasUpgrade("t", 132)) {
                         let onR = tmp.t.getResetGain
                         data.bestOnReset = data.bestOnReset.max(onR)
 
