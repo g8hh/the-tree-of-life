@@ -239,7 +239,12 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
-        606:() => false ? "something gain" : "nothing (currently)",
+        505:() => false ? "Tissue gain per milestones<sup>2</sup>" : "nothing (currently)",
+        506:() => false ? "Tissue gain per milestones<sup>2</sup>" : "nothing (currently)",
+        507:() => false ? "something gain" : "nothing (currently)",
+        508:() => false ? "something gain" : "nothing (currently)",
+
+        606:() => hasUpgrade("an", 14) ? "Tissue gain per milestones<sup>2</sup>" : "nothing (currently)",
         607:() => false ? "something gain" : "nothing (currently)",
         608:() => false ? "something gain" : "nothing (currently)",
 
@@ -290,6 +295,11 @@ var TAXONOMY_NAMES = {
 
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
+        505: [new Decimal(1e108), new Decimal(300), new Decimal(1.1)],
+        506: [new Decimal(1e123), new Decimal(20000), new Decimal(1.2)],
+        507: [new Decimal("1e9999"), new Decimal(25000), new Decimal(1.2)],
+        508: [new Decimal("1e9999"), new Decimal(400), new Decimal(1.1)],
+
         606: [new Decimal(5e17), new Decimal(100), new Decimal(1.1)],
         607: [new Decimal(1e28), new Decimal(600), new Decimal(1.1)],
         608: [new Decimal(1e53), new Decimal(250), new Decimal(1.1)],
@@ -23745,6 +23755,7 @@ addLayer("t", {
                 if (hasUpgrade("sci", 563))     ret = ret.times(2)
                                                 ret = ret.times(tmp.or.challenges[32].reward)
                 if (hasUpgrade("or", 155))      ret = ret.times(player.or.energy.points.max(1))
+                if (hasUpgrade("an", 14))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2))
                 
                 return ret.max(1)
         },
@@ -29715,7 +29726,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 234)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
-                                //if (hasUpgrade("or", 41))  logBase = new Decimal(5)
+                                if (hasUpgrade("an", 14))  logBase = new Decimal(5)
                                 let ret = player.or.points.max(logBase).log(logBase)
                                 
                                 return ret
@@ -29742,7 +29753,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 234)) logBase = new Decimal(8)
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
-                                //if (hasUpgrade("or", 41))  logBase = new Decimal(5)
+                                if (hasUpgrade("an", 14))  logBase = new Decimal(5)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
 
@@ -31095,13 +31106,18 @@ addLayer("an", {
                                 808]
                         // id-101 and id-100 affect id
                         let genesGain = tmp.an.gene.getResetGain
+                        let contamRate = .01
+                        if (hasMilestone("an", 19)) contamRate = .05
+
                         data.genes.total = data.genes.total.plus(genesGain.times(diff))
-                        data.genes.points = getLogisticAmount(data.genes.points, genesGain, .01, diff)
+                        data.genes.best = data.genes.best.max(data.genes.points)
+                        data.genes.points = getLogisticAmount(data.genes.points, genesGain, contamRate, diff)
+                        
                         for (i in keys) {
                                 let id = keys[i]
                                 let gain = Decimal.pow(2, getAmount1(id)).sub(1)
                                 gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
-                                player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, .01, diff)
+                                player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, contamRate, diff)
                         }
                 }
         },
@@ -31116,6 +31132,7 @@ addLayer("an", {
                                                         ret = ret.times(base.pow(exp))
                         }
                         if (hasMilestone("an", 18))     ret = ret.times(player.an.points.max(10).log10())
+                        if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
 
                         return ret
                 },
@@ -31169,6 +31186,18 @@ addLayer("an", {
                         unlocked(){
                                 return hasMilestone("an", 18)
                         }, // hasUpgrade("an", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals IV"
+                        },
+                        description(){
+                                return "Hominidae amount multiplies Tissue gain per milestone<sup>2</sup> and INtes<u>tine</u>'s log6 becomes log5"
+                        },
+                        cost:() => new Decimal(215e3),
+                        unlocked(){
+                                return hasUpgrade("an", 13)
+                        }, // hasUpgrade("an", 14)
                 },
         },
         milestones: {
@@ -31425,11 +31454,37 @@ addLayer("an", {
                         unlocked(){
                                 return true
                         },
+                        onComplete(){
+                                player.an.points = player.an.points.min(tmp.an.getResetGain.times(10))
+                        },
                         effectDescription(){
                                 let a = "Reward: Canis amount multiplies " + makePurple("OB") + " gain, log10(Animals) multiplies Gene gain, and log10(Genes)"
                                 return a + " multiplies Animal gain but disable Lung XXVI's affect on Animal gain and remove the ability to Animal reset"
                         },
                 }, // hasMilestone("an", 18)
+                19: {
+                        requirementDescription(){
+                                return "3e82 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("3e82")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                player.an.grid[606].extras = decimalZero
+                                player.an.grid[607].extras = decimalZero
+                                player.an.grid[608].extras = decimalZero
+                                player.an.grid[707].extras = decimalZero
+                                player.an.grid[708].extras = decimalZero
+                                player.an.grid[808].extras = decimalZero
+                        },
+                        effectDescription(){
+                                let a = "Reward: log10(Contaminants) multiplies Gene gain and unlock a new row of Taxonomy"
+                                return a + " but increase cross contamination to 5% and the first three rows extra amounts to 0."
+                        },
+                }, // hasMilestone("an", 19)
         },
         clickables: {
                 11: {
@@ -31440,10 +31495,21 @@ addLayer("an", {
                         display(){
                                 let id = player.an.selectedId
                                 let costs = TAXONOMY_COSTS[id]
-                                let a = "Levels: " + format(player.an.grid[id].buyables) 
+                                let a = "Levels: " + formatWhole(player.an.grid[id].buyables) 
                                 let b = "Amount: " + format(player.an.grid[id].extras)
                                 let c = "Cost: " + format(tmp.an.clickables[11].cost) + " Genes"
-                                let d = "Amount multiplies " + TAXONOMY_EFFECTS[id]()
+
+                                let split = TAXONOMY_EFFECTS[id]().split(" per ")
+                                let d
+                                if (split.length == 1) {
+                                        d = "Amount multiplies " + split[0] 
+                                } else if (split.length == 2) {
+                                        d = "Amount<sup>" + split[1] + "</sup> multiplies " + split[0]
+                                } else if (split.length == 3) {
+                                        d = "Amount<sup>" + split[1] + "*" + split[2] 
+                                        d += "</sup> multiplies " + split[0]
+                                }
+
                                 if (costs == undefined) return br + a + br + b + br + c + br2 + d
                                 let e = "Cost formula:<br>" + formatWhole(costs[0]) + "(" + formatWhole(costs[1])
                                 e += "<sup>x<sup>" + format(costs[2], 1) + "</sup></sup>)"
@@ -31485,7 +31551,8 @@ addLayer("an", {
         grid: {
                 unlockedRows(){
                         //if (true) return 8
-                        if (false) return 4
+                        if (false) return 5
+                        if (hasMilestone("an", 19)) return 4
                         if (hasUpgrade("or", 354)) return 3 // etc
                         return 2
                 },
@@ -31575,8 +31642,12 @@ addLayer("an", {
                                 "blank",
                                 "blank",
                                 ["display-text", 
-                                        "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above<sup>*</sup> amounts plus 1.<br>" + 
-                                        "Amounts and gene amount decays by 1% per second due to genetic cross contamination."
+                                        function(){
+                                                let a = "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above<sup>*</sup> amounts plus 1.<br>"
+                                                a += "Amounts and gene amount decays by 1% per second due to genetic cross contamination."
+                                                if (hasMilestone("an", 19)) a = a.replace("1%", "5%")
+                                                return a
+                                        }
                                 ],
                                 "blank",
                                 "blank"
@@ -33076,6 +33147,17 @@ addLayer("ach", {
                         },
                         unlocked(){
                                 return tmp.a.layerShown
+                        },
+                },
+                {key: "b", description(){
+                                return "B: Buy Taxonomy level"
+                        }, onPress(){
+                                if (hasUpgrade("or", 352)) {
+                                        if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
+                                } 
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 352)
                         },
                 },
                 {key: "3ALT", description: "3: Reset for tokens", 
