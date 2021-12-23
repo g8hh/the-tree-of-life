@@ -238,6 +238,59 @@ function dilate(x, exponent, base = 10){
         return Decimal.pow(base, x.log(base).pow(exponent))
 }
 
+var TAXONOMY_EFFECTS = {
+        808:() => false ? "something gain" : "nothing (currently)",
+        708:() => false ? "something gain" : "nothing (currently)",
+        707:() => false ? "something gain" : "nothing (currently)",
+}
+
+var TAXONOMY_NAMES = {
+        101: "Eukaryote I",
+        202: "Animalia I",
+        303: "Chordata I",
+        404: "Mammalia I",
+        505: "Primates",
+        606: "Hominidae",
+        707: "Homo",
+        808: "Sapien",
+        102: "Eukaryote II",
+        203: "Animalia II",
+        304: "Chordata II",
+        405: "Mammalia II",
+        506: "Carnivora I",
+        607: "Canidae",
+        708: "Canis",
+        103: "Eukaryote III",
+        204: "Animalia III",
+        305: "Chordata III",
+        406: "Mammalia III",
+        507: "Carnivora II",
+        608: "Felidae",
+        104: "Eukaryote IV",
+        205: "Animalia IV",
+        306: "Chordata IV",
+        407: "Aves",
+        508: "Psittaciformes",
+        105: "Bacteria I",
+        206: "Eubacteria I",
+        307: "Proteobacteria I",
+        408: "Gammaproteobacteria",
+        106: "Bacteria II",
+        207: "Eubacteria II",
+        308: "Proteobacteria II",
+        107: "Prokaryota I",
+        208: "Archaebacteria",
+        108: "Prokaryota II ",
+}
+
+var TAXONOMY_COSTS = {
+        // [a,b,c] means the cost is a*b^(x^c)
+        707: [new Decimal(1e4), new Decimal(20), new Decimal(1.1)],
+        
+        808: [new Decimal(10), new Decimal(5), new Decimal(1.1)],
+        
+}
+
 var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350, 
                       9350,   10000,   10860,   11230,   12600,
                      14460,   15170,   15430,   19780,   24000,
@@ -28217,6 +28270,23 @@ addLayer("or", {
                                 return hasUpgrade("or", 35)
                         }, // hasUpgrade("or", 351)
                 },
+                352: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXVII"
+                        },
+                        description(){
+                                return "in<u>tes</u>TINE's log6 becomes log5 and unlock Taxonomy"
+                        },
+                        cost(){
+                                return new Decimal("1e34543")
+                        },
+                        currencyLocation:() => player.or.air,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Air",
+                        unlocked(){
+                                return hasUpgrade("or", 351)
+                        }, // hasUpgrade("or", 352)
+                },
         },
         clickables: {
                 201: {
@@ -29452,6 +29522,7 @@ addLayer("or", {
                                 if (hasMilestone("an", 7)) logBase = new Decimal(8)
                                 if (hasMilestone("an", 8)) logBase = new Decimal(7)
                                 if (hasMilestone("an", 9)) logBase = new Decimal(6)
+                                if (hasUpgrade("or", 352)) logBase = new Decimal(5)
                                 let ret = player.or.energy.points.max(logBase).log(logBase).max(logBase).log10(logBase)
                                 
                                 return ret
@@ -29478,6 +29549,7 @@ addLayer("or", {
                                 if (hasMilestone("an", 7)) logBase = new Decimal(8)
                                 if (hasMilestone("an", 8)) logBase = new Decimal(7)
                                 if (hasMilestone("an", 9)) logBase = new Decimal(6)
+                                if (hasUpgrade("or", 352)) logBase = new Decimal(5)
                                 eformula = eformula.replaceAll("10", formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
 
@@ -30777,6 +30849,12 @@ addLayer("an", {
                 time: 0,
                 times: 0,
                 passiveTime: 0,
+                selectedId: 808,
+                genes: {
+                        points: decimalZero,
+                        total: decimalZero,
+                        best: decimalZero,
+                },
         }},
         color: "#FFEC13",
         branches: [],
@@ -30909,6 +30987,33 @@ addLayer("an", {
                                 boughtYet = buyUpg("or", id) 
                         }
                 }
+
+                if (hasUpgrade("or", 352)) {
+                        let getAmount1 = function(id){
+                                return player.an.grid[id].buyables
+                        }
+                        let getAmount2 = function(id){
+                                return player.an.grid[id].extras
+                        }
+                        let keys = [
+                                202, 203, 204, 205, 206, 207, 208, 
+                                303, 304, 305, 306, 307, 308, 
+                                404, 405, 406, 407, 408, 
+                                505, 506, 507, 508, 
+                                606, 607, 608, 
+                                707, 708, 
+                                808]
+                        // id-101 and id-100 affect id
+                        let genesGain = getAmount2(808).plus(1)
+                        data.genes.total = data.genes.total.plus(genesGain.times(diff))
+                        data.genes.points = getLogisticAmount(data.genes.points, genesGain, .01, diff)
+                        for (i in keys) {
+                                let id = keys[i]
+                                let gain = Decimal.pow(2, getAmount1(id)).sub(1)
+                                gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
+                                player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, .01, diff)
+                        }
+                }
         },
         row: 0, 
         prestigeButtonText(){
@@ -30961,7 +31066,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep all prior automation, bulk 19x Secondary, and gain 3x Organ resets."
+                                return "Reward: Keep most prior automation, bulk 19x Secondary, and gain 3x Organ resets."
                         },
                 }, // hasMilestone("an", 1)
                 2: {
@@ -31165,6 +31270,102 @@ addLayer("an", {
                         },
                 }, // hasMilestone("an", 15)
         },
+        clickables: {
+                11: {
+                        title(){
+                                return TAXONOMY_NAMES[player.an.selectedId]
+                        },
+                        display(){
+                                let id = player.an.selectedId
+                                let a = "Levels: " + format(player.an.grid[id].buyables) 
+                                let b = "Amount: " + format(player.an.grid[id].extras)
+                                let c = "Cost: " + format(tmp.an.clickables[11].cost) + " Genes"
+                                let d = "Amount multiplies " + TAXONOMY_EFFECTS[id]()
+                                return br + a + br + b + br + c + br2 + d
+                        },
+                        cost(){
+                                let id = player.an.selectedId
+                                let costs = TAXONOMY_COSTS[id]
+                                let levels = player.an.grid[id].buyables
+                                if (costs == undefined) return new Decimal("1ee99")
+                                return costs[1].pow(levels.pow(costs[2])).times(costs[0])
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                let pts = player.an.genes.points
+                                let cost = tmp.an.clickables[11].cost 
+                                return pts.gte(cost)
+                        },
+                        onClick(){
+                                let id = player.an.selectedId
+                                let costs = TAXONOMY_COSTS[id]
+                                let pts = player.an.genes.points
+                                let ma = decimalZero
+                                if (pts.gte(costs[0])) {
+                                        ma = pts.div(costs[0]).log(costs[1]).root(costs[2]).ceil()
+                                }
+                                let buy = ma.sub(player.an.grid[id].buyables).max(0)
+                                if (!false) buy = buy.min(1)
+
+                                player.an.grid[id].buyables = player.an.grid[id].buyables.plus(buy)
+                                if (buy.gt(0)) {
+                                        player.an.genes.points = player.an.genes.points.sub(tmp.an.clickables[11].cost)
+                                }
+                        },
+                },
+        },
+        grid: {
+                unlockedRows(){
+                        //if (true) return 8
+                        if (false) return 3 // etc
+                        return 2
+                },
+                rows: 8,
+                cols: 8,
+                getStartData(id) {
+                        return {buyables: decimalZero, extras: decimalZero, units: id % 100, hundreds: (id-id%100)/100, autobought: false}
+                },
+                getUnlocked(id) {
+                        if (!hasUpgrade("or", 352)) return false
+                        if (id % 100 < Math.floor(id/100)) return false
+                        let unl = tmp.an.grid.unlockedRows
+                        return id > 900 - 100 * unl
+                },
+                getCanClick(data, id) {
+                        return true
+                },
+                onClick(data, id) {
+                        player.an.selectedId = id
+                },
+                getStyle(data, id){
+                        if (id == player.an.selectedId) {
+                                return {"background-color": "#FFA225"}
+                        }
+                        let costs = TAXONOMY_COSTS[id]
+                        if (costs != undefined) {
+                                let canAfford = player.an.genes.points.div(costs[0]).gt(  costs[1].pow( data.buyables.pow(costs[2]) )  )
+                                if (!data.autobought && canAfford) {
+                                        let x = ["#4F82A7", "#5D9094", "#6B9E82", "#79AC6F", "#86B95D",
+                                                "#94C74A", "#A2D538", "#B0E325",]
+                                        return {"background-color": x[data.hundreds-1]}
+                                }
+                        }
+                        let x = ["#DA096F", "#C70E74", "#B51379", "#A2177D", "#901C82",
+                                 "#7D2086", "#6B258B", "#582A90",]
+                        return {"background-color": x[data.hundreds-1]}
+                },
+                getDisplay(data, id) {
+                        return "Levels:<br>" + formatWhole(data.buyables) + "<br>Amount:<br>" + format(data.extras)
+                }, // layers.l.grid.getGemEffect(id)
+                getTitle(data, id){
+                        if (id == 508 || id == 408 || id == 308 || id == 307) {
+                                return "<bdi style='font-size: 60%'>" + TAXONOMY_NAMES[id] + "</bdi>"
+                        }
+                        return "<bdi style='font-size: 80%'>" + TAXONOMY_NAMES[id] + "</bdi>"
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: [
@@ -31193,6 +31394,23 @@ addLayer("an", {
                         ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Taxonomy": {
+                        content: [
+                                ["secondary-display", "genes"],
+                                "grid",
+                                "blank",
+                                ["clickablesBig", [1]],
+                                "blank",
+                                "blank",
+                                ["display-text", 
+                                        "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above amounts plus 1.<br>" + 
+                                        "Amounts and gene amount decays by 1% per second due to genetic cross contamination."
+                                ]
+                        ],
+                        unlocked(){
+                                return hasUpgrade("or", 352)
                         },
                 },
                 "Info": {
