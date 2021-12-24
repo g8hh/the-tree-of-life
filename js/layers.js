@@ -245,8 +245,8 @@ var TAXONOMY_EFFECTS = {
         508:() => false ? "something gain" : "nothing (currently)",
 
         606:() => hasUpgrade("an", 14) ? "Tissue gain per milestones<sup>2</sup>" : "nothing (currently)",
-        607:() => false ? "something gain" : "nothing (currently)",
-        608:() => false ? "something gain" : "nothing (currently)",
+        607:() => hasUpgrade("an", 15) ? "Energy gain" : "nothing (currently)",
+        608:() => hasUpgrade("an", 21) ? "Contaminant gain per Taxonomy levels" : "nothing (currently)",
 
         707:() => hasMilestone("an", 17) ? makeBlue("DB") + " gain" : "nothing (currently)",
         708:() => hasMilestone("an", 18) ? makePurple("OB") + " gain" : "nothing (currently)",
@@ -298,7 +298,7 @@ var TAXONOMY_COSTS = {
         505: [new Decimal(1e108), new Decimal(300), new Decimal(1.1)],
         506: [new Decimal(1e123), new Decimal(20000), new Decimal(1.2)],
         507: [new Decimal("1e9999"), new Decimal(25000), new Decimal(1.2)],
-        508: [new Decimal("1e9999"), new Decimal(400), new Decimal(1.1)],
+        508: [new Decimal(1e292), new Decimal(400), new Decimal(1.1)],
 
         606: [new Decimal(5e17), new Decimal(100), new Decimal(1.1)],
         607: [new Decimal(1e28), new Decimal(600), new Decimal(1.1)],
@@ -18653,6 +18653,7 @@ addLayer("d", {
                 if (hasUpgrade("or", 222)) {
                         let base = 2
                         if (hasUpgrade("or", 21)) base = 4
+                        if (hasUpgrade("an", 15)) base = player.an.upgrades.length
                         return Decimal.pow(base, player.tokens.tokens2.total).pow(tmp.d.getGainExp)
                 }
                 let pts = player.a.points
@@ -19467,6 +19468,7 @@ addLayer("d", {
                                         a2 += ")" + exp 
                                         if (hasUpgrade("or", 222)) a2 = "Current DNA gain: (2^[Tokens II])" + exp
                                         if (hasUpgrade("or", 21)) a2 = a2.replace("2", "4")
+                                        if (hasUpgrade("an", 15)) a2 = a2.replace("4", "[Animal upgrades]")
                                         if ((layers.l.grid.getGemEffect(701) || hasUpgrade("or", 145)) && !player.extremeMode) a2 = a2.replace("/2", "")
                                         if (layers.l.grid.getGemEffect(408) || hasUpgrade("or", 145)) a2 = a2.replace("/" + div, "")
                                         if (hasMilestone("cells", 31)) {
@@ -26179,6 +26181,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 23))       ret = ret.times(tmp.or.upgrades[23].effect)
                         if (hasUpgrade("or", 323))      ret = ret.times(tmp.or.upgrades[323].effect)
                                                         ret = ret.times(tmp.an.effect)
+                        if (hasUpgrade("an", 15))       ret = ret.times(player.an.grid[607].extras.plus(1))
 
                         // BELOW IS EXPONENTIAL THINGS
                         if (player.extremeMode)         ret = ret.pow(.75) 
@@ -26347,6 +26350,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 225))      ret = ret.times(player.or.energy.points.max(1).div(1e200).pow(player.or.upgrades.length))
                                                         ret = ret.times(tmp.an.effect)
                         if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
+                        if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
 
                         if (player.extremeMode) ret = ret.pow(.75) 
                         
@@ -26886,6 +26890,21 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("an", 13)
                         }, // hasUpgrade("or", 41)
+                },
+                42: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XVII"
+                        },
+                        description(){
+                                return "INtes<u>tine</u>'s log5 becomes log4 and Token II buyables' cost exponent is .49 but Bottom Quark base is (1+C/1000)"
+                        },
+                        cost:() => new Decimal(2.4e235),
+                        onPurchase(){
+                                player.tokens.bestBottom = decimalOne
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 41)
+                        }, // hasUpgrade("or", 42)
                 },
                 
                 101: {
@@ -29727,6 +29746,8 @@ addLayer("or", {
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
                                 if (hasUpgrade("an", 14))  logBase = new Decimal(5)
+                                if (hasUpgrade("or", 42))  logBase = new Decimal(4)
+                                if (hasUpgrade("an", 21))  logBase = new Decimal(3)
                                 let ret = player.or.points.max(logBase).log(logBase)
                                 
                                 return ret
@@ -29754,6 +29775,8 @@ addLayer("or", {
                                 if (hasUpgrade("or", 332)) logBase = new Decimal(7)
                                 if (hasUpgrade("or", 333)) logBase = new Decimal(6)
                                 if (hasUpgrade("an", 14))  logBase = new Decimal(5)
+                                if (hasUpgrade("or", 42))  logBase = new Decimal(4)
+                                if (hasUpgrade("an", 21))  logBase = new Decimal(3)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
 
@@ -31199,6 +31222,30 @@ addLayer("an", {
                                 return hasUpgrade("an", 13)
                         }, // hasUpgrade("an", 14)
                 },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals V"
+                        },
+                        description(){
+                                return "Canidae amount multiplies Energy gain and base DNA gain becomes [Animal upgrades]^[Token II]"
+                        },
+                        cost:() => new Decimal(948e3),
+                        unlocked(){
+                                return hasUpgrade("an", 14)
+                        }, // hasUpgrade("an", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals VI"
+                        },
+                        description(){
+                                return "Felidae amount multiplies Contaminant gain per Taxonomy level and INtes<u>tine</u>'s log4 becomes log3"
+                        },
+                        cost:() => new Decimal(1014e3),
+                        unlocked(){
+                                return hasUpgrade("an", 15)
+                        }, // hasUpgrade("an", 21)
+                },
         },
         milestones: {
                 1: {
@@ -31573,6 +31620,22 @@ addLayer("an", {
                 onClick(data, id) {
                         player.an.selectedId = id
                 },
+                totalLevels(){
+                        let keys = [
+                                101, 102, 103, 104, 105, 106, 107, 108,
+                                202, 203, 204, 205, 206, 207, 208, 
+                                303, 304, 305, 306, 307, 308, 
+                                404, 405, 406, 407, 408, 
+                                505, 506, 507, 508, 
+                                606, 607, 608, 
+                                707, 708, 
+                                808]
+                        let a = decimalZero
+                        for (i in keys) {
+                                a = a.plus(player.an.grid[keys[i]].buyables)
+                        }
+                        return a
+                }, // tmp.an.grid.totalLevels
                 getStyle(data, id){
                         if (id == player.an.selectedId) {
                                 return {"background-color": "#FFA225"}
@@ -40086,6 +40149,7 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 42))       return x.pow(.49).floor().sub(1).max(0)
                         if (hasUpgrade("or", 355))      return x.pow(.5).floor().sub(1).max(0)
                         if (hasUpgrade("or", 353))      return x.pow(.51).floor().sub(1).max(0)
                         if (hasMilestone("an", 15))     return x.pow(.52).floor().sub(1).max(0)
@@ -40111,6 +40175,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 42))       return "max(floor(x<sup>.49</sup>)-1, 0)"
                         if (hasUpgrade("or", 355))      return "max(floor(x<sup>.5</sup>)-1, 0)"
                         if (hasUpgrade("or", 353))      return "max(floor(x<sup>.51</sup>)-1, 0)"
                         if (hasMilestone("an", 15))     return "max(floor(x<sup>.52</sup>)-1, 0)"
@@ -40136,6 +40201,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("or", 42))       return 22
                         if (hasUpgrade("or", 355))      return 21
                         if (hasUpgrade("or", 353))      return 20
                         if (hasMilestone("an", 15))     return 19
@@ -41599,6 +41665,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
+                                if (hasUpgrade("or", 42)) return c.div(1000).plus(1)
                                 if (hasMilestone("or", 8)) return c.plus(6)
 
                                 return c.times(30).plus(100).div(r.plus(20))
@@ -41635,6 +41702,7 @@ addLayer("tokens", {
 
                                 let eformula = "(100+30C)/(20+R)^x<br>" 
                                 if (hasMilestone("or", 8)) eformula = "(6+C)^x<br>"
+                                if (hasUpgrade("or", 42)) eformula = "(1+C/1000)^x<br>"
                                 eformula += format(tmp.tokens.buyables[122].base, 4) + "^x" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
