@@ -22944,8 +22944,9 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 4 && inChallenge("cells", 21)) return decimalOne
-                                if (hasMilestone("an", 15)) return player.or.air.points.max(10).log10()
-                                if (hasUpgrade("or", 234)) return Decimal.pow(3, player.cells.challenges[21])
+                                if (hasUpgrade("an", 24))       return player.or.contaminants.points.max(10).log10()
+                                if (hasMilestone("an", 15))     return player.or.air.points.max(10).log10()
+                                if (hasUpgrade("or", 234))      return Decimal.pow(3, player.cells.challenges[21])
                                 return new Decimal(player.cells.challenges[21]).plus(1)
                         },
                         effect(){
@@ -22964,7 +22965,8 @@ addLayer("cells", {
 
                                 let eformula = "(Tertiary Completions + 1)^x<br>" + format(tmp.cells.buyables[22].base) + "^x"
                                 if (hasUpgrade("or", 234)) eformula = eformula.replace("Tertiary Completions + 1", "3^Tertiary Completions")
-                                if (hasMilestone("an", 15)) eformula = eformula.replace("3^Tertiary Completions", "log10(Air)")
+                                if (hasMilestone("an", 15)) eformula = eformula.replace("(3^Tertiary Completions)", "log10(Air)")
+                                if (hasUpgrade("an", 24)) eformula = eformula.replace("Air", "Contaminants")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -23841,6 +23843,7 @@ addLayer("t", {
                                                 ret = ret.plus(tmp.tokens.buyables[111].effect.min(100))
                 if (hasUpgrade("cells", 53))    ret = ret.plus(player.cells.upgrades.length * .008)
                 if (hasUpgrade("an", 11))       ret = ret.plus(5)
+                if (hasUpgrade("or", 45))       ret = ret.plus(.91)
 
                 return ret
         },
@@ -26918,12 +26921,33 @@ addLayer("or", {
                                 return "<bdi style='font-size: 90%'>IN<u>tes</u>tine's log5 becomes log4, Token II buyables' cost exponent is .48, and Bottom Quark only affects Energy and Air gain</bdi>"
                         },
                         cost:() => new Decimal("1e316"),
-                        onPurchase(){
-                                player.tokens.bestBottom = decimalOne
-                        },
                         unlocked(){
                                 return hasUpgrade("or", 42)
                         }, // hasUpgrade("or", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XIX"
+                        },
+                        description(){
+                                return "IN<u>tes</u>tine's log4 becomes log3 and Token II via Cell double exponent is 9+x/500"
+                        },
+                        cost:() => new Decimal("9.36e334"),
+                        unlocked(){
+                                return hasUpgrade("or", 43)
+                        }, // hasUpgrade("or", 44)
+                },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Organs XX"
+                        },
+                        description(){
+                                return "IN<u>tes</u>tine's log3 becomes log2, Charm Quark coefficient is .1, and add .91 from Tissue effect exponent"
+                        },
+                        cost:() => new Decimal("1e348"),
+                        unlocked(){
+                                return hasUpgrade("or", 44)
+                        }, // hasUpgrade("or", 45)
                 },
                 
                 101: {
@@ -29435,6 +29459,8 @@ addLayer("or", {
                                 if (hasUpgrade("or", 31))   logBase = new Decimal(6)
                                 if (hasUpgrade("an", 23))   logBase = new Decimal(5)
                                 if (hasUpgrade("or", 43))   logBase = new Decimal(4)
+                                if (hasUpgrade("or", 44))   logBase = new Decimal(3)
+                                if (hasUpgrade("or", 45))   logBase = new Decimal(2)
                                 let ret = player.tokens.total.max(logBase).log(logBase)
                                 
                                 return ret
@@ -29463,6 +29489,8 @@ addLayer("or", {
                                 if (hasUpgrade("or", 31))   logBase = new Decimal(6)
                                 if (hasUpgrade("an", 23))   logBase = new Decimal(5)
                                 if (hasUpgrade("or", 43))   logBase = new Decimal(4)
+                                if (hasUpgrade("or", 44))   logBase = new Decimal(3)
+                                if (hasUpgrade("or", 45))   logBase = new Decimal(2)
                                 eformula = eformula.replaceAll("10", formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
 
@@ -29539,9 +29567,10 @@ addLayer("or", {
                         base(){
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("or", 23)) logBase = new Decimal(9)
-                                if (hasUpgrade("or", 334)) logBase = new Decimal(8)
-                                if (hasUpgrade("or", 25)) logBase = new Decimal(7)
-                                if (hasUpgrade("or", 335)) logBase = new Decimal(6)
+                                if (hasUpgrade("or", 334))  logBase = new Decimal(8)
+                                if (hasUpgrade("or", 25))   logBase = new Decimal(7)
+                                if (hasUpgrade("or", 335))  logBase = new Decimal(6)
+                                if (hasUpgrade("an", 24))   logBase = new Decimal(5)
                                 let ret = player.or.contaminants.points.max(logBase).log(logBase).max(logBase).log(logBase)
                                 
                                 return ret
@@ -29565,9 +29594,10 @@ addLayer("or", {
                                 let eformula = "log10(log10(Contaminants)^x<br>" + format(tmp.or.buyables[id].base) + "^x"
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("or", 23)) logBase = new Decimal(9)
-                                if (hasUpgrade("or", 334)) logBase = new Decimal(8)
-                                if (hasUpgrade("or", 25)) logBase = new Decimal(7)
-                                if (hasUpgrade("or", 335)) logBase = new Decimal(6)
+                                if (hasUpgrade("or", 334))  logBase = new Decimal(8)
+                                if (hasUpgrade("or", 25))   logBase = new Decimal(7)
+                                if (hasUpgrade("or", 335))  logBase = new Decimal(6)
+                                if (hasUpgrade("an", 24))   logBase = new Decimal(5)
                                 eformula = eformula.replaceAll("10", formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
 
@@ -31179,6 +31209,7 @@ addLayer("an", {
                         if (hasMilestone("an", 18))     ret = ret.times(player.an.points.max(10).log10())
                         if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
                         if (hasMilestone("an", 20))     ret = ret.times(player.cells.points.max(10).log10())
+                        if (hasMilestone("an", 21))     ret = ret.times(tmp.an.milestones[21].effect)
 
                         return ret
                 },
@@ -31292,6 +31323,18 @@ addLayer("an", {
                         unlocked(){
                                 return hasUpgrade("an", 22)
                         }, // hasUpgrade("an", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals IX"
+                        },
+                        description(){
+                                return "in<u>TES</u>tine's log6 becomes log5 and Oligopotent's base is log10(Contaminants)"
+                        },
+                        cost:() => new Decimal(2132620),
+                        unlocked(){
+                                return hasUpgrade("an", 23)
+                        }, // hasUpgrade("an", 24)
                 },
         },
         milestones: {
@@ -31606,6 +31649,24 @@ addLayer("an", {
                                 return a + " but increase cross contamination to 25% and the first four rows extra amounts to 0."
                         },
                 }, // hasMilestone("an", 20)
+                21: {
+                        requirementDescription(){
+                                return "2.7e563 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("2.7e563")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effect(){
+                                let m = player.an.milestones.length
+                                return Decimal.pow(m, m-19).max(1)
+                        },
+                        effectDescription(){
+                                return "Reward: Per milestone-19, milestones multiply Gene gain.<br>Currently: " + format(tmp.an.milestones[21].effect)  
+                        },
+                }, // hasMilestone("an", 21)
         },
         clickables: {
                 11: {
@@ -41509,6 +41570,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("or", 45))   return c.pow(.6).times(.1)
                                 if (hasMilestone("an", 14)) return c.pow(.6).times(.07)
                                 if (hasMilestone("or", 11)) return c.pow(.6).times(.1)
 
@@ -41552,7 +41614,11 @@ addLayer("tokens", {
 
                                 let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
                                 if (hasMilestone("or", 11)) eformula = eformula.replace(".04(3C<sup>.5</sup>-R<sup>.25</sup>)", ".1(C<sup>.6</sup>)")
-                                if (hasMilestone("an", 14)) eformula = eformula.replace(".1(C<sup>.6</sup>)*sqrt(x)", ".07(C*x)<sup>.6</sup>")
+                                if (hasMilestone("an", 14)) {
+                                        eformula = eformula.replace(".1(C<sup>.6</sup>)*sqrt(x)", ".07(C*x)<sup>.6</sup>")
+                                        eformula = eformula.replace("sqrt(x)", "x<sup>.6</sup>")
+                                }
+                                if (hasUpgrade("or", 45))  eformula = eformula.replace(".07", ".1")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -41887,10 +41953,12 @@ addLayer("tokens", {
                         cost(){
                                 let add = hasMilestone("or", 19) ? 5 : 4
                                 if (hasMilestone("or", 24)) add = 7
+                                if (hasUpgrade("or", 44)) add = 9
                                 let div = tmp.tokens.buyables[193].div
                                 return player.tokens.buyables[193].div(div).plus(add).pow10().pow10()
                         },
                         div(){
+                                if (hasUpgrade("or", 44))   return new Decimal(500)
                                 if (hasMilestone("or", 24)) return new Decimal(150)
                                 if (hasMilestone("or", 19)) return new Decimal(40)
                                 return new Decimal(hasUpgrade("cells", 52) ? 20 : 10)
@@ -41912,6 +41980,7 @@ addLayer("tokens", {
                                 let eformula = "10^10^(4+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
                                 if (hasMilestone("or", 19)) eformula = eformula.replace("4", "5")
                                 if (hasMilestone("or", 24)) eformula = eformula.replace("5", "7")
+                                if (hasUpgrade("or", 44))   eformula = eformula.replace("7", "9")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
