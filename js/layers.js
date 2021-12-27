@@ -240,7 +240,7 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
-        404:() => false ? "Air gain per Psittaciformes" : "nothing (currently)",
+        404:() => hasMilestone("an", 23) ? "Energy gain per Chromosomes" : "nothing (currently)",
         405:() => false ? "Air gain per Psittaciformes" : "nothing (currently)",
         406:() => false ? "Organ gain" : "nothing (currently)",
         407:() => false ? "something gain" : "nothing (currently)",
@@ -248,7 +248,7 @@ var TAXONOMY_EFFECTS = {
 
         505:() => hasUpgrade("an", 22) ? "Air gain per Psittaciformes" : "nothing (currently)",
         506:() => hasUpgrade("an", 23) ? "Organ gain" : "nothing (currently)",
-        507:() => false ? "something gain" : "nothing (currently)",
+        507:() => hasUpgrade("an", 31) ? "<u>in</u>TEStine gain" : "nothing (currently)",
         508:() => hasMilestone("an", 22) ? "Animal gain per .01" : "nothing (currently)",
 
         606:() => hasUpgrade("an", 14) ? "Tissue gain per milestones<sup>2</sup>" : "nothing (currently)",
@@ -304,9 +304,9 @@ var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         404: [new Decimal("5e638"), new Decimal(1e15), new Decimal(1.1)],
         405: [new Decimal("5e799"), new Decimal(1e11), new Decimal(1.3)],
-        406: [new Decimal("1e9999"), new Decimal(2e4), new Decimal(1.4)],
+        406: [new Decimal("8e1068"), new Decimal(6e40), new Decimal(1.4)],
         407: [new Decimal("2.4e958"), new Decimal(2.5e11), new Decimal(1.3)],
-        408: [new Decimal("1e9999"), new Decimal(400), new Decimal(1.1)],
+        408: [new Decimal("1e1257"), new Decimal(90), new Decimal(1.1)],
 
         505: [new Decimal(1e108), new Decimal(300), new Decimal(1.1)],
         506: [new Decimal(1e123), new Decimal(2e4), new Decimal(1.2)],
@@ -26200,6 +26200,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.an.effect)
                         if (hasUpgrade("an", 15))       ret = ret.times(player.an.grid[607].extras.plus(1))
                         if (hasUpgrade("or", 43))       ret = ret.times(tmp.tokens.buyables[122].effect)
+                        if (hasMilestone("an", 23))     ret = ret.times(player.an.grid[404].extras.plus(1).pow(player.ch.points))
 
                         // BELOW IS EXPONENTIAL THINGS
                         if (player.extremeMode)         ret = ret.pow(.75) 
@@ -28506,6 +28507,7 @@ addLayer("or", {
                         if (hasMilestone("an", 9))      ret = ret.times(4)
                         if (hasMilestone("an", 14))     ret = ret.times(5)
                         if (hasMilestone("an", 20))     ret = ret.times(5)
+                        if (hasUpgrade("an", 32))       ret = ret.times(4)
                         return ret
                 }, // tmp.or.buyables.getMaxBulk
                 201: {
@@ -29270,6 +29272,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[402].effect)
                                 ret = ret.times(tmp.an.effect)
+                                if (hasUpgrade("an", 31)) ret = ret.times(player.an.grid[507].extras.plus(1))
 
                                 return ret
                         },
@@ -29280,6 +29283,9 @@ addLayer("or", {
                                 if (hasMilestone("or", 22))logBase = new Decimal(7)
                                 if (hasUpgrade("or", 24))  logBase = new Decimal(6)
                                 if (hasMilestone("ch", 6)) logBase = new Decimal(5)
+                                if (hasUpgrade("an", 31))  logBase = new Decimal(4)
+                                if (hasMilestone("an", 23))logBase = new Decimal(3)
+                                if (hasUpgrade("an", 32))  logBase = new Decimal(2)
                                 let ret = player.or.air.points.max(logBase).log(logBase).max(logBase).log(logBase)
                                 
                                 return ret
@@ -29307,6 +29313,9 @@ addLayer("or", {
                                 if (hasMilestone("or", 22))logBase = new Decimal(7)
                                 if (hasUpgrade("or", 24))  logBase = new Decimal(6)
                                 if (hasMilestone("ch", 6)) logBase = new Decimal(5)
+                                if (hasUpgrade("an", 31))  logBase = new Decimal(4)
+                                if (hasMilestone("an", 23))logBase = new Decimal(3)
+                                if (hasUpgrade("an", 32))  logBase = new Decimal(2)
                                 eformula = eformula.replaceAll("10", formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
 
@@ -31249,8 +31258,11 @@ addLayer("an", {
                         if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
                         if (hasMilestone("an", 20))     ret = ret.times(player.cells.points.max(10).log10())
                         if (hasMilestone("an", 21))     ret = ret.times(tmp.an.milestones[21].effect)
-                        if (hasMilestone("ch", 5))      ret = ret.times(Decimal.pow(.5, player.ch.points.sub(8)))
+                        if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
+                                                        ret = ret.times(Decimal.pow(.5, player.ch.points.sub(8)))
+                        }
                         if (hasMilestone("ch", 6))      ret = ret.times(Decimal.pow(.5, player.ch.points))
+                        if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
 
                         return ret
                 },
@@ -31388,6 +31400,30 @@ addLayer("an", {
                         unlocked(){
                                 return hasUpgrade("an", 24)
                         }, // hasUpgrade("an", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XI"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'><u>in</u>TEStine's log5 becomes log4, disable Chromosome Milestone 5's nerfs, and Carnivora II amount multiplies <u>in</u>TEStine amount gain</bdi>"
+                        },
+                        cost:() => new Decimal(16942e3),
+                        unlocked(){
+                                return hasUpgrade("an", 25)
+                        }, // hasUpgrade("an", 31)
+                },
+                32: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XII"
+                        },
+                        description(){
+                                return "<u>in</u>TEStine's log3 becomes log2 and bulk 4x Kidney buyables"
+                        },
+                        cost:() => new Decimal(54208e3),
+                        unlocked(){
+                                return hasUpgrade("an", 31)
+                        }, // hasUpgrade("an", 32)
                 },
         },
         milestones: {
@@ -31747,6 +31783,21 @@ addLayer("an", {
                                 return a + " and Psittaciformes amount<sup>.01</sup> multiplies Animal gain, but the corss contamination rate is now 100% and the first four rows extra amounts to 0."
                         },
                 }, // hasMilestone("an", 22)
+                23: {
+                        requirementDescription(){
+                                return "8e1222 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("8e1222")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: <u>in</u>TEStine's log4 becomes log3, Mammalia I amount multiplies Energy gain per Chromosome,"
+                                return a + " and (Energy/1e14000+1)<sup>.002</sup> multiplies Gene gain."
+                        },
+                }, // hasMilestone("an", 23)
         },
         clickables: {
                 11: {
@@ -43565,7 +43616,7 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
-                                return canReset("tokens")
+                                return canReset("tokens") && player.tokens.total.lt(1e4)
                         },
                 },
                 "II": {
