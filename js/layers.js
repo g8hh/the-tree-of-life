@@ -305,7 +305,7 @@ var TAXONOMY_COSTS = {
         404: [new Decimal("5e638"), new Decimal(1e15), new Decimal(1.1)],
         405: [new Decimal("5e799"), new Decimal(1e11), new Decimal(1.3)],
         406: [new Decimal("1e9999"), new Decimal(2e4), new Decimal(1.4)],
-        407: [new Decimal("1e9999"), new Decimal(25e4), new Decimal(1.3)],
+        407: [new Decimal("2.4e958"), new Decimal(2.5e11), new Decimal(1.3)],
         408: [new Decimal("1e9999"), new Decimal(400), new Decimal(1.1)],
 
         505: [new Decimal(1e108), new Decimal(300), new Decimal(1.1)],
