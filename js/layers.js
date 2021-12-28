@@ -25936,6 +25936,7 @@ addLayer("or", {
                 if (hasUpgrade("or", 31))       ret = ret.times(Decimal.pow(1.03, player.tokens.tokens2.total))
                                                 ret = ret.times(tmp.an.effect)
                 if (hasUpgrade("an", 23))       ret = ret.times(player.an.grid[506].extras.plus(1))
+                if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.pow(player.ch.points))
 
                 return ret.max(1)
         },
@@ -30033,6 +30034,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasMilestone("an", 24)) return player.or.buyables[423].max(1).sqrt()
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("an", 12)) logBase = new Decimal(9)
                                 if (hasUpgrade("or", 342)) logBase = new Decimal(8)
@@ -30076,6 +30078,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 351)) logBase = new Decimal(2)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
+                                if (hasMilestone("an", 24)) eformula = eformula.replace("log2(in<u>TES</u>tine)", "sqrt(intes<u>TINE</u>)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31261,8 +31264,12 @@ addLayer("an", {
                         if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points.sub(8)))
                         }
-                        if (hasMilestone("ch", 6))      ret = ret.times(Decimal.pow(.5, player.ch.points))
+                        if (hasMilestone("ch", 6) && !hasMilestone("an", 24)) {
+                                                        ret = ret.times(Decimal.pow(.5, player.ch.points))
+                        }
                         if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
+                        if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
+                        if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3))
 
                         return ret
                 },
@@ -31798,6 +31805,20 @@ addLayer("an", {
                                 return a + " and (Energy/1e14000+1)<sup>.002</sup> multiplies Gene gain."
                         },
                 }, // hasMilestone("an", 23)
+                24: {
+                        requirementDescription(){
+                                return "2.4e1507 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("2.4e1507")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: in<u>TES</u>tine's base becomes sqrt(in<u>TES</u>tine) and remove Chromosome milestone 6 nerfs."
+                        },
+                }, // hasMilestone("an", 24)
         },
         clickables: {
                 11: {
@@ -32545,6 +32566,34 @@ addLayer("ch", {
                                 return "Reward: <u>in</u>TEStine's log6 becomes log5 but per Chromosome halve Gene gain."
                         },
                 }, // hasMilestone("ch", 6)
+                7: {
+                        requirementDescription(){
+                                return "32 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(32)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per Chromosome Chromosomes multiply Organ gain and 1+Chromosomes/67 multiplies Gene gain."
+                        },
+                }, // hasMilestone("ch", 7)
+                8: {
+                        requirementDescription(){
+                                return "33 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(33)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per milestone cbrt(Chromosomes) multiply Gene gain."
+                        },
+                }, // hasMilestone("ch", 8)
         },
         tabFormat: {
                 "Upgrades": {
