@@ -241,10 +241,10 @@ function dilate(x, exponent, base = 10){
 
 var TAXONOMY_EFFECTS = {
         404:() => hasMilestone("an", 23) ? "Energy gain per Chromosomes" : "nothing (currently)",
-        405:() => false ? "Air gain per Psittaciformes" : "nothing (currently)",
+        405:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
         406:() => false ? "Organ gain" : "nothing (currently)",
-        407:() => false ? "something gain" : "nothing (currently)",
-        408:() => false ? "Air gain per " : "nothing (currently)",
+        407:() => hasUpgrade("ch", 13) ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
+        408:() => hasUpgrade("ch", 11) ? "INtes<u>tine</u> gain" : "nothing (currently)",
 
         505:() => hasUpgrade("an", 22) ? "Air gain per Psittaciformes" : "nothing (currently)",
         506:() => hasUpgrade("an", 23) ? "Organ gain" : "nothing (currently)",
@@ -19791,10 +19791,8 @@ addLayer("cells", {
         canReset(){
                 return tmp.cells.getResetGain.gt(0) && !hasMilestone("cells", 14)
         },
-        effect(){
-                let amt = player.cells.best
-
-                let exp = amt.cbrt().min(10)
+        effectExp(){
+                let exp = player.cells.best.cbrt().min(10)
 
                 if (hasMilestone("cells", 11))  exp = exp.plus(player.cells.upgrades.length)
                 if (hasUpgrade("or", 121))      exp = exp.plus(player.or.upgrades.length)
@@ -19805,7 +19803,10 @@ addLayer("cells", {
                                                 exp = exp.plus(per * upgs * mile)
                 }
 
-                return amt.plus(9).pow(exp)
+                return exp
+        },
+        effect(){
+                return player.cells.best.plus(9).pow(tmp.cells.effectExp)
         },
         effectDescription(){
                 let start = " multiplying DNA, Life, and Protein gain and exponentiating Phosphorus gain by " 
@@ -23504,6 +23505,7 @@ addLayer("cells", {
                                         let a2 = "Current Cell gain: (DNA/1e582)<sup>1/" + formatWhole(tmp.cells.getGainExp.pow(-1))
                                         let a = a1 + br + a2 + "</sup>"
                                         if (player.extremeMode) a = a.replaceAll("582", "1228")
+                                        a += br2 + "Cell effect: (Cells+9)<sup>" + format(tmp.cells.effectExp) + "</sup>"
                                         let b = "Cell resets (in order) DNA content, Amino Acid content, Life buyables and gems."
                                         b += br + "Note that Anti- challenges are never reset."
                                         let c = "For unlocking Cells permanently keep Dilation completions<br>add 1 to base Life Point gain, and gems from C55 and easier challenges."
@@ -23792,6 +23794,7 @@ addLayer("t", {
                         ret = ret.sub(lvls*2)
                 }
                 if (hasUpgrade("an", 11)) ret = ret.sub(100)
+                if (hasUpgrade("ch", 11)) ret = ret.sub(player.ch.points.min(100))
 
                 return ret.pow(-1)
         },
@@ -23857,6 +23860,7 @@ addLayer("t", {
                 if (hasUpgrade("cells", 53))    ret = ret.plus(player.cells.upgrades.length * .008)
                 if (hasUpgrade("an", 11))       ret = ret.plus(5)
                 if (hasUpgrade("or", 45))       ret = ret.plus(.91)
+                if (hasUpgrade("ch", 12))       ret = ret.plus(player.ch.upgrades.length)
 
                 return ret
         },
@@ -29159,6 +29163,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[401].effect)
+                                if (hasUpgrade("ch", 13)) ret = ret.times(player.an.grid[407].extras.plus(1).pow(7))
 
                                 return ret
                         },
@@ -29822,6 +29827,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[421].effect)
+                                if (hasUpgrade("ch", 11)) ret = ret.times(player.an.grid[508].extras.plus(1))
 
                                 return ret
                         },
@@ -31847,7 +31853,7 @@ addLayer("an", {
                                 
 
                                 if (costs == undefined) return br + a + br + b + br + c + br2 + d
-                                if (player.an.grid[id].buyables.gte(400)) {
+                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) {
                                         c = "Maxed levels!"
                                         return br + a + br + b + br + c + br2 + d
                                 }
@@ -31867,14 +31873,14 @@ addLayer("an", {
                         },
                         canClick(){
                                 let id = player.an.selectedId
-                                if (player.an.grid[id].buyables.gte(400)) return false
+                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) return false
                                 let pts = player.an.genes.points
                                 let cost = tmp.an.clickables[11].cost 
                                 return pts.gte(cost)
                         },
                         onClick(){
                                 let id = player.an.selectedId
-                                if (player.an.grid[id].buyables.gte(400)) return 
+                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) return 
                                 let costs = TAXONOMY_COSTS[id]
                                 let pts = player.an.genes.points
                                 let ma = decimalZero
@@ -31903,6 +31909,16 @@ addLayer("an", {
                 getStartData(id) {
                         return {buyables: decimalZero, extras: decimalZero, units: id % 100, hundreds: (id-id%100)/100, autobought: false}
                 },
+                maxLevels(){
+                        let ret = new Decimal(400)
+
+                        if (hasUpgrade("ch", 13)) {
+                                let add = player.ch.points.sub(37).max(0).times(player.ch.upgrades.length + 1)
+                                ret = ret.plus(add.min(600))
+                        }
+
+                        return ret
+                }, // tmp.an.grid.maxLevels
                 getUnlocked(id) {
                         if (!hasUpgrade("or", 352)) return false
                         if (id % 100 < Math.floor(id/100)) return false
@@ -31936,7 +31952,7 @@ addLayer("an", {
                                 return {"background-color": "#FFA225"}
                         }
                         let costs = TAXONOMY_COSTS[id]
-                        if (costs != undefined && data.buyables.lt(400)) {
+                        if (costs != undefined && data.buyables.lt(tmp.an.grid.maxLevels)) {
                                 let canAfford = player.an.genes.points.div(costs[0]).gt(  costs[1].pow( data.buyables.pow(costs[2]) )  )
                                 if (!data.autobought && canAfford) {
                                         let x = ["#4F82A7", "#5D9094", "#6B9E82", "#79AC6F", "#86B95D",
@@ -32412,6 +32428,8 @@ addLayer("ch", {
         exponent(){
                 let ret = new Decimal(1.35)
 
+                if (hasUpgrade("ch", 12)) ret = new Decimal(1.34)
+
                 return ret
         },
         gainMult(){
@@ -32470,15 +32488,39 @@ addLayer("ch", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes I"
                         },
                         description(){
-                                return "Subtract 100 from the Tissue gain exponent and add 5 to Tissue effect exponent"
+                                return "<bdi style='font-size: 80%'>Per Chromosome up to 100 subtract 1 from Tissue gain exponent and Gamma-<br>proteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
                         },
-                        cost:() => new Decimal(100),
+                        cost:() => new Decimal(34),
                         unlocked(){
-                                return false
+                                return hasMilestone("ch", 8)
                         }, // hasUpgrade("ch", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes II"
+                        },
+                        description(){
+                                return "Chromosome gain exponent is 1.34 and per upgrade add 1 to Tissue effect exponent"
+                        },
+                        cost:() => new Decimal(35),
+                        unlocked(){
+                                return player.an.grid[505].buyables.gte(52)
+                        }, // hasUpgrade("ch", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes III"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Per upgrade + 1 per Chromosome - 37 increase the Taxonomy buyables max by 1, up to a max of 1000 and Aves amount<sup>7</sup> multiplies in<u>TES</u>tine gain</bdi>"
+                        },
+                        cost:() => new Decimal(38),
+                        unlocked(){
+                                return player.an.grid[607].buyables.gte(367)
+                        }, // hasUpgrade("ch", 13)
                 },
         },
         milestones: {
@@ -32591,7 +32633,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per milestone cbrt(Chromosomes) multiply Gene gain."
+                                return "Reward: Per milestone cbrt(Chromosomes) multiply Gene gain and unlock Chromosome upgrades."
                         },
                 }, // hasMilestone("ch", 8)
         },
