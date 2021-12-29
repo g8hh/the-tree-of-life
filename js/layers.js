@@ -240,6 +240,13 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
+        303:() => false ? "Energy gain per Chromosomes" : "nothing (currently)",
+        304:() => false ? "Energy gain per Chromosomes" : "nothing (currently)",
+        305:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
+        306:() => false ? "Organ gain" : "nothing (currently)",
+        307:() => false ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
+        308:() => false ? "INtes<u>tine</u> gain" : "nothing (currently)",
+
         404:() => hasMilestone("an", 23) ? "Energy gain per Chromosomes" : "nothing (currently)",
         405:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
         406:() => false ? "Organ gain" : "nothing (currently)",
@@ -302,6 +309,13 @@ var TAXONOMY_NAMES = {
 
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
+        303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
+        304: [new Decimal("5e5638"), new Decimal(1e15), new Decimal(1.3)],
+        305: [new Decimal("5e5799"), new Decimal(1e11), new Decimal(1.4)],
+        306: [new Decimal("8e51068"), new Decimal(6e40), new Decimal(1.4)],
+        307: [new Decimal("2e5958"), new Decimal(2.5e11), new Decimal(1.3)],
+        308: [new Decimal("1e5257"), new Decimal(90), new Decimal(1.1)],
+
         404: [new Decimal("5e638"), new Decimal(1e15), new Decimal(1.1)],
         405: [new Decimal("5e799"), new Decimal(1e11), new Decimal(1.3)],
         406: [new Decimal("8e1068"), new Decimal(6e40), new Decimal(1.4)],
@@ -31899,9 +31913,10 @@ addLayer("an", {
         grid: {
                 unlockedRows(){
                         //if (true) return 8
-                        if (hasMilestone("ch", 2)) return 5
-                        if (hasMilestone("an", 19)) return 4
-                        if (hasUpgrade("or", 354)) return 3 // etc
+                        if (hasMilestone("ch", 8))      return 6
+                        if (hasMilestone("ch", 2))      return 5
+                        if (hasMilestone("an", 19))     return 4
+                        if (hasUpgrade("or", 354))      return 3 // etc
                         return 2
                 },
                 rows: 8,
@@ -32633,7 +32648,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per milestone cbrt(Chromosomes) multiply Gene gain and unlock Chromosome upgrades."
+                                return "Reward: Per milestone cbrt(Chromosomes) multiplies Gene gain and unlock Chromosome upgrades and a new Taxonomy row."
                         },
                 }, // hasMilestone("ch", 8)
         },
