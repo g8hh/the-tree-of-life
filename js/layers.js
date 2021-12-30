@@ -310,9 +310,9 @@ var TAXONOMY_NAMES = {
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
-        304: [new Decimal("5e5638"), new Decimal(1e15), new Decimal(1.3)],
+        304: [new Decimal("1e2315"), new Decimal(1e20), new Decimal(1.3)],
         305: [new Decimal("5e5799"), new Decimal(1e11), new Decimal(1.4)],
-        306: [new Decimal("8e51068"), new Decimal(6e40), new Decimal(1.4)],
+        306: [new Decimal("5.9e2513"), new Decimal(1e156), new Decimal(1.2)],
         307: [new Decimal("2e5958"), new Decimal(2.5e11), new Decimal(1.3)],
         308: [new Decimal("1e5257"), new Decimal(90), new Decimal(1.1)],
 
@@ -25962,6 +25962,7 @@ addLayer("or", {
                 let ret = new Decimal(.5)
 
                 if (hasUpgrade("or", 112)) ret = ret.plus(.01 * player.or.upgrades.length)
+                if (hasMilestone("ch", 9)) ret = ret.plus(player.ch.points.div(100))
 
                 return ret
         },
@@ -31133,6 +31134,7 @@ addLayer("an", {
                 let ret = new Decimal(1/3)
 
                 if (hasUpgrade("an", 12)) ret = new Decimal(1/2)
+                if (hasUpgrade("ch", 14)) ret = new Decimal(1)
 
                 return ret
         },
@@ -31290,6 +31292,7 @@ addLayer("an", {
                         if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
                         if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
                         if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3))
+                        if (hasUpgrade("ch", 14))       ret = ret.times(tmp.ch.upgrades[14].effect)
 
                         return ret
                 },
@@ -31928,7 +31931,7 @@ addLayer("an", {
                         let ret = new Decimal(400)
 
                         if (hasUpgrade("ch", 13)) {
-                                let add = player.ch.points.sub(37).max(0).times(player.ch.upgrades.length + 1)
+                                let add = player.ch.points.sub(37).max(0).times(4)
                                 ret = ret.plus(add.min(600))
                         }
 
@@ -32058,6 +32061,7 @@ addLayer("an", {
                                         let a2 = "Current Animal gain: cbrt(log10(Organs)-99)"
                                         if (hasUpgrade("an", 12)) a2 = a2.replace("cbrt", "sqrt")
                                         if (hasUpgrade("or", 33)) a2 = a2.replace("-99", "")
+                                        if (hasUpgrade("ch", 14)) a2 = "Current Animal gain: log10(Organs)<sup>" + formatWhole(tmp.an.gainExp) + "</sup>"
                                         let a3 = "Initial Animal effect: (Animals+1)<sup>min(20, log10(99+Animals))</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
@@ -32530,12 +32534,30 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes III"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per upgrade + 1 per Chromosome - 37 increase the Taxonomy buyables max by 1, up to a max of 1000 and Aves amount<sup>7</sup> multiplies in<u>TES</u>tine gain</bdi>"
+                                return "<bdi style='font-size: 80%'>Per Chromosome - 37 increase the Taxonomy buyables max by 4, up to a max of 1000 and Aves amount<sup>7</sup> multiplies in<u>TES</u>tine gain</bdi>"
                         },
                         cost:() => new Decimal(38),
                         unlocked(){
                                 return player.an.grid[607].buyables.gte(367)
                         }, // hasUpgrade("ch", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes IV"
+                        },
+                        description(){
+                                if (player.shiftAlias) return "Effect is softcaped at 1e10,<br>x->log10(x)<sup>10</sup> <br>Currently: " + format(tmp.ch.upgrades[14].effect)
+                                return "Square base Animal gain and (1+Organs/1e900)<sup>.08</sup> multiplies Gene gain"
+                        },
+                        cost:() => new Decimal(50),
+                        effect(){
+                                let ret = player.or.points.div("1e900").plus(1).pow(.08)
+                                if (ret.gt(1e10)) ret = ret.log10().pow(10)
+                                return ret
+                        },
+                        unlocked(){
+                                return player.an.grid[507].buyables.gte(139)
+                        }, // hasUpgrade("ch", 14)
                 },
         },
         milestones: {
@@ -32651,6 +32673,20 @@ addLayer("ch", {
                                 return "Reward: Per milestone cbrt(Chromosomes) multiplies Gene gain and unlock Chromosome upgrades and a new Taxonomy row."
                         },
                 }, // hasMilestone("ch", 8)
+                9: {
+                        requirementDescription(){
+                                return "48 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(48)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each Chromosome adds .01 to the Organ gain exponent."
+                        },
+                }, // hasMilestone("ch", 9)
         },
         tabFormat: {
                 "Upgrades": {
@@ -33825,6 +33861,14 @@ addLayer("ach", {
                                 return tmp.t.layerShown
                         },
                 },
+                {key: "shift+X", description: "Shift+X: Go to Chromosomes", onPress(){
+                                if (!tmp.ch.layerShown) return
+                                showTab("ch")
+                        },
+                        unlocked(){
+                                return tmp.ch.layerShown
+                        },
+                },
                 {
                         key: "THIS SHOULD NOT BE POSSIBLE3",
                         description: br + makeBlue("<b>Prestige</b>:"),
@@ -33922,6 +33966,15 @@ addLayer("ach", {
                         },
                         unlocked(){
                                 return tmp.t.layerShown
+                        },
+                },
+                {key: "x", description: "X: Reset for Chromosomes", 
+                        onPress(){
+                                if (!tmp.ch.layerShown) return
+                                if (canReset("ch")) doReset("ch")
+                        },
+                        unlocked(){
+                                return tmp.ch.layerShown
                         },
                 },
                 {
