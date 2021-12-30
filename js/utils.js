@@ -215,6 +215,12 @@ function inChallenge(layer, id) {
 
 var onTreeTab = true
 
+function getFullEffectDescription(layer){
+        let str = run(layers[layer].effectDescription, layers[layer])
+        if (str != "") return ", " + str
+        return str
+}
+
 function showTab(name, prev) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
 	if (player.tab !== name) clearParticles(function(p) {return p.layer === player.tab})

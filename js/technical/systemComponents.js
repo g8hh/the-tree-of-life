@@ -170,12 +170,12 @@ var systemComponents = {
 		</table>
 		<br><br>
 		<h2 style='color: #FF0066'>Hard mode</h2>:<br>
-		Passive gains are 4x less and various other smaller nerfs<br><br>
+		Most passive gains are 4x less and various other smaller nerfs<br><br>
 
 		<h2 style='color: #FF0066'>Easy mode</h2>:<br>
 		All bulk buying is done by default<br>
-		Gain 2x of all prestige currencies, and 4x all passive gain currencies<br>
-		Gain 2x resets at once and pre-Phosphorus gain ^1.001<br><br>
+		Gain 2x of all prestige currencies, and 4x of all passive gain currencies<br>
+		Gain 2x resets at once and pre-Phosphorus resource gain ^1.001<br><br>
 
 		<h2 style='color: #FF0066'>Extreme mode</h2>:<br>
 		Gain of all currencies is raised ^.75 (after everything except dilation)<br>

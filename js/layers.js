@@ -200,33 +200,6 @@ function getDilationExponent(){
         return getPointDilationExponent()
 }
 
-function getFullEffectDescription(layer){
-        let str = run(layers[layer].effectDescription, layers[layer])
-        if (str != "") return ", " + str
-        return str
-}
-
-function getResetGemIDs(){
-        if (!player.cells.unlocked) return (
-                           ["101", "102", "103", "104", "105", "106", "107", "108", 
-                            "201", "202", "203", "204", "205", "206", "207", "208", 
-                            "301", "302", "303", "304", "305", "306", "307", "308", 
-                            "401", "402", "403", "404", "405", "406", "407", "408", 
-                            "501", "502", "503", "504", "505", "506", "507", "508", 
-                            "601", "602", "603", "604", "605", "606", "607", "608", 
-                            "701", "702", "703", "704", "705", "706", "707", "708", 
-                            "801", "802", "803", "804", "805", "806", "807", "808"])
-                            
-        return             [                                   "106", "107", "108", 
-                                                               "206", "207", "208", 
-                                                               "306", "307", "308", 
-                                                               "406", "407", "408", 
-                                                               "506", "507", "508", 
-                            "601", "602", "603", "604", "605", "606", "607", "608", 
-                            "701", "702", "703", "704", "705", "706", "707", "708", 
-                            "801", "802", "803", "804", "805", "806", "807", "808"].slice(player.cells.milestone2Best)
-}
-
 function sortStrings(l){
         l.sort(function(a,b){return Number(a)-Number(b)})
 }
@@ -311,10 +284,10 @@ var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
         304: [new Decimal("1e2315"), new Decimal(1e20), new Decimal(1.3)],
-        305: [new Decimal("5e5799"), new Decimal(1e11), new Decimal(1.4)],
+        305: [new Decimal("1.7e4318"), new Decimal("7e335"), new Decimal(1.4)],
         306: [new Decimal("5.9e2513"), new Decimal(1e156), new Decimal(1.2)],
-        307: [new Decimal("2e5958"), new Decimal(2.5e11), new Decimal(1.3)],
-        308: [new Decimal("1e5257"), new Decimal(90), new Decimal(1.1)],
+        307: [new Decimal("2e95958"), new Decimal(2.5e11), new Decimal(1.3)],
+        308: [new Decimal("1e95257"), new Decimal(90), new Decimal(1.1)],
 
         404: [new Decimal("5e638"), new Decimal(1e15), new Decimal(1.1)],
         405: [new Decimal("5e799"), new Decimal(1e11), new Decimal(1.3)],
@@ -23818,7 +23791,7 @@ addLayer("t", {
                         ret = ret.sub(lvls*2)
                 }
                 if (hasUpgrade("an", 11)) ret = ret.sub(100)
-                if (hasUpgrade("ch", 11)) ret = ret.sub(player.ch.points.min(100))
+                if (hasUpgrade("ch", 11)) ret = ret.sub(player.ch.points.min(200))
 
                 return ret.pow(-1)
         },
@@ -26215,7 +26188,7 @@ addLayer("or", {
                         let data = player.or.extras
                         let ret = decimalOne
 
-                        if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
                                                         ret = ret.times(data[401].plus(1))
                                                         ret = ret.times(data[402].plus(1))
                                                         ret = ret.times(data[403].plus(1))
@@ -26302,6 +26275,7 @@ addLayer("or", {
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
                                                         ret = ret.times(tmp.or.challenges[11].reward)
                                                         ret = ret.times(tmp.or.challenges[12].reward)
                                                         ret = ret.times(tmp.or.challenges[21].reward)
@@ -26383,6 +26357,7 @@ addLayer("or", {
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("or", 201)) {
                                 let base = hasUpgrade("or", 321) || player.an.unlocked ? 4 : 2
                                                         ret = ret.times(Decimal.pow(base, tmp.or.upgrades.kidneyUpgradesLength))
@@ -26405,7 +26380,7 @@ addLayer("or", {
                         if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
                         if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
 
-                        if (player.extremeMode) ret = ret.pow(.75) 
+                        if (player.extremeMode)         ret = ret.pow(.75) 
                         
                         return ret
                 },
@@ -26450,6 +26425,7 @@ addLayer("or", {
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("or", 101))      ret = ret.times(tmp.or.upgrades[101].base.pow(player.or.upgrades.length))
                         if (hasUpgrade("or", 103))      ret = ret.times(tmp.or.upgrades[103].ob_effect)
                         if (hasUpgrade("or", 202))      ret = ret.times(player.or.deoxygenated_blood.points.max(1).pow(.1))
@@ -26467,6 +26443,7 @@ addLayer("or", {
                         let ret = decimalOne
 
                         if (player.hardMode)            ret = ret.div(4)
+                        if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("or", 101))      ret = ret.times(tmp.or.upgrades[101].base.pow(player.or.upgrades.length))
                         if (hasUpgrade("or", 105))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 115))      ret = ret.times(player.t.points.max(10).log10())
@@ -30477,7 +30454,7 @@ addLayer("or", {
                                 return [["or", "dontshoworgans"]]
                         },
                         effectDescription(){
-                                return "Reward: in<u>TES</u>tine's log10 becomes log9, per milestone Energy<sup>.01</sup> dilates point gain and unlock a toggle for hiding the Organ tab [doesn't affect gameplay]."
+                                return "Reward: in<u>TES</u>tine's log10 becomes log9, per milestone Energy<sup>.01</sup> dilates point gain and unlock a toggle for hiding the Organs subtab [doesn't affect gameplay]."
                         },
                 }, // hasMilestone("or", 23)
                 24: {
@@ -31133,6 +31110,7 @@ addLayer("an", {
         getGainMult(){ // a gain animalgain again animal gain animalsgain animals gain
                 let ret = decimalOne
 
+                if (player.easyMode)            ret = ret.times(2)
                 if (hasMilestone("an", 13))     ret = ret.times(player.an.milestones.length)
                 if (hasMilestone("an", 18))     ret = ret.times(player.an.genes.points.max(10).log10())
                 else if (hasUpgrade("or", 351)) {
@@ -31318,6 +31296,8 @@ addLayer("an", {
                 getResetGain(){ // genegain gene gain ggain g gain
                         let ret = player.an.grid[808].extras.plus(1)
 
+                        if (player.easyMode)            ret = ret.times(4)
+
                         if (hasMilestone("an", 16)) {
                                 let sub = hasMilestone("an", 22) ? 0 : 1000
                                                         ret = ret.times(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0)))
@@ -31347,6 +31327,8 @@ addLayer("an", {
                                 let exp = player.tokens.tokens2.total.sub(sub).max(0)
                                                         ret = ret.times(Decimal.pow(base, exp))
                         }
+
+                        if (player.extremeMode)         ret = ret.pow(.75)
 
                         return ret
                 },
@@ -32591,6 +32573,9 @@ addLayer("ch", {
         },
         effect(){
                 let pts = player.ch.points
+
+                if (pts.gte(100)) pts = pts.times(100).sqrt()
+
                 let ret = pts.div(100).plus(2)
                 if (hasMilestone("ch", 10)) ret = Decimal.pow(1.004, pts).times(2)
 
@@ -32612,7 +32597,7 @@ addLayer("ch", {
         prestigeButtonText(){
                 if (player.shiftAlias) {
                         let p1 = "Formula:" + br + format(tmp.ch.requires, 0) + "*"
-                        p1 += formatWhole(tmp.ch.base) + "^(x<sup>" + formatWhole(tmp.ch.exponent)
+                        p1 += formatWhole(tmp.ch.base) + "^(x<sup>" + format(tmp.ch.exponent, 4)
                         p1 += "</sup>)"
                         return p1.replace("1*", "")
                 }
@@ -32640,7 +32625,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes I"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per Chromosome up to 100 subtract 1 from Tissue gain exponent and Gamma-<br>proteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
+                                return "<bdi style='font-size: 80%'>Per Chromosome up to 200 subtract 1 from Tissue gain exponent and Gamma-<br>proteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
                         },
                         cost:() => new Decimal(34),
                         unlocked(){
@@ -32883,8 +32868,11 @@ addLayer("ch", {
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Chromosomes only resets Gene amounts."
+                                        let b = "Chromosome effect is 2+x/100."
+                                        if (hasMilestone("ch", 10)) b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
+                                        if (player.ch.points.gte(100)) b += br + "Effect after 100 is softcapped, x ⭢ (100*x)<sup>.5</sup>"
 
-                                        return a
+                                        return a + br2 + b
                                 }],
                         ],
                         unlocked(){
@@ -40728,12 +40716,7 @@ addLayer("tokens", {
         type: "custom",
         getResetGain(){
                 if (hasMilestone("or", 2) && player.points.slog().gt(4)) {
-                        let tetBase = 9.5
-                        if (hasMilestone("or", 5)) tetBase = 9
-                        if (hasUpgrade("or", 231)) tetBase = 8.5
-                        if (hasUpgrade("or", 232)) tetBase = 8
-                        if (hasUpgrade("or", 34))  tetBase = 7.5
-                        if (hasUpgrade("or", 35))  tetBase = 7
+                        let tetBase = tmp.tokens.getTetrationBase
 
                         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
 
@@ -40743,6 +40726,16 @@ addLayer("tokens", {
                 } 
                 if (tmp.tokens.getNextAt.lt(tmp.tokens.baseAmount)) return decimalOne
                 return decimalZero
+        },
+        getTetrationBase(){
+                let tetBase = 10
+                if (hasMilestone("or", 2)) tetBase = 9.5
+                if (hasMilestone("or", 5)) tetBase = 9
+                if (hasUpgrade("or", 231)) tetBase = 8.5
+                if (hasUpgrade("or", 232)) tetBase = 8
+                if (hasUpgrade("or", 34))  tetBase = 7.5
+                if (hasUpgrade("or", 35))  tetBase = 7
+                return tetBase 
         },
         shouldNotify(){
                 if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) return true
@@ -40837,13 +40830,7 @@ addLayer("tokens", {
                 amt = Math.floor(amt)
 
                 if (amt >= len) {
-                        let tetBase = 10
-                        if (hasMilestone("or", 2)) tetBase = 9.5
-                        if (hasMilestone("or", 5)) tetBase = 9
-                        if (hasUpgrade("or", 231)) tetBase = 8.5
-                        if (hasUpgrade("or", 232)) tetBase = 8
-                        if (hasUpgrade("or", 34))  tetBase = 7.5
-                        if (hasUpgrade("or", 35))  tetBase = 7
+                        let tetBase = tmp.tokens.getTetrationBase
                         return Decimal.tetrate(tetBase, 4 + (amt - len) / tmp.tokens.getTetrationScalingDivisor)
                 }
                 let additional = player.hardMode ? 1e4 : 1
@@ -42606,7 +42593,7 @@ addLayer("tokens", {
                         },
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[191]) + "</b><br>"
-                                let cost = "<b><h2>Requires</h2>: " + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 if (player.extremeMode) eformula = eformula.replace("21", "25")
                                 if (hasUpgrade("sci", 571)) eformula = eformula.replace("25", "24")
@@ -43945,13 +43932,7 @@ addLayer("tokens", {
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
                                         let add = player.extremeMode ? TOKEN_COSTS_EXTREME.length : TOKEN_COSTS.length
                                         let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + add)
-                                        let baseStr = "10"
-                                        if (hasMilestone("or", 2)) baseStr = "9.5"
-                                        if (hasMilestone("or", 5)) baseStr = "9"
-                                        if (hasUpgrade("or", 231)) baseStr = "8.5"
-                                        if (hasUpgrade("or", 232)) baseStr = "8"
-                                        if (hasUpgrade("or", 34))  baseStr = "7.5"
-                                        if (hasUpgrade("or", 35))  baseStr = "7"
+                                        let baseStr = formatWhole(tmp.tokens.getTetrationBase, false, 1)
                                         return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>" + baseStr
                                 }],
                         ],
