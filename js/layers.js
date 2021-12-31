@@ -287,7 +287,7 @@ var TAXONOMY_COSTS = {
         305: [new Decimal("1.7e4318"), new Decimal("7e335"), new Decimal(1.4)],
         306: [new Decimal("5.9e2513"), new Decimal(1e156), new Decimal(1.2)],
         307: [new Decimal("2e95958"), new Decimal(2.5e11), new Decimal(1.3)],
-        308: [new Decimal("1e95257"), new Decimal(90), new Decimal(1.1)],
+        308: [new Decimal("9.8e5766"), new Decimal(5e11), new Decimal(1.3)],
 
         404: [new Decimal("5e638"), new Decimal(1e15), new Decimal(1.1)],
         405: [new Decimal("5e799"), new Decimal(1e11), new Decimal(1.3)],
@@ -11785,27 +11785,26 @@ addLayer("mu", {
                                         }
                                         doReset("mu", true)
                                         if (hasMilestone("d", 15)) {
-                                                let x = player.mu.buyables[31].toNumber()
-                                                let diff = 20
-                                                if (hasMilestone("d", 16))      diff = 100
+                                                let x = player.mu.buyables[31]
+                                                let diff = new Decimal(20)
+                                                if (hasMilestone("d", 16))      diff = new Decimal(100)
                                                 if (player.extremeMode && hasMilestone("cells", 1)) {
-                                                                                diff *= 10
+                                                                                diff = diff.times(10)
                                                 } 
-                                                if (hasMilestone("d", 28))      diff *= 20
+                                                if (hasMilestone("d", 28))      diff = diff.times(20)
                                                 if (hasMilestone("cells", 4) && !player.extremeMode) {
-                                                                                diff *= 10
+                                                                                diff = diff.times(10)
                                                 }
-                                                if (hasChallenge("l", 101))     diff *= 50
-                                                if (hasChallenge("l", 102))     diff *= 50
-                                                if (hasUpgrade("sci", 534))     diff *= 100
+                                                if (hasChallenge("l", 101))     diff = diff.times(50)
+                                                if (hasChallenge("l", 102))     diff = diff.times(50)
+                                                if (hasUpgrade("sci", 534))     diff = diff.times(100)
                                                 if (hasMilestone("cells", 49) && player.extremeMode) {
-                                                                                diff *= 100
+                                                                                diff = diff.times(100)
                                                 }
-                                                                                diff *= layers.l.grid.getGemEffect(702).toNumber()
+                                                                                diff = diff.times(layers.l.grid.getGemEffect(702))
 
-                                                diff = Math.floor(diff)
-                                                y = Math.ceil(x/diff) * diff
-                                                player.mu.buyables[31] = new Decimal(y)
+                                                diff = diff.floor()
+                                                player.mu.buyables[31] = new Decimal(x.div(diff).ceil().times(diff))
                                         }
                                 }
                         },
@@ -20188,7 +20187,7 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 564))     ret = ret.times(tmp.sci.buyables[522].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
                                                         ret = ret.times(tmp.or.challenges[12].reward)
-                        if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01).pow(player.or.upgrades.length))
+                        if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01 * player.or.upgrades.length))
                                                         ret = ret.times(tmp.an.effect)
 
                         if (inChallenge("cells", 12))   ret = ret.pow(tmp.cells.challenges[12].challengeEffect)
@@ -23780,15 +23779,14 @@ addLayer("t", {
 
                 if (hasUpgrade("t", 72)) {
                         let amt = Math.min(50, player.t.upgrades.length)
-                        ret = ret.sub(20*amt)
-                }
-                if (hasUpgrade("t", 111) && !hasUpgrade("or", 324)) {
-                        let amt = Math.min(500, 3*player.tokens.tokens2.total.sqrt().toNumber())
-                        ret = ret.sub(amt)
+                        ret = ret.sub(20 * amt)
                 }
                 if (hasUpgrade("or", 324)) {
                         let lvls = Math.min(100, player.or.upgrades.length)
-                        ret = ret.sub(lvls*2)
+                        ret = ret.sub(lvls * 2)
+                } else if (hasUpgrade("t", 111)) {
+                        let amt = player.tokens.tokens2.total.sqrt().times(3).min(100)
+                        ret = ret.sub(amt)
                 }
                 if (hasUpgrade("an", 11)) ret = ret.sub(100)
                 if (hasUpgrade("ch", 11)) ret = ret.sub(player.ch.points.min(200))
@@ -26276,12 +26274,14 @@ addLayer("or", {
 
                         if (player.hardMode)            ret = ret.div(4)
                         if (player.easyMode)            ret = ret.times(4)
+                        if (!hasMilestone("ch", 11)) {
                                                         ret = ret.times(tmp.or.challenges[11].reward)
                                                         ret = ret.times(tmp.or.challenges[12].reward)
                                                         ret = ret.times(tmp.or.challenges[21].reward)
                                                         ret = ret.times(tmp.or.challenges[22].reward)
                                                         ret = ret.times(tmp.or.challenges[31].reward)
                                                         ret = ret.times(tmp.or.challenges[32].reward)
+                        }
                         if (hasUpgrade("or", 224))      ret = ret.times(tmp.or.upgrades[224].effect)
                         if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
                         if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
@@ -26297,6 +26297,7 @@ addLayer("or", {
                         if (hasUpgrade("or", 43))       ret = ret.times(tmp.tokens.buyables[122].effect)
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
+                        if (hasMilestone("ch", 11))     ret = ret.pow(60)
                         
                         return ret
                 },
@@ -28551,13 +28552,14 @@ addLayer("or", {
                                 let id = 201
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
                                 }
                         },
                         base(){
+                                if (hasUpgrade("ch", 22)) return player.ch.points.div(100).plus(25)
                                 if (hasUpgrade("or", 333)) return new Decimal(player.or.upgrades.length / 4)
                                 let ret = new Decimal(tmp.or.upgrades.kidneyUpgradesLength).plus(1)
 
@@ -28583,6 +28585,7 @@ addLayer("or", {
                                 let eformula = "(Kidney upgrades + 1)^x<br>" + format(tmp.or.buyables[201].base) + "^x"
                                 if (hasUpgrade("or", 144)) eformula = eformula.replace("1", ".03 * Organ upgrades")
                                 if (hasUpgrade("or", 333)) eformula = eformula.replace("Kidney upgrades + .03 * Organ upgrades", "Organ upgrades/4")
+                                if (hasUpgrade("ch", 22)) eformula = eformula.replace("Organ upgrades/4", "25 + Chromosomes/100")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -28623,7 +28626,7 @@ addLayer("or", {
                                 let id = 202
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -28688,7 +28691,7 @@ addLayer("or", {
                                 let id = 203
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -28753,16 +28756,15 @@ addLayer("or", {
                                 let id = 211
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
                                 }
                         },
                         base(){
-                                let ret = player.or.buyables[203].max(1).sqrt()
-                                
-                                return ret
+                                if (false) return player.or.buyables[203].max(1)
+                                return player.or.buyables[203].max(1).sqrt()
                         },
                         effect(){
                                 return tmp.or.buyables[211].base.pow(player.or.buyables[211])
@@ -28778,6 +28780,7 @@ addLayer("or", {
                                 }
 
                                 let eformula = "sqrt(make levels)^x<br>" + format(tmp.or.buyables[211].base) + "^x"
+                                if (false) eformula = eformula.replace("sqrt(make levels)", "make levels")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -28818,7 +28821,7 @@ addLayer("or", {
                                 let id = 212
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -28883,7 +28886,7 @@ addLayer("or", {
                                 let id = 213
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -28948,7 +28951,7 @@ addLayer("or", {
                                 let id = 221
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -29013,7 +29016,7 @@ addLayer("or", {
                                 let id = 222
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -29078,7 +29081,7 @@ addLayer("or", {
                                 let id = 223
                                 let ma = tmp.or.buyables[id].getMaxAfford
                                 let maxBulk = tmp.or.buyables.getMaxBulk
-                                let up = false ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
+                                let up = hasUpgrade("ch", 22) || player.easyMode ? ma.sub(data.buyables[id]) : ma.sub(data.buyables[id]).min(maxBulk)
                                 data.buyables[id] = data.buyables[id].plus(up.max(0))
                                 if (!hasUpgrade("or", 155) && up.gt(0)) {
                                         data.contaminants.points = data.contaminants.points.sub(tmp.or.buyables[id].cost)
@@ -31122,6 +31125,7 @@ addLayer("an", {
                                                 ret = ret.times(Decimal.pow(2, a))
                 }
                 if (hasMilestone("an", 22))     ret = ret.times(player.an.grid[508].extras.plus(1).pow(.01))
+                if (hasUpgrade("an", 35))       ret = ret.times(Decimal.pow(1.01, player.ch.points))
 
                 return ret.max(1)
         },
@@ -31152,7 +31156,7 @@ addLayer("an", {
                 let pts = player.an.total
                 if (hasUpgrade("or", 33)) pts = player.an.best
 
-                let exp = pts.plus(99).log10().min(20)
+                let exp = pts.plus(99).log10().min(100)//for now, may change later
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -31514,6 +31518,18 @@ addLayer("an", {
                         unlocked(){
                                 return hasUpgrade("an", 33)
                         }, // hasUpgrade("an", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XV"
+                        },
+                        description(){
+                                return "Per Chromosome gain 1.01x Animals"
+                        },
+                        cost:() => new Decimal(1.58e18),
+                        unlocked(){
+                                return hasUpgrade("an", 34)
+                        }, // hasUpgrade("an", 35)
                 },
         },
         milestones: {
@@ -32135,7 +32151,7 @@ addLayer("an", {
                         content: [
                                 ["secondary-display", "genes"],
                                 ["display-text", function(){
-                                        return "You are gain " + format(tmp.an.gene.getResetGain) + " Genes/s before cross contamination."
+                                        return "You are gaining " + format(tmp.an.gene.getResetGain) + " Genes/s before cross contamination."
                                 }],
                                 "grid",
                                 "blank",
@@ -32171,7 +32187,7 @@ addLayer("an", {
                                         if (hasUpgrade("an", 12)) a2 = a2.replace("cbrt", "sqrt")
                                         if (hasUpgrade("or", 33)) a2 = a2.replace("-99", "")
                                         if (hasUpgrade("ch", 14)) a2 = "Current Animal gain: log10(Organs)<sup>" + formatWhole(tmp.an.gainExp) + "</sup>"
-                                        let a3 = "Initial Animal effect: (Animals+1)<sup>min(20, log10(99+Animals))</sup>"
+                                        let a3 = "Initial Animal effect: (Animals+1)<sup>log10(99+Animals)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
                                         let c = "Note that Tertiary completions are never reset."
@@ -32574,7 +32590,7 @@ addLayer("ch", {
         effect(){
                 let pts = player.ch.points
 
-                if (pts.gte(100)) pts = pts.times(100).sqrt()
+                if (pts.gte(95)) pts = pts.times(190).sub(9025).sqrt()
 
                 let ret = pts.div(100).plus(2)
                 if (hasMilestone("ch", 10)) ret = Decimal.pow(1.004, pts).times(2)
@@ -32697,6 +32713,18 @@ addLayer("ch", {
                         unlocked(){
                                 return player.an.grid[506].buyables.gte(264)
                         }, // hasUpgrade("ch", 21)
+                },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VII"
+                        },
+                        description(){
+                                return "I'm base becomes 25 + Chromosomes/100 and bulk unlimited Contaminant buyables"
+                        },
+                        cost:() => new Decimal(111),
+                        unlocked(){
+                                return player.an.grid[405].buyables.gte(108)
+                        }, // hasUpgrade("ch", 22)
                 },
         },
         milestones: {
@@ -32840,6 +32868,37 @@ addLayer("ch", {
                                 return "Reward: Chromosome effect becomes 1.004<sup>x</sup>*2 and Chromosome cost exponent is 1.32."
                         },
                 }, // hasMilestone("ch", 10)
+                11: {
+                        requirementDescription(){
+                                return "103 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(103)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Air Challenges no longer boost Air gain, but raise Air gain ^60."
+                        },
+                }, // hasMilestone("ch", 11)
+                12: {
+                        requirementDescription(){
+                                return "104 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(104)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                player.tokens.bestTop = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Top Quark multiplies instead of adds to the tetrational divider but its coefficient is .007."
+                        },
+                }, // hasMilestone("ch", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -32870,7 +32929,7 @@ addLayer("ch", {
                                         let a = "Chromosomes only resets Gene amounts."
                                         let b = "Chromosome effect is 2+x/100."
                                         if (hasMilestone("ch", 10)) b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
-                                        if (player.ch.points.gte(100)) b += br + "Effect after 100 is softcapped, x ⭢ (100*x)<sup>.5</sup>"
+                                        if (player.ch.points.gte(95)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
 
                                         return a + br2 + b
                                 }],
@@ -40771,68 +40830,66 @@ addLayer("tokens", {
                 return start + format(tmp.tokens.effect) + "."
         },
         getMinusEffectiveTokens(){
-                let a = 0
+                let a = decimalZero
                 
-                if (hasUpgrade("tokens", 73))   a += 1
-                if (hasMilestone("p", 1))       a += 1
-                if (hasUpgrade("p", 11))        a += 1
-                if (hasUpgrade("mu", 22))       a += 1
-                if (hasUpgrade("mu", 24))       a += 1
-                if (hasMilestone("l", 9))       a += Math.floor(player.l.challenges[11]/(player.extremeMode ? 1 : 2))
-                if (hasUpgrade("p", 41))        a += player.extremeMode ? 3 : 1
-                if (!hasUpgrade("or", 132))     a += layers.l.grid.getGemEffect(303).toNumber()
-                if (hasMilestone("l", 41))      a += player.extremeMode ? tmp.l.getNonZeroGemCount :  1
-                if (hasChallenge("l", 52))      a += tmp.l.challenges[52].reward.toNumber()
-                if (hasUpgrade("d", 33))        a += player.d.upgrades.length
+                if (hasUpgrade("tokens", 73))   a = a.plus(1)
+                if (hasMilestone("p", 1))       a = a.plus(1)
+                if (hasUpgrade("p", 11))        a = a.plus(1)
+                if (hasUpgrade("mu", 22))       a = a.plus(1)
+                if (hasUpgrade("mu", 24))       a = a.plus(1)
+                if (hasMilestone("l", 9))       a = a.plus(player.l.challenges[11]/(player.extremeMode ? 1 : 2))
+                if (hasUpgrade("p", 41))        a = a.plus(player.extremeMode ? 3 : 1)
+                if (!hasUpgrade("or", 132))     a = a.plus(layers.l.grid.getGemEffect(303))
+                if (hasMilestone("l", 41))      a = a.plus(player.extremeMode ? tmp.l.getNonZeroGemCount :  1)
+                if (hasChallenge("l", 52))      a = a.plus(tmp.l.challenges[52].reward)
+                if (hasUpgrade("d", 33))        a = a.plus(player.d.upgrades.length)
                 if (hasMilestone("cells", 25) && !player.extremeMode) {
-                                                a += player.cells.milestones.length
+                                                a = a.plus(player.cells.milestones.length)
                 }
-                if (hasMilestone("t", 2))       a += player.t.milestones.length
-                if (hasMilestone("t", 3))       a += player.t.milestones.length
-                if (hasUpgrade("cells", 45))    a += player.cells.upgrades.length
-                                                a += tmp.tokens.buyables[112].effect.toNumber()
-                if (hasUpgrade("t", 141))       a += player.t.upgrades.length
-                if (hasUpgrade("sci", 244))     a += Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5)
-                                                a += tmp.sci.buyables[303].effect.toNumber()
-                if (hasUpgrade("l", 12))        a += player.l.upgrades.length
-                if (hasMilestone("or", 14))     a += player.or.milestones.length * 3
-                if (hasUpgrade("or", 132))      a += player.or.upgrades.length * 3
-                if (hasUpgrade("sci", 203))     a += 1
-                if (hasUpgrade("sci", 303))     a += 1
-                if (hasUpgrade("p", 113))       a += 1
-                if (hasUpgrade("sci", 415))     a += tmp.sci.upgrades.proteinUpgradesLength
-                if (hasUpgrade("sci", 454))     a += tmp.sci.upgrades.proteinUpgradesLength * 3.5
-
-                if (typeof a != "number") Decimal(0) 
+                if (hasMilestone("t", 2))       a = a.plus(player.t.milestones.length)
+                if (hasMilestone("t", 3))       a = a.plus(player.t.milestones.length)
+                if (hasUpgrade("cells", 45))    a = a.plus(player.cells.upgrades.length)
+                                                a = a.plus(tmp.tokens.buyables[112].effect)
+                if (hasUpgrade("t", 141))       a = a.plus(player.t.upgrades.length)
+                if (hasUpgrade("sci", 244))     a = a.plus(Math.floor(tmp.sci.upgrades.carbonUpgradesLength / 5))
+                                                a = a.plus(tmp.sci.buyables[303].effect)
+                if (hasUpgrade("l", 12))        a = a.plus(player.l.upgrades.length)
+                if (hasMilestone("or", 14))     a = a.plus(player.or.milestones.length * 3)
+                if (hasUpgrade("or", 132))      a = a.plus(player.or.upgrades.length * 3)
+                if (hasUpgrade("sci", 203))     a = a.plus(1)
+                if (hasUpgrade("sci", 303))     a = a.plus(1)
+                if (hasUpgrade("p", 113))       a = a.plus(1)
+                if (hasUpgrade("sci", 415))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength)
+                if (hasUpgrade("sci", 454))     a = a.plus(tmp.sci.upgrades.proteinUpgradesLength * 3.5)
                 
-                return a
+                return a.ceil()
         },
         getTetrationScalingDivisor(){
-                let ret = 10
+                let ret = new Decimal(10)
 
-                if (hasMilestone("cells", 36))  ret *= 20
-                if (hasMilestone("cells", 51))  ret *= 3
-                if (hasMilestone("t", 18))      ret *= 1 + player.t.milestones.length / 50
+                if (hasMilestone("cells", 36))  ret = ret.times(20)
+                if (hasMilestone("cells", 51))  ret = ret.times(3)
+                if (hasMilestone("t", 18))      ret = ret.times(1 + player.t.milestones.length / 50)
+                if (hasMilestone("ch", 12))     ret = ret.times(tmp.tokens.buyables[121].effect)
 
-                                                ret += tmp.tokens.buyables[121].effect.toNumber()
+                if (!hasMilestone("ch", 12))    ret = ret.plus(tmp.tokens.buyables[121].effect)
                 
                 return ret
         },
         getNextAt(){
                 // 1e6-1
                 let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
-                let amt = player.tokens.total.toNumber()
+                let amt = player.tokens.total
 
-                amt -= tmp.tokens.getMinusEffectiveTokens
+                amt = amt.sub(tmp.tokens.getMinusEffectiveTokens).floor()
                 
-                if (amt < 0) return Decimal.pow(10, 5000 + Math.floor(amt))
+                if (amt.lt(0)) return amt.plus(5000).pow10()
 
-                amt = Math.floor(amt)
-
-                if (amt >= len) {
+                if (amt.gte(len)) {
                         let tetBase = tmp.tokens.getTetrationBase
-                        return Decimal.tetrate(tetBase, 4 + (amt - len) / tmp.tokens.getTetrationScalingDivisor)
+                        return Decimal.tetrate(tetBase, amt.sub(len).div(tmp.tokens.getTetrationScalingDivisor).plus(4))
                 }
+                amt = Math.round(amt.toNumber())
                 let additional = player.hardMode ? 1e4 : 1
                 if (player.extremeMode) return Decimal.pow(10, TOKEN_COSTS_EXTREME[amt]).times(additional)
                 return Decimal.pow(10, TOKEN_COSTS[amt]).times(additional)
@@ -42444,6 +42501,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("ch", 12)) return c.pow(.7).times(.007)
                                 if (hasMilestone("or", 7)) return c.pow(.7).times(4)
 
                                 return c.plus(100).div(r.plus(50)).times(c.pow(.6)).times(2)
@@ -42472,6 +42530,7 @@ addLayer("tokens", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[121]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: +"
+                                        if (hasMilestone("ch", 12)) eff1 = eff1.replace("+", "*")
                                         let eff2 = format(tmp.tokens.buyables[121].effect, 4) + " to Token tetrational divider</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("tokens", 121)) + " Token II</b><br>"
                                         
@@ -42481,6 +42540,7 @@ addLayer("tokens", {
                                 let eformula = "2C<sup>.6</sup>(100+C)/(50+R)*x<br>" 
                                 if (hasMilestone("or", 7)) eformula = "4C<sup>.7</sup>*x<br>"
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
+                                if (hasMilestone("ch", 12)) eformula = eformula.replace("4", ".007")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -43931,7 +43991,7 @@ addLayer("tokens", {
                                         let a = "Current tetrational scaling formula: "
                                         let div = formatWhole(tmp.tokens.getTetrationScalingDivisor)
                                         let add = player.extremeMode ? TOKEN_COSTS_EXTREME.length : TOKEN_COSTS.length
-                                        let sub = formatWhole(Math.ceil(tmp.tokens.getMinusEffectiveTokens) + add)
+                                        let sub = formatWhole(tmp.tokens.getMinusEffectiveTokens.plus(add))
                                         let baseStr = formatWhole(tmp.tokens.getTetrationBase, false, 1)
                                         return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>" + baseStr
                                 }],
