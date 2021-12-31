@@ -44164,7 +44164,6 @@ addLayer("tokens", {
                                                 let a = "DNA gain is " + format(tmp.d.getBaseGain) + "*AX"
                                                 let b = "AX is multiplied by the following factors"
                                                 let c = ""
-                                                let ret = decimalOne
 
                                                 if (layers.l.grid.getGemEffect(206).gt(1)) {
                                                                                 c += "C26 Gems multiply AX by " + format(layers.l.grid.getGemEffect(206)) + br
@@ -44225,7 +44224,50 @@ addLayer("tokens", {
                         },
                         "Cells": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Cell gain is " + format(tmp.cells.getBaseGain) + "*AX"
+                                                let b = "AX is multiplied by the following factors"
+                                                let c = ""
+
+                                                let ret = decimalOne
+
+                                                if (hasUpgrade("cells", 111))   c += "Mu I multiplies AX by " + format(tmp.cells.upgrades[111].effect) + br
+                                                if (hasUpgrade("cells", 211))   c += "Lambda I multiplies AX by " + format(tmp.cells.upgrades[211].effect) + br
+                                                if (hasUpgrade("cells", 311))   c += "Kappa I multiplies AX by " + format(tmp.cells.upgrades[311].effect) + br
+                                                if (hasUpgrade("cells", 411))   c += "Iota I multiplies AX by " + format(tmp.cells.upgrades[411].effect) + br
+                                                if (hasMilestone("cells", 16))  c += "Cell Milestone 16 multiplies AX by " + format(tmp.cells.milestones[16].effect) + br
+                                                if (player.cells.challenges[12] > 0) {
+                                                                                c += "Secondary multiplies AX by " + format(tmp.cells.challenges[12].rewardEffect) + br
+                                                }                                
+                                                                                c += "Stem Cells multiply AX by " + format(player.cells.stem_cells.points.plus(10).log10()) + br
+                                                if (hasUpgrade("cells", 15))    c += "Cells V multiplies AX by " + format(tmp.cells.upgrades[15].effect) + br
+                                                if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
+                                                if (hasUpgrade("cells", 54) && tmp.cells.upgrades[54].effect.gt(1)) {
+                                                                                c += "Cells XXIV multiplies AX by " + format(tmp.cells.upgrades[54].effect) + br
+                                                }
+                                                if (hasUpgrade("t", 135))       c += "Tissues LXV multiplies AX by " + format(tmp.t.upgrades[135].effect) + br
+                                                if (hasUpgrade("sci", 511))     c += "DNA Sci VI multiplies AX by " + format(Decimal.pow(2, tmp.sci.upgrades[511].lvls)) + br
+                                                if (hasUpgrade("sci", 555))     c += "DNA Sci XXV multiplies AX by " + format(tmp.sci.buyables[501].effect.max(1)) + br
+                                                if (hasUpgrade("sci", 561))     c += "DNA Sci XXVI multiplies AX by " + format(tmp.sci.buyables[502].effect.max(1)) + br
+                                                if (hasChallenge("l", 111))     c += "Anti-Theta multiplies AX by " + format(tmp.l.challenges[22].reward.min(ret.sqrt())) + br
+                                                if (tmp.or.effect.gt(1))        c += "Organ effect multiplies AX by " + format(tmp.or.effect) + br
+                                                if (player.easyMode)            c += "Easy mode multiplies AX by 2" + br
+                                                if (hasUpgrade("sci", 514))     c += "DNA Sci IX multiplies AX by " + format(player.cells.stem_cells.points.plus(10).log10()) + br
+                                                if (hasUpgrade("sci", 551))     c += "DNA Sci XXI multiplies AX by " + format(player.sci.dna_science.points.max(10).log10().pow(tmp.sci.upgrades[551].lvls)) + br
+                                                if (hasUpgrade("cells", 21) && player.extremeMode)  {
+                                                                                c += "Cells VI multiplies AX by " + format(Decimal.pow(player.cells.upgrades.length, player.cells.upgrades.length + 3)) + br
+                                                }
+                                                if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+                                                if (tmp.or.challenges[21].reward.gt(1)) {
+                                                        c += "Primary Bronchi multiplies AX by " + format(tmp.or.challenges[21].reward) + br
+                                                }
+                                                if (hasUpgrade("or", 102))      c += "Heart II multiplies AX by " + format(tmp.or.upgrades[102].cell_effect) + br
+                                                                                
+                                                if (hasMilestone("cells", 40))  c += br + "Cell Milestone 40 multiplies AX by " + format(player.cells.stem_cells.best.max(1).root(100)) + br
+                                                                                c += "Tissue effect multiplies AX by " + format(tmp.t.effect) + br
+
+                                                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+                                        }],
                                 ],
                                 unlocked(){
                                         return true
