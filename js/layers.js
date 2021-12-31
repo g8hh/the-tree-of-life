@@ -1985,6 +1985,7 @@ addLayer("sci", {
                 }
         },
         effect(){
+                if (!player.extremeMode) return decimalOne
                 return player.sci.points.plus(10).log10()
         },
         effectDescription(){
@@ -27780,6 +27781,15 @@ addLayer("or", {
                                 data.protein.points = decimalZero
                                 data.protein.total = decimalZero
                                 data.protein.best = decimalZero
+                                data.buyables[11] = decimalZero
+                                data.buyables[12] = decimalZero
+                                data.buyables[13] = decimalZero
+                                data.buyables[21] = decimalZero
+                                data.buyables[22] = decimalZero
+                                data.buyables[23] = decimalZero
+                                data.buyables[31] = decimalZero
+                                data.buyables[32] = decimalZero
+                                data.buyables[33] = decimalZero
                         },
                         currencyLocation:() => player.or.contaminants,
                         currencyInternalName:() => "points",
@@ -43970,6 +43980,316 @@ addLayer("tokens", {
                         }, // hasUpgrade("tokens", 95)
                 },
         },
+        microtabs: {
+                currency_displays: {
+                        "Nothing": {
+                                content: [
+                                        ["display-text", 
+                                                makeRed("WARNING: The other tabs may cause large amounts of lag.") +
+                                                br2 + "Only selected currencies have tabs,<br>if you'd want a currency to have a tab, let me know!"
+                                        ],
+                                ]
+                        },
+                        "Points": {
+                                content: [
+                                        ["display-text", function(){
+                                                let a = "Point gain is (" + format(getPointConstant(), 1) + "*AX)^BX all dilated ^CX."
+                                                let b = "AX, BX, and CX are initially 1 and boosted as follows."
+                                                let c = ""
+
+                                                if (tmp.l.effect.gt(1))         c += "Life effect multiplies AX by " + format(tmp.l.effect) + br
+                                                if (tmp.sci.effect.gt(1))       c += "Science effect multiplies AX by " + format(tmp.sci.effect) + br
+                                                if (hasUpgrade("sci", 302))     c += "N Sci II effect multiplies AX by " + format(tmp.sci.upgrades[302].effect) + br
+                                                if (player.easyMode)            c += "Easy mode multiplies AX by 4" + br
+                                                if (c.includes("AX"))           c += br
+
+                                                if (player.easyMode)            c += "Easy mode multiplies BX by 1.001" + br
+                                                if (hasMilestone("l", 1))       c += "Life Milestone 1 multiplies BX by " + format(tmp.l.milestones[1].effect) + br
+                                                if (hasMilestone("l", 18) && !player.extremeMode) {
+                                                                                c += "Life Milestone 18 multiplies BX by 2" + br
+                                                }
+                                                if (hasUpgrade("mu", 51))       c += "µ XXI multiplies BX by " + format(player.l.points.max(10).log10()) + br
+                                                if (hasMilestone("l", 31)) {
+                                                        let l31exp = Math.max(0, player.l.challenges[11] - 100)
+                                                        let l31base = 100
+                                                        if (player.extremeMode) l31base = 9
+                                                        if (hasMilestone("l", 32)) l31base *= 10
+                                                        if (hasMilestone("l", 34)) l31base *= 10
+                                                                                c += "Life Milestones 31, 32, and 34 multiply BX by " + format(Decimal.pow(l31base, l31exp)) + br
+                                                }
+                                                if (hasMilestone("l", 33)) {
+                                                        let l33base = Math.max(1, player.l.challenges[11]/(player.extremeMode ? 98 : 100) )
+                                                        let l33exp = player.mu.buyables[33]
+                                                                                c += "Life Milestone 33 multiplies BX by " + format(Decimal.pow(l33base, l33exp)) + br
+                                                }
+                                                if (layers.l.grid.getGemEffect(102).gt(1)) {
+                                                                                c += "C12 Gems multiply BX by " + format(layers.l.grid.getGemEffect(102)) + br
+                                                }
+                                                if (hasMilestone("a", 18))      c += "Amino Acid milestone 18 multiplies BX by " + format(Decimal.pow(3, getBuyableAmount("l", 23))) + br
+                                                if (!player.extremeMode) {
+                                                        let c31base = layers.l.grid.getGemEffect(301)
+                                                        if (c31base.gt(1))      c += "C31 Gems multiply BX by " + format(c31base.pow(tmp.l.getNonZeroGemCount)) + br
+                                                        let c34base = layers.l.grid.getGemEffect(304)
+                                                        if (c34base.gt(1))      c += "C34 Gems multiply BX by " + format(c34base.pow(getBuyableAmount("mu", 32))) + br
+                                                        let c65base = layers.l.grid.getGemEffect(605)
+                                                        if (c65base.gt(1))      c += "C65 Gems multiply BX by " + format(c65base.pow(getBuyableAmount("l", 11))) + br
+                                                        if (!hasUpgrade("or", 132)) {
+                                                                let c73base = layers.l.grid.getGemEffect(703)
+                                                                if (c73base.gt(1)) {
+                                                                                c += "C73 Gems multiply BX by " + format(c73base.pow(getBuyableAmount("a", 21))) + br
+                                                                }
+                                                        }
+                                                        let c38base = layers.l.grid.getGemEffect(308)
+                                                        if (c38base.gt(1))      c += "C38 Gems multiply BX by " + format(c38base.pow(getBuyableAmount("l", 21))) + br
+                                                        if (hasMile("l", 36))   c += "Life Milestone 36 multiplies BX by 1.1" + br
+                                                } else {
+                                                        let c34base = layers.l.grid.getGemEffect(304)
+                                                        if (c34base.gt(1))      c += "C34 Gems multiply BX by " + format(c34base.pow(getBuyableAmount("l", 33))) + br
+                                                        if (hasUpg("p", 43))    c += "Phosphorus XVIII multiplies BX by " + format(Decimal.pow(2, player.p.upgrades.length))
+                                                        if (hasMile("a", 17))   c += "Amino Acid Milestone 17 multiplies BX by " + format(Decimal.pow(3, player.a.milestones.length)) + br
+                                                        if (hasMile("a", 22))   c += "Amino Acid Milestone 22 multiplies BX by " + format(Decimal.pow(1 + player.a.milestones.length/100, player.a.milestones.length)) + br
+                                                                                c += "Extreme Mode multiplies BX by .75" + br
+                                                }
+                                                if (!hasUpgrade("or", 132)) {
+                                                        let c54base = layers.l.grid.getGemEffect(504)
+                                                                                c += "C54 Gems multiply BX by " + format(c54base.pow(getBuyableAmount("a", 22))) + br
+                                                        let c64base = layers.l.grid.getGemEffect(604)
+                                                                                c += "C64 Gems multiply BX by " + format(c64base.pow(getBuyableAmount("a", 33))) + br
+                                                        let c17base = layers.l.grid.getGemEffect(107)
+                                                                                c += "C17 Gems multiply BX by " + format(c17base.pow(getBuyableAmount("a", 32))) + br
+                                                        let c18base = layers.l.grid.getGemEffect(108)
+                                                                                c += "C18 Gems multiply BX by " + format(c18base.pow(getBuyableAmount("l", 33).pow(player.extremeMode ? 1.9394 : 1.8))) + br
+                                                }
+                                                if (hasMilestone("a", 19))      c += "Amino Acid Milestone 19 multiply BX by " + format(tmp.a.milestones[19].effect) + br
+                                                if (hasUpgrade("a", 11))        c += "Amino Acid I multiplies BX by " + format(Decimal.pow(3, player.a.upgrades.length))
+                                                if (hasUpgrade("a", 13))        c += "Amino Acid III multiplies BX by " + format(getBuyableAmount("a", 11).max(1))
+                                                if (hasUpgrade("a", 15))        c += "Amino Acid V multiplies BX by " + format(getBuyableAmount("a", 12).max(1))
+                                                if (hasUpgrade("a", 33))        c += "Amino Acid XIII multiplies BX by " + format(Decimal.pow(100, getBuyableAmount("a", 13)))
+                                                let logProteinTimes = hasUpgrade("a", 34) + hasUpgrade("a", 35)
+                                                if (logProteinTimes > 0)        c += "Amino Acid XIII and XIV multiplies BX by " + format(player.a.protein.points.max(10).log10().pow(logProteinTimes)) + br
+                                                if (hasMilestone("a", 24))      c += "Amino Milestone 24 multiplies BX by " + format(tmp.a.milestones[24].effect) + br
+                                                if (!hasUpgrade("or", 223))     c += "siRNA multiplies BX by " + format(tmp.a.buyables[22].effect) + br
+                                                if (hasUpgrade("d", 12)) {
+                                                        let ncRNA = getBuyableAmount("a", 31)
+                                                        let d12exp = ncRNA.times(player.d.upgrades.length)
+                                                        if (ncRNA.gt(1))        c += "DNA II multiplies BX by " + format(ncRNA.pow(d12exp)) + br
+                                                }
+                                                if (hasUpgrade("d", 13)) {
+                                                        let d13base = getBuyableAmount("a", 13)
+                                                        let d13exp = d13base.times(player.extremeMode && !hasUpgrade("sci", 455) ? 1 : player.d.upgrades.length)
+                                                        if (d13base.gt(1))      c += "DNA III multiplies BX by " + format(d13base.pow(d13exp)) + br
+                                                }
+                                                if (hasUpgrade("d", 34)) {
+                                                        let a2da = getBuyableAmount("l", 11)
+                                                        let d34exp = a2da.times(player.d.upgrades.length)
+                                                                                c += "DNA XIV multiplies BX by " + format(a2da.pow(d34exp)) + br
+                                                }
+                                                if (hasMilestone("d", 27) && tmp.d.milestones[27].effect.gt(1)) {
+                                                                                c += "DNA Milestone 27 multiplies BX by " + format(tmp.d.milestones[27].effect) + br
+                                                }
+                                                if (hasUpgrade("l", 14))        c += "Life IV multiplies BX by " + format(tmp.l.upgrades[14].effect) + br
+                                                if (hasUpgrade("l", 45))        c += "Live XX multiplies BX by " + format(player.l.buyables[22].max(1)) + br
+                                                if (hasUpgrade("sci", 411))     c += "Protein Sci VI multiplies BX by " + format(player.sci.protein_science.points.max(1)) + br
+                                                if (hasUpgrade("sci", 502))     c += "DNA Sci II multiplies BX by " + format(player.d.points.max(1).pow(player.a.buyables[31].plus(player.a.buyables[13]))) + br
+                                                if (hasUpgrade("sci", 504))     c += "DNA Sci IV multiplies BX by " + format(tmp.sci.upgrades[504].effect) + br
+                                                if (c.includes("BX"))           c += br
+
+                                                if (inChallenge("l", 11))       c += "Dilation multiplies CX by " + format(tmp.l.challenges[11].challengeEffect) + br
+                                                if (inChallenge("l", 12)) {
+                                                        let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+                                                        let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0  
+                                                        let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
+                                                        let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
+
+                                                        let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
+                                                        let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
+                                                        let c7Base = player.extremeMode ? .0188 : .023
+                                                        c7Base -= layers.l.grid.getGemEffect(706).toNumber()
+                                                        c6Base -= c7Base * c7depth ** .56
+
+                                                        let portion = decimalOne
+                                                        let challId = player.l.activeChallengeID
+                                                        portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
+                                                        portion = portion.times(Decimal.pow(c6Base, c6Layers))
+                                                        if (challId > 801 && !player.extremeMode) {
+                                                                portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
+                                                        }
+                                                        if (challId > 801 && player.extremeMode) {
+                                                                portion = portion.div(Decimal.pow(406, Math.pow(challId-801, .55)))
+                                                        }
+                                                        if (challId > 803) {
+                                                                let sub = player.extremeMode && challId > 804 ? .058 : 0
+                                                                portion = portion.div(Decimal.pow(2.2 - sub, nCk(challId-802, 2)))
+                                                        }
+                                                        if (challId > 805 && player.extremeMode) portion = portion.times(1.53)
+                                                        if (challId > 806 && player.extremeMode) portion = portion.div(4.47)
+                                                        if (challId > 807 && player.extremeMode) portion = portion.div(1.55)
+
+                                                        if (hasMilestone("d", 24)) portion = portion.pow(.94)
+                                                        if (hasMilestone("d", 25) && player.extremeMode) portion = portion.pow(.973)
+                                                        
+                                                        let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
+                                                        let c58base = layers.l.grid.getGemEffect(508)
+                                                        
+                                                        portion = portion.pow(c58base.pow(c58exp))
+                                                                                c += "Selection multiplies CX by " + format(portion) + br
+                                                }
+                                                if (hasUpgrade("cells", 11))    c += "Cells I multiplies CX by " + format(tmp.cells.upgrades[11].effect) + br
+                                                if (hasUpgrade("cells", 315))   c += "Kappa V multiplies CX by " + format(player.tokens.total.max(1)) + br
+                                                if (hasMilestone("cells", 56))  c += "Cell Milestone 56 multiplies CX by " + format(tmp.cells.milestones[56].effect) + br
+                                                if (hasMilestone("t", 4))       c += "Tissue Milestone 4 multiplies CX by " + format(tmp.t.milestones[4].effect) + br
+                                                if (hasUpgrade("t", 114))       c += "Tissues LIV multiplies CX by " + format(player.t.upgrades.length) + br
+                                                if (hasMilestone("t", 21))      c += "Tissue Milestone 21 multiplies CX by " + format(player.t.milestones.length) + br
+                                                if (hasUpgrade("t", 124))       c += "Tissues LIX multiplies CX by " + format(Math.max(1, player.cells.challenges[11]) ** 2.5) + br
+                                                if (hasUpgrade("cells", 61))    c += "Cells XXVI multiplies CX by " + format(Decimal.pow(1.1, player.cells.upgrades.length)) + br
+                                                if (hasUpgrade("cells", 43))    c += br + "Cells XVIII multiplies CX by " + format(Decimal.pow(13, player.tokens.tokens2.total)) + br
+                                                if (hasMilestone("or", 23))     c += "Organ Milestone 23 multiplies CX by " + format(player.or.energy.points.max(1).pow(.01 * player.or.milestones.length)) + br
+                                                if (hasUpgrade("an", 25))       c += "Animal X multiplies CX by " + format(player.or.air.points.max(1).pow(.01 * player.an.upgrades.length)) + br
+                                                
+
+                                                let ret = a + br + b + br2 + c
+                                                ret = ret.replaceAll("AX", makeRed("A"))
+                                                ret = ret.replaceAll("BX", makeRed("B"))
+                                                ret = ret.replaceAll("CX", makeRed("C"))
+                                                return ret
+                                        }],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "DNA": {
+                                content: [
+                                        ["display-text", function(){
+                                                let a = "DNA gain is " + format(tmp.d.getBaseGain) + "*AX"
+                                                let b = "AX is multiplied by the following factors"
+                                                let c = ""
+                                                let ret = decimalOne
+
+                                                if (layers.l.grid.getGemEffect(206).gt(1)) {
+                                                                                c += "C26 Gems multiply AX by " + format(layers.l.grid.getGemEffect(206)) + br
+                                                }
+                                                if (hasUpgrade("d", 12)) {
+                                                        let base = 2
+                                                        if (hasUpgrade("d", 13)) base *= 2
+                                                        if (hasMilestone("d", 14)) base *= 2
+                                                        if (hasUpgrade("d", 14)) base *= 2
+                                                        if (hasUpgrade("d", 15)) base *= 2
+                                                                                c += "DNA II, III, IV, and V and DNA Milestone 14 multiply AX by " + format(Decimal.pow(base, player.d.upgrades.length)) + br
+                                                }       
+                                                if (hasChallenge("l", 22))      c += "Anti-minigame multiplies AX by " + format(tmp.l.challenges[22].reward) + br
+                                                if (!hasUpgrade("or", 133))     c += "C61 Gems multiply AX by " + format(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000")) + br
+                                                if (hasUpgrade("d", 23) && player.l.points.gt(10)) {
+                                                                                c += "DNA VIII multiplies AX by " + format(player.l.points.max(10).log10()) + br
+                                                }
+                                                if (hasMilestone("d", 18)) {
+                                                        let base = 2
+                                                        if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
+                                                        if (hasUpgrade("d", 25)) base *= 2
+                                                        if (hasUpgrade("d", 31)) base *= 2
+                                                                                c += "DNA IX, X, and XI multiply AX by " + format(Decimal.pow(base, player.d.milestones.length)) + br
+                                                        if (player.extremeMode) c = c.replaceAll("DNA IX, X,", "DNA X")
+                                                }
+                                                if (layers.l.grid.getGemEffect(607).gt(1)) {
+                                                                                c += "C67 Gems multiply AX by " + format(layers.l.grid.getGemEffect(607).pow(tmp.l.getNonZeroGemCount)) + br
+                                                }
+                                                if (hasUpgrade("d", 35) && getBuyableAmount("a", 33).gt(0)) {
+                                                                                c += "DNA XV multiplies AX by " + format(Decimal.pow(1.01, getBuyableAmount("a", 33)).min("e2e5")) + br
+                                                }
+                                                if (hasUpgrade("cells", 113))   c += "Mu III multiplies AX by " + format(tmp.cells.upgrades[113].effect) + br
+                                                if (hasChallenge("l", 111))     c += "Anti-Theta multiplies AX by " + format(tmp.l.challenges[21].reward.min(ret.sqrt())) + br
+                                                if (player.cells.challenges[21] >= 1) {
+                                                        let base = player.points.max(10).log10().max(10).log10()
+                                                        let exp = player.cells.upgrades.length
+                                                                                c += "Tertiary multiplies AX by " + format(base.pow(exp)) + br
+                                                }
+                                                if (player.easyMode)            c += "Easy mode multiplies AX by 2" + br
+                                                if (hasUpgrade("sci", 553))     c += "DNA Sci XXVIII multiplies AX by " + format(tmp.cells.buyables[13].effect) + br
+                                                if (tmp.sci.buyables[503].effect.gt(0)) {
+                                                        let eff = player.points.max(100).log10().log10().log10().max(1).pow(tmp.sci.buyables[503].effect)
+                                                                                c += "DNA Polymerase multiplies AX by " + format(eff) + br
+                                                }
+                                                
+                                                if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+                                                if (tmp.or.effect.gt(1))        c += "Organ effect multiplies AX by " + format(tmp.or.effect) + br
+                                                                                c += br + "Cell effect multiplies AX by " + format(tmp.cells.effect, 3) + br
+                                                                                c += "Tissue effect multiplies AX by " + format(tmp.t.effect, 3) + br
+                                                if (hasUpgrade("t", 112))       c += "Tissues LII multiplies AX by " + format(tmp.t.effect.pow(player.t.upgrades.length), 3) + br
+
+                                                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+                                        }],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Cells": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Stem Cells": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Tissues": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return true
+                                },
+                        },
+                        "Organs": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return player.or.unlocked
+                                },
+                        },
+                        "Air": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return player.or.air.points.gt(0) || player.an.unlocked
+                                },
+                        },
+                        "Energy": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return player.or.energy.points.gt(0) || player.an.unlocked
+                                },
+                        },
+                        "Animals": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return player.an.unlocked
+                                },
+                        },
+                        "Genes": {
+                                content: [
+                                        ["display-text", "not yet"],
+                                ],
+                                unlocked(){
+                                        return player.an.unlocked
+                                },
+                        },
+                        
+                },      
+        },
         tabFormat: {
                 "Milestones": {
                         content: [
@@ -43995,6 +44315,10 @@ addLayer("tokens", {
                                         let baseStr = formatWhole(tmp.tokens.getTetrationBase, false, 1)
                                         return br + a + "<sup>4+(Tokens-" + sub + ")/" + div + "</sup>" + baseStr
                                 }],
+                                "blank",
+                                "blank",
+                                "blank",
+                                ["microtabs", "currency_displays"],
                         ],
                         unlocked(){
                                 return hasUpgrade("cells", 42)
