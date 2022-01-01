@@ -31662,7 +31662,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XIX"
                         },
                         description(){
-                                return "Unlock Animal achievements"
+                                return "Unlock Animal achievements and a clickable"
                         },
                         cost:() => new Decimal(1.39e26),
                         unlocked(){
@@ -32206,6 +32206,7 @@ addLayer("an", {
                                 }
                         },
                 },
+
                 21: {
                         title(){
                                 return "Progression (" + (player.an.achActive[11] ? "ON" : "OFF") + ")"
@@ -32227,6 +32228,41 @@ addLayer("an", {
                         },
                         onClick(){
                                 player.an.achActive[11] = !player.an.achActive[11]
+                        },
+                },
+
+                101: {
+                        title(){
+                                return "Nullify"
+                        },
+                        display(){
+                                return "Zeros Genes and Taxonomy buyables amounts and levels"
+                        },
+                        unlocked(){
+                                return hasUpgrade("an", 44)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                let data = player.an.grid 
+
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+
+                                for (i in keys) {
+                                        data[keys[i]].extras = decimalZero
+                                        data[keys[i]].buyables = decimalZero
+                                }
+                                player.an.genes.points = decimalZero
+                                tmp.an.gene.getResetGain = decimalZero
                         },
                 },
         },
@@ -32367,6 +32403,7 @@ addLayer("an", {
                                 }], 
                                 "blank",
                                 ["upgrades", [1,2,3,4,5]],
+                                ["clickables", [10]],
                         ],
                         unlocked(){
                                 return true
