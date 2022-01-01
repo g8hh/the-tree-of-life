@@ -31341,6 +31341,9 @@ addLayer("an", {
                                 if (id > 200) {
                                         gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
                                 }
+                                if (player.an.achActive[12] && hasAchievement("an", 12)) {
+                                        gain = gain.times(getAmount1(id).plus(2).log(2))
+                                }
                                 player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, contamRate, diff)
                         }
                 }
@@ -31359,6 +31362,7 @@ addLayer("an", {
                                 808]
 
                         for (i in keys) {
+                                if (player.an.achActive[11] && hasAchievement("an", 11)) break
                                 let id = keys[i]
                                 if (!subD[id].everMaxed) continue
                                 if (subD[id].buyables.gte(ml)) continue 
@@ -31372,7 +31376,10 @@ addLayer("an", {
                                 ma = ma.min(ml)
                                 let buy = ma.sub(player.an.grid[id].buyables).max(0)
                                 
-                                if (player.an.achActive[11] || !hasAchievement("an", 11)) buy = buy.min(1)
+                                if (player.an.achActive[11] || !hasAchievement("an", 11)) {
+                                        buy = buy.min(5)
+                                        if (!player.shiftAlias) buy = buy.min(1)
+                                }
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
                                 if (buy.gt(0)) break
@@ -31420,6 +31427,8 @@ addLayer("an", {
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                                                         ret = ret.times(25)
                         }
+                        if (player.an.achActive[12])    ret = ret.div(4e49)
+                        else                            ret = ret.times(Decimal.pow(4, player.ch.points.sub(200).max(0)))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -32196,7 +32205,10 @@ addLayer("an", {
                                 ma = ma.min(tmp.an.grid.maxLevels)
                                 let buy = ma.sub(player.an.grid[id].buyables).max(0)
                                 
-                                if (player.an.achActive[11] || !hasAchievement("an", 11)) buy = buy.min(1)
+                                if (player.an.achActive[11] || !hasAchievement("an", 11)) {
+                                        buy = buy.min(5)
+                                        if (!player.shiftAlias) buy = buy.min(1)
+                                }
 
                                 player.an.grid[id].buyables = player.an.grid[id].buyables.plus(buy)
                                 if (buy.gt(0)) {
@@ -32229,6 +32241,31 @@ addLayer("an", {
                                 player.an.achActive[11] = !player.an.achActive[11]
                         },
                 },
+                22: {
+                        title(){
+                                return "Prime (" + (player.an.achActive[12] ? "ON" : "OFF") + ")"
+                        },
+                        display(){
+                                if (player.an.achActive[11]) return "log2(levels+2) multiplies amount gain but you gain 4e49x less Genes"
+                                return "Gain 4x Genes per Chromosome past 200"
+                        },
+                        tooltip(){
+                                let a = "Note: Toggleing this zeroes Taxonomy amounts<br>"
+                                a += "When toggled ON log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
+                                a += "When toggled OFF gain 4x Genes per Chromosome past 200"
+                                return a
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 12)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.an.achActive[12] = !player.an.achActive[12]
+                                layers.an.clickables[101].onClick(false)
+                        },
+                },
 
                 101: {
                         title(){
@@ -32243,7 +32280,7 @@ addLayer("an", {
                         canClick(){
                                 return true
                         },
-                        onClick(){
+                        onClick(resetBuyables = true){
                                 let data = player.an.grid 
 
                                 let keys = [
@@ -32258,7 +32295,7 @@ addLayer("an", {
 
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
-                                        data[keys[i]].buyables = decimalZero
+                                        if (resetBuyables) data[keys[i]].buyables = decimalZero
                                 }
                                 player.an.genes.points = decimalZero
                                 tmp.an.gene.getResetGain = decimalZero
@@ -32364,19 +32401,35 @@ addLayer("an", {
                 12: {
                         name: "Prime",
                         done(){
-                                return false
+                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+                                let a = 0
+                                for (i in keys) {
+                                        if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
+                                }
+                                return a >= 17
                         },
                         tooltip(){
-                                return "Have 21 Taxonomy buyables on prime levels [not possible for now]"
+                                if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
+                                return "Have 17 Taxonomy buyables on prime levels less than 140"
                         },
                 },
                 13: {
                         name: "Composite",
                         done(){
+                                let composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58, 60, 62, 63, 64, 65, 66, 68, 69, 70, 72, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 96, 98, 99]
                                 return false
                         },
                         tooltip(){
-                                return "Have 21 Taxonomy buyables on composite levels [not possible for now]"
+                                return "Have 21 Taxonomy buyables on composite levels less than 100 [not possible for now]"
                         },
                 },
                 14: {
@@ -32423,6 +32476,9 @@ addLayer("an", {
                 "Achievements": {
                         content: [
                                 "main-display",
+                                "blank",
+                                "blank",
+                                "blank",
                                 "achievements",
                                 ["clickablesBig", [2]],
                         ],
@@ -32451,7 +32507,7 @@ addLayer("an", {
                                                 if (hasMilestone("ch", 2))  a = a.replace("33%", "39%")
                                                 if (hasMilestone("ch", 4))  a = a.replace("39%", "75%")
                                                 if (hasMilestone("an", 22)) a = a.replace("75%", "100%")
-                                                return a
+                                                return a + br + "Press shift to bulk buy 5x."
                                         }
                                 ],
                                 "blank",
@@ -34260,15 +34316,22 @@ addLayer("ach", {
                                 return tmp.mini.layerShown || tmp.a.layerShown
                         },
                 },
-                {key: "shift+B", description: "Shift+B: Go to B", 
+                {key: "shift+B", description(){
+                        if (hasUpgrade("or", 352)) return "Shift+B: Buy Taxonomy buyable x5"
+                        return "Shift+B: Go to B"
+                        }, 
                         onPress(){
+                                if (hasUpgrade("or", 352)) {
+                                        if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
+                                        return 
+                                }
                                 if (!tmp.mini.layerShown) return
                                 if (!tmp.mini.tabFormat.B.unlocked) return 
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "B"
                         },
                         unlocked(){
-                                return tmp.mini.layerShown
+                                return tmp.mini.layerShown || hasUpgrade("or", 352)
                         },
                 },
                 {
