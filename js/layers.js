@@ -183,7 +183,9 @@ function getPointDilationExponent(){
         }
         if (hasUpgrade("cells", 11))    exp = exp.times(tmp.cells.upgrades[11].effect)
         if (hasUpgrade("cells", 315))   exp = exp.times(player.tokens.total.max(1))
-        if (hasMilestone("cells", 56))  exp = exp.times(tmp.cells.milestones[56].effect)
+        if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
+                                        exp = exp.times(tmp.cells.milestones[56].effect)
+        }
         if (hasMilestone("t", 4))       exp = exp.times(tmp.t.milestones[4].effect)
         if (hasUpgrade("cells", 43))    exp = exp.times(Decimal.pow(13, player.tokens.tokens2.total))
         if (hasUpgrade("t", 114))       exp = exp.times(player.t.upgrades.length)
@@ -2283,7 +2285,7 @@ addLayer("sci", {
                         if (hasUpgrade("t", 85))        ret = ret.times(tmp.cells.buyables[13].effect)
                         if (hasUpgrade("sci", 514))     ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                                                         ret = ret.times(tmp.cells.challenges[11].rewardEffect)
-                        if (hasMilestone("cells", 17))  {
+                        if (hasMilestone("cells", 17) && !hasMilestone("ch", 13))  {
                                 let exp = player.cells.activeChallenge ? 2 : 1
                                                         ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
                         }
@@ -19761,7 +19763,9 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 211))   ret = ret.times(tmp.cells.upgrades[211].effect)
                 if (hasUpgrade("cells", 311))   ret = ret.times(tmp.cells.upgrades[311].effect)
                 if (hasUpgrade("cells", 411))   ret = ret.times(tmp.cells.upgrades[411].effect)
-                if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
+                if (hasMilestone("cells", 16) && !hasMilestone("ch", 13)) {
+                                                ret = ret.times(tmp.cells.milestones[16].effect)
+                }
                                                 ret = ret.times(tmp.cells.challenges[12].rewardEffect)
                 if (hasMilestone("cells", 40))  ret = ret.times(player.cells.stem_cells.best.max(1).root(100))
                                                 ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
@@ -19916,7 +19920,9 @@ addLayer("cells", {
                                                         ret = ret.times(mult)
                         }
                                                         ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
-                        if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
+                        if (hasMilestone("cells", 22) && !hasMilestone("ch", 13)) {
+                                                        ret = ret.times(getBuyableAmount("cells", 11).plus(1))
+                        }
                         if (hasUpgrade("t", 12))        ret = ret.times(100)
                                                         ret = ret.times(tmp.t.effect)
                                                         ret = ret.times(tmp.or.effect)
@@ -20128,30 +20134,32 @@ addLayer("cells", {
                         if (player.hardMode)            ret = ret.div(4)
                         if (player.easyMode)            ret = ret.times(4)
                         if (hasUpgrade("cells", 114))   ret = ret.times(getBuyableAmount("cells", 112))
-                        if (hasMilestone("cells", 12)) {
-                                let exp = player.extremeMode ? 2.5 : 1
-                                                        ret = ret.times(player.cells.milestones.length ** exp)
-                        }
                         if (hasUpgrade("cells", 214))   ret = ret.times(tmp.cells.upgrades[214].effect)
                         if (hasUpgrade("cells", 414))   ret = ret.times(getBuyableAmount("cells", 411).max(10).log10().pow(1 + player.extremeMode))
                         if (hasUpgrade("cells", 314))   ret = ret.times(tmp.cells.upgrades[314].effect)
                         if (hasChallenge("cells", 11))  ret = ret.times(tmp.cells.challenges[11].rewardEffect)
-                        if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
-                        if (hasMilestone("cells", 17))  {
-                                let exp = player.cells.activeChallenge ? 2 : 1
-                                if (!player.extremeMode) exp = .5
-                                                        ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
+                        if (!hasMilestone("ch", 13)) {
+                                if (hasMilestone("cells", 12)) {
+                                        let exp = player.extremeMode ? 2.5 : 1
+                                                                ret = ret.times(player.cells.milestones.length ** exp)
+                                }
+                                if (hasMilestone("cells", 16))  ret = ret.times(tmp.cells.milestones[16].effect)
+                                if (hasMilestone("cells", 17))  {
+                                        let exp = player.cells.activeChallenge ? 2 : 1
+                                        if (!player.extremeMode) exp = .5
+                                                                ret = ret.times(Math.max(1, player.cells.upgrades.length) ** exp)
+                                }
+                                if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
+                                if (hasMilestone("cells", 23))  ret = ret.times(player.cells.mu.best.max(10).log10())
+                                if (hasMilestone("cells", 24))  ret = ret.times(tmp.tokens.buyables[21].effect)
+                                if (hasMilestone("cells", 26))  ret = ret.times(player.tokens.total.max(1))
+                                if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
+                                if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
+                                if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
+                                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : 50))
+                                if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
+                                if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
                         }
-                        if (hasMilestone("cells", 22))  ret = ret.times(getBuyableAmount("cells", 11).plus(1))
-                        if (hasMilestone("cells", 23))  ret = ret.times(player.cells.mu.best.max(10).log10())
-                        if (hasMilestone("cells", 24))  ret = ret.times(tmp.tokens.buyables[21].effect)
-                        if (hasMilestone("cells", 26))  ret = ret.times(player.tokens.total.max(1))
-                        if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
-                        if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
-                        if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
-                        if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : 50))
-                        if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
-                        if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
                         if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
                                                         ret = ret.times(tmp.l.challenges[31].reward.max(1))
                         }
@@ -20204,7 +20212,9 @@ addLayer("cells", {
                         }
                         if (hasUpgrade("sci", 524))     ret = ret.times(tmp.sci.buyables[501].effect.max(1))
                         if (hasUpgrade("sci", 525))     ret = ret.times(tmp.sci.buyables[502].effect.max(1))
-                        if (hasMilestone("cells", 32))  ret = ret.times(tmp.sci.buyables[503].effect.max(1))
+                        if (hasMilestone("cells", 32) && !hasMilestone("ch", 13)) {
+                                                        ret = ret.times(tmp.sci.buyables[503].effect.max(1))
+                        }
                         if (hasUpgrade("sci", 531))     ret = ret.times(tmp.sci.buyables[511].effect.max(1))
                         if (hasUpgrade("sci", 532))     ret = ret.times(tmp.sci.buyables[512].effect.max(1))
                         if (hasMilestone("cells", 34))  ret = ret.times(tmp.sci.buyables[513].effect.max(1))
@@ -20772,6 +20782,7 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[111].effect)
                         },
                         effect(){
+                                if (hasMilestone("an", 29)) return decimalOne
                                 return player.cells.total11.plus(10).log10()
                         },
                         cost:() => new Decimal(2000),
@@ -20853,6 +20864,7 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[211].effect)
                         },
                         effect(){
+                                if (hasMilestone("an", 29)) return decimalOne
                                 let ret = player.cells.total12.plus(10).log10()
                                 if (hasUpgrade("cells", 213)) ret = ret.times(player.cells.upgrades.length)
                                 return ret
@@ -20942,6 +20954,7 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[311].effect)
                         },
                         effect(){
+                                if (hasMilestone("an", 29)) return decimalOne
                                 return player.cells.total13.plus(10).log10()
                         },
                         cost:() => new Decimal("1000"),
@@ -21031,6 +21044,7 @@ addLayer("cells", {
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[411].effect)
                         },
                         effect(){
+                                if (hasMilestone("an", 29)) return decimalOne
                                 return player.cells.total14.plus(10).log10()
                         },
                         cost:() => new Decimal(4321),
@@ -22378,7 +22392,7 @@ addLayer("cells", {
 
                                 if (player.extremeMode) {
                                         exp = 897
-                                        if (hasMilestone("cells", 41)) exp += 3
+                                        if (hasMilestone("cells", 41) && !hasMilestone("ch", 13)) exp += 3
                                         if (hasMilestone("cells", 43)) exp += 32
                                         if (hasMilestone("cells", 44)) exp += -35
                                         if (hasMilestone("cells", 46)) exp += 23
@@ -32140,6 +32154,20 @@ addLayer("an", {
                                 return "Reward: Chordata IV amount multiplies Gene gain and Genes multiply point gain but repeal and remove DNA upgrades."
                         },
                 }, // hasMilestone("an", 28)
+                29: {
+                        requirementDescription(){
+                                return "8.8e12049 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("8.8e12049")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Top Quark coefficient is .011 but disable Mu I, Lambda I, Kappa I, and Iota I."
+                        },
+                }, // hasMilestone("an", 29)
         },
         clickables: {
                 11: {
@@ -32246,7 +32274,7 @@ addLayer("an", {
                                 return "Prime (" + (player.an.achActive[12] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[11]) return "log2(levels+2) multiplies amount gain but you gain 4e49x less Genes"
+                                if (player.an.achActive[12]) return "log2(levels+2) multiplies amount gain but you gain 4e49x less Genes"
                                 return "Gain 4x Genes per Chromosome past 200"
                         },
                         tooltip(){
@@ -32906,6 +32934,8 @@ addLayer("ch", {
         base(){
                 let ret = new Decimal(1e10)
 
+                if (hasMilestone("ch", 13)) ret = new Decimal(9.9e9)
+
                 return ret
         },
         exponent(){
@@ -33262,6 +33292,20 @@ addLayer("ch", {
                                 return "Reward: Top Quark multiplies instead of adds to the tetrational divider but its coefficient is .007."
                         },
                 }, // hasMilestone("ch", 12)
+                13: {
+                        requirementDescription(){
+                                return "209 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(209)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Chromosome cost base is 9.9e9 but disable Cell Milestones 12, 16, 17, 22, 23, 24, 26, 32, 38, 39, 41, 49, 53, and 56 (Lambda and Iota stay active)."
+                        },
+                }, // hasMilestone("ch", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -42874,6 +42918,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("an", 29)) return c.pow(.7).times(.011)
                                 if (hasMilestone("ch", 12)) return c.pow(.7).times(.007)
                                 if (hasMilestone("or", 7)) return c.pow(.7).times(4)
 
@@ -42914,6 +42959,7 @@ addLayer("tokens", {
                                 if (hasMilestone("or", 7)) eformula = "4C<sup>.7</sup>*x<br>"
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
                                 if (hasMilestone("ch", 12)) eformula = eformula.replace("4", ".007")
+                                if (hasMilestone("an", 29)) eformula = eformula.replace(".007", ".011")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -44507,7 +44553,9 @@ addLayer("tokens", {
                                                 }
                                                 if (hasUpgrade("cells", 11))    c += "Cells I multiplies CX by " + format(tmp.cells.upgrades[11].effect) + br
                                                 if (hasUpgrade("cells", 315))   c += "Kappa V multiplies CX by " + format(player.tokens.total.max(1)) + br
-                                                if (hasMilestone("cells", 56))  c += "Cell Milestone 56 multiplies CX by " + format(tmp.cells.milestones[56].effect) + br
+                                                if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
+                                                                                c += "Cell Milestone 56 multiplies CX by " + format(tmp.cells.milestones[56].effect) + br
+                                                }
                                                 if (hasMilestone("t", 4))       c += "Tissue Milestone 4 multiplies CX by " + format(tmp.t.milestones[4].effect) + br
                                                 if (hasUpgrade("t", 114))       c += "Tissues LIV multiplies CX by " + format(player.t.upgrades.length) + br
                                                 if (hasMilestone("t", 21))      c += "Tissue Milestone 21 multiplies CX by " + format(player.t.milestones.length) + br
@@ -44557,7 +44605,7 @@ addLayer("tokens", {
                                                         if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                                                         if (hasUpgrade("d", 25)) base *= 2
                                                         if (hasUpgrade("d", 31)) base *= 2
-                                                                                c += "DNA IX, X, and XI multiply AX by " + format(Decimal.pow(base, player.d.milestones.length)) + br
+                                                                                c += "DNA IX, X, and XI and DNA Milestone 18 multiplies AX by " + format(Decimal.pow(base, player.d.milestones.length)) + br
                                                         if (player.extremeMode) c = c.replaceAll("DNA IX, X,", "DNA X")
                                                 }
                                                 if (layers.l.grid.getGemEffect(607).gt(1)) {
@@ -44601,12 +44649,24 @@ addLayer("tokens", {
                                                 let c = ""
 
                                                 let ret = decimalOne
-
-                                                if (hasUpgrade("cells", 111))   c += "Mu I multiplies AX by " + format(tmp.cells.upgrades[111].effect) + br
-                                                if (hasUpgrade("cells", 211))   c += "Lambda I multiplies AX by " + format(tmp.cells.upgrades[211].effect) + br
-                                                if (hasUpgrade("cells", 311))   c += "Kappa I multiplies AX by " + format(tmp.cells.upgrades[311].effect) + br
-                                                if (hasUpgrade("cells", 411))   c += "Iota I multiplies AX by " + format(tmp.cells.upgrades[411].effect) + br
-                                                if (hasMilestone("cells", 16))  c += "Cell Milestone 16 multiplies AX by " + format(tmp.cells.milestones[16].effect) + br
+                                                
+                                                if (!hasMilestone("an", 29)) {
+                                                        if (hasUpgrade("cells", 111)) {
+                                                                                c += "Mu I multiplies AX by " + format(tmp.cells.upgrades[111].effect) + br
+                                                        }
+                                                        if (hasUpgrade("cells", 211)) {
+                                                                                c += "Lambda I multiplies AX by " + format(tmp.cells.upgrades[211].effect) + br
+                                                        }
+                                                        if (hasUpgrade("cells", 311)) {
+                                                                                c += "Kappa I multiplies AX by " + format(tmp.cells.upgrades[311].effect) + br
+                                                        }
+                                                        if (hasUpgrade("cells", 411)) {
+                                                                                c += "Iota I multiplies AX by " + format(tmp.cells.upgrades[411].effect) + br
+                                                        }
+                                                }
+                                                if (hasMilestone("cells", 16) && !hasMilestone("ch", 13)) {
+                                                                                c += "Cell Milestone 16 multiplies AX by " + format(tmp.cells.milestones[16].effect) + br
+                                                }
                                                 if (player.cells.challenges[12] > 0) {
                                                                                 c += "Secondary multiplies AX by " + format(tmp.cells.challenges[12].rewardEffect) + br
                                                 }                                
@@ -44655,29 +44715,32 @@ addLayer("tokens", {
                                                 if (player.hardMode)            c += "Hard mode divides AX by 4" + br
                                                 if (player.easyMode)            c += "Easy mode multiplies AX by 4" + br
                                                 if (hasUpgrade("cells", 114))   c += "Mu IV multiplies AX by " + format(getBuyableAmount("cells", 112)) + br
-                                                if (hasMilestone("cells", 12)) {
-                                                        let exp = player.extremeMode ? 2.5 : 1
-                                                                                c += "Cell Milestone 12 multiplies AX by " + format(player.cells.milestones.length ** exp) + br
-                                                }
+                                                
                                                 if (hasUpgrade("cells", 214))   c += "Lambda IV multiplies AX by " + format(tmp.cells.upgrades[214].effect) + br
                                                 if (hasUpgrade("cells", 414))   c += "Iota IV multiplies AX by " + format(getBuyableAmount("cells", 411).max(10).log10().pow(1 + player.extremeMode)) + br
                                                 if (hasUpgrade("cells", 314))   c += "Kappa IV multiplies AX by " + format(tmp.cells.upgrades[314].effect) + br
                                                 if (hasChallenge("cells", 11))  c += "Primary reward multiplies AX by " + format(tmp.cells.challenges[11].rewardEffect) + br
-                                                if (hasMilestone("cells", 16))  c += "Cell Milestone 16 multiplies AX by " + format(tmp.cells.milestones[16].effect) + br
-                                                if (hasMilestone("cells", 17))  {
-                                                        let exp = player.cells.activeChallenge ? 2 : 1
-                                                        if (!player.extremeMode) exp = .5
-                                                                                c += "Cell Milestone 17 multiplies AX by " + format(Math.max(1, player.cells.upgrades.length) ** exp) + br
+                                                if (!hasMilestone("ch", 13)) {
+                                                        if (hasMilestone("cells", 12)) {
+                                                                let exp = player.extremeMode ? 2.5 : 1
+                                                                                        c += "Cell Milestone 12 multiplies AX by " + format(player.cells.milestones.length ** exp) + br
+                                                        }
+                                                        if (hasMilestone("cells", 16))  c += "Cell Milestone 16 multiplies AX by " + format(tmp.cells.milestones[16].effect) + br
+                                                        if (hasMilestone("cells", 17))  {
+                                                                let exp = player.cells.activeChallenge ? 2 : 1
+                                                                if (!player.extremeMode) exp = .5
+                                                                                        c += "Cell Milestone 17 multiplies AX by " + format(Math.max(1, player.cells.upgrades.length) ** exp) + br
+                                                        }
+                                                        if (hasMilestone("cells", 22))  c += "Cell Milestone 22 multiplies AX by " + format(getBuyableAmount("cells", 11).plus(1)) + br
+                                                        if (hasMilestone("cells", 23))  c += "Cell Milestone 23 multiplies AX by " + format(player.cells.mu.best.max(10).log10()) + br
+                                                        if (hasMilestone("cells", 24))  c += "Cell Milestone 24 multiplies AX by " + format(tmp.tokens.buyables[21].effect) + br
+                                                        if (hasMilestone("cells", 26))  c += "Cell Milestone 26 multiplies AX by " + format(player.tokens.total.max(1)) + br
+                                                        if (hasMilestone("cells", 32))  c += "Cell Milestone 32 multiplies AX by " + format(player.cells.lambda.points.max(10).log10()) + br
+                                                        if (hasMilestone("cells", 38))  c += "Cell Milestone 38 multiplies AX by " + format(player.d.points.max(10).log10()) + br
+                                                        if (hasMilestone("cells", 39))  c += "Cell Milestone 39 multiplies AX by " + format(player.mu.points.max(10).log10()) + br
+                                                        if (hasMilestone("cells", 41))  c += "Cell Milestone 41 multiplies AX by " + format(player.tokens.buyables[11].max(1)) + br
+                                                        if (hasMilestone("cells", 53))  c += "Cell Milestone 53 multiplies AX by " + format(tmp.cells.milestones[53].effect) + br
                                                 }
-                                                if (hasMilestone("cells", 22))  c += "Cell Milestone 22 multiplies AX by " + format(getBuyableAmount("cells", 11).plus(1)) + br
-                                                if (hasMilestone("cells", 23))  c += "Cell Milestone 23 multiplies AX by " + format(player.cells.mu.best.max(10).log10()) + br
-                                                if (hasMilestone("cells", 24))  c += "Cell Milestone 24 multiplies AX by " + format(tmp.tokens.buyables[21].effect) + br
-                                                if (hasMilestone("cells", 26))  c += "Cell Milestone 26 multiplies AX by " + format(player.tokens.total.max(1)) + br
-                                                if (hasMilestone("cells", 32))  c += "Cell Milestone 32 multiplies AX by " + format(player.cells.lambda.points.max(10).log10()) + br
-                                                if (hasMilestone("cells", 38))  c += "Cell Milestone 38 multiplies AX by " + format(player.d.points.max(10).log10()) + br
-                                                if (hasMilestone("cells", 39))  c += "Cell Milestone 39 multiplies AX by " + format(player.mu.points.max(10).log10()) + br
-                                                if (hasMilestone("cells", 41))  c += "Cell Milestone 41 multiplies AX by " + format(player.tokens.buyables[11].max(1)) + br
-                                                if (hasMilestone("cells", 53))  c += "Cell Milestone 53 multiplies AX by " + format(tmp.cells.milestones[53].effect) + br
                                                 if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
                                                                                 c += "Anti-Theta multiplies AX by " + format(tmp.l.challenges[31].reward.max(1)) + br
                                                 }
@@ -44730,7 +44793,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasUpgrade("sci", 524))     c += "DNA Sci XIV multiplies AX by " + format(tmp.sci.buyables[501].effect.max(1)) + br
                                                 if (hasUpgrade("sci", 525))     c += "DNA Sci XV multiplies AX by " + format(tmp.sci.buyables[502].effect.max(1)) + br
-                                                if (hasMilestone("cells", 32) && player.extremeMode) {
+                                                if (hasMilestone("cells", 32) && player.extremeMode && !hasMilestone("ch", 13)) {
                                                                                 c += "Cell Milestone 32 multiplies AX by " + format(tmp.sci.buyables[503].effect.max(1)) + br
                                                 }
                                                 if (hasUpgrade("sci", 531))     c += "DNA Sci XVI multiplies AX by " + format(tmp.sci.buyables[511].effect.max(1)) + br
