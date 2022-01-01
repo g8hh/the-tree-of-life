@@ -22955,6 +22955,7 @@ addLayer("cells", {
                                 if (hasUpgrade("or", 13))       base = new Decimal(1e90)
                                 if (hasMilestone("an", 25))     base = new Decimal(1e80)
                                 if (hasUpgrade("an", 34))       base = new Decimal(1e75)
+                                if (hasUpgrade("ch", 24))       base = new Decimal(1e70)
                                 let init = new Decimal("1e5283e3")
                                 if (hasUpgrade("or", 114)) init = decimalOne
                                 return init.times(base.pow(exp))
@@ -22972,6 +22973,7 @@ addLayer("cells", {
                                 if (hasUpgrade("or", 13))       base = new Decimal(1e90)
                                 if (hasMilestone("an", 25))     base = new Decimal(1e80)
                                 if (hasUpgrade("an", 34))       base = new Decimal(1e75)
+                                if (hasUpgrade("ch", 24))       base = new Decimal(1e70)
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         buy(){
@@ -23021,6 +23023,7 @@ addLayer("cells", {
                                 if (hasUpgrade("or", 13)) cost2 = cost2.replace("100", "90")
                                 if (hasMilestone("an", 25)) cost2 = cost2.replace("90", "80")
                                 if (hasUpgrade("an", 34)) cost2 = cost2.replace("80", "75")
+                                if (hasUpgrade("ch", 24)) cost2 = cost2.replace("75", "70")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -23894,6 +23897,7 @@ addLayer("t", {
                 if (hasUpgrade("an", 11))       ret = ret.plus(5)
                 if (hasUpgrade("or", 45))       ret = ret.plus(.91)
                 if (hasUpgrade("ch", 12))       ret = ret.plus(player.ch.upgrades.length)
+                if (hasUpgrade("an", 43))       ret = ret.plus(1)
 
                 return ret
         },
@@ -31155,6 +31159,13 @@ addLayer("an", {
                         total: decimalZero,
                         best: decimalZero,
                 },
+                achActive: {
+                        11: false,
+                        12: false,
+                        13: false,
+                        14: false,
+                        15: false,
+                },
         }},
         color: "#FFEC13",
         branches: [],
@@ -31202,6 +31213,8 @@ addLayer("an", {
 
                 if (hasUpgrade("an", 12)) ret = new Decimal(1/2)
                 if (hasUpgrade("ch", 14)) ret = new Decimal(1)
+
+                if (hasUpgrade("ch", 24)) ret = ret.plus(player.ch.upgrades.length / 100)
 
                 return ret
         },
@@ -31357,7 +31370,10 @@ addLayer("an", {
                                 if (pts.gte(costs[0])) {
                                         ma = pts.div(costs[0]).log(costs[1]).root(costs[2]).ceil()
                                 }
-                                let buy = ma.sub(subD[id].buyables).max(0).min(1)
+                                ma = ma.min(ml)
+                                let buy = ma.sub(player.an.grid[id].buyables).max(0)
+                                
+                                if (player.an.achActive[11] || !hasAchievement("an", 11)) buy = buy.min(1)
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
                                 if (buy.gt(0)) break
@@ -31395,12 +31411,16 @@ addLayer("an", {
                         if (hasUpgrade("ch", 14))       ret = ret.times(tmp.ch.upgrades[14].effect)
                         if (hasUpgrade("ch", 15)) {
                                 let base = hasUpgrade("an", 34) ? 1.04 : 1.01
-                                let sub = 2600
+                                let sub = hasUpgrade("an", 43) ? 0 : 2600
                                 let exp = player.tokens.tokens2.total.sub(sub).max(0)
                                                         ret = ret.times(Decimal.pow(base, exp))
                         }
                         if (hasUpgrade("ch", 23))       ret = ret.times(20)
                         if (hasMilestone("an", 28))     ret = ret.times(player.an.grid[306].extras.plus(1))
+                        if (hasUpgrade("an", 43))       ret = ret.div(1e42)
+                        if (!player.an.achActive[11] && hasAchievement("an", 11)) {
+                                                        ret = ret.times(25)
+                        }
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -31624,6 +31644,30 @@ addLayer("an", {
                         unlocked(){
                                 return hasUpgrade("an", 41)
                         }, // hasUpgrade("an", 42)
+                },
+                43: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XVIII"
+                        },
+                        description(){
+                                return "Chromosomes V counts every Token II and add 1 to the Tissue effect exponent but divide Gene gain by 1e42"
+                        },
+                        cost:() => new Decimal(4.09e24),
+                        unlocked(){
+                                return hasUpgrade("an", 42)
+                        }, // hasUpgrade("an", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XIX"
+                        },
+                        description(){
+                                return "Unlock Animal achievements"
+                        },
+                        cost:() => new Decimal(1.39e26),
+                        unlocked(){
+                                return hasUpgrade("an", 43)
+                        }, // hasUpgrade("an", 44)
                 },
         },
         milestones: {
@@ -32150,13 +32194,39 @@ addLayer("an", {
                                 if (pts.gte(costs[0])) {
                                         ma = pts.div(costs[0]).log(costs[1]).root(costs[2]).ceil()
                                 }
-                                let buy = ma.sub(player.an.grid[id].buyables).max(0).min(1)
+                                ma = ma.min(tmp.an.grid.maxLevels)
+                                let buy = ma.sub(player.an.grid[id].buyables).max(0)
+                                
+                                if (player.an.achActive[11] || !hasAchievement("an", 11)) buy = buy.min(1)
 
                                 player.an.grid[id].buyables = player.an.grid[id].buyables.plus(buy)
                                 if (buy.gt(0)) {
                                         player.an.genes.points = player.an.genes.points.sub(tmp.an.clickables[11].cost)
                                         if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) player.an.grid[id].everMaxed = true
                                 }
+                        },
+                },
+                21: {
+                        title(){
+                                return "Progression (" + (player.an.achActive[11] ? "ON" : "OFF") + ")"
+                        },
+                        display(){
+                                if (player.an.achActive[11]) return "Disables gene buyable autobuyers"
+                                return "Bulk buy Gene buyables and gain 25x Genes"
+                        },
+                        tooltip(){
+                                let a = "When toggled ON disable gene buyale autobuyers" + br 
+                                a += "When toggled OFF bulk buy Gene buyables and gain 25x Genes"
+                                return a
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 11)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.an.achActive[11] = !player.an.achActive[11]
                         },
                 },
         },
@@ -32246,6 +32316,44 @@ addLayer("an", {
                         return "<bdi style='font-size: 80%'>" + TAXONOMY_NAMES[id] + "</bdi>"
                 },
         },
+        achievements: {
+                11: {
+                        name: "Progression",
+                        done(){
+                                return player.an.genes.points.gte("1e11619")
+                        },
+                        tooltip(){
+                                return "Get 1e11619 Genes"
+                        },
+                },
+                12: {
+                        name: "Prime",
+                        done(){
+                                return false
+                        },
+                        tooltip(){
+                                return "Have 21 Taxonomy buyables on prime levels [not possible for now]"
+                        },
+                },
+                13: {
+                        name: "Composite",
+                        done(){
+                                return false
+                        },
+                        tooltip(){
+                                return "Have 21 Taxonomy buyables on composite levels [not possible for now]"
+                        },
+                },
+                14: {
+                        name: "One",
+                        done(){
+                                return false
+                        },
+                        tooltip(){
+                                return "Have 21(?) Taxonomy buyables on 1 level [not possible for now]"
+                        },
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: [
@@ -32271,6 +32379,16 @@ addLayer("an", {
                                         return "You have done " + formatWhole(player.an.times) + " Animals resets"
                                 }],
                                 "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Achievements": {
+                        content: [
+                                "main-display",
+                                "achievements",
+                                ["clickablesBig", [2]],
                         ],
                         unlocked(){
                                 return true
@@ -32315,7 +32433,7 @@ addLayer("an", {
                                         let a2 = "Current Animal gain: cbrt(log10(Organs)-99)"
                                         if (hasUpgrade("an", 12)) a2 = a2.replace("cbrt", "sqrt")
                                         if (hasUpgrade("or", 33)) a2 = a2.replace("-99", "")
-                                        if (hasUpgrade("ch", 14)) a2 = "Current Animal gain: log10(Organs)<sup>" + formatWhole(tmp.an.gainExp) + "</sup>"
+                                        if (hasUpgrade("ch", 14)) a2 = "Current Animal gain: log10(Organs)<sup>" + format(tmp.an.getGainExp) + "</sup>"
                                         let a3 = "Initial Animal effect: (Animals+1)<sup>log10(99+Animals)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
@@ -32857,7 +32975,7 @@ addLayer("ch", {
                 },
                 23: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VII"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VIII"
                         },
                         description(){
                                 return "<bdi style='font-size: 80%'>Token II buyables' cost exponent is .46, gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3, but disable Chromosomes III</bdi>"
@@ -32866,6 +32984,18 @@ addLayer("ch", {
                         unlocked(){
                                 return player.an.grid[506].buyables.gte(528)
                         }, // hasUpgrade("ch", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes IX"
+                        },
+                        description(){
+                                return "Oligopotent cost base is 1e70 and per upgrade add .01 to the Animal gain exponent"
+                        },
+                        cost:() => new Decimal(178),
+                        unlocked(){
+                                return player.an.grid[303].buyables.gte(424)
+                        }, // hasUpgrade("ch", 24)
                 },
         },
         milestones: {
