@@ -44620,8 +44620,8 @@ addLayer("tokens", {
                                                                                 c += "Cell Milestone 56 multiplies CX by " + format(tmp.cells.milestones[56].effect) + br
                                                 }
                                                 if (hasMilestone("t", 4))       c += "Tissue Milestone 4 multiplies CX by " + format(tmp.t.milestones[4].effect) + br
-                                                if (hasUpgrade("t", 114))       c += "Tissues LIV multiplies CX by " + format(player.t.upgrades.length) + br
                                                 if (hasMilestone("t", 21))      c += "Tissue Milestone 21 multiplies CX by " + format(player.t.milestones.length) + br
+                                                if (hasUpgrade("t", 114))       c += "Tissues LIV multiplies CX by " + format(player.t.upgrades.length) + br
                                                 if (hasUpgrade("t", 124))       c += "Tissues LIX multiplies CX by " + format(Math.max(1, player.cells.challenges[11]) ** 2.5) + br
                                                 if (hasUpgrade("cells", 61))    c += "Cells XXVI multiplies CX by " + format(Decimal.pow(1.1, player.cells.upgrades.length)) + br
                                                 if (hasUpgrade("cells", 43))    c += br + "Cells XVIII multiplies CX by " + format(Decimal.pow(13, player.tokens.tokens2.total)) + br
@@ -44708,7 +44708,7 @@ addLayer("tokens", {
                                 content: [
                                         ["display-text", function(){
                                                 let a = "Cell gain is " + format(tmp.cells.getBaseGain, 3) + "*AX"
-                                                let b = "AX is multiplied by the following factors"
+                                                let b = "AX is initially 1 and is multiplied by the following factors"
                                                 let c = ""
 
                                                 let ret = decimalOne
@@ -44902,8 +44902,8 @@ addLayer("tokens", {
 
                                                 // AFTER SECONDARY BUFFS
                                                 if (hasUpgrade("t", 63))        c += "Tissues XXVIII multiplies CX by " + format(tmp.t.effect) + br
-                                                if (hasMilestone("t", 20))      c += "Tissue Milestone 20 multiplies CX by " + format(Decimal.pow(1.5, player.tokens.tokens2.total)) + br
                                                 if (hasUpgrade("t", 124))       c += "Tissues LIX multiplies CX by " + format(Math.max(1, player.cells.challenges[11]) ** 2.5) + br
+                                                if (hasMilestone("t", 20))      c += "Tissue Milestone 20 multiplies CX by " + format(Decimal.pow(1.5, player.tokens.tokens2.total)) + br
                                                 if (c.includes("CX"))           c += br
 
                                                 if (hasUpgrade("t", 35))        c += "Tissues XV multiplies DX by 1.001" + br
@@ -44932,7 +44932,39 @@ addLayer("tokens", {
                         },
                         "Tissues": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Tissue gain is " + format(tmp.t.getBaseGain, 3) + "*AX"
+                                                let b = "AX is initially 1 and is multiplied by the following factors"
+                                                let c = ""
+
+                                                if (player.easyMode)            c += "Easy Mode multiplies AX by " + format(2) + br
+                                                if (hasUpgrade("t", 83)) {
+                                                        let base = new Decimal(player.cells.challenges[12]).max(10).log10()
+                                                        let exp = Math.max(0, player.cells.challenges[11] - 10)
+                                                                                c += "Tissues XXXVIII multiplies AX by " + format(base.pow(exp)) + br
+                                                }
+                                                if (hasUpgrade("t", 131))       c += "Tissues LXI multiplies AX by " + format(Decimal.pow(2, tmp.t.upgrades.endUpgradeAmount)) + br
+                                                if (hasUpgrade("t", 155))       c += "Tissues LXXV multiplies AX by " + format(Decimal.pow(1.11, player.tokens.tokens2.total)) + br
+                                                if (hasUpgrade("cells", 44))    c += "Cells XIX multiplies AX by " + format(player.tokens.tokens2.total.max(1)) + br
+                                                if (!hasUpgrade("or", 43))      c += "Bottom Quark multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
+                                                if (player.cells.challenges[21] >= 2) {
+                                                                                c += "Tertiary multiplies AX by " + format(player.t.best.plus(10).log10().plus(9).log10().pow(player.cells.challenges[21])) + br
+                                                }
+                                                if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+                                                if (hasMilestone("or", 10))     c += "Organ Milestone 10 multiplies AX by " + format(Decimal.pow(2, player.or.milestones.length)) + br
+                                                if (hasUpgrade("sci", 552))     c += "DNA Sci XXVII multiplies AX by " + format(Decimal.pow(2, tmp.sci.upgrades[552].lvls)) + br
+                                                if (hasUpgrade("or", 143))      c += "Heart XXIII multiplies AX by " + format(player.or.buyables[202].max(1).pow(player.or.upgrades.length)) + br
+                                                if (hasUpgrade("or", 155))      c += "Heart XXX multiplies AX by " + format(player.or.energy.points.max(1)) + br
+                                                if (hasUpgrade("sci", 563))     c += "DNA Sci XXXIII multiplies AX by " + format(2) + br
+                                                if (tmp.or.challenges[32].reward.gt(1)) {
+                                                                                c += "Bronchioles multiplies AX by " + format(tmp.or.challenges[32].reward) + br
+                                                }
+                                                if (hasUpgrade("an", 14))       c += "Animals IV multiplies AX by " + format(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2)) + br
+                                                if (hasUpgrade("an", 34))       c += "Animals XIV multiplies AX by " + format(tmp.tokens.buyables[102].effect) + br
+                                                if (tmp.or.effect.gt(1))        c += br + "Organ effect multiplies AX by " + format(tmp.or.effect) + br
+                                                
+                                                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+                                        }],
                                 ],
                                 unlocked(){
                                         return true
