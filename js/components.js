@@ -410,6 +410,57 @@ function loadVue() {
 		},
 	})
 
+	Vue.component('clickablesBIG', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].clickables" class="upgTable">
+			<master-button v-if="tmp[layer].clickables.masterButtonPress && !(tmp[layer].clickables.showMasterButton !== undefined && tmp[layer].clickables.showMasterButton == false)" :layer = "layer" v-bind:style="[{'margin-bottom': '12px'}, tmp[layer].componentStyles['master-button']]"></master-button>
+			<div v-for="row in (data === undefined ? tmp[layer].clickables.rows : data)" class="upgRow">
+				<div v-for="col in tmp[layer].clickables.cols"><div v-if="tmp[layer].clickables[row*10+col]!== undefined && tmp[layer].clickables[row*10+col].unlocked" class="upgAlign" v-bind:style="{'margin-left': '7px', 'margin-right': '7px',  'height': (data ? data : 'inherit'),}">
+					<clickableBIG :layer = "layer" :data = "row*10+col" v-bind:style="tmp[layer].componentStyles.clickable"></clickable>
+				</div></div>
+				<br>
+			</div>
+		</div>
+	`
+	})
+
+	// data = id of clickable
+	Vue.component('clickableBIG', {
+		props: ['layer', 'data'],
+		template: `
+		<button 
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
+			v-bind:class="{upgBIG: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}	
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
 	Vue.component('master-button', {
 		props: ['layer', 'data'],
 		template: `

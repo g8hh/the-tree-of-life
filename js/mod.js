@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.213",
+	num: "1.230",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,122 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
-	if (player.extremeMode) return player.tokens.tokens2.total.gt(0)
-	return player.or.air.points.gte("1e2050")
+	if (player.extremeMode) return player.cells.points.gte("1e14545")
+	return player.an.genes.points.gte("1e578")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.213)<br><br>
+		Reaching the endgame screen (updated at least as of v1.229)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.230</h3><br>
+		- Balanced until 1e578 Genes.<br>
+		- Added an Animal upgrade.<br>
+		- Added two Organ upgrades.<br>
+		- Added an Animal milestone.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.229</h3><br>
+		- Balanced until 4e550 Genes
+		- Added an Organ upgrade.<br>
+		- Added two Animal upgrades.<br>
+		- Added an Animal milestone.<br>
+		- Added a custom save.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.228</h3><br>
+		- Balanced until 1e349 Genes.<br>
+		- Added an Animal upgrade.<br>
+		- Added two Organ upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.227</h3><br>
+		- Balanced until 1e283 Genes.<br>
+		- Added an Animal upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Added a hotkey for Taxonomy (B).<br>
+		- Added a new row of Taxonomy.<br>
+	<br><h3 style='color: #CC0000'>v1.226</h3><br>
+		- Balanced until 1e76 Genes.<br>
+		- Added an Organ upgrade.<br>
+		- Added two Lung upgrades.<br>
+		- Added an Animal upgrade.<br>
+		- Added two Animal milestones.<br>
+		- Added a custom save.<br>
+		- Added another row of Taxonomy.<br>
+		- Changed some styles around.<br>
+	<br><h3 style='color: #CC0000'>v1.225</h3><br>
+		- Balanced until 1e7 Genes.<br>
+		- Added Genes.<br>
+		- Added a Air buyable.<br>
+		- Added a grid for Taxonomy.<br>
+		- Various wording changes.<br>
+		- Added a new component.<br>
+	<br><h3 style='color: #CC0000'>v1.224</h3><br>
+		- Balanced extreme until 1e14545 Cells.<br>
+		- Various extreme mode changes.<br>
+		- Added a DNA Science upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.223</h3><br>
+		- Balanced until 1114 Token II.<br>
+		- Added a custom save.<br>
+		- Added two Organ upgrades.<br>
+		- Added a Lung upgrade.<br>
+		- Added two Animal milestones.<br>
+		- Added a hardcap for Charm's effect to Tissue exponent.<br>
+	<br><h3 style='color: #CC0000'>v1.222</h3><br>
+		- Added three Lung upgrades.<br>
+		- Added an Organ upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Added an Animal upgrade.<br>
+		- Various code cleanup.<br>
+		- Balanced until Organs XIII.<br>
+	<br><h3 style='color: #CC0000'>v1.221</h3><br>
+		- Added a Lung upgrade.<br>
+		- Added four Animal milestones.<br>
+	<br><h3 style='color: #CC0000'>v1.220</h3><br>
+		- Added three Animal milestones.<br>
+		- Balanced until 5 Animal resets.<br>
+	<br><h3 style='color: #CC0000'>v1.219</h3><br>
+		- Added a Lung upgrade.<br>
+		- Added three Animal milestones.<br>
+		- Balanced until 5 Animal resets.<br>
+	<br><h3 style='color: #CC0000'>v1.218</h3><br>
+		- Balanced until 2 Animal resets.<br>
+		- Added two animal milestones.<br>
+		- Added a animal upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.217.1</h3><br>
+		- Added five rows of achievements.<br>
+		- Made achievements unlock at various points.<br>
+	<br><h3 style='color: #CC0000'>v1.217</h3><br>
+		- Balanced until 1e100 Organs.<br>
+		- Added 3 Organ upgrades.<br>
+		- Added 3 Kidney upgrades.<br>
+		- Added 4 Lung upgrades.<br>
+		- Added 3 Organ milestones.<br>
+		- Various code and display clean up.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.216</h3><br>
+		- Balanced until 1e2948 Energy.<br>
+		- Added three Organ upgrades.<br>
+		- Added two Kidney upgrades.<br>
+		- Added six Lung upgrades.<br>
+		- Added three Intestine buyables.<br>
+		- Added an Organ milestone.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.215</h3><br>
+		- Added two Intestine buyables.<br>
+		- Added an Organ upgrade.<br>
+		- Added two Heart upgrades.<br>
+		- Added a Kidney upgrade.<br>
+		- Added two Organ milestones.<br>
+		- Balanced until 1e671 Energy.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.214</h3><br>
+		- Added four Intestine buyables.<br>
+		- Added a Lung upgrade.<br>
+		- Balanced until 1e175 Energy.<br>
+		- Added a new layer.<br>
 	<br><h3 style='color: #CC0000'>v1.213</h3><br>
 		- Added a Heart upgrade.<br>
 		- Added three Lung upgrades.<br>
