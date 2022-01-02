@@ -32278,7 +32278,7 @@ addLayer("an", {
                                 return "Gain 4x Genes per Chromosome past 200"
                         },
                         tooltip(){
-                                let a = "Note: Toggleing this zeroes Taxonomy amounts<br>"
+                                let a = makeRed("Note: Toggleing this zeroes Taxonomy amounts<br>")
                                 a += "When toggled ON log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
                                 a += "When toggled OFF gain 4x Genes per Chromosome past 200"
                                 return a
@@ -32308,7 +32308,7 @@ addLayer("an", {
                         canClick(){
                                 return true
                         },
-                        onClick(resetBuyables = true){
+                        onClick(resetBuys = true){
                                 let data = player.an.grid 
 
                                 let keys = [
@@ -32323,7 +32323,8 @@ addLayer("an", {
 
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
-                                        if (resetBuyables) data[keys[i]].buyables = decimalZero
+                                        if (resetBuys === null) data[keys[i]].buyables = decimalZero
+                                        // dont ask, its what it does
                                 }
                                 player.an.genes.points = decimalZero
                                 tmp.an.gene.getResetGain = decimalZero
@@ -32447,7 +32448,7 @@ addLayer("an", {
                         },
                         tooltip(){
                                 if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
-                                return "Have 17 Taxonomy buyables on prime levels less than 140"
+                                return "Have 17 Taxonomy buyables on prime levels less than 140 [shift for valid values]"
                         },
                 },
                 13: {
