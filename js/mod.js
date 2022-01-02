@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.241",
+	num: "1.241.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -38,6 +38,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added an Animal upgrade.<br>
 		- Implemented Composite.<br>
 		- Various small wording and balance changes.<br>
+		- Added an Animal milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.240</h3><br>
 		- Balanced until 212 Chromosomes.<br>
 		- Added an Animal milestone.<br>

@@ -186,10 +186,12 @@ function getPointDilationExponent(){
         if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
                                         exp = exp.times(tmp.cells.milestones[56].effect)
         }
-        if (hasMilestone("t", 4))       exp = exp.times(tmp.t.milestones[4].effect)
+        if (hasMilestone("an", 30)) {
+                if (hasMilestone("t", 4))       exp = exp.times(tmp.t.milestones[4].effect)
+                if (hasMilestone("t", 21))      exp = exp.times(player.t.milestones.length)
+        }
         if (hasUpgrade("cells", 43))    exp = exp.times(Decimal.pow(13, player.tokens.tokens2.total))
         if (hasUpgrade("t", 114))       exp = exp.times(player.t.upgrades.length)
-        if (hasMilestone("t", 21))      exp = exp.times(player.t.milestones.length)
         if (hasUpgrade("t", 124))       exp = exp.times(Math.max(1, player.cells.challenges[11]) ** 2.5)
         if (hasUpgrade("cells", 61))    exp = exp.times(Decimal.pow(1.1, player.cells.upgrades.length))
         if (hasMilestone("or", 23))     exp = exp.times(player.or.energy.points.max(1).pow(.01 * player.or.milestones.length))
@@ -18695,7 +18697,7 @@ addLayer("d", {
                 if (hasChallenge("l", 22))      ret = ret.times(tmp.l.challenges[22].reward)
                 if (!hasUpgrade("or", 133))     ret = ret.times(layers.l.grid.getGemEffect(601).pow(getBuyableAmount("a", 33)).min("1e50000"))
                 if (hasUpgrade("d", 23))        ret = ret.times(player.l.points.max(10).log10())
-                if (hasMilestone("d", 18)) {
+                if (hasMilestone("d", 18) && !hasMilestone("an", 30)) {
                         let base = 2
                         if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                         if (hasUpgrade("d", 25)) base *= 2
@@ -19772,7 +19774,9 @@ addLayer("cells", {
                                                 ret = ret.times(tmp.t.effect)
                 if (hasUpgrade("t", 62))        ret = ret.times(tmp.tokens.buyables[21].effect)
                 if (hasUpgrade("cells", 15))    ret = ret.times(tmp.cells.upgrades[15].effect)
-                if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
+                if (hasMilestone("t", 17) && !hasMilestone("an", 30)) {
+                                                ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
+                }
                 if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                 if (hasUpgrade("t", 135))       ret = ret.times(tmp.t.upgrades[135].effect)
                 if (hasUpgrade("sci", 511))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[511].lvls))
@@ -20174,15 +20178,19 @@ addLayer("cells", {
                         }        
                         if (hasUpgrade("t", 34))        ret = ret.times(tmp.t.upgrades[34].effect)
                                                         ret = ret.times(tmp.t.effect)
-                        if (hasMilestone("t", 10)) {
-                                let base = getBuyableAmount("cells", 13).max(1)
-                                let exp  = player.t.upgrades.length ** .5
-                                                        ret = ret.times(base.pow(exp))
-                        }
-                        if (hasMilestone("t", 11)) {
-                                let base = getBuyableAmount("cells", 13).max(1)
-                                let exp  = player.t.milestones.length
-                                                        ret = ret.times(base.pow(exp))
+                        if (!hasMilestone("an", 30)) {
+                                if (hasMilestone("t", 10)) {
+                                        let base = getBuyableAmount("cells", 13).max(1)
+                                        let exp  = player.t.upgrades.length ** .5
+                                                                ret = ret.times(base.pow(exp))
+                                }
+                                if (hasMilestone("t", 11)) {
+                                        let base = getBuyableAmount("cells", 13).max(1)
+                                        let exp  = player.t.milestones.length
+                                                                ret = ret.times(base.pow(exp))
+                                }
+                                if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
+                                if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) // log1.05(10)
                         }
                         if (hasUpgrade("t", 92))        ret = ret.times(player.tokens.total.max(1).pow(Math.PI))
                         if (hasUpgrade("cells", 15))    ret = ret.times(tmp.cells.upgrades[15].effect)
@@ -20198,8 +20206,6 @@ addLayer("cells", {
                                 else                    ret = ret.times(player.cells.upgrades.length)
                         }
                         if (!hasUpgrade("an", 34))      ret = ret.times(tmp.tokens.buyables[102].effect)
-                        if (hasMilestone("t", 17))      ret = ret.times(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length))
-                        if (hasMilestone("t", 18))      ret = ret.times(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) // log1.05(10)
                         if (hasUpgrade("cells", 52))    ret = ret.times(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total))
                         if (hasUpgrade("cells", 54))    ret = ret.times(tmp.cells.upgrades[54].effect)
                         if (hasUpgrade("t", 111))       ret = ret.times(5)
@@ -20245,7 +20251,9 @@ addLayer("cells", {
 
                         // AFTER SECONDARY BUFFS
                         if (hasUpgrade("t", 63))        ret = ret.times(tmp.t.effect)
-                        if (hasMilestone("t", 20))      ret = ret.times(Decimal.pow(1.5, player.tokens.tokens2.total))
+                        if (hasMilestone("t", 20) && !hasMilestone("an", 30)) {
+                                                        ret = ret.times(Decimal.pow(1.5, player.tokens.tokens2.total))
+                        }
                         if (hasUpgrade("t", 124))       ret = ret.times(Math.max(1, player.cells.challenges[11]) ** 2.5)
 
                         if (hasUpgrade("t", 35))        ret = ret.pow(1.001)
@@ -32052,9 +32060,11 @@ addLayer("an", {
                                 return true
                         },
                         effect(){
-                                if (hasMilestone("an", 26)) return decimalOne
+                                if (hasMilestone("an", 26) && !hasMilestone("an", 30)) return decimalOne
                                 let m = player.an.milestones.length
-                                return Decimal.pow(m, m-19).max(1)
+                                let ret = Decimal.pow(m, m-19).max(1)
+                                if (hasMilestone("an", 30)) ret = ret.cbrt()
+                                return ret
                         },
                         effectDescription(){
                                 return "Reward: Per milestone-19, milestones multiply Gene gain.<br>Currently: " + format(tmp.an.milestones[21].effect)  
@@ -32189,6 +32199,20 @@ addLayer("an", {
                                 return "Reward: Top Quark coefficient is .011 but disable Mu I, Lambda I, Kappa I, and Iota I."
                         },
                 }, // hasMilestone("an", 29)
+                30: {
+                        requirementDescription(){
+                                return "1e12708 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("1e12708")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Reinstate Animal Milestone 21 at a third the rate but disable DNA Milestone 18 and Tissue Milestones 4, 10, 11, 17, 18, 20, and 21."
+                        },
+                }, // hasMilestone("an", 30)
         },
         clickables: {
                 11: {
@@ -32401,7 +32425,8 @@ addLayer("an", {
                         let ret = new Decimal(400)
 
                         if (hasUpgrade("ch", 23)) {
-                                ret = ret.plus(player.ch.points.times(3))
+                                let add = player.ch.points.times(3).min(700)
+                                ret = ret.plus(add)
                         } else if (hasUpgrade("ch", 13)) {
                                 let add = player.ch.points.sub(37).max(0).times(4)
                                 ret = ret.plus(add.min(450))
@@ -33163,7 +33188,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VIII"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Token II buyables' cost exponent is .46, gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3, but disable Chromosomes III</bdi>"
+                                return "<bdi style='font-size: 70%'>Token II buyables' cost exponent is .46, gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
                         },
                         cost:() => new Decimal(151),
                         unlocked(){
@@ -44619,8 +44644,10 @@ addLayer("tokens", {
                                                 if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
                                                                                 c += "Cell Milestone 56 multiplies CX by " + format(tmp.cells.milestones[56].effect) + br
                                                 }
-                                                if (hasMilestone("t", 4))       c += "Tissue Milestone 4 multiplies CX by " + format(tmp.t.milestones[4].effect) + br
-                                                if (hasMilestone("t", 21))      c += "Tissue Milestone 21 multiplies CX by " + format(player.t.milestones.length) + br
+                                                if (!hasMilestone("an", 30)) {
+                                                        if (hasMilestone("t", 4))       c += "Tissue Milestone 4 multiplies CX by " + format(tmp.t.milestones[4].effect) + br
+                                                        if (hasMilestone("t", 21))      c += "Tissue Milestone 21 multiplies CX by " + format(player.t.milestones.length) + br
+                                                }
                                                 if (hasUpgrade("t", 114))       c += "Tissues LIV multiplies CX by " + format(player.t.upgrades.length) + br
                                                 if (hasUpgrade("t", 124))       c += "Tissues LIX multiplies CX by " + format(Math.max(1, player.cells.challenges[11]) ** 2.5) + br
                                                 if (hasUpgrade("cells", 61))    c += "Cells XXVI multiplies CX by " + format(Decimal.pow(1.1, player.cells.upgrades.length)) + br
@@ -44663,7 +44690,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("d", 23) && player.l.points.gt(10)) {
                                                                                 c += "DNA VIII multiplies AX by " + format(player.l.points.max(10).log10()) + br
                                                 }
-                                                if (hasMilestone("d", 18)) {
+                                                if (hasMilestone("d", 18) && !hasMilestone("an", 30)) {
                                                         let base = 2
                                                         if (hasUpgrade("d", 24) && !player.extremeMode) base *= 2
                                                         if (hasUpgrade("d", 25)) base *= 2
@@ -44735,7 +44762,9 @@ addLayer("tokens", {
                                                 }                                
                                                                                 c += "Stem Cells multiply AX by " + format(player.cells.stem_cells.points.plus(10).log10()) + br
                                                 if (hasUpgrade("cells", 15))    c += "Cells V multiplies AX by " + format(tmp.cells.upgrades[15].effect) + br
-                                                if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
+                                                if (hasMilestone("t", 17) && !hasMilestone("an", 30)) {
+                                                                                c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
+                                                }
                                                 if (hasUpgrade("cells", 54) && tmp.cells.upgrades[54].effect.gt(1)) {
                                                                                 c += "Cells XXIV multiplies AX by " + format(tmp.cells.upgrades[54].effect) + br
                                                 }
@@ -44827,18 +44856,20 @@ addLayer("tokens", {
                                                 if (hasUpgrade("cells", 54) && tmp.cells.upgrades[54].effect.gt(1)) {
                                                                                 c += "Cells XXIV multiplies AX by " + format(tmp.cells.upgrades[54].effect) + br
                                                 }
-                                                if (hasMilestone("t", 10)) {
-                                                        let base = getBuyableAmount("cells", 13).max(1)
-                                                        let exp  = player.t.upgrades.length ** .5
-                                                                                c += "Tissue Milestone 10 multiplies AX by " + format(base.pow(exp)) + br
+                                                if (!hasMilestone("an", 30)) {
+                                                        if (hasMilestone("t", 10)) {
+                                                                let base = getBuyableAmount("cells", 13).max(1)
+                                                                let exp  = player.t.upgrades.length ** .5
+                                                                                        c += "Tissue Milestone 10 multiplies AX by " + format(base.pow(exp)) + br
+                                                        }
+                                                        if (hasMilestone("t", 11)) {
+                                                                let base = getBuyableAmount("cells", 13).max(1)
+                                                                let exp  = player.t.milestones.length
+                                                                                        c += "Tissue Milestone 11 multiplies AX by " + format(base.pow(exp)) + br
+                                                        }
+                                                        if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
+                                                        if (hasMilestone("t", 18))      c += "Tissue Milestone 18 multiplies AX by " + format(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) + br
                                                 }
-                                                if (hasMilestone("t", 11)) {
-                                                        let base = getBuyableAmount("cells", 13).max(1)
-                                                        let exp  = player.t.milestones.length
-                                                                                c += "Tissue Milestone 11 multiplies AX by " + format(base.pow(exp)) + br
-                                                }
-                                                if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
-                                                if (hasMilestone("t", 18))      c += "Tissue Milestone 18 multiplies AX by " + format(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) + br
                                                 if (hasUpgrade("t", 31))        c += "Tissues XI multiplies AX by 3" + br
                                                 if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
                                                                                 c += "Tissues XII multiplies AX by 10" + br
@@ -44903,7 +44934,9 @@ addLayer("tokens", {
                                                 // AFTER SECONDARY BUFFS
                                                 if (hasUpgrade("t", 63))        c += "Tissues XXVIII multiplies CX by " + format(tmp.t.effect) + br
                                                 if (hasUpgrade("t", 124))       c += "Tissues LIX multiplies CX by " + format(Math.max(1, player.cells.challenges[11]) ** 2.5) + br
-                                                if (hasMilestone("t", 20))      c += "Tissue Milestone 20 multiplies CX by " + format(Decimal.pow(1.5, player.tokens.tokens2.total)) + br
+                                                if (hasMilestone("t", 20) && !hasMilestone("an", 30)) {
+                                                                                c += "Tissue Milestone 20 multiplies CX by " + format(Decimal.pow(1.5, player.tokens.tokens2.total)) + br
+                                                }
                                                 if (c.includes("CX"))           c += br
 
                                                 if (hasUpgrade("t", 35))        c += "Tissues XV multiplies DX by 1.001" + br
