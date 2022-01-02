@@ -87,10 +87,40 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return true
                 }
-        } else if (n <= 1111) {
+        } else if (n <= 161) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.tokens.unlocked
+                }
+        } else if (n <= 189) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.p.unlocked
+                }
+        } else if (n <= 301) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.l.unlocked
+                }
+        } else if (n <= 385) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.d.unlocked
+                }
+        } else if (n <= 532) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.cells.unlocked
+                }
+        } else if (n <= 595) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.t.unlocked
+                }
+        } else if (n <= 1111) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.or.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -758,8 +788,8 @@ PROGRESSION_MILESTONES = {
         633: () => player.or.oxygenated_blood.points.gte(1e200),
         634: () => player.or.oxygenated_blood.points.gte(1e250),
         635: () => player.or.oxygenated_blood.points.gte(1e300),
-        636: () => player.or.oxygenated_blood.points.gte(1e350),
-        637: () => player.or.oxygenated_blood.points.gte(1e400),
+        636: () => player.or.oxygenated_blood.points.gte("1e350"),
+        637: () => player.or.oxygenated_blood.points.gte("1e400"),
         638: () => player.tokens.tokens2.total.gte(150),
         639: () => player.tokens.tokens2.total.gte(155),
         640: () => player.tokens.tokens2.total.gte(160),
@@ -823,6 +853,41 @@ PROGRESSION_MILESTONES = {
         698: () => player.tokens.tokens2.total.gte(400),
         699: () => player.tokens.tokens2.total.gte(410),
         700: () => player.tokens.tokens2.total.gte(420),
+        701: () => player.or.energy.points.gte(Decimal.pow(2, 0).pow10()),
+        702: () => player.or.energy.points.gte(Decimal.pow(2, 1).pow10()),
+        703: () => player.or.energy.points.gte(Decimal.pow(2, 2).pow10()),
+        704: () => player.or.energy.points.gte(Decimal.pow(2, 3).pow10()),
+        705: () => player.or.energy.points.gte(Decimal.pow(2, 4).pow10()),
+        706: () => player.or.energy.points.gte(Decimal.pow(2, 5).pow10()),
+        707: () => player.or.energy.points.gte(Decimal.pow(2, 6).pow10()),
+        708: () => player.or.energy.points.gte(Decimal.pow(2, 7).pow10()),
+        709: () => player.or.energy.points.gte(Decimal.pow(2, 8).pow10()),
+        710: () => player.or.energy.points.gte(Decimal.pow(2, 9).pow10()),
+        711: () => player.or.energy.points.gte(Decimal.pow(2, 10).pow10()),
+        712: () => player.or.energy.points.gte(Decimal.pow(2, 11).pow10()),
+        713: () => player.or.energy.points.gte(Decimal.pow(2, 12).pow10()),
+        714: () => player.or.energy.points.gte(Decimal.pow(2, 13).pow10()),
+        715: () => player.tokens.tokens2.total.gte(440),
+        716: () => player.tokens.tokens2.total.gte(460),
+        717: () => player.tokens.tokens2.total.gte(480),
+        718: () => player.tokens.tokens2.total.gte(500),
+        719: () => player.tokens.tokens2.total.gte(520),
+        720: () => player.tokens.tokens2.total.gte(540),
+        721: () => player.tokens.tokens2.total.gte(560),
+        722: () => player.tokens.tokens2.total.gte(580),
+        723: () => player.tokens.tokens2.total.gte(600),
+        724: () => player.tokens.tokens2.total.gte(620),
+        725: () => player.tokens.tokens2.total.gte(640),
+        726: () => player.tokens.tokens2.total.gte(660),
+        727: () => player.tokens.tokens2.total.gte(680),
+        728: () => player.tokens.tokens2.total.gte(700),
+        729: () => player.tokens.tokens2.total.gte(720),
+        730: () => player.tokens.tokens2.total.gte(740),
+        731: () => player.tokens.tokens2.total.gte(760),
+        732: () => player.tokens.tokens2.total.gte(780),
+        733: () => player.tokens.tokens2.total.gte(800),
+        734: () => player.tokens.tokens2.total.gte(820),
+        735: () => player.tokens.tokens2.total.gte(840),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1526,6 +1591,41 @@ PROGRESSION_MILESTONES_TEXT = {
         698: "400 Token II",
         699: "410 Token II",
         700: "420 Token II",
+        701: "10 Energy",
+        702: "100 Energy",
+        703: "10,000 Energy",
+        704: "100,000,000 Energy",
+        705: "1e16 Energy",
+        706: "1e32 Energy",
+        707: "1e64 Energy",
+        708: "1e128 Energy",
+        709: "1e256 Energy",
+        710: "1e512 Energy",
+        711: "1e1,024 Energy",
+        712: "1e2,048 Energy",
+        713: "1e4,096 Energy",
+        714: "1e8,192 Energy",
+        715: "440 Token II",
+        716: "460 Token II",
+        717: "480 Token II",
+        718: "500 Token II",
+        719: "520 Token II",
+        720: "540 Token II",
+        721: "560 Token II",
+        722: "580 Token II",
+        723: "600 Token II",
+        724: "620 Token II",
+        725: "640 Token II",
+        726: "660 Token II",
+        727: "680 Token II",
+        728: "700 Token II",
+        729: "720 Token II",
+        730: "740 Token II",
+        731: "760 Token II",
+        732: "780 Token II",
+        733: "800 Token II",
+        734: "820 Token II",
+        735: "840 Token II",
 }
 
 
