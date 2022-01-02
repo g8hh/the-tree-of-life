@@ -44811,22 +44811,6 @@ addLayer("tokens", {
                                                 if (hasChallenge("l", 111) && player.cells.challenges[12] >= 15 && !player.extremeMode) {
                                                                                 c += "Anti-Theta multiplies AX by " + format(tmp.l.challenges[31].reward.max(1)) + br
                                                 }
-                                                if (hasUpgrade("t", 31))        c += "Tissues XI multiplies AX by 3" + br
-                                                if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
-                                                                                c += "Tissues XII multiplies AX by 10" + br
-                                                }        
-                                                if (hasUpgrade("t", 34))        c += "Tissues XIV multiplies AX by " + format(tmp.t.upgrades[34].effect) + br
-                                                if (hasMilestone("t", 10)) {
-                                                        let base = getBuyableAmount("cells", 13).max(1)
-                                                        let exp  = player.t.upgrades.length ** .5
-                                                                                c += "Tissue Milestone 10 multiplies AX by " + format(base.pow(exp)) + br
-                                                }
-                                                if (hasMilestone("t", 11)) {
-                                                        let base = getBuyableAmount("cells", 13).max(1)
-                                                        let exp  = player.t.milestones.length
-                                                                                c += "Tissue Milestone 11 multiplies AX by " + format(base.pow(exp)) + br
-                                                }
-                                                if (hasUpgrade("t", 92))        c += "Tissues XLII multiplies AX by " + format(player.tokens.total.max(1).pow(Math.PI)) + br
                                                 if (hasUpgrade("cells", 15))    c += "Cells V multiplies AX by " + format(tmp.cells.upgrades[15].effect) + br
                                                 if (hasUpgrade("cells", 21))  {
                                                         let exp = player.extremeMode ? player.cells.upgrades.length + 3 : 2
@@ -44839,17 +44823,33 @@ addLayer("tokens", {
                                                         if (player.extremeMode) c += "Cells IX multiplies AX by " + format(player.cells.points.max(1).pow(.01)) + br
                                                         else                    c += "Cells IX multiplies AX by " + format(player.cells.upgrades.length) + br
                                                 }
-                                                if (!hasUpgrade("an", 34))      c += "Down Quark multiplies AX by " + format(tmp.tokens.buyables[102].effect) + br
-                                                if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
-                                                if (hasMilestone("t", 18))      c += "Tissue Milestone 18 multiplies AX by " + format(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) + br
                                                 if (hasUpgrade("cells", 52))    c += "Cells XXII multiplies AX by " + format(player.cells.points.max(10).log10().pow(player.tokens.tokens2.total)) + br
                                                 if (hasUpgrade("cells", 54) && tmp.cells.upgrades[54].effect.gt(1)) {
                                                                                 c += "Cells XXIV multiplies AX by " + format(tmp.cells.upgrades[54].effect) + br
                                                 }
+                                                if (hasMilestone("t", 10)) {
+                                                        let base = getBuyableAmount("cells", 13).max(1)
+                                                        let exp  = player.t.upgrades.length ** .5
+                                                                                c += "Tissue Milestone 10 multiplies AX by " + format(base.pow(exp)) + br
+                                                }
+                                                if (hasMilestone("t", 11)) {
+                                                        let base = getBuyableAmount("cells", 13).max(1)
+                                                        let exp  = player.t.milestones.length
+                                                                                c += "Tissue Milestone 11 multiplies AX by " + format(base.pow(exp)) + br
+                                                }
+                                                if (hasMilestone("t", 17))      c += "Tissue Milestone 17 multiplies AX by " + format(player.tokens.tokens2.total.max(1).pow(player.t.milestones.length)) + br
+                                                if (hasMilestone("t", 18))      c += "Tissue Milestone 18 multiplies AX by " + format(player.tokens.total.pow10().root(player.extremeMode ? 29.918840221005354 : 47.19363281906435)) + br
+                                                if (hasUpgrade("t", 31))        c += "Tissues XI multiplies AX by 3" + br
+                                                if (hasUpgrade("t", 32) && player.cells.activeChallenge != undefined) {
+                                                                                c += "Tissues XII multiplies AX by 10" + br
+                                                }        
+                                                if (hasUpgrade("t", 34))        c += "Tissues XIV multiplies AX by " + format(tmp.t.upgrades[34].effect) + br
+                                                if (hasUpgrade("t", 92))        c += "Tissues XLII multiplies AX by " + format(player.tokens.total.max(1).pow(Math.PI)) + br
                                                 if (hasUpgrade("t", 111))       c += "Tissues LI multiplies AX by 5" + br
                                                 if (hasUpgrade("t", 113))       c += "Tissues LIII multiplies AX by " + format(player.tokens.tokens2.total.div(69).plus(1).pow(player.tokens.total)) + br
                                                 if (hasUpgrade("t", 135))       c += "Tissues LXV multiplies AX by " + format(tmp.t.upgrades[135].effect) + br
                                                 if (hasUpgrade("t", 144))       c += "Tissues LXIX multiplies AX by " + format(Decimal.pow(2, player.t.upgrades.length)) + br
+                                                if (!hasUpgrade("an", 34))      c += "Down Quark multiplies AX by " + format(tmp.tokens.buyables[102].effect) + br
                                                 if (tmp.or.effect.gt(1))        c += "Organ effect multiplies AX by " + format(tmp.or.effect) + br
                                                 if (player.extremeMode)         c += "Telomerase multiplies AX by " + format(tmp.sci.buyables[522].stem_cell_effect) + br
                                                 if ((!inChallenge("cells", 12) || player.cells.challenges[12] < 10) && tmp.sci.buyables[523].stem_cell_effect.gt(1)) {
