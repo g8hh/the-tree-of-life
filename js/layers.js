@@ -31458,8 +31458,12 @@ addLayer("an", {
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                                                         ret = ret.times(25)
                         }
-                        if (player.an.achActive[12])    ret = ret.div(4e49)
-                        else                            ret = ret.times(Decimal.pow(4, player.ch.points.sub(200).max(0)))
+                        if (hasAchievement("an", 12)) {
+                                if (player.an.achActive[12])    ret = ret.div(4e49)
+                                else                            ret = ret.times(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(200).max(0)))
+                        }
+
+
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
