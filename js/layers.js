@@ -31408,7 +31408,8 @@ addLayer("an", {
                                         gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
                                 }
                                 if (player.an.achActive[12] && hasAchievement("an", 12)) {
-                                        gain = gain.times(getAmount1(id).plus(2).log(2))
+                                        let exp = player.an.achActive[22] && hasAchievement("an", 22) ? 1.25 : 1
+                                        gain = gain.times(getAmount1(id).pow(exp).plus(2).log(2))
                                 }
                                 player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, contamRate, diff)
                         }
@@ -31494,11 +31495,17 @@ addLayer("an", {
                         if (hasMilestone("an", 28))     ret = ret.times(player.an.grid[306].extras.plus(1))
                         if (hasUpgrade("an", 43))       ret = ret.div(1e42)
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
-                                                        ret = ret.times(25)
+                                if (!player.an.achActive[22]) {
+                                                        ret = ret.times(Decimal.pow(5, player.an.achievements.length + 4))
+                                } else                  ret = ret.times(25)
                         }
                         if (hasAchievement("an", 12)) {
-                                if (player.an.achActive[12])    ret = ret.div(4e49)
-                                else                            ret = ret.times(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(200).max(0)))
+                                if (player.an.achActive[12]) {
+                                                        ret = ret.div(4e49)
+                                } 
+                                if (!player.an.achActive[12] || hasAchievement("an", 22)) {
+                                                        ret = ret.times(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(200).max(0)))
+                                }
                         }
                         if (hasUpgrade("an", 51))       ret = ret.times(2)
                         if (hasAchievement("an", 21)) {
@@ -32398,7 +32405,7 @@ addLayer("an", {
                                 return "Gain 4x Genes per Chromosome past 200"
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggleing this zeroes Taxonomy amounts<br>")
+                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
                                 a += "When toggled ON log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
                                 a += "When toggled OFF gain 4x Genes per Chromosome past 200"
                                 if (hasMilestone("an", 31)) a = a.replace("4x", "2x")
@@ -32493,15 +32500,13 @@ addLayer("an", {
                                 return "PRI II (" + (player.an.achActive[22] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[22]) return "log2(levels+2) multiplies amount gain but you gain 4e49x less Genes"
-                                if (hasMilestone("an", 31)) return "Gain 2x Genes per Chromosome past 200"
-                                return "Gain 4x Genes per Chromosome past 200"
+                                if (player.an.achActive[22]) return "PRI I's ON formula becomes log2(levels<sup>1.25</sup>+2)"
+                                return "PRO I's OFF boost to Genes becomes 5x per achievement + 4"
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggleing this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
-                                a += "When toggled OFF gain 4x Genes per Chromosome past 200"
-                                if (hasMilestone("an", 31)) a = a.replace("4x", "2x")
+                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
+                                a += "When toggled ON PRI I's ON formula becomes log2(levels<sup>1.25</sup>+2)" + br 
+                                a += "When toggled OFF PRO I's OFF boost to Genes becomes 5x per achievement + 4"
                                 return a
                         },
                         unlocked(){
@@ -32512,6 +32517,7 @@ addLayer("an", {
                         },
                         onClick(){
                                 player.an.achActive[22] = !player.an.achActive[22]
+                                layers.an.clickables[101].onClick(false)
                         },
                 },
                 33: {
@@ -32784,7 +32790,7 @@ addLayer("an", {
                 22: {
                         name: "Prime<br>II",
                         done(){
-                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
+                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]
                                 let keys = [
                                         101, 102, 103, 104, 105, 106, 107, 108,
                                         202, 203, 204, 205, 206, 207, 208, 
@@ -32798,12 +32804,12 @@ addLayer("an", {
                                 for (i in keys) {
                                         if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
                                 }
-                                return a >= 21
+                                return a >= 17
                         },
                         tooltip(){
-                                if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
-                                return "Have 17 Taxonomy buyables on prime levels less than 105 [not yet, shift for valid values]"
-                        },
+                                if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103"
+                                return "Have 17 Taxonomy buyables on prime levels less than 105 [shift for valid values]<br>Reward: PRI I's OFF effect is always active"
+                        }, // hasAchievement("an", 22)
                 },
                 23: {
                         name: "Composite<br>II",
