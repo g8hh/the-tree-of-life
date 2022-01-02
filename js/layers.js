@@ -31500,7 +31500,7 @@ addLayer("an", {
                                 if (player.an.achActive[12])    ret = ret.div(4e49)
                                 else                            ret = ret.times(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(200).max(0)))
                         }
-                        
+                        if (hasUpgrade("an", 51))       ret = ret.times(2)
                         if (hasAchievement("an", 21)) {
                                 let l = player.ch.points.sub(235).max(0)
                                 let aa = player.an.achActive
@@ -31773,7 +31773,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XX"
                         },
                         description(){
-                                return "Token II buyables' cost exponent is .45 but disable Primary and Secondary reward"
+                                return "Token II buyables' cost exponent is .45 and double Gene gain but disable Primary and Secondary reward"
                         },
                         cost:() => new Decimal(1.8e30),
                         unlocked(){
@@ -32802,7 +32802,7 @@ addLayer("an", {
                         },
                         tooltip(){
                                 if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
-                                return "Have 21 Taxonomy buyables on prime levels less than 140 [shift for valid values]"
+                                return "Have 17 Taxonomy buyables on prime levels less than 105 [not yet, shift for valid values]"
                         },
                 },
                 23: {
