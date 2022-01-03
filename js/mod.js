@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.243",
+	num: "1.244",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,23 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.ch.points.gte(241)
+	return player.ch.points.gte(243)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.243)<br><br>
+		Reaching the endgame screen (updated at least as of v1.244)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.244</h3><br>
+		- Balanced until 243 Chromosomes.<br>
+		- Added an Animal upgrade.<br>
+		- Added a Chromosome milestone.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.243</h3><br>
 		- Balanced until 241 Chromosomes.<br>
 		- Added an Animal Achievement.<br>
