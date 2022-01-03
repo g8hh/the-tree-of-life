@@ -32318,6 +32318,20 @@ addLayer("an", {
                                 return "Reward: Fully reinstate Animal Milestone 21 but Prime when toggled off becomes 2x per."
                         },
                 }, // hasMilestone("an", 31)
+                32: {
+                        requirementDescription(){
+                                return "2.9e14654 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("2.9e14654")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Remove the Chromosome effect exponent softcap and its effect formula is 1.002<sup>x</sup>*2.66."
+                        },
+                }, // hasMilestone("an", 32)
         },
         clickables: {
                 11: {
@@ -33374,10 +33388,11 @@ addLayer("ch", {
         effect(){
                 let pts = player.ch.points
 
-                if (pts.gte(95)) pts = pts.times(190).sub(9025).sqrt()
+                if (pts.gte(95) && !hasMilestone("an", 32)) pts = pts.times(190).sub(9025).sqrt()
 
                 let ret = pts.div(100).plus(2)
                 if (hasMilestone("ch", 10)) ret = Decimal.pow(1.004, pts).times(2)
+                if (hasMilestone("an", 32)) ret = Decimal.pow(1.002, pts).times(2.66)
 
                 return ret
         },
@@ -33545,6 +33560,18 @@ addLayer("ch", {
                         unlocked(){
                                 return player.ch.best.gte(234)
                         }, // hasUpgrade("ch", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XI"
+                        },
+                        description(){
+                                return "Token II via Cell double exponent is 12+x/2000"
+                        },
+                        cost:() => new Decimal(247),
+                        unlocked(){
+                                return player.ch.best.gte(247)
+                        }, // hasUpgrade("ch", 31)
                 },
         },
         milestones: {
@@ -33795,7 +33822,8 @@ addLayer("ch", {
                                         let a = "Chromosomes only resets Gene amounts."
                                         let b = "Chromosome effect is 2+x/100."
                                         if (hasMilestone("ch", 10)) b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
-                                        if (player.ch.points.gte(95)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
+                                        if (player.ch.points.gte(95) && !hasMilestone("an", 32)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
+                                        if (hasMilestone("an", 32)) b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
 
                                         return a + br2 + b
                                 }],
@@ -43625,13 +43653,15 @@ addLayer("tokens", {
                                 let add = hasMilestone("or", 19) ? 5 : 4
                                 if (hasMilestone("or", 24)) add = 7
                                 if (hasUpgrade("or", 44)) add = 9
+                                if (hasUpgrade("ch", 31)) add = 12
                                 let div = tmp.tokens.buyables[193].div
                                 return player.tokens.buyables[193].div(div).plus(add).pow10().pow10()
                         },
                         div(){
-                                if (hasUpgrade("or", 44))   return new Decimal(500)
-                                if (hasMilestone("or", 24)) return new Decimal(150)
-                                if (hasMilestone("or", 19)) return new Decimal(40)
+                                if (hasUpgrade("ch", 31))       return new Decimal(2000)
+                                if (hasUpgrade("or", 44))       return new Decimal(500)
+                                if (hasMilestone("or", 24))     return new Decimal(150)
+                                if (hasMilestone("or", 19))     return new Decimal(40)
                                 return new Decimal(hasUpgrade("cells", 52) ? 20 : 10)
                         },
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
@@ -43649,9 +43679,10 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[193]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193), 3) + " Cells</b><br>"
                                 let eformula = "10^10^(4+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
-                                if (hasMilestone("or", 19)) eformula = eformula.replace("4", "5")
-                                if (hasMilestone("or", 24)) eformula = eformula.replace("5", "7")
-                                if (hasUpgrade("or", 44))   eformula = eformula.replace("7", "9")
+                                if (hasMilestone("or", 19))     eformula = eformula.replace("4", "5")
+                                if (hasMilestone("or", 24))     eformula = eformula.replace("5", "7")
+                                if (hasUpgrade("or", 44))       eformula = eformula.replace("7", "9")
+                                if (hasUpgrade("ch", 31))       eformula = eformula.replace("9", "12")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
