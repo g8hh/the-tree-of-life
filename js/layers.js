@@ -45646,7 +45646,73 @@ addLayer("tokens", {
                         },
                         "Genes": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Gene gain is " + format(player.an.grid[808].extras.plus(1), 3) + "*AX"
+                                                let b = "AX is initially 1 and is multiplied by the following factors"
+                                                let c = ""
+
+                                                if (player.easyMode)            c += "Easy Mode multiplies AX by 4" + br
+                                                if (hasMilestone("an", 16)) {
+                                                        let sub = hasMilestone("an", 22) ? 0 : 1000
+                                                                                c += "Animal Milestone 16 multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0))) + br
+                                                }
+                                                if (hasMilestone("an", 17)) {
+                                                        let base = player.or.deoxygenated_blood.points.max(10).log10().max(10).log10()
+                                                        let exp = player.an.upgrades.length
+                                                                                c += "Animal Milestone 17 multiplies AX by " + format(base.pow(exp)) + br
+                                                }
+                                                if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.points.max(10).log10()) + br
+                                                if (hasMilestone("an", 19))     c += "Animal Milestone 19 multiplies AX by " + format(player.or.contaminants.points.max(10).log10()) + br
+                                                if (hasMilestone("an", 20))     c += "Animal Milestone 20 multiplies AX by " + format(player.cells.points.max(10).log10()) + br
+                                                if (hasMilestone("an", 21))     c += "Animal Milestone 21 multiplies AX by " + format(tmp.an.milestones[21].effect) + br
+                                                if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
+                                                if (hasMilestone("an", 28))     c += "Animal Milestone 28 multiplies AX by " + format(player.an.grid[306].extras.plus(1)) + br
+                                                if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
+                                                                                c += "Chromosome Milestone 5 divides AX by " + format(Decimal.pow(2, player.ch.points.sub(8))) + br
+                                                }
+                                                if (hasMilestone("ch", 6) && !hasMilestone("an", 24)) {
+                                                                                c += "Chromosome Milestone 6 divides AX by " + format(Decimal.pow(2, player.ch.points)) + br
+                                                }
+                                                if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
+                                                if (hasMilestone("ch", 8))      c += "Chromosome Milestone 8 multiplies AX by " + format(player.ch.points.pow(player.ch.milestones.length/3)) + br
+                                                if (hasUpgrade("ch", 14))       c += "Chromosomes IV multiplies AX by " + format(tmp.ch.upgrades[14].effect) + br
+                                                if (hasUpgrade("ch", 15)) {
+                                                        let base = hasUpgrade("an", 34) ? 1.04 : 1.01
+                                                        let sub = hasUpgrade("an", 43) ? 0 : 2600
+                                                        let exp = player.tokens.tokens2.total.sub(sub).max(0)
+                                                                                c += "Chromosomes V multiplies AX by " + format(Decimal.pow(base, exp)) + br
+                                                }
+                                                if (hasUpgrade("ch", 23))       c += "Chromosomes VIII multiplies AX by 20" + br
+                                                if (hasUpgrade("an", 43))       c += "Animals XVIII divides AX by 1e42" + br
+                                                if (hasUpgrade("an", 51))       c += "Animals XXI multiplies AX by 2" + br
+                                                if (hasUpgrade("an", 53)) {
+                                                        let sub = 7200
+                                                        let per = 1.05
+                                                                                c += "Animals XXIII multiplies AX by " + format(Decimal.pow(per, player.tokens.tokens2.total.sub(sub).max(0))) + br
+                                                }
+                                                if (!player.an.achActive[11] && hasAchievement("an", 11)) {
+                                                        if (!player.an.achActive[22]) {
+                                                                                c += "PRO I multiplies AX by " + format(Decimal.pow(5, player.an.achievements.length + 4)) + br
+                                                        } else                  c += "PRO I multiplies AX by 25" + br
+                                                }
+                                                if (hasAchievement("an", 12)) {
+                                                        if (player.an.achActive[12]) {
+                                                                                c += "PRI I divides AX by 4e49" + br
+                                                        } 
+                                                        if (!player.an.achActive[12] || hasAchievement("an", 22)) {
+                                                                                c += "PRI I multiplies AX by " + format(Decimal.pow(hasMilestone("an", 31) ? 2 : 4, player.ch.points.sub(200).max(0))) + br
+                                                        }
+                                                }
+                                                if (hasAchievement("an", 21)) {
+                                                        let l = player.ch.points.sub(235).max(0)
+                                                        let aa = player.an.achActive
+                                                        let r1o = !aa[11] + !aa[12] + !aa[13] + !aa[14]
+                                                        if (player.an.achActive[21])    c += "PRO II multiplies AX by " + format(Decimal.pow(3.3, l.times(r1o))) + br
+                                                        else                            c += "PRO II multiplies AX by " + format(Decimal.pow(100, l)) + br
+                                                }
+
+                                                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+                                        }],
                                 ],
                                 unlocked(){
                                         return player.an.unlocked
