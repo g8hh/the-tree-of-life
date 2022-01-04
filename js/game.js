@@ -427,7 +427,7 @@ function runInterval(){
 	if (diff > 0) updateOomps(diff);
 	updateWidth()
 	updateTabFormats()
-	gameLoop(diff)
+	if (diff > 0) gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)

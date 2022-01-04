@@ -230,7 +230,7 @@ var TAXONOMY_EFFECTS = {
         305:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
         306:() => hasMilestone("an", 28) ? "Gene gain" : "nothing (currently)",
         307:() => false ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
-        308:() => player.an.achActive[13] && hasAchievement("an", 13) ? "Organ gain per Chromosome/17" : "nothing (currently)",
+        308:() => player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23) ? "Organ gain per Chromosome/17" : "nothing (currently)",
 
         404:() => hasMilestone("an", 23) ? "Energy gain per Chromosomes" : "nothing (currently)",
         405:() => hasUpgrade("ch", 21) ? "in<u>TES</u>tine gain per Chromosome upgrades" : "nothing (currently)",
@@ -1151,9 +1151,10 @@ addLayer("h", {
                                 return a.pow(hasUpgrade("h", 45) ? 2 : 1)
                         },
                         onPurchase(){
-                                if (tmp.n.layerShown || player.p.unlocked) return 
+                                if (tmp.n.layerShown || player.p.unlocked) return
                                 if (player.tokens.total.lt(7)) player.subtabs.mini.mainTabs = "A"
-                                if (player.tokens.total.gt(0)) return 
+                                if (player.tokens.total.gt(0)) return
+ return
                                 player.tab = "mini"
                         },
                         unlocked(){
@@ -1174,9 +1175,9 @@ addLayer("h", {
                                 return a.pow(hasUpgrade("h", 44) ? 2 : 1)
                         },
                         onPurchase(){
-                                if (tmp.n.layerShown || player.p.unlocked) return 
+                                if (tmp.n.layerShown || player.p.unlocked) return
                                 if (player.tokens.total.lt(7)) player.subtabs.mini.mainTabs = "B"
-                                if (player.tokens.total.gt(0)) return 
+                                if (player.tokens.total.gt(0)) return
                                 player.tab = "mini"
                         },
                         unlocked(){
@@ -2058,7 +2059,7 @@ addLayer("sci", {
                         return ret
                 },
                 update(diff){
-                        if (hasUpgrade("sci", 305)) return 
+                        if (hasUpgrade("sci", 305)) return
                         let data = player.sci.hydrogen_science
                         data.best = data.best.max(data.points)
                         let gainThisTick = tmp.sci.hydrogen_science.getResetGain.times(diff)
@@ -2103,7 +2104,7 @@ addLayer("sci", {
                         return ret
                 },
                 update(diff){
-                        if (hasUpgrade("sci", 402)) return 
+                        if (hasUpgrade("sci", 402)) return
                         let data = player.sci.oxygen_science
                         data.best = data.best.max(data.points)
                         let gainThisTick = tmp.sci.oxygen_science.getResetGain.times(diff)
@@ -5249,7 +5250,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[11].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[11] = data.buyables[11].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[11].cost)
@@ -5313,7 +5314,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[12].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[12] = data.buyables[12].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[12].cost)
@@ -5373,7 +5374,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[13].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[13] = data.buyables[13].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[13].cost)
@@ -5442,7 +5443,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[21].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[21] = data.buyables[21].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[21].cost)
@@ -5512,7 +5513,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[22].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[22] = data.buyables[22].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[22].cost)
@@ -5578,7 +5579,7 @@ addLayer("sci", {
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[23].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[23] = data.buyables[23].plus(1)
                                 data.hydrogen_science.points = data.hydrogen_science.points.sub(tmp.sci.buyables[23].cost)
@@ -5641,7 +5642,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[101].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[101] = data.buyables[101].plus(1)
                                 if (!player.a.unlocked) {
@@ -5709,7 +5710,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[102].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[102] = data.buyables[102].plus(1)
                                 if (!player.a.unlocked) {
@@ -5772,7 +5773,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[103].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[103] = data.buyables[103].plus(1)
                                 if (!player.a.unlocked) {
@@ -5834,7 +5835,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[111].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[111] = data.buyables[111].plus(1)
                                 if (!player.a.unlocked) {
@@ -5900,7 +5901,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[112].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[112] = data.buyables[112].plus(1)
                                 if (!player.a.unlocked) {
@@ -5962,7 +5963,7 @@ addLayer("sci", {
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[113].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[113] = data.buyables[113].plus(1)
                                 if (!player.a.unlocked) {
@@ -6021,7 +6022,7 @@ addLayer("sci", {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[301].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[301] = data.buyables[301].plus(1)
                                 if (!player.a.unlocked) {
@@ -6064,7 +6065,7 @@ addLayer("sci", {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[302].cost)
                         },
                         buy(){
-                                if (!this.canAfford() || hasUpgrade("sci", 454)) return 
+                                if (!this.canAfford() || hasUpgrade("sci", 454)) return
                                 let data = player.sci
                                 data.buyables[302] = data.buyables[302].plus(1)
                                 if (!player.a.unlocked) {
@@ -6109,7 +6110,7 @@ addLayer("sci", {
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[303].cost)
                         },
                         buy(){
-                                if (!this.canAfford() || hasUpgrade("sci", 454)) return 
+                                if (!this.canAfford() || hasUpgrade("sci", 454)) return
                                 let data = player.sci
                                 data.buyables[303] = data.buyables[303].plus(1)
                                 if (!player.a.unlocked) {
@@ -6152,7 +6153,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[501].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[501] = data.buyables[501].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6210,7 +6211,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[502].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[502] = data.buyables[502].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6264,7 +6265,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[503].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[503] = data.buyables[503].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6318,7 +6319,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[511].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[511] = data.buyables[511].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6380,7 +6381,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[512].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[512] = data.buyables[512].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6434,7 +6435,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[513].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[513] = data.buyables[513].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6494,7 +6495,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[521].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[521] = data.buyables[521].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6550,7 +6551,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[522].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[522] = data.buyables[522].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -6607,7 +6608,7 @@ addLayer("sci", {
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[523].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.sci
                                 data.buyables[523] = data.buyables[523].plus(1)
                                 if (!hasUpgrade("sci", 554)) {
@@ -8514,7 +8515,7 @@ addLayer("n", {
                                 return true
                         },
                         toggles(){
-                                if (!player.extremeMode || hasUpgrade("sci", 305)) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return
                                 return [["sci", "autobuysci11"], ["sci", "autobuysci12"], ["sci", "autobuysci13"], ["sci", "autobuysci21"], ["sci", "autobuysci22"], ["sci", "autobuysci123"]]
                         },
                         effectDescription(){
@@ -8534,7 +8535,7 @@ addLayer("n", {
                                 return hasMilestone("n", 1)
                         },
                         toggles(){
-                                if (!player.extremeMode || hasUpgrade("sci", 402)) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return
                                 return [["sci", "autobuysci101"], ["sci", "autobuysci102"], ["sci", "autobuysci103"], ["sci", "autobuysci111"], ["sci", "autobuysci112"], ["sci", "autobuysci113"]]
                         },
                         effectDescription(){
@@ -8554,7 +8555,7 @@ addLayer("n", {
                                 return hasMilestone("n", 2)
                         },
                         toggles(){
-                                if (!player.extremeMode || hasUpgrade("sci", 305)) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 305)) return
                                 return [["sci", "autobuyhsciupg"]]
                         },
                         effectDescription(){
@@ -8589,7 +8590,7 @@ addLayer("n", {
                                 return hasMilestone("n", 4)
                         },
                         toggles(){
-                                if (!player.extremeMode || hasUpgrade("sci", 402)) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 402)) return
                                 return [["sci", "autobuyosciupg"]]
                         },
                         effectDescription(){
@@ -8609,7 +8610,7 @@ addLayer("n", {
                                 return hasMilestone("n", 5)
                         },
                         toggles(){
-                                if (!player.extremeMode || hasUpgrade("sci", 415)) return 
+                                if (!player.extremeMode || hasUpgrade("sci", 415)) return
                                 return [["sci", "autobuycsciupg"]]
                         },
                         effectDescription(){
@@ -9095,7 +9096,7 @@ addLayer("n", {
                 */
 
                 // 1: A point stuff
-                if (layer != "n") return 
+                if (layer != "n") return
                 player.n.time = 0
                 let inChallenge = hasMilestone("n", 13) && player.hardMode // cant reset otherwise once you have passive gain
                 let data1 = player.mini
@@ -9429,7 +9430,7 @@ addLayer("p", {
                 return hasUpgrade("t", 151)
         },
         update(diff){
-                if (hasUpgrade("t", 151)) return 
+                if (hasUpgrade("t", 151)) return
                 let data = player.p
                 
                 if (tmp.p.layerShown) data.unlocked = true
@@ -10595,7 +10596,7 @@ addLayer("mu", {
                 return hasUpgrade("t", 151)
         },
         update(diff){
-                if (hasUpgrade("t", 151)) return 
+                if (hasUpgrade("t", 151)) return
                 let data = player.mu
                 
                 if (tmp.mu.layerShown) data.unlocked = true
@@ -11417,7 +11418,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.mu.points.gte(tmp.mu.buyables[11].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[11] = player.mu.buyables[11].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(tmp.mu.buyables[11].cost)
                                 doReset("mu", true)
@@ -11475,7 +11476,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.p.points.gte(tmp.mu.buyables[12].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[12] = player.mu.buyables[12].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.p.points = player.p.points.sub(tmp.mu.buyables[12].cost)
                                 doReset("mu", true)
@@ -11540,7 +11541,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.p.points.gte(tmp.mu.buyables[13].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[13] = player.mu.buyables[13].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.p.points = player.p.points.sub(tmp.mu.buyables[13].cost)
                                 doReset("mu", true)
@@ -11605,7 +11606,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.mu.points.gte(tmp.mu.buyables[21].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[21] = player.mu.buyables[21].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.mu.points = player.mu.points.sub(tmp.mu.buyables[21].cost)
                                 doReset("mu", true)
@@ -11664,7 +11665,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.p.points.gte(tmp.mu.buyables[22].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[22] = player.mu.buyables[22].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.p.points = player.p.points.sub(tmp.mu.buyables[22].cost)
                                 doReset("mu", true)
@@ -11725,7 +11726,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.p.points.gte(tmp.mu.buyables[23].cost) && !hasMilestone("cells", 13),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mu.buyables[23] = player.mu.buyables[23].plus(1)
                                 if (!hasUpgrade("mu", 33)) player.p.points = player.p.points.sub(tmp.mu.buyables[23].cost)
                                 doReset("mu", true)
@@ -11784,7 +11785,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.mu.points.gte(tmp.mu.buyables[31].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 if (hasMilestone("cells", 57)) {
                                         let amt = player.mu.points
                                         let expDiv = tmp.mu.buyables[31].expDiv
@@ -11905,7 +11906,7 @@ addLayer("mu", {
                         },
                         canAfford:() => player.mu.points.gte(tmp.mu.buyables[32].cost) && (inChallenge("l", 11) || hasMilestone("l", 14)),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = tmp.mu.buyables[32]
                                 let bulk = data.getMaxBulk.min(data.getMaxAfford.sub(player.mu.buyables[32]))
                                 player.mu.buyables[32] = player.mu.buyables[32].plus(bulk)
@@ -11970,7 +11971,7 @@ addLayer("mu", {
                                 return decimalOne
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = tmp.mu.buyables[33]
                                 let bulk = data.getMaxBulk.min(data.getMaxAfford.sub(player.mu.buyables[33]))
                                 player.mu.buyables[33] = player.mu.buyables[33].plus(bulk)
@@ -12083,7 +12084,7 @@ addLayer("mu", {
                 return hasUpgrade("mu", 34) || hasMilestone("l", 2) || player.or.unlocked
         },
         doReset(layer){
-                if (layer != "mu") return 
+                if (layer != "mu") return
                 player.p.points = decimalZero
                 player.p.total = decimalZero
                 player.p.best = decimalZero
@@ -12933,7 +12934,7 @@ addLayer("l", {
                                 if (player.extremeMode) return player.l.challenges[11] >= 28
                                 if (player.l.challenges[11] > 26) return true
                                 if (!inChallenge("l", 11)) return
-                                if (player.points.lt("1ee305")) return 
+                                if (player.points.lt("1ee305")) return
                                 return player.l.challenges[11] >= 26
                         },
                         unlocked(){
@@ -13495,7 +13496,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[11].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 11
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -13612,7 +13613,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[12].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 12
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -13722,7 +13723,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[13].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 13
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -13822,7 +13823,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[21].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 21
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -13935,7 +13936,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[22].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 22
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -14028,7 +14029,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[23].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 23
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -14126,7 +14127,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[31].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 31
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -14227,7 +14228,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[32].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 32
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -14333,7 +14334,7 @@ addLayer("l", {
                         },
                         canAfford:() => player.l.points.gte(tmp.l.buyables[33].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.l
                                 let id = 33
                                 let ma = tmp.l.buyables[id].getMaxAfford
@@ -15615,7 +15616,7 @@ addLayer("l", {
                 player.l.time = 0
         },
         doReset(layer, force=false){
-                if (layer != "l" && !force) return 
+                if (layer != "l" && !force) return
                 player.l.time = 0
 
                 //this does a L reset
@@ -15997,7 +15998,7 @@ addLayer("a", {
                 return " multiply Life gain by " + format(tmp.a.effect) + "."
         },
         update(diff){
-                if (tmp.a.deactivated) return 
+                if (tmp.a.deactivated) return
                 let data = player.a
                 
                 if (player.l.grid[303].gems.gt(0)) data.unlocked = true
@@ -17524,7 +17525,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[11].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let ma = tmp.a.buyables[11].maxAfford
                                 let up = hasMilestone("a", 23) || hasMilestone("d", 1) || player.easyMode ? ma.sub(data.buyables[11]) : 1
@@ -17634,7 +17635,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[12].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let ma = tmp.a.buyables[12].maxAfford
                                 let up = hasMilestone("a", 23) || hasMilestone("d", 1) || player.easyMode ? ma.sub(data.buyables[12]) : 1
@@ -17716,7 +17717,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[13].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 13
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -17805,7 +17806,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[21].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 21
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -17886,7 +17887,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[22].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 22
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -17962,7 +17963,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[23].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 23
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -18035,7 +18036,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[31].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 31
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -18110,7 +18111,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[32].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 32
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -18181,7 +18182,7 @@ addLayer("a", {
                         },
                         canAfford:() => player.a.protein.points.gte(tmp.a.buyables[33].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.a
                                 let id = 33
                                 let ma = tmp.a.buyables[id].maxAfford
@@ -18537,7 +18538,7 @@ addLayer("a", {
                 player.a.time = 0
         },
         doReset(layer){
-                if (layer != "a") return 
+                if (layer != "a") return
 
                 /*
                 1. Life content
@@ -19547,7 +19548,7 @@ addLayer("d", {
                 player.d.time = 0
         },
         doReset(layer){
-                if (layer != "d") return 
+                if (layer != "d") return
 
                 /*
                 1. Amino Acid content
@@ -20623,7 +20624,7 @@ addLayer("cells", {
                                 player.tokens.buyables[11] = decimalZero
                                 player.tokens.points = player.tokens.total
                                 player.subtabs.tokens.mainTabs = "II"
-                                if (player.or.unlocked) return 
+                                if (player.or.unlocked) return
                                 player.tab = "tokens"
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e10888" : "9e10301"),
@@ -22615,7 +22616,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[11].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let data2 = data.stem_cells
                                 let id = 11
@@ -22736,7 +22737,7 @@ addLayer("cells", {
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let data2 = data.stem_cells
                                 let id = 12
@@ -22853,7 +22854,7 @@ addLayer("cells", {
                                 return pts.div(init).log(base).root(1.1).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let data2 = data.stem_cells
                                 let id = 13
@@ -22938,6 +22939,7 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 153)) base = new Decimal(1e50)
                                 if (hasUpgrade("t", 154)) base = new Decimal(1e40)
                                 if (player.an.achActive[14] && hasAchievement("an", 14)) base = new Decimal(1e39)
+                                if (hasAchievement("an", 24)) base = new Decimal(1e38)
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -22954,10 +22956,11 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 153)) base = new Decimal(1e50)
                                 if (hasUpgrade("t", 154)) base = new Decimal(1e40)
                                 if (player.an.achActive[14] && hasAchievement("an", 14)) base = new Decimal(1e39)
+                                if (hasAchievement("an", 24)) base = new Decimal(1e38)
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let data2 = data.stem_cells
                                 let id = 21
@@ -22994,9 +22997,12 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1,120,000*1e40^(x<sup>1.05</sup>)" 
                                 if (hasUpgrade("t", 152)) cost2 = "1e60^(x<sup>1.05</sup>)"
-                                if (hasUpgrade("t", 153)) cost2 = cost2.replace("60", "50")
-                                if (hasUpgrade("t", 154)) cost2 = cost2.replace("50", "40")
-                                if (player.an.achActive[14] && hasAchievement("an", 14)) cost2 = cost2.replace("40", "39")
+                                let base = "1e60"
+                                if (hasUpgrade("t", 153)) base = "1e50"
+                                if (hasUpgrade("t", 154)) base = "1e40"
+                                if (player.an.achActive[14] && hasAchievement("an", 14)) base = "1e39"
+                                if (hasAchievement("an", 24)) base = "1e38"
+                                cost2 = cost2.replace("1e60", base)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -23037,7 +23043,7 @@ addLayer("cells", {
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let data2 = data.stem_cells
                                 let id = 22
@@ -23114,7 +23120,7 @@ addLayer("cells", {
                                 return amt.div(init).log(base).root(exp2).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[111].maxAfford
                                 let max = hasMilestone("cells", 12) || player.easyMode ? ma.sub(data.buyables[111]).max(1) : 1
@@ -23183,7 +23189,7 @@ addLayer("cells", {
                                 return amt.div(init).log(base).root(exp2).plus(1).floor()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[112].maxAfford
                                 let max = hasUpgrade("t", 12) || player.easyMode ? ma.sub(data.buyables[112]).max(1) : 1
@@ -23253,7 +23259,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[411].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[411].maxAfford
                                 let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[411]).max(1) : 1
@@ -23320,7 +23326,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[412].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[412].maxAfford
                                 let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[412]).max(1) : 1
@@ -23386,7 +23392,7 @@ addLayer("cells", {
                         },
                         canAfford:() => player.cells.iota.points.gte(tmp.cells.buyables[413].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.cells
                                 let ma = tmp.cells.buyables[413].maxAfford
                                 let max = hasUpgrade("cells", 213) || player.easyMode ? ma.sub(data.buyables[413]).max(1) : 1
@@ -23669,7 +23675,7 @@ addLayer("cells", {
                 return hasUpgrade("cells", 24)
         },
         doReset(layer){
-                if (layer != "cells") return 
+                if (layer != "cells") return
                 player.cells.time = 0
 
                 /*
@@ -25710,7 +25716,7 @@ addLayer("t", {
                 player.t.bestOnReset = player.t.bestOnReset.max(g)
         },
         doReset(layer){
-                if (layer != "t") return 
+                if (layer != "t") return
                 player.t.time = 0
 
                 /*
@@ -26046,7 +26052,7 @@ addLayer("or", {
                                                 ret = ret.times(tmp.an.effect)
                 if (hasUpgrade("an", 23))       ret = ret.times(player.an.grid[506].extras.plus(1))
                 if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.pow(player.ch.points))
-                if (player.an.achActive[13] && hasAchievement("an", 13)) {
+                if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
                                                 ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17)))
                 }
 
@@ -28669,7 +28675,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 201
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -28743,7 +28749,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 202
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -28808,7 +28814,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 203
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -28873,7 +28879,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 211
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -28938,7 +28944,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 212
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29003,7 +29009,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 213
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29068,7 +29074,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 221
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29133,7 +29139,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 222
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29198,7 +29204,7 @@ addLayer("or", {
                                 return logPts.div(logPts.lambertw()).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 223
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29276,7 +29282,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 401
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29301,6 +29307,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasAchievement("an", 24) && player.an.achActive[24]) return player.tokens.tokens2.total.max(1).cbrt()
                                 let logBase = new Decimal(10)
                                 if (hasUpgrade("or", 322)) logBase = new Decimal(9)
                                 if (hasUpgrade("or", 323)) logBase = new Decimal(8)
@@ -29342,6 +29349,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 5)) logBase = new Decimal(2)
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
+                                if (hasAchievement("an", 24) && player.an.achActive[24]) eformula = eformula.replace("log2", "cbrt")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -29390,7 +29398,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 402
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29505,7 +29513,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 403
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29598,7 +29606,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 411
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29714,7 +29722,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 412
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29828,7 +29836,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 413
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -29943,7 +29951,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 421
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -30059,7 +30067,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 422
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -30152,7 +30160,7 @@ addLayer("or", {
                                 return discrim.sqrt().sub(lb1).div(2).ceil()
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.or
                                 let id = 423
                                 let ma = tmp.or.buyables[id].getMaxAfford
@@ -30915,7 +30923,7 @@ addLayer("or", {
                 player.or.time = 0
         },
         doReset(layer){
-                if (layer != "or") return 
+                if (layer != "or") return
                 player.or.time = 0
 
                 /*
@@ -31282,6 +31290,10 @@ addLayer("an", {
                 }
                 if (hasMilestone("an", 22))     ret = ret.times(player.an.grid[508].extras.plus(1).pow(.01))
                 if (hasUpgrade("an", 35))       ret = ret.times(Decimal.pow(1.01, player.ch.points))
+                if (hasAchievement("an", 23) && player.an.achActive[23]) {
+                                                ret = ret.times(10)
+                }
+                if (hasUpgrade("an", 53))       ret = ret.times(Decimal.pow(1.01, player.tokens.tokens2.total.sub(7200).max(0)))
 
                 return ret.max(1)
         },
@@ -31291,7 +31303,10 @@ addLayer("an", {
                 if (hasUpgrade("an", 12)) ret = new Decimal(1/2)
                 if (hasUpgrade("ch", 14)) ret = new Decimal(1)
 
-                if (hasUpgrade("ch", 24)) ret = ret.plus(player.ch.upgrades.length / 100)
+                if (hasUpgrade("ch", 24)) {
+                        let times = hasAchievement("an", 23) && !player.an.achActive[23] ? 3 : 1
+                        ret = ret.plus(player.ch.upgrades.length / 100 * times)
+                }
 
                 return ret
         },
@@ -31464,7 +31479,7 @@ addLayer("an", {
                                 }
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
-                                if (buy.gt(0)) break
+                                if (buy.gt(0) && !hasAchievement("an", 13)) break
                         }
                 }
         },
@@ -31526,6 +31541,11 @@ addLayer("an", {
                                 let r1o = !aa[11] + !aa[12] + !aa[13] + !aa[14]
                                 if (player.an.achActive[21])    ret = ret.times(Decimal.pow(3.3, l.times(r1o)))
                                 else                            ret = ret.times(Decimal.pow(100, l))
+                        }
+                        if (hasUpgrade("an", 53)) {
+                                let sub = 7200
+                                let per = 1.05
+                                                        ret = ret.times(Decimal.pow(per, player.tokens.tokens2.total.sub(sub).max(0)))
                         }
 
                         if (player.extremeMode)         ret = ret.pow(.75)
@@ -31810,6 +31830,18 @@ addLayer("an", {
                         unlocked(){
                                 return hasUpgrade("an", 51)
                         }, // hasUpgrade("an", 52)
+                },
+                53: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XXIII"
+                        },
+                        description(){
+                                return "Per Token II - 7200 gain 1.01x more Animals and 1.05x Genes"
+                        },
+                        cost:() => new Decimal(8.25e32),
+                        unlocked(){
+                                return hasUpgrade("an", 52)
+                        }, // hasUpgrade("an", 53)
                 },
         },
         milestones: {
@@ -32332,6 +32364,20 @@ addLayer("an", {
                                 return "Reward: Remove the Chromosome effect exponent softcap and its effect formula is 1.002<sup>x</sup>*2.66."
                         },
                 }, // hasMilestone("an", 32)
+                33: {
+                        requirementDescription(){
+                                return "3e15111 Genes"
+                        },
+                        done(){
+                                return player.an.genes.points.gte("3e15111")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The first 101 Token II buyables are free and selling Token II buyables starts them all at 100."
+                        },
+                }, // hasMilestone("an", 33)
         },
         clickables: {
                 11: {
@@ -32387,7 +32433,7 @@ addLayer("an", {
                         },
                         onClick(){
                                 let id = player.an.selectedId
-                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) return 
+                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) return
                                 let costs = TAXONOMY_COSTS[id]
                                 let pts = player.an.genes.points
                                 let ma = decimalZero
@@ -32491,8 +32537,8 @@ addLayer("an", {
                                 return "ONE I (" + (player.an.achActive[14] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[14]) return "When toggled ON Multipotent cost base is 1e39"
-                                return "When toggled OFF Oligopotent cost base is 1e69"
+                                if (player.an.achActive[14]) return "Multipotent cost base is 1e39"
+                                return "Oligopotent cost base is 1e69"
                         },
                         tooltip(){
                                 let a = ""
@@ -32563,13 +32609,13 @@ addLayer("an", {
                                 return "COM II (" + (player.an.achActive[23] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[23]) return "Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain"
-                                return "Base Organ gain double exponent is .31"
+                                if (player.an.achActive[23]) return "Gain 10x Animals"
+                                return "Triple Chromosomes IX"
                         },
                         tooltip(){
                                 let a = ""
-                                a += "When toggled ON Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain" + br 
-                                a += "When toggled OFF base Organ gain double exponent is .31"
+                                a += "When toggled ON gain 10x Animals" + br 
+                                a += "When toggled OFF triple Chromosomes IX"
                                 return a
                         },
                         unlocked(){
@@ -32587,13 +32633,13 @@ addLayer("an", {
                                 return "ONE II (" + (player.an.achActive[24] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[24]) return "When toggled ON Multipotent cost base is 1e39"
-                                return "When toggled OFF Oligopotent cost base is 1e69"
+                                if (player.an.achActive[24]) return "<u>IN</u>testine base is cbrt(Tokens II)"
+                                return "Unlock and you can prestige for Nucleuses"
                         },
                         tooltip(){
                                 let a = ""
-                                a += "When toggled ON Multipotent cost base is 1e39" + br 
-                                a += "When toggled OFF Oligopotent cost base is 1e69"
+                                a += "When toggled ON <u>IN</u>testine base is cbrt(Tokens II)" + br 
+                                a += "When toggled OFF unlock and you can prestige for Nucleuses [not yet]"
                                 return a
                         },
                         unlocked(){
@@ -32742,7 +32788,7 @@ addLayer("an", {
                         },
                         tooltip(){
                                 return "Get 1e11619 Genes"
-                        },
+                        }, // hasAchievement("an", 11)
                 },
                 12: {
                         name: "Prime",
@@ -32766,7 +32812,7 @@ addLayer("an", {
                         tooltip(){
                                 if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
                                 return "Have 17 Taxonomy buyables on prime levels less than 140 [shift for valid values]"
-                        },
+                        }, // hasAchievement("an", 12)
                 },
                 13: {
                         name: "Composite",
@@ -32790,8 +32836,8 @@ addLayer("an", {
                                 return a >= 17
                         },
                         tooltip(){
-                                return "Have 17 Taxonomy buyables on composite levels less than 134"
-                        },
+                                return "Have 17 Taxonomy buyables on composite levels less than 134<br>Reward: The taxonomy autobuyer can buy from every buyable"
+                        }, // hasAchievement("an", 13)
                 },
                 14: {
                         name: "One",
@@ -32814,7 +32860,7 @@ addLayer("an", {
                         },
                         tooltip(){
                                 return "Have 13 Taxonomy buyables on 1 level<br>Reward: Autobuy Taxonomy buyables which have 100 or more levels"
-                        },
+                        }, // hasAchievement("an", 14)
                 },
                 21: {
                         name: "Progression<br>II",
@@ -32823,7 +32869,7 @@ addLayer("an", {
                         },
                         tooltip(){
                                 return "Get 6308 Token II"
-                        },
+                        }, // hasAchievement("an", 21)
                 },
                 22: {
                         name: "Prime<br>II",
@@ -32866,16 +32912,16 @@ addLayer("an", {
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         a ++
-                                        if (primes.includes(v) || v < 4 || v >= 134) a --
+                                        if (primes.includes(v) || v < 4 || v >= 99) a --
                                 }
-                                return a >= 21
+                                return a >= 17
                         },
                         tooltip(){
-                                return "Have 21 Taxonomy buyables on composite levels less than 134"
-                        },
+                                return "Have 17 Taxonomy buyables on composite levels less than 99<br>Reward: COM I's ON effect is always active"
+                        }, // hasAchievement("an", 23)
                 },
                 24: {
-                        name: "One<br>II",
+                        name: "Six",
                         done(){
                                 let keys = [
                                         101, 102, 103, 104, 105, 106, 107, 108,
@@ -32887,15 +32933,17 @@ addLayer("an", {
                                         707, 708, 
                                         808]
                                 let a = 0
+                                let b = 1
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
-                                        if (v == 1) a ++ 
+                                        if (v == 6) a ++ 
+                                        if (v == 4) b ++
                                 }
-                                return a >= 17
+                                return a >= 14 && b >= 1
                         },
                         tooltip(){
-                                return "Have 17 Taxonomy buyables on 1 level<br>Reward: Autobuy Taxonomy buyables which have 100 or more levels"
-                        },
+                                return "Have 14 Taxonomy buyables on 6 levels and 1 on 4 levels<br>Reward: Multipotent cost base is 1e38"
+                        }, // hasAchievement("an", 24)
                 },
         },
         tabFormat: {
@@ -33012,7 +33060,7 @@ addLayer("an", {
                 player.an.time = 0
         },
         doReset(layer){
-                if (layer != "an") return 
+                if (layer != "an") return
                 player.an.time = 0
 
                 /*
@@ -33834,7 +33882,7 @@ addLayer("ch", {
                 },
         },
         doReset(layer){
-                if (layer != "ch") return 
+                if (layer != "ch") return
                 player.ch.time = 0
 
                 /*
@@ -33973,7 +34021,7 @@ addLayer("mc", {
                         cost: () => new Decimal(2).pow(getBuyableAmount("mc", 11).pow(2)),
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[11].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mc.buyables[11] = player.mc.buyables[11].plus(1)
                                 player.mc.points = player.mc.points.sub(tmp.mc.buyables[11].cost)
                         },
@@ -34021,7 +34069,7 @@ addLayer("mc", {
                         cost: () => new Decimal(10).pow(getBuyableAmount("mc", 12).pow(1.3).plus(1)),
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[12].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mc.buyables[12] = player.mc.buyables[12].plus(1)
                                 player.mc.points = player.mc.points.sub(tmp.mc.buyables[12].cost)
                         },
@@ -34072,7 +34120,7 @@ addLayer("mc", {
                         cost: () => new Decimal(1e2).pow(getBuyableAmount("mc", 13).pow(1.1).plus(2)),
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[13].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mc.buyables[13] = player.mc.buyables[13].plus(1)
                                 player.mc.points = player.mc.points.sub(tmp.mc.buyables[13].cost)
                         },
@@ -34831,11 +34879,11 @@ addLayer("ach", {
                         onPress(){
                                 if (player.an.unlocked) {
                                         player.tab = "an"
-                                        return 
+                                        return
                                 }
                                 if (!player.a.unlocked) {
                                         if (!tmp.mini.layerShown) return
-                                        if (!tmp.mini.tabFormat.A.unlocked) return 
+                                        if (!tmp.mini.tabFormat.A.unlocked) return
                                         player.tab = "mini"
                                         player.subtabs.mini.mainTabs = "A"
                                 } else {
@@ -34853,10 +34901,10 @@ addLayer("ach", {
                         onPress(){
                                 if (hasUpgrade("or", 352)) {
                                         if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
-                                        return 
+                                        return
                                 }
                                 if (!tmp.mini.layerShown) return
-                                if (!tmp.mini.tabFormat.B.unlocked) return 
+                                if (!tmp.mini.tabFormat.B.unlocked) return
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "B"
                         },
@@ -34875,7 +34923,7 @@ addLayer("ach", {
                                         player.tab = "cells"
                                 } else if (!hasMilestone("tokens", 23)) {
                                         if (!tmp.mini.layerShown) return
-                                        if (!tmp.mini.tabFormat.C.unlocked) return 
+                                        if (!tmp.mini.tabFormat.C.unlocked) return
                                         player.tab = "mini"
                                         player.subtabs.mini.mainTabs = "C"
                                 } else {
@@ -34894,7 +34942,7 @@ addLayer("ach", {
                         onPress(){
                                 if (!player.d.unlocked) {
                                         if (!tmp.mini.layerShown) return
-                                        if (!tmp.mini.tabFormat.D.unlocked) return 
+                                        if (!tmp.mini.tabFormat.D.unlocked) return
                                         player.tab = "mini"
                                         player.subtabs.mini.mainTabs = "D"
                                 } else {
@@ -34942,7 +34990,7 @@ addLayer("ach", {
                         onPress(){
                                 if (tmp.or.layerShown) {
                                         showTab("or")
-                                        return 
+                                        return
                                 }
                                 if (!tmp.o.layerShown) return
                                 showTab("o")
@@ -35163,7 +35211,7 @@ addLayer("ach", {
                                 return player.ach.hiddenRows < Object.keys(PROGRESSION_MILESTONES).length/7
                         },
                         onClick(){
-                                if (!this.canClick()) return 
+                                if (!this.canClick()) return
                                 if (!player.shiftAlias) {
                                         player.ach.hiddenRows ++
                                         return
@@ -35175,7 +35223,7 @@ addLayer("ach", {
                                         player.ach.hiddenRows ++
                                         if (b > 1000) {
                                                 console.log('uh oh')
-                                                return 
+                                                return
                                         }
                                 }
                         },
@@ -35194,7 +35242,7 @@ addLayer("ach", {
                                 return player.ach.hiddenRows > 0
                         },
                         onClick(){
-                                if (!this.canClick()) return 
+                                if (!this.canClick()) return
                                 if (player.shiftAlias) player.ach.hiddenRows = 0
                                 else player.ach.hiddenRows --
                         },
@@ -36026,7 +36074,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[11].cost) && getBuyableAmount("mini", 11).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[11] = player.mini.buyables[11].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[11].cost)
                         },
@@ -36082,7 +36130,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[12].cost) && getBuyableAmount("mini", 12).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[12] = player.mini.buyables[12].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[12].cost)
                         },
@@ -36141,7 +36189,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[13].cost) && getBuyableAmount("mini", 13).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[13] = player.mini.buyables[13].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[13].cost)
                         },
@@ -36197,7 +36245,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[21].cost) && getBuyableAmount("mini", 21).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[21] = player.mini.buyables[21].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[21].cost)
                         },
@@ -36269,7 +36317,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[23].cost) && getBuyableAmount("mini", 23).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[23] = player.mini.buyables[23].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[23].cost)
                         },
@@ -36330,7 +36378,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[61].cost) && getBuyableAmount("mini", 61).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[61] = player.mini.buyables[61].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[61].cost)
                         },
@@ -36393,7 +36441,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[62].cost) && getBuyableAmount("mini", 62).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[62] = player.mini.buyables[62].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[62].cost)
                         },
@@ -36459,7 +36507,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.a_points.points.gte(tmp.mini.buyables[63].cost) && getBuyableAmount("mini", 63).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[63] = player.mini.buyables[63].plus(1)
                                 player.mini.a_points.points = player.mini.a_points.points.sub(tmp.mini.buyables[63].cost)
                         },
@@ -36526,7 +36574,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[31].cost) && getBuyableAmount("mini", 31).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[31] = player.mini.buyables[31].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[31].cost)
                         },
@@ -36582,7 +36630,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[32].cost) && getBuyableAmount("mini", 32).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[32] = player.mini.buyables[32].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[32].cost)
                         },
@@ -36639,7 +36687,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[33].cost) && getBuyableAmount("mini", 33).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[33] = player.mini.buyables[33].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[33].cost)
                         },
@@ -36695,7 +36743,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[41].cost) && getBuyableAmount("mini", 41).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[41] = player.mini.buyables[41].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[41].cost)
                         },
@@ -36751,7 +36799,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[42].cost) && getBuyableAmount("mini", 42).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[42] = player.mini.buyables[42].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[42].cost)
                         },
@@ -36807,7 +36855,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[43].cost) && getBuyableAmount("mini", 43).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[43] = player.mini.buyables[43].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[43].cost)
                         },
@@ -36863,7 +36911,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[51].cost) && getBuyableAmount("mini", 51).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[51] = player.mini.buyables[51].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[51].cost)
                         },
@@ -36920,7 +36968,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[52].cost) && getBuyableAmount("mini", 52).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[52] = player.mini.buyables[52].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[52].cost)
                         },
@@ -36982,7 +37030,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.b_points.points.gte(tmp.mini.buyables[53].cost) && getBuyableAmount("mini", 53).lt(5000),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[53] = player.mini.buyables[53].plus(1)
                                 player.mini.b_points.points = player.mini.b_points.points.sub(tmp.mini.buyables[53].cost)
                         },
@@ -37047,9 +37095,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[71].cost) && getBuyableAmount("mini", 71).lt(11),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[71] = player.mini.buyables[71].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[71].cost)
                         },
                         unlocked(){
@@ -37089,9 +37137,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[72].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[72] = player.mini.buyables[72].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[72].cost)
                         },
                         maxAfford(){
@@ -37154,9 +37202,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[73].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[73] = player.mini.buyables[73].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[73].cost)
                         },
                         maxAfford(){
@@ -37210,9 +37258,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[81].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[81] = player.mini.buyables[81].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[81].cost)
                         },
                         maxAfford(){
@@ -37278,9 +37326,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[82].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[82] = player.mini.buyables[82].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[82].cost)
                         },
                         maxAfford(){
@@ -37341,9 +37389,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[83].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[83] = player.mini.buyables[83].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[83].cost)
                         },
                         maxAfford(){
@@ -37405,9 +37453,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[91].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[91] = player.mini.buyables[91].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[91].cost)
                         },
                         maxAfford(){
@@ -37462,9 +37510,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[92].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[92] = player.mini.buyables[92].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[92].cost)
                         },
                         maxAfford(){
@@ -37525,9 +37573,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[93].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[93] = player.mini.buyables[93].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[93].cost)
                         },
                         maxAfford(){
@@ -37593,9 +37641,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[101].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[101] = player.mini.buyables[101].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[101].cost)
                         },
                         maxAfford(){
@@ -37650,9 +37698,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[102].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[102] = player.mini.buyables[102].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[102].cost)
                         },
                         maxAfford(){
@@ -37714,9 +37762,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[103].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[103] = player.mini.buyables[103].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[103].cost)
                         },
                         maxAfford(){
@@ -37771,9 +37819,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[111].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[111] = player.mini.buyables[111].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[111].cost)
                         },
                         maxAfford(){
@@ -37828,9 +37876,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[112].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[112] = player.mini.buyables[112].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[112].cost)
                         },
                         maxAfford(){
@@ -37890,9 +37938,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.c_points.points.gte(tmp.mini.buyables[113].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[113] = player.mini.buyables[113].plus(1)
-                                if (player.mu.CCostFree) return 
+                                if (player.mu.CCostFree) return
                                 player.mini.c_points.points = player.mini.c_points.points.sub(tmp.mini.buyables[113].cost)
                         },
                         maxAfford(){
@@ -37952,10 +38000,10 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[121].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[121] = player.mini.buyables[121].plus(1)
-                                if (hasUpgrade("mini", 55)) return 
-                                if (hasUpgrade("sci", 321)) return 
+                                if (hasUpgrade("mini", 55)) return
+                                if (hasUpgrade("sci", 321)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[121].cost)
                         },
                         maxAfford(){
@@ -38019,9 +38067,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[122].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[122] = player.mini.buyables[122].plus(1)
-                                if (hasUpgrade("mini", 55)) return 
+                                if (hasUpgrade("mini", 55)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[122].cost)
                         },
                         maxAfford(){
@@ -38076,9 +38124,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[123].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[123] = player.mini.buyables[123].plus(1)
-                                if (hasUpgrade("mini", 55)) return 
+                                if (hasUpgrade("mini", 55)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[123].cost)
                         },
                         maxAfford(){
@@ -38135,7 +38183,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[131].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[131] = player.mini.buyables[131].plus(1)
                                 if (hasUpgrade("mini", 55)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[131].cost)
@@ -38199,7 +38247,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[132].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[132] = player.mini.buyables[132].plus(1)
                                 if (hasUpgrade("mini", 55)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[132].cost)
@@ -38262,7 +38310,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[133].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[133] = player.mini.buyables[133].plus(1)
                                 if (hasUpgrade("mini", 55)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[133].cost)
@@ -38321,9 +38369,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[151].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[151] = player.mini.buyables[151].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[151].cost)
                         },
                         maxAfford(){
@@ -38379,9 +38427,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[152].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[152] = player.mini.buyables[152].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[152].cost)
                         },
                         maxAfford(){
@@ -38437,9 +38485,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[153].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[153] = player.mini.buyables[153].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[153].cost)
                         },
                         maxAfford(){
@@ -38495,9 +38543,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[161].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[161] = player.mini.buyables[161].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[161].cost)
                         },
                         maxAfford(){
@@ -38555,9 +38603,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[162].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[162] = player.mini.buyables[162].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[162].cost)
                         },
                         maxAfford(){
@@ -38614,9 +38662,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[163].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[163] = player.mini.buyables[163].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[163].cost)
                         },
                         maxAfford(){
@@ -38673,9 +38721,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[171].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[171] = player.mini.buyables[171].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[171].cost)
                         },
                         maxAfford(){
@@ -38732,9 +38780,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[172].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[172] = player.mini.buyables[172].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[172].cost)
                         },
                         maxAfford(){
@@ -38792,9 +38840,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[173].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[173] = player.mini.buyables[173].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[173].cost)
                         },
                         maxAfford(){
@@ -38855,9 +38903,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[181].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[181] = player.mini.buyables[181].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[181].cost)
                         },
                         maxAfford(){
@@ -38914,9 +38962,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[182].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[182] = player.mini.buyables[182].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[182].cost)
                         },
                         maxAfford(){
@@ -38968,9 +39016,9 @@ addLayer("mini", {
                         cost:() => new Decimal("3e14159").times(Decimal.pow(265358, Decimal.pow(getBuyableAmount("mini", 183), 2))),
                         canAfford:() => player.mini.d_points.points.gte(tmp.mini.buyables[183].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[183] = player.mini.buyables[183].plus(1)
-                                if (hasUpgrade("mini", 74)) return 
+                                if (hasUpgrade("mini", 74)) return
                                 player.mini.d_points.points = player.mini.d_points.points.sub(tmp.mini.buyables[183].cost)
                         },
                         maxAfford(){
@@ -39023,9 +39071,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[201].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[201] = player.mini.buyables[201].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[201].cost)
                         },
                         unlocked(){
@@ -39064,7 +39112,7 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[202].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[202] = player.mini.buyables[202].plus(1)
                                 if (hasUpgrade("sci", 345) || hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[202].cost)
@@ -39132,9 +39180,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[203].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[203] = player.mini.buyables[203].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[203].cost)
                         },
                         maxAfford(){
@@ -39191,9 +39239,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[211].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[211] = player.mini.buyables[211].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[211].cost)
                         },
                         maxAfford(){
@@ -39268,9 +39316,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[212].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[212] = player.mini.buyables[212].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[212].cost)
                         },
                         maxAfford(){
@@ -39327,9 +39375,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[213].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[213] = player.mini.buyables[213].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[213].cost)
                         },
                         maxAfford(){
@@ -39399,9 +39447,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[221].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[221] = player.mini.buyables[221].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[221].cost)
                         },
                         maxAfford(){
@@ -39460,9 +39508,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[222].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[222] = player.mini.buyables[222].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[222].cost)
                         },
                         maxAfford(){
@@ -39517,9 +39565,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[223].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[223] = player.mini.buyables[223].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[223].cost)
                         },
                         maxAfford(){
@@ -39589,9 +39637,9 @@ addLayer("mini", {
                         },
                         canAfford:() => player.mini.e_points.points.gte(tmp.mini.buyables[231].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.mini.buyables[231] = player.mini.buyables[231].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[231].cost)
                         },
                         maxAfford(){
@@ -39660,7 +39708,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[232] = player.mini.buyables[232].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[232].cost)
                         },
                         maxAfford(){
@@ -39724,7 +39772,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[233] = player.mini.buyables[233].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[233].cost)
                         },
                         maxAfford(){
@@ -39782,7 +39830,7 @@ addLayer("mini", {
                         buy(){
                                 if (!this.canAfford()) return
                                 player.mini.buyables[241] = player.mini.buyables[241].plus(1)
-                                if (hasUpgrade("l", 13)) return 
+                                if (hasUpgrade("l", 13)) return
                                 player.mini.e_points.points = player.mini.e_points.points.sub(tmp.mini.buyables[241].cost)
                         },
                         maxAfford(){
@@ -41578,7 +41626,7 @@ addLayer("mini", {
                 },
         },
         doReset(layer){
-                if (layer == "h") return 
+                if (layer == "h") return
                 let data = player.mini
 
                 //section 1: buyables
@@ -41949,6 +41997,10 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+
+                        if (hasMilestone("an", 33) && x.lte(100)) return decimalZero
+
+
                         if (hasUpgrade("an", 51))       return x.pow(.45).floor().sub(1).max(0)
                         if (hasUpgrade("ch", 23))       return x.pow(.46).floor().sub(1).max(0)
                         if (hasMilestone("an", 25))     return x.pow(.47).floor().sub(1).max(0)
@@ -42009,6 +42061,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("an", 33))     return 27
                         if (hasUpgrade("an", 51))       return 26
                         if (hasUpgrade("ch", 23))       return 25
                         if (hasMilestone("an", 25))     return 24
@@ -42118,8 +42171,8 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(11),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
                         buy(auto = false){// player.tokens.autobuyradio && hasMilestone("n", 7)
-                                if (!this.canAfford()) return 
-                                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !auto) return 
+                                if (!this.canAfford()) return
+                                if (player.tokens.autobuyradio && hasMilestone("n", 7) && !auto) return
                                 player.tokens.buyables[11] = player.tokens.buyables[11].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[11].cost)
                         },
@@ -42168,7 +42221,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(12),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[12] = player.tokens.buyables[12].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[12].cost)
                         },
@@ -42217,7 +42270,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(13),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[13].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[13] = player.tokens.buyables[13].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[13].cost)
                         },
@@ -42267,7 +42320,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(21),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[21] = player.tokens.buyables[21].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[21].cost)
                         },
@@ -42343,7 +42396,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(22),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[22].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[22] = player.tokens.buyables[22].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[22].cost)
                         },
@@ -42399,7 +42452,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(23),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[23].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[23] = player.tokens.buyables[23].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[23].cost)
                         },
@@ -42446,7 +42499,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(31),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[31].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[31] = player.tokens.buyables[31].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[31].cost)
                         },
@@ -42497,7 +42550,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(32),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[32].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[32] = player.tokens.buyables[32].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[32].cost)
                         },
@@ -42542,7 +42595,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(33),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[33].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[33] = player.tokens.buyables[33].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[33].cost)
                         },
@@ -42589,7 +42642,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(41),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[41].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[41] = player.tokens.buyables[41].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[41].cost)
                         },
@@ -42655,7 +42708,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(42),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[42].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[42] = player.tokens.buyables[42].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[42].cost)
                         },
@@ -42707,7 +42760,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(43),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[43].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[43] = player.tokens.buyables[43].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[43].cost)
                         },
@@ -42751,7 +42804,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(51),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[51].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[51] = player.tokens.buyables[51].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[51].cost)
                         },
@@ -42795,7 +42848,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(52),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[52].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[52] = player.tokens.buyables[52].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[52].cost)
                         },
@@ -42842,7 +42895,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(53),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[53].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[53] = player.tokens.buyables[53].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[53].cost)
                         },
@@ -42889,7 +42942,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(61),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[61].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[61] = player.tokens.buyables[61].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[61].cost)
                         },
@@ -42935,7 +42988,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(62),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[62].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[62] = player.tokens.buyables[62].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[62].cost)
                         },
@@ -42981,7 +43034,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(63),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[63].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.buyables[63] = player.tokens.buyables[63].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[63].cost)
                         },
@@ -43033,7 +43086,7 @@ addLayer("tokens", {
                         title: "<bdi style='color:#FFFFFF'>Sell-all</bdi>",
                         canAfford:() => true,
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 player.tokens.points = player.tokens.total
                                 x = ["11", "12", "13", "21", "22", 
                                      "23", "31", "32", "33", "41", 
@@ -43059,8 +43112,8 @@ addLayer("tokens", {
                         title: "<bdi style='color:#FFFFFF'>Sell-all</bdi>",
                         canAfford:() => true,
                         buy(){
-                                if (!this.canAfford()) return 
-                                if (hasMilestone("l", 3)) return 
+                                if (!this.canAfford()) return
+                                if (hasMilestone("l", 3)) return
                                 let keep = [91, 92, 93, 94, 95]
                                 if (hasMilestone("tokens", 18))         keep = keep.concat([42, 61, 62])
                                 if (hasUpgrade("mini", 31))             keep = keep.concat([71, 72, 73, 81, 82])
@@ -43104,7 +43157,7 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[101].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[101] = data.buyables[101].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
@@ -43156,7 +43209,7 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[102].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[102] = data.buyables[102].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
@@ -43227,7 +43280,7 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[111].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[111] = data.buyables[111].plus(1)
                                 data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[111].cost)
@@ -43310,10 +43363,10 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[112].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 if (!player.tokens.tokens2Unl.includes(112)){
                                         player.tokens.tokens2Unl.push(112)
-                                        return 
+                                        return
                                 }
                                 let data = player.tokens
                                 data.buyables[112] = data.buyables[112].plus(1)
@@ -43395,10 +43448,10 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[121].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 if (!player.tokens.tokens2Unl.includes(121)){
                                         player.tokens.tokens2Unl.push(121)
-                                        return 
+                                        return
                                 }
                                 let data = player.tokens
                                 data.buyables[121] = data.buyables[121].plus(1)
@@ -43475,10 +43528,10 @@ addLayer("tokens", {
                                 return player.tokens.tokens2.points.gte(tmp.tokens.buyables[122].cost)
                         },
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 if (!player.tokens.tokens2Unl.includes(122)){
                                         player.tokens.tokens2Unl.push(122)
-                                        return 
+                                        return
                                 }
                                 let data = player.tokens
                                 data.buyables[122] = data.buyables[122].plus(1)
@@ -43554,7 +43607,7 @@ addLayer("tokens", {
                         },
                         canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[191] = data.buyables[191].plus(1)
                                 data.tokens2.points = data.tokens2.points.plus(1)
@@ -43600,7 +43653,7 @@ addLayer("tokens", {
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[192] = data.buyables[192].plus(1)
                                 data.tokens2.points = data.tokens2.points.plus(1)
@@ -43666,7 +43719,7 @@ addLayer("tokens", {
                         },
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
                         buy(){
-                                if (!this.canAfford()) return 
+                                if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[193] = data.buyables[193].plus(1)
                                 data.tokens2.points = data.tokens2.points.plus(1)
@@ -43710,8 +43763,10 @@ addLayer("tokens", {
                                 data.tokens2.points = data.tokens2.total
                                 ids = [101, 102, 111, 112, 121, 122, 131, 132]
                                 // add more when applicable
+                                let base = decimalZero
+                                if (hasMilestone("an", 33)) base = new Decimal(100)
                                 for (i in ids){
-                                        data.buyables[ids[i]] = decimalZero
+                                        data.buyables[ids[i]] = base
                                 }
                                 data.lastRespecDisplayFormula2ID = Math.max(data.lastRespecDisplayFormula2ID, tmp.tokens.buyables.costFormulaText2ID)
                         },
@@ -45455,7 +45510,7 @@ addLayer("tokens", {
                                                 if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
                                                 if (hasUpgrade("an", 23))       c += "Animals VIII multiplies AX by " + format(player.an.grid[506].extras.plus(1)) + br
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.pow(player.ch.points)) + br
-                                                if (player.an.achActive[13] && hasAchievement("an", 13)) {
+                                                if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
                                                                                 c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17))) + br
                                                 }
 
@@ -45468,7 +45523,44 @@ addLayer("tokens", {
                         },
                         "Air": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Air gain is AX<sup>BX</sup>"
+                                                let b = "AX and BX are initially 1 and are multiplied by the following factors"
+                                                let c = ""
+
+                                                if (player.hardMode)            c += "Hard Mode divides AX by 4" + br
+                                                if (player.easyMode)            c += "Easy Mode multiplies AX by 4" + br
+                                                if (!hasMilestone("ch", 11)) {
+                                                                                c += "Larynx multiplies AX by " + format(tmp.or.challenges[11].reward) + br
+                                                                                c += "Trachea multiplies AX by " + format(tmp.or.challenges[12].reward) + br
+                                                                                c += "Primary Bronchi multiplies AX by " + format(tmp.or.challenges[21].reward) + br
+                                                                                c += "Secondary Bronchi multiplies AX by " + format(tmp.or.challenges[22].reward) + br
+                                                                                c += "Tertiary Bronchi multiplies AX by " + format(tmp.or.challenges[31].reward) + br
+                                                                                c += "Bronchoiles multiplies AX by " + format(tmp.or.challenges[32].reward) + br
+                                                }
+                                                if (hasUpgrade("or", 221))      c += "Kidney XI multiplies AX by " + format(player.t.points.max(10).log10()) + br
+                                                if (hasUpgrade("or", 224))      c += "Kidney XIV multiplies AX by " + format(tmp.or.upgrades[224].effect) + br
+                                                if (hasUpgrade("or", 225))      c += "Kidney XV multiplies AX by " + format(tmp.or.buyables[412].effect) + br
+                                                if (hasUpgrade("or", 233))      c += "Kidney XVIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
+                                                if (hasUpgrade("or", 301))      c += "Air I multiplies AX by " + format(tmp.or.upgrades[301].effect) + br
+                                                if (hasUpgrade("or", 312))      c += "Air VII multiplies AX by " + format(Decimal.pow(3, player.tokens.best_buyables[101].sub(30)).max(1)) + br
+                                                if (hasMilestone("or", 17))     c += "Organ Milestone 18 multiplies AX by " + format(player.or.milestones.length) + br
+                                                if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+                                                if (hasUpgrade("or", 23))       c += "Organs VIII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
+                                                if (hasUpgrade("or", 43))       c += "Organs XVIII multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
+                                                if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+                                                if (hasMilestone("an", 16))     c += "Animal Milestone 16 multiplies AX by " + format(player.an.grid[808].extras.plus(1)) + br
+                                                if (hasUpgrade("an", 22))       c += "Animals VII multiplies AX by " + format(player.an.grid[505].extras.plus(1).pow(player.an.grid[508].buyables)) + br
+                                                if (c.includes("AX"))           c += br
+
+                                                if (hasMilestone("ch", 11))     c += "Chromosome Milestone 11 multiplies BX by " + format(60) + br
+                                                if (c.includes("BX"))           c += br
+
+                                                let ret = a + br + b + br2 + c
+                                                ret = ret.replaceAll("AX", makeRed("A"))
+                                                ret = ret.replaceAll("BX", makeRed("B"))
+                                                return ret
+                                        }],
                                 ],
                                 unlocked(){
                                         return player.or.air.points.gt(0) || player.an.unlocked
@@ -45476,7 +45568,45 @@ addLayer("tokens", {
                         },
                         "Energy": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Energy gain is AX<sup>BX</sup>"
+                                                let b = "AX and BX are initially 1 and are multiplied by the following factors"
+                                                let c = ""
+                                                let data = player.or.extras
+
+                                                if (player.easyMode)            c += "Easy Mode multiplies AX by 4" + br
+                                                if (data[401].gt(0))            c += "<u>IN</u>testine multiplies AX by " + format(data[401].plus(1)) + br
+                                                if (data[402].gt(0))            c += "<u>in</u>TEStine multiplies AX by " + format(data[402].plus(1)) + br
+                                                if (data[403].gt(0))            c += "<u>in</u>tesTINE multiplies AX by " + format(data[403].plus(1)) + br
+                                                if (data[411].gt(0))            c += "IN<u>tes</u>tine multiplies AX by " + format(data[411].plus(1)) + br
+                                                if (data[412].gt(0))            c += "in<u>TES</u>tine multiplies AX by " + format(data[412].plus(1)) + br
+                                                if (data[413].gt(0))            c += "in<u>tes</u>TINE multiplies AX by " + format(data[413].plus(1)) + br
+                                                if (data[421].gt(0))            c += "INtes<u>tine</u> multiplies AX by " + format(data[421].plus(1)) + br
+                                                if (data[422].gt(0))            c += "inTES<u>tine</u> multiplies AX by " + format(data[422].plus(1)) + br
+                                                if (data[423].gt(0))            c += "intes<u>TINE</u> multiplies AX by " + format(data[423].plus(1)) + br
+                                                if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.milestones.length) + br
+                                                if (hasUpgrade("or", 21))       c += "Organs VI multiplies AX by " + format(player.d.points.max(10).log10()) + br
+                                                if (hasUpgrade("or", 23))       c += "Organs VII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
+                                                if (hasUpgrade("or", 43))       c += "Organs XVIII multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
+                                                if (hasUpgrade("or", 323))      c += "Lung XIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
+                                                if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
+                                                if (hasUpgrade("an", 15))       c += "Animals V multiplies AX by " + format(player.an.grid[607].extras.plus(1)) + br
+                                                if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.an.grid[404].extras.plus(1).pow(player.ch.points)) + br
+                                                if (c.includes("AX"))           c += br
+
+                                                // BELOW IS EXPONENTIAL THINGS
+                                                if (hasMilestone("or", 21)) {
+                                                        let a = hasUpgrade("or", 151) + hasUpgrade("or", 152) + hasUpgrade("or", 153)
+                                                        a += hasUpgrade("or", 154) + hasUpgrade("or", 155) 
+                                                                                c += "Organ Milestone 21 multiplies BX by " + format(Decimal.pow(1.01, a))
+                                                }
+                                                if (c.includes("BX"))           c += br
+
+                                                let ret = a + br + b + br2 + c
+                                                ret = ret.replaceAll("AX", makeRed("A"))
+                                                ret = ret.replaceAll("BX", makeRed("B"))
+                                                return ret
+                                        }],
                                 ],
                                 unlocked(){
                                         return player.or.energy.points.gt(0) || player.an.unlocked
@@ -45484,7 +45614,31 @@ addLayer("tokens", {
                         },
                         "Animals": {
                                 content: [
-                                        ["display-text", "not yet"],
+                                        ["display-text", function(){
+                                                let a = "Animal gain is " + format(tmp.an.getBaseGain, 3) + "*AX"
+                                                let b = "AX is initially 1 and is multiplied by the following factors"
+                                                let c = ""
+
+                                                if (player.easyMode)            c += "Easy Mode multiplies AX by 2" + br
+                                                if (hasMilestone("an", 13))     c += "Animal Milestone 13 multiplies AX by " + format(player.an.milestones.length) + br
+                                                if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.genes.points.max(10).log10()) + br
+                                                else if (hasUpgrade("or", 351)) {
+                                                        let a = 1
+                                                        if (hasUpgrade("or", 352)) a ++
+                                                        if (hasUpgrade("or", 353)) a ++
+                                                        if (hasUpgrade("or", 354)) a ++
+                                                        if (hasUpgrade("or", 355)) a ++
+                                                                                c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
+                                                }
+                                                if (hasMilestone("an", 22))     c += "Animal Milestone 22 multiplies AX by " + format(player.an.grid[508].extras.plus(1).pow(.01)) + br
+                                                if (hasUpgrade("an", 35))       c += "Animals XV multiplies AX by " + format(Decimal.pow(1.01, player.ch.points)) + br
+                                                if (hasAchievement("an", 23) && player.an.achActive[23]) {
+                                                                                c += "COM II multiplies AX by " + format(10) + br
+                                                }
+                                                if (hasUpgrade("an", 53))       c += "Animals XXIII multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(7200).max(0))) + br
+
+                                                return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
+                                        }],
                                 ],
                                 unlocked(){
                                         return player.an.unlocked
@@ -45530,6 +45684,8 @@ addLayer("tokens", {
                                 "blank",
                                 "blank",
                                 ["microtabs", "currency_displays"],
+                                "blank",
+                                "blank",
                         ],
                         unlocked(){
                                 return hasUpgrade("cells", 42)
