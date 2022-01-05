@@ -31510,7 +31510,7 @@ addLayer("an", {
                         }
                         if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
                         if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
-                        if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3))
+                        if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3).max(1))
                         if (hasUpgrade("ch", 14))       ret = ret.times(tmp.ch.upgrades[14].effect)
                         if (hasUpgrade("ch", 15)) {
                                 let base = hasUpgrade("an", 34) ? 1.04 : 1.01
@@ -45674,7 +45674,7 @@ addLayer("tokens", {
                                                                                 c += "Chromosome Milestone 6 divides AX by " + format(Decimal.pow(2, player.ch.points)) + br
                                                 }
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
-                                                if (hasMilestone("ch", 8))      c += "Chromosome Milestone 8 multiplies AX by " + format(player.ch.points.pow(player.ch.milestones.length/3)) + br
+                                                if (hasMilestone("ch", 8))      c += "Chromosome Milestone 8 multiplies AX by " + format(player.ch.points.pow(player.ch.milestones.length/3).max(1)) + br
                                                 if (hasUpgrade("ch", 14))       c += "Chromosomes IV multiplies AX by " + format(tmp.ch.upgrades[14].effect) + br
                                                 if (hasUpgrade("ch", 15)) {
                                                         let base = hasUpgrade("an", 34) ? 1.04 : 1.01
