@@ -28527,7 +28527,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXVII"
                         },
                         description(){
-                                return "in<u>tes</u>TINE's log6 becomes log5 and unlock Taxonomy"
+                                return "in<u>tes</u>TINE's inner log6 becomes log5 and unlock Taxonomy"
                         },
                         cost(){
                                 return new Decimal("1e34543")
@@ -28544,7 +28544,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXVIII"
                         },
                         description(){
-                                return "in<u>tes</u>TINE's log5 becomes log4 and Token II buyables' cost exponent is .51"
+                                return "in<u>tes</u>TINE's inner log5 becomes log4 and Token II buyables' cost exponent is .51"
                         },
                         cost(){
                                 return new Decimal("1e36163")
@@ -28561,7 +28561,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXIX"
                         },
                         description(){
-                                return "in<u>tes</u>TINE's log4 becomes log3 and unlock a new row of Taxonomy"
+                                return "in<u>tes</u>TINE's inner log4 becomes log3 and unlock a new row of Taxonomy"
                         },
                         cost(){
                                 return new Decimal("1e38783")
@@ -28578,7 +28578,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung XXX"
                         },
                         description(){
-                                return "in<u>tes</u>TINE's log3 becomes ln and Token II buyables' cost exponent is .5"
+                                return "in<u>tes</u>TINE's inner log3 becomes ln and Token II buyables' cost exponent is .5"
                         },
                         cost(){
                                 return new Decimal("1e39993")
@@ -29870,7 +29870,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 354)) logBase = new Decimal(3)
                                 if (hasUpgrade("or", 355)) logBase = new Decimal(Math.E)
                                 if (hasUpgrade("an", 13))  logBase = new Decimal(2)
-                                let ret = player.or.energy.points.max(logBase).log(logBase).max(logBase).log10(logBase)
+                                let ret = player.or.energy.points.max(logBase).log(logBase).max(10).log10()
                                 
                                 return ret
                         },
@@ -29901,7 +29901,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 354)) logBase = new Decimal(3)
                                 if (hasUpgrade("or", 355)) logBase = new Decimal(Math.E)
                                 if (hasUpgrade("an", 13))  logBase = new Decimal(2)
-                                eformula = eformula.replaceAll("10", formatWhole(logBase))
+                                eformula = eformula.replaceAll("(log10", "(log" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -31596,7 +31596,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals III"
                         },
                         description(){
-                                return "Energy buyable extra amounts are set to their production in one second and in<u>tes</u>TINE's ln becomes log2"
+                                return "Energy buyable extra amounts are set to their production in one second and in<u>tes</u>TINE's inner ln becomes log2"
                         },
                         cost:() => new Decimal(158e3),
                         unlocked(){
@@ -31933,7 +31933,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy in<u>tes</u>TINE and in<u>tes</u>TINE's log10 becomes log9."
+                                return "Reward: Autobuy in<u>tes</u>TINE and in<u>tes</u>TINE's inner log10 becomes log9."
                         },
                 }, // hasMilestone("an", 6)
                 7: {
@@ -31949,7 +31949,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy INtes<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's log9 becomes log8."
+                                return "Reward: Autobuy INtes<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's inner log9 becomes log8."
                         },
                 }, // hasMilestone("an", 7)
                 8: {
@@ -31965,7 +31965,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy inTES<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's log8 becomes log7."
+                                return "Reward: Autobuy inTES<u>tine</u>, per Animal reset keep an Organ upgrade, and in<u>tes</u>TINE's inner log8 becomes log7."
                         },
                 }, // hasMilestone("an", 8)
                 9: {
@@ -31981,7 +31981,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Autobuy intes<u>TINE</u>, bulk 4x Kidney buyables, and in<u>tes</u>TINE's log7 becomes log6."
+                                return "Reward: Autobuy intes<u>TINE</u>, bulk 4x Kidney buyables, and in<u>tes</u>TINE's inner log7 becomes log6."
                         },
                 }, // hasMilestone("an", 9)
                 10: {
@@ -32750,9 +32750,11 @@ addLayer("an", {
                         let a = decimalZero
                         for (i in keys) {
                                 a = a.plus(player.an.grid[keys[i]].buyables)
+                                //a = a.plus(player.an.grid[keys[i]].buyables.times(nCk(8-Math.floor(keys[i]/100), 8-keys[i]%100))) 
+                                // above is the version where you take into account how much it boosts genes
                         }
                         return a
-                }, // tmp.an.grid.totalLevels
+                }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels
                 getStyle(data, id){
                         if (id == player.an.selectedId) {
                                 return {"background-color": "#FFA225"}
@@ -34429,7 +34431,7 @@ addLayer("mk", {
         baseAmount(){return player.points},
         type: "custom",
         tooltip(){
-                return format(player.or.contaminants.points) + " Contaminants"
+                return format(player.or.contaminants.points, 3) + " Contaminants"
         },
         getResetGain(){
                 return decimalOne
