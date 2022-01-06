@@ -32867,7 +32867,7 @@ addLayer("an", {
                 21: {
                         name: "Progression<br>II",
                         done(){
-                                return player.tokens.total.gte(6308)
+                                return player.tokens.tokens2.total.gte(6308)
                         },
                         tooltip(){
                                 return "Get 6308 Token II"
