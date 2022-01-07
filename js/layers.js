@@ -26344,7 +26344,7 @@ addLayer("or", {
                         for (i in ids) {
                                 let id = ids[i]
                                 let amtGain = tmp.or.buyables[id].amountGain
-                                if (hasUpgrade("an", 13)) {
+                                if (hasUpgrade("an", 13) && hasMilestone("or", 21)) {
                                         data.extras[id] = amtGain
                                 } else if (hasMilestone("or", 21)) {
                                         let lossRate = .05
@@ -34145,7 +34145,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleus log10(Stem Cells) multiplies Tissue gain and you gain 10x genes, and keep Taxonomy autobuyer content."
+                                return "Reward: Per Nucleus log10(Stem Cells) multiplies Tissue gain, per Nucleus you gain 10x genes, and keep Taxonomy autobuyer content."
                         },
                 }, // hasMilestone("nu", 2)
         },
