@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.246",
+	num: "1.246.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -33,10 +33,14 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.246.1</h3><br>
+		- Added three Nucleuse milestones.<br>
+		- Added a Chromosome upgrade.<br>
+		- Various code clean up that should make the game faster.<br>
 	<br><h3 style='color: #CC0000'>v1.246</h3><br>
 		- Balanced until right before 4 Nucleuses.<br>
 		- Added a new layer, Nucleuses.<br>
-		- Added three milestone.<br>
+		- Added three Nucleuse milestone.<br>
 		- Added a Chromosome upgrade.<br>
 		- Added two Animal upgrades.<br>
 		- Added a custom save.<br>
@@ -2120,6 +2124,39 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "1.192") {
 		player.cells.everMilestone60 = player.t.unlocked || player.cells.milestones.includes("60")
+	}
+	if (player.version < "1.246.1") {
+		let x = []
+		for (i in player.ach.achievements) {
+			x.push(Number(player.ach.achievements[i]))
+		}
+		player.ach.achievements = x
+
+		let y = []
+		for (i in player.an.achievements) {
+			x.push(Number(player.an.achievements[i]))
+		}
+		player.an.achievements = y
+
+		for (layer in player){
+			if (!player[layer]) continue
+			if (!player[layer].upgrades) continue
+			let z = []
+			for (i in player[layer].upgrades) {
+				z.push(Number(player[layer].upgrades[i]))
+			}
+			player[layer].upgrades = z
+		}
+
+		for (layer in player){
+			if (!player[layer]) continue
+			if (!player[layer].milestones) continue
+			let z = []
+			for (i in player[layer].milestones) {
+				z.push(Number(player[layer].milestones[i]))
+			}
+			player[layer].milestones = z
+		}
 	}
 }
 

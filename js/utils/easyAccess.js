@@ -1,6 +1,6 @@
 /* UPGRADE STUFF */
 function hasUpgrade(layer, id) {
-	return (player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString())) && !tmp[layer].deactivated
+	return player[layer].upgrades.includes(toNumber(id)) && !tmp[layer].deactivated
 }
 
 function hasUpg(layer, id){
@@ -18,7 +18,7 @@ function getUpgradeEffect(layer, id) {
 /* MILESTONE STUFF */
 
 function hasMilestone(layer, id) {
-	return player[layer].milestones.includes(id.toString()) && !tmp[layer].deactivated
+	return player[layer].milestones.includes(toNumber(id)) && !tmp[layer].deactivated
 }
 
 function hasMile(layer, id) {
@@ -36,7 +36,7 @@ function getMilestoneEffect(layer, id) {
 /* ACHIEVEMENT STUFF */
 
 function hasAchievement(layer, id) {
-	return player[layer].achievements.includes(id.toString()) && !tmp[layer].deactivated
+	return player[layer].achievements.includes(id) && !tmp[layer].deactivated
 }
 
 function hasAch(layer, id){

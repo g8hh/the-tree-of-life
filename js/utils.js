@@ -128,7 +128,6 @@ function buyUpg(layer, id) {
 	if (!player[layer].unlocked || player[layer].deactivated) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(Number(id))) return
-	if (player[layer].upgrades.includes(String(id))) return
 	if (tmp[layer].deactivated) return 
 	if (upg.canAfford === false) return
 	let pay = layers[layer].upgrades[id].pay
@@ -157,7 +156,7 @@ function buyUpg(layer, id) {
 			player[layer].points = player[layer].points.sub(cost)
 		}
 	}
-	player[layer].upgrades.push(id);
+	player[layer].upgrades.push(Number(id));
 	if (upg.onPurchase != undefined) run(upg.onPurchase, upg)
 	needCanvasUpdate = true
 	return true
@@ -338,13 +337,13 @@ function updateMilestones(layer) {
 	shouldPopup = !options.hideMilestonePopups && (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined)
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
-			player[layer].milestones.push(id)
+			player[layer].milestones.push(Number(id))
 			if (!tmp[layer].milestones[id].unlocked) continue
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete()
 			if (shouldPopup) {
 				doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
 			}
-			player[layer].lastMilestone = id
+			player[layer].lastMilestone = Number(id)
 		}
 	}
 }
@@ -352,8 +351,10 @@ function updateMilestones(layer) {
 function updateAchievements(layer) {
 	if (tmp[layer].deactivated) return
 	for (id in layers[layer].achievements) {
-		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
-			player[layer].achievements.push(id)
+		if (!isPlainObject(layers[layer].achievements[id])) continue
+		if (hasAchievement(layer, Number(id))) continue
+		if (layers[layer].achievements[id].done()) {
+			player[layer].achievements.push(Number(id))
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()
 			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup("achievement", tmp[layer].achievements[id].name, "Achievement Gotten!", 3, tmp[layer].color);
 		}
