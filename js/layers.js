@@ -31969,6 +31969,18 @@ addLayer("an", {
                                 return player.nu.best.gte(2)
                         }, // hasUpgrade("an", 54)
                 },
+                55: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XXV"
+                        },
+                        description(){
+                                return "Per Chromosome - 291 increase the Taxonomy buyable cap by 1"
+                        },
+                        cost:() => new Decimal(5.38e43),
+                        unlocked(){
+                                return player.nu.best.gte(3)
+                        }, // hasUpgrade("an", 55)
+                },
         },
         milestones: {
                 1: {
@@ -32852,6 +32864,10 @@ addLayer("an", {
                         }
                         if (hasMilestone("ch", 14)) {
                                 let add = player.ch.points.sub(234).times(2).max(0)
+                                ret = ret.plus(add.min(110))
+                        }
+                        if (hasUpgrade("an", 55)) {
+                                let add = player.ch.points.sub(291).max(0)
                                 ret = ret.plus(add)
                         }
 
@@ -33758,15 +33774,27 @@ addLayer("ch", {
                 },
                 32: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XII"
                         },
                         description(){
                                 return "You can buy max Chromosomes and gain 20x genes"
                         },
                         cost:() => new Decimal(264),
                         unlocked(){
-                                return player.ch.best.gte(264)
+                                return player.ch.best.gte(264) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 32)
+                },
+                33: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XII"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Token II buyables no longer cost anything and Top Quark coefficient is .012 but their cost formula is x<sup>1.36</sup></bdi>"
+                        },
+                        cost:() => new Decimal(292),
+                        unlocked(){
+                                return player.ch.best.gte(292) || player.nu.best.gte(3)
+                        }, // hasUpgrade("ch", 33)
                 },
         },
         milestones: {
@@ -33966,7 +33994,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Totipotent cost formula is 1e9^(x<sup>1.08</sup>) and per Chromosome - 234 increase the Taxonomy buyable cap by 2 but disable Tissues "
+                                let a = "Reward: Totipotent cost formula is 1e9^(x<sup>1.08</sup>) and per Chromosome - 234 increase the Taxonomy buyable cap by 2 up to 1210 but disable Tissues "
                                 a += "XI, XIV, XXVIII, XXXVIII, XLII, LI, LIII, LIV, LIX, LXI, LXV, LXIX, and LXXV"
                                 return a + " (Tissues XLII still multiplies DNA gain exponent and Tissues LXXV still makes Charm based on best)."
                         },
@@ -34104,6 +34132,8 @@ addLayer("nu", {
         effectSecondary(){
                 let ret = player.nu.points.div(10)
 
+                //if (ret.gt(.2)) ret = ret.div(2).plus(.1)
+
                 return ret
         },
         effectDescription(){
@@ -34175,7 +34205,7 @@ addLayer("nu", {
                 }, // hasMilestone("nu", 1)
                 2: {
                         requirementDescription(){
-                                return "2 Nucleuse"
+                                return "2 Nucleuses"
                         },
                         done(){
                                 return player.nu.best.gte(2)
@@ -34189,7 +34219,7 @@ addLayer("nu", {
                 }, // hasMilestone("nu", 2)
                 3: {
                         requirementDescription(){
-                                return "3 Nucleuse"
+                                return "3 Nucleuses"
                         },
                         done(){
                                 return player.nu.best.gte(3)
@@ -42530,13 +42560,16 @@ addLayer("tokens", {
         },
         tooltip(){
                 let data = player.tokens
+                if (hasUpgrade("ch", 33)) {
+                        return formatWhole(data.tokens2.points) + "/" + formatWhole(tmp.tokens.buyables[101].cost) + " Token II"
+                }
                 if (hasUpgrade("cells", 42)){
                         let end = ""
                         if (player.tokens.lastRespecDisplayFormula2ID < tmp.tokens.buyables.costFormulaText2ID) {
                                 end = br + "Need Respec"
                         }
                         let data2 = data.tokens2
-                        return formatWhole(data2.points, true) + "/" + formatWhole(data2.total) + " Token II" + end
+                        return formatWhole(data2.points) + "/" + formatWhole(data2.total) + " Token II" + end
                 }
                 let start = formatWhole(data.points, true) + "/" + formatWhole(data.total) + " tokens"
                 let lrdf = player.tokens.lastRespecDisplayFormula
@@ -42576,9 +42609,9 @@ addLayer("tokens", {
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
 
+                        if (hasUpgrade("ch", 33))       return x.pow(1.36).ceil()
+                        
                         if (hasMilestone("an", 33) && x.lte(100)) return decimalZero
-
-
                         if (hasUpgrade("an", 51))       return x.pow(.45).floor().sub(1).max(0)
                         if (hasUpgrade("ch", 23))       return x.pow(.46).floor().sub(1).max(0)
                         if (hasMilestone("an", 25))     return x.pow(.47).floor().sub(1).max(0)
@@ -42609,6 +42642,8 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("ch", 33))       return "ceil(x<sup>1.36</sup>)"
+
                         if (hasUpgrade("an", 51))       return "max(floor(x<sup>.45</sup>)-1, 0)"
                         if (hasUpgrade("ch", 23))       return "max(floor(x<sup>.46</sup>)-1, 0)"
                         if (hasMilestone("an", 25))     return "max(floor(x<sup>.47</sup>)-1, 0)"
@@ -42639,6 +42674,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasUpgrade("ch", 33))       return 28
                         if (hasMilestone("an", 33))     return 27
                         if (hasUpgrade("an", 51))       return 26
                         if (hasUpgrade("ch", 23))       return 25
@@ -43738,7 +43774,7 @@ addLayer("tokens", {
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[101] = data.buyables[101].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow10Total
@@ -43790,7 +43826,7 @@ addLayer("tokens", {
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[102] = data.buyables[102].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
                         },
                         coefficient(){
                                 let ret = decimalOne
@@ -43861,7 +43897,7 @@ addLayer("tokens", {
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[111] = data.buyables[111].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[111].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[111].cost)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow11Total
@@ -43948,7 +43984,7 @@ addLayer("tokens", {
                                 }
                                 let data = player.tokens
                                 data.buyables[112] = data.buyables[112].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[112].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[112].cost)
                         },
                         coefficient(){
                                 if (hasUpgrade("or", 111)) return new Decimal(10)
@@ -44033,14 +44069,18 @@ addLayer("tokens", {
                                 }
                                 let data = player.tokens
                                 data.buyables[121] = data.buyables[121].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[121].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[121].cost)
+                        },
+                        coefficient(){
+                                if (hasUpgrade("ch", 33))       return new Decimal(.012)
+                                if (hasMilestone("an", 29))     return new Decimal(.011)
+                                                                return new Decimal(.007)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
-                                if (hasMilestone("an", 29)) return c.pow(.7).times(.011)
-                                if (hasMilestone("ch", 12)) return c.pow(.7).times(.007)
+                                if (hasMilestone("ch", 12)) return c.pow(.7).times(tmp.tokens.buyables[121].coefficient)
                                 if (hasMilestone("or", 7)) return c.pow(.7).times(4)
 
                                 return c.plus(100).div(r.plus(50)).times(c.pow(.6)).times(2)
@@ -44079,8 +44119,7 @@ addLayer("tokens", {
                                 let eformula = "2C<sup>.6</sup>(100+C)/(50+R)*x<br>" 
                                 if (hasMilestone("or", 7)) eformula = "4C<sup>.7</sup>*x<br>"
                                 eformula += format(tmp.tokens.buyables[121].base, 4) + "*x" 
-                                if (hasMilestone("ch", 12)) eformula = eformula.replace("4", ".007")
-                                if (hasMilestone("an", 29)) eformula = eformula.replace(".007", ".011")
+                                if (hasMilestone("ch", 12)) eformula = eformula.replace("4", format(tmp.tokens.buyables[121].coefficient, 3))
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -44113,7 +44152,7 @@ addLayer("tokens", {
                                 }
                                 let data = player.tokens
                                 data.buyables[122] = data.buyables[122].plus(1)
-                                data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[122].cost)
+                                if (!hasUpgrade("ch", 33)) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[122].cost)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow12Total
@@ -44339,6 +44378,9 @@ addLayer("tokens", {
                         onClick(){
                                 let data = player.tokens
                                 data.tokens2.points = data.tokens2.total
+                                data.lastRespecDisplayFormula2ID = Math.max(data.lastRespecDisplayFormula2ID, tmp.tokens.buyables.costFormulaText2ID)
+
+                                if (hasUpgrade("ch", 33)) return 
                                 ids = [101, 102, 111, 112, 121, 122, 131, 132]
                                 // add more when applicable
                                 let base = decimalZero
@@ -44346,7 +44388,6 @@ addLayer("tokens", {
                                 for (i in ids){
                                         data.buyables[ids[i]] = base
                                 }
-                                data.lastRespecDisplayFormula2ID = Math.max(data.lastRespecDisplayFormula2ID, tmp.tokens.buyables.costFormulaText2ID)
                         },
                 },
         },
