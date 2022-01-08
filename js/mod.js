@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.245",
+	num: "1.246",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.ch.points.gte(257)
+	return player.ch.points.gte(297)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,6 +33,19 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.246</h3><br>
+		- Balanced until right before 4 Nucleuses.<br>
+		- Added a new layer, Nucleuses.<br>
+		- Added three milestone.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added two Animal upgrades.<br>
+		- Added a custom save.<br>
+		- Made achievements clean up nicer.<br>
+		- Fixed the bug with disabled layers showing until unlock.<br>
+	<br><h3 style='color: #CC0000'>v1.245.4</h3><br>
+		- Various wording fixes and code clean up.<br>
+		- Currencies on layers now display three digits.<br>
+		- Fixed Progression II being given too early.<br>
 	<br><h3 style='color: #CC0000'>v1.245</h3><br>
 		- Balanced until 257 Chromosomes.<br>
 		- Added an Animal upgrade.<br>
@@ -134,7 +147,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added an Animal milestone.<br>
 		- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.229</h3><br>
-		- Balanced until 4e550 Genes
+		- Balanced until 4e550 Genes.<br>
 		- Added an Organ upgrade.<br>
 		- Added two Animal upgrades.<br>
 		- Added an Animal milestone.<br>

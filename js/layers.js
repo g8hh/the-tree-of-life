@@ -31645,6 +31645,7 @@ addLayer("an", {
                                 }
                         }
                         if (hasUpgrade("an", 51))       ret = ret.times(2)
+                        if (hasMilestone("ch", 6))      ret = ret.times(player.ch.points.eq(14) ? 20 : 1)
                         if (hasAchievement("an", 21)) {
                                 let l = player.ch.points.sub(235).max(0)
                                 let aa = player.an.achActive
@@ -33879,7 +33880,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: <u>in</u>TEStine's log6 becomes log5 but per Chromosome halve Gene gain."
+                                return "Reward: <u>in</u>TEStine's log6 becomes log5 and gain 20x Genes if you have exactly 14 but per Chromosome halve Gene gain."
                         },
                 }, // hasMilestone("ch", 6)
                 7: {
