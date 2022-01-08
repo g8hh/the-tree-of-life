@@ -226,7 +226,7 @@ function dilate(x, exponent, base = 10){
 
 var TAXONOMY_EFFECTS = {
         303:() => false ? "Energy gain per Chromosomes" : "nothing (currently)",
-        304:() => false ? "Energy gain per Chromosomes" : "nothing (currently)",
+        304:() => hasUpgrade("ch", 35) ? "intes<u>TINE</u> gain" : "nothing (currently)",
         305:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
         306:() => hasMilestone("an", 28) ? "Gene gain" : "nothing (currently)",
         307:() => false ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
@@ -28534,7 +28534,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasMilestone("an", 12)
+                                return hasMilestone("an", 12) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 342)
                 },
                 343: {
@@ -28551,7 +28551,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 342)
+                                return hasUpgrade("or", 342) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 343)
                 },
                 344: {
@@ -28568,7 +28568,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 343)
+                                return hasUpgrade("or", 343) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 344)
                 },
                 345: {
@@ -28585,7 +28585,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 344)
+                                return hasUpgrade("or", 344) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 345)
                 },
                 351: {
@@ -28602,7 +28602,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 35)
+                                return hasUpgrade("or", 35) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 351)
                 },
                 352: {
@@ -28619,7 +28619,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 351)
+                                return hasUpgrade("or", 351) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 352)
                 },
                 353: {
@@ -28636,7 +28636,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 352)
+                                return hasUpgrade("or", 352) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 353)
                 },
                 354: {
@@ -28653,7 +28653,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 353)
+                                return hasUpgrade("or", 353) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 354)
                 },
                 355: {
@@ -28670,7 +28670,7 @@ addLayer("or", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Air",
                         unlocked(){
-                                return hasUpgrade("or", 354)
+                                return hasUpgrade("or", 354) || player.nu.best.gt(0)
                         }, // hasUpgrade("or", 355)
                 },
         },
@@ -30264,6 +30264,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[423].effect)
+                                if (hasUpgrade("ch", 35)) ret = ret.times(player.an.grid[304].extras.plus(1))
 
                                 return ret
                         },
@@ -31545,7 +31546,7 @@ addLayer("an", {
                                 if (id > 200) {
                                         gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
                                 }
-                                if (player.an.achActive[12] && hasAchievement("an", 12)) {
+                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && hasAchievement("an", 12)) {
                                         let exp = player.an.achActive[22] && hasAchievement("an", 22) ? 1.25 : 1
                                         gain = gain.times(getAmount1(id).pow(exp).plus(2).log(2))
                                 }
@@ -31640,7 +31641,7 @@ addLayer("an", {
                                 } else                  ret = ret.times(25)
                         }
                         if (hasAchievement("an", 12)) {
-                                if (player.an.achActive[12] && !hasUpgrade("ch", 34)) {
+                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34)) {
                                                         ret = ret.div(4e49)
                                 } 
                                 if (!player.an.achActive[12] || hasAchievement("an", 22)) {
@@ -31665,6 +31666,7 @@ addLayer("an", {
                         if (hasUpgrade("ch", 32))       ret = ret.times(20)
                         if (hasMilestone("nu", 2))      ret = ret.times(player.nu.points.pow10())
                         if (hasUpgrade("an", 54))       ret = ret.times(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length))
+                        if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -33821,6 +33823,18 @@ addLayer("ch", {
                                 return player.ch.best.gte(302) || player.nu.best.gte(5)
                         }, // hasUpgrade("ch", 34)
                 },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XV"
+                        },
+                        description(){
+                                return "Chordata II amount multiplies intes<u>TINE</u> amount gain"
+                        },
+                        cost:() => new Decimal(316),
+                        unlocked(){
+                                return player.ch.best.gte(316) || player.nu.best.gte(5)
+                        }, // hasUpgrade("ch", 35)
+                },
         },
         milestones: {
                 1: {
@@ -34036,10 +34050,23 @@ addLayer("ch", {
                         },
                         effectDescription(){
                                 let a = "Reward: IN<u>tes</u>tine's base is Chromosomes but disable Cells "
-                                a += "I, V, VI, VIII, IX, XVIII, XIX, XXII, and XXVI"
-                                return a + "."
+                                return a + "I, V, VI, VIII, IX, XVIII, XIX, XXII, and XXVI."
                         },
                 }, // hasMilestone("ch", 15)
+                16: {
+                        requirementDescription(){
+                                return "322 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(322)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: PRI I's ON effect is always active and Chromosomes+1 multiplies Gene gain."
+                        },
+                }, // hasMilestone("ch", 16)
         },
         tabFormat: {
                 "Upgrades": {
@@ -42678,7 +42705,8 @@ addLayer("tokens", {
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
 
-                        if (player.ch.everUpgrade33)       return x.pow(1.36).ceil()
+                        //if (hasMilestone("ch", 16))     return x.pow(1.35).ceil()
+                        if (player.ch.everUpgrade33)    return x.pow(1.36).ceil()
                         
                         if (hasMilestone("an", 33) && x.lte(100)) return decimalZero
                         if (hasUpgrade("an", 51))       return x.pow(.45).floor().sub(1).max(0)
@@ -42711,7 +42739,8 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
-                        if (player.ch.everUpgrade33)       return "ceil(x<sup>1.36</sup>)"
+                        //if (hasMilestone("ch", 16))     return "ceil(x<sup>1.35</sup>)"
+                        if (player.ch.everUpgrade33)    return "ceil(x<sup>1.36</sup>)"
 
                         if (hasUpgrade("an", 51))       return "max(floor(x<sup>.45</sup>)-1, 0)"
                         if (hasUpgrade("ch", 23))       return "max(floor(x<sup>.46</sup>)-1, 0)"
@@ -46366,6 +46395,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
                                                 if (hasMilestone("ch", 8))      c += "Chromosome Milestone 8 multiplies AX by " + format(player.ch.points.pow(player.ch.milestones.length/3).max(1)) + br
+                                                if (hasMilestone("ch", 16))     c += "Chromosome Milestone 16 multiplies AX by " + format(player.ch.points.plus(1)) + br
                                                 if (hasUpgrade("ch", 14))       c += "Chromosomes IV multiplies AX by " + format(tmp.ch.upgrades[14].effect) + br
                                                 if (hasUpgrade("ch", 15)) {
                                                         let base = hasUpgrade("an", 34) ? 1.04 : 1.01
@@ -46388,7 +46418,7 @@ addLayer("tokens", {
                                                         } else                  c += "PRO I multiplies AX by 25" + br
                                                 }
                                                 if (hasAchievement("an", 12)) {
-                                                        if (player.an.achActive[12] && !hasUpgrade("ch", 34)) {
+                                                        if ((player.an.achActive[12] || hasMilestone("ch", 16)) && !hasUpgrade("ch", 34)) {
                                                                                 c += "PRI I divides AX by 4e49" + br
                                                         } 
                                                         if (!player.an.achActive[12] || hasAchievement("an", 22)) {
