@@ -224,7 +224,7 @@ function doReset(layer, force=false) {
 
 	updateTemp()
 	updateTemp()
-	if (layer == "nu") updateTemp()
+	updateTemp()
 }
 
 function resetRow(row) {
