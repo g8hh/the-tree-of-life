@@ -227,7 +227,7 @@ function dilate(x, exponent, base = 10){
 var TAXONOMY_EFFECTS = {
         303:() => hasUpgrade("ch", 41) ? "Organ gain per Nucleuses" : "nothing (currently)",
         304:() => hasUpgrade("ch", 35) ? "intes<u>TINE</u> gain" : "nothing (currently)",
-        305:() => false ? "in<u>TES</u>tine gain" : "nothing (currently)",
+        305:() => hasMilestone("ch", 21) ? "Contaminant gain per Chromosomes<sup>4</sup>" : "nothing (currently)",
         306:() => hasMilestone("an", 28) ? "Gene gain" : "nothing (currently)",
         307:() => false ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
         308:() => player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23) ? "Organ gain per Chromosome/17" : "nothing (currently)",
@@ -26594,6 +26594,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.an.effect)
                         if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
                         if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
+                        if (hasMilestone("ch", 21))     ret = ret.times(player.an.grid[305].extras.plus(1).pow(player.ch.points.pow(4)))
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
                         
@@ -31692,6 +31693,7 @@ addLayer("an", {
                         if (hasUpgrade("an", 54))       ret = ret.times(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length))
                         if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
                         if (hasMilestone("ch", 17))     ret = ret.times(Decimal.pow(2, player.nu.points))
+                        if (hasMilestone("an", 34))     ret = ret.times(10)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -32563,7 +32565,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Token II buyables' cost exponent is 1.35 and in<u>tes</u>TINE's base is Nucleuses."
+                                return "Reward: Token II buyables' cost exponent is 1.35, gain 10x Genes, and in<u>tes</u>TINE's base is Nucleuses."
                         },
                 }, // hasMilestone("an", 34)
         },
@@ -33599,7 +33601,7 @@ addLayer("ch", {
         }},
         color: "#F6582A",
         branches: [],
-        requires:() => new Decimal("1e578"), 
+        requires:() => new Decimal(hasMilestone("ch", 20) ? 1 : "1e578"), 
         resource: "Chromosomes", 
         baseResource: "Genes", 
         baseAmount(){return player.an.genes.points},
@@ -33612,6 +33614,7 @@ addLayer("ch", {
 
                 if (hasMilestone("ch", 13))     ret = new Decimal(9.9e9)
                 if (hasUpgrade("ch", 25))       ret = new Decimal(9.8e9)
+                if (hasMilestone("ch", 21))     ret = new Decimal(9.6e9)
 
                 return ret
         },
@@ -33642,7 +33645,7 @@ addLayer("ch", {
 
                 let ret = pts.div(100).plus(2)
                 if (hasMilestone("ch", 10)) ret = Decimal.pow(1.004, pts).times(2)
-                if (hasMilestone("an", 32)) ret = Decimal.pow(1.002, pts).times(2.66)
+                if (hasMilestone("an", 32)) ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
 
                 return ret
         },
@@ -34163,6 +34166,56 @@ addLayer("ch", {
                                 return "Reward: Each of the first 100 Nucleuses past 7 reduces Chromosome cost exponent by .0001."
                         },
                 }, // hasMilestone("ch", 19)
+                20: {
+                        requirementDescription(){
+                                return "421 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(421)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                let data = player.an.grid 
+
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+
+                                for (i in keys) {
+                                        data[keys[i]].extras = decimalZero
+                                        data[keys[i]].buyables = decimalZero
+                                }
+
+                                player.an.genes.points = decimalZero
+                                player.an.genes.best = decimalZero
+                                player.an.genes.total = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Reset Taxnomy levels and extras and Genes, remove Chromosome base cost, and Chromosome effect formula is 1.002<sup>x</sup>*2.605."
+                        },
+                }, // hasMilestone("ch", 20)
+                21: {
+                        requirementDescription(){
+                                return "437 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(437)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Chordata III amount<sup>Chromosomes<sup>4</sup></sup> multiplies Contaminant gain and Chromosomes cost base is 9.6e9."
+                        },
+                }, // hasMilestone("ch", 21)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34195,6 +34248,7 @@ addLayer("ch", {
                                         if (hasMilestone("ch", 10)) b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
                                         if (player.ch.points.gte(95) && !hasMilestone("an", 32)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
                                         if (hasMilestone("an", 32)) b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
+                                        if (hasMilestone("ch", 20)) b = b.replace(".66", ".605")
 
                                         return a + br2 + b
                                 }],
@@ -46557,6 +46611,7 @@ addLayer("tokens", {
                                                 if (hasMilestone("an", 21))     c += "Animal Milestone 21 multiplies AX by " + format(tmp.an.milestones[21].effect) + br
                                                 if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
                                                 if (hasMilestone("an", 28))     c += "Animal Milestone 28 multiplies AX by " + format(player.an.grid[306].extras.plus(1)) + br
+                                                if (hasMilestone("an", 34))     c += "Animal Milestone 34 multiplies AX by 10" + br
                                                 if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
                                                                                 c += "Chromosome Milestone 5 divides AX by " + format(Decimal.pow(2, player.ch.points.sub(8))) + br
                                                 }
@@ -46566,7 +46621,7 @@ addLayer("tokens", {
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
                                                 if (hasMilestone("ch", 8))      c += "Chromosome Milestone 8 multiplies AX by " + format(player.ch.points.pow(player.ch.milestones.length/3).max(1)) + br
                                                 if (hasMilestone("ch", 16))     c += "Chromosome Milestone 16 multiplies AX by " + format(player.ch.points.plus(1)) + br
-                                                if (hasMilestone("ch", 17))     c += "Chromosome Milestone 17 multiplies AX by " + foramt(Decimal.pow(2, player.nu.points)) + br
+                                                if (hasMilestone("ch", 17))     c += "Chromosome Milestone 17 multiplies AX by " + format(Decimal.pow(2, player.nu.points)) + br
                                                 if (hasUpgrade("ch", 14))       c += "Chromosomes IV multiplies AX by " + format(tmp.ch.upgrades[14].effect) + br
                                                 if (hasUpgrade("ch", 15)) {
                                                         let base = hasUpgrade("an", 34) ? 1.04 : 1.01
