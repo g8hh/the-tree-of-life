@@ -13142,7 +13142,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 let b = "Note: Requires having being in Dilation with 39 completions. This will be refered to as \"Universe\"" + br
-                                if (player.extremeMode) b = init.slice(61, )
+                                if (player.extremeMode) b = b.slice(61, )
                                 let a = "Reward: If not in a challenge, you get ee40 Phosphorus after one second."
                                 return b + a
                         },
