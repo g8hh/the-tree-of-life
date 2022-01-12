@@ -33021,12 +33021,13 @@ addLayer("an", {
                                 let a = 0
                                 for (i in keys) {
                                         if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
+                                        if (player.an.grid[keys[i]].buyables.gte(140)) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
                                 if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139"
-                                return "Have 17 Taxonomy buyables on prime levels less than 140 [shift for valid values]"
+                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to be less than 140 [shift for valid values]"
                         }, // hasAchievement("an", 12)
                 },
                 13: {
@@ -33047,11 +33048,12 @@ addLayer("an", {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         a ++
                                         if (primes.includes(v) || v < 4 || v >= 134) a --
+                                        if (player.an.grid[keys[i]].buyables.gte(134)) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
-                                return "Have 17 Taxonomy buyables on composite levels less than 134<br>Reward: The taxonomy autobuyer can buy from every buyable"
+                                return "Have 17 Taxonomy buyables on composite levels. All Taxonomy buyables have to be less than 134<br>Reward: The taxonomy autobuyer can buy from every buyable"
                         }, // hasAchievement("an", 13)
                 },
                 14: {
@@ -33070,11 +33072,12 @@ addLayer("an", {
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         if (v == 1) a ++ 
+                                        if (v > 1) return false
                                 }
                                 return a >= 13
                         },
                         tooltip(){
-                                return "Have 13 Taxonomy buyables on 1 level<br>Reward: Autobuy Taxonomy buyables which have 100 or more levels"
+                                return "Have 13 Taxonomy buyables on 1 level and the rest on zero<br>Reward: Autobuy Taxonomy buyables which have 100 or more levels"
                         }, // hasAchievement("an", 14)
                 },
                 21: {
@@ -33102,12 +33105,13 @@ addLayer("an", {
                                 let a = 0
                                 for (i in keys) {
                                         if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
+                                        if (player.an.grid[keys[i]].buyables.gte(105)) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
                                 if (player.shiftAlias) return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103"
-                                return "Have 17 Taxonomy buyables on prime levels less than 105 [shift for valid values]<br>Reward: PRI I's OFF effect is always active"
+                                return "Have 17 Taxonomy buyables on prime levels. All Taxonomy buyables have to have less than 105 [shift for valid values]<br>Reward: PRI I's OFF effect is always active"
                         }, // hasAchievement("an", 22)
                 },
                 23: {
@@ -33127,12 +33131,12 @@ addLayer("an", {
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         a ++
-                                        if (primes.includes(v) || v < 4 || v >= 99) a --
+                                        if (player.an.grid[keys[i]].buyables.gte(99)) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
-                                return "Have 17 Taxonomy buyables on composite levels less than 99<br>Reward: COM I's ON effect is always active"
+                                return "Have 17 Taxonomy buyables on composite levels. All Taxonomy buyables have to be less than 99<br>Reward: COM I's ON effect is always active"
                         }, // hasAchievement("an", 23)
                 },
                 24: {
@@ -33153,11 +33157,12 @@ addLayer("an", {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         if (v == 6) a ++ 
                                         if (v == 4) b ++
+                                        if (player.an.grid[keys[i]].buyables.gte(7)) return false
                                 }
                                 return a >= 14 && b >= 1
                         },
                         tooltip(){
-                                return "Have 14 Taxonomy buyables on 6 levels and 1 on 4 levels<br>Reward: Multipotent cost base is 1e38"
+                                return "Have 14 Taxonomy buyables on 6 levels and 1 on 4 levels and every buyables is less than 7<br>Reward: Multipotent cost base is 1e38"
                         }, // hasAchievement("an", 24)
                 },
         },
