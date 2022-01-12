@@ -31440,7 +31440,8 @@ addLayer("an", {
                 if (hasUpgrade("or", 33)) pts = player.an.best
                 pts = pts.plus(tmp.nu.effectPrimary)
 
-                let exp = pts.plus(99).log10().min(100)//for now, may change later
+                let exp = pts.plus(99).log10().min(1000)
+                if (!hasMilestone("nu", 9)) exp = exp.min(100)
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -33921,6 +33922,18 @@ addLayer("ch", {
                                 return player.ch.best.gte(449) || player.nu.best.gte(16)
                         }, // hasUpgrade("ch", 42)
                 },
+                43: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XVIII"
+                        },
+                        description(){
+                                return "You can always reset for Nucleuses and unlock a new row of Animal Achievements [not yet]"
+                        },
+                        cost:() => new Decimal(488),
+                        unlocked(){
+                                return player.ch.best.gte(488) || player.nu.best.gte(17)
+                        }, // hasUpgrade("ch", 43)
+                },
         },
         milestones: {
                 1: {
@@ -34351,7 +34364,7 @@ addLayer("nu", {
                 return tmp.nu.baseAmount.gte(tmp.nu.getNextAt) ? decimalOne : decimalZero
         },
         canReset(){
-                return tmp.nu.getResetGain.gt(0) && !player.an.achActive[24]
+                return tmp.nu.getResetGain.gt(0) && (!player.an.achActive[24] || hasUpgrade("ch", 43))
         },
         resetsNothing(){
                 return false
@@ -34585,7 +34598,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Animals XXIII counts every Token II."
+                                return "Reward: Animals XXIII counts every Token II and Animal effect exponent is hardcapped at 1000."
                         },
                 }, // hasMilestone("nu", 9)
         },
