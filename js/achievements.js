@@ -65,7 +65,7 @@ function getAchStuffFromNumber(n){
         let name = getNumberName(n)
         let id = getColRowCode(n)
         let done = function(){
-                return hasAchievement("ach", id) || PROGRESSION_MILESTONES[n]() 
+                return hasAchievement("ach", id) || PROGRESSION_MILESTONES[n]() || (hasAchievement("ach", id + 100) && !player.extremeMode)
         }
         let isChall = false
         if (n > 301 && n < 309) isChall = true
@@ -129,10 +129,15 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.or.unlocked
                 }
-        } else if (n <= 1111) {
+        } else if (n <= 854) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.an.unlocked
+                }
+        } else if (n <= 1113) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.nu.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -156,7 +161,7 @@ function getFirstNAchData(n){
 function hasCompletedFirstNRows(n){
 	for (i = 1; i <= n; i++){
 		for (j = 1; j <= 7; j++){
-			x = String(i) + String(j)
+			let x = 10 * i + j
 			if (layers.ach.achievements[x] == undefined) return false
 			if (!hasAchievement("ach", x)) return false
 		}
@@ -977,6 +982,70 @@ PROGRESSION_MILESTONES = {
         810: () => player.ch.points.gte(Decimal.pow(12, 2)),
         811: () => player.ch.points.gte(Decimal.pow(13, 2)),
         812: () => player.ch.points.gte(Decimal.pow(14, 2)),
+
+        813: () => player.or.contaminants.points.gte(Decimal.pow10(1e11)),
+        814: () => player.or.contaminants.points.gte(Decimal.pow10(2e11)),
+        815: () => player.or.contaminants.points.gte(Decimal.pow10(5e11)),
+        816: () => player.or.contaminants.points.gte(Decimal.pow10(1e12)),
+        817: () => player.or.contaminants.points.gte(Decimal.pow10(2e12)),
+        818: () => player.or.contaminants.points.gte(Decimal.pow10(5e12)),
+        819: () => player.or.contaminants.points.gte(Decimal.pow10(1e13)),
+        820: () => player.or.contaminants.points.gte(Decimal.pow10(2e13)),
+        821: () => player.or.contaminants.points.gte(Decimal.pow10(5e13)),
+        822: () => player.or.contaminants.points.gte(Decimal.pow10(1e14)),
+        823: () => player.or.contaminants.points.gte(Decimal.pow10(2e14)),
+        824: () => player.or.contaminants.points.gte(Decimal.pow10(5e14)),
+        825: () => player.or.contaminants.points.gte(Decimal.pow10(1e15)),
+        826: () => player.or.contaminants.points.gte(Decimal.pow10(2e15)),
+        827: () => player.tokens.tokens2.total.gte(5000),
+        828: () => player.tokens.tokens2.total.gte(5500),
+        829: () => player.tokens.tokens2.total.gte(6000),
+        830: () => player.tokens.tokens2.total.gte(6500),
+        831: () => player.tokens.tokens2.total.gte(7000),
+        832: () => player.tokens.tokens2.total.gte(7500),
+        833: () => player.tokens.tokens2.total.gte(8000),
+        834: () => player.nu.points.gte(1),
+        835: () => player.nu.points.gte(2),
+        836: () => player.nu.points.gte(3),
+        837: () => player.nu.points.gte(4),
+        838: () => player.nu.points.gte(5),
+        839: () => player.nu.points.gte(6),
+        840: () => player.nu.points.gte(7),
+        841: () => player.tokens.tokens2.total.gte(9e3),
+        842: () => player.tokens.tokens2.total.gte(10e3),
+        843: () => player.tokens.tokens2.total.gte(11e3),
+        844: () => player.tokens.tokens2.total.gte(12e3),
+        845: () => player.tokens.tokens2.total.gte(13e3),
+        846: () => player.tokens.tokens2.total.gte(14e3),
+        847: () => player.tokens.tokens2.total.gte(15e3),
+        848: () => player.ch.points.gte(Decimal.pow(15, 2)),
+        849: () => player.ch.points.gte(Decimal.pow(16, 2)),
+        850: () => player.ch.points.gte(Decimal.pow(17, 2)),
+        851: () => player.ch.points.gte(Decimal.pow(18, 2)),
+        852: () => player.ch.points.gte(Decimal.pow(19, 2)),
+        853: () => player.ch.points.gte(Decimal.pow(20, 2)),
+        854: () => player.ch.points.gte(Decimal.pow(21, 2)),
+        855: () => player.nu.points.gte(8),
+        856: () => player.nu.points.gte(9),
+        857: () => player.nu.points.gte(10),
+        858: () => player.nu.points.gte(11),
+        859: () => player.nu.points.gte(12),
+        860: () => player.nu.points.gte(13),
+        861: () => player.nu.points.gte(14),
+        862: () => player.ch.points.gte(Decimal.pow(22, 2)),
+        863: () => player.ch.points.gte(Decimal.pow(23, 2)),
+        864: () => player.ch.points.gte(Decimal.pow(24, 2)),
+        865: () => player.ch.points.gte(Decimal.pow(25, 2)),
+        866: () => player.ch.points.gte(Decimal.pow(26, 2)),
+        867: () => player.ch.points.gte(Decimal.pow(27, 2)),
+        868: () => player.ch.points.gte(Decimal.pow(28, 2)),
+        869: () => player.nu.points.gte(15),
+        870: () => player.nu.points.gte(16),
+        871: () => player.nu.points.gte(17),
+        872: () => player.nu.points.gte(18),
+        873: () => player.nu.points.gte(19),
+        874: () => player.nu.points.gte(20),
+        875: () => player.nu.points.gte(21),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1792,6 +1861,70 @@ PROGRESSION_MILESTONES_TEXT = {
         810: "144 Chromosomes",
         811: "169 Chromosomes",
         812: "196 Chromosomes",
+
+        813: "1e1e11 Contaminants",
+        814: "1e2e11 Contaminants",
+        815: "1e5e11 Contaminants",
+        816: "1e1e12 Contaminants",
+        817: "1e2e12 Contaminants",
+        818: "1e5e12 Contaminants",
+        819: "1e1e13 Contaminants",
+        820: "1e2e13 Contaminants",
+        821: "1e5e13 Contaminants",
+        822: "1e1e14 Contaminants",
+        823: "1e2e14 Contaminants",
+        824: "1e5e14 Contaminants",
+        825: "1e1e15 Contaminants",
+        826: "1e2e15 Contaminants",
+        827: "5000 Token II",
+        828: "5500 Token II",
+        829: "6000 Token II",
+        830: "6500 Token II",
+        831: "7000 Token II",
+        832: "7500 Token II",
+        833: "8000 Token II",
+        834: "a Nucleuse",
+        835: "2 Nucleuses",
+        836: "3 Nucleuses",
+        837: "4 Nucleuses",
+        838: "5 Nucleuses",
+        839: "6 Nucleuses",
+        840: "7 Nucleuses",
+        841: "9000 Token II",
+        842: "10,000 Token II",
+        843: "11,000 Token II",
+        844: "12,000 Token II",
+        845: "13,000 Token II",
+        846: "14,000 Token II",
+        847: "15,000 Token II",
+        848: "225 Chromosomes",
+        849: "256 Chromosomes",
+        850: "289 Chromosomes",
+        851: "324 Chromosomes",
+        852: "361 Chromosomes",
+        853: "400 Chromosomes",
+        854: "441 Chromosomes",
+        855: "8 Nucleuses",
+        856: "9 Nucleuses",
+        857: "10 Nucleuses",
+        858: "11 Nucleuses",
+        859: "12 Nucleuses",
+        860: "13 Nucleuses",
+        861: "14 Nucleuses",
+        862: "484 Chromosomes",
+        863: "529 Chromosomes",
+        864: "576 Chromosomes",
+        865: "625 Chromosomes",
+        866: "676 Chromosomes",
+        867: "729 Chromosomes",
+        868: "784 Chromosomes",
+        869: "15 Nucleuses",
+        870: "16 Nucleuses",
+        871: "17 Nucleuses",
+        872: "18 Nucleuses",
+        873: "19 Nucleuses",
+        874: "20 Nucleuses",
+        875: "21 Nucleuses",
 }
 
 

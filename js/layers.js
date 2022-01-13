@@ -22797,6 +22797,10 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 46)) base = new Decimal(3e8)
                                 if (hasMilestone("cells", 47)) base = new Decimal(1e8)
                                 if (hasMilestone("ch", 14))    base = new Decimal(1e9)
+                                if (hasMilestone("nu", 10)) {
+                                        base = new Decimal(1e23)
+                                        exp = amt.pow(1.05)
+                                }
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -22817,6 +22821,10 @@ addLayer("cells", {
                                 if (hasMilestone("ch", 14)) {
                                         exp = 1.08
                                         base = new Decimal(1e9)
+                                }
+                                if (hasMilestone("nu", 10)) {
+                                        base = new Decimal(1e23)
+                                        exp = 1.05
                                 }
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
@@ -22883,6 +22891,7 @@ addLayer("cells", {
                                         cost2 = cost2.replace("1e8", "1e9")
                                         cost2 = cost2.replace("1.1", "1.08")
                                 }
+                                if (hasMilestone("nu", 10)) cost2 = cost2.replace("1e9^(x<sup>1.08</sup>)", "1e23^(x<sup>1.05</sup>)")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -31358,6 +31367,10 @@ addLayer("an", {
                         22: false,
                         23: false,
                         24: false,
+                        31: false,
+                        32: false,
+                        33: false,
+                        34: false,
                 },
         }},
         color: "#FFEC13",
@@ -31696,6 +31709,7 @@ addLayer("an", {
                         if (hasUpgrade("an", 54))       ret = ret.times(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length))
                         if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
                         if (hasMilestone("ch", 17))     ret = ret.times(Decimal.pow(2, player.nu.points))
+                        if (hasAchievement("an", 31))   ret = ret.times(Decimal.pow(15, player.nu.milestones.length))
                         if (hasMilestone("an", 34))     ret = ret.times(10)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
@@ -32861,6 +32875,38 @@ addLayer("an", {
                                 player.an.achActive[24] = !player.an.achActive[24]
                         },
                 },
+                rowThreeOff(){
+                        let a = 0
+                        a += hasAchievement("an", 31) && !player.an.achActive[31]
+                        a += hasAchievement("an", 32) && !player.an.achActive[32]
+                        a += hasAchievement("an", 33) && !player.an.achActive[33]
+                        a += hasAchievement("an", 34) && !player.an.achActive[34]
+                        return a
+                },
+                41: {
+                        title(){
+                                return "PRO III (" + (player.an.achActive[31] ? "ON" : "OFF") + ")"
+                        },
+                        display(){
+                                if (player.an.achActive[31]) return "Per this row OFF (and unlocked) achievement you have one more Chromosome for effect purposes"
+                                return ""
+                        },
+                        tooltip(){
+                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
+                                a += "When toggled ON"
+                                return a + " per this row OFF (and unlocked) achievement you have one more Chromosome for effect purposes"
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 31)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.an.achActive[31] = !player.an.achActive[31]
+                                layers.an.clickables[101].onClick(false)
+                        },
+                },
 
                 101: {
                         title(){
@@ -33165,6 +33211,15 @@ addLayer("an", {
                                 return "Have 14 Taxonomy buyables on 6 levels and 1 on 4 levels and every buyables is less than 7<br>Reward: Multipotent cost base is 1e38"
                         }, // hasAchievement("an", 24)
                 },
+                31: {
+                        name: "Progression<br>III",
+                        done(){
+                                return player.an.genes.points.gte("1e36068")
+                        },
+                        tooltip(){
+                                return "Get 1e36068 Genes.<br>Reward: Per Nucleuse milestone Nucleuse primary effect is 1% stronger (linear) and gain 15x Genes"
+                        }, // hasAchievement("an", 31)
+                },
         },
         tabFormat: {
                 "Upgrades": {
@@ -33204,7 +33259,7 @@ addLayer("an", {
                                 "blank",
                                 "blank",
                                 "achievements",
-                                ["clickablesBig", [2, 3]],
+                                ["clickablesBig", [2, 3, 4]],
                         ],
                         unlocked(){
                                 return hasUpgrade("an", 44) || player.nu.unlocked
@@ -33307,7 +33362,7 @@ addLayer("an", {
                 if (!false) {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
-                        if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.points.round().toNumber()
+                        if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
                         if (!false) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data1.milestones)
@@ -33319,7 +33374,7 @@ addLayer("an", {
                         if (hasMilestone("an", 7)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
-                        if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.points.round().toNumber()
+                        if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
                         if (!false) {
                                 //sortStrings(data1.upgrades)
                                 //commented out on purpose, if it breaks this you can add it back
@@ -33664,6 +33719,11 @@ addLayer("ch", {
         effect(){
                 let pts = player.ch.points.plus(tmp.nu.effectPrimary)
 
+                if (hasUpgrade("nu", 11)) pts = pts.plus(player.nu.upgrades.length)
+                if (player.an.achActive[31] && hasAchievement("ach", 31)) {
+                        pts = pts.plus(tmp.an.clickables.rowThreeOff)
+                }
+
                 if (pts.gte(95) && !hasMilestone("an", 32)) pts = pts.times(190).sub(9025).sqrt()
 
                 let ret = pts.div(100).plus(2)
@@ -33932,7 +33992,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XVIII"
                         },
                         description(){
-                                return "You can always reset for Nucleuses and unlock a new row of Animal Achievements [not yet]"
+                                return "You can always reset for Nucleuses and unlock a new row of Animal Achievements"
                         },
                         cost:() => new Decimal(488),
                         unlocked(){
@@ -34377,6 +34437,8 @@ addLayer("nu", {
         effectPrimary(){
                 let ret = player.nu.points
 
+                if (hasAchievement("an", 31)) ret = ret.times(1 + player.nu.milestones.length / 100)
+
                 return ret
         },
         effectSecondary(){
@@ -34423,6 +34485,9 @@ addLayer("nu", {
                 }
         },
         row: 0, 
+        prestigeNotify(){
+                return tmp.nu.getResetGain.gt(0)
+        },
         prestigeButtonText(){
                 if (player.shiftAlias) {
                         let p1 = "Formula:" + br + "(" + format(tmp.nu.costAdd, 0) + "+x)"
@@ -34454,11 +34519,15 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses I"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per Chromosome up to 200 subtract 1 from Tissue gain exponent and Gamma-<br>proteobacteria amount multiplies INtes<u>tine</u> gain</bdi>"
+                                return "Per upgrade you have one more effective Chromosomes for effect purposes and Charm Quark coefficient is 1"
                         },
-                        cost:() => new Decimal(34),
+                        cost:() => new Decimal(17),
+                        onPurchase(){
+                                doReset("nu", true)
+                        },
                         unlocked(){
-                                return false
+                                if (hasUpgrade("nu", 11)) return true
+                                return player.ch.best.gte(496)
                         }, // hasUpgrade("nu", 11)
                 },
         },
@@ -34606,6 +34675,20 @@ addLayer("nu", {
                                 return "Reward: Animals XXIII counts every Token II and Animal effect exponent is hardcapped at 1000."
                         },
                 }, // hasMilestone("nu", 9)
+                10: {
+                        requirementDescription(){
+                                return "18 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(18)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per Nucleuse keep a Chromosome upgrade and milestone and Totipotent cost formula is 1e23^(x<sup>1.05</sup>)."
+                        },
+                }, // hasMilestone("nu", 10)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34635,8 +34718,9 @@ addLayer("nu", {
                                 ["display-text", function(){
                                         let a = "Nucleuses resets all prior content not permanently kept."
                                         let b = "For unlocking Nucleuses you permanently keep DNA, Cell, and Tissue content."
+                                        let c = "Buying any upgrade forces a Nucleuse reset."
 
-                                        return a + br2 + b
+                                        return a + br2 + b + br2 + c
                                 }],
                         ],
                         unlocked(){
@@ -34669,13 +34753,13 @@ addLayer("nu", {
                 // 1. Chromosomes content
                 if (!false) {
                         let chKeptMilestones = 0 
-                        if (false) chKeptMilestones += 0
+                        if (hasMilestone("nu", 10)) chKeptMilestones += player.nu.best.round().toNumber()
                         if (!false) {
                                 data1.milestones = data1.milestones.slice(0, chKeptMilestones)
                         }
 
                         let chKeptUpgrades = 0 
-                        if (false) chKeptUpgrades += 0
+                        if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
                         if (!false) {
                                 data1.upgrades = data1.upgrades.slice(0, chKeptUpgrades)
                         }
@@ -34687,14 +34771,14 @@ addLayer("nu", {
                 // 2. Animals content
                 if (!false) {
                         let anKeptMilestones = 0 
-                        if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.points.round().toNumber()
+                        if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.best.round().toNumber()
                         if (!false) {
                                 sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, anKeptMilestones)
                         }
 
                         let anKeptUpgrades = 0 
-                        if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.points.toNumber()
+                        if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
                         if (!false) {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
@@ -34705,8 +34789,8 @@ addLayer("nu", {
                         }
 
                         let anKeptTimes = 0
-                        if (hasMilestone("nu", 1)) anKeptTimes += player.nu.points.toNumber()
-                        if (hasMilestone("nu", 5)) anKeptTimes += player.nu.points.toNumber()
+                        if (hasMilestone("nu", 1)) anKeptTimes += player.nu.best.toNumber()
+                        if (hasMilestone("nu", 5)) anKeptTimes += player.nu.best.toNumber()
                         if (!false) data2.times = Math.min(data2.times, anKeptTimes)
                 }
                 data2.total = decimalZero
@@ -34740,7 +34824,7 @@ addLayer("nu", {
                 if (!false) {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
-                        if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.points.round().toNumber()
+                        if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
                         if (!false) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data3.milestones)
@@ -34752,7 +34836,7 @@ addLayer("nu", {
                         if (hasMilestone("an", 7)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
-                        if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.points.round().toNumber()
+                        if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
                         if (!false) {
                                 //sortStrings(data1.upgrades)
                                 //commented out on purpose, if it breaks this you can add it back
@@ -34996,12 +35080,30 @@ addLayer("mc", {
                 },
         },
         layerShown(){return hasMilestone("cells", 21) || hasMilestone("or", 4) || player.or.unlocked},
+        upgrades: {
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Micrometer"
+                        },
+                        description(){
+                                return "Each of the first 900 achievements reduces ...waves cost double exponent by .001"
+                        },
+                        cost:() => new Decimal(1e48),
+                        unlocked(){
+                                return player.mc.points.gte(1e47)
+                        }, // hasUpgrade("mc", 11)
+                },
+        },
         buyables: {
                 rows: 3,
                 cols: 3,
                 11: {
                         title: "...waves",
-                        cost: () => new Decimal(2).pow(getBuyableAmount("mc", 11).pow(2)),
+                        cost(){
+                                let exp = 2
+                                if (hasUpgrade("mc", 11)) exp -= Math.min(900, player.ach.achievements.length) / 1000
+                                return new Decimal(2).pow(getBuyableAmount("mc", 11).pow(exp))
+                        },
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[11].cost),
                         buy(){
                                 if (!this.canAfford()) return
@@ -35014,6 +35116,7 @@ addLayer("mc", {
                                 let exp = 2
                                 let pts = player.mc.points
                                 if (pts.lt(div)) return decimalZero
+                                if (hasUpgrade("mc", 11)) exp -= Math.min(900, player.ach.achievements.length) / 1000
                                 return pts.div(div).log(base).root(exp).floor().plus(1)
                         },
                         base(){
@@ -35039,7 +35142,10 @@ addLayer("mc", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "2^x<sup>2</sup>" 
+                                let cost2 = "2^x<sup>EXP</sup>" 
+                                let exp = 2
+                                if (hasUpgrade("mc", 11)) exp -= Math.min(900, player.ach.achievements.length) / 1000
+                                cost2 = cost2.replace("EXP", formatWhole(exp, false, 3))
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -35264,6 +35370,7 @@ addLayer("mc", {
                                         return "You are getting " + format(tmp.mc.getResetGain) + " Micro per second"
                                 }],
                                 ["buyables", [1,2,3,4]],
+                                ["upgrades", [1,2,3,4]],
                                 "blank",
                                 ["display-text", function(){
                                         let a = "Base gain = log10(log10(log10(Points)))/1000"
@@ -35738,7 +35845,7 @@ addLayer("ach", {
         },
         update(diff){
                 let data = player.ach
-                data.points = new Decimal(data.achievements.length).max(data.points)
+                data.points = new Decimal(data.achievements.length)
                 data.best = data.best.max(data.points)
                 if (hasCompletedFirstNRows(player.ach.completedRows + 1)){
                         player.ach.completedRows ++
@@ -35962,12 +36069,17 @@ addLayer("ach", {
                                 return tmp.mu.layerShown
                         },
                 },
-                {key: "shift+N", description: "Shift+N: Go to Nitrogen", onPress(){
-                                if (!tmp.n.layerShown) return
-                                showTab("n")
+                {
+                        key: "shift+N", 
+                        description(){
+                                if (player.nu.unlocked) return "Shift+N: Go to Nucleuses"
+                                return "Shift+N: Go to Nitrogen"
+                        }, onPress(){
+                                if (tmp.n.layerShown) showTab("n")
+                                if (tmp.nu.layerShown) showTab("nu")
                         },
                         unlocked(){
-                                return tmp.n.layerShown
+                                return tmp.n.layerShown || tmp.nu.layerShown
                         },
                 },
                 {key: "shift+O", description(){
@@ -36087,11 +36199,18 @@ addLayer("ach", {
                                 return tmp.mu.layerShown
                         },
                 },
-                {key: "n", description: "N: Reset for Nitrogen", onPress(){
+                {
+                        key: "n", 
+                        description(){
+                                if (player.nu.unlocked) return "N: Reset for Nucleuses"
+                                return "N: Reset for Nitrogen"
+                        }, 
+                        onPress(){
+                                if (canReset("nu")) doReset("nu")
                                 if (canReset("n")) doReset("n")
                         },
                         unlocked(){
-                                return tmp.n.layerShown
+                                return tmp.n.layerShown || tmp.nu.layerShown
                         },
                 },
                 {key: "o", description: "O: Reset for Organ", onPress(){
@@ -44287,6 +44406,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("nu", 11))   return c.pow(.6)
                                 if (hasUpgrade("or", 45))   return c.pow(.6).times(.1)
                                 if (hasMilestone("an", 14)) return c.pow(.6).times(.07)
                                 if (hasMilestone("or", 11)) return c.pow(.6).times(.1)
@@ -44336,6 +44456,7 @@ addLayer("tokens", {
                                         eformula = eformula.replace("sqrt(x)", "x<sup>.6</sup>")
                                 }
                                 if (hasUpgrade("or", 45))  eformula = eformula.replace(".07", ".1")
+                                if (hasUpgrade("nu", 11))  eformula = eformula.replace(".1", "")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -46724,6 +46845,7 @@ addLayer("tokens", {
                                                         if (player.an.achActive[21])    c += "PRO II multiplies AX by " + format(Decimal.pow(3.3, l.times(r1o))) + br
                                                         else                            c += "PRO II multiplies AX by " + format(Decimal.pow(100, l)) + br
                                                 }
+                                                if (hasAchievement("an", 31))   c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
                                                 if (hasMilestone("nu", 1))      c += "Nucleuse Milestone 1 multiplies AX by 2" + br
                                                 if (hasMilestone("nu", 2))      c += "Nucleuse Milestone 2 multiplies AX by " + format(player.nu.points.pow10()) + br
 
