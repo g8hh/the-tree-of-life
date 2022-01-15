@@ -191,7 +191,7 @@ function getPointDilationExponent(){
         if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
                                         exp = exp.times(tmp.cells.milestones[56].effect)
         }
-        if (hasMilestone("an", 30)) {
+        if (!hasMilestone("an", 30)) {
                 if (hasMilestone("t", 4))       exp = exp.times(tmp.t.milestones[4].effect)
                 if (hasMilestone("t", 21))      exp = exp.times(player.t.milestones.length)
         }
@@ -42812,6 +42812,7 @@ addLayer("tokens", {
                         points: decimalZero,
                 },
                 tokens2Unl: [101, 102, 111],
+                buyablesBoughtThisTick: [],
                 coins: {
                         points: decimalZero,
                         best: decimalZero
@@ -42955,6 +42956,9 @@ addLayer("tokens", {
         },
         update(diff){
                 let data = player.tokens
+
+                data.buyablesBoughtThisTick = []
+
                 let a = ["11", "12", "13", "21", "22", 
                          "23", "31", "32", "33", "41", 
                          "42", "43", "51", "52", "53", 
@@ -43284,12 +43288,13 @@ addLayer("tokens", {
                 11: {
                         title: "<bdi style='color:#FF0000'>Radio Waves</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(11),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[11].cost) && !player.tokens.buyablesBoughtThisTick.includes(11),
                         buy(auto = false){// player.tokens.autobuyradio && hasMilestone("n", 7)
                                 if (!this.canAfford()) return
                                 if (player.tokens.autobuyradio && hasMilestone("n", 7) && !auto) return
                                 player.tokens.buyables[11] = player.tokens.buyables[11].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[11].cost)
+                                player.tokens.buyablesBoughtThisTick.push(11)
                         },
                         base(){
                                 if (hasMilestone("t", 13)) return decimalOne
@@ -43333,12 +43338,13 @@ addLayer("tokens", {
                 },
                 12: {
                         title: "<bdi style='color:#FF0000'>Microwaves</bdi>",
-                        cost:() => layers.tokens.buyables.costFormulaID(12),
+                        cost:() => layers.tokens.buyables.costFormulaID(12) && !player.tokens.buyablesBoughtThisTick.includes(12),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[12] = player.tokens.buyables[12].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[12].cost)
+                                player.tokens.buyablesBoughtThisTick.push(12)
                         },
                         base(){
                                 if (hasUpgrade("t", 91)) return decimalOne
@@ -43383,11 +43389,12 @@ addLayer("tokens", {
                 13: { 
                         title: "<bdi style='color:#FF0000'>Infrared</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(13),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[13].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[13].cost) && !player.tokens.buyablesBoughtThisTick.includes(13),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[13] = player.tokens.buyables[13].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[13].cost)
+                                player.tokens.buyablesBoughtThisTick.push(13)
                         },
                         base(){
                                 if (hasUpgrade("t", 92)) return decimalOne
@@ -43432,12 +43439,13 @@ addLayer("tokens", {
                 },
                 21: { 
                         title: "<bdi style='color:#FF0000'>Visible</bdi>",
-                        cost:() => layers.tokens.buyables.costFormulaID(21),
+                        cost:() => layers.tokens.buyables.costFormulaID(21) && !player.tokens.buyablesBoughtThisTick.includes(21),
                         canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[21] = player.tokens.buyables[21].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[21].cost)
+                                player.tokens.buyablesBoughtThisTick.push(21)
                         },
                         base(){
                                 if (hasUpgrade("t", 93)) return decimalOne
@@ -43509,11 +43517,12 @@ addLayer("tokens", {
                 22: {
                         title: "<bdi style='color:#FF0000'>Near-ultraviolet</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(22),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[22].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[22].cost) && !player.tokens.buyablesBoughtThisTick.includes(22),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[22] = player.tokens.buyables[22].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[22].cost)
+                                player.tokens.buyablesBoughtThisTick.push(22)
                         },
                         base(){
                                 if (hasUpgrade("t", 94)) return decimalOne
@@ -43565,11 +43574,12 @@ addLayer("tokens", {
                 23: {
                         title: "<bdi style='color:#FF0000'>Ultraviolet</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(23),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[23].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[23].cost) && !player.tokens.buyablesBoughtThisTick.includes(23),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[23] = player.tokens.buyables[23].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[23].cost)
+                                player.tokens.buyablesBoughtThisTick.push(23)
                         },
                         base(){
                                 if (hasUpgrade("t", 95)) return decimalOne
@@ -43612,11 +43622,12 @@ addLayer("tokens", {
                 31: {
                         title: "<bdi style='color:#FF0000'>X-Rays</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(31),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[31].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[31].cost) && !player.tokens.buyablesBoughtThisTick.includes(31),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[31] = player.tokens.buyables[31].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[31].cost)
+                                player.tokens.buyablesBoughtThisTick.push(31)
                         },
                         base(){
                                 if (hasUpgrade("t", 101)) return decimalOne
@@ -43663,11 +43674,12 @@ addLayer("tokens", {
                 32: {
                         title: "<bdi style='color:#FF0000'>Gamma Rays</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(32),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[32].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[32].cost) && !player.tokens.buyablesBoughtThisTick.includes(32),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[32] = player.tokens.buyables[32].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[32].cost)
+                                player.tokens.buyablesBoughtThisTick.push(32)
                         },
                         base(){
                                 if (hasUpgrade("t", 102)) return decimalOne
@@ -43708,11 +43720,12 @@ addLayer("tokens", {
                 33: { 
                         title: "<bdi style='color:#FF0000'>UHF Gamma Rays</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(33),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[33].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[33].cost) && !player.tokens.buyablesBoughtThisTick.includes(33),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[33] = player.tokens.buyables[33].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[33].cost)
+                                player.tokens.buyablesBoughtThisTick.push(33)
                         },
                         base(){
                                 if (hasMilestone("t", 14)) return decimalOne
@@ -43755,11 +43768,12 @@ addLayer("tokens", {
                 41: {
                         title: "<bdi style='color:#FFFF00'>Constant</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(41),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[41].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[41].cost) && !player.tokens.buyablesBoughtThisTick.includes(41),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[41] = player.tokens.buyables[41].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[41].cost)
+                                player.tokens.buyablesBoughtThisTick.push(41)
                         },
                         base(){
                                 if (hasUpgrade("cells", 31)) return decimalOne
@@ -43821,11 +43835,12 @@ addLayer("tokens", {
                 42: {
                         title: "<bdi style='color:#FFFF00'>Logarithmic</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(42),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[42].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[42].cost) && !player.tokens.buyablesBoughtThisTick.includes(42),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[42] = player.tokens.buyables[42].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[42].cost)
+                                player.tokens.buyablesBoughtThisTick.push(42)
                         },
                         base(){
                                 if (hasUpgrade("cells", 25)) return decimalOne
@@ -43873,11 +43888,12 @@ addLayer("tokens", {
                 43: {
                         title: "<bdi style='color:#FFFF00'>Linear</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(43),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[43].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[43].cost) && !player.tokens.buyablesBoughtThisTick.includes(43),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[43] = player.tokens.buyables[43].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[43].cost)
+                                player.tokens.buyablesBoughtThisTick.push(43)
                         },
                         base(){
                                 if (hasUpgrade("cells", 24)) return decimalOne
@@ -43917,11 +43933,12 @@ addLayer("tokens", {
                 51: {
                         title: "<bdi style='color:#FFFF00'>Quadratic</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(51),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[51].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[51].cost) && !player.tokens.buyablesBoughtThisTick.includes(51),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[51] = player.tokens.buyables[51].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[51].cost)
+                                player.tokens.buyablesBoughtThisTick.push(51)
                         },
                         base(){
                                 if (hasUpgrade("cells", 22)) return decimalOne
@@ -43961,11 +43978,12 @@ addLayer("tokens", {
                 52: {
                         title: "<bdi style='color:#FFFF00'>Cubic</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(52),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[52].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[52].cost) && !player.tokens.buyablesBoughtThisTick.includes(52),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[52] = player.tokens.buyables[52].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[52].cost)
+                                player.tokens.buyablesBoughtThisTick.push(52)
                         },
                         base(){
                                 if (hasUpgrade("t", 105)) return decimalOne
@@ -44008,11 +44026,12 @@ addLayer("tokens", {
                 53: {
                         title: "<bdi style='color:#FFFF00'>Polynomial</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(53),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[53].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[53].cost) && !player.tokens.buyablesBoughtThisTick.includes(53),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[53] = player.tokens.buyables[53].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[53].cost)
+                                player.tokens.buyablesBoughtThisTick.push(53)
                         },
                         base(){
                                 if (hasUpgrade("t", 104)) return decimalOne
@@ -44055,11 +44074,12 @@ addLayer("tokens", {
                 61: {
                         title: "<bdi style='color:#FFFF00'>Semi-exponential</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(61),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[61].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[61].cost) && !player.tokens.buyablesBoughtThisTick.includes(61),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[61] = player.tokens.buyables[61].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[61].cost)
+                                player.tokens.buyablesBoughtThisTick.push(61)
                         },
                         base(){
                                 if (hasUpgrade("t", 103)) return decimalOne
@@ -44101,11 +44121,12 @@ addLayer("tokens", {
                 62: {
                         title: "<bdi style='color:#FFFF00'>Exponential</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(62),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[62].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[62].cost) && !player.tokens.buyablesBoughtThisTick.includes(62),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[62] = player.tokens.buyables[62].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[62].cost)
+                                player.tokens.buyablesBoughtThisTick.push(62)
                         },
                         base(){
                                 if (hasMilestone("t", 16)) return decimalOne
@@ -44147,11 +44168,12 @@ addLayer("tokens", {
                 63: {
                         title: "<bdi style='color:#FFFF00'>Double-exponential</bdi>",
                         cost:() => layers.tokens.buyables.costFormulaID(63),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[63].cost),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[63].cost) && !player.tokens.buyablesBoughtThisTick.includes(63),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[63] = player.tokens.buyables[63].plus(1)
                                 player.tokens.points = player.tokens.points.sub(tmp.tokens.buyables[63].cost)
+                                player.tokens.buyablesBoughtThisTick.push(63)
                         },
                         effect(){
                                 if (hasMilestone("t", 15)) return decimalZero
@@ -44269,13 +44291,14 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(101),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(101)) return false
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[101].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[101].cost) && !player.tokens.buyablesBoughtThisTick.includes(101)
                         },
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[101] = data.buyables[101].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
+                                player.tokens.buyablesBoughtThisTick.push(101)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow10Total
@@ -44323,13 +44346,14 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(102),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(102)) return false
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[102].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[102].cost) && !player.tokens.buyablesBoughtThisTick.includes(102)
                         },
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[102] = data.buyables[102].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[102].cost)
+                                player.tokens.buyablesBoughtThisTick.push(102)
                         },
                         coefficient(){
                                 let ret = decimalOne
@@ -44394,13 +44418,14 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(111),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(111)) return false
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[111].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[111].cost) && !player.tokens.buyablesBoughtThisTick.includes(111)
                         },
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.tokens
                                 data.buyables[111] = data.buyables[111].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[111].cost)
+                                player.tokens.buyablesBoughtThisTick.push(111)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow11Total
@@ -44479,7 +44504,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(112),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(112)) return player.cells.points.gte("5e13435")
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[112].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[112].cost) && !player.tokens.buyablesBoughtThisTick.includes(112)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -44490,6 +44515,7 @@ addLayer("tokens", {
                                 let data = player.tokens
                                 data.buyables[112] = data.buyables[112].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[112].cost)
+                                player.tokens.buyablesBoughtThisTick.push(112)
                         },
                         coefficient(){
                                 if (hasUpgrade("or", 111)) return new Decimal(10)
@@ -44564,7 +44590,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(121),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(121)) return player.cells.points.gte("1e30400")
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[121].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[121].cost) && !player.tokens.buyablesBoughtThisTick.includes(121)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -44575,6 +44601,7 @@ addLayer("tokens", {
                                 let data = player.tokens
                                 data.buyables[121] = data.buyables[121].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[121].cost)
+                                player.tokens.buyablesBoughtThisTick.push(121)
                         },
                         coefficient(){
                                 if (hasUpgrade("ch", 42))       return player.nu.best.div(1000)
@@ -44648,7 +44675,7 @@ addLayer("tokens", {
                         cost:() => layers.tokens.buyables.costFormulaID(122),
                         canAfford(){
                                 if (!player.tokens.tokens2Unl.includes(122)) return player.cells.points.gte("1e30942")
-                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[122].cost)
+                                return player.tokens.tokens2.points.gte(tmp.tokens.buyables[122].cost) && !player.tokens.buyablesBoughtThisTick.includes(122)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -44659,6 +44686,7 @@ addLayer("tokens", {
                                 let data = player.tokens
                                 data.buyables[122] = data.buyables[122].plus(1)
                                 if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[122].cost)
+                                player.tokens.buyablesBoughtThisTick.push(122)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow12Total
