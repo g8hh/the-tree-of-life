@@ -31648,14 +31648,16 @@ addLayer("an", {
                                 let sub = hasMilestone("an", 22) ? 0 : 1000
                                                         ret = ret.times(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0)))
                         }
-                        if (hasMilestone("an", 17)) {
-                                let base = player.or.deoxygenated_blood.points.max(10).log10().max(10).log10()
-                                let exp = player.nu.points.plus(player.an.upgrades.length)
-                                                        ret = ret.times(base.pow(exp))
+                        if (!hasUpgrade("ch", 44)) {
+                                if (hasMilestone("an", 17)) {
+                                        let base = player.or.deoxygenated_blood.points.max(10).log10().max(10).log10()
+                                        let exp = player.nu.points.plus(player.an.upgrades.length)
+                                                                ret = ret.times(base.pow(exp))
+                                }
+                                if (hasMilestone("an", 18))     ret = ret.times(player.an.points.max(10).log10())
+                                if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
+                                if (hasMilestone("an", 20))     ret = ret.times(player.cells.points.max(10).log10())
                         }
-                        if (hasMilestone("an", 18))     ret = ret.times(player.an.points.max(10).log10())
-                        if (hasMilestone("an", 19))     ret = ret.times(player.or.contaminants.points.max(10).log10())
-                        if (hasMilestone("an", 20))     ret = ret.times(player.cells.points.max(10).log10())
                         if (hasMilestone("an", 21))     ret = ret.times(tmp.an.milestones[21].effect)
                         if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points.sub(8)))
@@ -31678,7 +31680,7 @@ addLayer("an", {
                         if (hasUpgrade("an", 43))       ret = ret.div(1e42)
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                                 if (!player.an.achActive[22]) {
-                                                        ret = ret.times(Decimal.pow(5, player.an.achievements.length + 4))
+                                                        ret = ret.times(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4))
                                 } else                  ret = ret.times(25)
                         }
                         if (hasAchievement("an", 12)) {
@@ -31710,7 +31712,9 @@ addLayer("an", {
                         if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
                         if (hasMilestone("ch", 17))     ret = ret.times(Decimal.pow(2, player.nu.points))
                         if (hasAchievement("an", 31))   ret = ret.times(Decimal.pow(15, player.nu.milestones.length))
-                        if (hasMilestone("an", 34))     ret = ret.times(10)
+                        if (hasMilestone("an", 34) && !hasMilestone("an", 36)) {
+                                                        ret = ret.times(10)
+                        }
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -32599,6 +32603,20 @@ addLayer("an", {
                                 return "Reward: Token II buyables' cost exponent is 1.34 and Chromosome cost base is 9.2e9 but Omnipotent base is Up Quark effect."
                         },
                 }, // hasMilestone("an", 35)
+                36: {
+                        requirementDescription(){
+                                return "2.22e157 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("2.22e157")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token Tetrational base is 6 and square PRO I effect but disable Animal Milestone 34's boost to Genes."
+                        },
+                }, // hasMilestone("an", 36)
         },
         clickables: {
                 11: {
@@ -32907,6 +32925,30 @@ addLayer("an", {
                                 layers.an.clickables[101].onClick(false)
                         },
                 },
+                42: {
+                        title(){
+                                return "PRI III (" + (player.an.achActive[32] ? "ON" : "OFF") + ")"
+                        },
+                        display(){
+                                if (player.an.achActive[32]) return "Per this row OFF (and unlocked) achievement decrease Token II buyables' cost exponent by .01"
+                                return ""
+                        },
+                        tooltip(){
+                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
+                                a += "When toggled ON"
+                                return a + " per this row OFF (and unlocked) achievement decrease Token II buyables' cost exponent by .01"
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 32)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.an.achActive[32] = !player.an.achActive[32]
+                                layers.an.clickables[101].onClick(false)
+                        },
+                },
 
                 101: {
                         title(){
@@ -32981,9 +33023,10 @@ addLayer("an", {
                                 let add = player.ch.points.sub(291).max(0)
                                 ret = ret.plus(add)
                         }
+                        if (hasUpgrade("ch", 44)) ret = ret.plus(player.nu.points.div(2))
 
-                        return ret
-                }, // tmp.an.grid.maxLevels cap buyablecap buyable cap
+                        return ret.floor()
+                }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
                 getUnlocked(id) {
                         if (!hasUpgrade("or", 352)) return false
                         if (id % 100 < Math.floor(id/100)) return false
@@ -33013,7 +33056,7 @@ addLayer("an", {
                                 // above is the version where you take into account how much it boosts genes
                         }
                         return a
-                }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels
+                }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels 
                 getStyle(data, id){
                         if (id == player.an.selectedId) {
                                 return {"background-color": "#FFA225"}
@@ -33219,6 +33262,30 @@ addLayer("an", {
                         tooltip(){
                                 return "Get 1e36068 Genes.<br>Reward: Per Nucleuse milestone Nucleuse primary effect is 1% stronger (linear) and gain 15x Genes"
                         }, // hasAchievement("an", 31)
+                },
+                32: {
+                        name: "Prime<br>III",
+                        done(){
+                                let primes = [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59]
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+                                let a = 0
+                                for (i in keys) {
+                                        if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
+                                }
+                                return a >= 21
+                        },
+                        tooltip(){
+                                if (player.shiftAlias) return "7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59"
+                                return "Have 21 Taxonomy buyables on prime levels between 6 and 60 [shift for valid values]<br>Reward: idk yet"
+                        }, // hasAchievement("an", 32)
                 },
         },
         tabFormat: {
@@ -33998,6 +34065,18 @@ addLayer("ch", {
                         unlocked(){
                                 return player.ch.best.gte(488) || player.nu.best.gte(17)
                         }, // hasUpgrade("ch", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XIX"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Per Nucleuse increase the Taxonomy limit by .5 but disable Animal Milestones 17 through 20's effects on Gene gain</bdi>"
+                        },
+                        cost:() => new Decimal(514),
+                        unlocked(){
+                                return player.ch.best.gte(514) || player.nu.best.gte(19)
+                        }, // hasUpgrade("ch", 44)
                 },
         },
         milestones: {
@@ -42848,6 +42927,7 @@ addLayer("tokens", {
                 if (hasUpgrade("or", 232)) tetBase = 8
                 if (hasUpgrade("or", 34))  tetBase = 7.5
                 if (hasUpgrade("or", 35))  tetBase = 7
+                if (hasMilestone("an", 36))tetBase = 6
                 return tetBase 
         },
         shouldNotify(){
@@ -43109,7 +43189,16 @@ addLayer("tokens", {
                 },
                 costFormula2(x){
                         let tertComps = player.cells.challenges[21]
+                        let r3c = tmp.an.clickables.rowThreeOff
+                        let m1 = hasAchievement("an", 32) && player.an.achActive[32] && r3c >= 1
+                        let m2 = m1 && r3c >= 2
+                        let m3 = m1 && r3c >= 3
+                        let m4 = m1 && r3c >= 4
 
+                        if (m4)                         return x.pow(1.30).ceil()
+                        if (m3)                         return x.pow(1.31).ceil()
+                        if (m2)                         return x.pow(1.32).ceil()
+                        if (m1)                         return x.pow(1.33).ceil()
                         if (hasMilestone("an", 35))     return x.pow(1.34).ceil()
                         if (hasMilestone("an", 34))     return x.pow(1.35).ceil()
                         if (player.ch.everUpgrade33)    return x.pow(1.36).ceil()
@@ -43145,6 +43234,16 @@ addLayer("tokens", {
                 },
                 costFormulaText2(){
                         let tertComps = player.cells.challenges[21]
+                        let r3c = tmp.an.clickables.rowThreeOff
+                        let m1 = hasAchievement("an", 32) && player.an.achActive[32] && r3c >= 1
+                        let m2 = m1 && r3c >= 2
+                        let m3 = m1 && r3c >= 3
+                        let m4 = m1 && r3c >= 4
+
+                        if (m4)                         return "ceil(x<sup>1.30</sup>)"
+                        if (m3)                         return "ceil(x<sup>1.31</sup>)"
+                        if (m2)                         return "ceil(x<sup>1.32</sup>)"
+                        if (m1)                         return "ceil(x<sup>1.33</sup>)"
                         if (hasMilestone("an", 35))     return "ceil(x<sup>1.34</sup>)"
                         if (hasMilestone("an", 34))     return "ceil(x<sup>1.35</sup>)"
                         if (player.ch.everUpgrade33)    return "ceil(x<sup>1.36</sup>)"
@@ -46815,18 +46914,22 @@ addLayer("tokens", {
                                                         let sub = hasMilestone("an", 22) ? 0 : 1000
                                                                                 c += "Animal Milestone 16 multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0))) + br
                                                 }
-                                                if (hasMilestone("an", 17)) {
-                                                        let base = player.or.deoxygenated_blood.points.max(10).log10().max(10).log10()
-                                                        let exp = player.nu.points.plus(player.an.upgrades.length)
-                                                                                c += "Animal Milestone 17 multiplies AX by " + format(base.pow(exp)) + br
+                                                if (!hasUpgrade("ch", 44)) {
+                                                        if (hasMilestone("an", 17)) {
+                                                                let base = player.or.deoxygenated_blood.points.max(10).log10().max(10).log10()
+                                                                let exp = player.nu.points.plus(player.an.upgrades.length)
+                                                                                        c += "Animal Milestone 17 multiplies AX by " + format(base.pow(exp)) + br
+                                                        }
+                                                        if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.points.max(10).log10()) + br
+                                                        if (hasMilestone("an", 19))     c += "Animal Milestone 19 multiplies AX by " + format(player.or.contaminants.points.max(10).log10()) + br
+                                                        if (hasMilestone("an", 20))     c += "Animal Milestone 20 multiplies AX by " + format(player.cells.points.max(10).log10()) + br
                                                 }
-                                                if (hasMilestone("an", 18))     c += "Animal Milestone 18 multiplies AX by " + format(player.an.points.max(10).log10()) + br
-                                                if (hasMilestone("an", 19))     c += "Animal Milestone 19 multiplies AX by " + format(player.or.contaminants.points.max(10).log10()) + br
-                                                if (hasMilestone("an", 20))     c += "Animal Milestone 20 multiplies AX by " + format(player.cells.points.max(10).log10()) + br
                                                 if (hasMilestone("an", 21))     c += "Animal Milestone 21 multiplies AX by " + format(tmp.an.milestones[21].effect) + br
                                                 if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
                                                 if (hasMilestone("an", 28))     c += "Animal Milestone 28 multiplies AX by " + format(player.an.grid[306].extras.plus(1)) + br
-                                                if (hasMilestone("an", 34))     c += "Animal Milestone 34 multiplies AX by 10" + br
+                                                if (hasMilestone("an", 34) && !hasMilestone("an", 36)) {
+                                                                                c += "Animal Milestone 34 multiplies AX by 10" + br
+                                                }
                                                 if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
                                                                                 c += "Chromosome Milestone 5 divides AX by " + format(Decimal.pow(2, player.ch.points.sub(8))) + br
                                                 }
@@ -46855,7 +46958,7 @@ addLayer("tokens", {
                                                 }
                                                 if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                                                         if (!player.an.achActive[22]) {
-                                                                                c += "PRO I multiplies AX by " + format(Decimal.pow(5, player.an.achievements.length + 4)) + br
+                                                                                c += "PRO I multiplies AX by " + format(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4)) + br
                                                         } else                  c += "PRO I multiplies AX by 25" + br
                                                 }
                                                 if (hasAchievement("an", 12)) {
