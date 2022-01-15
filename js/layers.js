@@ -225,6 +225,14 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
+        202:() => false ? "Organ gain per Nucleuses" : "nothing (currently)",
+        203:() => false ? "Organ gain per Nucleuses" : "nothing (currently)",
+        204:() => false ? "intes<u>TINE</u> gain" : "nothing (currently)",
+        205:() => false ? "Contaminant gain per Chromosomes<sup>4</sup>" : "nothing (currently)",
+        206:() => false ? "Gene gain" : "nothing (currently)",
+        207:() => false ? "<u>IN</u>testine gain per 7" : "nothing (currently)",
+        208:() => false ? "Organ gain per Chromosome/17" : "nothing (currently)",
+
         303:() => hasUpgrade("ch", 41) ? "Organ gain per Nucleuses" : "nothing (currently)",
         304:() => hasUpgrade("ch", 35) ? "intes<u>TINE</u> gain" : "nothing (currently)",
         305:() => hasMilestone("ch", 21) ? "Contaminant gain per Chromosomes<sup>4</sup>" : "nothing (currently)",
@@ -294,6 +302,14 @@ var TAXONOMY_NAMES = {
 
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
+        202: [new Decimal("1e92027"), new Decimal(1.5e10), new Decimal(1.1)],
+        203: [new Decimal("1e42884"), new Decimal(1e193), new Decimal(1.2)],
+        204: [new Decimal("1e92315"), new Decimal(1e20), new Decimal(1.3)],
+        205: [new Decimal("1e94318"), new Decimal("7e335"), new Decimal(1.4)],
+        206: [new Decimal("5e92513"), new Decimal(1e156), new Decimal(1.3)],
+        207: [new Decimal("3e98292"), new Decimal(1.2e11), new Decimal(1.2)],
+        208: [new Decimal("9e95766"), new Decimal(5e11), new Decimal(1.1)],
+
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
         304: [new Decimal("1e2315"), new Decimal(1e20), new Decimal(1.3)],
         305: [new Decimal("1.7e4318"), new Decimal("7e335"), new Decimal(1.4)],
@@ -23123,6 +23139,7 @@ addLayer("cells", {
                                 if (hasUpgrade("an", 34))       base = new Decimal(1e75)
                                 if (hasUpgrade("ch", 24))       base = new Decimal(1e70)
                                 if (!player.an.achActive[14] && hasAchievement("an", 14)) base = new Decimal(1e69)
+                                if (hasMilestone("nu", 11))     base = new Decimal(1e55)
                                 let init = new Decimal("1e5283e3")
                                 if (hasUpgrade("or", 114)) init = decimalOne
                                 return init.times(base.pow(exp))
@@ -23142,6 +23159,7 @@ addLayer("cells", {
                                 if (hasUpgrade("an", 34))       base = new Decimal(1e75)
                                 if (hasUpgrade("ch", 24))       base = new Decimal(1e70)
                                 if (!player.an.achActive[14] && hasAchievement("an", 14)) base = new Decimal(1e69)
+                                if (hasMilestone("nu", 11))     base = new Decimal(1e55)
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         buy(){
@@ -23187,12 +23205,15 @@ addLayer("cells", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e5,283,000*1e100^(x<sup>1.05</sup>)" 
-                                if (hasUpgrade("or", 114)) cost2 = "1e100^(x<sup>1.05</sup>)"
-                                if (hasUpgrade("or", 13)) cost2 = cost2.replace("100", "90")
-                                if (hasMilestone("an", 25)) cost2 = cost2.replace("90", "80")
-                                if (hasUpgrade("an", 34)) cost2 = cost2.replace("80", "75")
-                                if (hasUpgrade("ch", 24)) cost2 = cost2.replace("75", "70")
-                                if (!player.an.achActive[14] && hasAchievement("an", 14)) cost2 = cost2.replace("70", "69")
+                                if (hasUpgrade("or", 114)) cost2 = "1eBASE^(x<sup>1.05</sup>)"
+                                let base = "100"
+                                if (hasUpgrade("or", 13)) base = "90"
+                                if (hasMilestone("an", 25)) base = "80"
+                                if (hasUpgrade("an", 34)) base = "75"
+                                if (hasUpgrade("ch", 24)) base = "70"
+                                if (!player.an.achActive[14] && hasAchievement("an", 14)) base = "69"
+                                if (hasMilestone("nu", 11)) base = "55"
+                                cost2 = cost2.replace("BASE", base)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -31583,11 +31604,15 @@ addLayer("an", {
                                 if (id > 200) {
                                         gain = gain.times(getAmount2(id-100).plus(1)).times(getAmount2(id-101).plus(1))
                                 }
-                                if ((player.an.achActive[12] || hasMilestone("ch", 16)) && hasAchievement("an", 12)) {
-                                        let exp = (player.an.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
+                                if ((data.achActive[12] || hasMilestone("ch", 16)) && hasAchievement("an", 12)) {
+                                        let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                                         gain = gain.times(getAmount1(id).pow(exp).plus(2).log(2))
                                 }
-                                player.an.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, contamRate, diff)
+                                if (hasAchievement("an", 33)) {
+                                        data.grid[id].extras = gain
+                                } else {
+                                        data.grid[id].extras = getLogisticAmount(player.an.grid[id].extras, gain, contamRate, diff)
+                                }
                         }
                 }
 
@@ -32028,7 +32053,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XXV"
                         },
                         description(){
-                                return "Per Chromosome - 291 increase the Taxonomy buyable cap by 1"
+                                return "Per Chromosome - 291 increase the Taxonomy buyable cap by 1 up to 1510"
                         },
                         cost:() => new Decimal(5.38e43),
                         unlocked(){
@@ -32949,6 +32974,30 @@ addLayer("an", {
                                 layers.an.clickables[101].onClick(false)
                         },
                 },
+                43: {
+                        title(){
+                                return "COM III (" + (player.an.achActive[33] ? "ON" : "OFF") + ")"
+                        },
+                        display(){
+                                if (player.an.achActive[33]) return "Per this row OFF (and unlocked) achievement idk yet"
+                                return ""
+                        },
+                        tooltip(){
+                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
+                                a += "When toggled ON"
+                                return a + " per this row OFF (and unlocked) achievement idk yet"
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 33)
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.an.achActive[33] = !player.an.achActive[33]
+                                layers.an.clickables[101].onClick(false)
+                        },
+                },
 
                 101: {
                         title(){
@@ -32989,6 +33038,7 @@ addLayer("an", {
         grid: {
                 unlockedRows(){
                         //if (true) return 8
+                        if (hasAchievement("an", 32))   return 7
                         if (hasMilestone("ch", 8))      return 6
                         if (hasMilestone("ch", 2))      return 5
                         if (hasMilestone("an", 19))     return 4
@@ -33021,9 +33071,9 @@ addLayer("an", {
                         }
                         if (hasUpgrade("an", 55)) {
                                 let add = player.ch.points.sub(291).max(0)
-                                ret = ret.plus(add)
+                                ret = ret.plus(add.min(297))
                         }
-                        if (hasUpgrade("ch", 44)) ret = ret.plus(player.nu.points.div(2))
+                        if (hasUpgrade("ch", 44)) ret = ret.plus(player.nu.points.div(2 - hasMilestone("nu", 11)))
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -33136,12 +33186,13 @@ addLayer("an", {
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         a ++
-                                        if (primes.includes(v) || v < 4 || v >= 134) a --
-                                        if (player.an.grid[keys[i]].buyables.gte(134)) return false
+                                        if (primes.includes(v) || v < 4) a --
+                                        if (v >= 134) return false
                                 }
                                 return a >= 17
                         },
                         tooltip(){
+                                if (player.shiftAlias) return "A composite number is a number bigger than 3 that is NOT prime"
                                 return "Have 17 Taxonomy buyables on composite levels. All Taxonomy buyables have to be less than 134<br>Reward: The taxonomy autobuyer can buy from every buyable"
                         }, // hasAchievement("an", 13)
                 },
@@ -33220,7 +33271,8 @@ addLayer("an", {
                                 for (i in keys) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         a ++
-                                        if (player.an.grid[keys[i]].buyables.gte(99)) return false
+                                        if (primes.includes(v) || v < 4) a --
+                                        if (v >= 99) return false
                                 }
                                 return a >= 17
                         },
@@ -33284,8 +33336,34 @@ addLayer("an", {
                         },
                         tooltip(){
                                 if (player.shiftAlias) return "7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59"
-                                return "Have 21 Taxonomy buyables on prime levels between 6 and 60 [shift for valid values]<br>Reward: idk yet"
+                                return "Have 21 Taxonomy buyables on prime levels between 6 and 60 [shift for valid values]<br>Reward: Unlock a new row of Taxonomy"
                         }, // hasAchievement("an", 32)
+                },
+                33: {
+                        name: "Composite<br>III",
+                        done(){
+                                let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73]
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+                                let a = 0
+                                for (i in keys) {
+                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                        a ++
+                                        if (primes.includes(v) || v < 7) a --
+                                        if (v >= 25) return false
+                                }
+                                return a >= 21
+                        },
+                        tooltip(){
+                                return "Have 21 Taxonomy buyables on composite levels above 7. All Taxonomy buyables have to be less than 25<br>Reward: Taxonomy amounts are set to their gain limit immediately"
+                        }, // hasAchievement("an", 33)
                 },
         },
         tabFormat: {
@@ -34768,6 +34846,20 @@ addLayer("nu", {
                                 return "Reward: Per Nucleuse keep a Chromosome upgrade and milestone and Totipotent cost formula is 1e23^(x<sup>1.05</sup>)."
                         },
                 }, // hasMilestone("nu", 10)
+                11: {
+                        requirementDescription(){
+                                return "23 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(23)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per Nucleuse increase the Taxonomy limit by .5 and Oligopotent cost base is 1e55."
+                        },
+                }, // hasMilestone("nu", 11)
         },
         tabFormat: {
                 "Upgrades": {
