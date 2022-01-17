@@ -982,7 +982,6 @@ PROGRESSION_MILESTONES = {
         810: () => player.ch.points.gte(Decimal.pow(12, 2)),
         811: () => player.ch.points.gte(Decimal.pow(13, 2)),
         812: () => player.ch.points.gte(Decimal.pow(14, 2)),
-
         813: () => player.or.contaminants.points.gte(Decimal.pow10(1e11)),
         814: () => player.or.contaminants.points.gte(Decimal.pow10(2e11)),
         815: () => player.or.contaminants.points.gte(Decimal.pow10(5e11)),
@@ -1046,6 +1045,21 @@ PROGRESSION_MILESTONES = {
         873: () => player.nu.points.gte(19),
         874: () => player.nu.points.gte(20),
         875: () => player.nu.points.gte(21),
+
+        876: () => player.nu.points.gte(22),
+        877: () => player.nu.points.gte(24),
+        878: () => player.nu.points.gte(26),
+        879: () => player.nu.points.gte(28),
+        880: () => player.nu.points.gte(30),
+        881: () => player.nu.points.gte(32),
+        882: () => player.nu.points.gte(34),
+        883: () => player.or.contaminants.points.gte(Decimal.pow10(5e15)),
+        884: () => player.or.contaminants.points.gte(Decimal.pow10(1e16)),
+        885: () => player.or.contaminants.points.gte(Decimal.pow10(2e16)),
+        886: () => player.or.contaminants.points.gte(Decimal.pow10(5e16)),
+        887: () => player.or.contaminants.points.gte(Decimal.pow10(1e17)),
+        888: () => player.or.contaminants.points.gte(Decimal.pow10(2e17)),
+        889: () => player.or.contaminants.points.gte(Decimal.pow10(5e17)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1861,7 +1875,6 @@ PROGRESSION_MILESTONES_TEXT = {
         810: "144 Chromosomes",
         811: "169 Chromosomes",
         812: "196 Chromosomes",
-
         813: "1e1e11 Contaminants",
         814: "1e2e11 Contaminants",
         815: "1e5e11 Contaminants",
@@ -1925,6 +1938,20 @@ PROGRESSION_MILESTONES_TEXT = {
         873: "19 Nucleuses",
         874: "20 Nucleuses",
         875: "21 Nucleuses",
+        876: "22 Nucleuses",
+        877: "24 Nucleuses",
+        878: "26 Nucleuses",
+        879: "28 Nucleuses",
+        880: "30 Nucleuses",
+        881: "32 Nucleuses",
+        882: "34 Nucleuses",
+        883: "1e5e15 Contaminants",
+        884: "1e1e16 Contaminants",
+        885: "1e2e16 Contaminants",
+        886: "1e5e16 Contaminants",
+        887: "1e1e17 Contaminants",
+        888: "1e2e17 Contaminants",
+        889: "1e5e17 Contaminants",
 }
 
 

@@ -305,9 +305,9 @@ var TAXONOMY_COSTS = {
         202: [new Decimal("1e92027"), new Decimal(1.5e10), new Decimal(1.1)],
         203: [new Decimal("1e42884"), new Decimal(1e193), new Decimal(1.2)],
         204: [new Decimal("1e92315"), new Decimal(1e20), new Decimal(1.3)],
-        205: [new Decimal("1e94318"), new Decimal("7e335"), new Decimal(1.4)],
+        205: [new Decimal("2e55367"), new Decimal(1e105), new Decimal(1.4)],
         206: [new Decimal("5e92513"), new Decimal(1e156), new Decimal(1.3)],
-        207: [new Decimal("3e98292"), new Decimal(1.2e11), new Decimal(1.2)],
+        207: [new Decimal("1e55504"), new Decimal(6e25), new Decimal(1.3)],
         208: [new Decimal("9e95766"), new Decimal(5e11), new Decimal(1.1)],
 
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
@@ -30327,6 +30327,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasUpgrade("nu", 13))  return player.or.buyables[423].max(1)
                                 if (hasMilestone("an", 24)) return player.or.buyables[423].max(1).sqrt()
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("an", 12)) logBase = new Decimal(9)
@@ -30372,6 +30373,7 @@ addLayer("or", {
                                 eformula = eformula.replace("10", formatWhole(logBase))
                                 eformula = eformula.replace("log2.72", "ln")
                                 if (hasMilestone("an", 24)) eformula = eformula.replace("log2(in<u>TES</u>tine)", "sqrt(intes<u>TINE</u>)")
+                                if (hasUpgrade("nu", 13)) eformula = eformula.replace("sqrt", "")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31482,7 +31484,7 @@ addLayer("an", {
                 if (hasUpgrade("or", 33)) pts = player.an.best
                 pts = pts.plus(tmp.nu.effectPrimary)
 
-                let exp = pts.plus(99).log10().min(1000)
+                let exp = pts.plus(99).log10().min(300)
                 if (!hasMilestone("nu", 9)) exp = exp.min(100)
 
                 let ret = pts.plus(1).pow(exp)
@@ -34548,6 +34550,20 @@ addLayer("ch", {
                                 return "Reward: Chordata III amount<sup>Chromosomes<sup>4</sup></sup> multiplies Contaminant gain and Chromosomes cost base is 9.6e9."
                         },
                 }, // hasMilestone("ch", 21)
+                22: {
+                        requirementDescription(){
+                                return "677 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(677)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: ONE III's ON effect is always active and Token II buyables' cost exponent is 1.29."
+                        },
+                }, // hasMilestone("ch", 22)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34767,9 +34783,25 @@ addLayer("nu", {
                                 doReset("nu", true)
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 11)) return true
+                                if (hasUpgrade("nu", 12)) return true
                                 return player.ch.best.gte(652)
                         }, // hasUpgrade("nu", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses III"
+                        },
+                        description(){
+                                return "Square intes<u>TINE</u> base"
+                        },
+                        cost:() => new Decimal(28),
+                        onPurchase(){
+                                doReset("nu", true)
+                        },
+                        unlocked(){
+                                if (hasUpgrade("nu", 13)) return true
+                                return player.ch.best.gte(687)
+                        }, // hasUpgrade("nu", 13)
                 },
         },
         milestones: {
@@ -34913,7 +34945,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Animals XXIII counts every Token II and Animal effect exponent is hardcapped at 1000."
+                                return "Reward: Animals XXIII counts every Token II and Animal effect exponent is hardcapped at 300."
                         },
                 }, // hasMilestone("nu", 9)
                 10: {
@@ -35376,6 +35408,18 @@ addLayer("mc", {
                                 return player.mc.points.gte(1e47)
                         }, // hasUpgrade("mc", 11)
                 },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Microfilament"
+                        },
+                        description(){
+                                return "Each Nucleuse past 25 adds .01 to ...waves base"
+                        },
+                        cost:() => new Decimal("1e639"),
+                        unlocked(){
+                                return player.mc.points.gte("1e635")
+                        }, // hasUpgrade("mc", 12)
+                },
         },
         buyables: {
                 rows: 3,
@@ -35404,6 +35448,8 @@ addLayer("mc", {
                         },
                         base(){
                                 let ret = new Decimal(2)
+
+                                if (hasUpgrade("mc", 12)) ret = ret.plus(player.nu.points.sub(25).max(0).div(100))
 
                                 return ret
                         },
@@ -43399,6 +43445,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 22))     return x.pow(1.29).ceil()
                         if (m4)                         return x.pow(1.30).ceil()
                         if (m3)                         return x.pow(1.31).ceil()
                         if (m2)                         return x.pow(1.32).ceil()
@@ -43444,6 +43491,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 22))     return "ceil(x<sup>1.29</sup>)"
                         if (m4)                         return "ceil(x<sup>1.30</sup>)"
                         if (m3)                         return "ceil(x<sup>1.31</sup>)"
                         if (m2)                         return "ceil(x<sup>1.32</sup>)"
@@ -44997,7 +45045,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow12Total
                                 let c = tmp.tokens.buyables.getCol2Total
 
-                                if (player.an.achActive[34]) {
+                                if (player.an.achActive[34] || hasMilestone("ch", 22)) {
                                         return c.max(1).pow(Math.max(tmp.an.clickables.rowThreeOff, 1))
                                 }
                                 if (hasUpgrade("ch", 42)) return c.max(1)
