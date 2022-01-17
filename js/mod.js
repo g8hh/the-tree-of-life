@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.251",
+	num: "1.252",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.ch.points.gte(619)
+	return player.ch.points.gte(677)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,6 +33,12 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.252</h3><br>
+		- Balanced until 677 Chromosomes.<br>
+		- Added an Animal Achievement.<br>
+		- Added two Nucleuse milestones.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Implemented a Animal Achievement's clickable.<br>
 	<br><h3 style='color: #CC0000'>v1.251</h3><br>
 		- Balanced until 619 Chromosomes.<br>
 		- Added two Animal achievement.<br>
