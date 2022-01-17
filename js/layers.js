@@ -191,7 +191,7 @@ function getPointDilationExponent(){
         if (hasMilestone("cells", 56) && !hasMilestone("ch", 13)) {
                                         exp = exp.times(tmp.cells.milestones[56].effect)
         }
-        if (hasMilestone("an", 30)) {
+        if (!hasMilestone("an", 30)) {
                 if (hasMilestone("t", 4))       exp = exp.times(tmp.t.milestones[4].effect)
                 if (hasMilestone("t", 21))      exp = exp.times(player.t.milestones.length)
         }
