@@ -1045,7 +1045,6 @@ PROGRESSION_MILESTONES = {
         873: () => player.nu.points.gte(19),
         874: () => player.nu.points.gte(20),
         875: () => player.nu.points.gte(21),
-
         876: () => player.nu.points.gte(22),
         877: () => player.nu.points.gte(24),
         878: () => player.nu.points.gte(26),
@@ -1060,6 +1059,13 @@ PROGRESSION_MILESTONES = {
         887: () => player.or.contaminants.points.gte(Decimal.pow10(1e17)),
         888: () => player.or.contaminants.points.gte(Decimal.pow10(2e17)),
         889: () => player.or.contaminants.points.gte(Decimal.pow10(5e17)),
+        890: () => player.nu.points.gte(36),
+        891: () => player.nu.points.gte(39),
+        892: () => player.nu.points.gte(42),
+        893: () => player.nu.points.gte(45),
+        894: () => player.nu.points.gte(48),
+        895: () => player.nu.points.gte(51),
+        896: () => player.nu.points.gte(54),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1952,6 +1958,13 @@ PROGRESSION_MILESTONES_TEXT = {
         887: "1e1e17 Contaminants",
         888: "1e2e17 Contaminants",
         889: "1e5e17 Contaminants",
+        890: "36 Nucleuses",
+        891: "39 Nucleuses",
+        892: "42 Nucleuses",
+        893: "45 Nucleuses",
+        894: "48 Nucleuses",
+        895: "51 Nucleuses",
+        896: "54 Nucleuses",
 }
 
 
