@@ -224,6 +224,7 @@ function doReset(layer, force=false) {
 
 	updateTemp()
 	updateTemp()
+	if (layer == "nu") updateTemp()
 }
 
 function resetRow(row) {
@@ -310,11 +311,6 @@ function autobuyUpgrades(layer){
 }
 
 function gameLoop(diff) {
-	if (isEndgame() || tmp.gameEnded){
-		tmp.gameEnded = true
-		clearParticles()
-	}
-
 	if (isNaN(diff) || diff < 0) diff = 0
 	if (tmp.gameEnded && !player.keepGoing) {
 		diff = 0
@@ -427,7 +423,11 @@ function runInterval(){
 	if (diff > 0) updateOomps(diff);
 	updateWidth()
 	updateTabFormats()
-	gameLoop(diff)
+	if (isEndgame() || tmp.gameEnded){
+		tmp.gameEnded = true
+		clearParticles()
+	}
+	if (diff > 0) gameLoop(diff)
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)

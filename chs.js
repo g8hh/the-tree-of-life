@@ -1941,7 +1941,7 @@ var cnItems = {
     "Double DNA gain exponent and DNA base gain is log10(Amino Acid": "双倍 DNA 增益指数和 DNA 基础增益为 log10（氨基酸",
     "Double Organ gain per this row upgrade but max passive gain at 10x of Organs on reset, effect is based on best, and disable Anti-Oxygen's positive effects": "每行升级双倍器官增益，但在重置时最大被动增益为 10 倍器官，效果基于最佳，并禁用抗氧的积极效果",
     "Down Quark base becomes Tokens": "下夸克基数 成为 代币",
-    "Energy": "活力",
+    "Energy": "能量",
     "Energy multiplies Tissue gain and Contaminant buyables no longer cost anything": "能量倍增组织增益和污染物可购买不再花费任何费用",
     "Filter from your LEFT Kidney": "从您的左肾过滤",
     "Filter from your RIGHT Kidney": "从您的右肾过滤",

@@ -234,6 +234,7 @@ function exportSave() {
 	el.setSelectionRange(0, 99999)
 	document.execCommand("copy")
 	document.body.removeChild(el)
+	doPopup("export", "", "Save Exported!", 1, "#25B9E3");
 }
 
 function importSave(imported = undefined, forced = false) {
