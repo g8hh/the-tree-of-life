@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.230",
+	num: "1.246.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,129 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.an.genes.points.gte("1e578")
+	return player.ch.points.gte(297)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.229)<br><br>
+		Reaching the endgame screen (updated at least as of v1.245)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.246.1</h3><br>
+		- Added three Nucleuse milestones.<br>
+		- Added a Chromosome upgrade.<br>
+		- Various code clean up that should make the game faster.<br>
+	<br><h3 style='color: #CC0000'>v1.246</h3><br>
+		- Balanced until right before 4 Nucleuses.<br>
+		- Added a new layer, Nucleuses.<br>
+		- Added three Nucleuse milestone.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added two Animal upgrades.<br>
+		- Added a custom save.<br>
+		- Made achievements clean up nicer.<br>
+		- Fixed the bug with disabled layers showing until unlock.<br>
+	<br><h3 style='color: #CC0000'>v1.245.4</h3><br>
+		- Various wording fixes and code clean up.<br>
+		- Currencies on layers now display three digits.<br>
+		- Fixed Progression II being given too early.<br>
+	<br><h3 style='color: #CC0000'>v1.245</h3><br>
+		- Balanced until 257 Chromosomes.<br>
+		- Added an Animal upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Implemented two Animal Achievements.<br>
+		- Various code cleanup and display issues resolved.<br>
+		- Made pausing the game eaiser on your device (no longer runs game loop).<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.244</h3><br>
+		- Balanced until 243 Chromosomes.<br>
+		- Added an Animal upgrade.<br>
+		- Added a Chromosome milestone.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.243</h3><br>
+		- Balanced until 241 Chromosomes.<br>
+		- Added an Animal Achievement.<br>
+	<br><h3 style='color: #CC0000'>v1.242</h3><br>
+		- Balanced until 239 Chromosomes.<br>
+		- Added an Animal upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added a Chromosome milestone.<br>
+		- Added a new Animal Achievement row and implemented two more of them.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.241</h3><br>
+		- Balanced until 217 Chromosomes.<br>
+		- Added an Animal upgrade.<br>
+		- Implemented Composite.<br>
+		- Various small wording and balance changes.<br>
+		- Added an Animal milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.240</h3><br>
+		- Balanced until 212 Chromosomes.<br>
+		- Added an Animal milestone.<br>
+		- Added a Chromosome milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.239</h3><br>
+		- Balanced until 208 Chromosomes.<br>
+		- Added an Animal Achievement.<br>
+	<br><h3 style='color: #CC0000'>v1.238</h3><br>
+		- Balanced until 206 Chromosomes.<br>
+		- Added a new component for Animal Achievements.<br>
+		- Added two Animal upgrades.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added a row of Animal Achievements.<br>
+		- Added a custom save.<br>
+		- Added a notification when a save is exported.<br>
+	<br><h3 style='color: #CC0000'>v1.237</h3><br>
+		- Balanced until 178 Chromosomes.<br>
+		- Added two Animal upgrades.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Buffed DNA milestones 1/2.<br>
+		- Various hard mode nerfs.<br>
+		- Various wording fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.236</h3><br>
+		- Balanced until 141 Chromosomes.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added two Chromosome milestones.<br>
+		- Added an Animal upgrade.<br>
+		- Added a custom save.<br>
+		- Various wording fixes and code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.235</h3><br>
+		- Added eleven rows of achievements.<br>
+		- Balanced until 101 Chromosomes.<br>
+		- Added more digits to the Chromosome effect display.<br>
+		- Various code clean up.<br>
+		- Added more easy mode buffs to Organ and Animal era.<br>
+		- Various wording changes.<br>
+	<br><h3 style='color: #CC0000'>v1.234</h3><br>
+		- Added a new row of Taxonomy.<br>
+		- Added three Animal upgrade.<br>
+		- Added four Animal milestone.<br>
+		- Balanced until 89 Chromosomes.<br>
+		- Added a Chromosome milestone.<br>
+		- Added a custom save.<br>
+		- Added a hotkey for Chromosome resets.<br>
+		- Added two Chromosome upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.233</h3><br>
+		- Added an Animal milestone.<br>
+		- Balanced until 41 Chromosomes.<br>
+		- Added 2 Chromosome milestones.<br>
+		- Added 3 Chromsome upgrades.<br>
+		- Added a display for the cell effect exponent.<br>
+	<br><h3 style='color: #CC0000'>v1.232</h3><br>
+		- Balanced until 29 Chromosomes.<br>
+		- Finished the fifth row of Taxonomy.<br>
+		- Added an Animal milestone.<br>
+		- Added two Animal upgrades.<br>
+	<br><h3 style='color: #CC0000'>v1.231</h3><br>
+		- Balanced until 15 Chromosomes.<br>
+		- Added a custom save.<br>
+		- Added a new layer, Chromosomes!.<br>
+		- Added six Chromosome milestones.<br>
+		- Added an Animal milestone.<br>
+		- Added an Animal upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.230</h3><br>
 		- Balanced until 1e578 Genes.<br>
 		- Added an Animal upgrade.<br>
@@ -40,7 +151,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added an Animal milestone.<br>
 		- Various code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.229</h3><br>
-		- Balanced until 4e550 Genes
+		- Balanced until 4e550 Genes.<br>
 		- Added an Organ upgrade.<br>
 		- Added two Animal upgrades.<br>
 		- Added an Animal milestone.<br>
@@ -2013,6 +2124,39 @@ function fixOldSave(oldVersion){
 	}
 	if (player.version < "1.192") {
 		player.cells.everMilestone60 = player.t.unlocked || player.cells.milestones.includes("60")
+	}
+	if (player.version < "1.246.1") {
+		let x = []
+		for (i in player.ach.achievements) {
+			x.push(Number(player.ach.achievements[i]))
+		}
+		player.ach.achievements = x
+
+		let y = []
+		for (i in player.an.achievements) {
+			x.push(Number(player.an.achievements[i]))
+		}
+		player.an.achievements = y
+
+		for (layer in player){
+			if (!player[layer]) continue
+			if (!player[layer].upgrades) continue
+			let z = []
+			for (i in player[layer].upgrades) {
+				z.push(Number(player[layer].upgrades[i]))
+			}
+			player[layer].upgrades = z
+		}
+
+		for (layer in player){
+			if (!player[layer]) continue
+			if (!player[layer].milestones) continue
+			let z = []
+			for (i in player[layer].milestones) {
+				z.push(Number(player[layer].milestones[i]))
+			}
+			player[layer].milestones = z
+		}
 	}
 }
 

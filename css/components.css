@@ -138,8 +138,8 @@
 }
 
 .upgBig {
-	height: 200px;
-	width: 200px;
+	height: 150px;
+	width: 150px;
 	border-radius: 25%;
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.125);

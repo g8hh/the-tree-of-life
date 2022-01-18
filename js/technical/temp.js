@@ -123,7 +123,11 @@ function updateTempData(layerData, tmpData, funcsData, useThis, noError = false,
 	for (item in funcsData){
 		if (firstStep && !noError) {
 			if (layers[item].deactivated) {
-				if (layers[item].deactivated()) continue
+				if (layers[item].deactivated()) {
+					tmp[item].deactivated = true
+					tmp[item].layerShown = layers[item].layerShown()
+					continue
+				}
 			}
 		}
 		if (Array.isArray(layerData[item])) {
