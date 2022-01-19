@@ -34420,6 +34420,7 @@ addLayer("ch", {
                         },
                         onComplete(){
                                 player.tokens.bestTop = decimalZero
+                                tmp.tokens.buyables[121].effect = decimalOne
                         },
                         effectDescription(){
                                 return "Reward: Top Quark multiplies instead of adds to the tetrational divider but its coefficient is .007."
