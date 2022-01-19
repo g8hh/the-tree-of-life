@@ -34419,7 +34419,7 @@ addLayer("ch", {
                                 return true
                         },
                         onComplete(){
-                                player.tokens.bestTop = decimalZero
+                                player.tokens.bestTop = decimalOne
                                 tmp.tokens.buyables[121].effect = decimalOne
                         },
                         effectDescription(){
@@ -43363,7 +43363,7 @@ addLayer("tokens", {
                 if (hasMilestone("cells", 36))  ret = ret.times(20)
                 if (hasMilestone("cells", 51))  ret = ret.times(3)
                 if (hasMilestone("t", 18))      ret = ret.times(1 + player.t.milestones.length / 50)
-                if (hasMilestone("ch", 12))     ret = ret.times(tmp.tokens.buyables[121].effect)
+                if (hasMilestone("ch", 12))     ret = ret.times(tmp.tokens.buyables[121].effect.max(1))
                 if (hasUpgrade("an", 52))       ret = ret.times(player.ch.points.max(74).log(74))
 
                 if (!hasMilestone("ch", 12))    ret = ret.plus(tmp.tokens.buyables[121].effect)
