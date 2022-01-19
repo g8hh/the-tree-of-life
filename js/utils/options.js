@@ -59,7 +59,7 @@ function adjustMSDisp() {
 }
 
 function milestoneShown(layer, id) {
-	complete = player[layer].milestones.includes(id);
+	complete = player[layer].milestones.includes(toNumber(id));
 	auto = layers[layer].milestones[id].toggles;
 
 	switch (options.msDisplay) {
