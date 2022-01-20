@@ -304,7 +304,7 @@ var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         202: [new Decimal("1e92027"), new Decimal(1.5e10), new Decimal(1.1)],
         203: [new Decimal("1e42884"), new Decimal(1e193), new Decimal(1.2)],
-        204: [new Decimal("1e92315"), new Decimal(1e20), new Decimal(1.3)],
+        204: [new Decimal("1e78004"), new Decimal(1e109), new Decimal(1.4)],
         205: [new Decimal("2e55367"), new Decimal(1e105), new Decimal(1.4)],
         206: [new Decimal("5e92513"), new Decimal(1e156), new Decimal(1.3)],
         207: [new Decimal("1e55504"), new Decimal(6e25), new Decimal(1.3)],
@@ -18841,6 +18841,7 @@ addLayer("d", {
                 if (hasUpgrade("or", 213))      ret = ret.times(2)
                 if (hasUpgrade("an", 41))       ret = ret.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("ch", 23))     ret = ret.times(player.nu.points.max(2).log(2))
+                if (hasMilestone("ch", 25))     ret = ret.times(player.nu.points.max(1).sqrt())
 
                 return ret
         },
@@ -31449,7 +31450,7 @@ addLayer("an", {
                 }
                 if (hasUpgrade("an", 53))       ret = ret.times(Decimal.pow(1.01, player.tokens.tokens2.total.sub(hasMilestone("nu", 9) ? 0 : 7200).max(0)))
                 if (hasMilestone("nu", 1))      ret = ret.times(2)
-                if (player.an.achActive[33] && hasAchievement("an", 33)) {
+                if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                                 ret = ret.times(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff)))
                 }
 
@@ -32675,6 +32676,20 @@ addLayer("an", {
                                 return "Reward: <u>in</u>TEStine base is log10(Animals)."
                         },
                 }, // hasMilestone("an", 37)
+                38: {
+                        requirementDescription(){
+                                return "1e402 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("1e402")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Up Quark divider is 12."
+                        },
+                }, // hasMilestone("an", 38)
         },
         clickables: {
                 11: {
@@ -33943,21 +33958,26 @@ addLayer("ch", {
         resetsNothing(){
                 return player.ch.everUpgrade32
         },
-        effect(){
+        effectPoints(){
                 let pts = player.ch.points.plus(tmp.nu.effectPrimary)
 
                 if (hasUpgrade("nu", 11)) pts = pts.plus(player.nu.upgrades.length)
-                if (player.an.achActive[31] && hasAchievement("ach", 31)) {
+                if ((player.an.achActive[31] || hasMilestone("nu", 15)) && hasAchievement("ach", 31)) {
                         pts = pts.plus(tmp.an.clickables.rowThreeOff)
                 }
 
+                return pts
+        },
+        effect(){
+                let pts = tmp.ch.effectPoints
+
                 if (pts.gte(95) && !hasMilestone("an", 32)) pts = pts.times(190).sub(9025).sqrt()
 
-                if (pts.gte(900)) pts = pts.sub(360).times(1500).sqrt()
-
                 let ret = pts.div(100).plus(2)
-                if (hasMilestone("ch", 10)) ret = Decimal.pow(1.004, pts).times(2)
-                if (hasMilestone("an", 32)) ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
+                if (hasMilestone("ch", 10))     ret = Decimal.pow(1.004, pts).times(2)
+                if (hasMilestone("an", 32))     ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
+
+                if (pts.gte(910))               ret = pts.times(.03).sub(11.23)
 
                 return ret
         },
@@ -34619,6 +34639,20 @@ addLayer("ch", {
                                 return "Reward: in<u>TES</u>tine base is sqrt(log10(Organs))."
                         },
                 }, // hasMilestone("ch", 24)
+                25: {
+                        requirementDescription(){
+                                return "975 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(975)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: sqrt(Nucleuses) multiplies DNA gain exponent (at least 1x)."
+                        },
+                }, // hasMilestone("ch", 25)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34648,10 +34682,11 @@ addLayer("ch", {
                                 ["display-text", function(){
                                         let a = "Chromosomes only resets Gene amounts."
                                         let b = "Chromosome effect is 2+x/100."
-                                        if (hasMilestone("ch", 10)) b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
+                                        if (hasMilestone("ch", 10))             b = b.replace("2+x/100", "1.004<sup>x</sup>*2")
                                         if (player.ch.points.gte(95) && !hasMilestone("an", 32)) b += br + "Effect after 95 is softcapped, x ⭢ (190*x-9025)<sup>.5</sup>"
-                                        if (hasMilestone("an", 32)) b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
-                                        if (hasMilestone("ch", 20)) b = b.replace(".66", ".605")
+                                        if (hasMilestone("an", 32))             b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
+                                        if (hasMilestone("ch", 20))             b = b.replace(".66", ".605")
+                                        if (tmp.ch.effectPoints.gte(910))       b = "When you have over 910 effective Chromosomes, the effect is .03*x-11.23"
 
                                         return a + br2 + b
                                 }],
@@ -35075,6 +35110,34 @@ addLayer("nu", {
                                 return "Reward: Chromosome Milestone 19 counts every Nucleuse."
                         },
                 }, // hasMilestone("nu", 13)
+                14: {
+                        requirementDescription(){
+                                return "38 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(38)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: COM III's ON effect is always active."
+                        },
+                }, // hasMilestone("nu", 14)
+                15: {
+                        requirementDescription(){
+                                return "43 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(43)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: PRO III's ON effect is always active and Token II buyables' cost exponent is 1.286."
+                        },
+                }, // hasMilestone("nu", 15)
         },
         tabFormat: {
                 "Upgrades": {
@@ -43554,6 +43617,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("nu", 15))     return x.pow(1.286).ceil()
                         if (hasMilestone("ch", 22))     return x.pow(1.29).ceil()
                         if (m4)                         return x.pow(1.30).ceil()
                         if (m3)                         return x.pow(1.31).ceil()
@@ -43600,6 +43664,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("nu", 15))     return "ceil(x<sup>1.286</sup>)"
                         if (hasMilestone("ch", 22))     return "ceil(x<sup>1.29</sup>)"
                         if (m4)                         return "ceil(x<sup>1.30</sup>)"
                         if (m3)                         return "ceil(x<sup>1.31</sup>)"
@@ -44764,6 +44829,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("an", 38)) return c.plus(1).sqrt().div(12)
                                 if (hasUpgrade("nu", 12))   return c.plus(1).sqrt().div(14)
                                 if (hasMilestone("nu", 7))  return c.plus(1).sqrt().div(25)
                                 if (hasMilestone("or", 12)) return c.plus(1).sqrt().div(40)
@@ -44791,6 +44857,7 @@ addLayer("tokens", {
                                 if (hasMilestone("or", 12)) eformula = eformula.replace("(40+R)", "40")
                                 if (hasMilestone("nu", 7)) eformula = eformula.replace("40", "25")
                                 if (hasUpgrade("nu", 12))  eformula = eformula.replace("25", "14")
+                                if (hasMilestone("an", 38)) eformula = eformula.replace("14", "12")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -45224,6 +45291,11 @@ addLayer("tokens", {
                                 return player.tokens.buyables[191].plus(add).pow(2).sub(.0001)
                         },
                         canAfford:() => player.tokens.total.gte(tmp.tokens.buyables[191].cost),
+                        maxAfford(){
+                                let add = hasUpgrade("or", 153) ? 0 : (player.extremeMode ? 25 : 21)
+                                if (hasUpgrade("sci", 571) && add > 0) add = 24
+                                return player.tokens.total.plus(.0001).sqrt().sub(add).ceil()
+                        },
                         buy(){
                                 if (!this.canAfford()) return
                                 let data = player.tokens
@@ -45247,7 +45319,7 @@ addLayer("tokens", {
                 },
                 192: {
                         title: "Token II via Stem Cell",
-                        cost(){
+                        costData(){
                                 let div = hasUpgrade("or", 313) ? 5 : (1+hasUpgrade("t", 111))
                                 let add = hasUpgrade("or", 313) ? 50 : (player.extremeMode ? 36 : 33)
                                 let exp = hasUpgrade("ch", 21) ? .4 : .5
@@ -45271,7 +45343,19 @@ addLayer("tokens", {
                                         div = 20
                                         add = 800
                                 }
-                                return player.tokens.buyables[192].div(div).plus(add).pow(exp).pow10().pow10()
+                                return [add, div, exp]
+                        },
+                        maxAfford(){
+                                let costData = tmp.tokens.buyables[192].costData 
+                                let add = costData[0]
+                                let div = costData[1]
+                                let exp = costData[2]
+                                let ret = player.cells.stem_cells.points.max(10).log10().max(10).log10().root(exp).sub(add)
+                                return ret.times(div).ceil().max(0)
+                        },
+                        cost(){
+                                let costData = tmp.tokens.buyables[192].costData 
+                                return player.tokens.buyables[192].div(costData[1]).plus(costData[0]).pow(costData[2]).pow10().pow10()
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
@@ -45285,39 +45369,10 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 192), 3) + " Stem Cells</b><br>"
                                 let eformula = "10^10^((ADD+x/DIV)<sup>EXP</sup>)"
-                                let add = "33"
-                                let div = "1"
-                                let exp = ".5"
-                                if (hasUpgrade("t", 111)) div = "2"
-                                if (player.extremeMode) add = "36"
-                                if (hasUpgrade("or", 313)) {
-                                        add = "50"
-                                        div = "5"
-                                }
-                                if (hasUpgrade("or", 343)) {
-                                        add = "75"
-                                        div = "10"
-                                }
-                                if (hasMilestone("ch", 3)) {
-                                        add = "103"
-                                        div = "20"
-                                }
-                                if (hasUpgrade("ch", 21)) {
-                                        exp = ".4"
-                                        div = "5"
-                                        add = "330"
-                                }
-                                if (hasUpgrade("an", 42)) {
-                                        div = "10"
-                                        add = "480"
-                                }
-                                if (hasUpgrade("ch", 45)) {
-                                        div = "20"
-                                        add = "800"
-                                }
-                                eformula = eformula.replace("ADD", add)
-                                eformula = eformula.replace("DIV", div)
-                                eformula = eformula.replace("EXP", exp)
+                                let costData = tmp.tokens.buyables[192].costData 
+                                eformula = eformula.replace("ADD", formatWhole(costData[0]))
+                                eformula = eformula.replace("DIV", formatWhole(costData[1]))
+                                eformula = eformula.replace("EXP", format(costData[2], 1))
                                 eformula = eformula.replace("x/1)", "x)")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
@@ -45329,12 +45384,16 @@ addLayer("tokens", {
                 193: {
                         title: "Token II via Cell",
                         cost(){
+                                let add = tmp.tokens.buyables[193].add
+                                let div = tmp.tokens.buyables[193].div
+                                return player.tokens.buyables[193].div(div).plus(add).pow10().pow10()
+                        },
+                        add(){
                                 let add = hasMilestone("or", 19) ? 5 : 4
                                 if (hasMilestone("or", 24)) add = 7
                                 if (hasUpgrade("or", 44)) add = 9
                                 if (hasUpgrade("ch", 31)) add = 12
-                                let div = tmp.tokens.buyables[193].div
-                                return player.tokens.buyables[193].div(div).plus(add).pow10().pow10()
+                                return add
                         },
                         div(){
                                 if (hasUpgrade("ch", 31))       return new Decimal(2000)
@@ -45342,6 +45401,11 @@ addLayer("tokens", {
                                 if (hasMilestone("or", 24))     return new Decimal(150)
                                 if (hasMilestone("or", 19))     return new Decimal(40)
                                 return new Decimal(hasUpgrade("cells", 52) ? 20 : 10)
+                        },
+                        maxAfford(){
+                                let add = tmp.tokens.buyables[193].add
+                                let div = tmp.tokens.buyables[193].div
+                                return player.cells.points.max(10).log10().max(10).log10().sub(add).times(div).ceil().max(0)
                         },
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
                         buy(){
@@ -45357,16 +45421,12 @@ addLayer("tokens", {
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[193]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193), 3) + " Cells</b><br>"
-                                let eformula = "10^10^(4+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
-                                if (hasMilestone("or", 19))     eformula = eformula.replace("4", "5")
-                                if (hasMilestone("or", 24))     eformula = eformula.replace("5", "7")
-                                if (hasUpgrade("or", 44))       eformula = eformula.replace("7", "9")
-                                if (hasUpgrade("ch", 31))       eformula = eformula.replace("9", "12")
+                                let eformula = "10^10^(ADD+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
+                                eformula = eformula.replace("ADD", formatWhole(tmp.tokens.buyables[193].add))
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
-
-                                let start = lvl + cost
-                                return br + start + allEff
+                                
+                                return br + lvl + cost + allEff
                         },
                 },
         },
@@ -47266,7 +47326,7 @@ addLayer("tokens", {
                                                 if (hasAchievement("an", 23) && player.an.achActive[23]) {
                                                                                 c += "COM II multiplies AX by 10" + br
                                                 }
-                                                if (player.an.achActive[33] && hasAchievement("an", 33)) {
+                                                if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                                                                 c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
                                                 }
                                                 if (hasMilestone("nu", 1))      c += "Nucleuses Milestone 1 multiplies AX by 2" + br
