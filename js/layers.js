@@ -35009,7 +35009,7 @@ addLayer("nu", {
                                 return [["nu", "autobuyanch"]]
                         },
                         effectDescription(){
-                                return "Reward: Him base is (make levels)<sup>.91</sup>, autobuy currently unlocked Animal and Chromosme upgrades, and autobuy Taxonomy buyables that were ever above 400 levels."
+                                return "Reward: Him base is (make levels)<sup>.91</sup>, autobuy currently unlocked Animal and Chromosome upgrades, and autobuy Taxonomy buyables that were ever above 400 levels."
                         },
                 }, // hasMilestone("nu", 6)
                 7: {
