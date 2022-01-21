@@ -43863,8 +43863,8 @@ addLayer("tokens", {
                 },
                 12: {
                         title: "<bdi style='color:#FF0000'>Microwaves</bdi>",
-                        cost:() => layers.tokens.buyables.costFormulaID(12) && !player.tokens.buyablesBoughtThisTick.includes(12),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost),
+                        cost:() => layers.tokens.buyables.costFormulaID(12),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[12].cost) && !player.tokens.buyablesBoughtThisTick.includes(12),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[12] = player.tokens.buyables[12].plus(1)
