@@ -43964,8 +43964,8 @@ addLayer("tokens", {
                 },
                 21: { 
                         title: "<bdi style='color:#FF0000'>Visible</bdi>",
-                        cost:() => layers.tokens.buyables.costFormulaID(21) && !player.tokens.buyablesBoughtThisTick.includes(21),
-                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost),
+                        cost:() => layers.tokens.buyables.costFormulaID(21),
+                        canAfford:() => player.tokens.points.gte(tmp.tokens.buyables[21].cost) && !player.tokens.buyablesBoughtThisTick.includes(21),
                         buy(){
                                 if (!this.canAfford()) return
                                 player.tokens.buyables[21] = player.tokens.buyables[21].plus(1)
