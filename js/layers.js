@@ -302,13 +302,13 @@ var TAXONOMY_NAMES = {
 
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
-        202: [new Decimal("1e92027"), new Decimal(1.5e10), new Decimal(1.1)],
+        202: [new Decimal("1e992027"), new Decimal(1.5e10), new Decimal(1.1)],
         203: [new Decimal("1e42884"), new Decimal(1e193), new Decimal(1.2)],
         204: [new Decimal("1e78004"), new Decimal(1e109), new Decimal(1.4)],
         205: [new Decimal("2e55367"), new Decimal(1e105), new Decimal(1.4)],
-        206: [new Decimal("5e92513"), new Decimal(1e156), new Decimal(1.3)],
+        206: [new Decimal("9e95030"), new Decimal(1e141), new Decimal(1.3)],
         207: [new Decimal("1e55504"), new Decimal(6e25), new Decimal(1.3)],
-        208: [new Decimal("9e95766"), new Decimal(5e11), new Decimal(1.1)],
+        208: [new Decimal("9e995766"), new Decimal(5e11), new Decimal(1.1)],
 
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
         304: [new Decimal("1e2315"), new Decimal(1e20), new Decimal(1.3)],
@@ -18842,6 +18842,7 @@ addLayer("d", {
                 if (hasUpgrade("an", 41))       ret = ret.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("ch", 23))     ret = ret.times(player.nu.points.max(2).log(2))
                 if (hasMilestone("ch", 25))     ret = ret.times(player.nu.points.max(1).sqrt())
+                if (hasMilestone("ch", 26))     ret = ret.times(1.31)
 
                 return ret
         },
@@ -29628,6 +29629,11 @@ addLayer("or", {
                                 let a = new Decimal(1e195)
                                 let b = new Decimal(1e10)
                                 let c = new Decimal(9)
+                                if (hasMilestone("ch", 26)) {
+                                        a = decimalOne
+                                        b = decimalOne
+                                        c = new Decimal(5)
+                                }
                                 return [a,b,c]
                         },
                         cost(){
@@ -29705,6 +29711,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e195*1e10<sup>x</sup>*9<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("ch", 26)) cost2 = "5<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -33146,7 +33153,12 @@ addLayer("an", {
                                 let add = player.ch.points.sub(291).max(0)
                                 ret = ret.plus(add.min(297))
                         }
-                        if (hasUpgrade("ch", 44)) ret = ret.plus(player.nu.points.div(2 - hasMilestone("nu", 11)))
+                        if (hasMilestone("nu", 16)) {
+                                ret = ret.plus(tmp.nu.effectPrimary)
+                        } else {
+                                if (hasMilestone("nu", 11))     ret = ret.plus(player.nu.points.div(2))
+                                if (hasUpgrade("ch", 44))       ret = ret.plus(player.nu.points.div(2))
+                        }
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -34653,6 +34665,20 @@ addLayer("ch", {
                                 return "Reward: sqrt(Nucleuses) multiplies DNA gain exponent (at least 1x)."
                         },
                 }, // hasMilestone("ch", 25)
+                26: {
+                        requirementDescription(){
+                                return "1014 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1014)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Multiply DNA gain exponent by 1.31, Token II buyables' cost exponent is 1.28 and <u>in</u>tesTINE cost formula is 5<sup>x<sup>2</sup></sup>."
+                        },
+                }, // hasMilestone("ch", 26)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34780,7 +34806,8 @@ addLayer("nu", {
                 return ret
         },
         effectDescription(){
-                let start = " adding " + format(tmp.nu.effectPrimary) + " effective Chromosomes and Animals for their effects and " 
+                let start = " adding " + format(tmp.nu.effectPrimary) + " to effective Chromosomes and Animals for their effects and " 
+                if (hasMilestone("nu", 16)) start = start.replace("Animals for their effects", "the Taxonomy limit")
                 return start + format(tmp.nu.effectSecondary) + " to Organ and Animal gain exponents and I'm base."
         },
         update(diff){
@@ -35138,6 +35165,21 @@ addLayer("nu", {
                                 return "Reward: PRO III's ON effect is always active and Token II buyables' cost exponent is 1.286."
                         },
                 }, // hasMilestone("nu", 15)
+                16: {
+                        requirementDescription(){
+                                return "45 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(45)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                let a = "Reward: Nucleuse primary effect affects Taxonomy limit instead of Animals but "
+                                return a + "disable Nucleuse Milestone 11 and Chromosomes XIX's effects on Taxonomy limit."
+                        },
+                }, // hasMilestone("nu", 16)
         },
         tabFormat: {
                 "Upgrades": {
@@ -35470,6 +35512,8 @@ addLayer("mc", {
                 ret = ret.times(tmp.mc.buyables[12].effect)
                 ret = ret.times(tmp.mc.buyables[13].effect)
 
+                if (hasUpgrade("mc", 14))       ret = ret.times(player.mc.buyables[11].max(1).pow(player.mc.upgrades.length))
+
                 return ret
         },
         getResetGain(){
@@ -35488,6 +35532,8 @@ addLayer("mc", {
                 data.best = data.best.max(data.points)
                 data.points = data.points.plus(tmp.mc.getResetGain.times(diff))
                 data.total = data.total.plus(tmp.mc.getResetGain.times(diff))
+
+                if (hasUpgrade("mc", 14)) layers.mc.buyables[11].buy()
         },
         getMinigameMaximum(){
                 if (player.cells.currentMinigame == undefined) return Infinity
@@ -35565,6 +35611,18 @@ addLayer("mc", {
                         unlocked(){
                                 return player.mc.points.gte("1e945")
                         }, // hasUpgrade("mc", 13)
+                },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Microcomputer"
+                        },
+                        description(){
+                                return "Autobuy ...waves and per upgrade ...waves levels multiply Micro gain"
+                        },
+                        cost:() => new Decimal("1e1567"),
+                        unlocked(){
+                                return player.mc.points.gte("1e1550")
+                        }, // hasUpgrade("mc", 14)
                 },
         },
         buyables: {
@@ -43617,6 +43675,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 26))     return x.pow(1.28).ceil()
                         if (hasMilestone("nu", 15))     return x.pow(1.286).ceil()
                         if (hasMilestone("ch", 22))     return x.pow(1.29).ceil()
                         if (m4)                         return x.pow(1.30).ceil()
@@ -43664,6 +43723,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 26))     return "ceil(x<sup>1.28</sup>)"
                         if (hasMilestone("nu", 15))     return "ceil(x<sup>1.286</sup>)"
                         if (hasMilestone("ch", 22))     return "ceil(x<sup>1.29</sup>)"
                         if (m4)                         return "ceil(x<sup>1.30</sup>)"
