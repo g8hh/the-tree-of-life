@@ -22820,6 +22820,7 @@ addLayer("cells", {
                                         base = new Decimal(1e23)
                                         exp = amt.pow(1.05)
                                 }
+                                if (hasUpgrade("nu", 15))      base = new Decimal(1e21)
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -22845,6 +22846,7 @@ addLayer("cells", {
                                         base = new Decimal(1e23)
                                         exp = 1.05
                                 }
+                                if (hasUpgrade("nu", 15))       base = new Decimal(1e21)
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
                         buy(){
@@ -22911,6 +22913,7 @@ addLayer("cells", {
                                         cost2 = cost2.replace("1.1", "1.08")
                                 }
                                 if (hasMilestone("nu", 10)) cost2 = cost2.replace("1e9^(x<sup>1.08</sup>)", "1e23^(x<sup>1.05</sup>)")
+                                if (hasUpgrade("nu", 15)) cost2 = cost2.replace("23", "21")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -30288,6 +30291,11 @@ addLayer("or", {
                                 let a = new Decimal("1e1526")
                                 let b = new Decimal(1e60)
                                 let c = new Decimal(99)
+                                if (hasMilestone("ch", 27)) {
+                                        a = decimalOne
+                                        b = decimalOne
+                                        c = new Decimal(8)
+                                }
                                 return [a,b,c]
                         },
                         cost(){
@@ -30392,6 +30400,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1526*1e60<sup>x</sup>*99<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("ch", 27)) cost2 = "8<sup>x<sup>2</sup></sup>" 
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -33951,6 +33960,8 @@ addLayer("ch", {
                 if (hasMilestone("ch", 21))     ret = new Decimal(9.6e9)
                 if (hasMilestone("an", 35))     ret = new Decimal(9.2e9)
 
+                if (hasMilestone("ch", 27))     ret = new Decimal(1e10)
+
                 return ret
         },
         exponent(){
@@ -34682,6 +34693,20 @@ addLayer("ch", {
                                 return "Reward: Multiply DNA gain exponent by 1.31, Token II buyables' cost exponent is 1.28 and <u>in</u>tesTINE cost formula is 5<sup>x<sup>2</sup></sup>."
                         },
                 }, // hasMilestone("ch", 26)
+                27: {
+                        requirementDescription(){
+                                return "1125 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1125)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: intes<u>TINE</u> cost formula is 8<sup>x<sup>2</sup></sup> but Chromosomes cost base is 1e10."
+                        },
+                }, // hasMilestone("ch", 27)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34938,6 +34963,22 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 14)) return true
                                 return player.ch.best.gte(795)
                         }, // hasUpgrade("nu", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses V"
+                        },
+                        description(){
+                                return "Totipotent cost base is 1e21"
+                        },
+                        cost:() => new Decimal(48),
+                        onPurchase(){
+                                doReset("nu", true)
+                        },
+                        unlocked(){
+                                if (hasUpgrade("nu", 15)) return true
+                                return player.ch.best.gte(1104)
+                        }, // hasUpgrade("nu", 15)
                 },
         },
         milestones: {
