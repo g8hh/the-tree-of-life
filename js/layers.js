@@ -32731,6 +32731,20 @@ addLayer("an", {
                                 return "Reward: IN<u>tes</u>tine cost is 1.5<sup>x<sup>2</sup></sup>, gain 1000x Genes, and Proteobacteria amount<sup>Chromosomes<sup>3</sup></sup> multiplies Tissue gain."
                         },
                 }, // hasMilestone("an", 39)
+                40: {
+                        requirementDescription(){
+                                return "7e518 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("7e518")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token II via Stem Cell double exponent is (9640+x/2)<sup>.3</sup>."
+                        },
+                }, // hasMilestone("an", 40)
         },
         clickables: {
                 11: {
@@ -34729,6 +34743,20 @@ addLayer("ch", {
                                 return "Reward: intes<u>TINE</u> cost formula is 8<sup>x<sup>2</sup></sup> but Chromosomes cost base is 1e10."
                         },
                 }, // hasMilestone("ch", 27)
+                28: {
+                        requirementDescription(){
+                                return "1171 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1171)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token II buyables' cost exponent is 1.274 and you can bulk 5x Token IIs."
+                        },
+                }, // hasMilestone("ch", 28)
         },
         tabFormat: {
                 "Upgrades": {
@@ -43741,6 +43769,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 28))     return x.pow(1.274).ceil()
                         if (hasMilestone("ch", 26))     return x.pow(1.28).ceil()
                         if (hasMilestone("nu", 15))     return x.pow(1.286).ceil()
                         if (hasMilestone("ch", 22))     return x.pow(1.29).ceil()
@@ -43789,6 +43818,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 28))     return "ceil(x<sup>1.274</sup>)"
                         if (hasMilestone("ch", 26))     return "ceil(x<sup>1.28</sup>)"
                         if (hasMilestone("nu", 15))     return "ceil(x<sup>1.286</sup>)"
                         if (hasMilestone("ch", 22))     return "ceil(x<sup>1.29</sup>)"
@@ -45424,10 +45454,12 @@ addLayer("tokens", {
                         },
                         buy(){
                                 if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[191].maxAfford
+                                ma = ma.sub(player.tokens.buyables[191]).max(0).min(hasMilestone("ch", 28) ? 5 : 1)
                                 let data = player.tokens
-                                data.buyables[191] = data.buyables[191].plus(1)
-                                data.tokens2.points = data.tokens2.points.plus(1)
-                                data.tokens2.total = data.tokens2.total.plus(1)
+                                data.buyables[191] = data.buyables[191].plus(ma)
+                                data.tokens2.points = data.tokens2.points.plus(ma)
+                                data.tokens2.total = data.tokens2.total.plus(ma)
                         },
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[191]) + "</b><br>"
@@ -45469,6 +45501,11 @@ addLayer("tokens", {
                                         div = 20
                                         add = 800
                                 }
+                                if (hasMilestone("an", 40)) {
+                                        div = 2
+                                        add = 9640
+                                        exp = .3
+                                }
                                 return [add, div, exp]
                         },
                         maxAfford(){
@@ -45486,10 +45523,12 @@ addLayer("tokens", {
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.tokens.buyables[192].cost),
                         buy(){
                                 if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[192].maxAfford
+                                ma = ma.sub(player.tokens.buyables[192]).max(0).min(hasMilestone("ch", 28) ? 5 : 1)
                                 let data = player.tokens
-                                data.buyables[192] = data.buyables[192].plus(1)
-                                data.tokens2.points = data.tokens2.points.plus(1)
-                                data.tokens2.total = data.tokens2.total.plus(1)
+                                data.buyables[192] = data.buyables[192].plus(ma)
+                                data.tokens2.points = data.tokens2.points.plus(ma)
+                                data.tokens2.total = data.tokens2.total.plus(ma)
                         },
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[192]) + "</b><br>"
@@ -45536,10 +45575,12 @@ addLayer("tokens", {
                         canAfford:() => player.cells.points.gte(tmp.tokens.buyables[193].cost),
                         buy(){
                                 if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[193].maxAfford
+                                ma = ma.sub(player.tokens.buyables[193]).max(0).min(hasMilestone("ch", 28) ? 5 : 1)
                                 let data = player.tokens
-                                data.buyables[193] = data.buyables[193].plus(1)
-                                data.tokens2.points = data.tokens2.points.plus(1)
-                                data.tokens2.total = data.tokens2.total.plus(1)
+                                data.buyables[193] = data.buyables[193].plus(ma)
+                                data.tokens2.points = data.tokens2.points.plus(ma)
+                                data.tokens2.total = data.tokens2.total.plus(ma)
                         },
                         unlocked(){
                                 return hasMilestone("t", 17)
