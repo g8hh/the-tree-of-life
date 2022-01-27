@@ -36913,13 +36913,14 @@ addLayer("ach", {
                 {
                         key: "v",
                         description(){
-                                if (hasAchievement("an", 11)) return "V: Sell one Taxonomy buyable"
+                                if (hasAchievement("an", 11)) return "V: Sell one Taxonomy buyable (if not maxed)"
                                 return "V: Start Customizable"
                         }, 
                         onPress(){
                                 if (hasAchievement("an", 11)) {
                                         let data = player.an.grid
                                         let id = player.an.selectedId
+                                        if (data[id].buyables.gte(tmp.an.grid.maxLevels)) return
                                         data[id].buyables = data[id].buyables.sub(1).max(0)
                                         let keys = [
                                                 101, 102, 103, 104, 105, 106, 107, 108,
