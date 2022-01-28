@@ -32779,12 +32779,10 @@ addLayer("an", {
                                 } else if (split.length == 3) {
                                         d = "Amount<sup>" + split[1] + "*" + split[2] 
                                         d += "</sup> multiplies " + split[0]
-                                }
-
-                                
+                                }                                
 
                                 if (costs == undefined) return br + a + br + b + br + c + br2 + d
-                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) {
+                                if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels) && !player.shiftAlias) {
                                         c = "Maxed levels!"
                                         return br + a + br + b + br + c + br2 + d
                                 }
@@ -47556,17 +47554,17 @@ addLayer("tokens", {
                                                         if (hasUpgrade("or", 355)) a ++
                                                                                 c += "Lung XXVI multiplies AX by " + format(Decimal.pow(2, a)) + br
                                                 }
-                                                if (hasMilestone("an", 22))     c += "Animal Milestone 22 multiplies AX by " + format(player.an.grid[508].extras.plus(1).pow(.01)) + br
                                                 if (hasUpgrade("an", 35))       c += "Animals XV multiplies AX by " + format(Decimal.pow(1.01, player.ch.points)) + br
                                                 if (hasAchievement("an", 23) && player.an.achActive[23]) {
                                                                                 c += "COM II multiplies AX by 10" + br
                                                 }
-                                                if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
-                                                                                c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
-                                                }
                                                 if (hasMilestone("nu", 1))      c += "Nucleuses Milestone 1 multiplies AX by 2" + br
 
                                                 if (hasUpgrade("an", 53))       c += br + "Animals XXIII multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(hasMilestone("nu", 9) ? 0 : 7200).max(0))) + br
+                                                if (hasMilestone("an", 22))     c += "Animal Milestone 22 multiplies AX by " + format(player.an.grid[508].extras.plus(1).pow(.01)) + br
+                                                if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
+                                                                                c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
+                                                }
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
