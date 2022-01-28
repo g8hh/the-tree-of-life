@@ -26465,7 +26465,7 @@ addLayer("or", {
                                 a += hasUpgrade("or", 154) + hasUpgrade("or", 155) 
                                                         ret = ret.pow(Decimal.pow(1.01, a))
                         }
-                        if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.05))
+                        if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
                         
                         return ret
                 },
@@ -31752,7 +31752,9 @@ addLayer("an", {
                                                         ret = ret.times(20)
                         }
                         if (hasMilestone("an", 28))     ret = ret.times(player.an.grid[306].extras.plus(1))
-                        if (hasUpgrade("an", 43))       ret = ret.div(1e42)
+                        if (hasUpgrade("an", 43) && !hasMilestone("ch", 29)) {
+                                                        ret = ret.div(1e42)
+                        }
                         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                                 if (!player.an.achActive[22]) {
                                                         ret = ret.times(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4))
@@ -34798,9 +34800,10 @@ addLayer("ch", {
                                 player.an.genes.points = decimalZero
                                 player.an.genes.best = decimalZero
                                 player.an.genes.total = decimalZero
+                                player.an.points = decimalZero
                         },
                         effectDescription(){
-                                return "Reward: Reset gene and Taxonomy amounts, square <u>IN</u>testine base, and INtes<u>tine</u> cost formula is 2<sup>x<sup>2</sup></sup> but the Taxonomy limit is 1500+Nucleuses."
+                                return "Reward: Reset Genes, Animals, and Taxonomy amounts, disable Animals XVIII's nerfs, square <u>IN</u>testine base, and INtes<u>tine</u> cost formula is 2<sup>x<sup>2</sup></sup> but the Taxonomy limit is 1500+Nucleuses."
                         },
                 }, // hasMilestone("ch", 29)
         },
@@ -35081,7 +35084,7 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses VI"
                         },
                         description(){
-                                return "Raise energy gain to cbrt(max(Chromosomes, 1234)/1234) up to 1.05"
+                                return "Raise energy gain to cbrt(max(Chromosomes, 1234)/1234) up to 1.01"
                         },
                         cost:() => new Decimal(53),
                         onPurchase(){
@@ -47522,7 +47525,7 @@ addLayer("tokens", {
                                                         a += hasUpgrade("or", 154) + hasUpgrade("or", 155) 
                                                                                 c += "Organ Milestone 21 multiplies BX by " + format(Decimal.pow(1.01, a), 4) + br
                                                 }
-                                                if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.05), 4) + br
+                                                if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.01), 4) + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
@@ -47624,7 +47627,9 @@ addLayer("tokens", {
                                                 if (hasUpgrade("ch", 32) && !hasUpgrade("nu", 14)) {
                                                                                 c += "Chromosomes XII multiplies AX by 20" + br
                                                 }
-                                                if (hasUpgrade("an", 43))       c += "Animals XVIII divides AX by 1e42" + br
+                                                if (hasUpgrade("an", 43) && !hasMilestone("ch", 29)) {
+                                                                                c += "Animals XVIII divides AX by 1e42" + br
+                                                }
                                                 if (hasUpgrade("an", 51))       c += "Animals XXI multiplies AX by 2" + br
                                                 if (hasUpgrade("an", 53)) {
                                                         let sub = hasMilestone("nu", 9) ? 0 : 7200
