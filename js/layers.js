@@ -308,7 +308,7 @@ var TAXONOMY_COSTS = {
         205: [new Decimal("2e55367"), new Decimal(1e105), new Decimal(1.4)],
         206: [new Decimal("9e95030"), new Decimal(1e141), new Decimal(1.3)],
         207: [new Decimal("1e55504"), new Decimal(6e25), new Decimal(1.3)],
-        208: [new Decimal("9e995766"), new Decimal(5e11), new Decimal(1.1)],
+        208: [new Decimal("1e114301"), new Decimal("1e350"), new Decimal(1.1)],
 
         303: [new Decimal("1.2e2027"), new Decimal(1.5e10), new Decimal(1.1)],
         304: [new Decimal("1e2315"), new Decimal(1e20), new Decimal(1.3)],
@@ -26465,6 +26465,7 @@ addLayer("or", {
                                 a += hasUpgrade("or", 154) + hasUpgrade("or", 155) 
                                                         ret = ret.pow(Decimal.pow(1.01, a))
                         }
+                        if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.05))
                         
                         return ret
                 },
@@ -29447,7 +29448,8 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
-                                if (hasMilestone("nu", 12)) return player.tokens.tokens2.total.max(1).sqrt()
+                                if (hasMilestone("ch", 29))     return player.tokens.tokens2.total.max(1)
+                                if (hasMilestone("nu", 12))     return player.tokens.tokens2.total.max(1).sqrt()
                                 if (hasAchievement("an", 24) && player.an.achActive[24]) return player.tokens.tokens2.total.max(1).cbrt()
                                 let logBase = new Decimal(10)
                                 if (hasUpgrade("or", 322)) logBase = new Decimal(9)
@@ -29495,6 +29497,7 @@ addLayer("or", {
                                         eformula = eformula.replace("log2", "sqrt")
                                         eformula = eformula.replace("cbrt", "sqrt")
                                 }
+                                if (hasMilestone("ch", 29)) eformula = eformula.replace("sqrt(Tokens II)", "Token II")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -30087,6 +30090,11 @@ addLayer("or", {
                                 let a = new Decimal("1e672")
                                 let b = new Decimal(1e19)
                                 let c = new Decimal(20)
+                                if (hasMilestone("ch", 29)) {
+                                        a = decimalOne
+                                        b = decimalOne
+                                        c = new Decimal(2)
+                                }
                                 return [a,b,c]
                         },
                         cost(){
@@ -30189,6 +30197,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e672*1e19<sup>x</sup>*20<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("ch", 29)) cost2 = "2<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -33207,6 +33216,7 @@ addLayer("an", {
                                 if (hasMilestone("nu", 11))     ret = ret.plus(player.nu.points.div(2))
                                 if (hasUpgrade("ch", 44))       ret = ret.plus(player.nu.points.div(2))
                         }
+                        if (hasMilestone("ch", 29))     ret = player.nu.points.plus(1500)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -34757,6 +34767,42 @@ addLayer("ch", {
                                 return "Reward: Token II buyables' cost exponent is 1.274 and you can bulk 5x Token IIs."
                         },
                 }, // hasMilestone("ch", 28)
+                29: {
+                        requirementDescription(){
+                                return "1241 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1241)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                let data = player.an.grid 
+
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+
+                                for (i in keys) {
+                                        data[keys[i]].extras = decimalZero
+                                        data[keys[i]].buyables = decimalZero
+                                }
+                                
+                                player.an.genes.points = decimalZero
+                                player.an.genes.best = decimalZero
+                                player.an.genes.total = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Reset gene and Taxonomy amounts, square <u>IN</u>testine base, and INtes<u>tine</u> cost formula is 2<sup>x<sup>2</sup></sup> but the Taxonomy limit is 1500+Nucleuses."
+                        },
+                }, // hasMilestone("ch", 29)
         },
         tabFormat: {
                 "Upgrades": {
@@ -35029,6 +35075,22 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 15)) return true
                                 return player.ch.best.gte(1104)
                         }, // hasUpgrade("nu", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses VI"
+                        },
+                        description(){
+                                return "Raise energy gain to cbrt(max(Chromosomes, 1234)/1234) up to 1.05"
+                        },
+                        cost:() => new Decimal(53),
+                        onPurchase(){
+                                doReset("nu", true)
+                        },
+                        unlocked(){
+                                if (hasUpgrade("nu", 21)) return true
+                                return player.an.grid[208].buyables.gt(0)
+                        }, // hasUpgrade("nu", 21)
                 },
         },
         milestones: {
@@ -47458,8 +47520,9 @@ addLayer("tokens", {
                                                 if (hasMilestone("or", 21)) {
                                                         let a = hasUpgrade("or", 151) + hasUpgrade("or", 152) + hasUpgrade("or", 153)
                                                         a += hasUpgrade("or", 154) + hasUpgrade("or", 155) 
-                                                                                c += "Organ Milestone 21 multiplies BX by " + format(Decimal.pow(1.01, a))
+                                                                                c += "Organ Milestone 21 multiplies BX by " + format(Decimal.pow(1.01, a), 4) + br
                                                 }
+                                                if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.05), 4) + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
