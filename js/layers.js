@@ -35093,6 +35093,22 @@ addLayer("nu", {
                                 return player.an.grid[208].buyables.gt(0)
                         }, // hasUpgrade("nu", 21)
                 },
+                22: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses VI"
+                        },
+                        description(){
+                                return "Charm Quark exponent is .7 and Token II buyables' exponent is 1.272"
+                        },
+                        cost:() => new Decimal(57),
+                        onPurchase(){
+                                doReset("nu", true)
+                        },
+                        unlocked(){
+                                if (hasUpgrade("nu", 22)) return true
+                                return player.ch.points.gte(1307)
+                        }, // hasUpgrade("nu", 22)
+                },
         },
         milestones: {
                 1: {
@@ -43833,6 +43849,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("nu", 22))       return x.pow(1.272).ceil()
                         if (hasMilestone("ch", 28))     return x.pow(1.274).ceil()
                         if (hasMilestone("ch", 26))     return x.pow(1.28).ceil()
                         if (hasMilestone("nu", 15))     return x.pow(1.286).ceil()
@@ -43882,6 +43899,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("nu", 22))       return "ceil(x<sup>1.272</sup>)"
                         if (hasMilestone("ch", 28))     return "ceil(x<sup>1.274</sup>)"
                         if (hasMilestone("ch", 26))     return "ceil(x<sup>1.28</sup>)"
                         if (hasMilestone("nu", 15))     return "ceil(x<sup>1.286</sup>)"
@@ -45180,6 +45198,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("nu", 22))   return c.pow(.7)
                                 if (hasUpgrade("nu", 11))   return c.pow(.6)
                                 if (hasUpgrade("or", 45))   return c.pow(.6).times(.1)
                                 if (hasMilestone("an", 14)) return c.pow(.6).times(.07)
@@ -45189,6 +45208,9 @@ addLayer("tokens", {
                         },
                         initialEffect(){
                                 let base = tmp.tokens.buyables[111].base
+                                if (hasUpgrade("nu", 22)) {
+                                        return base.times(player.tokens.best_buyables[111].pow(.7))
+                                }
                                 if (hasMilestone("an", 14)) {
                                         return base.times(player.tokens.best_buyables[111].pow(.6))
                                 }
@@ -45199,6 +45221,9 @@ addLayer("tokens", {
                         },
                         effect(){
                                 let base = tmp.tokens.buyables[111].base
+                                if (hasUpgrade("nu", 22)) {
+                                        return base.times(player.tokens.best_buyables[111].pow(.7)).max(player.tokens.bestCharm)
+                                }
                                 if (hasMilestone("an", 14)) {
                                         return base.times(player.tokens.best_buyables[111].pow(.6)).max(player.tokens.bestCharm)
                                 }
@@ -45229,8 +45254,9 @@ addLayer("tokens", {
                                         eformula = eformula.replace(".1(C<sup>.6</sup>)*sqrt(x)", ".07(C*x)<sup>.6</sup>")
                                         eformula = eformula.replace("sqrt(x)", "x<sup>.6</sup>")
                                 }
-                                if (hasUpgrade("or", 45))  eformula = eformula.replace(".07", ".1")
-                                if (hasUpgrade("nu", 11))  eformula = eformula.replace(".1", "")
+                                if (hasUpgrade("nu", 22))       eformula = eformula.replaceAll(".6", ".7")
+                                if (hasUpgrade("or", 45))       eformula = eformula.replace(".07", ".1")
+                                if (hasUpgrade("nu", 11))       eformula = eformula.replace(".1", "")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
