@@ -34914,7 +34914,7 @@ addLayer("nu", {
                 return tmp.nu.getResetGain.gt(0) && (!player.an.achActive[24] || hasUpgrade("ch", 43))
         },
         resetsNothing(){
-                return false
+                return hasUpgrade("nu", 15)
         },
         effectPrimary(){
                 let ret = player.nu.points
@@ -35066,7 +35066,7 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses V"
                         },
                         description(){
-                                return "Totipotent cost base is 1e21"
+                                return "Totipotent cost base is 1e21 and Nucleuses reset nothing"
                         },
                         cost:() => new Decimal(48),
                         onPurchase(){
@@ -35095,7 +35095,7 @@ addLayer("nu", {
                 },
                 22: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses VI"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses VII"
                         },
                         description(){
                                 return "Charm Quark exponent is .7 and Token II buyables' exponent is 1.272"
