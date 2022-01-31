@@ -30221,6 +30221,7 @@ addLayer("or", {
                                         b = decimalOne
                                         c = new Decimal(5.6)
                                 }
+                                if (hasMilestone("ch", 31)) c = new Decimal(3.5)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30299,6 +30300,7 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e925*1e52<sup>x</sup>*50<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 30)) cost2 = "5.6<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -33244,6 +33246,7 @@ addLayer("an", {
                                 if (hasUpgrade("ch", 44))       ret = ret.plus(player.nu.points.div(2))
                         }
                         if (hasMilestone("ch", 29))     ret = player.nu.points.plus(1500)
+                        if (hasMilestone("ch", 32))     ret = player.nu.points.plus(1200)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -34077,6 +34080,7 @@ addLayer("ch", {
                 if (hasMilestone("an", 32))     ret = Decimal.pow(1.002, pts).times(hasMilestone("ch", 20) ? 2.605 : 2.66)
 
                 if (pts.gte(910))               ret = pts.times(.03).sub(11.23)
+                if (hasMilestone("ch", 32))     ret = pts.times(.03).plus(7.78)
 
                 return ret
         },
@@ -34842,9 +34846,60 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: inTES<u>tine</u> base is 5.6<sup>x<sup>2</sup></sup> but disable Chromosomes IV."
+                                return "Reward: inTES<u>tine</u> cost formula is 5.6<sup>x<sup>2</sup></sup> but disable Chromosomes IV."
                         },
                 }, // hasMilestone("ch", 30)
+                31: {
+                        requirementDescription(){
+                                return "1401 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1401)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: inTES<u>tine</u> cost formula is 3.5<sup>x<sup>2</sup></sup> and Token II buyables' cost exponent is 1.27."
+                        },
+                }, // hasMilestone("ch", 31)
+                32: {
+                        requirementDescription(){
+                                return "1424 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1424)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                let data = player.an.grid 
+
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+
+                                for (i in keys) {
+                                        data[keys[i]].extras = decimalZero
+                                        data[keys[i]].buyables = decimalZero
+                                }
+                                
+                                player.an.genes.points = decimalZero
+                                player.an.genes.best = decimalZero
+                                player.an.genes.total = decimalZero
+                                player.an.points = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Chromosomes effect is x*.03+7.78 and Token II via Stem Cells' adder is 9635 but the Taxonomy limit is 1200+Nucleuses and reset Taxonomy buyables and Animals."
+                        },
+                }, // hasMilestone("ch", 32)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34879,6 +34934,7 @@ addLayer("ch", {
                                         if (hasMilestone("an", 32))             b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
                                         if (hasMilestone("ch", 20))             b = b.replace(".66", ".605")
                                         if (tmp.ch.effectPoints.gte(910))       b = "When you have over 910 effective Chromosomes, the effect is .03*x-11.23"
+                                        if (hasMilestone("ch", 32))             b = b.replace("-11.23", "")
 
                                         return a + br2 + b
                                 }],
@@ -43897,6 +43953,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 31))     return x.pow(1.27).ceil()
                         if (hasUpgrade("nu", 22))       return x.pow(1.272).ceil()
                         if (hasMilestone("ch", 28))     return x.pow(1.274).ceil()
                         if (hasMilestone("ch", 26))     return x.pow(1.28).ceil()
@@ -43947,6 +44004,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("ch", 31))     return "ceil(x<sup>1.27</sup>)"
                         if (hasUpgrade("nu", 22))       return "ceil(x<sup>1.272</sup>)"
                         if (hasMilestone("ch", 28))     return "ceil(x<sup>1.274</sup>)"
                         if (hasMilestone("ch", 26))     return "ceil(x<sup>1.28</sup>)"
@@ -45644,6 +45702,7 @@ addLayer("tokens", {
                                         add = 9640
                                         exp = .3
                                 }
+                                if (hasMilestone("ch", 32)) add = 9635
                                 return [add, div, exp]
                         },
                         maxAfford(){
