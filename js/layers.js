@@ -34934,7 +34934,7 @@ addLayer("ch", {
                                         if (hasMilestone("an", 32))             b = b.replace("1.004<sup>x</sup>*2", "1.002<sup>x</sup>*2.66")
                                         if (hasMilestone("ch", 20))             b = b.replace(".66", ".605")
                                         if (tmp.ch.effectPoints.gte(910))       b = "When you have over 910 effective Chromosomes, the effect is .03*x-11.23"
-                                        if (hasMilestone("ch", 32))             b = b.replace("-11.23", "")
+                                        if (hasMilestone("ch", 32))             b = b.replace("-11.23", "+7.78")
 
                                         return a + br2 + b
                                 }],
@@ -35030,6 +35030,7 @@ addLayer("nu", {
         effectDescription(){
                 let start = " adding " + format(tmp.nu.effectPrimary) + " to effective Chromosomes and Animals for their effects and " 
                 if (hasMilestone("nu", 16)) start = start.replace("Animals for their effects", "the Taxonomy limit")
+                if (hasMilestone("ch", 29)) start = start.replace("and the Taxonomy limit", "")
                 return start + format(tmp.nu.effectSecondary) + " to Organ and Animal gain exponents and I'm base."
         },
         update(diff){
