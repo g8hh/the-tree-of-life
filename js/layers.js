@@ -35909,7 +35909,7 @@ addLayer("mc", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Microcomputer"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Micromanagement"//Microcomputer
                         },
                         description(){
                                 return "Autobuy ...waves and per upgrade ...waves levels multiply Micro gain"
