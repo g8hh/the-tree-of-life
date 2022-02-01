@@ -31815,6 +31815,9 @@ addLayer("an", {
                         if (hasMilestone("ch", 10) && player.ch.points.eq(100)) {
                                                         ret = ret.times(20)
                         } 
+                        if (hasMilestone("ch", 10) && player.ch.points.eq(410)) {
+                                                        ret = ret.times(200)
+                        }
                         if (hasMilestone("an", 39))     ret = ret.times(1e3)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
