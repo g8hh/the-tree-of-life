@@ -226,7 +226,7 @@ function dilate(x, exponent, base = 10){
 
 var TAXONOMY_EFFECTS = {
         202:() => false ? "Organ gain per Nucleuses" : "nothing (currently)",
-        203:() => false ? "Organ gain per Nucleuses" : "nothing (currently)",
+        203:() => hasUpgrade("nu", 24) ? "Organ gain per Chromosomes" : "nothing (currently)",
         204:() => false ? "intes<u>TINE</u> gain" : "nothing (currently)",
         205:() => false ? "Contaminant gain per Chromosomes<sup>4</sup>" : "nothing (currently)",
         206:() => false ? "Gene gain" : "nothing (currently)",
@@ -26187,6 +26187,7 @@ addLayer("or", {
                                                 ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17)))
                 }
                 if (hasUpgrade("ch", 41))       ret = ret.times(player.an.grid[303].extras.plus(1).pow(player.nu.points))
+                if (hasUpgrade("nu", 24))       ret = ret.times(player.an.grid[203].extras.plus(1).pow(player.ch.points))
 
                 return ret.max(1)
         },
@@ -29387,7 +29388,8 @@ addLayer("or", {
                 },
                 getIntestineMaxBulk(){
                         let ret = decimalOne
-                        if (hasMilestone("an", 10)) ret = ret.times(5)
+                        if (hasMilestone("an", 10))     ret = ret.times(5)
+                        if (hasUpgrade("nu", 13))       ret = ret.times(4)
                         return ret 
                 }, // tmp.or.buyables.getIntestineMaxBulk
                 401: {
@@ -30322,6 +30324,7 @@ addLayer("or", {
                                         b = decimalOne
                                         c = new Decimal(8)
                                 }
+                                if (hasUpgrade("nu", 24)) c = new Decimal(2.5)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30427,6 +30430,7 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1526*1e60<sup>x</sup>*99<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 27)) cost2 = "8<sup>x<sup>2</sup></sup>" 
+                                if (hasUpgrade("nu", 24)) cost2 = cost2.replace("8", "2.5")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -32675,10 +32679,10 @@ addLayer("an", {
                 }, // hasMilestone("an", 33)
                 34: {
                         requirementDescription(){
-                                return "3e27962 Genes"
+                                return "6e27961 Genes"
                         },
                         done(){
-                                return player.an.genes.points.gte("3e27962")
+                                return player.an.genes.points.gte("6e27961")
                         },
                         unlocked(){
                                 return true
@@ -35132,7 +35136,7 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses III"
                         },
                         description(){
-                                return "Square intes<u>TINE</u> base"
+                                return "Square intes<u>TINE</u> base and bulk 4x intestine buyables"
                         },
                         cost:() => new Decimal(28),
                         onPurchase(){
@@ -35213,6 +35217,19 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 23)) return true
                                 return player.ch.points.gte(1330)
                         }, // hasUpgrade("nu", 23)
+                },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses IX"
+                        },
+                        description(){
+                                return "Per Chromosome Animalia II multiplies Organ gain and intes<u>TINE</u> cost base is 2.5"
+                        },
+                        cost:() => new Decimal(63),
+                        unlocked(){
+                                if (hasUpgrade("nu", 24)) return true
+                                return player.ch.points.gte(1439)
+                        }, // hasUpgrade("nu", 24)
                 },
         },
         milestones: {
@@ -47572,6 +47589,7 @@ addLayer("tokens", {
                                                                                 c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17))) + br
                                                 }
                                                 if (hasUpgrade("ch", 41))       c += "Chromosomes XVI multiplies AX by " + format(player.an.grid[303].extras.plus(1).pow(player.nu.points)) + br
+                                                if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points)) + br
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
