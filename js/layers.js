@@ -18839,6 +18839,7 @@ addLayer("d", {
                 if (hasMilestone("ch", 23))     ret = ret.times(player.nu.points.max(2).log(2))
                 if (hasMilestone("ch", 25))     ret = ret.times(player.nu.points.max(1).sqrt())
                 if (hasMilestone("ch", 26))     ret = ret.times(1.31)
+                if (hasMilestone("nu", 17))     ret = ret.times(Decimal.pow(1.01, player.nu.points))
 
                 return ret
         },
@@ -26145,6 +26146,7 @@ addLayer("or", {
                 let pts = player.t.points
                 if (pts.lt("1e100")) return decimalZero
 
+                if (hasMilestone("ch", 33))     return pts.log10().pow(.35).pow10().pow(tmp.or.getGainExp)
                 if (!player.an.achActive[13] && hasAchievement("an", 13)) {
                                                 return pts.log10().pow(.31).pow10().pow(tmp.or.getGainExp)
                 }
@@ -26185,7 +26187,9 @@ addLayer("or", {
                 let ret = new Decimal(.5)
 
                 if (hasUpgrade("or", 112)) ret = ret.plus(.01 * player.or.upgrades.length)
-                if (hasMilestone("ch", 9)) ret = ret.plus(player.ch.points.div(100))
+                if (hasMilestone("ch", 9) && !hasMilestone("ch", 33)) {
+                                                ret = ret.plus(player.ch.points.div(100))
+                }
                 ret = ret.plus(tmp.nu.effectSecondary)
 
                 return ret
@@ -26457,6 +26461,7 @@ addLayer("or", {
                                                         ret = ret.pow(Decimal.pow(1.01, a))
                         }
                         if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
+                        if (hasMilestone("an", 42))     ret = ret.pow(player.ch.points.max(1465).div(1465).sqrt().min(1.1))
                         
                         return ret
                 },
@@ -26543,6 +26548,7 @@ addLayer("or", {
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
                         if (hasMilestone("ch", 11))     ret = ret.pow(60)
+                        if (hasMilestone("nu", 17))     ret = ret.pow(Decimal.pow(1.01, player.nu.points))
                         
                         return ret
                 },
@@ -29849,6 +29855,12 @@ addLayer("or", {
                                 let a = new Decimal(1e58)
                                 let b = new Decimal(1e8)
                                 let c = new Decimal(4)
+                                if (hasMilestone("ch", 33)) {
+                                        a = decimalOne
+                                        b = decimalOne
+                                        c = new Decimal(1.71)
+                                }
+                                if (hasMilestone("an", 42)) c = new Decimal(1.25)
                                 return [a,b,c]
                         },
                         cost(){
@@ -29951,6 +29963,8 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e58*1e8<sup>x</sup>*4<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("ch", 33)) cost2 = "1.71<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("an", 42)) cost2 = cost2.replace("1.71", "1.25")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -31072,6 +31086,7 @@ addLayer("or", {
                                         if (hasUpgrade("or", 235)) a2 = a2.replace(".2", ".25")
                                         if (hasUpgrade("or", 41)) a2 = a2.replace("<sup>.25</sup>", "<sup>.3</sup>*EXP")
                                         if (!player.an.achActive[13] && hasAchievement("an", 13)) a2 = a2.replace(".3<",".31<")
+                                        if (hasMilestone("ch", 33)) a2 = a2.replaceAll(".31<", ".35<")
                                         a2 = a2.replace("EXP", formatWhole(tmp.or.getGainExp))
                                         let a3 = "Initial Organ effect: (Organs+1)<sup>min(100, 1+cbrt(Organs)/5)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
@@ -32781,6 +32796,20 @@ addLayer("an", {
                                 return "Reward: Token II via Cell double exponent is 15+x/4300."
                         },
                 }, // hasMilestone("an", 41)
+                42: {
+                        requirementDescription(){
+                                return "1.7e654 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("1.7e654")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: in<u>TES</u>tine base is 1.25, each of the 50 Nucleuses after the first 50 decrease its cost exponent by .0001, and sqrt(max(Chromosomes, 1465)/1465) exponentiates Energy gain (capped at 1.1)."
+                        },
+                }, // hasMilestone("an", 42)
         },
         clickables: {
                 11: {
@@ -34896,6 +34925,23 @@ addLayer("ch", {
                                 return "Reward: Chromosomes effect is x*.03+7.78 and Token II via Stem Cells' adder is 9635 but the Taxonomy limit is 1200+Nucleuses and reset Taxonomy buyables and Animals."
                         },
                 }, // hasMilestone("ch", 32)
+                33: {
+                        requirementDescription(){
+                                return "1454 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1454)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                tmp.or.getGainExp = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Organ base gain double exponent is .35 and in<u>TES</u>tine cost fomula is 1.71<sup>x<sup>2</sup></sup> but disable Chromosome milestone 9."
+                        },
+                }, // hasMilestone("ch", 33)
         },
         tabFormat: {
                 "Upgrades": {
@@ -34993,6 +35039,8 @@ addLayer("nu", {
         },
         costExponent(){
                 let ret = new Decimal(1.6)
+
+                if (hasMilestone("an", 42)) ret = ret.sub(player.nu.points.sub(50).max(0).min(50).div(1e4))
 
                 return ret
         },
@@ -35467,6 +35515,20 @@ addLayer("nu", {
                                 return a + "disable Nucleuse Milestone 11 and Chromosomes XIX's effects on Taxonomy limit."
                         },
                 }, // hasMilestone("nu", 16)
+                17: {
+                        requirementDescription(){
+                                return "65 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(65)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token buyables' cost exponent is 1.26 and per Nucleuse multiply DNA and Air gain exponents by 1.01."
+                        },
+                }, // hasMilestone("nu", 17)
         },
         tabFormat: {
                 "Upgrades": {
@@ -43961,6 +44023,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("nu", 17))     return x.pow(1.26).ceil()
                         if (hasMilestone("ch", 31))     return x.pow(1.27).ceil()
                         if (hasUpgrade("nu", 22))       return x.pow(1.272).ceil()
                         if (hasMilestone("ch", 28))     return x.pow(1.274).ceil()
@@ -44012,6 +44075,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("nu", 17))     return "ceil(x<sup>1.26</sup>)"
                         if (hasMilestone("ch", 31))     return "ceil(x<sup>1.27</sup>)"
                         if (hasUpgrade("nu", 22))       return "ceil(x<sup>1.272</sup>)"
                         if (hasMilestone("ch", 28))     return "ceil(x<sup>1.274</sup>)"
@@ -47619,6 +47683,7 @@ addLayer("tokens", {
                                                 if (c.includes("AX"))           c += br
 
                                                 if (hasMilestone("ch", 11))     c += "Chromosome Milestone 11 multiplies BX by " + format(60) + br
+                                                if (hasMilestone("nu", 17))     c += "Nucleuse Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
@@ -47666,6 +47731,7 @@ addLayer("tokens", {
                                                                                 c += "Organ Milestone 21 multiplies BX by " + format(Decimal.pow(1.01, a), 4) + br
                                                 }
                                                 if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.01), 4) + br
+                                                if (hasMilestone("an", 42))     c += "Animal Milestone 42 multiplies BX by " + format(player.ch.points.max(1465).div(1465).sqrt().min(1.1), 4) + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
