@@ -33146,13 +33146,13 @@ addLayer("an", {
                                 return "COM III (" + (player.an.achActive[33] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[33]) return "Per this row OFF (and unlocked) achievement per Nucleuse quintuple Animal gain"
+                                if (player.an.achActive[33]) return "Per this row OFF (and unlocked) achievement per Nucleus quintuple Animal gain"
                                 return ""
                         },
                         tooltip(){
                                 let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
                                 a += "When toggled ON"
-                                return a + " per this row OFF (and unlocked) achievement per Nucleuse quintuple Animal gain"
+                                return a + " per this row OFF (and unlocked) achievement per Nucleus quintuple Animal gain"
                         },
                         unlocked(){
                                 return hasAchievement("an", 33)
@@ -33510,7 +33510,7 @@ addLayer("an", {
                                 return player.an.genes.points.gte("1e36068")
                         },
                         tooltip(){
-                                return "Get 1e36068 Genes.<br>Reward: Per Nucleuse milestone Nucleuse primary effect is 1% stronger (linear) and gain 15x Genes"
+                                return "Get 1e36068 Genes.<br>Reward: Per Nucleus milestone Nucleus primary effect is 1% stronger (linear) and gain 15x Genes"
                         }, // hasAchievement("an", 31)
                 },
                 32: {
@@ -34345,7 +34345,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XVI"
                         },
                         description(){
-                                return "Chordata I amount multiplies Organ gain per Nucleuse and PRI II's ON effect is always active"
+                                return "Chordata I amount multiplies Organ gain per Nucleus and PRI II's ON effect is always active"
                         },
                         cost:() => new Decimal(390),
                         unlocked(){
@@ -34381,7 +34381,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XIX"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per Nucleuse increase the Taxonomy limit by .5 but disable Animal Milestones 17 through 20's effects on Gene gain</bdi>"
+                                return "<bdi style='font-size: 80%'>Per Nucleus increase the Taxonomy limit by .5 but disable Animal Milestones 17 through 20's effects on Gene gain</bdi>"
                         },
                         cost:() => new Decimal(514),
                         unlocked(){
@@ -34644,7 +34644,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Raise him base ^ 1.6 and per Nucleuse double gene gain."
+                                return "Reward: Raise him base ^ 1.6 and per Nucleus double gene gain."
                         },
                 }, // hasMilestone("ch", 17)
                 18: {
@@ -35427,7 +35427,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleuse keep a Chromosome upgrade and milestone and Totipotent cost formula is 1e23^(x<sup>1.05</sup>)."
+                                return "Reward: Per Nucleus keep a Chromosome upgrade and milestone and Totipotent cost formula is 1e23^(x<sup>1.05</sup>)."
                         },
                 }, // hasMilestone("nu", 10)
                 11: {
@@ -35441,7 +35441,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleuse increase the Taxonomy limit by .5 and Oligopotent cost base is 1e55."
+                                return "Reward: Per Nucleus increase the Taxonomy limit by .5 and Oligopotent cost base is 1e55."
                         },
                 }, // hasMilestone("nu", 11)
                 12: {
@@ -35511,8 +35511,8 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Nucleuse primary effect affects Taxonomy limit instead of Animals but "
-                                return a + "disable Nucleuse Milestone 11 and Chromosomes XIX's effects on Taxonomy limit."
+                                let a = "Reward: Nucleus primary effect affects Taxonomy limit instead of Animals but "
+                                return a + "disable Nucleus Milestone 11 and Chromosomes XIX's effects on Taxonomy limit."
                         },
                 }, // hasMilestone("nu", 16)
                 17: {
@@ -35526,7 +35526,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Token buyables' cost exponent is 1.26 and per Nucleuse multiply DNA and Air gain exponents by 1.01."
+                                return "Reward: Token buyables' cost exponent is 1.26 and per Nucleus multiply DNA and Air gain exponents by 1.01."
                         },
                 }, // hasMilestone("nu", 17)
         },
@@ -35558,7 +35558,7 @@ addLayer("nu", {
                                 ["display-text", function(){
                                         let a = "Nucleuses resets all prior content not permanently kept."
                                         let b = "For unlocking Nucleuses you permanently keep DNA, Cell, and Tissue content."
-                                        let c = "Buying any upgrade forces a Nucleuse reset."
+                                        let c = "Buying any upgrade forces a Nucleus reset."
 
                                         return a + br2 + b + br2 + c
                                 }],
@@ -35942,7 +35942,7 @@ addLayer("mc", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Microfilament"
                         },
                         description(){
-                                return "Each Nucleuse past 25 adds .01 to ...waves base"
+                                return "Each Nucleus past 25 adds .01 to ...waves base"
                         },
                         cost:() => new Decimal("1e639"),
                         unlocked(){
@@ -47601,7 +47601,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("an", 14))       c += "Animals IV multiplies AX by " + format(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2)) + br
                                                 if (hasUpgrade("an", 34))       c += "Animals XIV multiplies AX by " + format(tmp.tokens.buyables[102].effect) + br
                                                 if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
-                                                if (hasMilestone("nu", 2))      c += "Nucleuse Milestone 2 multiplies AX by " + format(player.t.points.plus(10).log10().pow(player.nu.points)) + br
+                                                if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(player.t.points.plus(10).log10().pow(player.nu.points)) + br
                                                 if (tmp.or.effect.gt(1))        c += br + "Organ effect multiplies AX by " + format(tmp.or.effect) + br
                                                 if (hasMilestone("an", 39))     c += "Animal Milestone 39 multiplies AX by " + format(player.an.grid[307].extras.plus(1).pow(player.ch.points.pow(3))) + br
                                                 
@@ -47683,7 +47683,7 @@ addLayer("tokens", {
                                                 if (c.includes("AX"))           c += br
 
                                                 if (hasMilestone("ch", 11))     c += "Chromosome Milestone 11 multiplies BX by " + format(60) + br
-                                                if (hasMilestone("nu", 17))     c += "Nucleuse Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
+                                                if (hasMilestone("nu", 17))     c += "Nucleus Milestone 17 multiplies BX by " + format(Decimal.pow(1.01, player.nu.points)) + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
@@ -47869,8 +47869,8 @@ addLayer("tokens", {
                                                         else                            c += "PRO II multiplies AX by " + format(Decimal.pow(100, l)) + br
                                                 }
                                                 if (hasAchievement("an", 31))   c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
-                                                if (hasMilestone("nu", 1))      c += "Nucleuse Milestone 1 multiplies AX by 2" + br
-                                                if (hasMilestone("nu", 2))      c += "Nucleuse Milestone 2 multiplies AX by " + format(player.nu.points.pow10()) + br
+                                                if (hasMilestone("nu", 1))      c += "Nucleus Milestone 1 multiplies AX by 2" + br
+                                                if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(player.nu.points.pow10()) + br
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
