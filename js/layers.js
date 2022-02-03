@@ -35181,7 +35181,7 @@ addLayer("nu", {
                         cost:() => new Decimal(53),
                         unlocked(){
                                 if (hasUpgrade("nu", 21)) return true
-                                return player.an.grid[208].buyables.gt(0)
+                                return player.ch.points.gte(1218)
                         }, // hasUpgrade("nu", 21)
                 },
                 22: {
