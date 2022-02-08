@@ -12331,8 +12331,6 @@ addLayer("l", {
                 if (player.points.max(10).log10().log(2).gte(1024)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                if (diff <= 0) return
-
                 let forceAbContent = hasMilestone("d", 1) || hasMilestone("or", 1)
 
                 if (data.autobuyhco && hasMilestone("l", 2) || forceAbContent) {
@@ -31456,6 +31454,8 @@ addLayer("an", {
                         33: false,
                         34: false,
                 },
+                lastBought: undefined,
+                hasSoldYet: false,
         }},
         color: "#FFEC13",
         branches: [],
@@ -31696,7 +31696,7 @@ addLayer("an", {
                                 808]
 
                         for (i in keys) {
-                                if (player.an.achActive[11] && hasAchievement("an", 11)) break
+                                if (data.achActive[11] && hasAchievement("an", 11)) break
                                 let id = keys[i]
                                 
                                 let shouldAB = false 
@@ -31710,7 +31710,7 @@ addLayer("an", {
                                 if (subD[id].buyables.gte(ml)) continue 
                                 
                                 let costs = TAXONOMY_COSTS[id]
-                                let pts = player.an.genes.points
+                                let pts = data.genes.points
                                 let ma = decimalZero
                                 if (pts.gte(costs[0])) {
                                         ma = pts.div(costs[0]).log(costs[1]).root(costs[2]).ceil()
@@ -31718,11 +31718,15 @@ addLayer("an", {
                                 ma = ma.min(ml)
                                 let buy = ma.sub(subD[id].buyables).max(0)
                                 
-                                if (player.an.achActive[11] || !hasAchievement("an", 11)) {
+                                if (data.achActive[11] || !hasAchievement("an", 11)) {
                                         buy = buy.min(5)
                                         if (!player.shiftAlias) buy = buy.min(1)
                                 }
                                 if (subD[id].buyables.gte(400)) subD[id].ever400 = true
+                                if (buy.gt(0)) {
+                                        data.lastBought = id
+                                        data.hasSoldYet = false
+                                }
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
                                 if (buy.gt(0) && !hasAchievement("an", 13) && !hasMilestone("nu", 2)) break
@@ -32842,8 +32846,8 @@ addLayer("an", {
                                 }
                                 let e = "Cost formula:<br>" + formatWhole(costs[0]) + "(" + formatWhole(costs[1])
                                 e += "<sup>x<sup>" + format(costs[2], 1) + "</sup></sup>)"
-                                let ret = br + a + br + b + br + c + br2 + d + br2 + e + br2
-                                return ret + "(Press B to buy)" + (hasAchievement("an", 11) ? br + "(Press V to sell one level but<br>reset amounts and Genes)" : "")
+                                let ret = br + a + br + b + br + c + br2 + d + br2 + e + br2 + "(Press B to buy)"
+                                return ret + (hasAchievement("an", 11) && player.an.lastBought != undefined && !player.an.hasSoldYet ? br + "(Press V to sell the last bought level but<br>reset amounts and Genes)" : "")
                         },
                         cost(){
                                 let id = player.an.selectedId
@@ -32877,6 +32881,10 @@ addLayer("an", {
                                 if (player.an.achActive[11] || !hasAchievement("an", 11)) {
                                         buy = buy.min(5)
                                         if (!player.shiftAlias) buy = buy.min(1)
+                                }
+                                if (buy.gt(0)) {
+                                        player.an.lastBought = id
+                                        player.an.hasSoldYet = false
                                 }
 
                                 player.an.grid[id].buyables = player.an.grid[id].buyables.plus(buy)
@@ -33223,6 +33231,7 @@ addLayer("an", {
                                 }
                                 player.an.genes.points = decimalZero
                                 tmp.an.gene.getResetGain = decimalZero
+                                player.an.lastBought = undefined
                         },
                 },
         },
@@ -37176,6 +37185,7 @@ addLayer("ach", {
                                         let data = player.an.grid
                                         let id = player.an.selectedId
                                         if (data[id].buyables.gte(tmp.an.grid.maxLevels)) return
+                                        if (player.an.lastBought == undefined || player.an.hasSoldYet) return
                                         data[id].buyables = data[id].buyables.sub(1).max(0)
                                         let keys = [
                                                 101, 102, 103, 104, 105, 106, 107, 108,
@@ -37191,8 +37201,11 @@ addLayer("ach", {
                                                 data[keys[i]].extras = decimalZero
                                         }
                                         player.an.genes.points = decimalZero
+                                        player.an.hasSoldYet = true
                                 }
-                                if (tmp.l.challenges[12].unlocked) startChallenge("l", 12)
+                                if (tmp.l.challenges[12].unlocked && !hasUpgrade("or", 135)){
+                                        startChallenge("l", 12)
+                                }
                         },
                         unlocked(){
                                 return tmp.l.challenges[12].unlocked || hasAchievement("an", 11)

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.265",
+	num: "1.265.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -2257,6 +2257,9 @@ function fixOldSave(oldVersion){
 			}
 			player[layer].milestones = z
 		}
+	}
+	if (player.version < "1.265.1") {
+		if (hasUpgrade("or", 135)) player.l.activeChallenge = null
 	}
 }
 
