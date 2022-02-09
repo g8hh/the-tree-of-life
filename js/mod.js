@@ -2259,7 +2259,7 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (player.version < "1.265.1") {
-		if (hasUpgrade("or", 135)) player.l.activeChallenge = null
+		if (player.or.upgrades.includes(135)) player.l.activeChallenge = null
 	}
 }
 
