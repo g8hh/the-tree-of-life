@@ -26144,6 +26144,7 @@ addLayer("or", {
                 let pts = player.t.points
                 if (pts.lt("1e100")) return decimalZero
 
+                if (hasMilestone("nu", 18))     return pts.log10().pow(.35).pow10().root(4).pow(tmp.or.getGainExp)
                 if (hasMilestone("ch", 33))     return pts.log10().pow(.35).pow10().pow(tmp.or.getGainExp)
                 if (!player.an.achActive[13] && hasAchievement("an", 13)) {
                                                 return pts.log10().pow(.31).pow10().pow(tmp.or.getGainExp)
@@ -28819,6 +28820,7 @@ addLayer("or", {
                         },
                         base(){
                                 let add = tmp.nu.effectSecondary
+                                if (hasMilestone("nu", 18)) return player.ch.points.div(100).plus(add)
                                 if (hasUpgrade("ch", 22)) return player.ch.points.div(100).plus(25).plus(add)
                                 if (hasUpgrade("or", 333)) return new Decimal(player.or.upgrades.length / 4).plus(add)
                                 let ret = new Decimal(tmp.or.upgrades.kidneyUpgradesLength).plus(1).plus(add)
@@ -28846,6 +28848,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 144)) eformula = eformula.replace("1", ".03 * Organ upgrades")
                                 if (hasUpgrade("or", 333)) eformula = eformula.replace("Kidney upgrades + .03 * Organ upgrades", "Organ upgrades/4")
                                 if (hasUpgrade("ch", 22)) eformula = eformula.replace("Organ upgrades/4", "25 + Chromosomes/100")
+                                if (hasMilestone("nu", 18)) eformula = eformula.replace("25 + ", "")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -29562,7 +29565,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[402].effect)
-                                ret = ret.times(tmp.an.effect)
+                                if (!hasUpgrade("nu", 25)) ret = ret.times(tmp.an.effect)
                                 if (hasUpgrade("an", 31)) ret = ret.times(player.an.grid[507].extras.plus(1))
 
                                 return ret
@@ -29783,7 +29786,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[411].effect)
-                                ret = ret.times(tmp.an.effect)
+                                if (!hasUpgrade("nu", 25)) ret = ret.times(tmp.an.effect)
 
                                 return ret
                         },
@@ -30379,6 +30382,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasUpgrade("nu", 25)) return player.or.energy.points.max(2022).log(2022)
                                 if (hasUpgrade("nu", 13))  return player.or.buyables[423].max(1)
                                 if (hasMilestone("an", 24)) return player.or.buyables[423].max(1).sqrt()
                                 let logBase = new Decimal(10)
@@ -30426,6 +30430,7 @@ addLayer("or", {
                                 eformula = eformula.replace("log2.72", "ln")
                                 if (hasMilestone("an", 24)) eformula = eformula.replace("log2(in<u>TES</u>tine)", "sqrt(intes<u>TINE</u>)")
                                 if (hasUpgrade("nu", 13)) eformula = eformula.replace("sqrt", "")
+                                if (hasUpgrade("nu", 25)) eformula = eformula.replace("(intes<u>TINE</u>)", "log2022(Energy)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31077,15 +31082,16 @@ addLayer("or", {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
-                                        let a1 = "Initial Organ gain: log10(Tissue)<sup>0.5</sup>-9"
-                                        let a2 = "Current Organ gain: (log10(Tissue))<sup>EXP</sup>-9"
+                                        let a1 = "Initial Organ gain: log10(Tissues)<sup>0.5</sup>-9"
+                                        let a2 = "Current Organ gain: (log10(Tissues))<sup>EXP</sup>-9"
                                         if (hasUpgrade("or", 114)) a2 = a2.replace("-9", "")
-                                        if (hasUpgrade("or", 154)) a2 = a2.replace("(log10(Tissue))<sup>EXP</sup>", "10<sup>log10(Tissue)<sup>.2</sup></sup>")
+                                        if (hasUpgrade("or", 154)) a2 = a2.replace("(log10(Tissues))<sup>EXP</sup>", "10<sup>log10(Tissues)<sup>.2</sup></sup>")
                                         if (hasUpgrade("or", 235)) a2 = a2.replace(".2", ".25")
                                         if (hasUpgrade("or", 41)) a2 = a2.replace("<sup>.25</sup>", "<sup>.3</sup>*EXP")
                                         if (!player.an.achActive[13] && hasAchievement("an", 13)) a2 = a2.replace(".3<",".31<")
                                         if (hasMilestone("ch", 33)) a2 = a2.replaceAll(".31<", ".35<")
-                                        a2 = a2.replace("EXP", formatWhole(tmp.or.getGainExp))
+                                        if (hasMilestone("nu", 18)) a2 = "Current Organ gain: 10<sup>log10(Tissues)<sup>.35</sup>/4*EXP</sup>"
+                                        a2 = a2.replace("EXP", format(tmp.or.getGainExp))
                                         let a3 = "Initial Organ effect: (Organs+1)<sup>min(100, 1+cbrt(Organs)/5)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Organ resets all prior content that is not permanently kept, including Token content."
@@ -31540,7 +31546,8 @@ addLayer("an", {
                 if (hasUpgrade("or", 33)) pts = player.an.best
                 pts = pts.plus(tmp.nu.effectPrimary)
 
-                let exp = pts.plus(99).log10().min(300)
+                let exp = pts.plus(99).log10().min(1000)
+                if (!hasUpgrade("nu", 25)) exp = exp.min(300)
                 if (!hasMilestone("nu", 9)) exp = exp.min(100)
 
                 let ret = pts.plus(1).pow(exp)
@@ -35078,7 +35085,7 @@ addLayer("nu", {
         effectSecondary(){
                 let ret = player.nu.points.div(10)
 
-                //if (ret.gt(.2)) ret = ret.div(2).plus(.1)
+                if (hasMilestone("nu", 18)) ret = ret.times(5)
 
                 return ret
         },
@@ -35281,6 +35288,19 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 24)) return true
                                 return player.ch.points.gte(1439)
                         }, // hasUpgrade("nu", 24)
+                },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses X"
+                        },
+                        description(){
+                                return "<bdi style='font-size: 80%'>Animal effect no longer affects <u>in</u>TEStine or IN<u>tes</u>tine amount but its effect exponent limit is 1000 and intes<u>TINE</u> base is log2022(Energy)</bdi>"
+                        },
+                        cost:() => new Decimal(65),
+                        unlocked(){
+                                if (hasUpgrade("nu", 25)) return true
+                                return player.ch.points.gte(1494)
+                        }, // hasUpgrade("nu", 25)
                 },
         },
         milestones: {
@@ -35540,6 +35560,20 @@ addLayer("nu", {
                                 return "Reward: Token buyables' cost exponent is 1.26 and per Nucleus multiply DNA and Air gain exponents by 1.01."
                         },
                 }, // hasMilestone("nu", 17)
+                18: {
+                        requirementDescription(){
+                                return "66 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(66)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Nucleuses' second effect is five times stronger but fourth root the initial Organ gain and remove the + 25 from I'm's base."
+                        },
+                }, // hasMilestone("nu", 18)
         },
         tabFormat: {
                 "Upgrades": {
