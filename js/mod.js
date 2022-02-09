@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.265.1",
+	num: "1.265.3",
 	name: "Advil's Auspicious Acension",
 }
 
