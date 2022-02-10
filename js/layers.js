@@ -29640,6 +29640,7 @@ addLayer("or", {
                                         b = decimalOne
                                         c = new Decimal(5)
                                 }
+                                if (hasMilestone("an", 43)) c = new Decimal(3)
                                 return [a,b,c]
                         },
                         cost(){
@@ -29718,6 +29719,7 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e195*1e10<sup>x</sup>*9<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 26)) cost2 = "5<sup>x<sup>2</sup></sup>"
+                                if (hasMilestone("an", 43)) cost2 = cost2.replace("5", "3")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -29982,6 +29984,11 @@ addLayer("or", {
                                 let a = new Decimal(1e300)
                                 let b = new Decimal(1e17)
                                 let c = new Decimal(3)
+                                if (hasMilestone("an", 43)) {
+                                        a = decimalOne 
+                                        b = decimalOne
+                                        c = new Decimal(1.75)
+                                }
                                 return [a,b,c]
                         },
                         cost(){
@@ -30083,6 +30090,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e300*1e17<sup>x</sup>*3<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("an", 43)) cost2 = "1.75<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -31821,7 +31829,7 @@ addLayer("an", {
                         if (hasUpgrade("ch", 32) && !hasUpgrade("nu", 14)) {
                                                         ret = ret.times(20)
                         }
-                        if (hasMilestone("nu", 2))      ret = ret.times(player.nu.points.pow10())
+                        if (hasMilestone("nu", 2))      ret = ret.times(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points))
                         if (hasUpgrade("an", 54))       ret = ret.times(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length))
                         if (hasAchievement("an", 31))   ret = ret.times(Decimal.pow(15, player.nu.milestones.length))
                         if (hasMilestone("an", 34) && !hasMilestone("an", 36)) {
@@ -32820,9 +32828,23 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: in<u>TES</u>tine base is 1.25, each of the 50 Nucleuses after the first 50 decrease its cost exponent by .0001, and sqrt(max(Chromosomes, 1465)/1465) exponentiates Energy gain (capped at 1.1)."
+                                return "Reward: in<u>TES</u>tine cost base is 1.25, each of the 50 Nucleuses after the first 50 decrease its cost exponent by .0001, and sqrt(max(Chromosomes, 1465)/1465) exponentiates Energy gain (capped at 1.1)."
                         },
                 }, // hasMilestone("an", 42)
+                43: {
+                        requirementDescription(){
+                                return "5.4e884 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("5.4e884")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: in<u>tes</u>TINE cost is 1.75<sup>x<sup>2</sup></sup>, <u>in</u>tesTINE cost base is 4, and Nucleuse Milestone 2 permanently becomes 70x per. [need to code permanently]"
+                        },
+                }, // hasMilestone("an", 43)
         },
         clickables: {
                 11: {
@@ -35297,6 +35319,19 @@ addLayer("nu", {
                                 return "<bdi style='font-size: 80%'>Animal effect no longer affects <u>in</u>TEStine or IN<u>tes</u>tine amount but its effect exponent limit is 1000 and intes<u>TINE</u> base is log2022(Energy)</bdi>"
                         },
                         cost:() => new Decimal(65),
+                        onPurchase(){
+                                let data = player.or.extras
+                                data[401] = decimalZero
+                                data[402] = decimalZero
+                                data[403] = decimalZero
+                                data[411] = decimalZero
+                                data[412] = decimalZero
+                                data[413] = decimalZero
+                                data[421] = decimalZero
+                                data[422] = decimalZero
+                                data[423] = decimalZero
+                                tmp.or.energy.getResetGain = decimalZero
+                        },
                         unlocked(){
                                 if (hasUpgrade("nu", 25)) return true
                                 return player.ch.points.gte(1494)
@@ -35574,6 +35609,20 @@ addLayer("nu", {
                                 return "Reward: Nucleuses' second effect is five times stronger but fourth root the initial Organ gain and remove the + 25 from I'm's base."
                         },
                 }, // hasMilestone("nu", 18)
+                19: {
+                        requirementDescription(){
+                                return "68 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(68)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock Species and Token II via Cell's divider is 4444.4."
+                        },
+                }, // hasMilestone("nu", 19)
         },
         tabFormat: {
                 "Upgrades": {
@@ -45880,6 +45929,7 @@ addLayer("tokens", {
                                 return add
                         },
                         div(){
+                                if (hasMilestone("nu", 19))     return new Decimal(4444.4)
                                 if (hasMilestone("an", 41))     return new Decimal(4300)
                                 if (hasUpgrade("ch", 31))       return new Decimal(2000)
                                 if (hasUpgrade("or", 44))       return new Decimal(500)
@@ -45910,6 +45960,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 193), 3) + " Cells</b><br>"
                                 let eformula = "10^10^(ADD+x/" + formatWhole(tmp.tokens.buyables[193].div) + ")"
                                 eformula = eformula.replace("ADD", formatWhole(tmp.tokens.buyables[193].add))
+                                eformula = eformula.replace("444", "444.4")
                                 
                                 let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                                 
@@ -47919,7 +47970,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasAchievement("an", 31))   c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
                                                 if (hasMilestone("nu", 1))      c += "Nucleus Milestone 1 multiplies AX by 2" + br
-                                                if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(player.nu.points.pow10()) + br
+                                                if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points)) + br
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
