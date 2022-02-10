@@ -32355,7 +32355,7 @@ addLayer("an", {
                 }, // hasMilestone("an", 12)
                 13: {
                         requirementDescription(){
-                                if (!hasUpgrade("or", 344)) return "Requires: Lung XXIV"
+                                if (!hasUpgrade("or", 344)) return "Lung XXIV and ???"
                                 return "169 Animals"
                         },
                         done(){
