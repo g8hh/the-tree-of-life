@@ -33800,6 +33800,7 @@ addLayer("an", {
                                                 if (hasMilestone("ch", 4))  pc = "75%"
                                                 if (hasMilestone("an", 22)) pc = "100%"
                                                 if (hasMilestone("sp", 1) && player.ch.points.lt(11)) pc = "1%"
+                                                a = a.replace("PC", pc)
                                                 return a + br + "Press shift to bulk buy 5x."
                                         }
                                 ],
