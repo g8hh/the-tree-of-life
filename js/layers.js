@@ -31789,7 +31789,7 @@ addLayer("an", {
                                 
                                 let shouldAB = false 
                                 if (subD[id].everMaxed == true) shouldAB = true
-                                if (hasMilestone("nu", 6) && subD[id].ever400) shouldAB = true
+                                if ((hasMilestone("nu", 6) || hasMilestone("sp", 2)) && subD[id].ever400) shouldAB = true
                                 if (!shouldAB) {
                                         if (subD[id].buyables.lt(100)) continue
                                         let canOver100 = hasMilestone("nu", 2) || hasAchievement("an", 14)
@@ -33890,9 +33890,7 @@ addLayer("an", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!false) {
-                                //sortStrings(data1.upgrades)
-                                //commented out on purpose, if it breaks this you can add it back
+                        if (!hasMilestone("sp", 2)) {
                                 data1.upgrades = data1.upgrades.slice(0, oKeptUpgrades)
                         }
 
@@ -35866,7 +35864,7 @@ addLayer("nu", {
                         }
 
                         let anKeptAchievements = 0
-                        if (!hasMilestone("nu", 5)) {
+                        if (!hasMilestone("nu", 5) && !hasMilestone("sp", 2)) {
                                 data2.achievements = data2.achievements.slice(0, anKeptAchievements)
                         }
 
@@ -35919,9 +35917,7 @@ addLayer("nu", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!false) {
-                                //sortStrings(data1.upgrades)
-                                //commented out on purpose, if it breaks this you can add it back
+                        if (!hasMilestone("sp", 2)) {
                                 data3.upgrades = data3.upgrades.slice(0, oKeptUpgrades)
                         }
 
@@ -36393,6 +36389,20 @@ addLayer("sp", {
                                 return "Reward: Per reset keep a Animal, Chromosome, and Nucleuse milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 4."
                         },
                 }, // hasMilestone("sp", 1)
+                2: {
+                        requirementDescription(){
+                                return "2 Species resets"
+                        },
+                        done(){
+                                return player.sp.times >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep Organ upgrades, keep Animal Achievements upon Nucleus rest, and autobuy Taxonomy buyables that were ever above 400 levels."
+                        },
+                }, // hasMilestone("sp", 2)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36566,9 +36576,7 @@ addLayer("sp", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!false) {
-                                //sortStrings(data1.upgrades)
-                                //commented out on purpose, if it breaks this you can add it back
+                        if (!hasMilestone("sp", 2)) {
                                 data3.upgrades = data3.upgrades.slice(0, oKeptUpgrades)
                         }
 
