@@ -1066,6 +1066,20 @@ PROGRESSION_MILESTONES = {
         894: () => player.nu.points.gte(48),
         895: () => player.nu.points.gte(51),
         896: () => player.nu.points.gte(54),
+        897: () => player.nu.points.gte(58),
+        898: () => player.nu.points.gte(62),
+        899: () => player.nu.points.gte(66),
+        900: () => player.nu.points.gte(70),
+        901: () => player.nu.points.gte(74),
+        902: () => player.nu.points.gte(78),
+        903: () => player.nu.points.gte(82),
+        904: () => player.sp.times >= 1,
+        905: () => player.sp.times >= 2,
+        906: () => player.sp.times >= 3,
+        907: () => player.sp.times >= 4,
+        908: () => player.sp.times >= 5,
+        909: () => player.sp.times >= 6,
+        910: () => player.sp.times >= 7,
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1965,6 +1979,20 @@ PROGRESSION_MILESTONES_TEXT = {
         894: "48 Nucleuses",
         895: "51 Nucleuses",
         896: "54 Nucleuses",
+        897: "58 Nucleuses",
+        898: "62 Nucleuses",
+        899: "66 Nucleuses",
+        900: "70 Nucleuses",
+        901: "74 Nucleuses",
+        902: "78 Nucleuses",
+        903: "82 Nucleuses",
+        904: "1 Species reset",
+        905: "2 Species resets",
+        906: "3 Species resets",
+        907: "4 Species resets",
+        908: "5 Species resets",
+        909: "6 Species resets",
+        910: "7 Species resets",
 }
 
 

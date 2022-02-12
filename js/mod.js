@@ -44,6 +44,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Changed "cost" to "requires" for Token II buyables once they're free.<br>
 		- Fixed token layer notification.<br>
 		- Added a custom save.<br>
+		- Added two rows of achievements.<br>
 	<br><h3 style='color: #CC0000'>v1.267</h3><br>
 		- Balanced until 1e900 Animals.<br>
 		- Added a Nucleuse milestone.<br>
