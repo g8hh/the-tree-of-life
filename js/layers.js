@@ -31793,7 +31793,8 @@ addLayer("an", {
                                 if (!shouldAB) {
                                         if (subD[id].buyables.lt(100)) continue
                                         let canOver100 = hasMilestone("nu", 2) || hasAchievement("an", 14)
-                                        if (!canOver100 && !(hasMilestone("an", 27) && player.nu.unlocked)) continue
+                                        let nuUnl = hasMilestone("an", 27) && player.nu.unlocked
+                                        if (!canOver100 && !nuUnl && !(hasMilestone("an", 20) && player.sp.unlocked)) continue
                                 }
                                 if (subD[id].buyables.gte(ml)) continue 
                                 
@@ -31915,7 +31916,7 @@ addLayer("an", {
                         if (player.ch.points.eq(425))   ret = ret.times(200)
                         if (player.ch.points.eq(426))   ret = ret.times(10)
                         if (player.ch.points.eq(1221))  ret = ret.times(1e6)
-                        
+                        if (hasMilestone("an", 16))     ret = ret.times(Decimal.pow(10, player.sp.times).min(1e22))
                         if (hasMilestone("an", 39))     ret = ret.times(1e3)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
@@ -32495,7 +32496,7 @@ addLayer("an", {
                 }, // hasMilestone("an", 15)
                 16: {
                         requirementDescription(){
-                                if (player.sp.unlocked) return makeRed("1e9") + " Genes"
+                                if (player.sp.unlocked) return makePurple("1e9") + " Genes"
                                 return "1e14 Genes"
                         },
                         done(){
@@ -32505,7 +32506,9 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Sapien amount multiplies Air gain and each Token II past 1000 (multiplcatively) increases Gene gain by 1%."
+                                let a = "Reward: Sapien amount multiplies Air gain"
+                                if (player.sp.unlocked) a += makePurple(", each of the first 22 Species resets multiplies gene gain by 10,")
+                                return a + " and each Token II past 1000 (multiplcatively) increases Gene gain by 1%."
                         },
                 }, // hasMilestone("an", 16)
                 17: {
@@ -32521,7 +32524,7 @@ addLayer("an", {
                         effectDescription(){
                                 let a = "Reward: Homo amount multiplies " + makeBlue("DB") + " gain and per upgrade log10(log10("
                                 if (player.nu.unlocked) a = a.replace("upgrade", "upgrade " + makeRed("or Nucleus"))
-                                return a + makeBlue("DB") + ")) multiplies Gene gain"
+                                return a + makeBlue("DB") + ")) multiplies Gene gain."
                         },
                 }, // hasMilestone("an", 17)
                 18: {
@@ -32562,7 +32565,8 @@ addLayer("an", {
                         },
                         effectDescription(){
                                 let a = "Reward: log10(Contaminants) multiplies Gene gain and unlock a new row of Taxonomy"
-                                return a + " but increase cross contamination to 5% and the first three rows extra amounts to 0."
+                                a += " but increase cross contamination to 5% and the first three rows extra amounts to 0."
+                                return a
                         },
                 }, // hasMilestone("an", 19)
                 20: {
@@ -32591,6 +32595,7 @@ addLayer("an", {
                                 let a = "Reward: log10(Cells) multiplies Gene gain, bulk 5x Kidney buyables, and INtes<u>tine</u>'s ln becomes log2"
                                 a += " but increase cross contamination to 25% and the first four rows extra amounts to 0."
                                 if (player.nu.unlocked) a += makeRed(" Activate milestone 26's autobuyer.")
+                                if (player.sp.unlocked) a += makePurple(" Activate One reward.")
                                 return a
                         },
                 }, // hasMilestone("an", 20)
@@ -48698,6 +48703,9 @@ addLayer("tokens", {
                                                 if (hasMilestone("an", 16)) {
                                                         let sub = hasMilestone("an", 22) ? 0 : 1000
                                                                                 c += "Animal Milestone 16 multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0))) + br
+                                                }
+                                                if (hasMilestone("an", 16) && player.sp.unlocked) {
+                                                                                c += "Animal Milestone 16 due to Species multiplies AX by " + format(Decimal.pow(10, player.sp.times).min(1e22)) + br
                                                 }
                                                 if (!hasUpgrade("ch", 44)) {
                                                         if (hasMilestone("an", 17)) {
