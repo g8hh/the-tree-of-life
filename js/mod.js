@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.267",
+	num: "1.268",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,29 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.an.points.gte("1e900")
+	return player.sp.times >= 2
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.267)<br><br>
+		Reaching the endgame screen (updated at least as of v1.268)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.268</h3><br>
+		- Balanced until 2 Species resets.<br>
+		- Added a new layer, Species!<br>
+		- Added 20 Species upgrades.<br>
+		- Added a Species milestone.<br>
+		- Various code clean up.<br>
+		- Fixed a bug with cross contamination percentage display.<br>
+		- Fixed the display of tertiary.<br>
+		- Changed "cost" to "requires" for Token II buyables once they're free.<br>
+		- Fixed token layer notification.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.267</h3><br>
 		- Balanced until 1e900 Animals.<br>
 		- Added a Nucleuse milestone.<br>

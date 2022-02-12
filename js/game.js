@@ -71,7 +71,9 @@ function softcap(value, cap, power = 0.5) {
 function shouldNotify(layer){
 	if (layer == "tokens" && hasUpgrade("cells", 42)) {
 		let data = tmp.tokens.buyables
-		return data[191].canAfford || data[192].canAfford || (data[193].canAfford && data[193].unlocked)
+		if (data[191].canAfford && !hasMilestone("or", 6)) return true
+		if (data[192].canAfford && !hasMilestone("or", 7)) return true
+		if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
 	}
 	for (id in tmp[layer].upgrades){
 		if (layer == "cells" && id > 100 && tmp.mc.layerShown) break

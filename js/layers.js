@@ -31739,7 +31739,7 @@ addLayer("an", {
 
                                 let spExp = decimalZero
                                 if (hasUpgrade("sp", 22) && row == 8) {
-                                        spExp = getLevels(808).div(10)
+                                        spExp = getLevels(808).div(15)
                                 }
                                 if (hasUpgrade("sp", 23) && row == 7) {
                                         spExp = player.ch.points.plus(10).sqrt()
@@ -31916,6 +31916,7 @@ addLayer("an", {
                         if (player.ch.points.eq(425))   ret = ret.times(200)
                         if (player.ch.points.eq(426))   ret = ret.times(10)
                         if (player.ch.points.eq(1221))  ret = ret.times(1e6)
+                        if (player.ch.points.eq(1435))  ret = ret.times(1e25)
                         if (hasMilestone("an", 16))     ret = ret.times(Decimal.pow(10, player.sp.times).min(1e22))
                         if (hasMilestone("an", 39))     ret = ret.times(1e3)
 
@@ -36076,7 +36077,7 @@ addLayer("sp", {
         baseAmount(){return player.an.points},
         type: "custom",
         getNextAt(){
-                let baseGain = tmp.sp.getResetGain.div(tmp.sp.getGainMult).max(1)
+                let baseGain = tmp.sp.getResetGain.plus(1).div(tmp.sp.getGainMult).max(1)
 
                 return baseGain.root(tmp.sp.getGainExp).times(900).pow10()
         },
@@ -36212,7 +36213,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect VII"
                         },
                         description(){
-                                return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/10"
+                                return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/15"
                         },
                         cost:() => new Decimal(1),
                         unlocked(){
@@ -44651,7 +44652,9 @@ addLayer("tokens", {
                 return tetBase 
         },
         shouldNotify(){
-                if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) return true
+                if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) {
+                        if (player.tokens.tokens2.total.eq(0)) return true
+                }
                 let x = ["11", "12", "13", "21", "22", 
                          "23", "31", "32", "33", "41", 
                          "42", "43", "51", "52", "53", 
@@ -48847,12 +48850,10 @@ addLayer("tokens", {
                                 return hasUpgrade("cells", 42)
                         },
                         shouldNotify(){
-                                let x = [191, 192, 193]
-                                for (i in x){
-                                        id = x[i]
-                                        if (!tmp.tokens.buyables[id].unlocked) continue
-                                        if (tmp.tokens.buyables[id].canAfford) return true
-                                }
+                                let data = tmp.tokens.buyables
+                                if (data[191].canAfford && !hasMilestone("or", 6)) return true
+                                if (data[192].canAfford && !hasMilestone("or", 7)) return true
+                                if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
                                 return false
                         },
                 },
