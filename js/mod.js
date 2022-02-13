@@ -21,18 +21,26 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.sp.times >= 2
+	return player.sp.times >= 4
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.268)<br><br>
+		Reaching the endgame screen (updated at least as of v1.269)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.269</h3><br>
+		- Balanced until 4 Species resets.<br>
+		- Nerfed the Species effect formula.<br>
+		- Added a Species milestone.<br>
+		- Fixed Animal next at to always be at least 1e100.<br>
+		- Made Chromosomes XVIII actually do something.<br>
+		- Species now gives a bonus to Nucleus Milestone 10.<br>
+		- Upgrading Token II buyables' formulas will not make them more expensive.<br>
 	<br><h3 style='color: #CC0000'>v1.268</h3><br>
 		- Balanced until 2 Species resets.<br>
 		- Added a new layer, Species!<br>

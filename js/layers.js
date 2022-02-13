@@ -35651,7 +35651,7 @@ addLayer("nu", {
                         },
                         effectDescription(){
                                 let a = "Reward: Per Nucleus keep a Chromosome upgrade and milestone and Totipotent cost formula is 1e23^(x<sup>1.05</sup>)."
-                                if (player.sp.unlocked) a += makePurple(" Nucleuses reset nothing.")
+                                if (player.sp.unlocked) a += makeRed(" Nucleuses reset nothing.")
                                 return a
                         },
                 }, // hasMilestone("nu", 10)
@@ -36117,9 +36117,20 @@ addLayer("sp", {
                 return false
         },
         effect(){
-                let ret = player.sp.total.plus(1)
+                let amt = player.sp.total.plus(1)
 
-                return ret
+                if (amt.lt(1)) return amt
+                
+                let logBase = new Decimal(10) // how often we square root
+
+                let times = amt.log(logBase).plus(1).log(2).floor()
+                // how many times to square root the final thing
+                let a = Decimal.pow(2, times)
+
+                let mult_main = Decimal.pow(logBase, times)
+                let mult_extra = amt.div(Decimal.pow(logBase, a.sub(1))).root(a)
+
+                return mult_main.times(mult_extra)
         },
         effectDescription(){
                 let start = " affecting various things by " + format(tmp.sp.effect)
@@ -46695,7 +46706,7 @@ addLayer("tokens", {
                                         div = 20
                                         add = 103
                                 }
-                                if (hasUpgrade("ch", 21) && lvls.gte(560)) {
+                                if (hasUpgrade("ch", 21) && lvls.gte(555)) {
                                         div = 5
                                         add = 330
                                         exp = .4
