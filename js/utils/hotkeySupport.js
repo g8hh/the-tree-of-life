@@ -65,7 +65,7 @@ document.onkeydown = function(e) {
 		hotkeys[key].onPress()
 	}
 	key += "ALT" // try again with ALT at the end
-	if (hotkeys[key] != undefined player[hotkeys[key].layer].unlocked) {
+	if (hotkeys[key] != undefined && player[hotkeys[key].layer].unlocked) {
 		hotkeys[key].onPress()
 	}
 

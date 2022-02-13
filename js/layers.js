@@ -35189,7 +35189,7 @@ addLayer("nu", {
                 return tmp.nu.baseAmount.gte(tmp.nu.getNextAt) ? decimalOne : decimalZero
         },
         canReset(){
-                return tmp.nu.getResetGain.gt(0) && (!player.an.achActive[24] || hasUpgrade("ch", 43))
+                return tmp.nu.getResetGain.gt(0) && ((!player.an.achActive[24] && hasAchievement("an", 24)) || hasUpgrade("ch", 43))
         },
         resetsNothing(){
                 if (hasMilestone("nu", 10) && player.sp.unlocked) return true
