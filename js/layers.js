@@ -35780,6 +35780,9 @@ addLayer("nu", {
                         },
                 },
         },
+        onPrestige(){
+                tmp.nu.getResetGain = decimalZero
+        },
         doReset(layer){
                 if (layer != "nu") return
                 player.nu.time = 0
