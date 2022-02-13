@@ -36457,7 +36457,9 @@ addLayer("sp", {
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Species resets all prior content not permanently kept."
-                                        let b = "Initial effect: Total Species + 1"
+                                        let b1 = "Initial effect: Total Species + 1"
+                                        let b2 = "However, every time the Species effect gets 10x larger,<br>square root effective (further) species."
+                                        let b = b1 + br + b2
                                         let c = "For unlocking Species, you always autobuy all energy buyables and you can bulk 5x more Energy and Token II buyables."
 
                                         return a + br2 + b + br2 + c
@@ -38119,10 +38121,10 @@ addLayer("ach", {
                         onPress(){
                                 if (hasAchievement("an", 11)) {
                                         let data = player.an.grid
-                                        let id = player.an.selectedId
-                                        if (data[id].buyables.gte(tmp.an.grid.maxLevels)) return
-                                        if (player.an.lastBought == undefined || player.an.hasSoldYet) return
-                                        data[id].buyables = data[id].buyables.sub(1).max(0)
+                                        let lb = player.an.lastBought
+                                        if (data[lb].buyables.gte(tmp.an.grid.maxLevels)) return
+                                        if (lb == undefined || player.an.hasSoldYet) return
+                                        data[lb].buyables = data[lb].buyables.sub(1).max(0)
                                         let keys = [
                                                 101, 102, 103, 104, 105, 106, 107, 108,
                                                 202, 203, 204, 205, 206, 207, 208, 
