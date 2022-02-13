@@ -1,4 +1,3 @@
-
 function exponentialFormat(num, precision, mantissa = true) {
         let e = num.log10().floor()
         let m = num.div(Decimal.pow(10, e))
@@ -20,7 +19,6 @@ function commaFormat(num, precision) {
         if (portions.length == 1) return portions[0]
         return portions[0] + "." + portions[1]
 }
-
 
 function regularFormat(num, precision) {
         if (num === null || num === undefined) return "NaN"
@@ -119,9 +117,6 @@ function formatSmall(x, precision=2) {
 
 function invertOOM(x){
         let e = x.log10().ceil()
-        let m = x.div(Decimal.pow(10, e))
-        e = e.neg()
-        x = new Decimal(10).pow(e).times(m)
 
-        return x
+        return Decimal.pow10(e.neg()).times(x.div(e.pow10()))
 }

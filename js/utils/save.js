@@ -64,8 +64,8 @@ function deleteSave(name) {
 	}
 	if (!confirm("Are you sure you wish to delete your save named " + name + "?")) return
 	allSaves[name] = undefined
-	if (name==allSaves.set) {
-		let valid = Object.keys(allSaves).filter(x => (x!="set" && (allSaves[x]!==undefined||x==name)))
+	if (name == allSaves.set) {
+		let valid = Object.keys(allSaves).filter(x => (x != "set" && (allSaves[x] !== undefined || x == name)))
 		let toLoad = valid[(valid.indexOf(name)+1)%valid.length]
 		loadSave(toLoad)
 	}
@@ -134,8 +134,6 @@ function resetSaveMenu() { // reset the menu display
 	player.saveMenuOpen = true
 }
 
-
-
 // **LOADING SAVE STUFF**
 
 function load() {
@@ -182,10 +180,8 @@ function load() {
 
 function loadOptions() {
 	let get2 = localStorage.getItem(modInfo.id+"_options")
-	if (get2) 
-		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))))
-	else 
-		options = getStartOptions()
+	if (get2) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))))
+	else options = getStartOptions()
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
 }
@@ -223,6 +219,7 @@ function NaNcheck(data) {
 	}
 	return curr
 }
+
 function exportSave() {
 	//if (NaNalert) return
 	let str = btoa(JSON.stringify(player))

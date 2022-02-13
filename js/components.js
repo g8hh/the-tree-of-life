@@ -9,7 +9,7 @@ function loadVue() {
 		`
 	})
 
-// data = a function returning the content (actually HTML)
+	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
 			props: ['layer', 'data'],
 			template: `
@@ -590,6 +590,7 @@ function loadVue() {
 		</div>
 		`
 	})
+	
 	Vue.component('microtab', { // copy it
 		props: ['layer', 'data'],
 		computed: {
@@ -625,7 +626,6 @@ function loadVue() {
 		</div></div>
 		`
 	})
-
 
 	Vue.component('achievements', {
 		props: ['layer', 'data'],
@@ -794,7 +794,6 @@ function loadVue() {
 	Vue.component('tooltip', systemComponents['tooltip'])
 	Vue.component('particle', systemComponents['particle'])
 	Vue.component('bg', systemComponents['bg'])
-
 
 	app = new Vue({
 		el: "#app",

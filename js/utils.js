@@ -236,12 +236,12 @@ function showTab(name, prev) {
 }
 
 function showNavTab(name, prev) {
-	console.log(prev)
+	//console.log(prev)
 	if (LAYERS.includes(name) && !layerunlocked(name)) return
 	if (player.navTab !== name) clearParticles(function(p) {return p.layer === player.navTab})
 	if (tmp[name] && tmp[name].previousTab !== undefined) prev = tmp[name].previousTab
 	var toTreeTab = name == "tree-tab"
-	console.log(name + prev)
+	//console.log(name + prev)
 	if (name!== "none" && prev && !tmp[prev]?.leftTab == !tmp[name]?.leftTab) player[name].prevTab = prev
 	else if (player[name]) player[name].prevTab = ""
 	player.navTab = name
@@ -258,7 +258,6 @@ function goBack(layer) {
 
 	if (tmp[layer].leftTab) showNavTab(nextTab, layer)
 	else showTab(nextTab, layer)
-
 }
 
 function layOver(obj1, obj2) {
@@ -404,12 +403,11 @@ document.title = modInfo.name
 // Converts a string value to whatever it's supposed to be
 function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal) {
-		value = new Decimal (value)
+		value = new Decimal(value)
 		if (checkDecimalNaN(value)) return decimalZero
 		return value
 	}
-	if (!isNaN(oldValue)) 
-		return parseFloat(value) || 0
+	if (!isNaN(oldValue)) return parseFloat(value) || 0
 	return value
 }
 

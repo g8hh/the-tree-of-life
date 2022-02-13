@@ -32,7 +32,7 @@ function getResetGain(layer, useType = null) {
 	return decimalZero
 }
 
-function getNextAt(layer, canMax=false, useType = null) {
+function getNextAt(layer, canMax = false, useType = null) {
 	let type = useType
 	if (!useType) {
 		type = tmp[layer].type
@@ -124,7 +124,7 @@ function canReset(layer){
 
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]){
-		if(layers[lr].doReset) {
+		if (layers[lr].doReset) {
 			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer)
 		} else if (tmp[layer].row > tmp[lr].row && row !== "side" && !isNaN(row)) {
@@ -137,8 +137,7 @@ function layerDataReset(layer, keep = []) {
 	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab:player[layer].prevTab} // Always keep these
 
 	for (thing in keep) {
-		if (player[layer][keep[thing]] !== undefined)
-			storedData[keep[thing]] = player[layer][keep[thing]]
+		if (player[layer][keep[thing]] !== undefined) storedData[keep[thing]] = player[layer][keep[thing]]
 	}
 
 	Vue.set(player[layer], "buyables", getStartBuyables(layer))
@@ -152,7 +151,7 @@ function layerDataReset(layer, keep = []) {
 	player[layer].achievements = []
 
 	for (thing in storedData) {
-		player[layer][thing] =storedData[thing]
+		player[layer][thing] = storedData[thing]
 	}
 }
 
@@ -160,7 +159,6 @@ function resetBuyables(layer){
 	if (layers[layer].buyables) player[layer].buyables = getStartBuyables(layer)
 	player[layer].spentOnBuyables = decimalZero
 }
-
 
 function addPoints(layer, gain) {
 	player[layer].points = player[layer].points.add(gain).max(0)
@@ -179,7 +177,6 @@ function doReset(layer, force=false) {
 	let row = tmp[layer].row
 	if (logLayerReset) console.log(layer, force)
 	if (!force) {
-		
 		if (tmp[layer].canReset === false) return;
 		
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
@@ -205,7 +202,6 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
-	
 	}
 
 	if (run(layers[layer].resetsNothing, layers[layer])) return
@@ -251,11 +247,11 @@ function startChallenge(layer, x) {
 	if (player[layer].activeChallenge == x) {
 		completeChallenge(layer, x)
 		Vue.set(player[layer], "activeChallenge", null)
-		} else {
+	} else {
 		enter = true
 	}	
 	doReset(layer, true)
-	if(enter) {
+	if (enter) {
 		Vue.set(player[layer], "activeChallenge", x)
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])
 	}
@@ -448,3 +444,4 @@ var interval = setInterval(function() {
 /* */
 
 setInterval(function() {needCanvasUpdate = true}, 500)
+

@@ -60,18 +60,15 @@ document.onkeydown = function(e) {
 	if (controlDown) key = "Control+" + key.toUpperCase()
 	if (shiftDown) key = "shift+" + key
 	if (e.ctrlKey && hotkeys[key]) e.preventDefault()
-	if (hotkeys[key] != undefined){
-		if (player[hotkeys[key].layer].unlocked) {
-			hotkeys[key].onPress()
-		}
-	} else {
-		key += "ALT"
-		if (hotkeys[key] != undefined){
-			if (player[hotkeys[key].layer].unlocked) {
-				hotkeys[key].onPress()
-			}
-		}
+
+	if (hotkeys[key] != undefined && player[hotkeys[key].layer].unlocked) {
+		hotkeys[key].onPress()
 	}
+	key += "ALT" // try again with ALT at the end
+	if (hotkeys[key] != undefined player[hotkeys[key].layer].unlocked) {
+		hotkeys[key].onPress()
+	}
+
 	if (logHotkey) console.log(key)
 	if (key == "q" && qForClear) clearInterval(interval)
 }
