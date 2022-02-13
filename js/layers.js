@@ -1970,70 +1970,32 @@ addLayer("sci", {
                 if (hasUpgrade("a", 23) || force2)      layers.sci.protein_science.update(diff)
                 if (layers.l.grid.getGemEffect(705))    layers.sci.dna_science.update(diff)
 
+                
+                let sciBuyIds = []
+                if (hasMilestone("n", 1)) sciBuyIds = [11, 12, 13, 21, 22, 23]
+                if (hasMilestone("n", 1)) sciBuyIds = sciBuyIds.concat([101, 102, 103, 111, 112, 113])
+                let orderNormal = [12, 11, 13, 22, 21, 23, 101, 102, 103, 111, 112, 113]
+                for (let i = 0; i < orderNormal.length; i ++){
+                        let id = orderNormal[i]
+                        if (sciBuyIds.includes(id)) continue
+                        if (!hasMilestone("tokens", i + 1)) continue
+                        if (data["autobuysci" + id]) sciBuyIds.push(id)
+                }
+
+                let reqSecondary = [11, 13, 14, 21, 25, 31, 32, 41, 42]
+                let orderSecondary = [501, 502, 503, 511, 512, 513, 521, 522, 523]
+                for (let i = 0; i < 9; i ++){
+                        if (hasUpgrade("t", reqSecondary[i])) sciBuyIds.push(orderSecondary[i])
+                }
+                
+                if (data.autobuyreuse && hasMilestone("l", 3)) sciBuyIds.push(302)
+                if (data.autobuyrecycle && hasMilestone("l", 5)) sciBuyIds.push(303)
+
                 let lsb = layers.sci.buyables
                 let tsb = tmp.sci.buyables
-                if (data.autobuysci12 && hasMilestone("tokens", 1) || hasMilestone("n", 1)) {
-                        if (tsb[12].unlocked) lsb[12].buy()
-                }
-                if (data.autobuysci11 && hasMilestone("tokens", 2) || hasMilestone("n", 1)) {
-                        if (tsb[11].unlocked) lsb[11].buy()
-                }
-                if (data.autobuysci13 && hasMilestone("tokens", 3) || hasMilestone("n", 1)) {
-                        if (tsb[13].unlocked) lsb[13].buy()
-                }
-                if (data.autobuysci22 && hasMilestone("tokens", 4) || hasMilestone("n", 1)) {
-                        if (tsb[22].unlocked) lsb[22].buy()
-                }
-                if (data.autobuysci21 && hasMilestone("tokens", 5) || hasMilestone("n", 1)) {
-                        if (tsb[21].unlocked) lsb[21].buy()
-                }
-                if (data.autobuysci23 && hasMilestone("tokens", 6) || hasMilestone("n", 1)) {
-                        if (tsb[23].unlocked) lsb[23].buy()
-                }
-                if (data.autobuysci101 && hasMilestone("tokens", 7) || hasMilestone("n", 2)) {
-                        if (tsb[101].unlocked) lsb[101].buy()
-                }
-                if (data.autobuysci102 && hasMilestone("tokens", 8) || hasMilestone("n", 2)) {
-                        if (tsb[102].unlocked) lsb[102].buy()
-                }
-                if (data.autobuysci103 && hasMilestone("tokens", 9) || hasMilestone("n", 2)) {
-                        if (tsb[103].unlocked) lsb[103].buy()
-                }
-                if (data.autobuysci111 && hasMilestone("tokens", 10) || hasMilestone("n", 2)) {
-                        if (tsb[111].unlocked) lsb[111].buy()
-                }
-                if (data.autobuysci112 && hasMilestone("tokens", 11) || hasMilestone("n", 2)) {
-                        if (tsb[112].unlocked) lsb[112].buy()
-                }
-                if (data.autobuysci113 && hasMilestone("tokens", 12) || hasMilestone("n", 2)) {
-                        if (tsb[113].unlocked) lsb[113].buy()
-                }
-                if (hasUpgrade("t", 11)) {
-                        if (tsb[501].unlocked) lsb[501].buy()
-                }
-                if (hasUpgrade("t", 13)) {
-                        if (tsb[502].unlocked) lsb[502].buy()
-                }
-                if (hasUpgrade("t", 14)) {
-                        if (tsb[503].unlocked) lsb[503].buy()
-                }
-                if (hasUpgrade("t", 21)) {
-                        if (tsb[511].unlocked) lsb[511].buy()
-                }
-                if (hasUpgrade("t", 25)) {
-                        if (tsb[512].unlocked) lsb[512].buy()
-                }
-                if (hasUpgrade("t", 31)) {
-                        if (tsb[513].unlocked) lsb[513].buy()
-                }
-                if (hasUpgrade("t", 32)) {
-                        if (tsb[521].unlocked) lsb[521].buy()
-                }
-                if (hasUpgrade("t", 41)) {
-                        if (tsb[522].unlocked) lsb[522].buy()
-                }
-                if (hasUpgrade("t", 42)) {
-                        if (tsb[523].unlocked) lsb[523].buy()
+                for (i = 0; i < sciBuyIds.length; i ++) {
+                        let id = sciBuyIds[i]
+                        if (tsb[id].unlocked) lsb[id].buy()
                 }
 
                 if (data.autobuyhsciupg && hasMilestone("n", 3)) {
@@ -2084,12 +2046,6 @@ addLayer("sci", {
                                 id = nSciKeys[i]
                                 boughtYet = buyUpg("sci", id) 
                         }
-                }
-                if (data.autobuyreuse && hasMilestone("l", 3)) {
-                        if (tsb[302].unlocked) lsb[302].buy()
-                }
-                if (data.autobuyrecycle && hasMilestone("l", 5)) {
-                        if (tsb[303].unlocked) lsb[303].buy()
                 }
         },
         effect(){
@@ -27246,10 +27202,12 @@ addLayer("or", {
                         },
                         description(){
                                 let a = "Per Organ upgrade multiply " + makePurple("OB") + " and " + makeBlue("DB") + " gain by log10(log10(Tissues))"
+                                if (player.sp.unlocked) a = a.replaceAll("log10", makePurple("log2"))
                                 return a + br + " Currently: *" + format(tmp.or.upgrades[101].base) + " per upgrade"
                         },
                         base(){
-                                return player.t.points.max(10).log10().max(10).log10()
+                                let base = player.sp.unlocked ? 2 : 10
+                                return player.t.points.max(base).log(base).max(base).log(base)
                         },
                         cost(){
                                 return new Decimal(25)
@@ -34408,6 +34366,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes VIII"
                         },
                         description(){
+                                if (player.ch.everUpgrade33) return "<bdi style='font-size: 90%'>Gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
                                 return "<bdi style='font-size: 70%'>Token II buyables' cost exponent is .46, gain 20x Genes, and per Chromosome increase the Taxonomy buyable max by 3 up to 1100, but disable Chromosomes III</bdi>"
                         },
                         cost:() => new Decimal(151),
@@ -36460,9 +36419,11 @@ addLayer("sp", {
                                         let b1 = "Initial effect: Total Species + 1"
                                         let b2 = "However, every time the Species effect gets 10x larger,<br>square root effective (further) species."
                                         let b = b1 + br + b2
-                                        let c = "For unlocking Species, you always autobuy all energy buyables and you can bulk 5x more Energy and Token II buyables."
+                                        let c = "For unlocking Species, you always autobuy all energy buyables and<br>you can bulk 5x more Energy and Token II buyables."
+                                        let d = "Furthermore, some things in previous layers (Organs and Animals) have some text in "
+                                        d += br + makePurple("purple") + " which are effects for unlocking Species."
 
-                                        return a + br2 + b + br2 + c
+                                        return a + br2 + b + br2 + c + br + d
                                 }],
                         ],
                         unlocked(){
