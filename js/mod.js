@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.268",
+	num: "1.269",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -41,6 +41,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Made Chromosomes XVIII actually do something.<br>
 		- Species now gives a bonus to Nucleus Milestone 10.<br>
 		- Upgrading Token II buyables' formulas will not make them more expensive.<br>
+		- Added Species hotkeys.<br>
 	<br><h3 style='color: #CC0000'>v1.268</h3><br>
 		- Balanced until 2 Species resets.<br>
 		- Added a new layer, Species!<br>

@@ -37795,21 +37795,16 @@ addLayer("ach", {
                         },
                 },
                 {key: "shift+B", description(){
-                        if (hasUpgrade("or", 352)) return "Shift+B: Buy Taxonomy buyable x5"
                         return "Shift+B: Go to B"
                         }, 
                         onPress(){
-                                if (hasUpgrade("or", 352)) {
-                                        if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
-                                        return
-                                }
                                 if (!tmp.mini.layerShown) return
                                 if (!tmp.mini.tabFormat.B.unlocked) return
                                 player.tab = "mini"
                                 player.subtabs.mini.mainTabs = "B"
                         },
                         unlocked(){
-                                return tmp.mini.layerShown || hasUpgrade("or", 352)
+                                return tmp.mini.layerShown
                         },
                 },
                 {
@@ -37912,7 +37907,15 @@ addLayer("ach", {
                                 return tmp.p.layerShown
                         },
                 },
-                {key: "shift+S", description: "Shift+S: Go to Stem Cells", onPress(){
+                {key: "shift+Q", description: "Shift+Q: Go to Species", onPress(){
+                                if (!player.sp.unlocked) return
+                                showTab("sp")
+                        },
+                        unlocked(){
+                                return player.sp.unlocked
+                        },
+                },
+                {key: "shift+R", description: "Shift+R: Go to Stem Cells", onPress(){
                                 if (!hasUpgrade("cells", 13)) return
                                 showTab("cells")
                                 player.subtabs.cells.mainTabs = "Stem"
@@ -38023,6 +38026,13 @@ addLayer("ach", {
                                 return tmp.p.layerShown
                         },
                 },
+                {key: "q", description: "Q: Reset for Species", onPress(){
+                                if (canReset("sp")) doReset("sp")
+                        },
+                        unlocked(){
+                                return tmp.sp.layerShown
+                        },
+                },
                 {key: "t", description: "T: Reset for Tissues", 
                         onPress(){
                                 if (!tmp.t.layerShown) return
@@ -38057,6 +38067,18 @@ addLayer("ach", {
                                 if (hasUpgrade("or", 352)) {
                                         if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
                                 } 
+                        },
+                        unlocked(){
+                                return hasUpgrade("or", 352)
+                        },
+                },
+                {key: "shift+BALT", description(){
+                        if (hasUpgrade("or", 352)) return "Shift+B: Buy Taxonomy buyable x5"
+                        }, 
+                        onPress(){
+                                if (hasUpgrade("or", 352)) {
+                                        if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
+                                }
                         },
                         unlocked(){
                                 return hasUpgrade("or", 352)
