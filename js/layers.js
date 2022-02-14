@@ -31551,7 +31551,7 @@ addLayer("an", {
                 return false
         },
         prestigeNotify(){
-                return tmp.an.getResetGain.gt(0) && player.an.times < 20
+                return tmp.an.getResetGain.gt(0) && player.an.times < 20 && player.an.points.lt(1e5)
         },
         effect(){
                 let pts = player.an.total
@@ -35191,6 +35191,9 @@ addLayer("nu", {
         canReset(){
                 return tmp.nu.getResetGain.gt(0) && ((!player.an.achActive[24] && hasAchievement("an", 24)) || hasUpgrade("ch", 43))
         },
+        autoPrestige(){
+                return hasMilestone("sp", 3)
+        },
         resetsNothing(){
                 if (hasMilestone("nu", 10) && player.sp.unlocked) return true
                 return hasUpgrade("nu", 15)
@@ -35198,7 +35201,7 @@ addLayer("nu", {
         effectPrimary(){
                 let pts = player.nu.points
 
-                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(4, Math.cbrt(player.sp.times))))
+                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
 
                 let ret = pts
 
@@ -35209,7 +35212,7 @@ addLayer("nu", {
         effectSecondary(){
                 let pts = player.nu.points
 
-                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(4, Math.cbrt(player.sp.times))))
+                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
                 
                 let ret = pts.div(10)
 
@@ -36374,7 +36377,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per reset keep a Animal, Chromosome, and Nucleuse milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 4."
+                                return "Reward: Per reset keep a Animal, Chromosome, and Nucleuse milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 3."
                         },
                 }, // hasMilestone("sp", 1)
                 2: {
@@ -36391,6 +36394,20 @@ addLayer("sp", {
                                 return "Reward: Keep Organ upgrades, keep Animal Achievements upon Nucleus rest, and autobuy Taxonomy buyables that were ever above 400 levels."
                         },
                 }, // hasMilestone("sp", 2)
+                3: {
+                        requirementDescription(){
+                                return "6 Species resets"
+                        },
+                        done(){
+                                return player.sp.times >= 6
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep one Nucleus per reset and autobuy Nucleuses."
+                        },
+                }, // hasMilestone("sp", 3)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36407,7 +36424,9 @@ addLayer("sp", {
                 "Milestones": {
                         content: [
                                 "main-display",
-                                "blank",
+                                ["display-text", function(){
+                                        return "You have done " + formatWhole(player.sp.times) + " Species resets"
+                                }],
                                 "milestones",
                         ],
                         unlocked(){
@@ -36477,7 +36496,7 @@ addLayer("sp", {
                 }
                 data0.total = decimalZero
                 data0.best = decimalZero
-                data0.points = decimalZero
+                data0.points = data0.points.min(hasMilestone("sp", 3) ? player.sp.times : 0)
                 
                 // 1. Chromosomes content
                 if (!false) {
