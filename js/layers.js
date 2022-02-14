@@ -225,7 +225,7 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
-        202:() => hasUpgrade("sp", 35) ? "to Bottom Quark base per .1" : "nothing (currently)",
+        202:() => hasUpgrade("sp", 35) ? "to Bottom Quark base per .06" : "nothing (currently)",
         203:() => hasUpgrade("nu", 24) ? "Organ gain per Chromosomes" : "nothing (currently)",
         204:() => hasUpgrade("sp", 41) ? "in<u>tes</u>TINE gain per sqrt(Nucleuses)" : "nothing (currently)",
         205:() => hasUpgrade("sp", 42) ? "inTES<u>tine</u> gain per 8" : "nothing (currently)",
@@ -36297,7 +36297,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XV"
                         },
                         description(){
-                                return "Animalia I amount<sup>.1</sup> adds to Bottom Quarks' base"
+                                return "Animalia I amount<sup>.06</sup> adds to Bottom Quarks' base"
                         },
                         cost:() => new Decimal(1),
                         unlocked(){
@@ -46587,13 +46587,13 @@ addLayer("tokens", {
                                 let c = tmp.tokens.buyables.getCol2Total
 
                                 let add = decimalZero
-                                if (hasUpgrade("sp", 35)) add = add.plus(player.an.grid[202].extras.pow(.1))
+                                if (hasUpgrade("sp", 35)) add = add.plus(player.an.grid[202].extras.pow(.06))
 
                                 if (player.an.achActive[34] || hasMilestone("ch", 22)) {
-                                        return c.max(1).pow(Math.max(tmp.an.clickables.rowThreeOff, 1))
+                                        return c.max(1).pow(Math.max(tmp.an.clickables.rowThreeOff, 1)).plus(add)
                                 }
-                                if (hasUpgrade("ch", 42)) return c.max(1)
-                                if (hasUpgrade("or", 42)) return c.div(1000).plus(1)
+                                if (hasUpgrade("ch", 42)) return c.max(1).plus(add)
+                                if (hasUpgrade("or", 42)) return c.div(1000).plus(1).plus(add)
                                 if (hasMilestone("or", 8)) return c.plus(6)
 
                                 return c.times(30).plus(100).div(r.plus(20))
