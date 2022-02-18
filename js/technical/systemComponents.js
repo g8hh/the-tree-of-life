@@ -217,6 +217,7 @@ var systemComponents = {
 		Thank you to <b>Jacorb</b> for letting me use his multi save code!<br>
 		Thank you to <b>Digiprime</b> for the idea for the Organ layer!<br>
 		Thank you to <b>Lordshinjo</b> for a specific and accurate bug report on "autobuying"<br>buyables and helping to subsequently fix.<br>
+		Thank you to <b>Virgil</b> for suggesting Taxonomy ranks and the general idea.<br>
 
 		<br><br><span v-if="player.showBuiltInSaves">
 			<h2 style='color: #00FF99'>Built in saves</h2><br>

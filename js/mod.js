@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.246.1",
+	num: "1.268",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,18 +21,139 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.ch.points.gte(297)
+	return player.sp.times >= 2
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.245)<br><br>
+		Reaching the endgame screen (updated at least as of v1.268)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.268</h3><br>
+		- Balanced until 2 Species resets.<br>
+		- Added a new layer, Species!<br>
+		- Added 20 Species upgrades.<br>
+		- Added a Species milestone.<br>
+		- Various code clean up.<br>
+		- Fixed a bug with cross contamination percentage display.<br>
+		- Fixed the display of tertiary.<br>
+		- Changed "cost" to "requires" for Token II buyables once they're free.<br>
+		- Fixed token layer notification.<br>
+		- Added a custom save.<br>
+		- Added two rows of achievements.<br>
+	<br><h3 style='color: #CC0000'>v1.267</h3><br>
+		- Balanced until 1e900 Animals.<br>
+		- Added a Nucleuse milestone.<br>
+		- Added an Animal milestone.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.266</h3><br>
+		- Balanced until 1539 Chromosomes.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Added a Nucleuse milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.265</h3><br>
+		- Added a Nucleuse, Animal, and Chromosome milestone.<br>
+		- Balanced until 1494 Chromosomes.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.264</h3><br>
+		- Added a Nucleuse upgrade.<br>
+		- Balanced until 1454 Chromosomes.<br>
+		- Fixed the 403 Chromosomes bug.<br>
+	<br><h3 style='color: #CC0000'>v1.263</h3><br>
+		- Added two Chromosome milestones.<br>
+		- Balanced until 1439 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.262</h3><br>
+		- Added a Nucleuse upgrade.<br>
+		- Added an Animal milestone.<br>
+		- Added a Chromosome milestone.<br>
+		- Balanced until 1401 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.261</h3><br>
+		- Added a Nucleuse upgrade.<br>
+		- Balanced until 1330 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.260.1</h3><br>
+		- Rebalanced until 1307 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.260</h3><br>
+		- Added a Nucleuse upgrade.<br>
+		- Added a Chromosome Milestone.<br>
+		- Balanced until 1241 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.259</h3><br>
+		- Added an Animal Milestone.<br>
+		- Added a Chromosome Milestone.<br>
+		- Balanced until 1216 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.258</h3><br>
+		- Balanced until 1174 Chromosomes.<br>
+		- Added an Animal milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.257</h3><br>
+		- Balanced until 1152 Chromosomes.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Added a Chromosome milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.256</h3><br>
+		- Balanced until 1104 Chromosomes.<br>
+		- Added a Nucleuse milestone.<br>
+		- Added a Chromosome milestone.<br>
+		- Added a Micro upgrade.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.255</h3><br>
+		- Balanced until 1014 Chromosomes.<br>
+		- Added two Nucleuse milestones.<br>
+		- Added a Animal milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.254</h3><br>
+		- Balanced until 864 Chromosomes.<br>
+		- Added a Micro upgrade.<br>
+		- Added a (V) hotkey for selling a single Taxonomy buyable.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Added two Chromosome milestones.<br>
+		- Added an Animal milestone.<br>
+		- Made the Taxonomy clickable larger.<br>
+		- Added a row of achievements.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.253</h3><br>
+		- Added a Chromosome milestone.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Added a Micro upgrade.<br>
+		- Added two Achievement rows.<br>
+		- Balanced until 776 Chromosomes.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.252</h3><br>
+		- Balanced until 677 Chromosomes.<br>
+		- Added an Animal Achievement.<br>
+		- Added two Nucleuse milestones.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Implemented a Animal Achievement's clickable.<br>
+	<br><h3 style='color: #CC0000'>v1.251</h3><br>
+		- Balanced until 619 Chromosomes.<br>
+		- Added two Animal achievement.<br>
+		- Added a Nucleuse milestone.<br>
+		- Added a Chromosome upgrade.<br>
+		- Added a Animal milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.250</h3><br>
+		- Balanced until 514 Chromosomes.<br>
+		- Added a Nucleuse milestone.<br>
+		- Added a Nucleuse upgrade.<br>
+		- Added hotkeys for Nucleuse.<br>
+		- Added nine rows of achievements.<br>
+		- Various bug fixes.<br>
+		- Added an Animal achievement.<br>
+		- Added a micro upgrade.<br>
+	<br><h3 style='color: #CC0000'>v1.249</h3><br>
+		- Added a Chromosome upgrade.<br>
+		- Balanced until 496 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.248</h3><br>
+		- Added three Chromosome milestones.<br>
+		- Added two Animal milestones.<br>
+		- Added two Chromosome upgrades.<br>
+		- Added a Nucluse milestone.<br>
+		- Added a custom save.<br.
+		- Various wording fixes.<br>
+		- Balanced until 482 Chromosomes.<br>
+	<br><h3 style='color: #CC0000'>v1.247</h3><br>
+		- Added three Chromosome milestones.<br>
+		- Added two Animal milestones.<br>
+		- Various code cleanup and bug fixes.<br>
+		- Balanced until 381 Chromosomes.<br>
 	<br><h3 style='color: #CC0000'>v1.246.1</h3><br>
 		- Added three Nucleuse milestones.<br>
 		- Added a Chromosome upgrade.<br>
@@ -2157,6 +2278,9 @@ function fixOldSave(oldVersion){
 			}
 			player[layer].milestones = z
 		}
+	}
+	if (player.version < "1.265.1") {
+		if (player.or.upgrades.includes(135)) player.l.activeChallenge = null
 	}
 }
 
