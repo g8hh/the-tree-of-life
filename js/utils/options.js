@@ -59,6 +59,7 @@ function adjustMSDisp() {
 }
 
 function milestoneShown(layer, id) {
+	id = toNumber(id)
 	complete = player[layer].milestones.includes(id);
 	auto = layers[layer].milestones[id].toggles;
 
@@ -67,10 +68,10 @@ function milestoneShown(layer, id) {
 			return true;
 			break;
 		case "last":
-			return (auto) || !complete || player[layer].lastMilestone === id;
+			return auto || !complete || player[layer].lastMilestone == id;
 			break;
 		case "automation":
-			return (auto) || !complete;
+			return auto || !complete;
 			break;
 		case "incomplete":
 			return !complete;

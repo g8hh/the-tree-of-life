@@ -19,6 +19,7 @@ function logisticTimeUntil(goal, current, gain, loss){
 
 function getLogisticAmount(current, gain, loss, diff){
         if (current.eq(gain.div(loss))) return current
+        if (gain.gte("ee10")) return gain.div(loss)
         if (current.lt(gain.div(loss))) {
                 c = getLogisticTimeConstant(current, gain, loss)
                 
