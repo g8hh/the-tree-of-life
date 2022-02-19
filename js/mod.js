@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.269.2",
+	num: "1.270",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.sp.times >= 4
+	return player.ch.points.gte(1683)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -33,6 +33,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.270</h3><br>
+		- Added 5 Effect upgrades.<br>
+		- Added two Chromosome milestone.<br>
+		- Added two Spcies milestones.<br>
+		- Buffed Species gain.<br>
+		- Various bugfixes.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.269.2</h3><br>
 		- Various code cleanup.<br>
 		- You now need Six to initially Nucleuse reset (post Species).<br>

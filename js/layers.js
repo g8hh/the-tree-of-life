@@ -19864,20 +19864,20 @@ addLayer("cells", {
                 return ret.max(1)
         },
         getGainExp(){
-                let ret = new Decimal(1/1960)
+                let ret = new Decimal(1960)
 
-                if (hasMilestone("cells", 14))  ret = ret.times(2)
-                if (hasMilestone("cells", 20))  ret = ret.times(49/25)
-                if (hasUpgrade("t", 52))        ret = ret.times(100/99)
+                if (hasMilestone("cells", 14))  ret = ret.div(2)
+                if (hasMilestone("cells", 20))  ret = ret.div(49/25)
+                if (hasUpgrade("t", 52))        ret = ret.div(100/99)
                 if (hasUpgrade("or", 211) && !player.or.filterLeftKidney) {
-                                                ret = ret.times(99/98)
+                                                ret = ret.div(99/98)
                 }
                 if (hasMilestone("or", 19) && player.or.filterLeftKidney) {
-                                                ret = ret.times(99/98)
+                                                ret = ret.div(99/98)
                 }
-                if (hasUpgrade("or", 341))      ret = ret.times(49/48)
+                if (hasUpgrade("or", 341))      ret = ret.div(49/48)
 
-                return ret
+                return ret.pow(-1)
         },
         getNextAt(){
                 let gain = tmp.cells.getResetGain.plus(1)
@@ -19902,6 +19902,7 @@ addLayer("cells", {
                                                 exp = exp.plus(per * upgs * mile)
                 }
                 if (hasUpgrade("ch", 15))       exp = exp.plus(13.75)
+                if (hasUpgrade("sp", 52))       exp = exp.plus(1)
 
                 return exp
         },
@@ -20337,6 +20338,7 @@ addLayer("cells", {
                         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                         ret = ret.pow(1.001)
                         }
+                        if (hasUpgrade("sp", 54))       ret = ret.pow(1.001)
 
                         return ret
                 },
@@ -24054,6 +24056,7 @@ addLayer("t", {
                 if (hasUpgrade("or", 45))       ret = ret.plus(.91)
                 if (hasUpgrade("ch", 12))       ret = ret.plus(player.ch.upgrades.length)
                 if (hasUpgrade("an", 43))       ret = ret.plus(1)
+                if (hasUpgrade("sp", 51))       ret = ret.plus(1)
 
                 return ret
         },
@@ -26430,6 +26433,7 @@ addLayer("or", {
                         }
                         if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
                         if (hasMilestone("an", 42))     ret = ret.pow(player.ch.points.max(1465).div(1465).sqrt().min(1.1))
+                        if (hasUpgrade("sp", 53))       ret = ret.pow(1.001)
                         
                         return ret
                 },
@@ -28937,9 +28941,9 @@ addLayer("or", {
                                 }
                         },
                         base(){
-                                let ret = player.or.buyables[202].max(1).sqrt()
-                                
-                                return ret
+                                if (hasMilestone("ch", 35))     return player.or.buyables[202].max(1).pow(.52)
+                                if (hasUpgrade("sp", 55))       return player.or.buyables[202].max(1).pow(.51)
+                                return player.or.buyables[202].max(1).pow(.5)
                         },
                         effect(){
                                 return tmp.or.buyables[203].base.pow(player.or.buyables[203])
@@ -28955,6 +28959,8 @@ addLayer("or", {
                                 }
 
                                 let eformula = "sqrt(gonna levels)^x<br>" + format(tmp.or.buyables[203].base) + "^x"
+                                if (hasUpgrade("sp", 55)) eformula = eformula.replace("sqrt(gonna levels)", "(gonna levels)<sup>.51</sup>")
+                                if (hasMilestone("ch", 35)) eformula = eformula.replace(".51", ".52")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31873,13 +31879,17 @@ addLayer("an", {
                         if (hasMilestone("ch", 10) && player.ch.points.eq(100)) {
                                                         ret = ret.times(20)
                         } 
+                        if (hasMilestone("an", 16))     ret = ret.times(Decimal.pow(10, player.sp.times).min(1e22))
+                        if (hasMilestone("an", 39))     ret = ret.times(1e3)
+
+                        // CORRECTIONS
+
                         if (player.ch.points.eq(410))   ret = ret.times(200)
                         if (player.ch.points.eq(425))   ret = ret.times(200)
                         if (player.ch.points.eq(426))   ret = ret.times(10)
                         if (player.ch.points.eq(1221))  ret = ret.times(1e6)
                         if (player.ch.points.eq(1435))  ret = ret.times(1e25)
-                        if (hasMilestone("an", 16))     ret = ret.times(Decimal.pow(10, player.sp.times).min(1e22))
-                        if (hasMilestone("an", 39))     ret = ret.times(1e3)
+                        if (player.ch.points.eq(1475))  ret = ret.times(1.3e19)
 
                         if (player.extremeMode)         ret = ret.pow(.75)
 
@@ -35096,6 +35106,20 @@ addLayer("ch", {
                                 return "Reward: Strange Quark formula is 4(C<sup>.9</sup>)*x and Token II via Cell double exponent is 17+x/9999."
                         },
                 }, // hasMilestone("ch", 34)
+                35: {
+                        requirementDescription(){
+                                return "1668 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(1668)
+                        },
+                        unlocked(){
+                                return player.sp.unlocked
+                        },
+                        effectDescription(){
+                                return "Reward: make base is raised to 52/51."
+                        },
+                }, // hasMilestone("ch", 35)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36076,7 +36100,7 @@ addLayer("sp", {
                 return baseGain.root(tmp.sp.getGainExp).times(900).pow10()
         },
         getGainExp(){
-                let ret = new Decimal(3)
+                let ret = new Decimal(8)
 
                 return ret
         },
@@ -36380,6 +36404,66 @@ addLayer("sp", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("sp", 45)
+                },
+                51: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXI"
+                        },
+                        description(){
+                                return "Add 1 to the Tissue effect exponent"
+                        },
+                        cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
+                        unlocked(){
+                                return hasMilestone("ch", 34)
+                        }, // hasUpgrade("sp", 51)
+                },
+                52: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXII"
+                        },
+                        description(){
+                                return "Add 1 to the Cell effect exponent"
+                        },
+                        cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
+                        unlocked(){
+                                return hasMilestone("ch", 34)
+                        }, // hasUpgrade("sp", 52)
+                },
+                53: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXIII"
+                        },
+                        description(){
+                                return "Gain ^1.001 Energy"
+                        },
+                        cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
+                        unlocked(){
+                                return hasMilestone("ch", 34)
+                        }, // hasUpgrade("sp", 53)
+                },
+                54: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXIV"
+                        },
+                        description(){
+                                return "Gain ^1.001 Stem Cells"
+                        },
+                        cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
+                        unlocked(){
+                                return hasMilestone("ch", 34)
+                        }, // hasUpgrade("sp", 54)
+                },
+                55: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXV"
+                        },
+                        description(){
+                                return "make base is (gonna levels)<sup>.51</sup>"
+                        },
+                        cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
+                        unlocked(){
+                                return hasMilestone("ch", 34)
+                        }, // hasUpgrade("sp", 55)
                 },
         },
         milestones: {
@@ -48578,6 +48662,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                                                 c += "Kidney IX multiplies DX by 1.001" + br
                                                 }
+                                                if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.001"
                                                 if (c.includes("DX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
@@ -48761,6 +48846,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.01), 4) + br
                                                 if (hasMilestone("an", 42))     c += "Animal Milestone 42 multiplies BX by " + format(player.ch.points.max(1465).div(1465).sqrt().min(1.1), 4) + br
+                                                if (hasUpgrade("sp", 53))       c += "Effect XXIII multplies BX by 1.001" + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
