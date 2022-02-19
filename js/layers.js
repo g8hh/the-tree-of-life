@@ -31477,8 +31477,6 @@ addLayer("an", {
                         33: false,
                         34: false,
                 },
-                lastBought: undefined,
-                hasSoldYet: false,
         }},
         color: "#FFEC13",
         branches: [],
@@ -32954,7 +32952,7 @@ addLayer("an", {
                                 let e = "Cost formula:<br>" + formatWhole(costs[0]) + "(" + formatWhole(costs[1])
                                 e += "<sup>x<sup>" + format(costs[2], 1) + "</sup></sup>)"
                                 let ret = br + a + br + b + br + c + br2 + d + br2 + e + br2 + "(Press B to buy)"
-                                return ret + (hasAchievement("an", 11) && player.an.lastBought != undefined && !player.an.hasSoldYet ? br + "(Press V to sell the last bought level but<br>reset amounts and Genes)" : "")
+                                return ret + (hasAchievement("an", 11) ? br + "(Press G/H to load/save levels but<br>reset amounts and Genes)" : "")
                         },
                         cost(){
                                 let id = player.an.selectedId
@@ -33333,6 +33331,7 @@ addLayer("an", {
 
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
+                                        data[keys[i]].savedValue = decimalZero
                                         if (resetBuys === null) data[keys[i]].buyables = decimalZero
                                         // dont ask, its what it does
                                 }
@@ -33355,12 +33354,15 @@ addLayer("an", {
                 rows: 8,
                 cols: 8,
                 getStartData(id) {
-                        return {everMaxed: false, 
+                        return {
+                                everMaxed: false, 
                                 buyables: decimalZero, 
                                 extras: decimalZero, 
                                 units: id % 100, 
                                 hundreds: (id-id%100)/100, 
-                                ever400: false}
+                                ever400: false,
+                                savedValue: decimalZero,
+                        }
                 },
                 maxLevels(){
                         let ret = new Decimal(400)
@@ -34851,6 +34853,7 @@ addLayer("ch", {
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
                                         data[keys[i]].buyables = decimalZero
+                                        data[keys[i]].savedValue = decimalZero
                                 }
 
                                 player.an.genes.points = decimalZero
@@ -34999,6 +35002,7 @@ addLayer("ch", {
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
                                         data[keys[i]].buyables = decimalZero
+                                        data[keys[i]].savedValue = decimalZero
                                 }
                                 
                                 player.an.genes.points = decimalZero
@@ -35064,6 +35068,7 @@ addLayer("ch", {
                                 for (i in keys) {
                                         data[keys[i]].extras = decimalZero
                                         data[keys[i]].buyables = decimalZero
+                                        data[keys[i]].savedValue = decimalZero
                                 }
                                 
                                 player.an.genes.points = decimalZero
@@ -35915,6 +35920,7 @@ addLayer("nu", {
                         for (i in keys) {
                                 data[keys[i]].extras = decimalZero
                                 data[keys[i]].buyables = decimalZero
+                                data[keys[i]].savedValue = decimalZero
                         }
                 }
                 data2.genes.points = decimalZero
@@ -36679,6 +36685,7 @@ addLayer("sp", {
                         for (i in keys) {
                                 data[keys[i]].extras = decimalZero
                                 data[keys[i]].buyables = decimalZero
+                                data[keys[i]].savedValue = decimalZero
                         }
                 }
                 data2.genes.points = decimalZero
@@ -37767,25 +37774,33 @@ addLayer("ach", {
                                 console.log("oops something went really badly wrong")
                         },
                 },
-                {key: "Control+C", description: "Control+C: Go to changelog", onPress(){
+                {
+                        key: "Control+C", 
+                        description: "Control+C: Go to changelog", onPress(){
                                 showTab("changelog-tab")
                         }
                 },
-                {key: ",", description: ",: Move one tab to the left", 
+                {
+                        key: ",", 
+                        description: ",: Move one tab to the left", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
                                 player.subtabs[l].mainTabs = getNextLeftTab(l)
                         }
                 },
-                {key: ".", description: ".: Move one tab to the right", 
+                {
+                        key: ".", 
+                        description: ".: Move one tab to the right", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
                                 player.subtabs[l].mainTabs = getNextRightTab(l)
                         }
                 },
-                {key: "ArrowLeft", description: "Left Arrow: Move one tab to the left", 
+                {
+                        key: "ArrowLeft", 
+                        description: "Left Arrow: Move one tab to the left", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
@@ -37793,7 +37808,9 @@ addLayer("ach", {
                                 player.subtabs[l].mainTabs = getNextLeftTab(l)
                         }
                 },
-                {key: "ArrowRight", description: "Right Arrow: Move one tab to the right", 
+                {
+                        key: "ArrowRight", 
+                        description: "Right Arrow: Move one tab to the right", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
@@ -37801,7 +37818,9 @@ addLayer("ach", {
                                 player.subtabs[l].mainTabs = getNextRightTab(l)
                         }
                 },
-                {key: "shift+<", description: "Shift+,: Move all the way to the left", 
+                {
+                        key: "shift+<", 
+                        description: "Shift+,: Move all the way to the left", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
@@ -37809,7 +37828,9 @@ addLayer("ach", {
                                 player.subtabs[l].mainTabs = k[0]
                         }
                 },
-                {key: "shift+>", description: "Shift+.: Move all the way to the right", 
+                {
+                        key: "shift+>", 
+                        description: "Shift+.: Move all the way to the right", 
                         onPress(){
                                 let l = player.tab
                                 if (layers[l] == undefined) return
@@ -37817,23 +37838,31 @@ addLayer("ach", {
                                 player.subtabs[l].mainTabs = k[k.length-1]
                         }
                 },
-                {key: "Control+S", description: "Control+S: Save", 
+                {
+                        key: "Control+S", 
+                        description: "Control+S: Save", 
                         onPress(){
                                 save()
                         }
                 },
-                {key: "shift+Control+S", description: "Shift+Control+S: Save", 
+                {
+                        key: "shift+Control+S", 
+                        description: "Shift+Control+S: Save", 
                         onPress(){
                                 save()
                         }
                 },
-                {key: "shift+Control+E", description: "Shift+Control+E: Force endgame",
+                {
+                        key: "shift+Control+E", 
+                        description: "Shift+Control+E: Force endgame",
                         onPress(){ // forces the endgame screen to pop up 
                                 forceEndgame = true
                                 player.keepGoing = false
                         }
                 },
-                {key: " ", description: "Space: Toggle Pause", 
+                {
+                        key: " ", 
+                        description: "Space: Toggle Pause", 
                         onPress(){
                                 if (player.spaceBarPauses) player.paused = !player.paused
                         }
@@ -37845,7 +37874,9 @@ addLayer("ach", {
                                 console.log("oops something went really badly wrong")
                         },
                 },
-                {key: "shift+!", description: "Shift+1: Go to achievements", 
+                {
+                        key: "shift+!", 
+                        description: "Shift+1: Go to achievements", 
                         onPress(){
                                 player.tab = "ach"
                         }
@@ -37861,7 +37892,9 @@ addLayer("ach", {
                                 return tmp.mini.layerShown
                         },
                 },
-                {key: "shift+#", description: "Shift+3: Go to tokens", 
+                {
+                        key: "shift+#", 
+                        description: "Shift+3: Go to tokens", 
                         onPress(){
                                 if (!tmp.tokens.layerShown) return
                                 player.tab = "tokens"
@@ -37894,8 +37927,10 @@ addLayer("ach", {
                                 return tmp.mini.layerShown || tmp.a.layerShown
                         },
                 },
-                {key: "shift+B", description(){
-                        return "Shift+B: Go to B"
+                {
+                        key: "shift+B", 
+                        description(){
+                                return "Shift+B: Go to B"
                         }, 
                         onPress(){
                                 if (!tmp.mini.layerShown) return
@@ -37948,14 +37983,18 @@ addLayer("ach", {
                                 return tmp.mini.layerShown || tmp.d.layerShown
                         },
                 },
-                {key: "shift+H", description: "Shift+H: Go to Hydrogen", onPress(){
+                {
+                        key: "shift+H", 
+                        description: "Shift+H: Go to Hydrogen", onPress(){
                                 showTab("h")
                         },
                         unlocked(){
                                 return tmp.h.layerShown
                         },
                 },
-                {key: "shift+L", description: "Shift+L: Go to Lives", onPress(){
+                {
+                        key: "shift+L", 
+                        description: "Shift+L: Go to Lives", onPress(){
                                 if (!tmp.l.layerShown) return
                                 showTab("l")
                         },
@@ -37963,7 +38002,9 @@ addLayer("ach", {
                                 return tmp.l.layerShown
                         },
                 },
-                {key: "shift+M", description: "Shift+M: Go to µ", onPress(){
+                {
+                        key: "shift+M", 
+                        description: "Shift+M: Go to µ", onPress(){
                                 if (!tmp.mu.layerShown) return
                                 showTab("mu")
                         },
@@ -37984,7 +38025,9 @@ addLayer("ach", {
                                 return tmp.n.layerShown || tmp.nu.layerShown
                         },
                 },
-                {key: "shift+O", description(){
+                {
+                        key: "shift+O", 
+                        description(){
                                 return player.or.unlocked ? "Shift+O: Go to Organ" : "Shift+D: Go to Oxygen"
                         }, 
                         onPress(){
@@ -37999,7 +38042,10 @@ addLayer("ach", {
                                 return tmp.o.layerShown || tmp.or.layerShown
                         },
                 },
-                {key: "shift+P", description: "Shift+P: Go to Phosphorus", onPress(){
+                {
+                        key: "shift+P", 
+                        description: "Shift+P: Go to Phosphorus", 
+                        onPress(){
                                 if (!tmp.p.layerShown) return
                                 showTab("p")
                         },
@@ -38007,7 +38053,10 @@ addLayer("ach", {
                                 return tmp.p.layerShown
                         },
                 },
-                {key: "shift+Q", description: "Shift+Q: Go to Species", onPress(){
+                {
+                        key: "shift+Q", 
+                        description: "Shift+Q: Go to Species", 
+                        onPress(){
                                 if (!player.sp.unlocked) return
                                 showTab("sp")
                         },
@@ -38015,7 +38064,10 @@ addLayer("ach", {
                                 return player.sp.unlocked
                         },
                 },
-                {key: "shift+R", description: "Shift+R: Go to Stem Cells", onPress(){
+                {
+                        key: "shift+R", 
+                        description: "Shift+R: Go to Stem Cells", 
+                        onPress(){
                                 if (!hasUpgrade("cells", 13)) return
                                 showTab("cells")
                                 player.subtabs.cells.mainTabs = "Stem"
@@ -38024,7 +38076,10 @@ addLayer("ach", {
                                 return hasUpgrade("cells", 13)
                         },
                 },
-                {key: "shift+T", description: "Shift+T: Go to Tissues", onPress(){
+                {
+                        key: "shift+T", 
+                        description: "Shift+T: Go to Tissues", 
+                        onPress(){
                                 if (!tmp.t.layerShown) return
                                 showTab("t")
                         },
@@ -38032,7 +38087,10 @@ addLayer("ach", {
                                 return tmp.t.layerShown
                         },
                 },
-                {key: "shift+X", description: "Shift+X: Go to Chromosomes", onPress(){
+                {
+                        key: "shift+X", 
+                        description: "Shift+X: Go to Chromosomes", 
+                        onPress(){
                                 if (!tmp.ch.layerShown) return
                                 showTab("ch")
                         },
@@ -38050,9 +38108,12 @@ addLayer("ach", {
                                 return player.n.unlocked
                         },
                 },
-                {key: "a", description(){
+                {
+                        key: "a", 
+                        description(){
                                 return player.an.unlocked ? "A: Reset for Animals" : "A: Reset for Amino Acid"
-                        }, onPress(){
+                        }, 
+                        onPress(){
                                 if (player.an.unlocked) {
                                         if (canReset("an")) doReset("an")
                                 } else if (canReset("a")) doReset("a")
@@ -38061,7 +38122,9 @@ addLayer("ach", {
                                 return tmp.a.layerShown
                         },
                 },
-                {key: "3ALT", description: "3: Reset for tokens", 
+                {
+                        key: "3ALT", 
+                        description: "3: Reset for tokens", 
                         onPress(){
                                 if (!tmp.tokens.layerShown) return
                                 if (canReset("tokens")) doReset("tokens")
@@ -38070,28 +38133,40 @@ addLayer("ach", {
                                 return tmp.tokens.layerShown
                         },
                 },
-                {key: "c", description: "C: Reset for Cells", onPress(){
+                {
+                        key: "c", 
+                        description: "C: Reset for Cells", 
+                        onPress(){
                                 if (canReset("cells")) doReset("cells")
                         },
                         unlocked(){
                                 return tmp.cells.layerShown
                         },
                 },
-                {key: "d", description: "D: Reset for DNA", onPress(){
+                {
+                        key: "d", 
+                        description: "D: Reset for DNA", 
+                        onPress(){
                                 if (canReset("d")) doReset("d")
                         },
                         unlocked(){
                                 return tmp.d.layerShown
                         },
                 },
-                {key: "l", description: "L: Reset for Lives", onPress(){
+                {
+                        key: "l", 
+                        description: "L: Reset for Lives", 
+                        onPress(){
                                 if (canReset("l")) doReset("l")
                         },
                         unlocked(){
                                 return tmp.l.layerShown
                         },
                 },
-                {key: "m", description: "M: Reset for µ", onPress(){
+                {
+                        key: "m", 
+                        description: "M: Reset for µ", 
+                        onPress(){
                                 if (canReset("mu")) doReset("mu")
                         },
                         unlocked(){
@@ -38112,28 +38187,39 @@ addLayer("ach", {
                                 return tmp.n.layerShown || tmp.nu.layerShown
                         },
                 },
-                {key: "o", description: "O: Reset for Organ", onPress(){
+                {
+                        key: "o", 
+                        description: "O: Reset for Organ", 
+                        onPress(){
                                 if (canReset("or")) doReset("or")
                         },
                         unlocked(){
                                 return tmp.or.layerShown
                         },
                 },
-                {key: "p", description: "P: Reset for Phosphorus", onPress(){
+                {
+                        key: "p", 
+                        description: "P: Reset for Phosphorus", 
+                        onPress(){
                                 if (canReset("p")) doReset("p")
                         },
                         unlocked(){
                                 return tmp.p.layerShown
                         },
                 },
-                {key: "q", description: "Q: Reset for Species", onPress(){
+                {
+                        key: "q", 
+                        description: "Q: Reset for Species", 
+                        onPress(){
                                 if (canReset("sp")) doReset("sp")
                         },
                         unlocked(){
                                 return tmp.sp.layerShown
                         },
                 },
-                {key: "t", description: "T: Reset for Tissues", 
+                {
+                        key: "t", 
+                        description: "T: Reset for Tissues", 
                         onPress(){
                                 if (!tmp.t.layerShown) return
                                 if (canReset("t")) doReset("t")
@@ -38142,7 +38228,9 @@ addLayer("ach", {
                                 return tmp.t.layerShown
                         },
                 },
-                {key: "x", description: "X: Reset for Chromosomes", 
+                {
+                        key: "x", 
+                        description: "X: Reset for Chromosomes", 
                         onPress(){
                                 if (!tmp.ch.layerShown) return
                                 if (canReset("ch")) doReset("ch")
@@ -38161,9 +38249,12 @@ addLayer("ach", {
                                 return player.tokens.unlocked
                         },
                 },
-                {key: "b", description(){
+                {
+                        key: "b", 
+                        description(){
                                 return "B: Buy Taxonomy level"
-                        }, onPress(){
+                        }, 
+                        onPress(){
                                 if (hasUpgrade("or", 352)) {
                                         if (tmp.an.clickables[11].canClick) layers.an.clickables[11].onClick()
                                 } 
@@ -38172,8 +38263,10 @@ addLayer("ach", {
                                 return hasUpgrade("or", 352)
                         },
                 },
-                {key: "shift+BALT", description(){
-                        if (hasUpgrade("or", 352)) return "Shift+B: Buy Taxonomy buyable x5"
+                {
+                        key: "shift+BALT", 
+                        description(){
+                                if (hasUpgrade("or", 352)) return "Shift+B: Buy Taxonomy buyable x5"
                         }, 
                         onPress(){
                                 if (hasUpgrade("or", 352)) {
@@ -38184,15 +38277,68 @@ addLayer("ach", {
                                 return hasUpgrade("or", 352)
                         },
                 },
-                {key: "g", description: "G: Gamble", 
+                {
+                        key: "g", 
+                        description(){
+                                if (hasAchievement("an", 11)) return "G: Load Taxonomy State"
+                                return "G: Gamble"
+                        }, 
                         onPress(){
-                                if (tmp.mini.clickables[41].canClick) layers.mini.clickables[41].onClick()
+                                if (hasAchievement("an", 11)) {
+                                        let data = player.an.grid
+                                        let keys = [
+                                                101, 102, 103, 104, 105, 106, 107, 108,
+                                                202, 203, 204, 205, 206, 207, 208, 
+                                                303, 304, 305, 306, 307, 308, 
+                                                404, 405, 406, 407, 408, 
+                                                505, 506, 507, 508, 
+                                                606, 607, 608, 
+                                                707, 708, 
+                                                808]
+
+                                        for (i in keys) {
+                                                data[keys[i]].buyables = data[keys[i]].savedValue
+                                                data[keys[i]].extras = decimalZero
+                                        }
+                                        player.an.genes.points = decimalZero
+                                        player.an.genes.total = decimalZero
+                                        player.an.genes.best = decimalZero
+                                        tmp.an.gene.getResetGain = decimalZero
+                                } else if (tmp.mini.clickables[41].canClick) {
+                                        layers.mini.clickables[41].onClick()
+                                }
                         },
                         unlocked(){
+                                if (hasAchievement("an", 11)) return true
                                 return tmp.mini.tabFormat.C.unlocked && tmp.mini.layerShown
                         },
                 },
-                {key: "s", description: "S: Sell token buyables (only if on said tab)", 
+                {
+                        key: "h", 
+                        description: "H: Save Taxonomy state", 
+                        onPress(){
+                                let data = player.an.grid
+                                let keys = [
+                                        101, 102, 103, 104, 105, 106, 107, 108,
+                                        202, 203, 204, 205, 206, 207, 208, 
+                                        303, 304, 305, 306, 307, 308, 
+                                        404, 405, 406, 407, 408, 
+                                        505, 506, 507, 508, 
+                                        606, 607, 608, 
+                                        707, 708, 
+                                        808]
+
+                                for (i in keys) {
+                                        data[keys[i]].savedValue = data[keys[i]].buyables
+                                }
+                        },
+                        unlocked(){
+                                return hasAchievement("an", 11)
+                        },
+                },
+                {
+                        key: "s", 
+                        description: "S: Sell token buyables (only if on said tab)", 
                         onPress(){
                                 if (player.tab == "tokens") {
                                         if (["Flat", "Scaling"].includes(player.subtabs.tokens.mainTabs)) {
@@ -38213,38 +38359,15 @@ addLayer("ach", {
                 {
                         key: "v",
                         description(){
-                                if (hasAchievement("an", 11)) return "V: Sell one Taxonomy buyable (if not maxed)"
                                 return "V: Start Customizable"
                         }, 
                         onPress(){
-                                if (hasAchievement("an", 11)) {
-                                        let data = player.an.grid
-                                        let lb = player.an.lastBought
-                                        if (data[lb].buyables.gte(tmp.an.grid.maxLevels)) return
-                                        if (lb == undefined || player.an.hasSoldYet) return
-                                        data[lb].buyables = data[lb].buyables.sub(1).max(0)
-                                        let keys = [
-                                                101, 102, 103, 104, 105, 106, 107, 108,
-                                                202, 203, 204, 205, 206, 207, 208, 
-                                                303, 304, 305, 306, 307, 308, 
-                                                404, 405, 406, 407, 408, 
-                                                505, 506, 507, 508, 
-                                                606, 607, 608, 
-                                                707, 708, 
-                                                808]
-
-                                        for (i in keys) {
-                                                data[keys[i]].extras = decimalZero
-                                        }
-                                        player.an.genes.points = decimalZero
-                                        player.an.hasSoldYet = true
-                                }
                                 if (tmp.l.challenges[12].unlocked && !hasUpgrade("or", 135)){
                                         startChallenge("l", 12)
                                 }
                         },
                         unlocked(){
-                                return tmp.l.challenges[12].unlocked || hasAchievement("an", 11)
+                                return tmp.l.challenges[12].unlocked
                         },
                 },
         ],
