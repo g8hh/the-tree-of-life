@@ -33005,7 +33005,6 @@ addLayer("an", {
                                 if (player.an.grid[id].buyables.gte(400)) player.an.grid[id].ever400 = true
                         },
                 },
-
                 21: {
                         title(){
                                 return "PRO I (" + (player.an.achActive[11] ? "ON" : "OFF") + ")"
@@ -33015,8 +33014,8 @@ addLayer("an", {
                                 return "Bulk buy Gene buyables and gain 25x Genes"
                         },
                         tooltip(){
-                                let a = "When toggled ON disable gene buyale autobuyers" + br 
-                                a += "When toggled OFF bulk buy Gene buyables and gain 25x Genes"
+                                let a = makeBlue("ON") + ": disable gene buyale autobuyers" + br 
+                                a += makeBlue("OFF") + ": bulk buy Gene buyables and gain 25x Genes"
                                 return a
                         },
                         unlocked(){
@@ -33039,9 +33038,8 @@ addLayer("an", {
                                 return "Gain 4x Genes per Chromosome past 200"
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
-                                a += "When toggled OFF gain 4x Genes per Chromosome past 200"
+                                let a = makeBlue("ON") + ": log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
+                                a += makeBlue("OFF") + ": gain 4x Genes per Chromosome past 200"
                                 if (hasMilestone("an", 31)) a = a.replace("4x", "2x")
                                 return a
                         },
@@ -33050,6 +33048,13 @@ addLayer("an", {
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasAchievement("an", 22) && !player.an.achActive[12] || hasMilestone("ch", 16) && player.an.achActive[31] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[12] = !player.an.achActive[12]
@@ -33065,16 +33070,19 @@ addLayer("an", {
                                 return "Base Organ gain double exponent is .31"
                         },
                         tooltip(){
-                                let a = ""
-                                a += "When toggled ON Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain" + br 
-                                a += "When toggled OFF base Organ gain double exponent is .31"
-                                return a
+                                let a = makeBlue("ON") + ": Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain" + br 
+                                return a + makeBlue("OFF") + ": base Organ gain double exponent is .31"
                         },
                         unlocked(){
                                 return hasAchievement("an", 13)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "background-color": hasAchievement("an", 23) && player.an.achActive[13] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[13] = !player.an.achActive[13]
@@ -33091,10 +33099,8 @@ addLayer("an", {
                                 return "Oligopotent cost base is 1e69"
                         },
                         tooltip(){
-                                let a = ""
-                                a += "When toggled ON Multipotent cost base is 1e39" + br 
-                                a += "When toggled OFF Oligopotent cost base is 1e69"
-                                return a
+                                let a = makeBlue("ON") + ": Multipotent cost base is 1e39" + br 
+                                return a + makeBlue("OFF") + ": Oligopotent cost base is 1e69"
                         },
                         unlocked(){
                                 return hasAchievement("an", 14)
@@ -33115,9 +33121,8 @@ addLayer("an", {
                                 return "Gain 100x Genes per Chromosome - 235"
                         },
                         tooltip(){
-                                let a = "When toggled ON gain 3.3x Genes per Chromosome - 235 per row one OFF achievement" + br 
-                                a += "When toggled OFF gain 100x Genes per Chromosome - 235"
-                                return a
+                                let a = makeBlue("ON") + ": gain 3.3x Genes per Chromosome - 235 per row one OFF achievement" + br 
+                                return a + makeBlue("OFF") + ": gain 100x Genes per Chromosome - 235"
                         },
                         unlocked(){
                                 return hasAchievement("an", 21)
@@ -33138,16 +33143,21 @@ addLayer("an", {
                                 return "PRO I's OFF boost to Genes becomes 5x per achievement + 4"
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON PRI I's ON formula becomes log2(levels<sup>1.25</sup>+2)" + br 
-                                a += "When toggled OFF PRO I's OFF boost to Genes becomes 5x per achievement + 4"
-                                return a
+                                let a = makeBlue("ON") + ": PRI I's ON formula becomes log2(levels<sup>1.25</sup>+2)" + br 
+                                return a + makeBlue("OFF") + ": PRO I's OFF boost to Genes becomes 5x per achievement + 4"
                         },
                         unlocked(){
                                 return hasAchievement("an", 22)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasUpgrade("ch", 41) && player.an.achActive[22] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[22] = !player.an.achActive[22]
@@ -33163,10 +33173,8 @@ addLayer("an", {
                                 return "Triple Chromosomes IX"
                         },
                         tooltip(){
-                                let a = ""
-                                a += "When toggled ON gain 10x Animals" + br 
-                                a += "When toggled OFF triple Chromosomes IX"
-                                return a
+                                let a = makeBlue("ON") + ": gain 10x Animals" + br 
+                                return a + makeBlue("OFF") + ": triple Chromosomes IX"
                         },
                         unlocked(){
                                 return hasAchievement("an", 23)
@@ -33188,10 +33196,8 @@ addLayer("an", {
                                 return "Unlock and you can prestige for Nucleuses"
                         },
                         tooltip(){
-                                let a = ""
-                                a += "When toggled ON <u>IN</u>testine base is cbrt(Tokens II)" + br 
-                                a += "When toggled OFF unlock and you can prestige for Nucleuses"
-                                return a
+                                let a = makeBlue("ON") + ": <u>IN</u>testine base is cbrt(Tokens II)" + br 
+                                return a + makeBlue("OFF") + ": unlock and you can prestige for Nucleuses"
                         },
                         unlocked(){
                                 return hasAchievement("an", 24)
@@ -33220,15 +33226,20 @@ addLayer("an", {
                                 return ""
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON"
-                                return a + " per this row OFF (and unlocked) achievement you have one more Chromosome for effect purposes"
+                                return makeBlue("ON") + ": per this row OFF (and unlocked) achievement you have one more Chromosome for effect purposes"
                         },
                         unlocked(){
                                 return hasAchievement("an", 31)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasMilestone("nu", 15) && player.an.achActive[31] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[31] = !player.an.achActive[31]
@@ -33244,15 +33255,20 @@ addLayer("an", {
                                 return ""
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON"
-                                return a + " per this row OFF (and unlocked) achievement decrease Token II buyables' cost exponent by .01"
+                                return makeBlue("ON") + ": per this row OFF (and unlocked) achievement decrease Token II buyables' cost exponent by .01"
                         },
                         unlocked(){
                                 return hasAchievement("an", 32)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasMilestone("nu", 12) && player.an.achActive[32] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[32] = !player.an.achActive[32]
@@ -33268,15 +33284,20 @@ addLayer("an", {
                                 return ""
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON"
-                                return a + " per this row OFF (and unlocked) achievement per Nucleus quintuple Animal gain"
+                                return makeBlue("ON") + ": per this row OFF (and unlocked) achievement per Nucleus quintuple Animal gain"
                         },
                         unlocked(){
                                 return hasAchievement("an", 33)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasMilestone("nu", 14) && player.an.achActive[33] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[33] = !player.an.achActive[33]
@@ -33292,15 +33313,20 @@ addLayer("an", {
                                 return ""
                         },
                         tooltip(){
-                                let a = makeRed("Note: Toggling this zeroes Taxonomy amounts<br>")
-                                a += "When toggled ON"
-                                return a + " raise Bottom Quark base to this row OFF (and unlocked) achievements (min 1)"
+                                return makeBlue("ON") + ": raise Bottom Quark base to this row OFF (and unlocked) achievements (min 1)"
                         },
                         unlocked(){
                                 return hasAchievement("an", 34)
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {
+                                        "border-color": "red", 
+                                        "border-width": "thick",
+                                        "background-color": hasMilestone("ch", 22) && player.an.achActive[34] ? "#7AEEFC" : "#FFEC13"
+                                }
                         },
                         onClick(){
                                 player.an.achActive[34] = !player.an.achActive[34]
@@ -33320,6 +33346,9 @@ addLayer("an", {
                         },
                         canClick(){
                                 return true
+                        },
+                        style(){
+                                return {"border-color": "red", "border-width": "thick"}
                         },
                         onClick(resetBuys = true){
                                 let data = player.an.grid
@@ -33757,11 +33786,17 @@ addLayer("an", {
                 "Achievements": {
                         content: [
                                 "main-display",
-                                "blank",
-                                "blank",
+                                ["display-text", function(){
+                                        if (hasAchievement("an", 11) || player.nu.unlocked) {
+                                                let a = "Clickables with " + makeRed("red") + " boarders reset Taxonomy amounts and Genes"
+                                                return a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
+                                        }
+                                        return ""
+                                }],
                                 "blank",
                                 "achievements",
                                 ["clickablesBig", [2, 3, 4]],
+                                "blank",
                         ],
                         unlocked(){
                                 return hasUpgrade("an", 44) || player.nu.unlocked
