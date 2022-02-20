@@ -35,6 +35,13 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<br><h3 style='color: #CC0000'>v1.271</h3><br>
 		- Balanced until 1785 Chromosomes.<br><span (just got it)></span>
+		- Added five Species milestones.<br>
+		- Added a Nucleus milestone.<br>
+		- Added a Nucleus upgrade.<br>
+		- Various wording, code clean up, and display fixes.<br>
+		- Added a display for the Speices gain formula.<br>
+		- Added a custom save.<br>
+		- Improved the visuals for Animal Achievements' clickables.<br>
 	<br><h3 style='color: #CC0000'>v1.270.1</h3><br>
 		- Added a load and save Taxonomy system, but removed selling.<br>
 		- Various code cleanup.<br>

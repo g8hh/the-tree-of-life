@@ -36590,7 +36590,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep Organ upgrades, keep Animal Achievements upon Nucleus rest, and autobuy Taxonomy buyables that were ever above 400 levels."
+                                return "Reward: Keep Organ upgrades, keep Animal Achievements upon Nucleus reset, and autobuy Taxonomy buyables that were ever above 400 levels."
                         },
                 }, // hasMilestone("sp", 2)
                 3: {
