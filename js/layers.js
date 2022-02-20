@@ -19903,6 +19903,7 @@ addLayer("cells", {
                 }
                 if (hasUpgrade("ch", 15))       exp = exp.plus(13.75)
                 if (hasUpgrade("sp", 52))       exp = exp.plus(1)
+                if (hasMilestone("sp", 9))      exp = exp.plus(1)
 
                 return exp
         },
@@ -26111,6 +26112,7 @@ addLayer("or", {
                 let pts = player.t.points
                 if (pts.lt("1e100")) return decimalZero
 
+                if (hasMilestone("sp", 9))      return pts.log10().pow(.4).pow10().pow(tmp.or.getGainExp)
                 if (hasMilestone("nu", 18))     return pts.log10().pow(.35).pow10().root(4).pow(tmp.or.getGainExp)
                 if (hasMilestone("ch", 33))     return pts.log10().pow(.35).pow10().pow(tmp.or.getGainExp)
                 if (!player.an.achActive[13] && hasAchievement("an", 13)) {
@@ -26153,11 +26155,11 @@ addLayer("or", {
         getGainExp(){
                 let ret = new Decimal(.5)
 
-                if (hasUpgrade("or", 112)) ret = ret.plus(.01 * player.or.upgrades.length)
+                if (hasUpgrade("or", 112))      ret = ret.plus(.01 * player.or.upgrades.length)
                 if (hasMilestone("ch", 9) && !hasMilestone("ch", 33)) {
                                                 ret = ret.plus(player.ch.points.div(100))
                 }
-                ret = ret.plus(tmp.nu.effectSecondary)
+                if (!hasMilestone("sp", 9))     ret = ret.plus(tmp.nu.effectSecondary)
 
                 return ret
         },
@@ -31110,6 +31112,7 @@ addLayer("or", {
                                         if (!player.an.achActive[13] && hasAchievement("an", 13)) a2 = a2.replace(".3<",".31<")
                                         if (hasMilestone("ch", 33)) a2 = a2.replaceAll(".31<", ".35<")
                                         if (hasMilestone("nu", 18)) a2 = "Current Organ gain: 10<sup>log10(Tissues)<sup>.35</sup>/4*EXP</sup>"
+                                        if (hasMilestone("sp", 9))  a2 = "Current Organ gain: 10<sup>log10(Tissues)<sup>.4</sup>*EXP</sup>"
                                         a2 = a2.replace("EXP", format(tmp.or.getGainExp))
                                         let a3 = "Initial Organ effect: (Organs+1)<sup>min(100, 1+cbrt(Organs)/5)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
@@ -35278,7 +35281,10 @@ addLayer("nu", {
                 let start = " adding " + format(tmp.nu.effectPrimary) + " to effective Chromosomes and Animals for their effects and " 
                 if (hasMilestone("nu", 16)) start = start.replace("Animals for their effects", "the Taxonomy limit")
                 if (hasMilestone("ch", 29)) start = start.replace("and the Taxonomy limit", "")
-                return start + format(tmp.nu.effectSecondary) + " to Organ and Animal gain exponents and I'm base."
+                if (!hasMilestone("sp", 9)) {
+                        return start + format(tmp.nu.effectSecondary) + " to Organ and Animal gain exponents and I'm base."
+                }
+                return start + format(tmp.nu.effectSecondary) + " to Animal gain exponent and I'm base."
         },
         update(diff){
                 let data = player.nu
@@ -36162,7 +36168,8 @@ addLayer("sp", {
         getGainMult(){//sp gain spgain speciesgain species gain sgain s gain 
                 let ret = decimalOne
 
-                if (hasMilestone("nu", 20)) ret = ret.times(player.tokens.total.plus(10).log10())
+                if (hasMilestone("nu", 20))     ret = ret.times(player.tokens.total.plus(10).log10())
+                if (hasMilestone("sp", 8))      ret = ret.times(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points))
 
                 return ret
         },
@@ -36633,9 +36640,26 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucelus gain .94 + milestones/100 more Species [not yet]."
+                                return "Reward: Per Nucleus gain .87 + milestones/50 more Species."
                         },
                 }, // hasMilestone("sp", 8)
+                9: {
+                        requirementDescription(){
+                                return "362,880 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(362880)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                tmp.or.getGainExp = decimalZero
+                        },
+                        effectDescription(){
+                                return "Reward: Organ base gain is 10<sup>log10(Tissues)<sup>.4</sup></sup> and add 1 to Cell effect exponent but Nucleus doesn't affect Organ gain exponent."
+                        },
+                }, // hasMilestone("sp", 9)
         },
         tabFormat: {
                 "Upgrades": {
