@@ -26148,7 +26148,7 @@ addLayer("or", {
                 }
                 if (hasUpgrade("ch", 41))       ret = ret.times(player.an.grid[303].extras.plus(1).pow(player.nu.points))
                 if (hasUpgrade("nu", 24))       ret = ret.times(player.an.grid[203].extras.plus(1).pow(player.ch.points))
-                if (hasUpgrade("sp", 12))       ret = ret.times(tmp.sp.effect.pow(player.sp.times ** 2))
+                if (hasUpgrade("sp", 12))       ret = ret.times(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2))
 
                 return ret.max(1)
         },
@@ -32452,7 +32452,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Charm Quark effect becomes .07(C*x)<sup>.6</sup>, bulk 5x Kidney buyables, and gain a Animal reset per second."
+                                return "Reward: Charm Quark effect becomes .07(C*x)<sup>.6</sup>, bulk 5x Kidney buyables, and gain an Animal reset per second."
                         },
                 }, // hasMilestone("an", 14)
                 15: {
@@ -33053,7 +33053,7 @@ addLayer("an", {
                                 return {
                                         "border-color": "red", 
                                         "border-width": "thick",
-                                        "background-color": hasAchievement("an", 22) && !player.an.achActive[12] || hasMilestone("ch", 16) && player.an.achActive[31] ? "#7AEEFC" : "#FFEC13"
+                                        "background-color": hasAchievement("an", 22) && !player.an.achActive[12] || hasMilestone("ch", 16) && player.an.achActive[12] ? "#7AEEFC" : "#FFEC13"
                                 }
                         },
                         onClick(){
@@ -35609,7 +35609,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleus keep a Animal milestone and Animal milestone 4 buys every Organ upgrade."
+                                return "Reward: Per Nucleus keep an Animal milestone and Animal milestone 4 buys every Organ upgrade."
                         },
                 }, // hasMilestone("nu", 3)
                 3: {
@@ -35623,7 +35623,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleus keep a Animal milestone and Animal milestone 4 buys every Organ upgrade."
+                                return "Reward: Per Nucleus keep an Animal milestone and Animal milestone 4 buys every Organ upgrade."
                         },
                 }, // hasMilestone("nu", 3)
                 4: {
@@ -36279,7 +36279,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect II"
                         },
                         description(){
-                                return "The Species effect multiplies Organ gain per resets<sup>2</sup> (max 22 resets)"
+                                return "The Species effect multiplies Organ gain per resets<sup>2</sup> (max 64 resets)"
                         },
                         cost:() => new Decimal(1),
                         unlocked(){
@@ -36576,7 +36576,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per reset keep a Animal, Chromosome, and Nucleus milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 3."
+                                return "Reward: Per reset keep an Animal, Chromosome, and Nucleus milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 3."
                         },
                 }, // hasMilestone("sp", 1)
                 2: {
@@ -36675,7 +36675,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per Nucleus gain .87 + milestones/50 more Species."
+                                return "Reward: Per Nucleus gain (.87 + milestones/50)x more Species."
                         },
                 }, // hasMilestone("sp", 8)
                 9: {
@@ -49045,7 +49045,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasUpgrade("ch", 41))       c += "Chromosomes XVI multiplies AX by " + format(player.an.grid[303].extras.plus(1).pow(player.nu.points)) + br
                                                 if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points)) + br
-                                                if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(player.sp.times ** 2)) + br
+                                                if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2)) + br
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
