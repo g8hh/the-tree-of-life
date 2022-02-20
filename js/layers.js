@@ -18710,8 +18710,8 @@ addLayer("d", {
                 if (hasUpgrade("or", 222)) {
                         let perT2 = 2
                         if (hasUpgrade("or", 21)) perT2 = 4
-                        if (hasUpgrade("an", 15)) perT2 = player.an.upgrades.length
-                        if (hasUpgrade("an", 33)) perT2 = player.ch.points
+                        if (hasUpgrade("an", 15)) perT2 = Math.max(perT2, player.an.upgrades.length)
+                        if (hasUpgrade("an", 33)) perT2 = player.ch.points.max(perT2)
 
                         let mult = decimalOne
                         if (hasUpgrade("sp", 34)) mult = mult.times(tmp.sp.effect.pow(player.tokens.total.sqrt()))
@@ -28943,6 +28943,7 @@ addLayer("or", {
                                 }
                         },
                         base(){
+                                if (hasMilestone("sp", 11))     return player.or.buyables[202].max(1).pow(.53)
                                 if (hasMilestone("ch", 35))     return player.or.buyables[202].max(1).pow(.52)
                                 if (hasUpgrade("sp", 55))       return player.or.buyables[202].max(1).pow(.51)
                                 return player.or.buyables[202].max(1).pow(.5)
@@ -28961,8 +28962,12 @@ addLayer("or", {
                                 }
 
                                 let eformula = "sqrt(gonna levels)^x<br>" + format(tmp.or.buyables[203].base) + "^x"
-                                if (hasUpgrade("sp", 55)) eformula = eformula.replace("sqrt(gonna levels)", "(gonna levels)<sup>.51</sup>")
-                                if (hasMilestone("ch", 35)) eformula = eformula.replace(".51", ".52")
+                                let exp = ".51"
+                                if (hasUpgrade("sp", 55)) eformula = eformula.replace("sqrt(gonna levels)", "(gonna levels)<sup>EXP</sup>")
+                                if (hasMilestone("ch", 35)) exp = ".52"
+                                if (hasMilestone("sp", 11)) exp = ".53"
+
+                                eformula = eformula.replace("EXP", exp)
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -29504,6 +29509,11 @@ addLayer("or", {
                                 let a = new Decimal(2e6)
                                 let b = new Decimal(1000)
                                 let c = new Decimal(1.1)
+                                if (hasMilestone("sp", 10)) {
+                                        a = decimalOne
+                                        b = decimalOne
+                                        c = new Decimal(1.04)
+                                }
                                 return [a,b,c]
                         },
                         cost(){
@@ -29606,6 +29616,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "2e6*1000<sup>x</sup>*1.1<sup>x<sup>2</sup></sup>" 
+                                if (hasMilestone("sp", 10)) cost2 = "1.04<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -29948,7 +29959,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 1))  logBase = new Decimal(4)
                                 if (hasMilestone("ch", 2))  logBase = new Decimal(3)
                                 if (hasMilestone("ch", 3))  logBase = new Decimal(2)
-                                eformula = eformula.replaceAll("10", formatWhole(logBase))
+                                eformula = eformula.replaceAll("g10", "g" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("ch", 24)) eformula = eformula.replace("log2(log2(Contaminants)", "sqrt(log10(Organs))")
                                 if (hasUpgrade("nu", 23)) eformula = eformula.replace("sqrt(log10(Organs))", "log10(Organs)")
@@ -31530,6 +31541,11 @@ addLayer("an", {
                                                 ret = ret.times(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff)))
                 }
                 if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1))
+                if (hasMilestone("sp", 10)) {
+                        let sub = 85800
+                        let base = decimalOne.plus(player.sp.milestones.length/500)
+                                                ret = ret.times(base.pow(player.tokens.tokens2.total.sub(sub).max(0)))
+                }
 
                 return ret.max(1)
         },
@@ -31718,7 +31734,7 @@ addLayer("an", {
                                         spExp = player.nu.points.plus(8).cbrt()
                                 }
                                 if (hasUpgrade("sp", 25) && row == 5) {
-                                        spExp = new Decimal(player.sp.times).min(22).plus(3).sqrt()
+                                        spExp = new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
                                 }
                                 if (hasUpgrade("sp", 31) && row == 4) {
                                         spExp = player.nu.points.div(50)
@@ -32923,6 +32939,20 @@ addLayer("an", {
                                 return "Reward: in<u>tes</u>TINE cost is 1.75<sup>x<sup>2</sup></sup>, <u>in</u>tesTINE cost base is 4, and Nucleus Milestone 2 becomes 70x per."
                         },
                 }, // hasMilestone("an", 43)
+                44: {
+                        requirementDescription(){
+                                return "1.5e1153 Animals"
+                        },
+                        done(){
+                                return player.an.points.gte("1.5e1153")
+                        },
+                        unlocked(){
+                                return player.sp.unlocked
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock Species challenges and Token II buyables' cost exponent is 1.25."
+                        },
+                }, // hasMilestone("an", 44)
         },
         clickables: {
                 11: {
@@ -34255,6 +34285,10 @@ addLayer("ch", {
         },
         resetsNothing(){
                 return player.ch.everUpgrade32
+        },
+        canReset(){
+                if (inChallenge("sp", 11)) return false
+                return getNextAt("ch").lte(player.an.genes.points)
         },
         effectPoints(){
                 let pts = player.ch.points.plus(tmp.nu.effectPrimary)
@@ -35870,6 +35904,20 @@ addLayer("nu", {
                                 return "Reward: log10(Tokens + 10) multiplies Species gain."
                         },
                 }, // hasMilestone("nu", 20)
+                21: {
+                        requirementDescription(){
+                                return "80 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(80)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Gain a Species reset per second and Effect II and Effect X's caps are 222."
+                        },
+                }, // hasMilestone("nu", 21)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36172,6 +36220,7 @@ addLayer("sp", {
                 abtime: 0,
                 time: 0,
                 times: 0,
+                passiveTime: 0,
         }},
         color: "#824600",
         branches: [],
@@ -36205,6 +36254,7 @@ addLayer("sp", {
 
                 if (hasMilestone("nu", 20))     ret = ret.times(player.tokens.total.plus(10).log10())
                 if (hasMilestone("sp", 8))      ret = ret.times(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points))
+                                                ret = ret.times(tmp.sp.challenges[11].reward)
 
                 return ret
         },
@@ -36245,6 +36295,13 @@ addLayer("sp", {
                         data.points = data.points.plus(gainThisTick)
                         data.total = data.total.plus(gainThisTick)
                 }
+                if (hasMilestone("nu", 21)) data.passiveTime += diff
+
+                if (data.passiveTime > 1) {
+                        data.passiveTime += -1
+                        data.times ++
+                }
+                if (data.passiveTime > 10) data.passiveTime = 10
 
                 data.time += diff
         },
@@ -36695,6 +36752,62 @@ addLayer("sp", {
                                 return "Reward: Organ base gain is 10<sup>log10(Tissues)<sup>.4</sup></sup> and add 1 to Cell effect exponent but Nucleus doesn't affect Organ gain exponent."
                         },
                 }, // hasMilestone("sp", 9)
+                10: {
+                        requirementDescription(){
+                                return "3,628,800 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(3628800)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per Token II past 85,800 gain (1 + milestones/500)x Animals, Token II via Stem Cell double exponent is (13000 + x/3)<sup>.3</sup>, and <u>in</u>TEStine cost is 1.04<sup>x<sup>2</sup></sup>."
+                        },
+                }, // hasMilestone("sp", 10)
+                11: {
+                        requirementDescription(){
+                                return "1e10 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e10)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock another challenge [not yet] and raise make base ^(53/52)."
+                        },
+                }, // hasMilestone("sp", 11)
+        },
+        challenges:{
+                11: {
+                        name: "Chromosomeless", 
+                        reward(){
+                                return tmp.sp.challenges[11].rewardBase.pow(layerChallengeCompletions("sp"))
+                        },
+                        rewardBase(){
+                                return new Decimal(player.sp.challenges[11]).times(50).max(1)
+                        },
+                        goal: () => Decimal.pow(10, 54153.7 + player.sp.challenges[11] * 1e4),
+                        canComplete(){ 
+                                return player.an.genes.points.gte(tmp.sp.challenges[11].goal)
+                        },
+                        completionLimit: 5,
+                        fullDisplay(){
+                                let a = "You can't get Chromosomes."
+                                let b = "Goal: " + format(tmp.sp.challenges[11].goal) + " Genes"
+                                let c = "Reward: Per Species challenge completion gain 50*completions more Species"
+                                let d = "Currently: " + format(tmp.sp.challenges[11].reward)
+
+                                return a + br + b + br2 + c + br2 + d
+                        },
+                        unlocked(){
+                                return hasMilestone("an", 44)
+                        },
+                        countsAs: [],
+                }, // inChallenge("sp", 11) hasChallenge("sp", 11)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36718,6 +36831,16 @@ addLayer("sp", {
                         ],
                         unlocked(){
                                 return true
+                        },
+                },
+                "Challenges": {
+                        content: [
+                                "main-display",
+                                "blank",
+                                "challenges",
+                        ],
+                        unlocked(){
+                                return hasMilestone("an", 44)
                         },
                 },
                 "Info": {
@@ -45365,6 +45488,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("an", 44))     return x.pow(1.25).ceil()
                         if (hasMilestone("nu", 17))     return x.pow(1.26).ceil()
                         if (hasMilestone("ch", 31))     return x.pow(1.27).ceil()
                         if (hasUpgrade("nu", 22))       return x.pow(1.272).ceil()
@@ -45417,6 +45541,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("an", 44))     return "ceil(x<sup>1.25</sup>)"
                         if (hasMilestone("nu", 17))     return "ceil(x<sup>1.26</sup>)"
                         if (hasMilestone("ch", 31))     return "ceil(x<sup>1.27</sup>)"
                         if (hasUpgrade("nu", 22))       return "ceil(x<sup>1.272</sup>)"
@@ -45462,6 +45587,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("an", 44))     return 29
                         if (player.ch.everUpgrade33)    return 28
                         if (hasMilestone("an", 33))     return 27
                         if (hasUpgrade("an", 51))       return 26
@@ -47160,6 +47286,10 @@ addLayer("tokens", {
                                         div = 2
                                         add = hasMilestone("ch", 32) ? 9635 : 9640
                                         exp = .3
+                                }
+                                if (hasMilestone("sp", 10) && lvls.gte(20190)) {
+                                        div = 3
+                                        add = 13000
                                 }
                                 return [add, div, exp]
                         },
@@ -49180,6 +49310,11 @@ addLayer("tokens", {
                                                                                 c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
                                                 }
                                                 if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1)) + br
+                                                if (hasMilestone("sp", 10)) {
+                                                        let sub = 85800
+                                                        let base = decimalOne.plus(player.sp.milestones.length/500)
+                                                                                c += "Species Milestone 10 multiplies AX by " + format(base.pow(player.tokens.tokens2.total.sub(sub).max(0))) + br
+                                                }
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
