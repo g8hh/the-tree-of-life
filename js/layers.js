@@ -30385,6 +30385,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasMilestone("sp", 6)) return player.or.energy.points.log10()
                                 if (hasUpgrade("nu", 25)) return player.or.energy.points.max(2022).log(2022)
                                 if (hasUpgrade("nu", 13))  return player.or.buyables[423].max(1)
                                 if (hasMilestone("an", 24)) return player.or.buyables[423].max(1).sqrt()
@@ -30434,6 +30435,7 @@ addLayer("or", {
                                 if (hasMilestone("an", 24)) eformula = eformula.replace("log2(in<u>TES</u>tine)", "sqrt(intes<u>TINE</u>)")
                                 if (hasUpgrade("nu", 13)) eformula = eformula.replace("sqrt", "")
                                 if (hasUpgrade("nu", 25)) eformula = eformula.replace("(intes<u>TINE</u>)", "log2022(Energy)")
+                                if (hasMilestone("sp", 6)) eformula = eformula.replace("2022", "10")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31524,7 +31526,7 @@ addLayer("an", {
                 if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                                 ret = ret.times(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff)))
                 }
-                if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect)
+                if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1))
 
                 return ret.max(1)
         },
@@ -32915,7 +32917,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: in<u>tes</u>TINE cost is 1.75<sup>x<sup>2</sup></sup>, <u>in</u>tesTINE cost base is 4, and Nucleuse Milestone 2 becomes 70x per."
+                                return "Reward: in<u>tes</u>TINE cost is 1.75<sup>x<sup>2</sup></sup>, <u>in</u>tesTINE cost base is 4, and Nucleus Milestone 2 becomes 70x per."
                         },
                 }, // hasMilestone("an", 43)
         },
@@ -35218,6 +35220,8 @@ addLayer("nu", {
         costAdd(){
                 let ret = new Decimal(32)
 
+                if (hasMilestone("sp", 5)) ret = new Decimal(30)
+
                 return ret
         },
         costExponent(){
@@ -35247,7 +35251,9 @@ addLayer("nu", {
         effectPrimary(){
                 let pts = player.nu.points
 
-                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
+                if (hasMilestone("sp", 1) && !hasMilestone("sp", 5)) {
+                        pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
+                }
 
                 let ret = pts
 
@@ -35258,7 +35264,9 @@ addLayer("nu", {
         effectSecondary(){
                 let pts = player.nu.points
 
-                if (hasMilestone("sp", 1)) pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
+                if (hasMilestone("sp", 1) && !hasMilestone("sp", 5)) {
+                        pts = pts.plus(Math.floor(Math.min(3, Math.cbrt(player.sp.times))))
+                }
                 
                 let ret = pts.div(10)
 
@@ -35311,7 +35319,7 @@ addLayer("nu", {
         prestigeButtonText(){
                 if (player.shiftAlias) {
                         let p1 = "Formula:" + br + "(" + format(tmp.nu.costAdd, 0) + "+x)"
-                        p1 += "^(x<sup>" + format(tmp.nu.costExponent, 4) + "</sup>)"
+                        p1 += "<sup>" + format(tmp.nu.costExponent, 4) + "</sup>"
                         if (hasMilestone("ch", 18)) return p1
                         return p1 + " + 1"
                 }
@@ -35501,6 +35509,23 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 25)) return true
                                 return player.ch.points.gte(1494)
                         }, // hasUpgrade("nu", 25)
+                },
+                31: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XI"
+                        },
+                        description(){
+                                if (!hasUpgrade("nu", 31) && !player.shiftAlias) return "Requires: 78930 Token II<br>Shift for effect"
+                                return "Species gain exponent is [upgrades] and gain 100% of Species on reset per second"
+                        },
+                        cost:() => new Decimal(76),
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(78930)
+                        },
+                        unlocked(){
+                                if (hasUpgrade("nu", 25)) return true
+                                return player.tokens.tokens2.total.gte(78900)
+                        }, // hasUpgrade("nu", 31)
                 },
         },
         milestones: {
@@ -35790,6 +35815,20 @@ addLayer("nu", {
                                 return "Reward: Unlock Species and Token II via Cell's divider is 4444.4."
                         },
                 }, // hasMilestone("nu", 19)
+                20: {
+                        requirementDescription(){
+                                return "78 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.best.gte(78)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: log10(Tokens + 10) multiplies Species gain."
+                        },
+                }, // hasMilestone("nu", 20)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36108,6 +36147,9 @@ addLayer("sp", {
         getGainExp(){
                 let ret = new Decimal(8)
 
+                if (hasUpgrade("nu", 31)) ret = new Decimal(player.nu.upgrades.length).max(8)
+                if (hasMilestone("sp", 7)) ret = ret.plus(player.sp.milestones.length)
+
                 return ret
         },
         getResetGain(){
@@ -36117,8 +36159,10 @@ addLayer("sp", {
                 
                 return ret.floor()
         },
-        getGainMult(){
+        getGainMult(){//sp gain spgain speciesgain species gain sgain s gain 
                 let ret = decimalOne
+
+                if (hasMilestone("nu", 20)) ret = ret.times(player.tokens.total.plus(10).log10())
 
                 return ret
         },
@@ -36153,6 +36197,12 @@ addLayer("sp", {
                 
                 if (player.sp.points.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
+
+                if (hasUpgrade("nu", 31)) {
+                        let gainThisTick = tmp.sp.getResetGain.times(diff)
+                        data.points = data.points.plus(gainThisTick)
+                        data.total = data.total.plus(gainThisTick)
+                }
 
                 data.time += diff
         },
@@ -36484,7 +36534,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Per reset keep a Animal, Chromosome, and Nucleuse milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 3."
+                                return "Reward: Per reset keep a Animal, Chromosome, and Nucleus milestone, the Contamination rate is 1% until you have 11 Chromosomes, and add floor(cbrt(resets)) effective Nucleuses, max 3."
                         },
                 }, // hasMilestone("sp", 1)
                 2: {
@@ -36529,6 +36579,63 @@ addLayer("sp", {
                                 return "Reward: Keep Nucleus upgrades on Species reset and Pluripotent double exponent is 1.08."
                         },
                 }, // hasMilestone("sp", 4)
+                5: {
+                        requirementDescription(){
+                                return "120 Species resets and total Species combined"
+                        },
+                        done(){
+                                return player.sp.total.plus(player.sp.times).gte(120)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                if (!hasMilestone("sp", 5)) return "Currently: " + formatWhole(player.sp.total.plus(player.sp.times)) + "/120"
+                                return "Reward: Species Milestone 1 no longer gives effective Nucleuses but the Nucleus cost adder is 30."
+                        },
+                }, // hasMilestone("sp", 5)
+                6: {
+                        requirementDescription(){
+                                return "720 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(720)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: intes<u>TINE</u> base is log10(Energy)."
+                        },
+                }, // hasMilestone("sp", 6)
+                7: {
+                        requirementDescription(){
+                                return "5040 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(5040)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each milestone adds 1 to the Species gain exponent and reapplies Effect I."
+                        },
+                }, // hasMilestone("sp", 7)
+                8: {
+                        requirementDescription(){
+                                return "40,320 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(40320)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per Nucelus gain .94 + milestones/100 more Species [not yet]."
+                        },
+                }, // hasMilestone("sp", 8)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36562,11 +36669,13 @@ addLayer("sp", {
                                         let b1 = "Initial effect: Total Species + 1"
                                         let b2 = "However, every time the Species effect gets 10x larger,<br>square root effective (further) species."
                                         let b = b1 + br + b2
-                                        let c = "For unlocking Species, you always autobuy all energy buyables and<br>you can bulk 5x more Energy and Token II buyables."
-                                        let d = "Furthermore, some things in previous layers (Organs and Animals) have some text in "
-                                        d += br + makePurple("purple") + " which are effects for unlocking Species."
+                                        let c = "Initial gain: (log10(Animals)/900)<sup>8</sup>"
+                                        c += br + "Current gain: (log10(Animals)/900)<sup>" + formatWhole(tmp.sp.getGainExp) + "</sup>"
+                                        let d = "For unlocking Species, you always autobuy all energy buyables and<br>you can bulk 5x more Energy and Token II buyables."
+                                        let e = "Furthermore, some things in previous layers (Organs and Animals) have some text in "
+                                        e += br + makePurple("purple") + " which are effects for unlocking Species."
 
-                                        return a + br2 + b + br2 + c + br + d
+                                        return a + br2 + b + br2 + c + br2 + d + br + e
                                 }],
                         ],
                         unlocked(){
@@ -36602,7 +36711,7 @@ addLayer("sp", {
                 let data3 = player.or 
                 let data4 = player.tokens 
 
-                // 0. Nucleuse content
+                // 0. Nucleus content
                 if (!false) {
                         let nuKeptMilestones = 0
                         if (hasMilestone("sp", 1)) nuKeptMilestones += player.sp.times
@@ -49011,7 +49120,7 @@ addLayer("tokens", {
                                                 if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                                                                 c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
                                                 }
-                                                if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect) + br
+                                                if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1)) + br
 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
