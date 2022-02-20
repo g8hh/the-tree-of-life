@@ -30387,7 +30387,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
-                                if (hasMilestone("sp", 6)) return player.or.energy.points.log10()
+                                if (hasMilestone("sp", 6)) return player.or.energy.points.max(10).log10()
                                 if (hasUpgrade("nu", 25)) return player.or.energy.points.max(2022).log(2022)
                                 if (hasUpgrade("nu", 13))  return player.or.buyables[423].max(1)
                                 if (hasMilestone("an", 24)) return player.or.buyables[423].max(1).sqrt()
