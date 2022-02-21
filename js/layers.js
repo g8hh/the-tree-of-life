@@ -31515,6 +31515,7 @@ addLayer("an", {
                 if (pts.lt("1e100")) return decimalZero
                 let exp = tmp.an.getGainExp
 
+                if (hasUpgrade("sp", 61)) return pts.log10().times(tmp.sp.effect).pow(exp)
                 if (hasUpgrade("or", 33)) return pts.log10().pow(exp)
                 return pts.log10().sub(99).pow(exp)
         },
@@ -36662,7 +36663,7 @@ addLayer("sp", {
                         description(){
                                 return "The Species effect multiplies base Animal gain"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(3e37),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 61)
@@ -37270,7 +37271,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.pow(1e6, player.sp.challenges[21])
                         },
-                        goal: () => Decimal.pow(10, [86220, 158027, 1e6][player.sp.challenges[21]]),
+                        goal: () => Decimal.pow(10, [86220, 89696.3, 1e6][player.sp.challenges[21]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[21].goal)
                         },
