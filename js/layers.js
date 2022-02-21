@@ -31775,16 +31775,7 @@ addLayer("an", {
                                 if (data.achActive[11] && hasAchievement("an", 11)) break
                                 let id = keys[i]
                                 
-                                let shouldAB = false 
-                                if (subD[id].everMaxed == true) shouldAB = true
-                                if ((hasMilestone("nu", 6) || hasMilestone("sp", 2)) && subD[id].ever400) shouldAB = true
-                                if (!shouldAB) {
-                                        if (subD[id].buyables.lt(100)) continue
-                                        let canOver100 = hasMilestone("nu", 2) || hasAchievement("an", 14)
-                                        let nuUnl = hasMilestone("an", 27) && player.nu.unlocked
-                                        if (!canOver100 && !nuUnl && !(hasMilestone("an", 20) && player.sp.unlocked)) continue
-                                }
-                                if (subD[id].buyables.gte(ml)) continue 
+                                if (subD[id].buyables.gte(ml) || !layers.an.grid.isAutobought(id)) continue 
                                 
                                 let costs = TAXONOMY_COSTS[id]
                                 let pts = data.genes.points
@@ -33465,6 +33456,17 @@ addLayer("an", {
                         let unl = tmp.an.grid.unlockedRows
                         return id > 900 - 100 * unl
                 },
+                isAutobought(id){
+                        let data = player.an.grid[id]
+
+                        if (data.everMaxed) return true
+                        if (data.ever400) if (hasMilestone("nu", 6) || hasMilestone("sp", 2)) return true
+                        if (data.buyables.lt(100)) return false
+                        if (hasMilestone("nu", 2) || hasAchievement("an", 14)) return true
+                        if (hasMilestone("an", 27) && player.nu.unlocked) return true
+                        if (hasMilestone("an", 20) && player.sp.unlocked) return true
+                        return false
+                },
                 getCanClick(data, id) {
                         return true
                 },
@@ -33828,6 +33830,8 @@ addLayer("an", {
                                 "blank",
                                 "achievements",
                                 ["clickablesBig", [2, 3, 4]],
+                                "blank",
+                                ["clickables", [10]],
                                 "blank",
                         ],
                         unlocked(){
