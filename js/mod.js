@@ -34,6 +34,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
 	<br><h3 style='color: #CC0000'>v1.272</h3><br> 
+		- Balanced until 9.5e19 Species.<br>
 		- Added an Animal milestone.<br>
 		- Added a Nucleus milestone.<br>
 		- Added four Species milestones.<br>
