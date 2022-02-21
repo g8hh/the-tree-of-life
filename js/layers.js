@@ -31728,7 +31728,7 @@ addLayer("an", {
 
                                 let spExp = decimalZero
                                 if (hasUpgrade("sp", 22) && row == 8) {
-                                        spExp = getLevels(808).div(15)
+                                        spExp = getLevels(808).div(hasUpgrade("sp", 72) ? 8 : 15)
                                 }
                                 if (hasUpgrade("sp", 23) && row == 7) {
                                         spExp = player.ch.points.plus(10).sqrt()
@@ -36271,6 +36271,7 @@ addLayer("sp", {
                 if (hasUpgrade("nu", 31))       ret = new Decimal(player.nu.upgrades.length).max(8)
                 if (hasMilestone("sp", 7))      ret = ret.plus(player.sp.milestones.length)
                 if (hasMilestone("sp", 15))     ret = ret.plus(layerChallengeCompletions("sp"))
+                if (hasUpgrade("sp", 63))       ret = ret.plus(tmp.sp.upgrades[63].effect)
 
                 return ret
         },
@@ -36654,6 +36655,320 @@ addLayer("sp", {
                                 return hasMilestone("ch", 34)
                         }, // hasUpgrade("sp", 55)
                 },
+                61: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect I"
+                        },
+                        description(){
+                                return "The Species effect multiplies base Animal gain"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 61)
+                },
+                62: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect II"
+                        },
+                        description(){
+                                return "The Species effect multiplies Organ gain per Nucleuses cubed"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 62)
+                },
+                63: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect III"
+                        },
+                        description(){
+                                return "Per this tab upgrade add 1 to the Species gain exponent"
+                        },
+                        effect(){
+                                let ids = [
+                                        61, 62, 63, 64, 65,
+                                        71, 72, 73, 74, 75,
+                                        81, 82, 83, 84, 85,
+                                        91, 92, 93, 94, 95,
+                                       101,102,103,104,105,
+                                ]
+                                let a = 0
+                                for (i in ids){
+                                        if (hasUpgrade("sp", ids[i])) a ++
+                                }
+                                return a
+                        },
+                        cost:() => new Decimal(1e35),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 63)
+                },
+                64: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect IV"
+                        },
+                        description(){
+                                return "Raise Air gain ^1.01 per upgrade"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 64)
+                },
+                65: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect V"
+                        },
+                        description(){
+                                return "Effect V is now per (I'm levels)<sup>.9</sup>"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 65)
+                },
+                71: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect VI"
+                        },
+                        description(){
+                                return "Effect VI is now per (its levels)<sup>.7</sup>"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 71)
+                },
+                72: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect VII"
+                        },
+                        description(){
+                                return "Effect VII's divider is 8"
+                        },
+                        cost:() => new Decimal(1e31),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 72)
+                },
+                73: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect VIII"
+                        },
+                        description(){
+                                return "Effect VIII's sqrt is ^.6"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 73)
+                },
+                74: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect IX"
+                        },
+                        description(){
+                                return "Effect IX's cbrt is ^.7"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 74)
+                },
+                75: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect X"
+                        },
+                        description(){
+                                return "Effect X becomes per upgrade"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 75)
+                },
+                81: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XI"
+                        },
+                        description(){
+                                return "Effect XI's divider is 15"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 81)
+                },
+                82: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XII"
+                        },
+                        description(){
+                                return "Effect XII's divider is 4"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 82)
+                },
+                83: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XIII"
+                        },
+                        description(){
+                                return "Effect XIII's divider is 4"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 83)
+                },
+                84: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XIV"
+                        },
+                        description(){
+                                return "Effect XIV's sqrt is ^.55"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 84)
+                },
+                85: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XV"
+                        },
+                        description(){
+                                return "Effect XV's ^.06 is ^.1"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 85)
+                },
+                91: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XVI"
+                        },
+                        description(){
+                                return "Energy base amount gain is [buyables]<sup>Nucleuses</sup>"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 91)
+                },
+                92: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XVII"
+                        },
+                        description(){
+                                return "Charm Quark effect is now (C*x)<sup>.8</sup>"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 92)
+                },
+                93: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XVIII"
+                        },
+                        description(){
+                                return "Token II buyables' cost exponent is 1.23"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 93)
+                },
+                94: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XIX"
+                        },
+                        description(){
+                                return "I'm base's divider is 99"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 94)
+                },
+                95: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XX"
+                        },
+                        description(){
+                                return "Token II via Cells' double exponent is [IMPROVED]"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 95)
+                },
+                101: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXI"
+                        },
+                        description(){
+                                return "Double Nucleusless reward"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 101)
+                },
+                102: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXII"
+                        },
+                        description(){
+                                return "Nucleusless reward effects Cell effect exponent"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 102)
+                },
+                103: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXIII"
+                        },
+                        description(){
+                                return "Gain ^1.003 Energy"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 103)
+                },
+                104: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXIV"
+                        },
+                        description(){
+                                return "Gain ^1.003 Stem Cells"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 104)
+                },
+                105: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXV"
+                        },
+                        description(){
+                                return "gonna base is (make levels)<sup>.54</sup>"
+                        },
+                        cost:() => new Decimal(1e300),
+                        unlocked(){
+                                return hasUpgrade("nu", 32)
+                        }, // hasUpgrade("sp", 105)
+                },
         },
         milestones: {
                 1: {
@@ -36880,6 +37195,20 @@ addLayer("sp", {
                                 return "Reward: Per Species challenge completion add 1 to the Animal and Species gain exponents and unlock another challenge."
                         },
                 }, // hasMilestone("sp", 15)
+                16: {
+                        requirementDescription(){
+                                return "1e36 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e36)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep Chromosome upgrades on reset and Up Quark divider is 11."
+                        },
+                }, // hasMilestone("sp", 16)
         },
         challenges:{
                 11: {
@@ -36890,7 +37219,7 @@ addLayer("sp", {
                         rewardBase(){
                                 return new Decimal(player.sp.challenges[11]).times(50).max(1)
                         },
-                        goal: () => Decimal.pow(10, [54153.7, 62138.7, 1e5][player.sp.challenges[11]]),
+                        goal: () => Decimal.pow(10, [54153.7, 62138.7, 67327, 1e5][player.sp.challenges[11]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[11].goal)
                         },
@@ -36966,13 +37295,29 @@ addLayer("sp", {
                         countsAs: [],
                 }, // inChallenge("sp", 21) hasChallenge("sp", 21)
         },
+        microtabs: {
+                upgrades_content: {
+                        "Effects": {
+                                content: [
+                                        ["upgrades", [1, 2, 3, 4, 5]],
+                                ]
+                        },
+                        "Upgraded Effects": {
+                                content: [
+                                        ["upgrades", [6,7,8,9,10]],
+                                ],
+                        },
+                },
+        },
         tabFormat: {
                 "Upgrades": {
                         content: [
                                 "main-display",
                                 ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
                                 "blank",
-                                ["upgrades", [1,2,3,4,5]],
+                                function(){
+                                        return hasUpgrade("nu", 32) ? ["microtabs", "upgrades_content"] : ["upgrades", [1,2,3,4,5]]
+                                },
                         ],
                         unlocked(){
                                 return true
@@ -37078,7 +37423,7 @@ addLayer("sp", {
 
                         let chKeptUpgrades = 0 
                         if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!false) {
+                        if (!hasMilestone("sp", 16)) {
                                 data1.upgrades = data1.upgrades.slice(0, chKeptUpgrades)
                         }
                 }
@@ -46898,10 +47243,11 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
-                                if (hasMilestone("an", 38)) return c.plus(1).sqrt().div(12)
-                                if (hasUpgrade("nu", 12))   return c.plus(1).sqrt().div(14)
-                                if (hasMilestone("nu", 7))  return c.plus(1).sqrt().div(25)
-                                if (hasMilestone("or", 12)) return c.plus(1).sqrt().div(40)
+                                if (hasMilestone("sp", 16))     return c.plus(1).sqrt().div(11)
+                                if (hasMilestone("an", 38))     return c.plus(1).sqrt().div(12)
+                                if (hasUpgrade("nu", 12))       return c.plus(1).sqrt().div(14)
+                                if (hasMilestone("nu", 7))      return c.plus(1).sqrt().div(25)
+                                if (hasMilestone("or", 12))     return c.plus(1).sqrt().div(40)
 
                                 return c.plus(1).sqrt().div(r.plus(40))
                         },
@@ -46923,11 +47269,14 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "(1+C)<sup>.5</sup>/(40+R)*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
-                                if (hasMilestone("or", 12)) eformula = eformula.replace("(40+R)", "40")
-                                if (hasMilestone("nu", 7)) eformula = eformula.replace("40", "25")
-                                if (hasUpgrade("nu", 12))  eformula = eformula.replace("25", "14")
-                                if (hasMilestone("an", 38)) eformula = eformula.replace("14", "12")
+                                let eformula = "(1+C)<sup>.5</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
+                                let div = "(40+R)"
+                                if (hasMilestone("or", 12))     div = "40"
+                                if (hasMilestone("nu", 7))      div = "25"
+                                if (hasUpgrade("nu", 12))       div = "14"
+                                if (hasMilestone("an", 38))     div = "12"
+                                if (hasMilestone("sp", 16))     div = "11"
+                                eformula = eformula.replace("DIV", div)
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
