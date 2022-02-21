@@ -46887,9 +46887,12 @@ addLayer("tokens", {
 
                                 maxNewLevels = Math.min(ma, maxNewLevels)
 
+                                if (!player.ch.everUpgrade33) {
+                                        maxNewLevels = 1
+                                        data.buyablesBoughtThisTick.push(101)
+                                        data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
+                                }
                                 data.buyables[101] = data.buyables[101].plus(maxNewLevels)
-                                if (!player.ch.everUpgrade33) data.tokens2.points = data.tokens2.points.sub(tmp.tokens.buyables[101].cost)
-                                if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(101)
                         },
                         base(){
                                 let r = tmp.tokens.buyables.getRow10Total
