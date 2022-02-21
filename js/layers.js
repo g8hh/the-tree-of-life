@@ -15622,7 +15622,7 @@ addLayer("l", {
                                         if (player.extremeMode) step0 += br2 + "<sup>**</sup>Capped at 1e10 and not affected by Life milestone 1"
                                         if (hasUpgrade("l", 11)) {
                                                 step0 = step0.replace("Nitrogen Science<sup>**</sup>,", "Nitrogen Science<sup>*3</sup>")
-                                                step0 += br + "<sup>*3</sup>Capped a 1e10"
+                                                step0 += br + "<sup>*3</sup>Capped at 1e10"
                                         }
 
                                         if (!tmp.l.challenges[11].unlocked) return step0
@@ -33493,7 +33493,7 @@ addLayer("an", {
                 }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels 
                 getStyle(data, id){
                         let ret = {}
-                        if (layers.an.grid.isAutobought(id)) ret["border-color"] = "#227700"
+                        if (layers.an.grid.isAutobought(id)) ret["border-color"] = "#90EE90"
                         if (id == player.an.selectedId) {
                                 ret["background-color"] = "#FFA225"
                                 return ret
@@ -35603,6 +35603,7 @@ addLayer("nu", {
                         },
                         description(){
                                 if (!hasUpgrade("nu", 31) && !player.shiftAlias) return "Requires: 78930 Token II<br>Shift for effect"
+                                if (player.hardMode) return "Species gain exponent is [upgrades] and gain 20% of Species on reset per second"
                                 return "Species gain exponent is [upgrades] and gain 100% of Species on reset per second"
                         },
                         cost:() => new Decimal(76),
@@ -35610,7 +35611,7 @@ addLayer("nu", {
                                 return player.tokens.tokens2.total.gte(78930)
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 25)) return true
+                                if (hasUpgrade("nu", 31)) return true
                                 return player.tokens.tokens2.total.gte(78900)
                         }, // hasUpgrade("nu", 31)
                 },
@@ -36267,7 +36268,7 @@ addLayer("sp", {
                 if (hasMilestone("nu", 20))     ret = ret.times(player.tokens.total.plus(10).log10())
                 if (hasMilestone("sp", 8))      ret = ret.times(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points))
                 if (hasChallenge("sp", 11))     ret = ret.times(tmp.sp.challenges[11].reward)
-                if (hasMilestone("sp", 12))     ret = ret.times(Decimal.pow(1.2, player.nu.points.sub(80).max(0)))
+                if (hasMilestone("sp", 12))     ret = ret.times(Decimal.pow(player.sp.milestones.length/10, player.nu.points.sub(80).max(0)).max(1))
 
                 return ret
         },
@@ -36305,6 +36306,7 @@ addLayer("sp", {
 
                 if (hasUpgrade("nu", 31)) {
                         let gainThisTick = tmp.sp.getResetGain.times(diff)
+                        if (player.hardMode) gainThisTick = gainThisTick.div(5)
                         data.points = data.points.plus(gainThisTick)
                         data.total = data.total.plus(gainThisTick)
                 }
@@ -36717,7 +36719,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: intes<u>TINE</u> base is log10(Energy)."
+                                return "Reward: intes<u>TINE</u> base is log10(Energy) and keep Organ milestones on Species reset."
                         },
                 }, // hasMilestone("sp", 6)
                 7: {
@@ -36804,7 +36806,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Token II buyables' cost exponent is 1.24 and per Nucleus past 80 multiply Species gain by 1.2."
+                                return "Reward: Token II buyables' cost exponent is 1.24 and per Nucleus past 80 multiply Species gain by milestones/10."
                         },
                 }, // hasMilestone("sp", 12)
                 13: {
@@ -36843,7 +36845,7 @@ addLayer("sp", {
                                 let d = "Currently: *" + format(tmp.sp.challenges[11].reward)
                                 let e = "Total completions: " + player.sp.challenges[11] + "/5"
 
-                                return a + br + b + br2 + c + br2 + d
+                                return a + br + b + br2 + c + br2 + d + br2 + e
                         },
                         unlocked(){
                                 return hasMilestone("an", 44)
@@ -36868,8 +36870,9 @@ addLayer("sp", {
                                 let b = "Goal: " + format(tmp.sp.challenges[12].goal) + " Genes"
                                 let c = "Reward: Add to Tissue effect exponent"
                                 let d = "Currently: +" + format(tmp.sp.challenges[12].reward)
+                                let e = "Total completions: " + player.sp.challenges[12] + "/5"
 
-                                return a + br + b + br2 + c + br2 + d
+                                return a + br + b + br2 + c + br2 + d + br2 + e
                         },
                         unlocked(){
                                 return hasMilestone("sp", 11)
@@ -37056,7 +37059,7 @@ addLayer("sp", {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
-                        if (!false) {
+                        if (!hasMilestone("sp", 6)) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data3.milestones)
                                 data3.milestones = data3.milestones.slice(0, oKeptMilestones)
