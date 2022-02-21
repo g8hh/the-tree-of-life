@@ -24058,6 +24058,7 @@ addLayer("t", {
                 if (hasUpgrade("ch", 12))       ret = ret.plus(player.ch.upgrades.length)
                 if (hasUpgrade("an", 43))       ret = ret.plus(1)
                 if (hasUpgrade("sp", 51))       ret = ret.plus(1)
+                if (hasChallenge("sp", 12))     ret = ret.plus(tmp.sp.challenges[12].reward)
 
                 return ret
         },
@@ -26187,6 +26188,7 @@ addLayer("or", {
                 
                 if (hasMilestone("an", 27))     exp = exp.times(player.ch.points.max(6).log(6))
                 if (hasMilestone("nu", 8))      exp = exp.times(player.nu.points.plus(1))
+                if (hasMilestone("sp", 13))     exp = exp.times(player.sp.milestones.length ** .5)
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -35311,6 +35313,7 @@ addLayer("nu", {
                 return tmp.nu.baseAmount.gte(tmp.nu.getNextAt) ? decimalOne : decimalZero
         },
         canReset(){
+                if (inChallenge("sp", 12)) return false
                 return tmp.nu.getResetGain.gt(0) && ((!player.an.achActive[24] && hasAchievement("an", 24)) || hasUpgrade("ch", 43))
         },
         autoPrestige(){
@@ -36254,7 +36257,8 @@ addLayer("sp", {
 
                 if (hasMilestone("nu", 20))     ret = ret.times(player.tokens.total.plus(10).log10())
                 if (hasMilestone("sp", 8))      ret = ret.times(new Decimal(player.sp.milestones.length).div(50).plus(.87).pow(player.nu.points))
-                                                ret = ret.times(tmp.sp.challenges[11].reward)
+                if (hasChallenge("sp", 11))     ret = ret.times(tmp.sp.challenges[11].reward)
+                if (hasMilestone("sp", 12))     ret = ret.times(Decimal.pow(1.2, player.nu.points.sub(80).max(0)))
 
                 return ret
         },
@@ -36777,9 +36781,37 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock another challenge [not yet] and raise make base ^(53/52)."
+                                return "Reward: Unlock another challenge and raise make base ^(53/52)."
                         },
                 }, // hasMilestone("sp", 11)
+                12: {
+                        requirementDescription(){
+                                return "1e13 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e13)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token II buyables' cost exponent is 1.24 and per Nucleus past 80 multiply Species gain by 1.2."
+                        },
+                }, // hasMilestone("sp", 12)
+                13: {
+                        requirementDescription(){
+                                return "1e16 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e16)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: sqrt(milestones) multiplies Organ's effect exponent."
+                        },
+                }, // hasMilestone("sp", 13)
         },
         challenges:{
                 11: {
@@ -36790,7 +36822,7 @@ addLayer("sp", {
                         rewardBase(){
                                 return new Decimal(player.sp.challenges[11]).times(50).max(1)
                         },
-                        goal: () => Decimal.pow(10, 54153.7 + player.sp.challenges[11] * 1e4),
+                        goal: () => Decimal.pow(10, [54153.7, 62138.7, 1e5][player.sp.challenges[11]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[11].goal)
                         },
@@ -36799,7 +36831,8 @@ addLayer("sp", {
                                 let a = "You can't get Chromosomes."
                                 let b = "Goal: " + format(tmp.sp.challenges[11].goal) + " Genes"
                                 let c = "Reward: Per Species challenge completion gain 50*completions more Species"
-                                let d = "Currently: " + format(tmp.sp.challenges[11].reward)
+                                let d = "Currently: *" + format(tmp.sp.challenges[11].reward)
+                                let e = "Total completions: " + player.sp.challenges[11] + "/5"
 
                                 return a + br + b + br2 + c + br2 + d
                         },
@@ -36808,6 +36841,32 @@ addLayer("sp", {
                         },
                         countsAs: [],
                 }, // inChallenge("sp", 11) hasChallenge("sp", 11)
+                12: {
+                        name: "Nucleusless", 
+                        reward(){
+                                return new Decimal(player.sp.challenges[12] * .2)
+                        },
+                        goal: () => Decimal.pow(10, 145553.7 + player.sp.challenges[12] * 1e5),
+                        canComplete(){ 
+                                return player.an.genes.points.gte(tmp.sp.challenges[12].goal)
+                        },
+                        onEnter(){
+                                player.nu.points = decimalZero
+                        },
+                        completionLimit: 5,
+                        fullDisplay(){
+                                let a = "You can't get Nucleuses and set them to 0."
+                                let b = "Goal: " + format(tmp.sp.challenges[12].goal) + " Genes"
+                                let c = "Reward: Add to Tissue effect exponent"
+                                let d = "Currently: +" + format(tmp.sp.challenges[12].reward)
+
+                                return a + br + b + br2 + c + br2 + d
+                        },
+                        unlocked(){
+                                return hasMilestone("sp", 11)
+                        },
+                        countsAs: [],
+                }, // inChallenge("sp", 12) hasChallenge("sp", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -45488,6 +45547,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("sp", 12))     return x.pow(1.24).ceil()
                         if (hasMilestone("an", 44))     return x.pow(1.25).ceil()
                         if (hasMilestone("nu", 17))     return x.pow(1.26).ceil()
                         if (hasMilestone("ch", 31))     return x.pow(1.27).ceil()
@@ -45541,6 +45601,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasMilestone("sp", 12))     return "ceil(x<sup>1.24</sup>)"
                         if (hasMilestone("an", 44))     return "ceil(x<sup>1.25</sup>)"
                         if (hasMilestone("nu", 17))     return "ceil(x<sup>1.26</sup>)"
                         if (hasMilestone("ch", 31))     return "ceil(x<sup>1.27</sup>)"
@@ -45587,6 +45648,7 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        if (hasMilestone("sp", 12))     return 30
                         if (hasMilestone("an", 44))     return 29
                         if (player.ch.everUpgrade33)    return 28
                         if (hasMilestone("an", 33))     return 27

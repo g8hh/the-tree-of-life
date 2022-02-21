@@ -21,7 +21,7 @@ var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.ch.points.gte(1785)
+	return player.sp.points.gte(9.5e19)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
