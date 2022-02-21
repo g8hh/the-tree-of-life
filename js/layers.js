@@ -33492,8 +33492,11 @@ addLayer("an", {
                         return a
                 }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels 
                 getStyle(data, id){
+                        let ret = {}
+                        if (layers.an.grid.isAutobought(id)) ret["border-color"] = "#227700"
                         if (id == player.an.selectedId) {
-                                return {"background-color": "#FFA225"}
+                                ret["background-color"] = "#FFA225"
+                                return ret
                         }
                         let costs = TAXONOMY_COSTS[id]
                         if (costs != undefined && data.buyables.lt(tmp.an.grid.maxLevels)) {
@@ -33501,12 +33504,14 @@ addLayer("an", {
                                 if (!data.autobought && canAfford) {
                                         let x = ["#4F82A7", "#5D9094", "#6B9E82", "#79AC6F", "#86B95D",
                                                 "#94C74A", "#A2D538", "#B0E325",]
-                                        return {"background-color": x[data.hundreds-1]}
+                                        ret["background-color"] = x[data.hundreds-1]
+                                        return ret
                                 }
                         }
                         let x = ["#DA096F", "#C70E74", "#B51379", "#A2177D", "#901C82",
                                  "#7D2086", "#6B258B", "#582A90",]
-                        return {"background-color": x[data.hundreds-1]}
+                        ret["background-color"] = x[data.hundreds-1]
+                        return ret
                 },
                 getDisplay(data, id) {
                         return "Levels:<br>" + formatWhole(data.buyables) + "<br>Amount:<br>" + format(data.extras)
@@ -33822,7 +33827,7 @@ addLayer("an", {
                                 "main-display",
                                 ["display-text", function(){
                                         if (hasAchievement("an", 11) || player.nu.unlocked) {
-                                                let a = "Clickables with " + makeRed("red") + " boarders reset Taxonomy amounts and Genes"
+                                                let a = "Clickables with " + makeRed("red") + " borders reset Taxonomy amounts and Genes"
                                                 return a + br + "while those with <bdi style='color:#7AEEFC'>sky-blue</bdi> backgrounds' effects are always active."
                                         }
                                         return ""

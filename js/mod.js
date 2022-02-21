@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.271",
+	num: "1.272",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -26,13 +26,21 @@ function isEndgame() {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.271)<br><br>
+		Reaching the endgame screen (updated at least as of v1.272)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.272</h3><br> 
+		- Added an Animal milestone.<br>
+		- Added a Nucleus milestone.<br>
+		- Added four Species milestones.<br>
+		- Added two Species challenges.<br>
+		- Various code cleanup and wording fixes.<br>
+		- Added a display for autobought/autobuying Taxonomy buyables.<br>
+		- Made Animals V and Animals XIII not nerf DNA gain.<br>
 	<br><h3 style='color: #CC0000'>v1.271</h3><br>
 		- Balanced until 1785 Chromosomes.<br><span (just got it)></span>
 		- Added five Species milestones.<br>
