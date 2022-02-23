@@ -134,10 +134,15 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.an.unlocked
                 }
-        } else if (n <= 1113) {
+        } else if (n <= 931) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.nu.unlocked
+                }
+        } else if (n <= 7777) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.sp.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -1080,6 +1085,35 @@ PROGRESSION_MILESTONES = {
         908: () => player.sp.times >= 5,
         909: () => player.sp.times >= 6,
         910: () => player.sp.times >= 7,
+
+        911: () => player.sp.points.gte(1e1),
+        912: () => player.sp.points.gte(1e3),
+        913: () => player.sp.points.gte(1e6),
+        914: () => player.sp.points.gte(1e10),
+        915: () => player.sp.points.gte(1e15),
+        916: () => player.sp.points.gte(1e21),
+        917: () => player.sp.points.gte(1e28),
+        918: () => player.sp.points.gte(1e36),
+        919: () => player.sp.points.gte(1e45),
+        920: () => player.sp.points.gte(1e55),
+        921: () => player.sp.points.gte(1e66),
+        922: () => player.sp.points.gte(1e78),
+        923: () => player.sp.points.gte(1e91),
+        924: () => player.sp.points.gte(1e105),
+        925: () => player.or.contaminants.points.gte(Decimal.pow10(1e18)),
+        926: () => player.or.contaminants.points.gte(Decimal.pow10(2e18)),
+        927: () => player.or.contaminants.points.gte(Decimal.pow10(5e18)),
+        928: () => player.or.contaminants.points.gte(Decimal.pow10(1e19)),
+        929: () => player.or.contaminants.points.gte(Decimal.pow10(2e19)),
+        930: () => player.or.contaminants.points.gte(Decimal.pow10(5e19)),
+        931: () => player.or.contaminants.points.gte(Decimal.pow10(1e20)),
+        932: () => player.sp.points.gte(1e120),
+        933: () => player.sp.points.gte(1e136),
+        934: () => player.sp.points.gte(1e153),
+        935: () => player.sp.points.gte(1e171),
+        936: () => player.sp.points.gte(1e190),
+        937: () => player.sp.points.gte(1e210),
+        938: () => player.sp.points.gte(1e231),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -1993,6 +2027,35 @@ PROGRESSION_MILESTONES_TEXT = {
         908: "5 Species resets",
         909: "6 Species resets",
         910: "7 Species resets",
+
+        911: "10 Species",
+        912: "1000 Species",
+        913: "1,000,000 Species",
+        914: "1e10 Species",
+        915: "1e15 Species",
+        916: "1e10 Species",
+        917: "1e28 Species",
+        918: "1e36 Species",
+        919: "1e45 Species",
+        920: "1e55 Species",
+        921: "1e66 Species",
+        922: "1e78 Species",
+        923: "1e91 Species",
+        924: "1e105 Species",
+        925: "1e1e18 Contaminants",
+        926: "1e2e18 Contaminants",
+        927: "1e5e18 Contaminants",
+        928: "1e1e19 Contaminants",
+        929: "1e2e19 Contaminants",
+        930: "1e5e19 Contaminants",
+        931: "1e1e20 Contaminants",
+        932: "1e120 Species",
+        933: "1e136 Species",
+        934: "1e153 Species",
+        935: "1e171 Species",
+        936: "1e190 Species",
+        937: "1e210 Species",
+        938: "1e231 Species",
 }
 
 

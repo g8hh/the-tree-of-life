@@ -5314,7 +5314,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[11].cost)
                         },
                         buy(){
@@ -5378,7 +5378,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[12].cost)
                         },
                         buy(){
@@ -5438,7 +5438,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 12) && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[13].cost)
                         },
                         buy(){
@@ -5507,7 +5507,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 14) && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[21].cost)
                         },
                         buy(){
@@ -5577,7 +5577,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 15) && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[22].cost)
                         },
                         buy(){
@@ -5643,7 +5643,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("h", 52)  && !hasUpgrade("sci", 305)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.hydrogen_science.points.gte(tmp.sci.buyables[23].cost)
                         },
                         buy(){
@@ -5706,7 +5706,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[101].cost)
                         },
                         buy(){
@@ -5774,7 +5774,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[102].cost)
                         },
                         buy(){
@@ -5837,7 +5837,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 102) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[103].cost)
                         },
                         buy(){
@@ -5899,7 +5899,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 103) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[111].cost)
                         },
                         buy(){
@@ -5965,7 +5965,7 @@ addLayer("sci", {
                         unlocked(){
                                 return player.sci.buyables[111].gte(8) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[112].cost)
                         },
                         buy(){
@@ -6027,7 +6027,7 @@ addLayer("sci", {
                         unlocked(){
                                 return player.sci.buyables[111].gte(9) && !hasUpgrade("sci", 402)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.oxygen_science.points.gte(tmp.sci.buyables[113].cost)
                         },
                         buy(){
@@ -6085,7 +6085,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 364)
                         },
-                        canAfford() {
+                        canAfford(){
                                 if (player.sci.buyables[301].gte(6)) return false
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[301].cost)
                         },
@@ -6117,7 +6117,7 @@ addLayer("sci", {
                                         else if (hasUpgrade("sci", 414))amt = amt.div(100).pow(2).times(100)
                                         else if (hasUpgrade("sci", 413))amt = amt.div(100).pow(7/3).times(100)
                                         else if (hasMilestone("a", 15)) amt = amt.div(100).pow(2.65).times(100)
-                                        else amt = amt.div(50).pow10()
+                                        else                            amt = amt.div(50).pow10()
                                 }
                                 if (hasUpgrade("p", 112)) amt = amt.div(2)
                                 if (amt.lte(0)) return new Decimal("1.105e107")
@@ -6129,7 +6129,7 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 364)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[302].cost)
                         },
                         buy(){
@@ -6174,7 +6174,7 @@ addLayer("sci", {
                                 if (hasUpgrade("sci", 454)) return false
                                 return hasUpgrade("sci", 364)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.nitrogen_science.points.gte(tmp.sci.buyables[303].cost)
                         },
                         buy(){
@@ -6217,7 +6217,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 501) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[501].cost)
                         },
                         buy(){
@@ -6275,7 +6275,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 502) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[502].cost)
                         },
                         buy(){
@@ -6329,7 +6329,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 503) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[503].cost)
                         },
                         buy(){
@@ -6383,7 +6383,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 504) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[511].cost)
                         },
                         buy(){
@@ -6445,7 +6445,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 505) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[512].cost)
                         },
                         buy(){
@@ -6499,7 +6499,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 511) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[513].cost)
                         },
                         buy(){
@@ -6559,7 +6559,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 512) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[521].cost)
                         },
                         buy(){
@@ -6615,7 +6615,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 513) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[522].cost)
                         },
                         buy(){
@@ -6672,7 +6672,7 @@ addLayer("sci", {
                         unlocked(){
                                 return hasUpgrade("sci", 514) && hasUpgrade("sci", 501)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.sci.dna_science.points.gte(tmp.sci.buyables[523].cost)
                         },
                         buy(){
@@ -19989,10 +19989,9 @@ addLayer("cells", {
                 if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
 
-                if (hasMilestone("an", 1) && !inChallenge("cells", 12)) {
-                        if (player.cells.challenges[12] % 19 > 0) player.cells.challenges[12] ++
-                } else if (hasUpgrade("or", 11) && !inChallenge("cells", 12)) {
-                        if (player.cells.challenges[12] % 5 > 0) player.cells.challenges[12] ++
+                if (!inChallenge("cells", 12)) {
+                        let multVal = hasMilestone("an", 1) ? 19 : hasUpgrade("or", 11) ? 5 : 1
+                        if (player.cells.challenges[12] % multVal > 0) player.cells.challenges[12] ++
                 }
 
                 if (hasMilestone("or", 5) && !inChallenge("cells", 11)) {
@@ -22613,16 +22612,21 @@ addLayer("cells", {
                                 let b = "Goal: " + format(tmp.cells.challenges[21].goal) + " Stem Cells"
                                 let c = "Reward: To see all rewards go to the info tab"
                                 let d = "Next: "
-                                if (player.cells.challenges[21] == 0) {
-                                        d += "Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
-                                } else if (player.cells.challenges[21] == 1) {
-                                        d += "Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain"
-                                } else if (player.cells.challenges[21] == 2) {
-                                        d += "Unlock Heart and another Cell buyable"
-                                } else if (player.cells.challenges[21] == 3) {
-                                        d += "Tokens II buyables' cost is ceil(x<sup>.9</sup>)"
-                                } else {
-                                        d += "REMOVE"
+                                switch (player.cells.challenges[21]) {
+                                        case 0:
+                                                d += "Per Cell upgrade log10(log10(Points)) multiplies DNA gain"
+                                                break
+                                        case 1:
+                                                d += "Per completion log10(9+log10(10+Best Tissues)) multiplies Tissue gain"
+                                                break
+                                        case 2:
+                                                d += "Unlock Heart and another Cell buyable"
+                                                break
+                                        case 3:
+                                                d += "Tokens II buyables' cost is ceil(x<sup>.9</sup>)"
+                                                break
+                                        default:
+                                                d += "REMOVE"
                                 }
                                 d = d.replace("Next: REMOVE", "")
                                 let e = br + "Completion count: " + player.cells.challenges[21] + "/" + formatWhole(tmp.cells.challenges[21].completionLimit)
@@ -28825,10 +28829,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 201) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[201].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(100)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -28902,10 +28906,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 202) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[202].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(5e4)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -28967,10 +28971,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 203) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[203].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div(5e45)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29039,10 +29043,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 204) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[211].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("5e442")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29108,10 +29112,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 205) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[212].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("1e3486")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29173,10 +29177,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 211) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[213].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("1e17147")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29238,10 +29242,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 212) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[221].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("1e64100")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29303,10 +29307,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 213) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[222].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("1e148127")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29368,10 +29372,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 214) && hasUpgrade("or", 201)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.contaminants.points.gte(tmp.or.buyables[223].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.contaminants.points.div("1e289805")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
@@ -29443,10 +29447,10 @@ addLayer("or", {
                         unlocked(){
                                 return hasUpgrade("or", 315)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[401].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[401].bases
                                 // take everything to log base bases[2]
@@ -29572,10 +29576,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte(1e6)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[402].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[402].bases
                                 // take everything to log base bases[2]
@@ -29697,10 +29701,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte(1e190)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[403].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[403].bases
                                 // take everything to log base bases[2]
@@ -29799,10 +29803,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte(1e27)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[411].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[411].bases
                                 // take everything to log base bases[2]
@@ -29923,10 +29927,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte(1e27)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[412].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[412].bases
                                 // take everything to log base bases[2]
@@ -30049,10 +30053,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte(1e190)
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[413].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[413].bases
                                 // take everything to log base bases[2]
@@ -30174,10 +30178,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte("1e666")
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[421].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[421].bases
                                 // take everything to log base bases[2]
@@ -30300,10 +30304,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte("1e666")
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[422].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[422].bases
                                 // take everything to log base bases[2]
@@ -30403,10 +30407,10 @@ addLayer("or", {
                         unlocked(){
                                 return player.or.energy.total.gte("1e666")
                         },
-                        canAfford() {
+                        canAfford(){
                                 return player.or.energy.points.gte(tmp.or.buyables[423].cost)
                         },
-                        getMaxAfford() {
+                        getMaxAfford(){
                                 let pts = player.or.energy.points
                                 let bases = tmp.or.buyables[423].bases
                                 // take everything to log base bases[2]
@@ -38695,7 +38699,7 @@ addLayer("mi", {
                                                         if (player.or.air.total.lt("1e2300")) return "You can begin Energy production at 1e2300 Air"
                                                         if (player.shiftAlias) {
                                                                 if (hasUpgrade("sp", 91))       return "Base gain amount is [buyables]<sup>Nucleuses</u>"
-                                                                if (hasMilestone("nu", 1)) return "Base gain amount is [buyables]<sup>2</sup>" + (hasMilestone("an", 3) ? "" : "/10")
+                                                                if (hasMilestone("nu", 1))      return "Base gain amount is [buyables]<sup>2</sup>" + (hasMilestone("an", 3) ? "" : "/10")
                                                                 return "Base gain amount is [buyables]" + (hasMilestone("an", 3) ? "" : "/10")
                                                         }
                                                         let a = "Buyable amounts (plus 1) multiply energy gain and the production<br>of buyable amounts directly above and to the left." 
@@ -40315,7 +40319,7 @@ addLayer("mini", {
                 },
                 12: {
                         title: "<bdi style='color:#FF9933'>Orange</bdi>",
-                        cost() {
+                        cost(){
                                 let exp = Decimal.pow(getBuyableAmount("mini", 12), 1.1)
                                 let init = new Decimal(player.extremeMode ? 3e18 : 1e20)
                                 if (hasUpgrade("sci", 22) || player.sci.everhasnsci2) init = decimalOne
@@ -40504,7 +40508,7 @@ addLayer("mini", {
                 },
                 23: {
                         title: "<bdi style='color:#33CC33'>Green</bdi>",
-                        cost() {
+                        cost(){
                                 let init = new Decimal(player.extremeMode ? 5e29 : 1e31)
                                 if (hasMilestone("mini", 11) || player.sci.everhasnsci2) init = decimalOne
                                 return init.times(Decimal.pow(1e11, Decimal.pow(getBuyableAmount("mini", 23), 1.1)))
@@ -40760,7 +40764,7 @@ addLayer("mini", {
                 },
                 31: {
                         title: "B11", 
-                        cost() {
+                        cost(){
                                 let init = new Decimal(10)
                                 if (hasMilestone("mini", 2) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 31)), 1.1)
@@ -40816,7 +40820,7 @@ addLayer("mini", {
                 },
                 32: {
                         title: "B12", 
-                        cost() {
+                        cost(){
                                 let init = new Decimal(3e6)
                                 if (hasMilestone("mini", 3) || player.sci.everhasnsci2) init = decimalOne
                                 let exp = Decimal.pow(nerfBminigameBuyableAmounts(getBuyableAmount("mini", 32)), 1.2)
