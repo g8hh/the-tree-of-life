@@ -312,7 +312,7 @@ var TAXONOMY_NAMES = {
 
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
-        101: [new Decimal("1e906090"), new Decimal(1e143), new Decimal(1.1)],
+        101: [new Decimal("1e253830"), new Decimal(1e250), new Decimal(1.1)],
         102: [new Decimal("1e906090"), new Decimal(1e143), new Decimal(1.2)],
         103: [new Decimal("1e239930"), new Decimal("1e310"), new Decimal(1.2)],
         104: [new Decimal("1e978004"), new Decimal(1e109), new Decimal(1.3)],
@@ -19925,6 +19925,7 @@ addLayer("cells", {
                 if (hasUpgrade("ch", 15))       exp = exp.plus(13.75)
                 if (hasUpgrade("sp", 52))       exp = exp.plus(1)
                 if (hasMilestone("sp", 9))      exp = exp.plus(1)
+                if (hasUpgrade("sp", 102))      exp = exp.plus(tmp.sp.challenges[12].reward)
 
                 return exp
         },
@@ -23981,7 +23982,9 @@ addLayer("t", {
                 }
                                                 ret = ret.times(tmp.or.effect)
                                                 ret = ret.times(tmp.an.effect)
-                if (hasMilestone("or", 10))     ret = ret.times(Decimal.pow(2, player.or.milestones.length))
+                if (hasMilestone("or", 10) && !hasUpgrade("nu", 35)) {
+                                                ret = ret.times(Decimal.pow(2, player.or.milestones.length))
+                }
                 if (player.easyMode)            ret = ret.times(2)
                 if (hasUpgrade("sci", 552))     ret = ret.times(Decimal.pow(2, tmp.sci.upgrades[552].lvls))
                 if (hasUpgrade("or", 143) && !hasMilestone("sp", 18)) {
@@ -26168,7 +26171,9 @@ addLayer("or", {
                                                 ret = ret.times(player.or.buyables[201].plus(10).log10().pow(lvls))
                 }
                 if (hasUpgrade("or", 313))      ret = ret.times(player.or.air.points.max(10).log10())
-                if (hasMilestone("or", 20))     ret = ret.times(player.or.energy.points.max(10).log10())
+                if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
+                                                ret = ret.times(player.or.energy.points.max(10).log10())
+                }
                                                 ret = ret.times(tmp.or.buyables[423].effect)
                 if (hasUpgrade("or", 31))       ret = ret.times(Decimal.pow(1.03, player.tokens.tokens2.total))
                                                 ret = ret.times(tmp.an.effect)
@@ -26451,7 +26456,9 @@ addLayer("or", {
                                                         ret = ret.times(data[421].plus(1))
                                                         ret = ret.times(data[422].plus(1))
                                                         ret = ret.times(data[423].plus(1))
-                        if (hasMilestone("or", 20))     ret = ret.times(player.or.milestones.length)
+                        if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
+                                                        ret = ret.times(player.or.milestones.length)
+                        }
                         if (hasUpgrade("or", 21))       ret = ret.times(player.d.points.max(10).log10())
                         if (hasUpgrade("or", 23))       ret = ret.times(tmp.or.upgrades[23].effect)
                         if (hasUpgrade("or", 323))      ret = ret.times(tmp.or.upgrades[323].effect)
@@ -26540,15 +26547,19 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.challenges[31].reward)
                                                         ret = ret.times(tmp.or.challenges[32].reward)
                         }
-                        if (hasUpgrade("or", 224))      ret = ret.times(tmp.or.upgrades[224].effect)
-                        if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
+                        if (!hasMilestone("sp", 19)) {
+                                if (hasUpgrade("or", 224))      ret = ret.times(tmp.or.upgrades[224].effect)
+                                if (hasUpgrade("or", 221))      ret = ret.times(player.t.points.max(10).log10())
+                                if (hasUpgrade("or", 225))      ret = ret.times(tmp.or.buyables[412].effect)
+                                if (hasUpgrade("or", 233))      ret = ret.times(tmp.or.upgrades[323].effect)
+                        }
+                        if (!hasUpgrade("nu", 35)) {
+                                if (hasMilestone("or", 17))     ret = ret.times(player.or.milestones.length)
+                                if (hasMilestone("or", 20))     ret = ret.times(player.or.energy.points.max(10).log10())
+                        }
                         if (hasUpgrade("or", 301))      ret = ret.times(tmp.or.upgrades[301].effect)
-                        if (hasUpgrade("or", 221))      ret = ret.times(player.t.points.max(10).log10())
                         if (hasUpgrade("or", 312))      ret = ret.times(Decimal.pow(3, player.tokens.best_buyables[101].sub(30)).max(1))
-                        if (hasMilestone("or", 20))     ret = ret.times(player.or.energy.points.max(10).log10())
-                        if (hasUpgrade("or", 225))      ret = ret.times(tmp.or.buyables[412].effect)
                         if (hasUpgrade("or", 23))       ret = ret.times(tmp.or.upgrades[23].effect)
-                        if (hasUpgrade("or", 233))      ret = ret.times(tmp.or.upgrades[323].effect)
                                                         ret = ret.times(tmp.an.effect)
                         if (hasMilestone("an", 16))     ret = ret.times(player.an.grid[808].extras.plus(1))
                         if (hasUpgrade("an", 22))       ret = ret.times(player.an.grid[505].extras.plus(1).pow(player.an.grid[508].buyables))
@@ -29461,7 +29472,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[401].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[401].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [402, 403, 411, 421]
@@ -29590,7 +29601,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[402].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[402].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [403, 412, 422]
@@ -29715,7 +29726,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[403].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[403].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [413, 423]
@@ -29817,7 +29828,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[411].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[411].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [412, 413, 421]
@@ -29941,7 +29952,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[412].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[412].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [413, 422]
@@ -30067,7 +30078,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[413].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[413].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [423]
@@ -30192,7 +30203,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[421].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[421].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [422, 423]
@@ -30318,7 +30329,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[422].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[422].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = [423]
@@ -30421,7 +30432,7 @@ addLayer("or", {
                                 }
                         },
                         amountGain(){
-                                let ret = player.or.buyables[423].pow(1+hasMilestone("nu", 1)).div(10)
+                                let ret = player.or.buyables[423].pow(hasUpgrade("sp", 91) ? player.nu.points.max(2) : 1 + hasMilestone("nu", 1)).div(10)
                                 if (hasMilestone("an", 3)) ret = ret.times(10)
 
                                 let ids = []
@@ -31539,6 +31550,7 @@ addLayer("an", {
         baseAmount(){return player.or.points},
         type: "custom",
         getResetGain(){
+                if (inChallenge("sp", 22)) return decimalZero
                 let ret = tmp.an.getBaseGain.times(tmp.an.getGainMult)
                 
                 if (player.extremeMode) ret = ret.pow(.75)
@@ -32955,7 +32967,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: in<u>TES</u>tine cost base is 1.25, each of the 50 Nucleuses after the first 50 decrease its cost exponent by .0001, and sqrt(max(Chromosomes, 1465)/1465) exponentiates Energy gain (capped at 1.1)."
+                                return "Reward: in<u>TES</u>tine cost base is 1.25, each of the 70 Nucleuses after the first 50 decrease its cost exponent by .0001, and sqrt(max(Chromosomes, 1465)/1465) exponentiates Energy gain (capped at 1.1)."
                         },
                 }, // hasMilestone("an", 42)
                 43: {
@@ -35379,7 +35391,8 @@ addLayer("nu", {
         costExponent(){
                 let ret = new Decimal(1.6)
 
-                if (hasMilestone("an", 42)) ret = ret.sub(player.nu.points.sub(50).max(0).min(50).div(1e4))
+                if (hasMilestone("an", 42))     ret = ret.sub(player.nu.points.sub(50).max(0).min(70).div(1e4))
+                if (hasChallenge("sp", 22))     ret = ret.sub(tmp.sp.challenges[22].reward)
 
                 return ret
         },
@@ -35730,6 +35743,19 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 34)) return true
                                 return player.ch.points.gte(2209)
                         }, // hasUpgrade("nu", 34)
+                },
+                35: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XV"
+                        },
+                        description(){
+                                return "Disable Organ Milestones 10, 17, and 20's positive boosts to resources"
+                        },
+                        cost:() => new Decimal(105),
+                        unlocked(){
+                                if (hasUpgrade("nu", 34)) return true
+                                return player.ch.points.gte(2481)
+                        }, // hasUpgrade("nu", 35)
                 },
         },
         milestones: {
@@ -36889,7 +36915,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect X becomes per upgrade"
                         },
-                        cost:() => new Decimal(1e280),
+                        cost:() => new Decimal(1e95),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 75)
@@ -36961,7 +36987,7 @@ addLayer("sp", {
                         description(){
                                 return "Energy base amount gain is [buyables]<sup>Nucleuses</sup>"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e88),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 91)
@@ -37033,7 +37059,7 @@ addLayer("sp", {
                         description(){
                                 return "Nucleusless reward affects Cell effect exponent"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e89),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 102)
@@ -37353,9 +37379,23 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Unlock a new Species challenge and Up Quark's divider is 10 but disable Kidney XI, XIV, XV, and XVIII's effects on Air gain [not yet]."
+                                return "Reward: Unlock a new Species challenge and Up Quark's divider is 10 but disable Kidney XI, XIV, XV, and XVIII's effects on Air gain."
                         },
                 }, // hasMilestone("sp", 19)
+                20: {
+                        requirementDescription(){
+                                return "1e100 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e100)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token II via Cell's double exponent is 18 + x/15,000."
+                        },
+                }, // hasMilestone("sp", 20)
         },
         challenges:{
                 11: {
@@ -37393,7 +37433,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[12] * .2).times(1 + hasUpgrade("sp", 101))
                         },
-                        goal: () => Decimal.pow(10, [145553.7, 158027, 172950, 1e6][player.sp.challenges[12]]),
+                        goal: () => Decimal.pow(10, [145553.7, 158027, 172950, 201412, 1e6][player.sp.challenges[12]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[12].goal)
                         },
@@ -37444,6 +37484,30 @@ addLayer("sp", {
                         },
                         countsAs: [],
                 }, // inChallenge("sp", 21) hasChallenge("sp", 21)
+                22: {
+                        name: "Animaless", 
+                        reward(){
+                                return Decimal.times(.0005, player.sp.challenges[22] + (player.sp.challenges[22] > 0))
+                        },
+                        goal: () => Decimal.pow(10, [223586, 253135, 394620, 1e6][player.sp.challenges[22]]),
+                        canComplete(){ 
+                                return player.an.genes.points.gte(tmp.sp.challenges[22].goal)
+                        },
+                        completionLimit: 5,
+                        fullDisplay(){
+                                let a = "You can't get Animals."
+                                let b = "Goal: " + format(tmp.sp.challenges[22].goal) + " Genes"
+                                let c = "Reward: Subtract from Nucleus' cost exponent"
+                                let d = "Currently: -" + format(tmp.sp.challenges[22].reward, 4)
+                                let e = "Total completions: " + player.sp.challenges[22] + "/5"
+
+                                return a + br + b + br2 + c + br2 + d + br2 + e
+                        },
+                        unlocked(){
+                                return hasMilestone("sp", 19)
+                        },
+                        countsAs: [],
+                }, // inChallenge("sp", 22) hasChallenge("sp", 22)
         },
         microtabs: {
                 upgrades_content: {
@@ -38630,6 +38694,7 @@ addLayer("mi", {
                                                 ["display-text", function(){
                                                         if (player.or.air.total.lt("1e2300")) return "You can begin Energy production at 1e2300 Air"
                                                         if (player.shiftAlias) {
+                                                                if (hasUpgrade("sp", 91))       return "Base gain amount is [buyables]<sup>Nucleuses</u>"
                                                                 if (hasMilestone("nu", 1)) return "Base gain amount is [buyables]<sup>2</sup>" + (hasMilestone("an", 3) ? "" : "/10")
                                                                 return "Base gain amount is [buyables]" + (hasMilestone("an", 3) ? "" : "/10")
                                                         }
@@ -47396,6 +47461,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasMilestone("sp", 19))     return c.plus(1).sqrt().div(10)
                                 if (hasMilestone("sp", 16))     return c.plus(1).sqrt().div(11)
                                 if (hasMilestone("an", 38))     return c.plus(1).sqrt().div(12)
                                 if (hasUpgrade("nu", 12))       return c.plus(1).sqrt().div(14)
@@ -47429,6 +47495,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("nu", 12))       div = "14"
                                 if (hasMilestone("an", 38))     div = "12"
                                 if (hasMilestone("sp", 16))     div = "11"
+                                if (hasMilestone("sp", 19))     div = "10"
                                 eformula = eformula.replace("DIV", div)
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -48037,6 +48104,10 @@ addLayer("tokens", {
                                 if (hasMilestone("ch", 34) && lvls.gte(16001)) {
                                         add = 17
                                         div = 9999
+                                }
+                                if (hasMilestone("sp", 20) && lvls.gte(29991)) {
+                                        add = 18
+                                        div = 15000
                                 }
                                 return [add, div]
                         },
@@ -49798,7 +49869,9 @@ addLayer("tokens", {
                                                                                 c += "Tertiary multiplies AX by " + format(player.t.best.plus(10).log10().plus(9).log10().pow(player.cells.challenges[21])) + br
                                                 }
                                                 if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
-                                                if (hasMilestone("or", 10))     c += "Organ Milestone 10 multiplies AX by " + format(Decimal.pow(2, player.or.milestones.length)) + br
+                                                if (hasMilestone("or", 10) && !hasUpgrade("nu", 35)) {
+                                                                                c += "Organ Milestone 10 multiplies AX by " + format(Decimal.pow(2, player.or.milestones.length)) + br
+                                                }
                                                 if (hasUpgrade("sci", 552))     c += "DNA Sci XXVII multiplies AX by " + format(Decimal.pow(2, tmp.sci.upgrades[552].lvls)) + br
                                                 if (!hasMilestone("sp", 18)) {
                                                         if (hasUpgrade("or", 143))      c += "Heart XXIII multiplies AX by " + format(player.or.buyables[202].max(1).pow(player.or.upgrades.length)) + br
@@ -49842,7 +49915,9 @@ addLayer("tokens", {
                                                 if (hasUpgrade("or", 14))       c += "Organs IV multiplies AX by " + format(player.tokens.tokens2.total.max(1)) + br
                                                 if (hasUpgrade("or", 31))       c += "Organs XI multiplies AX by " + format(Decimal.pow(1.03, player.tokens.tokens2.total)) + br
                                                 if (hasUpgrade("or", 313))      c += "Lung VIII multiplies AX by " + format(player.or.air.points.max(10).log10()) + br
-                                                if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+                                                if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
+                                                                                c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+                                                }
                                                 if (tmp.or.buyables[423].effect.gt(1)) {
                                                                                 c += br + "intes<u>TINE</u> multiplies AX by " + format(tmp.or.buyables[423].effect) + br
                                                 }
@@ -49881,14 +49956,18 @@ addLayer("tokens", {
                                                                                 c += "Tertiary Bronchi multiplies AX by " + format(tmp.or.challenges[31].reward) + br
                                                                                 c += "Bronchoiles multiplies AX by " + format(tmp.or.challenges[32].reward) + br
                                                 }
-                                                if (hasUpgrade("or", 221))      c += "Kidney XI multiplies AX by " + format(player.t.points.max(10).log10()) + br
-                                                if (hasUpgrade("or", 224))      c += "Kidney XIV multiplies AX by " + format(tmp.or.upgrades[224].effect) + br
-                                                if (hasUpgrade("or", 225))      c += "Kidney XV multiplies AX by " + format(tmp.or.buyables[412].effect) + br
-                                                if (hasUpgrade("or", 233))      c += "Kidney XVIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
+                                                if (!hasMilestone("sp", 19)) {
+                                                        if (hasUpgrade("or", 221))      c += "Kidney XI multiplies AX by " + format(player.t.points.max(10).log10()) + br
+                                                        if (hasUpgrade("or", 224))      c += "Kidney XIV multiplies AX by " + format(tmp.or.upgrades[224].effect) + br
+                                                        if (hasUpgrade("or", 225))      c += "Kidney XV multiplies AX by " + format(tmp.or.buyables[412].effect) + br
+                                                        if (hasUpgrade("or", 233))      c += "Kidney XVIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
+                                                }
                                                 if (hasUpgrade("or", 301))      c += "Air I multiplies AX by " + format(tmp.or.upgrades[301].effect) + br
                                                 if (hasUpgrade("or", 312))      c += "Air VII multiplies AX by " + format(Decimal.pow(3, player.tokens.best_buyables[101].sub(30)).max(1)) + br
-                                                if (hasMilestone("or", 17))     c += "Organ Milestone 18 multiplies AX by " + format(player.or.milestones.length) + br
-                                                if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+                                                if (!hasUpgrade("nu", 35)) {
+                                                        if (hasMilestone("or", 17))     c += "Organ Milestone 17 multiplies AX by " + format(player.or.milestones.length) + br
+                                                        if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
+                                                }
                                                 if (hasUpgrade("or", 23))       c += "Organs VIII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
                                                 if (hasUpgrade("or", 43))       c += "Organs XVIII multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
                                                 if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
@@ -49930,7 +50009,9 @@ addLayer("tokens", {
                                                 if (data[421].gt(0))            c += "INtes<u>tine</u> multiplies AX by " + format(data[421].plus(1)) + br
                                                 if (data[422].gt(0))            c += "inTES<u>tine</u> multiplies AX by " + format(data[422].plus(1)) + br
                                                 if (data[423].gt(0))            c += "intes<u>TINE</u> multiplies AX by " + format(data[423].plus(1)) + br
-                                                if (hasMilestone("or", 20))     c += "Organ Milestone 20 multiplies AX by " + format(player.or.milestones.length) + br
+                                                if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
+                                                                                c += "Organ Milestone 20 multiplies AX by " + format(player.or.milestones.length) + br
+                                                }
                                                 if (hasUpgrade("or", 21))       c += "Organs VI multiplies AX by " + format(player.d.points.max(10).log10()) + br
                                                 if (hasUpgrade("or", 23))       c += "Organs VII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
                                                 if (hasUpgrade("or", 43))       c += "Organs XVIII multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
