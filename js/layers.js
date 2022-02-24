@@ -248,7 +248,7 @@ var TAXONOMY_EFFECTS = {
         305:() => hasMilestone("ch", 21) ? "Contaminant gain per Chromosomes<sup>4</sup>" : "nothing (currently)",
         306:() => hasMilestone("an", 28) ? "Gene gain" : "nothing (currently)",
         307:() => hasMilestone("an", 39) ? "Tissue gain per Chromosomes<sup>3</sup>" : "nothing (currently)",
-        308:() => player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23) ? "Organ gain per Chromosome/17" : "nothing (currently)",
+        308:() => hasMilestone("sp", 21) ? "Organ gain per Chromosome" : player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23) ? "Organ gain per Chromosome/17" : "nothing (currently)",
 
         404:() => hasMilestone("an", 23) ? "Energy gain per Chromosomes" : "nothing (currently)",
         405:() => hasUpgrade("ch", 21) ? "in<u>TES</u>tine gain per Chromosome upgrades" : "nothing (currently)",
@@ -317,9 +317,9 @@ var TAXONOMY_COSTS = {
         103: [new Decimal("1e239930"), new Decimal("1e310"), new Decimal(1.2)],
         104: [new Decimal("1e978004"), new Decimal(1e109), new Decimal(1.3)],
         105: [new Decimal("2e955367"), new Decimal(1e105), new Decimal(1.3)],
-        106: [new Decimal("9e995030"), new Decimal(1e141), new Decimal(1.2)],
-        107: [new Decimal("1e955504"), new Decimal(6e25), new Decimal(1.2)],
-        108: [new Decimal("1e914301"), new Decimal("1e350"), new Decimal(1.1)],
+        106: [new Decimal("1e338170"), new Decimal("1e1000"), new Decimal(1.2)],
+        107: [new Decimal("1e938170"), new Decimal("1e1000"), new Decimal(1.2)],
+        108: [new Decimal("1e330000"), new Decimal("1e500"), new Decimal(1.1)],
 
         202: [new Decimal("1e106090"), new Decimal(1e143), new Decimal(1.1)],
         203: [new Decimal("1e42884"), new Decimal(1e193), new Decimal(1.2)],
@@ -26184,7 +26184,7 @@ addLayer("or", {
                 if (hasUpgrade("an", 23))       ret = ret.times(player.an.grid[506].extras.plus(1))
                 if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.pow(player.ch.points))
                 if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
-                                                ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17)))
+                                                ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(hasMilestone("sp", 21) ? 1 : 17)))
                 }
                 if (hasUpgrade("ch", 41))       ret = ret.times(player.an.grid[303].extras.plus(1).pow(player.nu.points))
                 if (hasUpgrade("nu", 24))       ret = ret.times(player.an.grid[203].extras.plus(1).pow(player.ch.points))
@@ -26659,7 +26659,7 @@ addLayer("or", {
                         if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
                         if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
                         if (hasMilestone("ch", 21))     ret = ret.times(player.an.grid[305].extras.plus(1).pow(player.ch.points.pow(4)))
-                        if (hasUpgrade("sp", 15))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[201].pow(.8)))
+                        if (hasUpgrade("sp", 15))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[201].pow(hasUpgrade("sp", 65) ? .9 : .8)))
                         if (hasUpgrade("sp", 44))       ret = ret.times(player.an.grid[206].extras.plus(1).pow(player.nu.points.pow(6)))
 
                         if (player.extremeMode)         ret = ret.pow(.75) 
@@ -28854,9 +28854,10 @@ addLayer("or", {
                         },
                         base(){
                                 let add = tmp.nu.effectSecondary
-                                if (hasMilestone("nu", 18)) return player.ch.points.div(100).plus(add)
-                                if (hasUpgrade("ch", 22)) return player.ch.points.div(100).plus(25).plus(add)
-                                if (hasUpgrade("or", 333)) return new Decimal(player.or.upgrades.length / 4).plus(add)
+                                if (hasUpgrade("sp", 94))       return player.ch.points.div(99).plus(add)
+                                if (hasMilestone("nu", 18))     return player.ch.points.div(100).plus(add)
+                                if (hasUpgrade("ch", 22))       return player.ch.points.div(100).plus(25).plus(add)
+                                if (hasUpgrade("or", 333))      return new Decimal(player.or.upgrades.length / 4).plus(add)
                                 let ret = new Decimal(tmp.or.upgrades.kidneyUpgradesLength).plus(1).plus(add)
 
                                 if (hasUpgrade("or", 144) && player.or.upgrades.length > 33) {
@@ -28883,6 +28884,7 @@ addLayer("or", {
                                 if (hasUpgrade("or", 333)) eformula = eformula.replace("Kidney upgrades + .03 * Organ upgrades", "Organ upgrades/4")
                                 if (hasUpgrade("ch", 22)) eformula = eformula.replace("Organ upgrades/4", "25 + Chromosomes/100")
                                 if (hasMilestone("nu", 18)) eformula = eformula.replace("25 + ", "")
+                                if (hasUpgrade("sp", 94))       eformula = eformula.replace("/100", "/99")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -36859,7 +36861,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect V is now per (I'm levels)<sup>.9</sup>"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e112),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 65)
@@ -37027,7 +37029,7 @@ addLayer("sp", {
                         description(){
                                 return "I'm base's divider is 99"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e119),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 94)
@@ -37400,6 +37402,20 @@ addLayer("sp", {
                                 return "Reward: Token II via Cell's double exponent is 18 + x/15,000."
                         },
                 }, // hasMilestone("sp", 20)
+                21: {
+                        requirementDescription(){
+                                return "1e121 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e121)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Remove the /17 from COM I's ON effect's reward."
+                        },
+                }, // hasMilestone("sp", 21)
         },
         challenges:{
                 11: {
@@ -49929,7 +49945,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("an", 23))       c += "Animals VIII multiplies AX by " + format(player.an.grid[506].extras.plus(1)) + br
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.pow(player.ch.points)) + br
                                                 if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
-                                                                                c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(17))) + br
+                                                                                c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(hasMilestone("sp", 21) ? 1 : 17))) + br
                                                 }
                                                 if (hasUpgrade("ch", 41))       c += "Chromosomes XVI multiplies AX by " + format(player.an.grid[303].extras.plus(1).pow(player.nu.points)) + br
                                                 if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points)) + br
