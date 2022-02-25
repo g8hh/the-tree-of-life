@@ -26481,6 +26481,7 @@ addLayer("or", {
                         if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
                         if (hasMilestone("an", 42))     ret = ret.pow(player.ch.points.max(1465).div(1465).sqrt().min(1.1))
                         if (hasUpgrade("sp", 53))       ret = ret.pow(1.001)
+                        if (hasUpgrade("sp", 103))      ret = ret.pow(1.003)
                         
                         return ret
                 },
@@ -35391,6 +35392,7 @@ addLayer("nu", {
                 let ret = new Decimal(32)
 
                 if (hasMilestone("sp", 5)) ret = new Decimal(30)
+                if (hasMilestone("sp", 22)) ret = ret.sub(player.nu.points.sub(150).div(9).max(0).min(30).floor())
 
                 return ret
         },
@@ -35762,6 +35764,19 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 34)) return true
                                 return player.ch.points.gte(2481)
                         }, // hasUpgrade("nu", 35)
+                },
+                41: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XVI"
+                        },
+                        description(){
+                                return "Each Nucleus past 150 adds 1 to the Species gain exponent"
+                        },
+                        cost:() => new Decimal(165),
+                        unlocked(){
+                                if (hasUpgrade("nu", 34)) return true
+                                return player.ch.points.gte(4707)
+                        }, // hasUpgrade("nu", 41)
                 },
         },
         milestones: {
@@ -36396,7 +36411,11 @@ addLayer("sp", {
         baseAmount(){return player.an.points},
         type: "custom",
         getNextAt(){
-                let baseGain = tmp.sp.getResetGain.plus(1).div(tmp.sp.getGainMult).max(1)
+                let baseGain = tmp.sp.getResetGain
+
+                if (hasUpgrade("sp", 103)) baseGain = baseGain.root(1.003)
+                
+                baseGain = baseGain.plus(1).div(tmp.sp.getGainMult).max(1)
 
                 return baseGain.root(tmp.sp.getGainExp).times(900).pow10()
         },
@@ -36407,6 +36426,7 @@ addLayer("sp", {
                 if (hasMilestone("sp", 7))      ret = ret.plus(player.sp.milestones.length)
                 if (hasMilestone("sp", 15))     ret = ret.plus(layerChallengeCompletions("sp"))
                 if (hasUpgrade("sp", 63))       ret = ret.plus(tmp.sp.upgrades[63].effect)
+                if (hasUpgrade("nu", 41))       ret = ret.plus(player.nu.points.sub(150).max(0))
 
                 return ret
         },
@@ -36414,6 +36434,8 @@ addLayer("sp", {
                 let ret = player.an.points.max(1).log10().div(900).pow(tmp.sp.getGainExp)
 
                 ret = ret.times(tmp.sp.getGainMult)
+
+                if (hasUpgrade("sp", 103)) ret = ret.pow(1.003)
                 
                 return ret.floor()
         },
@@ -37044,9 +37066,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XX"
                         },
                         description(){
-                                return "Token II via Cells' double exponent is [IMPROVED]"
+                                return "Token II via Cell's double exponent is 20 + x/30,000"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e180),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 95)
@@ -37080,9 +37102,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXIII"
                         },
                         description(){
-                                return "Gain ^1.003 Energy"
+                                return "Gain ^1.003 Energy and Species"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(5e166),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 103)
@@ -37421,6 +37443,20 @@ addLayer("sp", {
                                 return "Reward: Remove the /17 from COM I's ON effect's reward."
                         },
                 }, // hasMilestone("sp", 21)
+                22: {
+                        requirementDescription(){
+                                return "1e169 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e169)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each 9th Nucleus after 150 subtracts 1 from its cost adder (max 30)."
+                        },
+                }, // hasMilestone("sp", 22)
         },
         challenges:{
                 11: {
@@ -37485,7 +37521,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.pow(1e6, player.sp.challenges[21])
                         },
-                        goal: () => Decimal.pow(10, [86220, 89696.3, 94620, 133140.5, 1e6][player.sp.challenges[21]]),
+                        goal: () => Decimal.pow(10, [86220, 89696.3, 94620, 133140.5, 137630.3, 1e6][player.sp.challenges[21]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[21].goal)
                         },
@@ -37514,7 +37550,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.times(.0005, player.sp.challenges[22] + (player.sp.challenges[22] > 0))
                         },
-                        goal: () => Decimal.pow(10, [223586, 253135, 425120, 1e6][player.sp.challenges[22]]),
+                        goal: () => Decimal.pow(10, [223586, 253135, 425120, 452350, 1e6][player.sp.challenges[22]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[22].goal)
                         },
@@ -48134,6 +48170,10 @@ addLayer("tokens", {
                                         add = 18
                                         div = 15000
                                 }
+                                if (hasUpgrade("sp", 95) && lvls.gte(60000)) {
+                                        add = 20
+                                        div = 30000
+                                } 
                                 return [add, div]
                         },
                         maxAfford(){
@@ -50055,6 +50095,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.01), 4) + br
                                                 if (hasMilestone("an", 42))     c += "Animal Milestone 42 multiplies BX by " + format(player.ch.points.max(1465).div(1465).sqrt().min(1.1), 4) + br
                                                 if (hasUpgrade("sp", 53))       c += "Effect XXIII multplies BX by 1.001" + br
+                                                if (hasUpgrade("sp", 103))      c += "Upgraded Effect XXIII multiplies BX by 1.003" + br
                                                 if (c.includes("BX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
