@@ -20362,7 +20362,7 @@ addLayer("cells", {
                         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                         ret = ret.pow(1.001)
                         }
-                        if (hasUpgrade("sp", 54))       ret = ret.pow(1.001)
+                        if (hasUpgrade("sp", 54))       ret = ret.pow(hasUpgrade("sp", 104) ? 1.01 : 1.001)
 
                         return ret
                 },
@@ -31790,7 +31790,7 @@ addLayer("an", {
                                         spExp = player.ch.points.plus(10).pow(hasUpgrade("sp", 73) ? .6 : .5)
                                 }
                                 if (hasUpgrade("sp", 24) && row == 6) {
-                                        spExp = player.nu.points.plus(8).cbrt()
+                                        spExp = player.nu.points.plus(8).pow(hasUpgrade("sp", 74) ? .7 : 1/3)
                                 }
                                 if (hasUpgrade("sp", 25) && row == 5) {
                                         if (hasUpgrade("sp", 75)) spExp = player.sp.upgrades.length
@@ -34677,7 +34677,7 @@ addLayer("ch", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Chromosomes XVII"
                         },
                         description(){
-                                return "Bottom Quark base is C and Top Quark coefficient is Nucleuses/1000"
+                                return "Bottom Quark base is C and Top Quark coefficient is Nucleuses/1000 (capped at .14)"
                         },
                         cost:() => new Decimal(449),
                         unlocked(){
@@ -35395,7 +35395,7 @@ addLayer("nu", {
                 return ret
         },
         costExponent(){
-                let ret = new Decimal(1.6)
+                let ret = new Decimal(1.6).plus(player.nu.points.sub(150).max(0).div(1000))
 
                 if (hasMilestone("an", 42))     ret = ret.sub(player.nu.points.sub(50).max(0).min(70).div(1e4))
                 if (hasChallenge("sp", 22))     ret = ret.sub(tmp.sp.challenges[22].reward)
@@ -36109,8 +36109,13 @@ addLayer("nu", {
                                         let a = "Nucleuses resets all prior content not permanently kept."
                                         let b = "For unlocking Nucleuses you permanently keep DNA, Cell, and Tissue content."
                                         let c = "Buying any upgrade forces a Nucleus reset."
+                                        let part1 = a + br2 + b + br2 + c
 
-                                        return a + br2 + b + br2 + c
+                                        if (player.sp.total.lt(1e130)) return part1
+
+                                        let d = "Each Nucleus beyond 150 adds .001 to the Nucleus cost exponent"
+
+                                        return part1 + br2 + d
                                 }],
                         ],
                         unlocked(){
@@ -36909,7 +36914,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect IX's cbrt is ^.7"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e155),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 74)
@@ -37087,9 +37092,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXIV"
                         },
                         description(){
-                                return "Gain ^1.003 Stem Cells"
+                                return "Effect XXIV's 1.001 becomes 1.01"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(5e165),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 104)
@@ -37453,7 +37458,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[12] * .2).times(1 + hasUpgrade("sp", 101))
                         },
-                        goal: () => Decimal.pow(10, [145553.7, 158027, 172950, 201412, 1e6][player.sp.challenges[12]]),
+                        goal: () => Decimal.pow(10, [145553.7, 158027, 172950, 201412, 256811, 1e6][player.sp.challenges[12]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[12].goal)
                         },
@@ -37480,7 +37485,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.pow(1e6, player.sp.challenges[21])
                         },
-                        goal: () => Decimal.pow(10, [86220, 89696.3, 94620, 1e6][player.sp.challenges[21]]),
+                        goal: () => Decimal.pow(10, [86220, 89696.3, 94620, 133140.5, 1e6][player.sp.challenges[21]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[21].goal)
                         },
@@ -37509,7 +37514,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.times(.0005, player.sp.challenges[22] + (player.sp.challenges[22] > 0))
                         },
-                        goal: () => Decimal.pow(10, [223586, 253135, 394620, 1e6][player.sp.challenges[22]]),
+                        goal: () => Decimal.pow(10, [223586, 253135, 425120, 1e6][player.sp.challenges[22]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[22].goal)
                         },
@@ -47806,7 +47811,7 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(121)
                         },
                         coefficient(){
-                                if (hasUpgrade("ch", 42))       return player.nu.best.div(1000)
+                                if (hasUpgrade("ch", 42))       return player.nu.best.div(1000).min(.14)
                                 if (hasUpgrade("ch", 33))       return new Decimal(.012)
                                 if (hasMilestone("an", 29))     return new Decimal(.011)
                                                                 return new Decimal(.007)
@@ -49849,7 +49854,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                                                 c += "Kidney IX multiplies DX by 1.001" + br
                                                 }
-                                                if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.001"
+                                                if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.0" + (hasUpgrade("sp", 104) ? "" : "0") +"1" + br
                                                 if (c.includes("DX"))           c += br
 
                                                 let ret = a + br + b + br2 + c
