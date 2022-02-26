@@ -18733,7 +18733,7 @@ addLayer("d", {
                         if (hasUpgrade("an", 33)) perT2 = player.ch.points.max(perT2)
 
                         let mult = decimalOne
-                        if (hasUpgrade("sp", 34)) mult = mult.times(tmp.sp.effect.pow(player.tokens.total.sqrt()))
+                        if (hasUpgrade("sp", 34)) mult = mult.times(tmp.sp.effect.pow(player.tokens.total.sqrt().min(2e5)))
                         return Decimal.pow(perT2, player.tokens.tokens2.total).times(mult).pow(tmp.d.getGainExp)
                 }
                 let pts = player.a.points
@@ -30383,7 +30383,7 @@ addLayer("or", {
                                 let cost2 = "1e925*1e52<sup>x</sup>*50<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 30)) cost2 = "5.6<sup>x<sup>2</sup></sup>"
                                 if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
-                                if (hasMilestone("sp", 23)) cost2 = csot2.replace("3.5", "2.25")
+                                if (hasMilestone("sp", 23)) cost2 = cost2.replace("3.5", "2.25")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -36701,7 +36701,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XIV"
                         },
                         description(){
-                                return "The Species effect multiplies base DNA gain per sqrt(Token)"
+                                return "The Species effect multiplies base DNA gain per sqrt(Token) (capped at 200,000)"
                         },
                         cost:() => new Decimal(1),
                         unlocked(){
