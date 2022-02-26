@@ -313,12 +313,12 @@ var TAXONOMY_NAMES = {
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         101: [new Decimal("1e253830"), new Decimal(1e250), new Decimal(1.1)],
-        102: [new Decimal("1e9906090"), new Decimal(1e143), new Decimal(1.2)],
+        102: [new Decimal("1e713300"), new Decimal("1e999"), new Decimal(1.2)],
         103: [new Decimal("1e239930"), new Decimal("1e310"), new Decimal(1.2)],
         104: [new Decimal("1e622500"), new Decimal("1e2000"), new Decimal(1.3)],
         105: [new Decimal("2e9955367"), new Decimal(1e105), new Decimal(1.3)],
         106: [new Decimal("1e338170"), new Decimal("1e1000"), new Decimal(1.2)],
-        107: [new Decimal("1e9938170"), new Decimal("1e1000"), new Decimal(1.2)],
+        107: [new Decimal("1e9999999"), new Decimal("1e900"), new Decimal(1.2)],
         108: [new Decimal("1e330000"), new Decimal("1e500"), new Decimal(1.1)],
 
         202: [new Decimal("1e106090"), new Decimal(1e143), new Decimal(1.1)],
@@ -31804,7 +31804,7 @@ addLayer("an", {
                                         else spExp = new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
                                 }
                                 if (hasUpgrade("sp", 31) && row == 4) {
-                                        spExp = player.nu.points.div(50)
+                                        spExp = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
                                 }
                                 if (hasUpgrade("sp", 32) && row == 3) {
                                         spExp = player.ch.points.max(1).log(2).div(25)
@@ -33035,7 +33035,7 @@ addLayer("an", {
                                         d = "Amount<sup>" + split[1] + "*" + split[2] 
                                         d += "</sup> multiplies " + split[0]
                                 }
-                                if (id == 202) d = d.replace("multiplies", "adds")
+                                if (id == 202 && !hasUpgrade("sp", 85)) d = d.replace("multiplies", "adds")
 
                                 if (costs == undefined) return br + a + br + b + br + c + br2 + d
                                 if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels) && !player.shiftAlias) {
@@ -35413,7 +35413,7 @@ addLayer("nu", {
                 let ret = new Decimal(32)
 
                 if (hasMilestone("sp", 5)) ret = new Decimal(30)
-                if (hasMilestone("sp", 22)) ret = ret.sub(player.nu.points.sub(150).div(9).max(0).min(30).floor())
+                if (hasMilestone("sp", 22)) ret = ret.sub(player.nu.points.sub(150).div(hasUpgrade("nu", 42) ? 8 : 9).max(0).min(30).floor())
 
                 return ret
         },
@@ -35798,6 +35798,19 @@ addLayer("nu", {
                                 if (hasUpgrade("nu", 41)) return true
                                 return player.ch.points.gte(4707)
                         }, // hasUpgrade("nu", 41)
+                },
+                42: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XVII"
+                        },
+                        description(){
+                                return "Species Milestone 22 becomes every 8th"
+                        },
+                        cost:() => new Decimal(174),
+                        unlocked(){
+                                if (hasUpgrade("nu", 42)) return true
+                                return player.ch.points.gte(5252)
+                        }, // hasUpgrade("nu", 42)
                 },
         },
         milestones: {
@@ -36979,9 +36992,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XI"
                         },
                         description(){
-                                return "Effect XI's divider is 15"
+                                return "Effect XI's divider is 20"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e237),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 81)
@@ -37027,9 +37040,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XV"
                         },
                         description(){
-                                return "Effect XV's ^.06 is ^.1"
+                                return "Effect XV multiplies instead of adding"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e233),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 85)
@@ -38016,6 +38029,7 @@ addLayer("mc", {
                 data.total = data.total.plus(tmp.mc.getResetGain.times(diff))
 
                 if (hasUpgrade("mc", 14)) layers.mc.buyables[11].buy()
+                if (hasUpgrade("mc", 15)) layers.mc.buyables[13].buy()
         },
         getMinigameMaximum(){
                 if (player.cells.currentMinigame == undefined) return Infinity
@@ -38096,7 +38110,7 @@ addLayer("mc", {
                 },
                 14: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Micromanagement"//Microcomputer
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Micromanagement"
                         },
                         description(){
                                 return "Autobuy ...waves and per upgrade ...waves levels multiply Micro gain"
@@ -38105,6 +38119,18 @@ addLayer("mc", {
                         unlocked(){
                                 return player.mc.points.gte("1e1550")
                         }, // hasUpgrade("mc", 14)
+                },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Microcomputer"
+                        },
+                        description(){
+                                return "Autobuy ...phone and its cost base is 99"
+                        },
+                        cost:() => new Decimal("1e10000"),
+                        unlocked(){
+                                return player.mc.points.gte("1e9900")
+                        }, // hasUpgrade("mc", 15)
                 },
         },
         buyables: {
@@ -38222,7 +38248,7 @@ addLayer("mc", {
                 },
                 13: {
                         title: "...phone",
-                        cost: () => new Decimal(100).pow(getBuyableAmount("mc", 13).pow(1.1).plus(hasUpgrade("mc", 13) ? 0 : 2)),
+                        cost: () => new Decimal(hasUpgrade("mc", 15) ? 99 : 100).pow(getBuyableAmount("mc", 13).pow(1.1).plus(hasUpgrade("mc", 13) ? 0 : 2)),
                         canAfford:() => player.mc.points.gte(tmp.mc.buyables[13].cost),
                         buy(){
                                 if (!this.canAfford()) return
@@ -38232,6 +38258,7 @@ addLayer("mc", {
                         maxAfford(){
                                 let div = new Decimal(hasUpgrade("mc", 13) ? 1 : 1e4)
                                 let base = 100
+                                if (hasUpgrade("mc", 15)) base = 99
                                 let exp = 1.1
                                 let pts = player.mc.points
                                 if (pts.lt(div)) return decimalZero
@@ -47974,6 +48001,9 @@ addLayer("tokens", {
                                 let add = decimalZero
                                 if (hasUpgrade("sp", 35)) add = add.plus(player.an.grid[202].extras.pow(.06))
 
+                                if (hasUpgrade("sp", 85)) {
+                                        return c.max(1).pow(4).times(add.max(1))
+                                }
                                 if (player.an.achActive[34] || hasMilestone("ch", 22)) {
                                         return c.max(1).pow(Math.max(tmp.an.clickables.rowThreeOff, 1)).plus(add)
                                 }
@@ -48015,11 +48045,13 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "(100+30C)/(20+R)^x<br>" 
-                                if (hasMilestone("or", 8)) eformula = "(6+C)<sup>x</sup><br>"
-                                if (hasUpgrade("or", 42)) eformula = "(1+C/1000)<sup>x</sup><br>"
-                                if (hasUpgrade("ch", 42)) eformula = "C<sup>x</sup><br>"
-                                eformula += format(tmp.tokens.buyables[122].base, 4) + "<sup>x</sup>" 
+                                let eformula = "(100+30C)/(20+R)^x" 
+                                if (hasMilestone("or", 8)) eformula = "(6+C)<sup>x</sup>"
+                                if (hasUpgrade("or", 42)) eformula = "(1+C/1000)<sup>x</sup>"
+                                if (hasUpgrade("ch", 42)) eformula = "C<sup>x</sup>"
+                                if (hasMilestone("sp", 6)) eformula = eformula.replace("C", "C<sup>4</sup>")
+                                if (hasUpgrade("sp", 85)) eformula = "(C<sup>4</sup>*Anamalia I<sup>.06</sup>)<sup>x</sup>"
+                                eformula += br + format(tmp.tokens.buyables[122].base, 4) + "<sup>x</sup>" 
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
