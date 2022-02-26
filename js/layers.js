@@ -313,12 +313,12 @@ var TAXONOMY_NAMES = {
 var TAXONOMY_COSTS = {
         // [a,b,c] means the cost is a*b^(x^c)
         101: [new Decimal("1e253830"), new Decimal(1e250), new Decimal(1.1)],
-        102: [new Decimal("1e906090"), new Decimal(1e143), new Decimal(1.2)],
+        102: [new Decimal("1e9906090"), new Decimal(1e143), new Decimal(1.2)],
         103: [new Decimal("1e239930"), new Decimal("1e310"), new Decimal(1.2)],
-        104: [new Decimal("1e978004"), new Decimal(1e109), new Decimal(1.3)],
-        105: [new Decimal("2e955367"), new Decimal(1e105), new Decimal(1.3)],
+        104: [new Decimal("1e622500"), new Decimal("1e2000"), new Decimal(1.3)],
+        105: [new Decimal("2e9955367"), new Decimal(1e105), new Decimal(1.3)],
         106: [new Decimal("1e338170"), new Decimal("1e1000"), new Decimal(1.2)],
-        107: [new Decimal("1e938170"), new Decimal("1e1000"), new Decimal(1.2)],
+        107: [new Decimal("1e9938170"), new Decimal("1e1000"), new Decimal(1.2)],
         108: [new Decimal("1e330000"), new Decimal("1e500"), new Decimal(1.1)],
 
         202: [new Decimal("1e106090"), new Decimal(1e143), new Decimal(1.1)],
@@ -24002,7 +24002,7 @@ addLayer("t", {
                 if (hasUpgrade("an", 14))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2))
                 if (hasUpgrade("an", 34))       ret = ret.times(tmp.tokens.buyables[102].effect)
                 if (hasMilestone("nu", 2))      ret = ret.times(player.t.points.plus(10).log10().pow(player.nu.points))
-                if (hasMilestone("an", 39))     ret = ret.times(player.an.grid[307].extras.plus(1).pow(player.ch.points.pow(3)))
+                if (hasMilestone("an", 39))     ret = ret.times(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3)))
                 
                 return ret.max(1)
         },
@@ -26184,10 +26184,10 @@ addLayer("or", {
                 if (hasUpgrade("an", 23))       ret = ret.times(player.an.grid[506].extras.plus(1))
                 if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.pow(player.ch.points))
                 if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
-                                                ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(hasMilestone("sp", 21) ? 1 : 17)))
+                                                ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.min(5000).div(hasMilestone("sp", 21) ? 1 : 17)))
                 }
                 if (hasUpgrade("ch", 41))       ret = ret.times(player.an.grid[303].extras.plus(1).pow(player.nu.points))
-                if (hasUpgrade("nu", 24))       ret = ret.times(player.an.grid[203].extras.plus(1).pow(player.ch.points))
+                if (hasUpgrade("nu", 24))       ret = ret.times(player.an.grid[203].extras.plus(1).pow(player.ch.points.min(5000)))
                 if (hasUpgrade("sp", 12))       ret = ret.times(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2))
                 if (hasUpgrade("sp", 62))       ret = ret.times(tmp.sp.effect.pow(player.nu.points.pow(3)))
 
@@ -26469,7 +26469,11 @@ addLayer("or", {
                                                         ret = ret.times(tmp.an.effect)
                         if (hasUpgrade("an", 15))       ret = ret.times(player.an.grid[607].extras.plus(1))
                         if (hasUpgrade("or", 43))       ret = ret.times(tmp.tokens.buyables[122].effect)
-                        if (hasMilestone("an", 23))     ret = ret.times(player.an.grid[404].extras.plus(1).pow(player.ch.points))
+                        if (hasMilestone("an", 23)) {
+                                let base = player.an.grid[404].extras.plus(1)
+                                let exp = hasMilestone("ch", 36) ? player.ch.points.times(player.ch.points.min(5000)).sqrt() : player.ch.points.min(5000)
+                                                        ret = ret.times(base.pow(exp))
+                        }
 
                         // BELOW IS EXPONENTIAL THINGS
                         if (player.extremeMode)         ret = ret.pow(.75) 
@@ -26659,7 +26663,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.an.effect)
                         if (hasMilestone("an", 5))      ret = ret.times(player.or.contaminants.points.plus(10).log10().sqrt().pow10())
                         if (hasUpgrade("an", 21))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels))
-                        if (hasMilestone("ch", 21))     ret = ret.times(player.an.grid[305].extras.plus(1).pow(player.ch.points.pow(4)))
+                        if (hasMilestone("ch", 21))     ret = ret.times(player.an.grid[305].extras.plus(1).pow(player.ch.points.min(5000).pow(4)))
                         if (hasUpgrade("sp", 15))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[201].pow(hasUpgrade("sp", 65) ? .9 : .8)))
                         if (hasUpgrade("sp", 44))       ret = ret.times(player.an.grid[206].extras.plus(1).pow(player.nu.points.pow(6)))
 
@@ -29488,7 +29492,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[401].effect)
                                 if (hasUpgrade("ch", 13)) ret = ret.times(player.an.grid[407].extras.plus(1).pow(7))
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[401].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[401].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -29618,7 +29622,7 @@ addLayer("or", {
                                 ret = ret.times(tmp.or.buyables[402].effect)
                                 if (!hasUpgrade("nu", 25)) ret = ret.times(tmp.an.effect)
                                 if (hasUpgrade("an", 31)) ret = ret.times(player.an.grid[507].extras.plus(1))
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[402].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[402].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -29741,7 +29745,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[403].effect)
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[403].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[403].pow(hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 43)) ret = ret.times(player.an.grid[206].extras.plus(1).pow(player.tokens.tokens2.total.sqrt()))
 
                                 return ret
@@ -29844,7 +29848,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[411].effect)
                                 if (!hasUpgrade("nu", 25)) ret = ret.times(tmp.an.effect)
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -29968,7 +29972,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[412].effect)
                                 if (hasUpgrade("ch", 21)) ret = ret.times(player.an.grid[405].extras.plus(1).pow(player.ch.upgrades.length))
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[412].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[412].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -30093,7 +30097,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[413].effect)
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[413].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[413].pow(hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 41)) ret = ret.times(player.an.grid[204].extras.plus(1).pow(player.nu.points.sqrt()))
 
                                 return ret
@@ -30219,7 +30223,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[421].effect)
                                 if (hasUpgrade("ch", 11)) ret = ret.times(player.an.grid[508].extras.plus(1))
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[421].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[421].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -30297,6 +30301,7 @@ addLayer("or", {
                                         c = new Decimal(5.6)
                                 }
                                 if (hasMilestone("ch", 31)) c = new Decimal(3.5)
+                                if (hasMilestone("sp", 23)) c = new Decimal(2.25)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30344,7 +30349,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[422].effect)
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[422].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[422].pow(hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 42)) ret = ret.times(player.an.grid[205].extras.pow(8))
 
                                 return ret
@@ -30378,6 +30383,7 @@ addLayer("or", {
                                 let cost2 = "1e925*1e52<sup>x</sup>*50<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 30)) cost2 = "5.6<sup>x<sup>2</sup></sup>"
                                 if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
+                                if (hasMilestone("sp", 23)) cost2 = csot2.replace("3.5", "2.25")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -30448,7 +30454,7 @@ addLayer("or", {
                                 }
                                 ret = ret.times(tmp.or.buyables[423].effect)
                                 if (hasUpgrade("ch", 35)) ret = ret.times(player.an.grid[304].extras.plus(1))
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[423].sqrt()))
+                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[423].pow(hasUpgrade("sp", 71) ? .75 : .5)))
 
                                 return ret
                         },
@@ -33955,7 +33961,8 @@ addLayer("an", {
                                                 if (hasMilestone("an", 22)) pc = "100%"
                                                 if (hasMilestone("sp", 1) && player.ch.points.lt(11)) pc = "1%"
                                                 a = a.replace("PC", pc)
-                                                return a + br + "Press shift to bulk buy 5x. The buyable in light blue is the cheapest."
+                                                let part1 = a + br + "Press shift to bulk buy 5x. The buyable in light blue is the cheapest."
+                                                return part1 + br + (player.sp.unlocked ? "The number of Chromosomes in amount effects is maxed at 5000" : "")
                                         }
                                 ],
                                 "blank",
@@ -35298,6 +35305,20 @@ addLayer("ch", {
                                 return "Reward: make base is raised to 52/51."
                         },
                 }, // hasMilestone("ch", 35)
+                36: {
+                        requirementDescription(){
+                                return "5020 Chromosomes"
+                        },
+                        done(){
+                                return player.ch.points.gte(5020)
+                        },
+                        unlocked(){
+                                return player.sp.unlocked
+                        },
+                        effectDescription(){
+                                return "Reward: Mammalia I's exponent is sqrt(5,000 * Chromosomes) (at most Chromosomes)."
+                        },
+                }, // hasMilestone("ch", 36)
         },
         tabFormat: {
                 "Upgrades": {
@@ -36898,9 +36919,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect VI"
                         },
                         description(){
-                                return "Effect VI is now per (its levels)<sup>.7</sup>"
+                                return "Effect VI is now per (its levels)<sup>.75</sup>"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e221),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 71)
@@ -37443,20 +37464,20 @@ addLayer("sp", {
                                 return "Reward: Remove the /17 from COM I's ON effect's reward."
                         },
                 }, // hasMilestone("sp", 21)
-                22: {
+                23: {
                         requirementDescription(){
-                                return "1e169 Species"
+                                return "1e225 Species"
                         },
                         done(){
-                                return player.sp.points.gte(1e169)
+                                return player.sp.points.gte(1e225)
                         },
                         unlocked(){
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each 9th Nucleus after 150 subtracts 1 from its cost adder (max 30)."
+                                return "Reward: inTES<u>tine</u> base is 2.25."
                         },
-                }, // hasMilestone("sp", 22)
+                }, // hasMilestone("sp", 23)
         },
         challenges:{
                 11: {
@@ -37550,7 +37571,7 @@ addLayer("sp", {
                         reward(){
                                 return Decimal.times(.0005, player.sp.challenges[22] + (player.sp.challenges[22] > 0))
                         },
-                        goal: () => Decimal.pow(10, [223586, 253135, 425120, 452350, 1e6][player.sp.challenges[22]]),
+                        goal: () => Decimal.pow(10, [223586, 253135, 425120, 452350, 532868, 1e6][player.sp.challenges[22]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[22].goal)
                         },
@@ -49951,7 +49972,7 @@ addLayer("tokens", {
                                                 if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
                                                 if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(player.t.points.plus(10).log10().pow(player.nu.points)) + br
                                                 if (tmp.or.effect.gt(1))        c += br + "Organ effect multiplies AX by " + format(tmp.or.effect) + br
-                                                if (hasMilestone("an", 39))     c += "Animal Milestone 39 multiplies AX by " + format(player.an.grid[307].extras.plus(1).pow(player.ch.points.pow(3))) + br
+                                                if (hasMilestone("an", 39))     c += "Animal Milestone 39 multiplies AX by " + format(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3))) + br
                                                 
                                                 return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
                                         }],
@@ -49990,10 +50011,10 @@ addLayer("tokens", {
                                                 if (hasUpgrade("an", 23))       c += "Animals VIII multiplies AX by " + format(player.an.grid[506].extras.plus(1)) + br
                                                 if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.pow(player.ch.points)) + br
                                                 if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
-                                                                                c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.div(hasMilestone("sp", 21) ? 1 : 17))) + br
+                                                                                c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.min(5000).div(hasMilestone("sp", 21) ? 1 : 17))) + br
                                                 }
                                                 if (hasUpgrade("ch", 41))       c += "Chromosomes XVI multiplies AX by " + format(player.an.grid[303].extras.plus(1).pow(player.nu.points)) + br
-                                                if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points)) + br
+                                                if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points.min(5000))) + br
                                                 if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2)) + br
                                                 if (hasUpgrade("sp", 62))       c += "Upgraded Effect II multiplies AX by " + format(tmp.sp.effect.pow(player.nu.points.pow(3))) + br
 
@@ -50083,7 +50104,11 @@ addLayer("tokens", {
                                                 if (hasUpgrade("or", 323))      c += "Lung XIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
                                                 if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
                                                 if (hasUpgrade("an", 15))       c += "Animals V multiplies AX by " + format(player.an.grid[607].extras.plus(1)) + br
-                                                if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.an.grid[404].extras.plus(1).pow(player.ch.points)) + br
+                                                if (hasMilestone("an", 23)) {
+                                                        let base = player.an.grid[404].extras.plus(1)
+                                                        let exp = hasMilestone("ch", 36) ? player.ch.points.times(player.ch.points.min(5000)).sqrt() : player.ch.points.min(5000)
+                                                                                c += "Animal Milestone 23 multiplies AX by " + format(base.pow(exp)) + br
+                                                }
                                                 if (c.includes("AX"))           c += br
 
                                                 // BELOW IS EXPONENTIAL THINGS
