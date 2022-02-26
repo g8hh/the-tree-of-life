@@ -37464,6 +37464,20 @@ addLayer("sp", {
                                 return "Reward: Remove the /17 from COM I's ON effect's reward."
                         },
                 }, // hasMilestone("sp", 21)
+                22: {
+                        requirementDescription(){
+                                return "1e169 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte(1e169)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Each 9th Nucleus after 150 subtracts 1 from its cost adder (max 30)."
+                        },
+                }, // hasMilestone("sp", 22)
                 23: {
                         requirementDescription(){
                                 return "1e225 Species"
