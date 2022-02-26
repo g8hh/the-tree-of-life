@@ -35782,7 +35782,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(105),
                         unlocked(){
-                                if (hasUpgrade("nu", 34)) return true
+                                if (hasUpgrade("nu", 35)) return true
                                 return player.ch.points.gte(2481)
                         }, // hasUpgrade("nu", 35)
                 },
@@ -35795,7 +35795,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(165),
                         unlocked(){
-                                if (hasUpgrade("nu", 34)) return true
+                                if (hasUpgrade("nu", 41)) return true
                                 return player.ch.points.gte(4707)
                         }, // hasUpgrade("nu", 41)
                 },
