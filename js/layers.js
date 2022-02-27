@@ -31841,13 +31841,12 @@ addLayer("an", {
                                         if (!player.shiftAlias) buy = buy.min(1)
                                 }
                                 if (subD[id].buyables.gte(400)) subD[id].ever400 = true
-                                if (buy.gt(0)) {
-                                        data.lastBought = id
-                                        data.hasSoldYet = false
-                                }
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
-                                if (buy.gt(0) && !hasAchievement("an", 13) && !hasMilestone("nu", 2)) break
+                                if (buy.gt(0)) {
+                                        if (!hasAchievement("an", 13) && !hasMilestone("nu", 2)) break
+                                        if (subD[id].buyables.gte(tmp.an.grid.maxLevels)) subD[id].everMaxed = true
+                                }
                         }
                 }
         },
@@ -33065,10 +33064,6 @@ addLayer("an", {
                                         buy = buy.min(5)
                                         if (!player.shiftAlias) buy = buy.min(1)
                                 }
-                                if (buy.gt(0)) {
-                                        player.an.lastBought = id
-                                        player.an.hasSoldYet = false
-                                }
 
                                 player.an.grid[id].buyables = player.an.grid[id].buyables.plus(buy)
                                 if (buy.gt(0)) {
@@ -33434,7 +33429,6 @@ addLayer("an", {
                                 }
                                 player.an.genes.points = decimalZero
                                 tmp.an.gene.getResetGain = decimalZero
-                                player.an.lastBought = undefined
                         },
                 },
         },
@@ -33445,7 +33439,7 @@ addLayer("an", {
                         if (hasMilestone("ch", 8))      return 6
                         if (hasMilestone("ch", 2))      return 5
                         if (hasMilestone("an", 19))     return 4
-                        if (hasUpgrade("or", 354))      return 3 // etc
+                        if (hasUpgrade("or", 354))      return 3
                         return 2
                 },
                 rows: 8,
@@ -33540,27 +33534,27 @@ addLayer("an", {
                 }, // tmp.an.grid.totalLevels taxonomylevels taxonomy levels total levels 
                 getStyle(data, id){
                         let ret = {}
-                        if (layers.an.grid.isAutobought(id)) ret["border-color"] = "#90EE90"
+                        if (layers.an.grid.isAutobought(id)) ret["border-color"] = player.an.grid[id].everMaxed ? "#00FF00" : "#90EE90"
                         if (id == player.an.selectedId) {
                                 ret["background-color"] = "#FFA225"
+                                return ret
+                        }
+                        if (id == tmp.an.grid.cheapestAvailable) {
+                                ret["background-color"] = "#00BBBB"
                                 return ret
                         }
                         let costs = TAXONOMY_COSTS[id]
                         if (costs != undefined && data.buyables.lt(tmp.an.grid.maxLevels)) {
                                 let canAfford = player.an.genes.points.div(costs[0]).gt(  costs[1].pow( data.buyables.pow(costs[2]) )  )
                                 if (!data.autobought && canAfford) {
-                                        let x = ["#4F82A7", "#5D9094", "#6B9E82", "#79AC6F", "#86B95D",
-                                                "#94C74A", "#A2D538", "#B0E325",]
+                                        let x = ["#4F82A7", "#5D9094", "#6B9E82", "#79AC6F", 
+                                                 "#86B95D", "#94C74A", "#A2D538", "#B0E325",]
                                         ret["background-color"] = x[data.hundreds-1]
                                         return ret
                                 }
                         }
-                        if (id == tmp.an.grid.cheapestAvailable) {
-                                ret["background-color"] = "#00BBBB"
-                                return ret
-                        }
-                        let x = ["#DA096F", "#C70E74", "#B51379", "#A2177D", "#901C82",
-                                 "#7D2086", "#6B258B", "#582A90",]
+                        let x = ["#DA096F", "#C70E74", "#B51379", "#A2177D", 
+                                 "#901C82", "#7D2086", "#6B258B", "#582A90",]
                         ret["background-color"] = x[data.hundreds-1]
                         return ret
                 },
@@ -33826,8 +33820,11 @@ addLayer("an", {
                                 "blank",
                                 ["display-text", 
                                         function(){
-                                                let a = "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above<sup>*</sup> amounts plus 1.<br>"
-                                                a += "Amounts and gene amount decays by PC per second due to genetic cross contamination."
+                                                let a = "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above<sup>*</sup> amounts plus 1."
+                                                if (player.ch.unlocked) {
+                                                        a = a.replace("2", "(Chromosome effect)")
+                                                }
+                                                let b = "Amounts and gene amount decays by PC per second due to genetic cross contamination."
                                                 let pc = "1%"
                                                 if (hasMilestone("an", 19)) pc = "5%"
                                                 if (hasMilestone("an", 20)) pc = "25%"
@@ -33836,9 +33833,10 @@ addLayer("an", {
                                                 if (hasMilestone("ch", 4))  pc = "75%"
                                                 if (hasMilestone("an", 22)) pc = "100%"
                                                 if (hasMilestone("sp", 1) && player.ch.points.lt(11)) pc = "1%"
-                                                a = a.replace("PC", pc)
-                                                let part1 = a + br + "Press shift to bulk buy 5x. The buyable in light blue is the cheapest."
-                                                return part1 + br + (player.sp.unlocked ? "The number of Chromosomes in amount effects is maxed at 5000" : "")
+                                                b = b.replace("PC", pc)
+                                                let part1 = a + br2 + b + br + "Press shift to bulk buy 5x. The buyable in light blue is the cheapest." + br
+                                                if (!player.sp.unlocked) return part1
+                                                return part1 + br + "The number of Chromosomes in amount effects is maxed at 5000."
                                         }
                                 ],
                                 "blank",
