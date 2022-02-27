@@ -18817,6 +18817,7 @@ addLayer("d", {
                 if (hasMilestone("ch", 25))     ret = ret.times(player.nu.points.max(1).sqrt())
                 if (hasMilestone("ch", 26))     ret = ret.times(1.31)
                 if (hasMilestone("nu", 17))     ret = ret.times(Decimal.pow(1.01, player.nu.points))
+                if (hasUpgrade("sp", 84))       ret = ret.times(Decimal.pow(1.01, player.sp.upgrades.length))
 
                 return ret
         },
@@ -29002,6 +29003,7 @@ addLayer("or", {
                                 }
                         },
                         base(){
+                                if (hasUpgrade("sp", 105))      return player.or.buyables[202].max(1).pow(.54)
                                 if (hasMilestone("sp", 11))     return player.or.buyables[202].max(1).pow(.53)
                                 if (hasMilestone("ch", 35))     return player.or.buyables[202].max(1).pow(.52)
                                 if (hasUpgrade("sp", 55))       return player.or.buyables[202].max(1).pow(.51)
@@ -29023,8 +29025,9 @@ addLayer("or", {
                                 let eformula = "sqrt(gonna levels)^x<br>" + format(tmp.or.buyables[203].base) + "^x"
                                 let exp = ".51"
                                 if (hasUpgrade("sp", 55)) eformula = eformula.replace("sqrt(gonna levels)", "(gonna levels)<sup>EXP</sup>")
-                                if (hasMilestone("ch", 35)) exp = ".52"
-                                if (hasMilestone("sp", 11)) exp = ".53"
+                                if (hasMilestone("ch", 35))     exp = ".52"
+                                if (hasMilestone("sp", 11))     exp = ".53"
+                                if (hasUpgrade("sp", 105))      exp = ".54"
 
                                 eformula = eformula.replace("EXP", exp)
 
@@ -34399,7 +34402,7 @@ addLayer("ch", {
         effectPoints(){
                 let pts = player.ch.points.plus(tmp.nu.effectPrimary)
 
-                if (hasUpgrade("nu", 11)) pts = pts.plus(player.nu.upgrades.length)
+                if (hasUpgrade("nu", 11)) pts = pts.plus(player.nu.upgrades.length * (1 + hasUpgrade("nu", 43)))
                 if ((player.an.achActive[31] || hasMilestone("nu", 15)) && hasAchievement("ach", 31)) {
                         pts = pts.plus(tmp.an.clickables.rowThreeOff)
                 }
@@ -35413,7 +35416,7 @@ addLayer("nu", {
                 let ret = new Decimal(32)
 
                 if (hasMilestone("sp", 5)) ret = new Decimal(30)
-                if (hasMilestone("sp", 22)) ret = ret.sub(player.nu.points.sub(150).div(hasUpgrade("nu", 42) ? 8 : 9).max(0).min(30).floor())
+                if (hasMilestone("sp", 22)) ret = ret.sub(player.nu.points.sub(150).div(tmp.nu.upgrades[42].effect).max(0).min(30).floor())
 
                 return ret
         },
@@ -35804,13 +35807,46 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XVII"
                         },
                         description(){
-                                return "Species Milestone 22 becomes every 8th"
+                                return "Species Milestone 22 becomes every (10 - this row upgrades)"
                         },
                         cost:() => new Decimal(174),
+                        effect(){
+                                if (hasUpgrade("nu", 45)) return 5
+                                if (hasUpgrade("nu", 44)) return 6
+                                if (hasUpgrade("nu", 43)) return 7
+                                if (hasUpgrade("nu", 42)) return 8
+                                return 9
+                        },
                         unlocked(){
                                 if (hasUpgrade("nu", 42)) return true
                                 return player.ch.points.gte(5252)
                         }, // hasUpgrade("nu", 42)
+                },
+                43: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XVIII"
+                        },
+                        description(){
+                                return "Double Nucleuses I and Up Quark divider is 8"
+                        },
+                        cost:() => new Decimal(177),
+                        unlocked(){
+                                if (hasUpgrade("nu", 43)) return true
+                                return player.ch.points.gte(5407)
+                        }, // hasUpgrade("nu", 43)
+                },
+                44: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XIX"
+                        },
+                        description(){
+                                return "Token II buyables' cost exponent is 1.22"
+                        },
+                        cost:() => new Decimal(181),
+                        unlocked(){
+                                if (hasUpgrade("nu", 44)) return true
+                                return player.ch.points.gte(5638)
+                        }, // hasUpgrade("nu", 44)
                 },
         },
         milestones: {
@@ -37028,9 +37064,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XIV"
                         },
                         description(){
-                                return "Effect XIV's sqrt is ^.55"
+                                return "Each upgrade multiplies the DNA gain exponent by 1.01"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e240),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 84)
@@ -37064,9 +37100,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XVII"
                         },
                         description(){
-                                return "Charm Quark effect is now (C*x)<sup>.8</sup>"
+                                return "Charm Quark effect is now C*x"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e253),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 92)
@@ -37160,9 +37196,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XXV"
                         },
                         description(){
-                                return "gonna base is (make levels)<sup>.54</sup>"
+                                return "make base is (gonna levels)<sup>.54</sup>"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e249),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 105)
@@ -38290,6 +38326,7 @@ addLayer("mc", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e4*100^x<sup>1.1</sup>" 
                                 if (hasUpgrade("mc", 13)) cost2 = cost2.slice(4,)
+                                if (hasUpgrade("mc", 15)) cost2 = cost2.replace(100, 99)
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -46329,6 +46366,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("nu", 44))       return x.pow(1.22).ceil()
                         if (hasUpgrade("sp", 93))       return x.pow(1.23).ceil()
                         if (hasMilestone("sp", 12))     return x.pow(1.24).ceil()
                         if (hasMilestone("an", 44))     return x.pow(1.25).ceil()
@@ -46384,6 +46422,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("nu", 44))       return "ceil(x<sup>1.22</sup>)"
                         if (hasUpgrade("sp", 93))       return "ceil(x<sup>1.23</sup>)"
                         if (hasMilestone("sp", 12))     return "ceil(x<sup>1.24</sup>)"
                         if (hasMilestone("an", 44))     return "ceil(x<sup>1.25</sup>)"
@@ -46432,6 +46471,8 @@ addLayer("tokens", {
                 },
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
+                        
+                        if (hasUpgrade("nu", 44))       return 32
                         if (hasUpgrade("sp", 93))       return 31
                         if (hasMilestone("sp", 12))     return 30
                         if (hasMilestone("an", 44))     return 29
@@ -47584,6 +47625,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("nu", 43))       return c.plus(1).sqrt().div(8)
                                 if (hasMilestone("sp", 19))     return c.plus(1).sqrt().div(10)
                                 if (hasMilestone("sp", 16))     return c.plus(1).sqrt().div(11)
                                 if (hasMilestone("an", 38))     return c.plus(1).sqrt().div(12)
@@ -47619,6 +47661,7 @@ addLayer("tokens", {
                                 if (hasMilestone("an", 38))     div = "12"
                                 if (hasMilestone("sp", 16))     div = "11"
                                 if (hasMilestone("sp", 19))     div = "10"
+                                if (hasUpgrade("nu", 43))       div = "8"
                                 eformula = eformula.replace("DIV", div)
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -47723,6 +47766,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow11Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("sp", 92))   return c
                                 if (hasUpgrade("nu", 22))   return c.pow(.7)
                                 if (hasUpgrade("nu", 11))   return c.pow(.6)
                                 if (hasUpgrade("or", 45))   return c.pow(.6).times(.1)
@@ -47733,27 +47777,23 @@ addLayer("tokens", {
                         },
                         initialEffect(){
                                 let base = tmp.tokens.buyables[111].base
-                                if (hasUpgrade("nu", 22)) {
-                                        return base.times(player.tokens.best_buyables[111].pow(.7))
-                                }
-                                if (hasMilestone("an", 14)) {
-                                        return base.times(player.tokens.best_buyables[111].pow(.6))
-                                }
+                                let exp = .5
+                                if (hasMilestone("an", 14)) exp = .6
+                                if (hasUpgrade("nu", 22)) exp = .7
+                                if (hasUpgrade("sp", 92)) exp = 1
                                 if (hasUpgrade("or", 103)) {
-                                        return base.times(player.tokens.best_buyables[111].sqrt())
+                                        return base.times(player.tokens.best_buyables[111].pow(exp))
                                 }
                                 return base.times(player.tokens.buyables[111].sqrt())
                         },
                         effect(){
                                 let base = tmp.tokens.buyables[111].base
-                                if (hasUpgrade("nu", 22)) {
-                                        return base.times(player.tokens.best_buyables[111].pow(.7)).max(player.tokens.bestCharm)
-                                }
-                                if (hasMilestone("an", 14)) {
-                                        return base.times(player.tokens.best_buyables[111].pow(.6)).max(player.tokens.bestCharm)
-                                }
+                                let exp = .5
+                                if (hasMilestone("an", 14)) exp = .6
+                                if (hasUpgrade("nu", 22)) exp = .7
+                                if (hasUpgrade("sp", 92)) exp = 1
                                 if (hasUpgrade("or", 103)) {
-                                        return base.times(player.tokens.best_buyables[111].sqrt()).max(player.tokens.bestCharm)
+                                        return base.times(player.tokens.best_buyables[111].pow(exp)).max(player.tokens.bestCharm)
                                 }
                                 if (hasUpgrade("t", 155)) {
                                         return base.times(player.tokens.buyables[111].sqrt()).max(player.tokens.bestCharm)
@@ -47774,15 +47814,14 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>" + format(tmp.tokens.buyables[111].base, 4) + "*sqrt(x)" 
-                                if (hasMilestone("or", 11)) eformula = eformula.replace(".04(3C<sup>.5</sup>-R<sup>.25</sup>)", ".1(C<sup>.6</sup>)")
-                                if (hasMilestone("an", 14)) {
-                                        eformula = eformula.replace(".1(C<sup>.6</sup>)*sqrt(x)", ".07(C*x)<sup>.6</sup>")
-                                        eformula = eformula.replace("sqrt(x)", "x<sup>.6</sup>")
-                                }
-                                if (hasUpgrade("nu", 22))       eformula = eformula.replaceAll(".6", ".7")
-                                if (hasUpgrade("or", 45))       eformula = eformula.replace(".07", ".1")
-                                if (hasUpgrade("nu", 11))       eformula = eformula.replace(".1", "")
+                                let eformula = ".04(3C<sup>.5</sup>-R<sup>.25</sup>)*sqrt(x)<br>BASE*sqrt(x)" 
+                                if (hasMilestone("or", 11))     eformula = ".1(C<sup>.6</sup>)*sqrt(x)<br>BASE*sqrt(x)"
+                                if (hasMilestone("an", 14))     eformula = ".07(C*x)<sup>.6</sup><br>BASE*x<sup>.6</sup>"
+                                if (hasUpgrade("nu", 22))       eformula = ".07(C*x)<sup>.7</sup><br>BASE*x<sup>.7</sup>"
+                                if (hasUpgrade("or", 45))       eformula = ".1(C*x)<sup>.7</sup><br>BASE*x<sup>.7</sup>"
+                                if (hasUpgrade("nu", 11))       eformula = "(C*x)<sup>.7</sup><br>BASE*x<sup>.7</sup>"
+                                if (hasUpgrade("sp", 92))       eformula = "C*x<br>BASE*x"
+                                eformula = eformula.replace("BASE", format(tmp.tokens.buyables[111].base, 4))
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
