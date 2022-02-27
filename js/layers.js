@@ -567,6 +567,10 @@ function makeRed(c){
         return "<bdi style='color:#CC0033'>" + c + "</bdi>"
 }
 
+function makeOrange(c){
+        return "<bdi style='color:#FF5846'>" + c + "</bdi>"
+}
+
 function makeBlue(c){
         return "<bdi style='color:#3379E3'>" + c + "</bdi>"
 }
@@ -586,6 +590,16 @@ function filter(list, keep){
 function filterOut(list, out){
         return list.filter(x => !out.includes(x) && !out.includes(Number(x)))
 }
+
+var TAXONOMY_KEYS = [
+        101, 102, 103, 104, 105, 106, 107, 108,
+        202, 203, 204, 205, 206, 207, 208, 
+        303, 304, 305, 306, 307, 308, 
+        404, 405, 406, 407, 408, 
+        505, 506, 507, 508, 
+        606, 607, 608, 
+        707, 708, 
+        808]
 
 /*
 
@@ -31757,15 +31771,6 @@ addLayer("an", {
                         let getExtras = function(id){
                                 return player.an.grid[id].extras
                         }
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
                         // id-101 and id-100 affect id
                         let genesGain = tmp.an.gene.getResetGain
                         let contamRate = .01
@@ -31780,9 +31785,19 @@ addLayer("an", {
                         data.genes.total = data.genes.total.plus(genesGain.times(diff))
                         data.genes.best = data.genes.best.max(data.genes.points)
                         data.genes.points = getLogisticAmount(data.genes.points, genesGain, contamRate, diff)
+
+                        let spExp = [0, 0, 0, 0, 0, 0, 0, 0, 0] // 9 0's
                         
-                        for (i in keys) {
-                                let id = keys[i]
+                        if (hasUpgrade("sp", 22)) spExp[8] = getLevels(808).div(hasUpgrade("sp", 72) ? 8 : 15)
+                        if (hasUpgrade("sp", 23)) spExp[7] = player.ch.points.plus(10).pow(hasUpgrade("sp", 73) ? .6 : .5)
+                        if (hasUpgrade("sp", 24)) spExp[6] = player.nu.points.plus(8).pow(hasUpgrade("sp", 74) ? .7 : 1/3)
+                        if (hasUpgrade("sp", 25)) spExp[5] = hasUpgrade("sp", 75) ? player.sp.upgrades.length : new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
+                        if (hasUpgrade("sp", 31)) spExp[4] = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
+                        if (hasUpgrade("sp", 32)) spExp[3] = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 82) ? 2 : 25)
+                        if (hasUpgrade("sp", 33)) spExp[2] = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 83) ? 4 : 25)
+                        
+                        for (i in TAXONOMY_KEYS) {
+                                let id = TAXONOMY_KEYS[i]
                                 let row = Math.floor(id/100)
 
                                 let gain = Decimal.pow(tmp.ch.effect, getLevels(id)).sub(1)
@@ -31791,31 +31806,7 @@ addLayer("an", {
                                         let exp = (data.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22) ? 1.25 : 1
                                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                                 }
-
-                                let spExp = decimalZero
-                                if (hasUpgrade("sp", 22) && row == 8) {
-                                        spExp = getLevels(808).div(hasUpgrade("sp", 72) ? 8 : 15)
-                                }
-                                if (hasUpgrade("sp", 23) && row == 7) {
-                                        spExp = player.ch.points.plus(10).pow(hasUpgrade("sp", 73) ? .6 : .5)
-                                }
-                                if (hasUpgrade("sp", 24) && row == 6) {
-                                        spExp = player.nu.points.plus(8).pow(hasUpgrade("sp", 74) ? .7 : 1/3)
-                                }
-                                if (hasUpgrade("sp", 25) && row == 5) {
-                                        if (hasUpgrade("sp", 75)) spExp = player.sp.upgrades.length
-                                        else spExp = new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
-                                }
-                                if (hasUpgrade("sp", 31) && row == 4) {
-                                        spExp = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
-                                }
-                                if (hasUpgrade("sp", 32) && row == 3) {
-                                        spExp = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 82) ? 2 : 25)
-                                }
-                                if (hasUpgrade("sp", 33) && row == 2) {
-                                        spExp = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 83) ? 4 : 25)
-                                }
-                                gain = gain.times(tmp.sp.effect.pow(spExp))
+                                gain = gain.times(tmp.sp.effect.pow(spExp[row]))
 
 
                                 if (hasAchievement("an", 33)) {
@@ -31829,19 +31820,10 @@ addLayer("an", {
                 if (hasMilestone("an", 26) || (hasMilestone("an", 20) && player.nu.unlocked) || hasMilestone("nu", 2)) {
                         let subD = data.grid
                         let ml = tmp.an.grid.maxLevels
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
 
-                        for (i in keys) {
+                        for (i in TAXONOMY_KEYS) {
                                 if (data.achActive[11] && hasAchievement("an", 11)) break
-                                let id = keys[i]
+                                let id = TAXONOMY_KEYS[i]
                                 
                                 if (subD[id].buyables.gte(ml) || !layers.an.grid.isAutobought(id)) continue 
                                 
@@ -33444,20 +33426,10 @@ addLayer("an", {
                         onClick(resetBuys = true){
                                 let data = player.an.grid
 
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
-
-                                for (i in keys) {
-                                        data[keys[i]].extras = decimalZero
-                                        data[keys[i]].savedValue = decimalZero
-                                        if (resetBuys === null) data[keys[i]].buyables = decimalZero
+                                for (i in TAXONOMY_KEYS) {
+                                        data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                        data[TAXONOMY_KEYS[i]].savedValue = decimalZero
+                                        if (resetBuys === null) data[TAXONOMY_KEYS[i]].buyables = decimalZero
                                         // dont ask, its what it does
                                 }
                                 player.an.genes.points = decimalZero
@@ -33538,17 +33510,8 @@ addLayer("an", {
                 cheapestAvailable(){
                         let cheapestId = 0 // if we dont change it, then nothing will change color for it
                         let minCost = decimalOne.times(-1)
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
-                        for (i in keys) {
-                                let id = keys[i]
+                        for (i in TAXONOMY_KEYS) {
+                                let id = TAXONOMY_KEYS[i]
                                 if (!layers.an.grid.getUnlocked(id)) continue // if its not unlocked
                                 if (player.an.grid[id].buyables.gte(tmp.an.grid.maxLevels)) continue // if its maxed
                                 let costs = TAXONOMY_COSTS[id]
@@ -33567,18 +33530,9 @@ addLayer("an", {
                         player.an.selectedId = id
                 },
                 totalLevels(){
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
                         let a = decimalZero
-                        for (i in keys) {
-                                a = a.plus(player.an.grid[keys[i]].buyables)
+                        for (i in TAXONOMY_KEYS) {
+                                a = a.plus(player.an.grid[TAXONOMY_KEYS[i]].buyables)
                                 //a = a.plus(player.an.grid[keys[i]].buyables.times(nCk(8-Math.floor(keys[i]/100), 8-keys[i]%100))) 
                                 // above is the version where you take into account how much it boosts genes
                         }
@@ -33634,19 +33588,10 @@ addLayer("an", {
                         name: "Prime",
                         done(){
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
-                                        if (player.an.grid[keys[i]].buyables.gte(140)) return false
+                                for (i in TAXONOMY_KEYS) {
+                                        if (primes.includes(player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber())) a ++
+                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(140)) return false
                                 }
                                 return a >= 17
                         },
@@ -33659,18 +33604,9 @@ addLayer("an", {
                         name: "Composite",
                         done(){
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                for (i in TAXONOMY_KEYS) {
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         a ++
                                         if (primes.includes(v) || v < 4) a --
                                         if (v >= 134) return false
@@ -33685,17 +33621,8 @@ addLayer("an", {
                 14: {
                         name: "One",
                         done(){
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
+                                for (i in TAXONOMY_KEYS) {
                                         let v = player.an.grid[keys[i]].buyables.round().toNumber()
                                         if (v == 1) a ++ 
                                         if (v > 1) return false
@@ -33719,19 +33646,10 @@ addLayer("an", {
                         name: "Prime<br>II",
                         done(){
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
-                                        if (player.an.grid[keys[i]].buyables.gte(105)) return false
+                                for (i in TAXONOMY_KEYS) {
+                                        if (primes.includes(player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber())) a ++
+                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(105)) return false
                                 }
                                 return a >= 17
                         },
@@ -33744,18 +33662,9 @@ addLayer("an", {
                         name: "Composite<br>II",
                         done(){
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                for (i in TAXONOMY_KEYS) {
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         a ++
                                         if (primes.includes(v) || v < 4) a --
                                         if (v >= 99) return false
@@ -33769,22 +33678,13 @@ addLayer("an", {
                 24: {
                         name: "Six",
                         done(){
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
                                 let b = 0
-                                for (i in keys) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                for (i in TAXONOMY_KEYS) {
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         if (v == 6) a ++ 
                                         if (v == 4) b ++
-                                        if (player.an.grid[keys[i]].buyables.gte(7)) return false
+                                        if (player.an.grid[TAXONOMY_KEYS[i]].buyables.gte(7)) return false
                                 }
                                 return a >= 14 && b >= 1
                         },
@@ -33808,18 +33708,9 @@ addLayer("an", {
                         name: "Prime<br>III",
                         done(){
                                 let primes = [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        if (primes.includes(player.an.grid[keys[i]].buyables.round().toNumber())) a ++
+                                for (i in TAXONOMY_KEYS) {
+                                        if (primes.includes(player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber())) a ++
                                 }
                                 return a >= 21
                         },
@@ -33835,18 +33726,9 @@ addLayer("an", {
                         name: "Composite<br>III",
                         done(){
                                 let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73]
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
-                                for (i in keys) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                for (i in TAXONOMY_KEYS) {
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         a ++
                                         if (primes.includes(v) || v < 7) a --
                                         if (v >= 25) return false
@@ -33863,19 +33745,10 @@ addLayer("an", {
                 34: {
                         name: "Eight",
                         done(){
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
                                 let a = 0
                                 let b = 0
-                                for (i in keys) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                for (i in TAXONOMY_KEYS) {
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         if (v == 8) a ++ 
                                 }
                                 return a >= 21
@@ -35023,20 +34896,10 @@ addLayer("ch", {
                         onComplete(){
                                 let data = player.an.grid
 
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
-
-                                for (i in keys) {
-                                        data[keys[i]].extras = decimalZero
-                                        data[keys[i]].buyables = decimalZero
-                                        data[keys[i]].savedValue = decimalZero
+                                for (i in TAXONOMY_KEYS) {
+                                        data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                        data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                        data[TAXONOMY_KEYS[i]].savedValue = decimalZero
                                 }
 
                                 player.an.genes.points = decimalZero
@@ -35172,20 +35035,10 @@ addLayer("ch", {
                         onComplete(){
                                 let data = player.an.grid
 
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
-
-                                for (i in keys) {
-                                        data[keys[i]].extras = decimalZero
-                                        data[keys[i]].buyables = decimalZero
-                                        data[keys[i]].savedValue = decimalZero
+                                for (i in TAXONOMY_KEYS) {
+                                        data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                        data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                        data[TAXONOMY_KEYS[i]].savedValue = decimalZero
                                 }
                                 
                                 player.an.genes.points = decimalZero
@@ -35238,20 +35091,10 @@ addLayer("ch", {
                         onComplete(){
                                 let data = player.an.grid
 
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
-
-                                for (i in keys) {
-                                        data[keys[i]].extras = decimalZero
-                                        data[keys[i]].buyables = decimalZero
-                                        data[keys[i]].savedValue = decimalZero
+                                for (i in TAXONOMY_KEYS) {
+                                        data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                        data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                        data[TAXONOMY_KEYS[i]].savedValue = decimalZero
                                 }
                                 
                                 player.an.genes.points = decimalZero
@@ -35374,20 +35217,8 @@ addLayer("ch", {
                 Only resets Gene amounts (not levels)
                 */
 
-                let data = player.an.grid
-
-                let keys = [
-                        101, 102, 103, 104, 105, 106, 107, 108,
-                        202, 203, 204, 205, 206, 207, 208, 
-                        303, 304, 305, 306, 307, 308, 
-                        404, 405, 406, 407, 408, 
-                        505, 506, 507, 508, 
-                        606, 607, 608, 
-                        707, 708, 
-                        808]
-
-                for (i in keys) {
-                        data[keys[i]].extras = decimalZero
+                for (i in TAXONOMY_KEYS) {
+                        player.an.grid[TAXONOMY_KEYS[i]].extras = decimalZero
                 }
                 if (!hasUpgrade("ch", 25)) player.an.genes.points = decimalZero
         },
@@ -36299,20 +36130,10 @@ addLayer("nu", {
                 if (!false) {
                         let data = data2.grid
 
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
-
-                        for (i in keys) {
-                                data[keys[i]].extras = decimalZero
-                                data[keys[i]].buyables = decimalZero
-                                data[keys[i]].savedValue = decimalZero
+                        for (i in TAXONOMY_KEYS) {
+                                data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                data[TAXONOMY_KEYS[i]].savedValue = decimalZero
                         }
                 }
                 data2.genes.points = decimalZero
@@ -36655,6 +36476,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect V"
                         },
                         description(){
+                                if (hasUpgrade("sp", 65) && player.shiftAlias) return "The Species effect multiplies Contaminant gain per (I'm levels)<sup>" + makeOrange(".9") + "</sup>"
                                 return "The Species effect multiplies Contaminant gain per (I'm levels)<sup>.8</sup>"
                         },
                         cost:() => new Decimal(1),
@@ -36667,6 +36489,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect VI"
                         },
                         description(){
+                                if (hasUpgrade("sp", 71) && player.shiftAlias) return "The Species effect multiplies each Energy buyable amount gain per (its&nbsplevels)<sup>" + makeOrange(".75") + "</sup>"
                                 return "The Species effect multiplies each Energy buyable amount gain per sqrt(its levels)"
                         },
                         cost:() => new Decimal(1),
@@ -36679,6 +36502,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect VII"
                         },
                         description(){
+                                if (hasUpgrade("sp", 72) && player.shiftAlias) return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/" + makeOrange("8")
                                 return "The Species effect multiplies row 8 Taxonomy amounts per Sapien level/15"
                         },
                         cost:() => new Decimal(1),
@@ -36691,6 +36515,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect VIII"
                         },
                         description(){
+                                if (hasUpgrade("sp", 73) && player.shiftAlias) return "The Species effect multiplies row 7 Taxonomy amounts gain per (10&nbsp+&nbspChromosomes)<sup>" + makeOrange(".6") + "</sup>"
                                 return "The Species effect multiplies row 7 Taxonomy amounts gain per sqrt(10 + Chromosomes)"
                         },
                         cost:() => new Decimal(1),
@@ -36703,6 +36528,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect IX"
                         },
                         description(){
+                                if (hasUpgrade("sp", 74) && player.shiftAlias) return "The Species effect multiplies row 6 Taxonomy amounts gain per (8&nbsp+&nbspNucleuses)<sup>" + makeOrange(".7") + "</sup>"
                                 return "The Species effect multiplies row 6 Taxonomy amounts per cbrt(8 + Nucleuses)"
                         },
                         cost:() => new Decimal(1),
@@ -36715,6 +36541,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect X"
                         },
                         description(){
+                                if (hasUpgrade("sp", 75) && player.shiftAlias) return "The Species effect multiplies row 5 Taxonomy amounts per " + makeOrange("upgrade")
                                 return "The Species effect multiplies row 5 Taxonomy amounts per sqrt(3 + resets) (max 22 resets)"
                         },
                         cost:() => new Decimal(1),
@@ -36727,6 +36554,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XI"
                         },
                         description(){
+                                if (hasUpgrade("sp", 81) && player.shiftAlias) return "The Species effect multiplies row 4 Taxonomy amounts per Nucleuses/" + makeOrange("20")
                                 return "The Species effect multiplies row 4 Taxonomy amounts per Nucleuses/50"
                         },
                         cost:() => new Decimal(1),
@@ -36739,6 +36567,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XII"
                         },
                         description(){
+                                if (hasUpgrade("sp", 82) && player.shiftAlias) return "The Species effect multiplies row 3 Taxonomy amounts per log2(Chromosomes)/" + makeOrange("2")
                                 return "The Species effect multiplies row 3 Taxonomy amounts per log2(Chromosomes)/25"
                         },
                         cost:() => new Decimal(1),
@@ -36751,6 +36580,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XIII"
                         },
                         description(){
+                                if (hasUpgrade("sp", 83) && player.shiftAlias) return "The Species effect multiplies row 2 Taxonomy amounts per log10(Token II)/" + makeOrange("4")
                                 return "The Species effect multiplies row 2 Taxonomy amounts per log10(Token II)/25"
                         },
                         cost:() => new Decimal(1),
@@ -36883,6 +36713,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XXIV"
                         },
                         description(){
+                                if (hasUpgrade("sp", 104) && player.shiftAlias) return "Gain ^" + makeOrange("1.01") + " Stem Cells"
                                 return "Gain ^1.001 Stem Cells"
                         },
                         cost:() => Decimal.pow(2, 24-player.sp.upgrades.length).ceil(),
@@ -37053,7 +36884,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Upgraded Effect XII"
                         },
                         description(){
-                                return "Effect XII's divider is 4"
+                                return "Effect XII's divider is 2"
                         },
                         cost:() => new Decimal(1e294),
                         unlocked(){
@@ -37678,6 +37509,7 @@ addLayer("sp", {
                         "Effects": {
                                 content: [
                                         ["upgrades", [1, 2, 3, 4, 5]],
+                                        ["display-text", "Press shift to see in <bdi style='color:#FF5846'>orange</bdi> the changes from the next page of upgrades"]
                                 ]
                         },
                         "Upgraded Effects": {
@@ -37843,20 +37675,10 @@ addLayer("sp", {
                 if (!false) {
                         let data = data2.grid
 
-                        let keys = [
-                                101, 102, 103, 104, 105, 106, 107, 108,
-                                202, 203, 204, 205, 206, 207, 208, 
-                                303, 304, 305, 306, 307, 308, 
-                                404, 405, 406, 407, 408, 
-                                505, 506, 507, 508, 
-                                606, 607, 608, 
-                                707, 708, 
-                                808]
-
-                        for (i in keys) {
-                                data[keys[i]].extras = decimalZero
-                                data[keys[i]].buyables = decimalZero
-                                data[keys[i]].savedValue = decimalZero
+                        for (i in TAXONOMY_KEYS) {
+                                data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                data[TAXONOMY_KEYS[i]].savedValue = decimalZero
                         }
                 }
                 data2.genes.points = decimalZero
@@ -39473,19 +39295,10 @@ addLayer("ach", {
                         onPress(){
                                 if (hasAchievement("an", 11)) {
                                         let data = player.an.grid
-                                        let keys = [
-                                                101, 102, 103, 104, 105, 106, 107, 108,
-                                                202, 203, 204, 205, 206, 207, 208, 
-                                                303, 304, 305, 306, 307, 308, 
-                                                404, 405, 406, 407, 408, 
-                                                505, 506, 507, 508, 
-                                                606, 607, 608, 
-                                                707, 708, 
-                                                808]
 
-                                        for (i in keys) {
-                                                data[keys[i]].buyables = data[keys[i]].savedValue
-                                                data[keys[i]].extras = decimalZero
+                                        for (i in TAXONOMY_KEYS) {
+                                                data[TAXONOMY_KEYS[i]].buyables = data[TAXONOMY_KEYS[i]].savedValue
+                                                data[TAXONOMY_KEYS[i]].extras = decimalZero
                                         }
                                         player.an.genes.points = decimalZero
                                         player.an.genes.total = decimalZero
@@ -39505,18 +39318,9 @@ addLayer("ach", {
                         description: "H: Save Taxonomy state", 
                         onPress(){
                                 let data = player.an.grid
-                                let keys = [
-                                        101, 102, 103, 104, 105, 106, 107, 108,
-                                        202, 203, 204, 205, 206, 207, 208, 
-                                        303, 304, 305, 306, 307, 308, 
-                                        404, 405, 406, 407, 408, 
-                                        505, 506, 507, 508, 
-                                        606, 607, 608, 
-                                        707, 708, 
-                                        808]
 
-                                for (i in keys) {
-                                        data[keys[i]].savedValue = data[keys[i]].buyables
+                                for (i in TAXONOMY_KEYS) {
+                                        data[TAXONOMY_KEYS[i]].savedValue = data[TAXONOMY_KEYS[i]].buyables
                                 }
                         },
                         unlocked(){
