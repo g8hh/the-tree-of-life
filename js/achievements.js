@@ -1085,7 +1085,6 @@ PROGRESSION_MILESTONES = {
         908: () => player.sp.times >= 5,
         909: () => player.sp.times >= 6,
         910: () => player.sp.times >= 7,
-
         911: () => player.sp.points.gte(1e1),
         912: () => player.sp.points.gte(1e3),
         913: () => player.sp.points.gte(1e6),
@@ -1114,6 +1113,28 @@ PROGRESSION_MILESTONES = {
         936: () => player.sp.points.gte(1e190),
         937: () => player.sp.points.gte(1e210),
         938: () => player.sp.points.gte(1e231),
+
+        939: () => player.or.contaminants.points.gte(Decimal.pow10(2e20)),
+        940: () => player.or.contaminants.points.gte(Decimal.pow10(5e20)),
+        941: () => player.or.contaminants.points.gte(Decimal.pow10(1e21)),
+        942: () => player.or.contaminants.points.gte(Decimal.pow10(2e21)),
+        943: () => player.or.contaminants.points.gte(Decimal.pow10(5e21)),
+        944: () => player.or.contaminants.points.gte(Decimal.pow10(1e22)),
+        945: () => player.or.contaminants.points.gte(Decimal.pow10(2e22)),
+        946: () => player.sp.points.gte(1e253),
+        947: () => player.sp.points.gte(1e276),
+        948: () => player.sp.points.gte(1e300),
+        949: () => player.sp.points.gte("1e325"),
+        950: () => player.sp.points.gte("1e351"),
+        951: () => player.sp.points.gte("1e378"),
+        952: () => player.sp.points.gte("1e406"),
+        953: () => player.or.contaminants.points.gte(Decimal.pow10(5e22)),
+        954: () => player.or.contaminants.points.gte(Decimal.pow10(1e23)),
+        955: () => player.or.contaminants.points.gte(Decimal.pow10(2e23)),
+        956: () => player.or.contaminants.points.gte(Decimal.pow10(5e23)),
+        957: () => player.or.contaminants.points.gte(Decimal.pow10(1e24)),
+        958: () => player.or.contaminants.points.gte(Decimal.pow10(2e24)),
+        959: () => player.or.contaminants.points.gte(Decimal.pow10(5e24)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -2027,7 +2048,6 @@ PROGRESSION_MILESTONES_TEXT = {
         908: "5 Species resets",
         909: "6 Species resets",
         910: "7 Species resets",
-
         911: "10 Species",
         912: "1000 Species",
         913: "1,000,000 Species",
@@ -2056,6 +2076,28 @@ PROGRESSION_MILESTONES_TEXT = {
         936: "1e190 Species",
         937: "1e210 Species",
         938: "1e231 Species",
+
+        939: "1e2e20 Contaminants",
+        940: "1e5e20 Contaminants",
+        941: "1e1e21 Contaminants",
+        942: "1e2e21 Contaminants",
+        943: "1e5e21 Contaminants",
+        944: "1e1e22 Contaminants",
+        945: "1e2e22 Contaminants",
+        946: "1e253 Species",
+        947: "1e276 Species",
+        948: "1e300 Species",
+        949: "1e325 Species",
+        950: "1e351 Species",
+        951: "1e378 Species",
+        952: "1e406 Species",
+        953: "1e5e22 Contaminants",
+        954: "1e1e23 Contaminants",
+        955: "1e2e23 Contaminants",
+        956: "1e5e23 Contaminants",
+        957: "1e1e24 Contaminants",
+        958: "1e2e24 Contaminants",
+        959: "1e5e24 Contaminants",
 }
 
 

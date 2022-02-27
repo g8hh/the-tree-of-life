@@ -31608,7 +31608,7 @@ addLayer("an", {
                 }
                 if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1))
                 if (hasMilestone("sp", 10)) {
-                        let sub = 85800
+                        let sub = hasUpgrade("nu", 45) ? 0 : 85800
                         let base = decimalOne.plus(player.sp.milestones.length/500)
                                                 ret = ret.times(base.pow(player.tokens.tokens2.total.sub(sub).max(0)))
                 }
@@ -31810,7 +31810,7 @@ addLayer("an", {
                                         spExp = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
                                 }
                                 if (hasUpgrade("sp", 32) && row == 3) {
-                                        spExp = player.ch.points.max(1).log(2).div(25)
+                                        spExp = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 82) ? 2 : 25)
                                 }
                                 if (hasUpgrade("sp", 33) && row == 2) {
                                         spExp = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 83) ? 4 : 25)
@@ -35848,6 +35848,19 @@ addLayer("nu", {
                                 return player.ch.points.gte(5638)
                         }, // hasUpgrade("nu", 44)
                 },
+                45: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses XX"
+                        },
+                        description(){
+                                return "Species Milestone 10 counts every Token II and unlock two more Species challenges [not yet]"
+                        },
+                        cost:() => new Decimal(188),
+                        unlocked(){
+                                if (hasUpgrade("nu", 45)) return true
+                                return player.ch.points.gte(6090)
+                        }, // hasUpgrade("nu", 45)
+                },
         },
         milestones: {
                 1: {
@@ -37042,7 +37055,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect XII's divider is 4"
                         },
-                        cost:() => new Decimal(1e300),
+                        cost:() => new Decimal(1e294),
                         unlocked(){
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 82)
@@ -37593,6 +37606,8 @@ addLayer("sp", {
                                 let d = "Currently: +" + format(tmp.sp.challenges[12].reward)
                                 let e = "Total completions: " + player.sp.challenges[12] + "/5"
 
+                                if (player.sp.challenges[12] == 5) return a + br2 + c + br2 + d + br2 + e
+
                                 return a + br + b + br2 + c + br2 + d + br2 + e
                         },
                         unlocked(){
@@ -37622,6 +37637,8 @@ addLayer("sp", {
                                 let d = "Currently: /" + format(tmp.sp.challenges[21].reward)
                                 let e = "Total completions: " + player.sp.challenges[21] + "/5"
 
+                                if (player.sp.challenges[21] == 5) return a + br2 + c + br2 + d + br2 + e
+
                                 return a + br + b + br2 + c + br2 + d + br2 + e
                         },
                         unlocked(){
@@ -37645,6 +37662,8 @@ addLayer("sp", {
                                 let c = "Reward: Subtract from Nucleus' cost exponent"
                                 let d = "Currently: -" + format(tmp.sp.challenges[22].reward, 4)
                                 let e = "Total completions: " + player.sp.challenges[22] + "/5"
+
+                                if (player.sp.challenges[22] == 5) return a + br2 + c + br2 + d + br2 + e
 
                                 return a + br + b + br2 + c + br2 + d + br2 + e
                         },
@@ -50250,7 +50269,7 @@ addLayer("tokens", {
                                                 }
                                                 if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1)) + br
                                                 if (hasMilestone("sp", 10)) {
-                                                        let sub = 85800
+                                                        let sub = hasUpgrade("nu", 45) ? 0 : 85800
                                                         let base = decimalOne.plus(player.sp.milestones.length/500)
                                                                                 c += "Species Milestone 10 multiplies AX by " + format(base.pow(player.tokens.tokens2.total.sub(sub).max(0))) + br
                                                 }
