@@ -35394,7 +35394,7 @@ addLayer("nu", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Nucleuses II"
                         },
                         description(){
-                                return "PRI I's ON effect counts every Chromosome and Up Quark divider is 14"
+                                return "PRI I's OFF effect counts every Chromosome and Up Quark divider is 14"
                         },
                         cost:() => new Decimal(26),
                         onPurchase(){
