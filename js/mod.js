@@ -20,6 +20,10 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
+	return isEndgameRaw()
+}
+
+function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
 	return player.sp.points.gte(1e299)
 }
@@ -2279,7 +2283,7 @@ var displayThings = [
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (player.cells.slowTime > 0) return "For the next " + makeGreen(formatTime(player.cells.slowTime)) + " real seconds,<br>the game will tick 100x slower"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
-		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
+		if (player.keepGoing && isEndgameRaw()) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]

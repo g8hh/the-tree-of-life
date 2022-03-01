@@ -48085,6 +48085,10 @@ addLayer("tokens", {
                                         div = 4
                                         add = 13000
                                 }
+                                if (hasUpgrade("tokens", 103) && lvls.gte(11518)) {
+                                        div = 5
+                                        add = 13000
+                                }
                                 return [add, div, exp]
                         },
                         maxAfford(){
@@ -49407,7 +49411,6 @@ addLayer("tokens", {
                 101: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> I</h3>" + br
-                                let time = new Date().getTime()
                                 let cost = br2 + "Requires: 416800 Token II"
                                 return title + "Up Quark base is 7" + cost
                         },
@@ -49424,7 +49427,6 @@ addLayer("tokens", {
                 102: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> II</h3>" + br
-                                let time = new Date().getTime()
                                 let cost = br2 + "Requires: 421950 Token II"
                                 return title + "Base Animal gain is 10<sup>log10(Organs)<sup>.11</sup></sup> and per upgrade Species multiplies Gene gain" + cost
                         },
@@ -49435,6 +49437,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("tokens", 102)
+                },
+                103: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> III</h3>" + br
+                                let cost = br2 + "Requires: 427500 Token II"
+                                return title + "Token II via Stem Cell's divider is 5" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(427500)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("tokens", 103)
                 },
         },
         microtabs: {
