@@ -36625,6 +36625,7 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Effect XV"
                         },
                         description(){
+                                if (hasUpgrade("sp", 85) && player.shiftAlias) return "Animalia I amount<sup>.06</sup> " + makeOrange("multiplies") + " Bottom Quarks' base"
                                 return "Animalia I amount<sup>.06</sup> adds to Bottom Quarks' base"
                         },
                         cost:() => new Decimal(1),
