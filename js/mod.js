@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.276",
+	num: "1.277",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,18 +25,23 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.sp.points.gte(1e299)
+	return player.sp.points.gte("1e396")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.276)<br><br>
+		Reaching the endgame screen (updated at least as of v1.277)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.277</h3><br>
+		- Balanced until 1e396 Species.<br>
+		- Added five Token upgrades.<br>
+		- Added two Species challenges.<br>
+		- Various code cleanup and display fixes.<br>
 	<br><h3 style='color: #CC0000'>v1.276</h3><br>
 		- Added four Nucleus upgrades.<br>
 		- Implemented various upgraded effects.<br>

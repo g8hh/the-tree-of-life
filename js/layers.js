@@ -19791,6 +19791,7 @@ addLayer("cells", {
                 unlocked: false,
 		points: decimalZero,
                 best: decimalZero,
+                best_across_sp: decimalZero,
                 total: decimalZero,
                 abtime: 0,
                 time: 0,
@@ -19826,6 +19827,7 @@ addLayer("cells", {
                 stem_cells: {
                         points: decimalZero,
                         best: decimalZero,
+                        best_across_sp: decimalZero,
                 },
                 slowTime: 0,
         }},
@@ -19957,6 +19959,9 @@ addLayer("cells", {
                 
                 if (data.points.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
+                data.best_across_sp = data.best_across_sp.max(data.points)
+
+                if (hasMilestone("sp", 24)) data.points = data.points.max(data.best_across_sp)
 
                 if (data.milestone2Best != 0 || hasMilestone("cells", 2)) data.milestone2Best = Math.max(data.milestone2Best, data.times)
                 if (hasMilestone("cells", 1)) data.milestone1Ever = true
@@ -20392,6 +20397,9 @@ addLayer("cells", {
 
                         data2.points = data2.points.plus(thisGain)
                         data2.best = data2.best.max(data2.points)
+                        data2.best_across_sp = data2.best_across_sp.max(data2.points)
+
+                        if (hasMilestone("sp", 24)) data2.points = data2.points.max(data2.best_across_sp)
 
                         if (hasMilestone("cells", 15) && data.time > 1 && !player.cells.activeChallenge) {
                                 if (data2.best.div(data2.points).gt(1e4)) data2.points = data2.best.div(1e4)
@@ -22810,17 +22818,18 @@ addLayer("cells", {
                                 if (hasMilestone("ch", 14)) exp = amt.pow(1.08)
                                 let base = new Decimal(1e10)
                                 let init = new Decimal(1e28)
-                                if (hasMilestone("cells", 27)) init = decimalOne
-                                if (hasMilestone("cells", 28)) base = new Decimal(1e9)
-                                if (hasMilestone("cells", 45)) base = new Decimal(5e8)
-                                if (hasMilestone("cells", 46)) base = new Decimal(3e8)
-                                if (hasMilestone("cells", 47)) base = new Decimal(1e8)
-                                if (hasMilestone("ch", 14))    base = new Decimal(1e9)
+                                if (hasMilestone("cells", 27))  init = decimalOne
+                                if (hasMilestone("cells", 28))  base = new Decimal(1e9)
+                                if (hasMilestone("cells", 45))  base = new Decimal(5e8)
+                                if (hasMilestone("cells", 46))  base = new Decimal(3e8)
+                                if (hasMilestone("cells", 47))  base = new Decimal(1e8)
+                                if (hasMilestone("ch", 14))     base = new Decimal(1e9)
                                 if (hasMilestone("nu", 10)) {
                                         base = new Decimal(1e23)
                                         exp = amt.pow(1.05)
                                 }
-                                if (hasUpgrade("nu", 15))      base = new Decimal(1e21)
+                                if (hasUpgrade("nu", 15))       base = new Decimal(1e21)
+                                if (hasUpgrade("tokens", 104))  base = new Decimal(1e20)
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
@@ -22847,6 +22856,7 @@ addLayer("cells", {
                                         exp = 1.05
                                 }
                                 if (hasUpgrade("nu", 15))       base = new Decimal(1e21)
+                                if (hasUpgrade("tokens", 104))  base = new Decimal(1e20)
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
                         buy(){
@@ -22912,8 +22922,9 @@ addLayer("cells", {
                                         cost2 = cost2.replace("1e8", "1e9")
                                         cost2 = cost2.replace("1.1", "1.08")
                                 }
-                                if (hasMilestone("nu", 10)) cost2 = cost2.replace("1e9^(x<sup>1.08</sup>)", "1e23^(x<sup>1.05</sup>)")
-                                if (hasUpgrade("nu", 15)) cost2 = cost2.replace("23", "21")
+                                if (hasMilestone("nu", 10))     cost2 = "1e23^(x<sup>1.05</sup>)"
+                                if (hasUpgrade("nu", 15))       cost2 = cost2.replace("23", "21")
+                                if (hasUpgrade("tokens", 104))  cost2 = cost2.replace("21", "20")
                                 let cost3 = "</b><br>"
                                 let allCost = cost1 + cost2 + cost3
 
@@ -24107,6 +24118,7 @@ addLayer("t", {
                 if (hasUpgrade("an", 43))       ret = ret.plus(1)
                 if (hasUpgrade("sp", 51))       ret = ret.plus(1)
                 if (hasChallenge("sp", 12))     ret = ret.plus(tmp.sp.challenges[12].reward)
+                if (hasMilestone("sp", 24))     ret = ret.plus(1)
 
                 return ret
         },
@@ -34262,7 +34274,7 @@ addLayer("ch", {
                 if (hasMilestone("an", 26)) ret = new Decimal(1.33)
                 if (hasMilestone("ch", 10)) ret = new Decimal(1.32)
 
-                if (hasMilestone("ch", 19)) ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(200).div(1e4))
+                if (hasMilestone("ch", 19)) ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
 
                 return ret
         },
@@ -36338,6 +36350,7 @@ addLayer("sp", {
                 if (hasMilestone("sp", 15))     ret = ret.plus(layerChallengeCompletions("sp"))
                 if (hasUpgrade("sp", 63))       ret = ret.plus(tmp.sp.upgrades[63].effect)
                 if (hasUpgrade("nu", 41))       ret = ret.plus(player.nu.points.sub(150).max(0))
+                if (hasUpgrade("tokens", 104))  ret = ret.plus(player.tokens.upgrades.length)
 
                 return ret
         },
@@ -37392,6 +37405,20 @@ addLayer("sp", {
                                 return "Reward: inTES<u>tine</u> base is 2.25."
                         },
                 }, // hasMilestone("sp", 23)
+                24: {
+                        requirementDescription(){
+                                return "1e361 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte("1e361")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Your best Cells and Stem Cells across Species resets is given upon reset and add 1 to the Tissue effect exponent."
+                        },
+                }, // hasMilestone("sp", 24)
         },
         challenges:{
                 11: {
@@ -37515,7 +37542,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[31] * 20)
                         },
-                        goal: () => Decimal.pow(10, [181097, 188988.3, 9172950, 9201412, 9256811, 91e6][player.sp.challenges[31]]),
+                        goal: () => Decimal.pow(10, [181097, 188988.3, 221500, 9201412, 9256811, 91e6][player.sp.challenges[31]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[31].goal)
                         },
@@ -37542,9 +37569,9 @@ addLayer("sp", {
                 32: {
                         name: "Truely Energyless", 
                         reward(){
-                                return new Decimal(player.sp.challenges[32]).times(.4).plus(1)
+                                return new Decimal(player.sp.challenges[32]).times(.4).plus(1).pow(player.sp.challenges[32] + 3).root(4)
                         },
-                        goal: () => Decimal.pow(10, [136584, 9158027, 9172950, 9201412, 9256811, 91e6][player.sp.challenges[32]]),
+                        goal: () => Decimal.pow(10, [136584, 145555, 9172950, 9201412, 9256811, 91e6][player.sp.challenges[32]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[32].goal)
                         },
@@ -48086,7 +48113,7 @@ addLayer("tokens", {
                                         add = 13000
                                 }
                                 if (hasUpgrade("tokens", 103) && lvls.gte(11518)) {
-                                        div = 5
+                                        div = 2 + hasUpgrade("tokens", 101) + hasUpgrade("tokens", 102) + hasUpgrade("tokens", 103) + hasUpgrade("tokens", 104) + hasUpgrade("tokens", 105)
                                         add = 13000
                                 }
                                 return [add, div, exp]
@@ -49412,7 +49439,7 @@ addLayer("tokens", {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> I</h3>" + br
                                 let cost = br2 + "Requires: 416800 Token II"
-                                return title + "Up Quark base is 7" + cost
+                                return title + "Up Quark divider is 7" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(416800)
@@ -49442,7 +49469,7 @@ addLayer("tokens", {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> III</h3>" + br
                                 let cost = br2 + "Requires: 427500 Token II"
-                                return title + "Token II via Stem Cell's divider is 5" + cost
+                                return title + "Token II via Stem Cell's divider is 2 + [this row upgrades]" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(427500)
@@ -49451,6 +49478,34 @@ addLayer("tokens", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("tokens", 103)
+                },
+                104: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> IV</h3>" + br
+                                let cost = br2 + "Requires: 484000 Token II"
+                                return title + "Per upgrade add 1 to the Species gain exponent and Totipotent cost base is 1e20" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(484000)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("tokens", 104)
+                },
+                105: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> V</h3>" + br
+                                let cost = br2 + "Requires: 541200 Token II"
+                                return title + "Unlock Mastery Tokens [not yet] and Chromosome Milestone 19 is capped at 300" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(541200)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("tokens", 105)
                 },
         },
         microtabs: {
