@@ -9330,8 +9330,7 @@ addLayer("n", {
                         player.h.deuterium.best = decimalZero
                 }
 
-                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
-                // make the display update
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
         deactivated(){
                 if (hasUpgrade("or", 135)) return true
@@ -10537,8 +10536,7 @@ addLayer("p", {
 
                 if (player.extremeMode) layers.sci.doReset("p")
 
-                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
-                // make the display update
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
 })
 
@@ -15967,8 +15965,7 @@ addLayer("l", {
 
                 if (player.extremeMode) layers.sci.doReset("l")
 
-                player.tokens.lastRespecDisplayFormula = layers.tokens.buyables.costFormulaText()
-                // make the display update
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
         },
 })
 
@@ -19786,7 +19783,7 @@ addLayer("d", {
 addLayer("cells", {
         name: "Cells", 
         symbol: "C", 
-        position: 3, 
+        position: 4, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -31307,8 +31304,6 @@ addLayer("or", {
                         d2.total = decimalZero
                         d2.points = decimalZero
 
-                        player.tokens.lastRespecDisplayFormula = "2<sup>x</sup>"
-
                         let resetIds = [
                                 11, 12, 13,
                                 21, 22, 23,
@@ -31547,6 +31542,7 @@ addLayer("or", {
 
                 player.p.best_over_amino = decimalZero
 
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreLifeCurrencies()
         },
 })
@@ -32223,7 +32219,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals XIX"
                         },
                         description(){
-                                return "Unlock Animal achievements and a clickable"
+                                return "Unlock Animal achievements, a new layer, and a clickable"
                         },
                         cost:() => new Decimal(1.39e26),
                         unlocked(){
@@ -34066,8 +34062,6 @@ addLayer("an", {
                         data3.tokens2.total = decimalZero
                         data3.tokens2.points = decimalZero
 
-                        player.tokens.lastRespecDisplayFormula = "2<sup>x</sup>"
-
                         let resetIds = [
                                 11, 12, 13,
                                 21, 22, 23,
@@ -34228,6 +34222,7 @@ addLayer("an", {
 
                 player.p.best_over_amino = decimalZero
 
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreLifeCurrencies()
         },
 })
@@ -36269,8 +36264,6 @@ addLayer("nu", {
                         data4.tokens2.total = decimalZero
                         data4.tokens2.points = decimalZero
 
-                        player.tokens.lastRespecDisplayFormula = "2<sup>x</sup>"
-
                         let resetIds = [
                                 11, 12, 13,
                                 21, 22, 23,
@@ -36307,7 +36300,8 @@ addLayer("nu", {
 
                         data4.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
                 }
-                
+
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreOrganCurrencies()
         },
 })
@@ -36315,7 +36309,7 @@ addLayer("nu", {
 addLayer("sp", {
         name: "Species", 
         symbol: "S", 
-        position: 4, 
+        position: 9, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
@@ -37543,7 +37537,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[31] * 20)
                         },
-                        goal: () => Decimal.pow(10, [181097, 188988.3, 221500, 9201412, 9256811, 91e6][player.sp.challenges[31]]),
+                        goal: () => Decimal.pow(10, [181097, 188988.3, 221500, 239860, 9256811, 91e6][player.sp.challenges[31]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[31].goal)
                         },
@@ -37888,8 +37882,6 @@ addLayer("sp", {
                         data4.tokens2.total = decimalZero
                         data4.tokens2.points = decimalZero
 
-                        player.tokens.lastRespecDisplayFormula = "2<sup>x</sup>"
-
                         let resetIds = [
                                 11, 12, 13,
                                 21, 22, 23,
@@ -37926,7 +37918,8 @@ addLayer("sp", {
 
                         data4.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
                 }
-                
+
+                player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
                 resetPreOrganCurrencies()
         },
 })
@@ -37934,7 +37927,7 @@ addLayer("sp", {
 addLayer("mc", {
         name: "Micro", 
         symbol: "M<sub>C</sub>", 
-        position: 4, 
+        position: 5, 
         startData(){ return {
                 unlocked: true,
 		points: decimalZero,
@@ -38829,6 +38822,115 @@ addLayer("mi", {
         },
 })
 
+addLayer("mt", {
+        name: "mt", 
+        symbol: "M<sub>T</sub>", 
+        position: 3, 
+        startData(){ return {
+                unlocked: true,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+        }},
+        color: "#6B0079",
+        branches: ["an"],
+        requires:() => decimalZero, 
+        resource: "Micro", 
+        baseResource: "points", 
+        baseAmount(){return player.points},
+        type: "custom",
+        tooltip(){
+                return format(player.an.genes.points) + " Genes"
+        },
+        getResetGain(){
+                return decimalOne
+        },
+        getNextAt(){
+                return decimalOne
+        },
+        canReset(){
+                return false
+        },
+        update(diff){},
+        row: 1, 
+        prestigeButtonText(){
+                return br
+        },
+        clickables: {
+                rows: 1,
+                cols: 1,
+                11: {
+                        title(){
+                                return makeRed("Jump to Animals")
+                        },
+                        display(){
+                                return ""
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.tab = "an"
+                        },
+                },
+        },
+        layerShown(){return hasUpgrade("an", 44)},
+        tabFormat: {
+                "Taxonomy": {
+                        content: [
+                                ["layer-proxy", 
+                                        ["an",
+                                        [
+                                        ["secondary-display", "genes"],
+                                        ["display-text", function(){
+                                                return "You are gaining " + format(tmp.an.gene.getResetGain) + " Genes/s before cross contamination."
+                                        }],
+                                        "grid",
+                                        "blank",
+                                        ["clickablesBIG", [1]],
+                                        "blank",
+                                        "blank",
+                                        ["display-text", 
+                                                function(){
+                                                        let a = "Gene gain is <b>Sapien</b> amount plus 1,<br>and amount gain is 2<sup><b>levels</b></sup>-1, multiplied by above<sup>*</sup> amounts plus 1."
+                                                        if (player.ch.unlocked) {
+                                                                a = a.replace("2", "(Chromosome effect)")
+                                                        }
+                                                        let b = "Amounts and gene amount decays by PC per second due to genetic cross contamination."
+                                                        let pc = "1%"
+                                                        if (hasMilestone("an", 19)) pc = "5%"
+                                                        if (hasMilestone("an", 20)) pc = "25%"
+                                                        if (hasMilestone("ch", 1))  pc = "33%"
+                                                        if (hasMilestone("ch", 2))  pc = "39%"
+                                                        if (hasMilestone("ch", 4))  pc = "75%"
+                                                        if (hasMilestone("an", 22)) pc = "100%"
+                                                        if (hasMilestone("sp", 1) && player.ch.points.lt(11)) pc = "1%"
+                                                        b = b.replace("PC", pc)
+                                                        let part1 = a + br2 + b + br + "Press shift to bulk buy 5x. The buyable in light blue is the cheapest." + br
+                                                        if (!player.sp.unlocked) return part1
+                                                        return part1 + br + "The number of Chromosomes in amount effects is maxed at 5000."
+                                                }
+                                        ],
+                                        ]
+                                        ]
+                                ],
+                                "blank",
+                                ["clickables", [1]],
+                                "blank",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        doReset(){
+                // do nothing
+        },
+})
+
 addLayer("ach", {
         name: "Achievements",
         symbol: "⭑", 
@@ -39535,6 +39637,25 @@ addLayer("ach", {
                         },
                 },
         },
+        infoboxes: {
+                introBox: {
+                        title: "Introduction",
+                        body(){
+                                let a = "<h1>" + makeRed("Welcome to TREE OF LIFE!") + "</h1>"
+                                let b = "There are six pieces of information you should be aware of:"
+                                let c = "First, this game has (currently) three modes, Easy, Hard, and Extr" + "eme, each having a different effect."
+                                let d = "To access and select modes go to the info tab (the blue i in the top left corner) and click \"Show mod selection tab\", though it is recommended to play normal mode first."
+                                let e = "Second, the game is balanced around 60 to 250 second waits (at most), so if you find yourself "
+                                e += "waiting longer than that for seemingly no reward, try something else!"
+                                let f = "Third, there is a save bank. View it by going to the info tab and clicking \"Show built in saves\" and scrolling down."
+                                let g = "Fourth, this game is designed to be played on a computer on Google Chrome. If this does not apply to you there might be some bugs or other issues you run into." 
+                                let h = "Fifth, there are ways to force toggle shift and control for seeing various details in the info tab."
+                                let i = "Finally, you can click and drag to buy lots of upgrades at once!"
+
+                                return a + br2 + b + br2 + c + " " + d + br2 + e + br2 + f + br2 + g + br2 + h + br2 + i
+                        },
+                },
+        },
         tabFormat: {
                 "Achievements": {
                         content: [
@@ -39548,6 +39669,11 @@ addLayer("ach", {
                         unlocked(){
                                 return true
                         },
+                },
+                "Info": {
+                        content: [
+                                ["infobox", "introBox"],
+                        ],
                 },
         },
         doReset(layer){},
@@ -45981,7 +46107,7 @@ addLayer("tokens", {
                         points: decimalZero,
                         best: decimalZero
                 },
-                lastRespecDisplayFormula: "2<sup>x</sup>",
+                lastRespecDisplayFormulaID: 0,
                 lastRespecDisplayFormula2ID: 0,
         }},
         color: "#7DC71C",
@@ -46237,30 +46363,12 @@ addLayer("tokens", {
                         if (player.tokens.lastRespecDisplayFormula2ID < tmp.tokens.buyables.costFormulaText2ID) {
                                 end = br + "Need Respec"
                         }
-                        let data2 = data.tokens2
-                        return formatWhole(data2.points) + "/" + formatWhole(data2.total) + " Token II" + end
+                        return formatWhole(data.tokens2.points) + "/" + formatWhole(data.tokens2.total) + " Token II" + end
                 }
                 let start = formatWhole(data.points, true) + "/" + formatWhole(data.total) + " tokens"
-                let lrdf = player.tokens.lastRespecDisplayFormula
-                let cft = tmp.tokens.buyables.costFormulaText
-                let needSpec = false
-                if (lrdf != cft && typeof(cft) == "string" && typeof(lrdf) == "string"){
-                        if (cft == "2<sup>x</sup>") needSpec = false
-                        else if (lrdf == "2<sup>x</sup>") needSpec = true
-                        else if (cft == "x") needSpec = false
-                        else if (lrdf == "x") needSpec = true
-                        else {
-                                let x1 = lrdf.split(".")[1].split("<")[0]
-                                let y1 = cft.split(".")[1].split("<")[0]
-                                needSpec = parseFloat("." + y1) < parseFloat("." + x1)
-                        }
-                        if (lrdf.includes("ceil") && cft.includes("round")) needSpec = true
-                        if (lrdf.includes("round") && cft.includes("floor")) needSpec = true
-                        if (!lrdf.includes("max") && cft.includes("max"))   needSpec = true
-                }
+                let lrdf = player.tokens.lastRespecDisplayFormulaID
 
-                let end = ""
-                if (needSpec) end = br + "Need Respec"
+                let end = lrdf < tmp.tokens.buyables.costFormula1ID ? br + "Need Respec" : ""
 
                 if (!player.a.unlocked) return start + end
                 let mid = "<b>" + formatWhole(player.tokens.best_buyables[11]) + "</b>"
@@ -46474,6 +46582,44 @@ addLayer("tokens", {
                         if (hasUpgrade("h", 83))        return x.pow(.9).ceil()
                         if (hasUpgrade("c", 23))        return x
                         return Decimal.pow(2, x)
+                },
+                costFormula1ID(){
+                        if (hasUpgrade("sci", 562))     return 35
+                        if (hasMilestone("t", 13))      return 34
+                        if (hasMilestone("t", 10))      return 33
+                        if (hasMilestone("t", 9))       return 32
+                        if (hasMilestone("t", 8))       return 31
+                        if (hasUpgrade("t", 65))        return 30
+                        if (hasMilestone("t", 5))       return 29
+                        if (hasMilestone("cells", 62))  return 28
+                        if (hasMilestone("cells", 61))  return 27
+                        if (hasMilestone("cells", 59))  return 26
+                        if (hasMilestone("cells", 58))  return 25
+                        if (hasMilestone("cells", 57))  return 24
+                        if (hasMilestone("cells", 56))  return 23
+                        if (hasMilestone("cells", 55))  return 22
+                        if (hasMilestone("cells", 54))  return 21
+                        if (hasMilestone("cells", 50))  return 20
+                        if (hasMilestone("l", 31))      return 19
+                        if (hasMilestone("l", 30))      return 18
+                        if (hasMilestone("l", 29))      return 17
+                        if (hasUpgrade("p", 53))        return 16
+                        if (hasMilestone("l", 26))      return 15
+                        if (hasMilestone("l", 25))      return 14
+                        if (hasMilestone("l", 24))      return 13
+                        if (hasUpgrade("mu", 44))       return 12
+                        if (hasMilestone("l", 18))      return 11
+                        if (hasMilestone("l", 10))      return 10
+                        if (hasUpgrade("n", 31))        return 9
+                        if (hasUpgrade("n", 24))        return 8
+                        if (hasUpgrade("mini", 33))     return 7
+                        if (hasUpgrade("tokens", 82))   return 6
+                        if (hasUpgrade("h", 75))        return 5
+                        if (hasUpgrade("h", 85))        return 4
+                        if (hasUpgrade("h", 84))        return 3
+                        if (hasUpgrade("h", 83))        return 2
+                        if (hasUpgrade("c", 23))        return 1
+                                                        return 0
                 },
                 costFormulaText(){
                         if (hasUpgrade("sci", 562))     return "max(floor(x<sup>.25</sup>)-1, 0)"
@@ -47461,7 +47607,7 @@ addLayer("tokens", {
                                         id = x[i]
                                         player.tokens.buyables[id] = decimalZero
                                 }
-                                player.tokens.lastRespecDisplayFormula = tmp.tokens.buyables.costFormulaText
+                                player.tokens.lastRespecDisplayFormulaID = tmp.tokens.buyables.costFormula1ID
                         },
                         style(){
                                 return {
