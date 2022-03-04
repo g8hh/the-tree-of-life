@@ -9133,7 +9133,7 @@ addLayer("n", {
                                 ["microtabs", "challenge_content"]
                         ],
                         unlocked(){
-                                return hasMilestone("n", 14)
+                                return hasMilestone("n", 14) || player.p.unlocked
                         },
                 },
                 "Milestones": {
@@ -10313,8 +10313,8 @@ addLayer("p", {
 
                 
                 if (layer != "p") return
- 
                 player.p.time = 0
+                
                 let data1 = player.mini
                 let data2 = player.tokens
 
@@ -10326,6 +10326,7 @@ addLayer("p", {
                         player.n.best = decimalZero
                         player.n.points = decimalZero
                         player.n.total = decimalZero
+                        player.n.activeChallenge = undefined
 
                         let remupg = [11, 12, 13, 14, 15, 
                                       21, 22, 23, 24, 25, 
@@ -33629,7 +33630,7 @@ addLayer("an", {
                         done(){
                                 let a = 0
                                 for (i in TAXONOMY_KEYS) {
-                                        let v = player.an.grid[keys[i]].buyables.round().toNumber()
+                                        let v = player.an.grid[TAXONOMY_KEYS[i]].buyables.round().toNumber()
                                         if (v == 1) a ++ 
                                         if (v > 1) return false
                                 }
