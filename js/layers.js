@@ -38833,7 +38833,7 @@ addLayer("mt", {
                 best: decimalZero,
                 total: decimalZero,
         }},
-        color: "#6B0079",
+        color: "#0900E3",
         branches: ["an"],
         requires:() => decimalZero, 
         resource: "Micro", 
@@ -38862,7 +38862,7 @@ addLayer("mt", {
                 cols: 1,
                 11: {
                         title(){
-                                return makeRed("Jump to Animals")
+                                return makeGreen("Jump to Animals")
                         },
                         display(){
                                 return ""
