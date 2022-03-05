@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.279",
+	num: "1.280",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,18 +25,26 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.tokens.tokens2.total.gte(682300)
+	return player.tokens.tokens2.total.gte(749e3)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.279)<br><br>
+		Reaching the endgame screen (updated at least as of v1.280)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.280</h3><br>
+		- Balanced until 749,000 Token II.<br>
+		- Implemented more challenge completions.<br>
+		- Added a custom save.<br>
+		- Added a Species milestone.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Added two Mastery Token upgrades.<br>
+		- Various code clean up and display fixes.<br>
 	<br><h3 style='color: #CC0000'>v1.279</h3><br>
 		- Balanced until 682,300 Token II.<br>
 		- Added more challenge completions.<br>
