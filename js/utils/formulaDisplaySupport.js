@@ -282,7 +282,7 @@ function cellFormulaDisplay(){
         if (hasUpgrade("sci", 514))     c += "DNA Sci IX multiplies AX by " + format(player.cells.stem_cells.points.plus(10).log10()) + br
         if (hasUpgrade("sci", 551))     c += "DNA Sci XXI multiplies AX by " + format(player.sci.dna_science.points.max(10).log10().pow(tmp.sci.upgrades[551].lvls)) + br
         if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
-        if (tmp.or.challenges[21].reward.gt(1)) {
+        if (tmp.or.challenges[21].reward.gt(1) && !hasMilestone("sp", 25)) {
                                         c += "Primary Bronchi multiplies AX by " + format(tmp.or.challenges[21].reward) + br
         }
         if (hasUpgrade("or", 102) && !hasMilestone("sp", 18)) {
@@ -291,7 +291,7 @@ function cellFormulaDisplay(){
                                         
         if (hasMilestone("cells", 40))  c += br + "Cell Milestone 40 multiplies AX by " + format(player.cells.stem_cells.best.max(1).root(100), 3) + br
                                         c += "Tissue effect multiplies AX by " + format(tmp.t.effect, 3) + br
-        if (hasUpgrade("an", 41))       c += "Mammalia III amount multiplies AX by " + format(player.an.grid[406].extras.plus(1).pow(player.an.grid[507].buyables.pow(3))) + br
+        if (hasUpgrade("an", 41))       c += "Animals XVI multiplies AX by " + format(player.an.grid[406].extras.plus(1).pow(player.an.grid[507].buyables.pow(3))) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
@@ -417,7 +417,7 @@ function stemCellFormulaDisplay(){
         if (hasUpgrade("t", 91) && player.extremeMode) {
                                         c += "Tissues XLI multiplies AX by " + format(tmp.t.upgrades[91].effect) + br
         }
-        if (tmp.or.challenges[12].reward.gt(1)) {
+        if (tmp.or.challenges[12].reward.gt(1) && !hasMilestone("sp", 25)) {
                                         c += "Trachea multiplies AX by " + format(tmp.or.challenges[12].reward) + br
         }
         if (tmp.an.effect.gt(1))        c += "Animal Effect multiplies AX by " + format(tmp.an.effect) + br
@@ -497,13 +497,14 @@ function tissueFormulaDisplay(){
                 if (hasUpgrade("or", 155))      c += "Heart XXX multiplies AX by " + format(player.or.energy.points.max(1)) + br
         }
         if (hasUpgrade("sci", 563))     c += "DNA Sci XXXIII multiplies AX by " + format(2) + br
-        if (tmp.or.challenges[32].reward.gt(1)) {
+        if (tmp.or.challenges[32].reward.gt(1) && !hasMilestone("sp", 25)) {
                                         c += "Bronchioles multiplies AX by " + format(tmp.or.challenges[32].reward) + br
         }
         if (hasUpgrade("an", 14))       c += "Animals IV multiplies AX by " + format(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2)) + br
         if (hasUpgrade("an", 34))       c += "Animals XIV multiplies AX by " + format(tmp.tokens.buyables[102].effect) + br
-        if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
-        if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(player.t.points.plus(10).log10().pow(player.nu.points)) + br
+        if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
+                                        c += "Nucleus Milestone 2 multiplies AX by " + format(player.t.points.plus(10).log10().pow(player.nu.points)) + br
+        }
         if (tmp.or.effect.gt(1))        c += br + "Organ effect multiplies AX by " + format(tmp.or.effect) + br
         if (hasMilestone("an", 39))     c += "Animal Milestone 39 multiplies AX by " + format(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3))) + br
         
@@ -748,6 +749,7 @@ function geneFormulaDisplay(){
                 let per = 1.05
                                         c += "Animals XXIII multiplies AX by " + format(Decimal.pow(per, player.tokens.tokens2.total.sub(sub).max(0))) + br
         }
+        if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                 if (!player.an.achActive[22]) {
                                         c += "PRO I multiplies AX by " + format(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4)) + br
@@ -770,7 +772,9 @@ function geneFormulaDisplay(){
         }
         if (hasAchievement("an", 31))   c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
         if (hasMilestone("nu", 1))      c += "Nucleus Milestone 1 multiplies AX by 2" + br
-        if (hasMilestone("nu", 2))      c += "Nucleus Milestone 2 multiplies AX by " + format(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points)) + br
+        if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
+                                        c += "Nucleus Milestone 2 multiplies AX by " + format(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points)) + br
+        }
         if (hasUpgrade("tokens", 102))  c += "Token<sup>2</sup> II multiplies AX by " + format(player.sp.points.max(1).pow(player.tokens.upgrades.length)) + br
         
         if (c.includes(br))             c += br 

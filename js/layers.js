@@ -19895,7 +19895,7 @@ addLayer("cells", {
                 }
                 if (hasUpgrade("sci", 551))     ret = ret.times(player.sci.dna_science.points.max(10).log10().pow(tmp.sci.upgrades[551].lvls))
                 if (hasUpgrade("an", 41))       ret = ret.times(player.an.grid[406].extras.plus(1).pow(player.an.grid[507].buyables.pow(3)))
-                                                ret = ret.times(tmp.or.challenges[21].reward)
+                if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[21].reward)
                                                 ret = ret.times(tmp.an.effect)
 
                 return ret.max(1)
@@ -20356,7 +20356,7 @@ addLayer("cells", {
                         if (hasUpgrade("sci", 563))     ret = ret.times(tmp.sci.buyables[512].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("sci", 564))     ret = ret.times(tmp.sci.buyables[522].effect.max(1).pow(tmp.sci.upgrades[551].lvls))
                         if (hasUpgrade("t", 91))        ret = ret.times(tmp.t.upgrades[91].effect)
-                                                        ret = ret.times(tmp.or.challenges[12].reward)
+                        if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[12].reward)
                         if (hasUpgrade("or", 332))      ret = ret.times(player.or.contaminants.points.max(1).pow(.01 * player.or.upgrades.length))
                                                         ret = ret.times(tmp.an.effect)
 
@@ -24026,13 +24026,15 @@ addLayer("t", {
                                                 ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
                 }
                 if (hasUpgrade("sci", 563))     ret = ret.times(2)
-                                                ret = ret.times(tmp.or.challenges[32].reward)
+                if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[32].reward)
                 if (hasUpgrade("or", 155) && !hasMilestone("sp", 18)) {
                                                 ret = ret.times(player.or.energy.points.max(1))
                 }
                 if (hasUpgrade("an", 14))       ret = ret.times(player.an.grid[608].extras.plus(1).pow(player.an.milestones.length ** 2))
                 if (hasUpgrade("an", 34))       ret = ret.times(tmp.tokens.buyables[102].effect)
-                if (hasMilestone("nu", 2))      ret = ret.times(player.t.points.plus(10).log10().pow(player.nu.points))
+                if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
+                                                ret = ret.times(player.t.points.plus(10).log10().pow(player.nu.points))
+                }
                 if (hasMilestone("an", 39))     ret = ret.times(player.an.grid[307].extras.plus(1).pow(player.ch.points.min(5000).pow(3)))
                 
                 return ret.max(1)
@@ -30137,6 +30139,7 @@ addLayer("or", {
                                 return ret
                         },
                         base(){
+                                if (hasMilestone("sp", 25)) return player.sp.points.max(10).log10()
                                 if (hasMilestone("an", 34)) return player.nu.best.max(1)
                                 let logBase = new Decimal(10)
                                 if (hasMilestone("an", 6)) logBase = new Decimal(9)
@@ -30182,6 +30185,7 @@ addLayer("or", {
                                 eformula = eformula.replaceAll("(log10", "(log" + formatWhole(logBase))
                                 eformula = eformula.replaceAll("log2.72", "ln")
                                 if (hasMilestone("an", 34)) eformula = eformula.replace("log10(log2(Energy)", "Nucleuses")
+                                if (hasMilestone("sp", 25)) eformula = eformula.replace("Nucleuses", "log10(Species)")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -31948,7 +31952,9 @@ addLayer("an", {
                         if (hasUpgrade("ch", 32) && !hasUpgrade("nu", 14)) {
                                                         ret = ret.times(20)
                         }
-                        if (hasMilestone("nu", 2))      ret = ret.times(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points))
+                        if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
+                                                        ret = ret.times(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points))
+                        }
                         if (hasUpgrade("an", 54))       ret = ret.times(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length))
                         if (hasAchievement("an", 31))   ret = ret.times(Decimal.pow(15, player.nu.milestones.length))
                         if (hasMilestone("an", 34) && !hasMilestone("an", 36)) {
@@ -36356,8 +36362,15 @@ addLayer("sp", {
 
                 return ret
         },
+        getResetDiv(){
+                let ret = new Decimal(900)
+
+                if (hasUpgrade("tokens", 112))  ret = ret.sub(player.tokens.mastery_tokens.total.min(50).times(8))
+
+                return ret
+        },
         getResetGain(){
-                let ret = player.an.points.max(1).log10().div(900).pow(tmp.sp.getGainExp)
+                let ret = player.an.points.max(1).log10().div(tmp.sp.getResetDiv).pow(tmp.sp.getGainExp)
 
                 ret = ret.times(tmp.sp.getGainMult)
 
@@ -37422,6 +37435,20 @@ addLayer("sp", {
                                 return "Reward: Your best Cells and Stem Cells across Species resets is given upon reset and add 1 to the Tissue effect exponent."
                         },
                 }, // hasMilestone("sp", 24)
+                25: {
+                        requirementDescription(){
+                                return "1e441 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte("1e441")
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: in<u>tes</u>TINE base is log10(Species) but disable Primary Bronchi, Trachea, and Bronchioles and Nucleus Milestone 2 does not affect Tissue or Gene gain."
+                        },
+                }, // hasMilestone("sp", 25)
         },
         challenges:{
                 11: {
@@ -37545,7 +37572,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[31] * 20)
                         },
-                        goal: () => Decimal.pow(10, [181097, 188988.3, 221500, 239860, 9256811, 91e6][player.sp.challenges[31]]),
+                        goal: () => Decimal.pow(10, [181097, 188988.3, 221500, 239860, 281e3, 91e6][player.sp.challenges[31]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[31].goal)
                         },
@@ -37659,7 +37686,7 @@ addLayer("sp", {
                                         let b2 = "However, every time the Species effect gets 10x larger,<br>square root effective (further) species."
                                         let b = b1 + br + b2
                                         let c = "Initial gain: (log10(Animals)/900)<sup>8</sup>"
-                                        c += br + "Current gain: (log10(Animals)/900)<sup>" + formatWhole(tmp.sp.getGainExp) + "</sup>"
+                                        c += br + "Current gain: (log10(Animals)/" + formatWhole(tmp.sp.getResetDiv) + ")<sup>" + formatWhole(tmp.sp.getGainExp) + "</sup>"
                                         let d = "For unlocking Species, you always autobuy all energy buyables and<br>you can bulk 5x more Energy and Token II buyables."
                                         let e = "Furthermore, some things in previous layers (Organs and Animals) have some text in "
                                         e += br + makePurple("purple") + " which are effects for unlocking Species."
@@ -49777,6 +49804,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 105)
                         }, // hasUpgrade("tokens", 111)
+                },
+                112: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> VII</h3>" + br
+                                let cost = br2 + "Requires: 682,600 Token II"
+                                return title + "Each of the first 50 Mastery tokens subtracts 8 from the Species gain base divider" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(682600)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 111)
+                        }, // hasUpgrade("tokens", 112)
                 },
 
                 201: {
