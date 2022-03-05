@@ -19865,7 +19865,7 @@ addLayer("cells", {
                                                 ret = ret.times(tmp.cells.milestones[16].effect)
                 }
                 if (!hasUpgrade("an", 51))      ret = ret.times(tmp.cells.challenges[12].rewardEffect)
-                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.stem_cells.best.max(1).root(100))
+                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.stem_cells.best.max(1).root(hasUpgrade("tokens", 222) ? 50 : 100))
                 if (!hasMilestone("sp", 17))    ret = ret.times(player.cells.stem_cells.points.plus(10).log10())
                                                 ret = ret.times(tmp.t.effect)
                 if (hasUpgrade("t", 62))        ret = ret.times(tmp.tokens.buyables[21].effect)
@@ -20269,7 +20269,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 32))  ret = ret.times(player.cells.lambda.points.max(10).log10())
                                 if (hasMilestone("cells", 38))  ret = ret.times(player.d.points.max(10).log10())
                                 if (hasMilestone("cells", 39))  ret = ret.times(player.mu.points.max(10).log10())
-                                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : 50))
+                                if (hasMilestone("cells", 40))  ret = ret.times(player.cells.best.max(1).root(player.extremeMode ? 100 : hasUpgrade("tokens", 222) ? 25 : 50))
                                 if (hasMilestone("cells", 41))  ret = ret.times(player.tokens.buyables[11].max(1))
                                 if (hasMilestone("cells", 53))  ret = ret.times(tmp.cells.milestones[53].effect)
                                 if (hasMilestone("cells", 59) && !player.extremeMode) {
@@ -31612,10 +31612,11 @@ addLayer("an", {
                 if (pts.lt("1e100")) return decimalZero
                 let exp = tmp.an.getGainExp
 
+                if (hasUpgrade("tokens", 221))  return pts.log10().pow(.15).pow10().times(tmp.sp.effect).pow(exp)
                 if (hasUpgrade("tokens", 102))  return pts.log10().pow(.11).pow10().times(tmp.sp.effect).pow(exp)
                 if (hasUpgrade("sp", 61))       return pts.log10().times(tmp.sp.effect).pow(exp)
                 if (hasUpgrade("or", 33))       return pts.log10().pow(exp)
-                return pts.log10().sub(99).pow(exp)
+                                                return pts.log10().sub(99).pow(exp)
         },
         getGainMult(){ // a gain animalgain again animal gain animalsgain animals gain
                 let ret = decimalOne
@@ -33878,10 +33879,11 @@ addLayer("an", {
                                         let a1 = "Initial Animal gain: cbrt(log10(Organs)-99)"
 
                                         let a2 = "Current Animal gain: cbrt(log10(Organs)-99)"
-                                        if (hasUpgrade("an", 12)) a2 = a2.replace("cbrt", "sqrt")
-                                        if (hasUpgrade("or", 33)) a2 = a2.replace("-99", "")
-                                        if (hasUpgrade("ch", 14)) a2 = "Current Animal gain: log10(Organs)<sup>EXP</sup>"
-                                        if (hasUpgrade("tokens", 102)) a2 = "Current Animal gain: 10<sup>log10(Organs)<sup>.11</sup>*EXP</sup>"
+                                        if (hasUpgrade("an", 12))       a2 = a2.replace("cbrt", "sqrt")
+                                        if (hasUpgrade("or", 33))       a2 = a2.replace("-99", "")
+                                        if (hasUpgrade("ch", 14))       a2 = "Current Animal gain: log10(Organs)<sup>EXP</sup>"
+                                        if (hasUpgrade("tokens", 102))  a2 = "Current Animal gain: 10<sup>log10(Organs)<sup>.11</sup>*EXP</sup>"
+                                        if (hasUpgrade("tokens", 221))  a2 = a2.replace(".11", ".15")
                                         
                                         a2 = a2.replace("EXP", format(tmp.an.getGainExp))
 
@@ -37602,7 +37604,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[32]).times(.4).plus(1).pow(player.sp.challenges[32] + 3).root(4)
                         },
-                        goal: () => Decimal.pow(10, [136584, 145555, 166300, 170220, 9256811, 91e6][player.sp.challenges[32]]),
+                        goal: () => Decimal.pow(10, [136584, 145555, 166300, 170220, 181e3, 91e6][player.sp.challenges[32]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[32].goal)
                         },
@@ -48517,7 +48519,7 @@ addLayer("tokens", {
                         canAfford:() => player.nu.points.gte(tmp.tokens.buyables[203].cost),
                         maxAfford(){
                                 let add = 15
-                                return player.nu.points.plus(.00001).sub(false ? 0 : 1).sqrt().sub(add).ceil()
+                                return player.nu.points.plus(.00001).sub(false ? 0 : 1).max(0).sqrt().sub(add).ceil().max(0)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -49931,6 +49933,48 @@ addLayer("tokens", {
                                 return player.tokens.mastery_tokens.total.gte(1)
                         }, // hasUpgrade("tokens", 212)
                 },
+                221: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 31"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 211)) return "Purchase M 21 to unlock me!"
+                                if (!tmp.tokens.upgrades[221].canAfford) return makeRed("<b>LOCKED</b>") + br + "M 32"
+                                return "Animals base gain is 10<sup>log10(Organs)<sup>.15</sup>"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 211)) return false
+                                return !hasUpgrade("tokens", 222)
+                        },
+                        cost:() => new Decimal(3),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(5)
+                        }, // hasUpgrade("tokens", 221)
+                },
+                222: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 32"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 212)) return "Purchase M 22 to unlock me!"
+                                if (!tmp.tokens.upgrades[222].canAfford) return makeRed("<b>LOCKED</b>") + br + "M 31"
+                                return "Double Cell Milestone 40"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 212)) return false
+                                return !hasUpgrade("tokens", 221)
+                        },
+                        cost:() => new Decimal(3),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(5)
+                        }, // hasUpgrade("tokens", 222)
+                },
         },
         microtabs: {
                 currency_displays: {
@@ -50010,7 +50054,7 @@ addLayer("tokens", {
                         },
                         "Upgrade Tree": {
                                 content: [
-                                        ["upgrade-tree", [[201], [211, "blank", 212]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222]]],
                                         ["clickables", [2]]
                                 ],
                         },
