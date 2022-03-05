@@ -46102,6 +46102,10 @@ addLayer("tokens", {
                         total: decimalZero,
                         points: decimalZero,
                 },
+                mastery_tokens: {
+                        total: decimalZero,
+                        points: decimalZero,
+                },
                 tokens2Unl: [101, 102, 111],
                 buyablesBoughtThisTick: [],
                 coins: {
@@ -46391,6 +46395,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("tokens", 201))  return x.pow(1.21).ceil()
                         if (hasUpgrade("nu", 44))       return x.pow(1.22).ceil()
                         if (hasUpgrade("sp", 93))       return x.pow(1.23).ceil()
                         if (hasMilestone("sp", 12))     return x.pow(1.24).ceil()
@@ -46447,6 +46452,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("tokens", 201))  return "ceil(x<sup>1.21</sup>)"
                         if (hasUpgrade("nu", 44))       return "ceil(x<sup>1.22</sup>)"
                         if (hasUpgrade("sp", 93))       return "ceil(x<sup>1.23</sup>)"
                         if (hasMilestone("sp", 12))     return "ceil(x<sup>1.24</sup>)"
@@ -46497,6 +46503,7 @@ addLayer("tokens", {
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
                         
+                        if (hasUpgrade("tokens", 201))  return 33
                         if (hasUpgrade("nu", 44))       return 32
                         if (hasUpgrade("sp", 93))       return 31
                         if (hasMilestone("sp", 12))     return 30
@@ -47674,6 +47681,7 @@ addLayer("tokens", {
                                 
                                 let maxNewLevels = tmp.tokens.buyables.maxAffordTokenIIBuyables - data.buyables[101].round().toNumber()
                                 let ma = hasMilestone("sp", 3) ? 5 : 1
+                                if (hasUpgrade("tokens", 101))  ma *= 4
 
                                 maxNewLevels = Math.min(ma, maxNewLevels)
 
@@ -48175,8 +48183,9 @@ addLayer("tokens", {
                 },
                 maxTokenIIBulk(){
                         let ret = 1
-                        if (hasMilestone("ch", 28)) ret *= 5
-                        if (player.sp.unlocked) ret *= 5
+                        if (hasMilestone("ch", 28))     ret *= 5
+                        if (player.sp.unlocked)         ret *= 5
+                        if (hasUpgrade("tokens", 101))  ret *= 4
                         return ret
                 },
                 191: {
@@ -48209,10 +48218,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("sci", 571)) eformula = eformula.replace("25", "24")
                                 if (hasUpgrade("or", 153)) eformula = "x<sup>2</sup>"
                                 
-                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
-
-                                let start = lvl + cost
-                                return br + start + allEff
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
                 },
                 192: {
@@ -48298,10 +48304,7 @@ addLayer("tokens", {
                                 eformula = eformula.replace("EXP", format(costData[2], 1))
                                 eformula = eformula.replace("x/1)", "x)")
                                 
-                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
-
-                                let start = lvl + cost
-                                return br + start + allEff
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
                 },
                 193: {
@@ -48375,9 +48378,41 @@ addLayer("tokens", {
                                 let eformula = "10^10^(" + formatWhole(data[0]) + "+x/" + formatWhole(data[1]) + ")"
                                 eformula = eformula.replace("444", "444.4")
                                 
-                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                        },
+                },
+
+                201: {
+                        title: "Mastery I",
+                        cost(){
+                                let add = 20
+                                return player.tokens.buyables[201].plus(add).pow(2).times(1500)
+                        },
+                        canAfford:() => player.tokens.tokens2.total.gte(tmp.tokens.buyables[201].cost),
+                        maxAfford(){
+                                let add = 20
+                                return player.tokens.tokens2.total.div(1500).root(2).sub(add).ceil()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[201].maxAfford
+                                ma = ma.sub(player.tokens.buyables[201]).max(0).min(1)
+                                let data = player.tokens
+                                data.buyables[201] = data.buyables[201].plus(ma)
+                                data.mastery_tokens.points = data.mastery_tokens.points.plus(ma)
+                                data.mastery_tokens.total = data.mastery_tokens.total.plus(ma)
+                        },
+                        display(){
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[201]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 201)) + " Tokens II</b><br>"
+                                let eformula = "1500*(20+x)<sup>2</sup>"
                                 
+                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+
                                 return br + lvl + cost + allEff
+                        },
+                        unlocked(){
+                                return hasUpgrade("tokens", 105)
                         },
                 },
         },
@@ -49587,7 +49622,7 @@ addLayer("tokens", {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> I</h3>" + br
                                 let cost = br2 + "Requires: 416800 Token II"
-                                return title + "Up Quark divider is 7" + cost
+                                return title + "Up Quark divider is 7 and you can bulk 4x Token II buyables" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(416800)
@@ -49654,6 +49689,53 @@ addLayer("tokens", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("tokens", 105)
+                },
+
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IV"
+                        },
+                        description(){
+                                if (!player.shiftAlias) return "ln(Oxygen) multiplies Oxygen gain"
+                                a = "ln(Oxygen)"
+                                if (hasUpgrade("o", 15))        a = "(ln(Oxygen))^2"
+                                if (hasMilestone("tokens", 13)) a = a.replace("^2", "^4")
+                                if (hasUpgrade("h", 81))        a = a.replace("^4", "^8")
+                                if (hasUpgrade("o", 14)) return a
+                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[14].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        },
+                        cost:() => new Decimal(1500),
+                        effect(){
+                                let ret = player.o.points.max(1).ln().max(1)
+
+                                if (hasUpgrade("o", 15))        ret = ret.pow(2)
+                                if (hasMilestone("tokens", 13)) ret = ret.pow(2)
+                                if (hasUpgrade("h", 81))        ret = ret.pow(2)
+
+                                return ret
+                        },
+                        effectDisplay(){
+                                return format(tmp.o.upgrades[14].effect)
+                        },
+                        unlocked(){
+                                return hasMilestone("n", 6) || hasUpgrade("o", 13)
+                        }, // hasUpgrade("o", 14)
+                },
+
+                201: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>M 11"
+                        },
+                        description(){
+                                return "Token II buyables' cost exponent is 1.21"
+                        },
+                        cost:() => new Decimal(1),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("tokens", 201)
                 },
         },
         microtabs: {
@@ -50527,6 +50609,18 @@ addLayer("tokens", {
                                 },
                         },
                 },
+                mastery_displays: {
+                        "Main": {
+                                content: [
+                                        ["buyables", [20, 21]],
+                                ]
+                        },
+                        "Upgrade Tree": {
+                                content: [
+                                        ["upgrades", [20, 21, 22, 23, 24]],
+                                ],
+                        },
+                },
         },
         tabFormat: {
                 "Milestones": {
@@ -50583,7 +50677,17 @@ addLayer("tokens", {
                                 if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
                                 return false
                         },
-                },//hasChallenge("sp", 31)
+                },
+                "Mastery": {
+                        content: [
+                                ["secondary-display-tokens2", "tokens2"],
+                                ["secondary-display", "mastery_tokens"],
+                                ["microtabs", "mastery_displays"],
+                        ],
+                        unlocked(){
+                                return hasUpgrade("tokens", 105)
+                        },
+                },
                 "Flat": {
                         content: [
                                 "main-display",
