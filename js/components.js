@@ -710,7 +710,7 @@ function loadVue() {
 			<span v-for="id in row" style = "{width: 0px; height: 0px;}" v-if="tmp[layer][type+'s'][id]!== undefined && tmp[layer][type+'s'][id].unlocked" class="upgAlign">
 				<div v-bind:is="type" :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles[type]" class = "treeThing"></div>
 			</span>
-			<tr><table><button class="treeNode hidden"></button></table></tr>
+			<br><br>
 		</span></div>
 	`
 	})

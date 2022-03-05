@@ -35585,7 +35585,7 @@ addLayer("nu", {
                         },
                         unlocked(){
                                 if (hasUpgrade("nu", 31)) return true
-                                return player.tokens.tokens2.total.gte(78900)
+                                return player.tokens.tokens2.total.gte(78800)
                         }, // hasUpgrade("nu", 31)
                 },
                 32: {
@@ -36359,6 +36359,7 @@ addLayer("sp", {
                 if (hasUpgrade("sp", 63))       ret = ret.plus(tmp.sp.upgrades[63].effect)
                 if (hasUpgrade("nu", 41))       ret = ret.plus(player.nu.points.sub(150).max(0))
                 if (hasUpgrade("tokens", 104))  ret = ret.plus(player.tokens.upgrades.length)
+                if (hasUpgrade("tokens", 113))  ret = ret.plus(player.tokens.mastery_tokens.total.min(100))
 
                 return ret
         },
@@ -46206,13 +46207,19 @@ addLayer("tokens", {
                 if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) {
                         if (player.tokens.tokens2.total.eq(0)) return true
                 }
+                if (hasUpgrade("cells", 42)) {
+                        let data = tmp.tokens.buyables
+                        if (data[191].canAfford && !hasMilestone("or", 6)) return true
+                        if (data[192].canAfford && !hasMilestone("or", 7)) return true
+                        if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
+                }
+                
                 let x = ["11", "12", "13", "21", "22", 
                          "23", "31", "32", "33", "41", 
                          "42", "43", "51", "52", "53", 
                          "61", "62", "63"]
                 for (i in x){
-                        id = x[i]
-                        if (!tmp.tokens.buyables[id].canAfford) return false
+                        if (!tmp.tokens.buyables[x[i]].canAfford) return false
                 }
                 if (hasUpgrade("cells", 42)) return false // dealt with by II being notified
                 if (player.tokens.autobuyradio && hasMilestone("n", 7)) return false // radio is being autobought
@@ -47751,6 +47758,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("tokens", 113))  return c.plus(1).sqrt().div(6)
                                 if (hasUpgrade("tokens", 101))  return c.plus(1).sqrt().div(7)
                                 if (hasUpgrade("nu", 43))       return c.plus(1).sqrt().div(8)
                                 if (hasMilestone("sp", 19))     return c.plus(1).sqrt().div(10)
@@ -47790,6 +47798,7 @@ addLayer("tokens", {
                                 if (hasMilestone("sp", 19))     div = "10"
                                 if (hasUpgrade("nu", 43))       div = "8"
                                 if (hasUpgrade("tokens", 101))  div = "7"
+                                if (hasUpgrade("tokens", 113))  div = "6"
                                 eformula = eformula.replace("DIV", div)
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -48497,6 +48506,37 @@ addLayer("tokens", {
                         },
                         unlocked(){
                                 return hasUpgrade("tokens", 211)
+                        },
+                },
+                203: {
+                        title: "Mastery III",
+                        cost(){
+                                let add = 15
+                                return player.tokens.buyables[203].plus(add).pow(2).plus(false ? 0 : 1).sub(.00001).ceil()
+                        },
+                        canAfford:() => player.nu.points.gte(tmp.tokens.buyables[203].cost),
+                        maxAfford(){
+                                let add = 15
+                                return player.nu.points.plus(.00001).sub(false ? 0 : 1).sqrt().sub(add).ceil()
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[203].maxAfford
+                                ma = ma.sub(player.tokens.buyables[203]).max(0).min(1)
+                                let data = player.tokens
+                                data.buyables[203] = data.buyables[203].plus(ma)
+                                data.mastery_tokens.points = data.mastery_tokens.points.plus(ma)
+                                data.mastery_tokens.total = data.mastery_tokens.total.plus(ma)
+                        },
+                        display(){
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[203]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 203)) + " Nucleuses</b><br>"
+                                let eformula = "1+(x+15)<sup>2</sup>"
+                                
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                        },
+                        unlocked(){
+                                return hasUpgrade("tokens", 113)
                         },
                 },
         },
@@ -49818,6 +49858,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 111)
                         }, // hasUpgrade("tokens", 112)
+                },
+                113: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> VIII</h3>" + br
+                                let cost = br2 + "Requires: 688,500 Token II"
+                                return title + "<bdi style='font-size: 80%'>Unlock a new way to get Mastery Tokens, each Mastery Token adds 1 to the Species gain exponent (max 100), and the Up Quark divider is 6</bdi>" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(688500)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 112)
+                        }, // hasUpgrade("tokens", 113)
                 },
 
                 201: {
