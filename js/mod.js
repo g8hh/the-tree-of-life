@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.278",
+	num: "1.279",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,18 +25,24 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.tokens.tokens2.total.gte(6e5)
+	return player.tokens.tokens2.total.gte(682300)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.278)<br><br>
+		Reaching the endgame screen (updated at least as of v1.279)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.279</h3><br>
+		- Balanced until 682,300 Token II.<br>
+		- Added more challenge completions.<br>
+		- Fixed various issues with Token<sup>2</sup> upgrades unlocking too early.<br>
+		- Lots of code cleanup (almost 600 lines from layers.js).<br>
+		- Added a new file, formulaDisplaySupport.js .<br>
 	<br><h3 style='color: #CC0000'>v1.278</h3><br>
 		- Balanced until 600,000 Token II.<br>
 		- Added one more challenge completion.<br>

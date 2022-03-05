@@ -23075,15 +23075,17 @@ addLayer("cells", {
                         },
                         costBase(){
                                 let ret = 1e40
-                                if (hasUpgrade("t", 152)) ret = 1e60
-                                if (hasUpgrade("t", 153)) ret = 1e50
-                                if (hasUpgrade("t", 154)) ret = 1e40
+                                if (hasUpgrade("t", 152))       ret = 1e60
+                                if (hasUpgrade("t", 153))       ret = 1e50
+                                if (hasUpgrade("t", 154))       ret = 1e40
                                 if (player.an.achActive[14] && hasAchievement("an", 14)) ret = 1e39
-                                if (hasAchievement("an", 24)) ret = 1e38
+                                if (hasAchievement("an", 24))   ret = 1e38
 
                                 ret = new Decimal(ret)
 
-                                if (hasChallenge("sp", 21)) ret = ret.div(tmp.sp.challenges[21].reward)
+                                if (hasChallenge("sp", 21))     ret = ret.div(tmp.sp.challenges[21].reward)
+                                if (hasUpgrade("tokens", 111))  ret = ret.div(20)
+                                
                                 return ret
                         },
                         unlocked(){
@@ -23663,6 +23665,7 @@ addLayer("cells", {
                                 ["buyables", [11]],
                         ],
                         unlocked(){
+                                if (hasUpgrade("tokens", 111)) return false
                                 return player.cells.currentMinigame == 11 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
@@ -23677,6 +23680,7 @@ addLayer("cells", {
                                 ["clickables", [21]],
                         ],
                         unlocked(){
+                                if (hasUpgrade("tokens", 111)) return false
                                 return player.cells.currentMinigame == 12 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
@@ -23691,6 +23695,7 @@ addLayer("cells", {
                                 ["upgrades", [31, 32]],
                         ],
                         unlocked(){
+                                if (hasUpgrade("tokens", 111)) return false
                                 return player.cells.currentMinigame == 13 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
@@ -23708,6 +23713,7 @@ addLayer("cells", {
                                 ["buyables", [41, 42]],
                         ],
                         unlocked(){
+                                if (hasUpgrade("tokens", 111)) return false
                                 return player.cells.currentMinigame == 14 && !(hasMilestone("cells", 21) || hasMilestone("or", 4))
                         },
                 },
@@ -34290,10 +34296,11 @@ addLayer("ch", {
         effectPoints(){
                 let pts = player.ch.points.plus(tmp.nu.effectPrimary)
 
-                if (hasUpgrade("nu", 11)) pts = pts.plus(player.nu.upgrades.length * (1 + hasUpgrade("nu", 43)))
+                if (hasUpgrade("nu", 11))       pts = pts.plus(player.nu.upgrades.length * (1 + hasUpgrade("nu", 43)))
                 if ((player.an.achActive[31] || hasMilestone("nu", 15)) && hasAchievement("ach", 31)) {
-                        pts = pts.plus(tmp.an.clickables.rowThreeOff)
+                                                pts = pts.plus(tmp.an.clickables.rowThreeOff)
                 }
+                if (hasUpgrade("tokens", 212))  pts = pts.plus(player.tokens.mastery_tokens.total.min(20).times(player.tokens.upgrades.length))
 
                 return pts
         },
@@ -37567,7 +37574,7 @@ addLayer("sp", {
                         reward(){
                                 return new Decimal(player.sp.challenges[32]).times(.4).plus(1).pow(player.sp.challenges[32] + 3).root(4)
                         },
-                        goal: () => Decimal.pow(10, [136584, 145555, 9172950, 9201412, 9256811, 91e6][player.sp.challenges[32]]),
+                        goal: () => Decimal.pow(10, [136584, 145555, 166300, 170220, 9256811, 91e6][player.sp.challenges[32]]),
                         canComplete(){ 
                                 return player.an.genes.points.gte(tmp.sp.challenges[32].goal)
                         },
@@ -38302,7 +38309,7 @@ addLayer("mc", {
                                 "clickables",
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("tokens", 111)
                         },
                 },
                 "Lambda": {
@@ -38323,7 +38330,7 @@ addLayer("mc", {
                                 "clickables",
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("tokens", 111)
                         },
                 },
                 "Kappa": {
@@ -38344,7 +38351,7 @@ addLayer("mc", {
                                 "clickables",
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("tokens", 111)
                         },
                 },
                 "Iota": {
@@ -38369,7 +38376,28 @@ addLayer("mc", {
                                 "clickables",
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("tokens", 111)
+                        },
+                },
+                "Stem": {
+                        content: [
+                                ["layer-proxy", 
+                                        ["cells", 
+                                        [
+                                                "main-display",
+                                                ["secondary-display", "stem_cells"],
+                                                ["display-text", function(){
+                                                        return "Currently you are gaining " + format(tmp.cells.stem_cells.getResetGain) + " Stem Cells/s"
+                                                }],
+                                                ["microtabs", "stem_content"],
+                                        ]
+                                        ]
+                                ],
+                                "blank",
+                                "clickables",
+                        ],
+                        unlocked(){
+                                return hasUpgrade("tokens", 111)
                         },
                 },
                 "Micro": {
@@ -48391,7 +48419,7 @@ addLayer("tokens", {
                         canAfford:() => player.tokens.tokens2.total.gte(tmp.tokens.buyables[201].cost),
                         maxAfford(){
                                 let add = 20
-                                return player.tokens.tokens2.total.div(1500).root(2).sub(add).ceil()
+                                return player.tokens.tokens2.total.div(1500).root(2).sub(add).ceil().max(0)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -48406,13 +48434,42 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[201]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 201)) + " Tokens II</b><br>"
                                 let eformula = "1500*(20+x)<sup>2</sup>"
-                                
-                                let allEff = "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
 
-                                return br + lvl + cost + allEff
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
                         unlocked(){
                                 return hasUpgrade("tokens", 105)
+                        },
+                },
+                202: {
+                        title: "Mastery II",
+                        cost(){
+                                let add = 11
+                                return player.tokens.buyables[202].plus(add).pow10().pow(39)
+                        },
+                        canAfford:() => player.sp.points.gte(tmp.tokens.buyables[202].cost),
+                        maxAfford(){
+                                let add = 11
+                                return player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[202].maxAfford
+                                ma = ma.sub(player.tokens.buyables[202]).max(0).min(1)
+                                let data = player.tokens
+                                data.buyables[202] = data.buyables[202].plus(ma)
+                                data.mastery_tokens.points = data.mastery_tokens.points.plus(ma)
+                                data.mastery_tokens.total = data.mastery_tokens.total.plus(ma)
+                        },
+                        display(){
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[202]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 202)) + " Species</b><br>"
+                                let eformula = "10<sup>39(x+11)</sup>"
+                                
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                        },
+                        unlocked(){
+                                return hasUpgrade("tokens", 211)
                         },
                 },
         },
@@ -48443,6 +48500,23 @@ addLayer("tokens", {
                                 for (i in ids){
                                         data.buyables[ids[i]] = base
                                 }
+                        },
+                },
+                21: {
+                        title: "Sell Mastery upgrades", 
+                        display(){
+                                return "Doing so forces a Species reset"
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        canClick(){
+                                return true
+                        },
+                        onClick(){
+                                player.tokens.upgrades = player.tokens.upgrades.filter(x => x < 200)
+                                doReset("sp", true) // forced reset
+                                player.tokens.mastery_tokens.points = player.tokens.mastery_tokens.total
                         },
                 },
         },
@@ -49637,7 +49711,7 @@ addLayer("tokens", {
                 102: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> II</h3>" + br
-                                let cost = br2 + "Requires: 421950 Token II"
+                                let cost = br2 + "Requires: 421,950 Token II"
                                 return title + "Base Animal gain is 10<sup>log10(Organs)<sup>.11</sup></sup> and per upgrade Species multiplies Gene gain" + cost
                         },
                         canAfford(){
@@ -49645,13 +49719,13 @@ addLayer("tokens", {
                         },
                         pay(){}, // doesnt cost anything
                         unlocked(){
-                                return true
+                                return hasUpgrade("tokens", 101)
                         }, // hasUpgrade("tokens", 102)
                 },
                 103: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> III</h3>" + br
-                                let cost = br2 + "Requires: 427500 Token II"
+                                let cost = br2 + "Requires: 427,500 Token II"
                                 return title + "Token II via Stem Cell's divider is 2 + [this row upgrades]" + cost
                         },
                         canAfford(){
@@ -49659,13 +49733,13 @@ addLayer("tokens", {
                         },
                         pay(){}, // doesnt cost anything
                         unlocked(){
-                                return true
+                                return hasUpgrade("tokens", 102)
                         }, // hasUpgrade("tokens", 103)
                 },
                 104: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> IV</h3>" + br
-                                let cost = br2 + "Requires: 484000 Token II"
+                                let cost = br2 + "Requires: 484,000 Token II"
                                 return title + "Per upgrade add 1 to the Species gain exponent and Totipotent cost base is 1e20" + cost
                         },
                         canAfford(){
@@ -49673,58 +49747,41 @@ addLayer("tokens", {
                         },
                         pay(){}, // doesnt cost anything
                         unlocked(){
-                                return true
+                                return hasUpgrade("tokens", 103)
                         }, // hasUpgrade("tokens", 104)
                 },
                 105: {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> V</h3>" + br
-                                let cost = br2 + "Requires: 541200 Token II"
-                                return title + "Unlock Mastery Tokens [not yet] and Chromosome Milestone 19 is capped at 300" + cost
+                                let cost = br2 + "Requires: 541,200 Token II"
+                                return title + "Unlock Mastery Tokens and Chromosome Milestone 19 is capped at 300" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(541200)
                         },
                         pay(){}, // doesnt cost anything
                         unlocked(){
-                                return true
+                                return hasUpgrade("tokens", 104)
                         }, // hasUpgrade("tokens", 105)
                 },
-
-                14: {
-                        title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Oxygen IV"
+                111: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> VI</h3>" + br
+                                let cost = br2 + "Requires: 659,000 Token II"
+                                return title + "Remove Cell minigames and divide Multipotent cost base by 20" + cost
                         },
-                        description(){
-                                if (!player.shiftAlias) return "ln(Oxygen) multiplies Oxygen gain"
-                                a = "ln(Oxygen)"
-                                if (hasUpgrade("o", 15))        a = "(ln(Oxygen))^2"
-                                if (hasMilestone("tokens", 13)) a = a.replace("^2", "^4")
-                                if (hasUpgrade("h", 81))        a = a.replace("^4", "^8")
-                                if (hasUpgrade("o", 14)) return a
-                                return a + br + "Estimated time: " + logisticTimeUntil(tmp.o.upgrades[14].cost, player.o.points, tmp.o.getResetGain, tmp.o.getLossRate)
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(659000)
                         },
-                        cost:() => new Decimal(1500),
-                        effect(){
-                                let ret = player.o.points.max(1).ln().max(1)
-
-                                if (hasUpgrade("o", 15))        ret = ret.pow(2)
-                                if (hasMilestone("tokens", 13)) ret = ret.pow(2)
-                                if (hasUpgrade("h", 81))        ret = ret.pow(2)
-
-                                return ret
-                        },
-                        effectDisplay(){
-                                return format(tmp.o.upgrades[14].effect)
-                        },
+                        pay(){}, // doesnt cost anything
                         unlocked(){
-                                return hasMilestone("n", 6) || hasUpgrade("o", 13)
-                        }, // hasUpgrade("o", 14)
+                                return hasUpgrade("tokens", 105)
+                        }, // hasUpgrade("tokens", 111)
                 },
 
                 201: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>M 11"
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 11"
                         },
                         description(){
                                 return "Token II buyables' cost exponent is 1.21"
@@ -49736,6 +49793,48 @@ addLayer("tokens", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("tokens", 201)
+                },
+                211: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 21"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 201)) return "Purchase M 11 to unlock me!"
+                                if (!tmp.tokens.upgrades[211].canAfford) return makeRed("<b>LOCKED</b>") + br + "M 22"
+                                return "Unlock a new way to get Mastery Tokens"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 201)) return false
+                                return !hasUpgrade("tokens", 212)
+                        },
+                        cost:() => new Decimal(1),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(1)
+                        }, // hasUpgrade("tokens", 211)
+                },
+                212: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 22"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 201)) return "Purchase M 11 to unlock me!"
+                                if (!tmp.tokens.upgrades[212].canAfford) return makeRed("<b>LOCKED</b>") + br + "M 21"
+                                return "Per upgrade per total Mastery Token (max 20) you have one more Chromosome for effect purposes"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 201)) return false
+                                return !hasUpgrade("tokens", 211)
+                        },
+                        cost:() => new Decimal(1),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(1)
+                        }, // hasUpgrade("tokens", 212)
                 },
         },
         microtabs: {
@@ -49749,81 +49848,43 @@ addLayer("tokens", {
                                 ]
                         },
                         "Points": {
-                                content: [
-                                        ["display-text", pointFormulaDisplay]
-                                ],
-                                unlocked(){
-                                        return true
-                                },
+                                content: [["display-text", pointFormulaDisplay]],
                         },
                         "DNA": {
-                                content: [
-                                        ["display-text", dnaFormulaDisplay],
-                                ],
-                                unlocked(){
-                                        return true
-                                },
+                                content: [["display-text", dnaFormulaDisplay]],
                         },
                         "Cells": {
-                                content: [
-                                        ["display-text", cellFormulaDisplay],
-                                ],
-                                unlocked(){
-                                        return true
-                                },
+                                content: [["display-text", cellFormulaDisplay]]
                         },
                         "Stem Cells": {
-                                content: [
-                                        ["display-text", stemCellFormulaDisplay],
-                                ],
-                                unlocked(){
-                                        return true
-                                },
+                                content: [["display-text", stemCellFormulaDisplay]],
                         },
                         "Tissues": {
-                                content: [
-                                        ["display-text", tissueFormulaDisplay],
-                                ],
-                                unlocked(){
-                                        return true
-                                },
+                                content: [["display-text", tissueFormulaDisplay]],
                         },
                         "Organs": {
-                                content: [
-                                        ["display-text", organFormulaDisplay],
-                                ],
-                                unlocked(){
-                                        return player.or.unlocked
-                                },
+                                content: [["display-text", organFormulaDisplay]],
                         },
                         "Air": {
-                                content: [
-                                        ["display-text", airFormulaDisplay],
-                                ],
+                                content: [["display-text", airFormulaDisplay]],
                                 unlocked(){
                                         return player.or.air.points.gt(0) || player.an.unlocked
                                 },
                         },
                         "Energy": {
-                                content: [
-                                        ["display-text", energyFormulaDisplay],
-                                ],
+                                content: [["display-text", energyFormulaDisplay]],
                                 unlocked(){
                                         return player.or.energy.points.gt(0) || player.an.unlocked
                                 },
                         },
                         "Animals": {
-                                content: [
-                                        ["display-text", animalFormulaDisplay],
-                                ],
+                                content: [["display-text", animalFormulaDisplay]],
                                 unlocked(){
                                         return player.an.unlocked
                                 },
                         },
                         "Genes": {
-                                content: [
-                                        ["display-text", geneFormulaDisplay],
-                                ],
+                                content: [["display-text", geneFormulaDisplay]],
                                 unlocked(){
                                         return player.an.unlocked
                                 },
@@ -49854,7 +49915,8 @@ addLayer("tokens", {
                         },
                         "Upgrade Tree": {
                                 content: [
-                                        ["upgrades", [20, 21, 22, 23, 24]],
+                                        ["upgrade-tree", [[201], [211, "blank", 212]]],
+                                        ["clickables", [2]]
                                 ],
                         },
                 },
