@@ -689,12 +689,10 @@ function geneFormulaDisplay(){
         let c = ""
 
         if (player.easyMode)            c += "Easy Mode multiplies AX by 4" + br
-        if (hasMilestone("an", 16)) {
+        if (hasMilestone("an", 16) && !hasUpgrade("tokens", 114)) {
                 let sub = hasMilestone("an", 22) ? 0 : 1000
                                         c += "Animal Milestone 16 multiplies AX by " + format(Decimal.pow(1.01, player.tokens.tokens2.total.sub(sub).max(0))) + br
-        }
-        if (hasMilestone("an", 16) && player.sp.unlocked) {
-                                        c += "Animal Milestone 16 due to Species multiplies AX by " + format(Decimal.pow(10, player.sp.times).min(1e22)) + br
+                if (player.sp.unlocked) c += "Animal Milestone 16 due to Species multiplies AX by " + format(Decimal.pow(10, player.sp.times).min(1e22)) + br
         }
         if (!hasUpgrade("ch", 44)) {
                 if (hasMilestone("an", 17)) {
@@ -728,7 +726,7 @@ function geneFormulaDisplay(){
         if (hasUpgrade("ch", 14) && !hasMilestone("ch", 30)) {
                                         c += "Chromosomes IV multiplies AX by " + format(tmp.ch.upgrades[14].effect) + br
         }
-        if (hasUpgrade("ch", 15)) {
+        if (hasUpgrade("ch", 15) && !hasMilestone("sp", 26)) {
                 let base = hasUpgrade("an", 34) ? 1.04 : 1.01
                 let sub = hasUpgrade("an", 43) ? 0 : 2600
                 let exp = player.tokens.tokens2.total.sub(sub).max(0)
@@ -743,13 +741,15 @@ function geneFormulaDisplay(){
         if (hasUpgrade("an", 43) && !hasMilestone("ch", 29)) {
                                         c += "Animals XVIII divides AX by 1e42" + br
         }
-        if (hasUpgrade("an", 51))       c += "Animals XXI multiplies AX by 2" + br
-        if (hasUpgrade("an", 53)) {
-                let sub = hasMilestone("nu", 9) ? 0 : 7200
-                let per = 1.05
-                                        c += "Animals XXIII multiplies AX by " + format(Decimal.pow(per, player.tokens.tokens2.total.sub(sub).max(0))) + br
+        if (!hasMilestone("sp", 26)) {
+                if (hasUpgrade("an", 51))       c += "Animals XXI multiplies AX by 2" + br
+                if (hasUpgrade("an", 53)) {
+                        let sub = hasMilestone("nu", 9) ? 0 : 7200
+                        let per = 1.05
+                                                c += "Animals XXIII multiplies AX by " + format(Decimal.pow(per, player.tokens.tokens2.total.sub(sub).max(0))) + br
+                }
+                if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
         }
-        if (hasUpgrade("an", 54))       c += "Animals XXIV multiplies AX by " + format(player.nu.points.div(4).plus(1).pow(player.an.upgrades.length)) + br
         if (!player.an.achActive[11] && hasAchievement("an", 11)) {
                 if (!player.an.achActive[22]) {
                                         c += "PRO I multiplies AX by " + format(Decimal.pow(hasMilestone("an", 36) ? 25 : 5, player.an.achievements.length + 4)) + br
@@ -779,6 +779,7 @@ function geneFormulaDisplay(){
         
         if (c.includes(br))             c += br 
         if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
+        if (hasMilestone("sp", 26))     c += "Species Milestone 26 multiplies AX by " + format(Decimal.pow(1.1, player.tokens.tokens2.total)) + br
         if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
