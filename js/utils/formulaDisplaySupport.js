@@ -673,7 +673,8 @@ function animalFormulaDisplay(){
         if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                         c += "COM III multiplies AX by " + format(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff))) + br
         }
-        if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1)) + br
+        if (hasUpgrade("sp", 11))       c += "Effect I multiplies AX by " + format(tmp.sp.effect) + br
+        if (hasMilestone("sp", 7))      c += "Species Milestone 7 multiplies AX by " + format(tmp.sp.effect.pow(player.sp.milestones.length)) + br
         if (hasMilestone("sp", 10)) {
                 let sub = hasUpgrade("nu", 45) ? 0 : 85800
                 let base = decimalOne.plus(player.sp.milestones.length/500)

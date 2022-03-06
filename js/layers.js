@@ -37097,6 +37097,306 @@ addLayer("sp", {
                                 return hasUpgrade("nu", 32)
                         }, // hasUpgrade("sp", 105)
                 },
+                111: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect I"
+                        },
+                        description(){
+                                return "Effect I becomes per Nucleus"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 111)
+                },
+                112: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect II"
+                        },
+                        description(){
+                                return "Effect II becomes per Chromosome<sup>2</sup>"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 112)
+                },
+                113: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect III"
+                        },
+                        description(){
+                                return "Upgraded Effect III counts this tab at twice the rate"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 113)
+                },
+                114: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect IV"
+                        },
+                        description(){
+                                return "[Eukaryote I effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 114)
+                },
+                115: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect V"
+                        },
+                        description(){
+                                return "Effect V's exponent is .91"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 115)
+                },
+                121: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VI"
+                        },
+                        description(){
+                                return "Effect VI's exponent is .8"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 121)
+                },
+                122: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VII"
+                        },
+                        description(){
+                                return "Effect VII's divider is 4"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 122)
+                },
+                123: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VIII"
+                        },
+                        description(){
+                                return "Effect VII's divider is 3"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 123)
+                },
+                124: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect IX"
+                        },
+                        description(){
+                                return "Effect IX's exponent is .65"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 124)
+                },
+                125: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect X"
+                        },
+                        description(){
+                                return "Effect X's exponent is .65"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 125)
+                },
+                131: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XI"
+                        },
+                        description(){
+                                return "Effect XI's divider is 7"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 131)
+                },
+                132: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XII"
+                        },
+                        description(){
+                                return "Effect XII's divider is 1"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 132)
+                },
+                133: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XIII"
+                        },
+                        description(){
+                                return "Effect XIII's divider is 1"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 133)
+                },
+                134: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XIV"
+                        },
+                        description(){
+                                return "Upgraded Effect XIV becomes per upgrade<sup>1.1</sup>"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 134)
+                },
+                135: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XV"
+                        },
+                        description(){
+                                return "Bottom Quark's C exponent is sqrt(upgrades)"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 135)
+                },
+                141: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XVI"
+                        },
+                        description(){
+                                return "[Eukaryote II effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 141)
+                },
+                142: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XVII"
+                        },
+                        description(){
+                                return "[Eukaryote III effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 142)
+                },
+                143: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XVIII"
+                        },
+                        description(){
+                                return "[Eukaryote IV effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 143)
+                },
+                144: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XIX"
+                        },
+                        description(){
+                                return "[Bacteria I effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 144)
+                },
+                145: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XX"
+                        },
+                        description(){
+                                return "[Bacteria II effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 145)
+                },
+                151: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXI"
+                        },
+                        description(){
+                                return "[Prokaryota I effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 151)
+                },
+                152: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXII"
+                        },
+                        description(){
+                                return "[Prokaryota II effect]"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 152)
+                },
+                153: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXIII"
+                        },
+                        description(){
+                                return "Effect XXIII's 1.001 becomes 1.003"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 153)
+                },
+                154: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXIV"
+                        },
+                        description(){
+                                return "Effect XXIV's 1.01 becomes 1.02"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 154)
+                },
+                155: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXV"
+                        },
+                        description(){
+                                return "make base is (gonna levels)<sup>.56</sup>"
+                        },
+                        cost:() => new Decimal("1e9999"),
+                        unlocked(){
+                                return hasUpgrade("tokens", 115)
+                        }, // hasUpgrade("sp", 155)
+                },
         },
         milestones: {
                 1: {
@@ -37666,6 +37966,14 @@ addLayer("sp", {
                                 content: [
                                         ["upgrades", [6,7,8,9,10]],
                                 ],
+                        },
+                        "Boosted Effects": {
+                                content: [
+                                        ["upgrades", [11,12,13,14,15]],
+                                ],
+                                unlocked(){
+                                        return hasUpgrade("tokens", 115)
+                                },
                         },
                 },
         },
@@ -49922,7 +50230,7 @@ addLayer("tokens", {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> X</h3>" + br
                                 let cost = br2 + "Requires: 763,400 Token II"
-                                return title + "Token II via Cell's divider is 33,000" + cost
+                                return title + "Token II via Cell's divider is 33,000 and unlock Boosted Effects" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(763400)
