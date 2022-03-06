@@ -26687,7 +26687,7 @@ addLayer("or", {
                                                         ret = ret.times(tmp.or.buyables[221].effect)
                                                         ret = ret.times(tmp.or.buyables[222].effect)
                                                         ret = ret.times(tmp.or.buyables[223].effect)
-                                                        ret = ret.times(tmp.or.challenges[11].reward)
+                        if (!hasMilestone("sp", 25))    ret = ret.times(tmp.or.challenges[11].reward)
                         if (hasUpgrade("or", 142))      ret = ret.times(player.or.points.max(1))
                         if (hasUpgrade("or", 143) && !hasMilestone("sp", 18)) {
                                                         ret = ret.times(player.or.buyables[202].max(1).pow(player.or.upgrades.length))
@@ -35726,7 +35726,7 @@ addLayer("nu", {
         milestones: {
                 1: {
                         requirementDescription(){
-                                return "1 Nucleuse"
+                                return "1 Nucleus"
                         },
                         done(){
                                 return player.nu.best.gte(1)
@@ -35922,7 +35922,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Chromosome Milestone 19 counts every Nucleuse."
+                                return "Reward: Chromosome Milestone 19 counts every Nucleus."
                         },
                 }, // hasMilestone("nu", 13)
                 14: {
@@ -37449,7 +37449,7 @@ addLayer("sp", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: in<u>tes</u>TINE base is log10(Species) but disable Primary Bronchi, Trachea, and Bronchioles and Nucleus Milestone 2 does not affect Tissue or Gene gain."
+                                return "Reward: in<u>tes</u>TINE base is log10(Species) but disable Larynx, Primary Bronchi, Trachea, and Bronchioles and Nucleus Milestone 2 does not affect Tissue or Gene gain."
                         },
                 }, // hasMilestone("sp", 25)
         },
@@ -48916,8 +48916,8 @@ addLayer("tokens", {
                                 return hasMilestone("tokens", 13)
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Tokens multiply coin gain and keep Hydrogen Science content"
-                                return "Reward: Tokens multiply coin gain.<br>" 
+                                if (player.extremeMode) return "Reward: Total tokens multiply coin gain and keep Hydrogen Science content"
+                                return "Reward: Total tokens multiply coin gain.<br>" 
                         },
                 }, // hasMilestone("tokens", 14)
                 15: {
@@ -50003,6 +50003,9 @@ addLayer("tokens", {
                         },
                         "Organs": {
                                 content: [["display-text", organFormulaDisplay]],
+                        },
+                        "Contaminants": {
+                                content: [["display-text", contaminantFormulaDisplay]],
                         },
                         "Air": {
                                 content: [["display-text", airFormulaDisplay]],
