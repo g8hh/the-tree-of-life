@@ -352,6 +352,7 @@ function updateAchievements(layer) {
 	for (id in layers[layer].achievements) {
 		if (!isPlainObject(layers[layer].achievements[id])) continue
 		if (hasAchievement(layer, Number(id))) continue
+		if (!tmp[layer].achievements[id].unlocked) continue
 		if (layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(Number(id))
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()

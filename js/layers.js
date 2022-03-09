@@ -23202,8 +23202,7 @@ addLayer("cells", {
                                 return new Decimal(player.cells.challenges[21]).plus(1)
                         },
                         effect(){
-                                let amt = getBuyableAmount("cells", 22)
-                                return tmp.cells.buyables[22].base.pow(amt)
+                                return tmp.cells.buyables[22].base.pow(getBuyableAmount("cells", 22))
                         },
                         display(){
                                 if (!player.shiftAlias) {
@@ -46772,6 +46771,9 @@ addLayer("tokens", {
         },
         tooltip(){
                 let data = player.tokens
+                if (player.sp.total.gte(1e5)) {
+                        return formatWhole(data.tokens2.points) + " Token II"
+                }
                 if (player.ch.everUpgrade33) {
                         return formatWhole(data.tokens2.points) + "/" + formatWhole(tmp.tokens.buyables[101].cost) + " Token II"
                 }
