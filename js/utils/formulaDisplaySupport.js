@@ -771,7 +771,9 @@ function geneFormulaDisplay(){
                 if (player.an.achActive[21])    c += "PRO II multiplies AX by " + format(Decimal.pow(3.3, l.times(r1o))) + br
                 else                            c += "PRO II multiplies AX by " + format(Decimal.pow(100, l)) + br
         }
-        if (hasAchievement("an", 31))   c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
+        if (hasAchievement("an", 31) && !hasUpgrade("tokens", 123)) {
+                                        c += "Progression III multiplies AX by " + format(Decimal.pow(15, player.nu.milestones.length)) + br
+        }
         if (hasMilestone("nu", 1))      c += "Nucleus Milestone 1 multiplies AX by 2" + br
         if (hasMilestone("nu", 2) && !hasMilestone("sp", 25)) {
                                         c += "Nucleus Milestone 2 multiplies AX by " + format(Decimal.pow(hasMilestone("an", 43) ? 70 : 10, player.nu.points)) + br
@@ -782,6 +784,7 @@ function geneFormulaDisplay(){
         if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
         if (hasMilestone("sp", 26))     c += "Species Milestone 26 multiplies AX by " + format(Decimal.pow(1.1, player.tokens.tokens2.total)) + br
         if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
+        if (hasUpgrade("sp", 143))      c += "Boosted Species XVIII multiplies AX by " + format(player.an.grid[104].extras.plus(1).pow(player.tokens.mastery_tokens.total)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
@@ -806,7 +809,7 @@ function contaminantFormulaDisplay(){
         if (hasMilestone("an", 5))      c += "Animal Milestone 5 multiplies AX by " + format(player.or.contaminants.points.plus(10).log10().sqrt().pow10()) + br
         if (hasUpgrade("an", 21))       c += "Animals VI multiplies AX by " + format(player.an.grid[608].extras.plus(1).pow(tmp.an.grid.totalLevels)) + br
         if (hasMilestone("ch", 21))     c += "Chromosome Milestone 21 multiplies AX by " + format(player.an.grid[305].extras.plus(1).pow(player.ch.points.min(5000).pow(4))) + br
-        if (hasUpgrade("sp", 15))       c += "Effect V multiplies AX by " + format(tmp.sp.effect.pow(player.or.buyables[201].pow(hasUpgrade("sp", 65) ? .9 : .8))) + br
+        if (hasUpgrade("sp", 15))       c += "Effect V multiplies AX by " + format(tmp.sp.effect.pow(player.or.buyables[201].pow(hasUpgrade("sp", 115) ? .91 : hasUpgrade("sp", 65) ? .9 : .8))) + br
         if (hasUpgrade("sp", 44))       c += "Effect XIX multiplies AX by " + format(player.an.grid[206].extras.plus(1).pow(player.nu.points.pow(6))) + br
         if (c.includes(br))             c += br
                                         c += "I'm multiplies AX by " + format(tmp.or.buyables[201].effect) + br
