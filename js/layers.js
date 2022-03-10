@@ -5422,10 +5422,8 @@ addLayer("sci", {
                                 let cost2 = "1e6*100^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[12].expDiv) + "</sup>)" 
                                 if (hasMilestone("mini", 2)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -5487,10 +5485,8 @@ addLayer("sci", {
                                 let cost2 = "2e9*1,000^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[13].expDiv) + "</sup>)" 
                                 if (hasMilestone("mini", 1)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -5559,10 +5555,8 @@ addLayer("sci", {
                                 }
                                 if (hasUpgrade("sci", 21)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -5627,10 +5621,8 @@ addLayer("sci", {
                                 if (hasUpgrade("h", 45)) cost2 = cost2.replace("1e19", "2e61") 
                                 if (hasMilestone("mini", 12)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -5691,10 +5683,8 @@ addLayer("sci", {
                                 let cost2 = "2e291*1e10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[23].expDiv) + "</sup>)"
                                 if (hasUpgrade("h", 54)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 101: {
@@ -5758,10 +5748,8 @@ addLayer("sci", {
                                 let cost2 = "1e4*10^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[101].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 104)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 102: {
@@ -5821,10 +5809,8 @@ addLayer("sci", {
                                 let cost2 = "5e5*2^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[102].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 112)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 103: {
@@ -5884,10 +5870,8 @@ addLayer("sci", {
                                 let cost2 = "5e9*3^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[103].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 111)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 111: {
@@ -5950,10 +5934,8 @@ addLayer("sci", {
                                 let cost2 = "2e19*5e3^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[111].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 105)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 112: {
@@ -6012,10 +5994,8 @@ addLayer("sci", {
                                 let cost2 = "4e49*2e5^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[112].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 114)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 113: {
@@ -6074,10 +6054,8 @@ addLayer("sci", {
                                 let cost2 = "1e57*30^(x<sup>1+x/" + formatWhole(tmp.sci.buyables[113].expDiv) + "</sup>)"
                                 if (hasUpgrade("sci", 113)) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 301: {
@@ -11521,10 +11499,8 @@ addLayer("mu", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "floor(x<sup>1+x/" + formatWhole(tmp.mu.buyables[11].expDiv) + "</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -11586,10 +11562,8 @@ addLayer("mu", {
                                 if (player.extremeMode) cost2 = cost2.replace("159", "157")
                                 if (hasUpgrade("p", 105)) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -11650,10 +11624,8 @@ addLayer("mu", {
                                 if (player.extremeMode)         cost2 = cost2.replace("281*50", "293*1e4")
                                 if (hasMilestone("mu", 14))     cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -11709,10 +11681,8 @@ addLayer("mu", {
                                 if (player.extremeMode)         cost2 = cost2.replace("25", "27")
                                 if (hasMilestone("mu", 15))     cost2 = cost2.slice(3,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -11772,10 +11742,8 @@ addLayer("mu", {
                                 if (player.extremeMode)         cost2 = cost2.replace("597", "599")
                                 if (hasUpgrade("mu", 34))       cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -11829,10 +11797,8 @@ addLayer("mu", {
                                 if (player.extremeMode)         cost2 = cost2.replace("814*5e90", "819*1e126")
                                 if (hasUpgrade("mu", 34))       cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 31: {
@@ -11927,10 +11893,8 @@ addLayer("mu", {
                                 if (player.extremeMode)         cost2 = cost2.replace("65", "69")
                                 if (hasUpgrade("d", 31))        cost2 = cost2.replace("x", "100,000")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 32: {
@@ -12016,9 +11980,8 @@ addLayer("mu", {
                                 let cost2 = format(tmp.mu.buyables[32].initialCost, 2, true) + "*"
                                 cost2 += formatWhole(tmp.mu.buyables[32].costBase) + "<sup>x<sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost + br
+                                let end = allEff + cost1 + cost2 + cost3 + br
                                 if (!hasMilestone("l", 14)) end += "Note: Can only buy while in Dilation<br>"
                                 return br + end + "Effect is hardcapped at .5"
                         },
@@ -12088,12 +12051,11 @@ addLayer("mu", {
                                 let cost2 = "1e4*3^(x<sup>1.2</sup>)" 
                                 if (hasUpgrade("l", 21)) cost2 = cost2.slice(4,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
+                                let end = allEff + cost1 + cost2 + cost3
+                                if (hasMilestone("d", 17)) return br + end
                                 let ending = "<br>Note: if you are in Dilation then the effect is capped at 1e12"
                                 if (hasMilestone("l", 23)) ending += "<br>x → (log10(x)-2)<sup>12</sup>"
-                                if (hasMilestone("d", 17)) return br + end
                                 return br + end + ending
                         },
                 },
@@ -13633,10 +13595,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5<", format(tmp.l.buyables.getBuyableExponent, 1) + "<")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -13747,10 +13707,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30)) cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -13848,10 +13806,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -13961,10 +13917,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -14053,10 +14007,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -14151,10 +14103,8 @@ addLayer("l", {
                                 }
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 31: {
@@ -14252,10 +14202,8 @@ addLayer("l", {
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("158", "2")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 32: {
@@ -14348,10 +14296,8 @@ addLayer("l", {
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("1600", "2")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 33: {
@@ -14462,10 +14408,8 @@ addLayer("l", {
                                 if (hasMilestone("cells", 30))  cost2 = cost2.replace("2.5", format(tmp.l.buyables.getBuyableExponent, 1))
                                 if (hasMilestone("cells", 34))  cost2 = cost2.replace("2468", "2")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
         },
@@ -17673,10 +17617,8 @@ addLayer("a", {
                                 let cost2 = format(tmp.a.buyables[11].baseCost, 2, true) + "*5^x"
                                 if (hasMilestone("a", 31)) cost2 = "5^x"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -17751,10 +17693,8 @@ addLayer("a", {
                                 let cost2 = format(tmp.a.buyables[12].baseCost, 2, true) + "*10^x"
                                 if (hasMilestone("a", 31)) cost2 = "10^x"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -17850,10 +17790,8 @@ addLayer("a", {
                                 if (hasUpgrade("sci", 442)) cost2 = cost2.replace("1.8<", "1.7<")
                                 if (hasUpgrade("sci", 444)) cost2 = cost2.replace("1.7<", "1.6<")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -17930,10 +17868,8 @@ addLayer("a", {
                                 let cost2 = "1e7350*1e200^x<sup>1.2</sup>"
                                 if (hasUpgrade("sci", 422)) cost2 = cost2.slice(7,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -18005,10 +17941,8 @@ addLayer("a", {
                                 if (player.extremeMode)         cost2 = cost2.replace("35", "34")
                                 if (hasUpgrade("sci", 425))     cost2 = cost2.slice(9,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -18081,10 +18015,8 @@ addLayer("a", {
                                 }
                                 if (hasUpgrade("sci", 445)) cost2 = cost2.slice(10,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 31: {
@@ -18156,10 +18088,8 @@ addLayer("a", {
                                 if (player.extremeMode) cost2 = cost2.replace("702,000", "1,156,500")
                                 if (hasMilestone("d", 12)) cost2 = cost2.slice(12,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 32: {
@@ -18219,10 +18149,8 @@ addLayer("a", {
                                 if (player.extremeMode) cost2 = cost2.replace("012", "826")
                                 if (hasMilestone("d", 11)) cost2 = cost2.slice(12, )
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 33: {
@@ -18302,10 +18230,8 @@ addLayer("a", {
                                 if (layers.l.grid.getGemEffect(207) && player.extremeMode) expPortion = "1.7<"
                                 cost2 = cost2.replace("2<", expPortion)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
         },
@@ -18411,9 +18337,8 @@ addLayer("a", {
                                         let oomNeeded = cost.div(player.a.protein.points).log10()
                                         let flat = oomps.pow(-1).div(Math.log(10)).times(boostExp)
                                         let scaling = oomNeeded.div(boostExp).pow10().sub(1).max(0)
-                                        let end = formatTime(flat.times(scaling)) 
                                         
-                                        return start + mid + end
+                                        return start + mid + formatTime(flat.times(scaling))
                                 }],
                                 "blank",
                                 ["buyables", [1,2,3]],
@@ -22796,10 +22721,8 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
                                 cost2 = cost2.replace("10^", formatWhole(base) + "^")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -22918,11 +22841,8 @@ addLayer("cells", {
                                 if (hasUpgrade("nu", 15))       cost2 = cost2.replace("23", "21")
                                 if (hasUpgrade("tokens", 104))  cost2 = cost2.replace("21", "20")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                if (!player.extremeMode) return br + end
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -23052,10 +22972,8 @@ addLayer("cells", {
                                 if (hasMilestone("sp", 4))      cost2 = cost2.replace("1.09", "1.08")
                                 if (hasMilestone("sp", 18))     cost2 = cost2.replace("1.08", "1.07")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -23135,10 +23053,8 @@ addLayer("cells", {
                                 let base = format(tmp.cells.buyables[21].costBase, 0)
                                 cost2 = cost2.replace("BASE", base)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -23227,10 +23143,8 @@ addLayer("cells", {
                                 if (hasMilestone("nu", 11)) base = "55"
                                 cost2 = cost2.replace("BASE", base)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 111: {
@@ -23294,10 +23208,8 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*1.1^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 112: {
@@ -23366,10 +23278,8 @@ addLayer("cells", {
                                 let cost2 = "1e15*1e3^(x<sup>1.1</sup>)"
                                 if (hasUpgrade("sci", 541)) cost2 = "1e15*1e3^(x<sup>1.09</sup>)"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 411: {
@@ -23433,10 +23343,8 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*2^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 412: {
@@ -23499,10 +23407,8 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "3*2^(x<sup>1.2</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 413: {
@@ -23565,10 +23471,8 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5*4^(x<sup>1.1</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 421: {
@@ -28929,10 +28833,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "100*x<sup>x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 202: {
@@ -28994,10 +28896,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "50,000*x<sup>2x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 203: {
@@ -29074,10 +28974,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e45*x<sup>4x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 211: {
@@ -29143,10 +29041,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e442*x<sup>8x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 212: {
@@ -29208,10 +29104,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e3,486*x<sup>16x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 213: {
@@ -29273,10 +29167,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e17,147*x<sup>32x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 221: {
@@ -29338,10 +29230,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e64,100*x<sup>64x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 222: {
@@ -29403,10 +29293,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e148,127*x<sup>128x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 223: {
@@ -29466,10 +29354,8 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e259,805*x<sup>256x</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 getIntestineMaxBulk(){
@@ -29594,13 +29480,10 @@ addLayer("or", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10*5<sup>x</sup>*1.01<sup>x<sup>2</sup></sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 402: {
@@ -29718,13 +29601,10 @@ addLayer("or", {
                                 let cost2 = "2e6*1000<sup>x</sup>*1.1<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("sp", 10)) cost2 = "1.04<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 403: {
@@ -29823,13 +29703,10 @@ addLayer("or", {
                                 if (hasMilestone("an", 43)) cost2 = cost2.replace("5", "3")
                                 if (hasUpgrade("tokens", 114)) cost2 = cost2.replace("3", "1.09")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
-
+                                
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 411: {
@@ -29948,13 +29825,10 @@ addLayer("or", {
                                 if (hasMilestone("an", 39)) cost2 = "1.5<sup>x<sup>2</sup></sup>"
                                 if (hasUpgrade("tokens", 122)) cost2 = cost2.replace("1.5", "1.16")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 412: {
@@ -30075,13 +29949,10 @@ addLayer("or", {
                                 if (hasMilestone("ch", 33)) cost2 = "1.71<sup>x<sup>2</sup></sup>"
                                 if (hasMilestone("an", 42)) cost2 = cost2.replace("1.71", "1.25")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 413: {
@@ -30202,13 +30073,10 @@ addLayer("or", {
                                 let cost2 = "1e300*1e17<sup>x</sup>*3<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("an", 43)) cost2 = "1.75<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 421: {
@@ -30327,13 +30195,10 @@ addLayer("or", {
                                 let cost2 = "1e672*1e19<sup>x</sup>*20<sup>x<sup>2</sup></sup>" 
                                 if (hasMilestone("ch", 29)) cost2 = "2<sup>x<sup>2</sup></sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 422: {
@@ -30432,13 +30297,10 @@ addLayer("or", {
                                 if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
                                 if (hasMilestone("sp", 23)) cost2 = cost2.replace("3.5", "2.25")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 423: {
@@ -30565,13 +30427,10 @@ addLayer("or", {
                                 if (hasMilestone("ch", 27)) cost2 = "8<sup>x<sup>2</sup></sup>" 
                                 if (hasUpgrade("nu", 24)) cost2 = cost2.replace("8", "2.5")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allEff + allCost
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
 
-                                return br + start + br + end
+                                return br + start + br + allEff + cost1 + cost2 + cost3
                         },
                 },
         },
@@ -38524,10 +38383,8 @@ addLayer("mc", {
                                 if (hasUpgrade("mc", 11)) exp -= Math.min(900, player.ach.achievements.length) / 1000
                                 cost2 = cost2.replace("EXP", formatWhole(exp, false, 3))
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -38576,10 +38433,8 @@ addLayer("mc", {
                                 let cost2 = "10*10^x<sup>1.3</sup>" 
                                 if (hasUpgrade("mc", 13)) cost2 = cost2.slice(3,)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -38628,10 +38483,8 @@ addLayer("mc", {
                                 if (hasUpgrade("mc", 13)) cost2 = cost2.slice(4,)
                                 if (hasUpgrade("mc", 15)) cost2 = cost2.replace(100, 99)
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
         },
@@ -40903,10 +40756,8 @@ addLayer("mini", {
                                 let cost2 = "(20)*(1e3^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 25) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -40964,10 +40815,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(3e18)*(1e4^x<sup>1.1</sup>)"
                                 if (hasUpgrade("sci", 22) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: {
@@ -41018,10 +40867,8 @@ addLayer("mini", {
                                 let cost2 = "(1e6)*(1e6^x<sup>1.2</sup>)" 
                                 if (hasMilestone("mini", 9) || player.sci.everhasnsci2) cost2 = "1e6^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: {
@@ -41092,10 +40939,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(1e14)*(1e5^x<sup>1.1</sup>)"
                                 if (hasUpgrade("sci", 24) || player.sci.everhasnsci2) cost2 = "1e5^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -41151,10 +40996,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("1e31", "5e29")
                                 if (hasMilestone("mini", 11) || player.sci.everhasnsci2) cost2 = "1e11^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 61: {
@@ -41214,10 +41057,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("10", "5") 
                                 if (hasMilestone("mini", 10) || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 62: {
@@ -41281,10 +41122,8 @@ addLayer("mini", {
                                 }
                                 if (hasUpgrade("sci", 23) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.15</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 63: {
@@ -41342,10 +41181,8 @@ addLayer("mini", {
                                 let cost2 = "(1e10)*(1e8^x<sup>1.1</sup>)" 
                                 if (hasMilestone("mini", 8) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -41404,10 +41241,8 @@ addLayer("mini", {
                                 let cost2 = "(10)*(20^x<sup>1.1</sup>)" 
                                 if (hasMilestone("mini", 2) || player.sci.everhasnsci2) cost2 = "20^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 32: {
@@ -41460,10 +41295,8 @@ addLayer("mini", {
                                 let cost2 = "(3e6)*(5e5^x<sup>1.2</sup>)" 
                                 if (hasMilestone("mini", 3) || player.sci.everhasnsci2) cost2 = "5e5^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 33: {
@@ -41517,10 +41350,8 @@ addLayer("mini", {
                                 let cost2 = "(1e25)*(100^x<sup>" + (player.extremeMode ? 1.1 : 1.2) + "</sup>)" 
                                 if (hasMilestone("mini", 1) || player.sci.everhasnsci2) cost2 = "100^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 41: {
@@ -41573,10 +41404,8 @@ addLayer("mini", {
                                 let cost2 = "(1e33)*(10^x<sup>1.5</sup>)" 
                                 if (hasUpgrade("sci", 101) || player.sci.everhasnsci2) cost2 = "10^x<sup>1.5</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 42: {
@@ -41629,10 +41458,8 @@ addLayer("mini", {
                                 let cost2 = "(5e237)*(2e10^x<sup>1.35</sup>)" 
                                 if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) cost2 = "2e10^x<sup>1.35</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 43: {
@@ -41685,10 +41512,8 @@ addLayer("mini", {
                                 let cost2 = "(1e425)*(1e15^x<sup>1.2</sup>)"
                                 if (hasUpgrade("c", 13) && player.extremeMode || player.sci.everhasnsci2) cost2 = "1e15^x<sup>1.2</sup>" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 51: {
@@ -41742,10 +41567,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("5600", "3565")
                                 if (hasUpgrade("sci", 102) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 52: {
@@ -41804,10 +41627,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("18650", "17400")
                                 if (hasUpgrade("sci", 103) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 53: {
@@ -41860,10 +41681,8 @@ addLayer("mini", {
                                 let cost2 = "(1e22000)*(1e3^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 112) || player.sci.everhasnsci2) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 71: {
@@ -41911,9 +41730,8 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 42)) exp = "6"
                                 let cost2 = "(" + base + ")^(" + expBase + "<sup>" + exp + "</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                return br + allCost + "<br>You can only have 15 slots" 
+                                return br + cost1 + cost2 + cost3 + "<br>You can only have 15 slots" 
                         },
                 },
                 72: {
@@ -41977,10 +41795,8 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 224)) cost2 = cost2.replace("1.3", "1.21")
                                 if (hasUpgrade("sci", 225)) cost2 = cost2.replace("1.21", "1.2")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 73: {
@@ -42033,10 +41849,8 @@ addLayer("mini", {
                                 let cost2 = "(5000)*(200^x<sup>1.1</sup>)" 
                                 if (hasUpgrade("sci", 211) || player.sci.everhasnsci2) cost2 = "200^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 81: {
@@ -42101,10 +41915,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("90", "96")
                                 if (hasUpgrade("sci", 221) || player.sci.everhasnsci2) cost2 = "1e5^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 82: {
@@ -42163,10 +41975,8 @@ addLayer("mini", {
                                 let cost2 = "(1e180)*(1e4^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 223) || player.sci.everhasnsci2) cost2 = "1e4^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 83: {
@@ -42227,10 +42037,8 @@ addLayer("mini", {
                                 let cost2 = "(1e225)*(1e10^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
                                 if (hasUpgrade("mini", 24) && player.extremeMode || player.sci.everhasnsci2) cost2 = "1e10^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 91: {
@@ -42285,10 +42093,8 @@ addLayer("mini", {
                                 let cost2 = "(1e1300)*(1e8^x<sup>" + (player.extremeMode ? 1.2 : 1.3) + "</sup>)" 
                                 if (hasUpgrade("sci", 233) || player.sci.everhasnsci2) cost2 = "1e8^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 92: {
@@ -42348,10 +42154,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("00", "80")
                                 if (hasUpgrade("sci", 241) || player.sci.everhasnsci2) cost2 = "1e50^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 93: {
@@ -42416,10 +42220,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("6350", "6280")
                                 if (hasUpgrade("sci", 242) || player.sci.everhasnsci2) cost2 = "1e6^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 101: {
@@ -42473,10 +42275,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("13000", "13700")
                                 if (hasUpgrade("sci", 243) || player.sci.everhasnsci2) cost2 = "100^x<sup>1.4</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 102: {
@@ -42537,10 +42337,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("19590", "20400")
                                 if (hasUpgrade("sci", 245) || player.sci.everhasnsci2) cost2= "1e23^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 103: {
@@ -42594,10 +42392,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("0", "4")
                                 if (hasMilestone("tokens", 27) || player.sci.everhasnsci2) cost2 = "20^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 111: {
@@ -42651,10 +42447,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("67", "80")
                                 if (hasMilestone("tokens", 28) || player.sci.everhasnsci2) cost2 = "1e11^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 112: {
@@ -42713,10 +42507,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("175", "385")
                                 if (hasUpgrade("sci", 301) || player.sci.everhasnsci2) cost2 = "1e100^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 113: {
@@ -42775,10 +42567,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("80870", "95300")
                                 if (player.sci.everhasnsci2) cost2 = "1.80e308^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 121: {
@@ -42842,10 +42632,8 @@ addLayer("mini", {
                                 let cost2 = "(150)*(1.2^x<sup>1.1</sup>)" 
                                 if (hasUpgrade("sci", 312)) cost2 = "1.2^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 122: {
@@ -42898,10 +42686,8 @@ addLayer("mini", {
                                 let cost2 = "(1e19)*(3^x<sup>1.1</sup>)" 
                                 if (hasUpgrade("sci", 321)) cost2 = "3^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 123: {
@@ -42957,10 +42743,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("383", "390")
                                 if (hasUpgrade("sci", 332)) cost2 = "5^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 131: {
@@ -43021,10 +42805,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("1140", "1215")
                                 if (hasUpgrade("sci", 332)) cost2 = "10^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 132: {
@@ -43084,10 +42866,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("6415", "7834")
                                 if (hasUpgrade("sci", 331)) cost2 = "1e38^x<sup>1.4</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 133: {
@@ -43143,10 +42923,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(1e41647)*(1e8^x<sup>1.5</sup>)"
                                 if (hasUpgrade("sci", 333)) cost2 = "1e8^x<sup>1.5</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 151: {
@@ -43201,10 +42979,8 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 313)) cost2 = "20^x<sup>1.3</sup>"
                                 if (hasUpgrade("sci", 315)) cost2 = cost2.replace("1.3", "1.2")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 152: {
@@ -43260,10 +43036,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("5e32", "3e41")
                                 if (hasUpgrade("sci", 322)) cost2 = "1e3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 153: {
@@ -43316,10 +43090,8 @@ addLayer("mini", {
                                 let cost2 = "(1e140)*(1e10^x<sup>1.3</sup>)" 
                                 if (hasUpgrade("sci", 323)) cost2 = "1e10^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 161: {
@@ -43377,10 +43149,8 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 324)) cost2 = "1e20^x<sup>1.2</sup>"
                                 if (hasUpgrade("sci", 342)) cost2 = cost2.replace("1.2", "1.1")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 162: {
@@ -43436,10 +43206,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("654", "650") 
                                 if (hasUpgrade("sci", 325)) cost2 = "100^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 163: {
@@ -43495,10 +43263,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("1344", "1505")
                                 if (hasUpgrade("sci", 333)) cost2 = "1e24^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 171: {
@@ -43554,10 +43320,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("3020", "3631")
                                 if (hasUpgrade("sci", 334)) cost2 = "1e30^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 172: {
@@ -43613,10 +43377,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("4751", "6041")
                                 if (hasUpgrade("sci", 341)) cost2 = "1e20^x<sup>1.4</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 173: {
@@ -43676,10 +43438,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(1e46073)*(1e30^x<sup>1.2</sup>)"
                                 if (hasUpgrade("sci", 335)) cost2 = "1e30^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 181: {
@@ -43736,10 +43496,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("41025", "50073")
                                 if (hasUpgrade("sci", 343)) cost2 = "1e35^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 182: {
@@ -43795,10 +43553,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("193300", "314500")
                                 if (hasUpgrade("p", 102)) cost2 = "1e19^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 183: {
@@ -43845,10 +43601,8 @@ addLayer("mini", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "(3e14159)*(265358^x<sup>2</sup>)" 
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 201: {
@@ -43887,10 +43641,8 @@ addLayer("mini", {
                                 if (hasUpgrade("mini", 85)) cost2 = "10^(x+1<sup>x</sup>)" 
                                 if (hasMilestone("mu", 4)) cost2 = "10^(x<sup>x</sup>)"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
-
-                                let end = allCost
-                                return br + end
+                                
+                                return br + cost1 + cost2 + cost3
                         },
                 },
                 202: {
@@ -43953,10 +43705,8 @@ addLayer("mini", {
                                 let cost2 = "(30)*(1.5^x<sup>1.1</sup>)" 
                                 if (hasUpgrade("sci", 344)) cost2 = "1.5^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 203: {
@@ -44014,10 +43764,8 @@ addLayer("mini", {
                                 if (hasUpgrade("sci", 351)) cost2 = cost2.replace("1.2", "1.15")
                                 if (hasUpgrade("sci", 362)) cost2 = cost2.replace("1.15", "1.1")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 211: {
@@ -44089,10 +43837,8 @@ addLayer("mini", {
                                 let cost2 = "(1e4)*(4^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 351)) cost2 = "4^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 212: {
@@ -44149,10 +43895,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(5e6)*(3^x<sup>1.2</sup>)" 
                                 if (hasUpgrade("sci", 354)) cost2 = "3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 213: {
@@ -44220,10 +43964,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("1e9", "5e7") 
                                 if (hasUpgrade("sci", 355)) cost2 = "5^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 221: {
@@ -44283,10 +44025,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = "(1e122)*(30^x<sup>1.2</sup>)"
                                 if (player.sci.buyables[301].gt(0)) cost2 = "30^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 222: {
@@ -44339,10 +44079,8 @@ addLayer("mini", {
                                 let cost2 = "(1e176)*(3^x<sup>1.2</sup>)" 
                                 if (player.sci.buyables[301].gt(1)) cost2 = "3^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 223: {
@@ -44411,10 +44149,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("1507", "1702")
                                 if (player.sci.buyables[301].gte(2)) cost2 = "8^x<sup>1.2</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 231: {
@@ -44480,10 +44216,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("9864", "9280")
                                 if (player.sci.buyables[301].gte(3)) cost2 = "8^x<sup>1.1</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 232: {
@@ -44544,10 +44278,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("34464", "35768")
                                 if (player.sci.buyables[301].gte(4)) cost2 = "6^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 233: {
@@ -44603,10 +44335,8 @@ addLayer("mini", {
                                 if (player.extremeMode) cost2 = cost2.replace("34833", "36530")
                                 if (player.sci.buyables[301].gte(5)) cost2 = "100^x<sup>1.3</sup>"
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 241: {
@@ -44659,10 +44389,8 @@ addLayer("mini", {
                                 let cost2 = "(1e1,220,000)*(1e5^x<sup>1.1</sup>)" 
                                 if (player.extremeMode) cost2 = cost2.replace("220", "112")
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
         },
@@ -44682,8 +44410,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44707,8 +44434,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44732,8 +44458,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44757,8 +44482,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44782,8 +44506,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44807,8 +44530,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44832,8 +44554,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44857,8 +44578,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44882,8 +44602,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44907,8 +44626,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44932,8 +44650,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44957,8 +44674,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -44982,8 +44698,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -45007,8 +44722,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -45032,8 +44746,7 @@ addLayer("mini", {
                                 if (tmp.mini.clickables.unlockedSlots >= val) {
                                         if (lr.length >= val) {
                                                 let start = "<h2 style='font-size: 500%'>"
-                                                let end = "</h2>"
-                                                return start + getUnicodeCharacter(lr[val-1]) + end
+                                                return start + getUnicodeCharacter(lr[val-1]) + "</h2>"
                                         }
                                         return "Have not rolled this slot yet"
                                 }
@@ -45868,13 +45581,12 @@ addLayer("mini", {
                                                         }
                                                         let start = "The cheapest buyable (" + (num-140) + ") costs " + format(a) + "."
                                                         if (!player.shiftAlias) return start
-                                                        let mid = " You have " 
                                                         let pts = player.mini.d_points.points
                                                         let end = ""
                                                         if (pts.eq(0)) end = "0 points."
                                                         else if (pts.gt(a)) end = format(pts.div(a)) + " times more points."
                                                         else end = format(a.div(pts)) + " times less points."
-                                                        return start+mid+end 
+                                                        return start + " You have "  + end 
                                                 }
                                                 return "This tab has buyables for increasing point gain"
                                         }],
@@ -45966,13 +45678,12 @@ addLayer("mini", {
                                                 }
                                                 let start = "The cheapest buyable (" + (num-60) + ") costs " + format(a) + "."
                                                 if (!player.shiftAlias) return start
-                                                let mid = " You have " 
                                                 let pts = player.mini.c_points.points
                                                 let end = ""
                                                 if (pts.eq(0)) end = "0 points."
                                                 else if (pts.gt(a)) end = format(pts.div(a)) + " times more points."
                                                 else end = format(a.div(pts)) + " times less points."
-                                                return start+mid+end
+                                                return start + " You have " + end
                                         }],
                                         ["buyables", [7,8,9,10,11]]
                                 ],
@@ -46217,8 +45928,7 @@ addLayer("mini", {
                                         let mid = hasUpgrade("h", 45) ? "log10(9+log10(10+B Points))*" : ""
                                         let end = "*2<sup>levels</sup>*" + mid + "multipliers"
                                         let exp = tmp.mini.a_points.getColorGainExp
-                                        a = "Formula: amt<sup>" + format(exp, 4) + "</sup>/20" + end
-                                        return a
+                                        return "Formula: amt<sup>" + format(exp, 4) + "</sup>/20" + end
                                 }],
                                 ["buyables", [1,2,6]],
                                 ["milestones", [8,9,10,11,12,13]]
@@ -46397,10 +46107,9 @@ addLayer("mini", {
                                         let corr = numCorrectLetters(player.targetWord)
                                         let wordUpper = player.targetWord.toLocaleUpperCase()
                                         let start = "<bdi style='font-size: 300%'>"
-                                        let end = "</bdi>"
                                         let goodPart = "<bdi style='color:#FF0000'>" + wordUpper.slice(0,corr) + "</bdi>"
                                         let badPart  = "<bdi style='color:#993333'>" + wordUpper.slice(corr) + "</bdi>"
-                                        return start+goodPart+badPart+end
+                                        return start + goodPart + badPart + "</bdi>"
                                 }],
                                 ["display-text", function(){
                                         let a = "You have spelled " + formatWhole(player.wordsSpelled)
@@ -47123,10 +46832,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 12: {
@@ -47173,10 +46880,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 13: { 
@@ -47224,10 +46929,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 21: { 
@@ -47301,10 +47004,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 22: {
@@ -47358,10 +47059,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 23: {
@@ -47406,10 +47105,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 31: {
@@ -47458,10 +47155,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 32: {
@@ -47504,10 +47199,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 33: { 
@@ -47552,10 +47245,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 41: {
@@ -47619,10 +47310,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 42: {
@@ -47672,10 +47361,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 43: {
@@ -47717,10 +47404,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 51: {
@@ -47762,10 +47447,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 52: {
@@ -47810,10 +47493,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 53: {
@@ -47858,10 +47539,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 61: {
@@ -47905,10 +47584,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 62: {
@@ -47952,10 +47629,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 63: {
@@ -48006,10 +47681,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 71: {
@@ -48157,10 +47830,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 102: {
@@ -48230,10 +47901,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
-                                return br + end
+                                return br + allEff + cost1 + cost2 + cost3
                         },
                 },
                 111: {
@@ -48316,9 +47985,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
+                                let end = allEff + cost1 + cost2 + cost3
                                 if (!hasUpgrade("t", 155)) return br + end
 
                                 let bestDisplay = "Currently: " + format(tmp.tokens.buyables[111].initialEffect) 
@@ -48406,9 +48074,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
+                                let end = allEff + cost1 + cost2 + cost3
                                 if (!hasUpgrade("t", 143)) return br + end
 
                                 let bestDisplay = "Currently: " + format(tmp.tokens.buyables[112].initialEffect) 
@@ -48492,9 +48159,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
+                                let end = allEff + cost1 + cost2 + cost3
                                 if (!hasUpgrade("t", 145)) return br + end
 
                                 let bestDisplay = "Currently: " + format(tmp.tokens.buyables[121].initialEffect) 
@@ -48585,9 +48251,8 @@ addLayer("tokens", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = tmp.tokens.buyables.costFormulaText2
                                 let cost3 = "</b><br>"
-                                let allCost = cost1 + cost2 + cost3
 
-                                let end = allEff + allCost
+                                let end = allEff + cost1 + cost2 + cost3
                                 if (!hasUpgrade("cells", 65)) return br + end
 
                                 let bestDisplay = "Currently: " + format(tmp.tokens.buyables[122].initialEffect) 
