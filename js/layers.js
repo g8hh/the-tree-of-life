@@ -50179,7 +50179,7 @@ addLayer("tokens", {
                         },
                         description(){
                                 if (!hasUpgrade("tokens", 231)) return "Purchase M 41 to unlock me!"
-                                return "make base exponent is .62 but Nucleus' secondary effect no longer affects I'm base"
+                                return "make base exponent is .62 but Nucleus' secondary effect no longer affects I'm base (without this, the exponent is never above .56)"
                         },
                         canAfford(){
                                 if (!hasUpgrade("tokens", 231)) return false
