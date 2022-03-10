@@ -34960,7 +34960,7 @@ addLayer("ch", {
                                 player.an.genes.total = decimalZero
                         },
                         effectDescription(){
-                                return "Reward: Reset Taxnomy levels and extras and Genes, remove Chromosome base cost, and Chromosome effect formula is 1.002<sup>x</sup>*2.605."
+                                return "Reward: Reset Taxonomy levels and extras and Genes, remove Chromosome base cost, and Chromosome effect formula is 1.002<sup>x</sup>*2.605."
                         },
                 }, // hasMilestone("ch", 20)
                 21: {
