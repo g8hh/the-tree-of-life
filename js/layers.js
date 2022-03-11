@@ -31684,7 +31684,7 @@ addLayer("an", {
 
                         let spExp = [0, 0, 0, 0, 0, 0, 0, 0, 0] // 9 0's
                         
-                        if (hasUpgrade("sp", 22)) spExp[8] = getLevels(808).div(hasUpgrade("sp", 72) ? 8 : 15)
+                        if (hasUpgrade("sp", 22)) spExp[8] = getLevels(808).div(hasUpgrade("sp", 122) ? 2 : hasUpgrade("sp", 72) ? 8 : 15)
                         if (hasUpgrade("sp", 23)) spExp[7] = player.ch.points.plus(10).pow(hasUpgrade("sp", 73) ? .6 : .5)
                         if (hasUpgrade("sp", 24)) spExp[6] = player.nu.points.plus(8).pow(hasUpgrade("sp", 74) ? .7 : 1/3)
                         if (hasUpgrade("sp", 25)) spExp[5] = hasUpgrade("sp", 75) ? player.sp.upgrades.length : new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
@@ -37042,9 +37042,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VII"
                         },
                         description(){
-                                return "Effect VII's divider is 4"
+                                return "Effect VII's divider is 4 and Token<sup>2</sup> XII counts this tab upgrades"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e733"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 122)
@@ -47788,6 +47788,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("tokens", 131))  return c.plus(1).sqrt().div(4)
                                 if (hasUpgrade("tokens", 124))  return c.plus(1).sqrt().div(5)
                                 if (hasUpgrade("tokens", 113))  return c.plus(1).sqrt().div(6)
                                 if (hasUpgrade("tokens", 101))  return c.plus(1).sqrt().div(7)
@@ -47831,6 +47832,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 101))  div = "7"
                                 if (hasUpgrade("tokens", 113))  div = "6"
                                 if (hasUpgrade("tokens", 124))  div = "5"
+                                if (hasUpgrade("tokens", 131))  div = "4"
                                 eformula = eformula.replace("DIV", div)
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
@@ -48448,6 +48450,10 @@ addLayer("tokens", {
                                         add = 20
                                         div = 37200
                                 }
+                                if (hasUpgrade("tokens", 131) && lvls.gte(49068)) {
+                                        add = 20
+                                        div = 38600
+                                }
                                 return [add, div]
                         },
                         maxAfford(){
@@ -48555,7 +48561,7 @@ addLayer("tokens", {
                         baseCost(){
                                 let ret = 226
 
-                                if (hasUpgrade("tokens", 122)) ret = Math.min(ret, 241-player.tokens.upgrades.length)
+                                if (hasUpgrade("tokens", 122)) ret = Math.min(ret, 241 - player.tokens.upgrades.length - (hasUpgrade("sp", 122) ? player.sp.upgrades.filter(x => x > 110 && x < 160).length : 0))
 
                                 return ret
                         },
@@ -50050,6 +50056,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 124)
                         }, // hasUpgrade("tokens", 125)
+                },
+                131: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> XV</h3>" + br
+                                let cost = br2 + "Requires: 1,077,500 Token II"
+                                return title + "Up Quark's divider is 4 and Token II divider is 38,000" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(1077500)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 125)
+                        }, // hasUpgrade("tokens", 131)
                 },
 
                 201: {
