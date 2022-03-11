@@ -3001,7 +3001,7 @@ var cnRegReplace = new Map([
     [/^You have done (.+) Phosphorus resets$/, '您已完成 $1 磷重置'],
     [/^You have done (.+) Life resets$/, '您已完成 $1 生命重置'],
     [/^You have (.+) Organ upgrades,$/, '您有 $1 氧气升级'],
-    [/^Upon Completion: (.+) Gems$/, '完成后：$2 宝石'],
+    [/^Upon Completion: (.+) Gems$/, '完成后：$1 宝石'],
     [/^Requires: (.+) Amino Acids$/, '要求：$1 氨基酸'],
     [/^Requires: (.+) Proteins$/, '要求：$1 蛋白质'],
     [/^Requires: (.+) A Points$/, '要求：$1 A 点'],
