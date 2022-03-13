@@ -526,8 +526,10 @@ function organFormulaDisplay(){
                 let lvls = Math.max(0, player.or.upgrades.length - 30)
                                         c += "Heart XXI multiplies AX by " + format(player.or.buyables[201].plus(10).log10().pow(lvls)) + br
         }
-        if (hasUpgrade("or", 14))       c += "Organs IV multiplies AX by " + format(player.tokens.tokens2.total.max(1)) + br
-        if (hasUpgrade("or", 31))       c += "Organs XI multiplies AX by " + format(Decimal.pow(1.03, player.tokens.tokens2.total)) + br
+        if (!hasMilestone("sp", 27)) {
+                if (hasUpgrade("or", 14))       c += "Organs IV multiplies AX by " + format(player.tokens.tokens2.total.max(1)) + br
+                if (hasUpgrade("or", 31))       c += "Organs XI multiplies AX by " + format(Decimal.pow(1.03, player.tokens.tokens2.total)) + br
+        }
         if (hasUpgrade("or", 313))      c += "Lung VIII multiplies AX by " + format(player.or.air.points.max(10).log10()) + br
         if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
                                         c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
@@ -614,8 +616,10 @@ function energyFormulaDisplay(){
         if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
                                         c += "Organ Milestone 20 multiplies AX by " + format(player.or.milestones.length) + br
         }
-        if (hasUpgrade("or", 21))       c += "Organs VI multiplies AX by " + format(player.d.points.max(10).log10()) + br
-        if (hasUpgrade("or", 23))       c += "Organs VII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
+        if (!hasMilestone("sp", 27)) {
+                if (hasUpgrade("or", 21))       c += "Organs VI multiplies AX by " + format(player.d.points.max(10).log10()) + br
+                if (hasUpgrade("or", 23))       c += "Organs VIII multiplies AX by " + format(tmp.or.upgrades[23].effect) + br
+        }
         if (hasUpgrade("or", 43))       c += "Organs XVIII multiplies AX by " + format(tmp.tokens.buyables[122].effect) + br
         if (hasUpgrade("or", 323))      c += "Lung XIII multiplies AX by " + format(tmp.or.upgrades[323].effect) + br
         if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
