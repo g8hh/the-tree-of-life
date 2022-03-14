@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.281.1",
+	num: "1.282",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -37,6 +37,13 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.282</h3><br>
+		- Balanced until 5e871 Species.<br>
+		- Added two Mastery Token upgrades.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Added a Species milestone.<br>
+		- Various wording and code cleanup.<br>
 	<br><h3 style='color: #CC0000'>v1.281</h3><br>
 		- Balanced until 1e673 Species.<br>
 		- Added two Mastery Token upgrades.<br>

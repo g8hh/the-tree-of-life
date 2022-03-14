@@ -22609,6 +22609,7 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 35))    base = new Decimal(player.extremeMode ? 8.55 : 9.1)
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
+                                if (hasUpgrade("tokens", 132))  base = new Decimal(10)
                                 if (hasMilestone("cells", 20))  init = decimalOne
                                 return init.times(base.pow(exp))
                         },
@@ -22634,6 +22635,7 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 35))    base = new Decimal(player.extremeMode ? 8.55 : 9.1)
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
+                                if (hasUpgrade("tokens", 132))  base = new Decimal(10)
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[11].cost),
@@ -22719,6 +22721,7 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 35))    base = new Decimal(player.extremeMode ? 8.55 : 9.1)
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
+                                if (hasUpgrade("tokens", 132))  base = new Decimal(10)
                                 cost2 = cost2.replace("10^", formatWhole(base) + "^")
                                 let cost3 = "</b><br>"
 
@@ -23106,6 +23109,7 @@ addLayer("cells", {
                         },
                         base(){
                                 if (player.cells.challenges[21] >= 4 && inChallenge("cells", 21)) return decimalOne
+                                if (hasUpgrade("tokens", 132))  return Decimal.pow(2, player.nu.points)
                                 if (hasUpgrade("an", 24))       return player.or.contaminants.points.max(10).log10()
                                 if (hasMilestone("an", 15))     return player.or.air.points.max(10).log10()
                                 if (hasUpgrade("or", 234))      return Decimal.pow(3, player.cells.challenges[21])
@@ -23125,9 +23129,10 @@ addLayer("cells", {
                                 }
 
                                 let eformula = "(Tertiary Completions + 1)^x<br>" + format(tmp.cells.buyables[22].base) + "^x"
-                                if (hasUpgrade("or", 234)) eformula = eformula.replace("Tertiary Completions + 1", "3^Tertiary Completions")
-                                if (hasMilestone("an", 15)) eformula = eformula.replace("(3^Tertiary Completions)", "log10(Air)")
-                                if (hasUpgrade("an", 24)) eformula = eformula.replace("Air", "Contaminants")
+                                if (hasUpgrade("or", 234))      eformula = eformula.replace("Tertiary Completions + 1", "3^Tertiary Completions")
+                                if (hasMilestone("an", 15))     eformula = eformula.replace("(3^Tertiary Completions)", "log10(Air)")
+                                if (hasUpgrade("an", 24))       eformula = eformula.replace("Air", "Contaminants")
+                                if (hasUpgrade("tokens", 132))  eformula = eformula.replace("log10(Contaminants)", "2<sup>Nucleuses</sup>")
 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -50090,9 +50095,9 @@ addLayer("tokens", {
                 },
                 131: {
                         fullDisplay(){
-                                let title = "<h3>Token<sup>2</sup> XV</h3>" + br
+                                let title = "<h3>Token<sup>2</sup> XVI</h3>" + br
                                 let cost = br2 + "Requires: 1,077,500 Token II"
-                                return title + "Up Quark's divider is 4 and Token II divider is 38,000" + cost
+                                return title + "Up Quark's divider is 4 and Token II divider is 38,600" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(1077500)
@@ -50102,21 +50107,20 @@ addLayer("tokens", {
                                 return hasUpgrade("tokens", 125)
                         }, // hasUpgrade("tokens", 131)
                 },
-                /*
-                131: {
+                132: {
                         fullDisplay(){
-                                let title = "<h3>Token<sup>2</sup> XV</h3>" + br
-                                let cost = br2 + "Requires: 1,077,500 Token II"
-                                return title + "Up Quark's divider is 4 and Token II divider is 38,000" + cost
+                                let title = "<h3>Token<sup>2</sup> XVII</h3>" + br
+                                let cost = br2 + "Requires: 1,141,000 Token II"
+                                return title + "Oligopotent effect base is 2<sup>Nucleuses</sup> but Omnipotent cost base is 10" + cost
                         },
                         canAfford(){
-                                return player.tokens.tokens2.total.gte(1077500)
+                                return player.tokens.tokens2.total.gte(1141000)
                         },
                         pay(){}, // doesnt cost anything
                         unlocked(){
-                                return hasUpgrade("tokens", 125)
-                        }, // hasUpgrade("tokens", 131)
-                },*/
+                                return hasUpgrade("tokens", 131)
+                        }, // hasUpgrade("tokens", 132)
+                },
 
                 201: {
                         title(){
