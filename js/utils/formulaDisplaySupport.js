@@ -547,6 +547,7 @@ function organFormulaDisplay(){
         if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points.min(5000))) + br
         if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2)) + br
         if (hasUpgrade("sp", 62))       c += "Upgraded Effect II multiplies AX by " + format(tmp.sp.effect.pow(player.nu.points.pow(3))) + br
+        if (hasUpgrade("sp", 141))      c += "Boosted Effect XVI multiplies AX by " + format(player.an.grid[102].extras.plus(1).pow(player.tokens.tokens2.total)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
@@ -684,6 +685,7 @@ function animalFormulaDisplay(){
                 let base = decimalOne.plus(player.sp.milestones.length/500)
                                         c += "Species Milestone 10 multiplies AX by " + format(base.pow(player.tokens.tokens2.total.sub(sub).max(0))) + br
         }
+        if (hasUpgrade("sp", 152))      c += "Boosted Upgrade XXII multiplies AX by " + format(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100))) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }
