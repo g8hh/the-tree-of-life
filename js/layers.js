@@ -33008,11 +33008,13 @@ addLayer("an", {
                         },
                         display(){
                                 if (player.an.achActive[11]) return "Disables gene buyable autobuyers"
+                                if (!player.an.achActive[22] && hasAchievement("an", 22)) return "Bulk buy Gene buyables and gain " + makeOrange("5<sup>Achievements + 4</sup>") + "x Genes"
                                 return "Bulk buy Gene buyables and gain 25x Genes"
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": disable gene buyale autobuyers" + br 
                                 a += makeBlue("OFF") + ": bulk buy Gene buyables and gain 25x Genes"
+                                if (!player.an.achActive[22] && hasAchievement("an", 22))  a = a.replace("25", makeOrange("5<sup>Achievements + 4</sup>"))
                                 return a
                         },
                         unlocked(){
@@ -33030,14 +33032,23 @@ addLayer("an", {
                                 return "PRI I (" + (player.an.achActive[12] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[12]) return "log2(levels+2) multiplies amount gain but you gain 4e49x less Genes"
-                                if (hasMilestone("an", 31)) return "Gain 2x Genes per Chromosome past 200"
-                                return "Gain 4x Genes per Chromosome past 200"
+                                let end = hasUpgrade("ch", 34) ? "" : " but you gain 4e49x less Genes"
+                                let lvls = "levels"
+                                if ((player.an.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22)) lvls = "levels<sup>" + makeOrange("1.25") + "</sup>"
+                                if (player.an.achActive[12]) return "log2(" + lvls + "+2) multiplies amount gain" + end
+                                end = hasUpgrade("nu", 12) ? "" : " past 200"
+                                if (hasMilestone("an", 31)) return "Gain " + makeOrange("2") + "x Genes per Chromosome" + end
+                                return "Gain 4x Genes per Chromosome" + end
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": log2(levels+2) multiplies amount gain but you gain 4e49x less Genes" + br 
                                 a += makeBlue("OFF") + ": gain 4x Genes per Chromosome past 200"
-                                if (hasMilestone("an", 31)) a = a.replace("4x", "2x")
+                                if (hasMilestone("an", 31)) a = a.replace("4x", makeOrange("2") + "x")
+                                if (hasUpgrade("nu", 12)) a = a.replace(" past 200", "")
+                                if (hasUpgrade("ch", 34)) a = a.replace(" but you gain 4e49x less Genes", "")
+                                if ((player.an.achActive[22] || hasUpgrade("ch", 41)) && hasAchievement("an", 22)) {
+                                        a = a.replace("levels", "levels<sup>" + makeOrange("1.25") + "</sup>")
+                                }
                                 return a
                         },
                         unlocked(){
@@ -33063,11 +33074,14 @@ addLayer("an", {
                                 return "COM I (" + (player.an.achActive[13] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[13]) return "Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain"
-                                return "Base Organ gain double exponent is .31"
+                                if (!player.an.achActive[13]) return hasMilestone("ch", 33) ? "Effect overwritten by Chromosome Milestone 33" : "Base Organ gain double exponent is .31"
+                                if (hasMilestone("sp", 21)) return "Proteobacteria II amount<sup>" + makeOrange("Chromosomes") + "</sup> multiplies Organ gain"
+                                return "Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain"
+                                
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": Proteobacteria II amount<sup>Chromosomes/17</sup> multiplies Organ gain" + br 
+                                if (hasMilestone("sp", 21)) a = a.replace("Chromosomes/17", makeOrange("Chromosomes"))
                                 return a + makeBlue("OFF") + ": base Organ gain double exponent is .31"
                         },
                         unlocked(){
@@ -33092,8 +33106,8 @@ addLayer("an", {
                                 return "ONE I (" + (player.an.achActive[14] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[14]) return "Multipotent cost base is 1e39"
-                                return "Oligopotent cost base is 1e69"
+                                if (player.an.achActive[14]) return hasAchievement("an", 24) ? "Effect overwritten by Six reward" : "Multipotent cost base is 1e39"
+                                return hasMilestone("nu", 11) ? "Effect overwritten by Nucleus Milestone 11" : "Oligopotent cost base is 1e69"
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": Multipotent cost base is 1e39" + br 
@@ -33189,8 +33203,8 @@ addLayer("an", {
                                 return "ONE II (" + (player.an.achActive[24] ? "ON" : "OFF") + ")"
                         },
                         display(){
-                                if (player.an.achActive[24]) return "<u>IN</u>testine base is cbrt(Tokens II)"
-                                return "Unlock and you can prestige for Nucleuses"
+                                if (player.an.achActive[24]) return hasMilestone("nu", 12) ? "Effect overwritten by Nucleus Milestone 12" : "<u>IN</u>testine base is cbrt(Tokens II)"
+                                return hasUpgrade("ch", 43) ? "Effect overwritten by Chromosomes XVIII" : "Unlock and you can prestige for Nucleuses"
                         },
                         tooltip(){
                                 let a = makeBlue("ON") + ": <u>IN</u>testine base is cbrt(Tokens II)" + br 
@@ -48302,6 +48316,9 @@ addLayer("tokens", {
                                 if (hasUpgrade("or", 42)) eformula = "(1+C/1000)<sup>x</sup>"
                                 if (hasUpgrade("ch", 42)) eformula = "C<sup>x</sup>"
                                 if (hasMilestone("sp", 6)) eformula = eformula.replace("C", "C<sup>4</sup>")
+                                else if ((!player.an.achActive[34] || hasMilestone("ch", 22)) && tmp.an.clickables.rowThreeOff > 1) {
+                                        eformula = eformula.replace("C", "C<sup>" + formatWhole(tmp.an.clickables.rowThreeOff) + "</sup>")
+                                }
                                 if (hasUpgrade("sp", 85)) eformula = "(C<sup>4</sup>*Anamalia I<sup>.06</sup>)<sup>x</sup>"
                                 eformula += br + format(tmp.tokens.buyables[122].base, 4) + "<sup>x</sup>" 
                                 
@@ -50501,6 +50518,7 @@ addLayer("tokens", {
                         },
                         "Upgrade Tree": {
                                 content: [
+                                        ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
                                         ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262]]],
                                         ["clickables", [2]]
                                 ],
