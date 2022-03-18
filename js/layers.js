@@ -26430,7 +26430,9 @@ addLayer("or", {
                         if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
                         if (hasMilestone("an", 42))     ret = ret.pow(player.ch.points.max(1465).div(1465).sqrt().min(1.1))
                         if (hasUpgrade("sp", 53))       ret = ret.pow(1.001)
-                        if (hasUpgrade("sp", 103))      ret = ret.pow(1.003)
+                        if (hasUpgrade("sp", 103) && !hasUpgrade("tokens", 141)) {
+                                                        ret = ret.pow(1.003)
+                        }
                         
                         return ret
                 },
@@ -30243,6 +30245,7 @@ addLayer("or", {
                                 }
                                 if (hasMilestone("ch", 31)) c = new Decimal(3.5)
                                 if (hasMilestone("sp", 23)) c = new Decimal(2.25)
+                                if (hasUpgrade("tokens", 141))  c = new Decimal(1.64)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30325,6 +30328,7 @@ addLayer("or", {
                                 if (hasMilestone("ch", 30)) cost2 = "5.6<sup>x<sup>2</sup></sup>"
                                 if (hasMilestone("ch", 31)) cost2 = cost2.replace("5.6", "3.5")
                                 if (hasMilestone("sp", 23)) cost2 = cost2.replace("3.5", "2.25")
+                                if (hasUpgrade("tokens", 141)) cost2 = cost2.replace("2.25", "1.64")
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -31714,7 +31718,7 @@ addLayer("an", {
                         if (hasUpgrade("sp", 25)) spExp[5] = hasUpgrade("sp", 125) ? player.sp.upgrades.length + player.tokens.upgrades.length : hasUpgrade("sp", 75) ? player.sp.upgrades.length : new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
                         if (hasUpgrade("sp", 31)) spExp[4] = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
                         if (hasUpgrade("sp", 32)) spExp[3] = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 132) ? 1 : hasUpgrade("sp", 82) ? 2 : 25)
-                        if (hasUpgrade("sp", 33)) spExp[2] = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 83) ? 4 : 25)
+                        if (hasUpgrade("sp", 33)) spExp[2] = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 133) ? 1 : hasUpgrade("sp", 83) ? 4 : 25)
                         
                         for (i in TAXONOMY_KEYS) {
                                 let id = TAXONOMY_KEYS[i]
@@ -36270,7 +36274,9 @@ addLayer("sp", {
         getNextAt(){
                 let baseGain = tmp.sp.getResetGain
 
-                if (hasUpgrade("sp", 103)) baseGain = baseGain.root(1.003)
+                if (hasUpgrade("sp", 103) && !hasUpgrade("tokens", 141)) {
+                        baseGain = baseGain.root(1.003)
+                }
                 
                 baseGain = baseGain.plus(1).div(tmp.sp.getGainMult).max(1)
 
@@ -36301,7 +36307,7 @@ addLayer("sp", {
 
                 ret = ret.times(tmp.sp.getGainMult)
 
-                if (hasUpgrade("sp", 103)) ret = ret.pow(1.003)
+                if (hasUpgrade("sp", 103) && !hasUpgrade("tokens", 141)) ret = ret.pow(1.003)
                 
                 return ret.floor()
         },
@@ -37158,7 +37164,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect XIII's divider is 1"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e1101"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 133)
@@ -48678,11 +48684,13 @@ addLayer("tokens", {
                         title: "Mastery IV",
                         cost(){
                                 let base = 82
+                                if (hasUpgrade("tokens", 141)) base = 81
                                 return Decimal.pow(2, player.tokens.buyables[211].plus(base)).pow10()
                         },
                         canAfford:() => player.or.contaminants.points.gte(tmp.tokens.buyables[211].cost),
                         maxAfford(){
                                 let base = 82
+                                if (hasUpgrade("tokens", 141)) base = 81
                                 return player.or.contaminants.points.max(10).log10().log(2).sub(base).max(0).ceil()
                         },
                         buy(){
@@ -48698,6 +48706,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[211]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 211), 3) + " Contaminants</b><br>"
                                 let eformula = "10<sup>2<sup>82+x</sup>"
+                                if (hasUpgrade("tokens", 141)) eformula = eformula.replace("82", "81")
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -50206,6 +50215,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 134)
                         }, // hasUpgrade("tokens", 135)
+                },
+                141: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> XXI</h3>" + br
+                                let cost = br2 + "Requires: 1,325,000 Token II"
+                                return title + "Upgraded Effect XXIII no longer boosts Species gain, Mastery IV adder is 81, and inTES<u>tine</u> cost base is 1.64" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(1325000)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 135)
+                        }, // hasUpgrade("tokens", 141)
                 },
 
                 201: {
