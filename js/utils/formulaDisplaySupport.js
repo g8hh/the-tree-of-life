@@ -534,7 +534,7 @@ function organFormulaDisplay(){
         if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
                                         c += "Organ Milestone 20 multiplies AX by " + format(player.or.energy.points.max(10).log10()) + br
         }
-        if (tmp.or.buyables[423].effect.gt(1)) {
+        if (tmp.or.buyables[423].effect.gt(1) && !hasUpgrade("sp", 112)) {
                                         c += br + "intes<u>TINE</u> multiplies AX by " + format(tmp.or.buyables[423].effect) + br
         }
         if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
@@ -545,7 +545,7 @@ function organFormulaDisplay(){
         }
         if (hasUpgrade("ch", 41))       c += "Chromosomes XVI multiplies AX by " + format(player.an.grid[303].extras.plus(1).pow(player.nu.points)) + br
         if (hasUpgrade("nu", 24))       c += "Nucleuses IX multiplies AX by " + format(player.an.grid[203].extras.plus(1).pow(player.ch.points.min(5000))) + br
-        if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2)) + br
+        if (hasUpgrade("sp", 12))       c += "Effect II multiplies AX by " + format(tmp.sp.effect.pow(hasUpgrade("sp", 112) ? player.ch.points.pow(2) : Math.min(hasMilestone("nu", 21) ? 222 : 64, player.sp.times) ** 2)) + br
         if (hasUpgrade("sp", 62))       c += "Upgraded Effect II multiplies AX by " + format(tmp.sp.effect.pow(player.nu.points.pow(3))) + br
         if (hasUpgrade("sp", 141))      c += "Boosted Effect XVI multiplies AX by " + format(player.an.grid[102].extras.plus(1).pow(player.tokens.tokens2.total)) + br
 
