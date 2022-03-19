@@ -1113,7 +1113,6 @@ PROGRESSION_MILESTONES = {
         936: () => player.sp.points.gte(1e190),
         937: () => player.sp.points.gte(1e210),
         938: () => player.sp.points.gte(1e231),
-
         939: () => player.or.contaminants.points.gte(Decimal.pow10(2e20)),
         940: () => player.or.contaminants.points.gte(Decimal.pow10(5e20)),
         941: () => player.or.contaminants.points.gte(Decimal.pow10(1e21)),
@@ -1135,6 +1134,28 @@ PROGRESSION_MILESTONES = {
         957: () => player.or.contaminants.points.gte(Decimal.pow10(1e24)),
         958: () => player.or.contaminants.points.gte(Decimal.pow10(2e24)),
         959: () => player.or.contaminants.points.gte(Decimal.pow10(5e24)),
+
+        960: () => player.sp.points.gte("1e512"),
+        961: () => player.sp.points.gte("1e729"),
+        962: () => player.sp.points.gte("1e1000"),
+        963: () => player.sp.points.gte("1e1331"),
+        964: () => player.sp.points.gte("1e1728"),
+        965: () => player.sp.points.gte("1e2197"),
+        966: () => player.sp.points.gte("1e2744"),
+        967: () => player.or.contaminants.points.gte(Decimal.pow10(1e25)),
+        968: () => player.or.contaminants.points.gte(Decimal.pow10(2e25)),
+        969: () => player.or.contaminants.points.gte(Decimal.pow10(5e25)),
+        970: () => player.or.contaminants.points.gte(Decimal.pow10(1e26)),
+        971: () => player.or.contaminants.points.gte(Decimal.pow10(2e26)),
+        972: () => player.or.contaminants.points.gte(Decimal.pow10(5e26)),
+        973: () => player.or.contaminants.points.gte(Decimal.pow10(1e27)),
+        974: () => player.or.contaminants.points.gte(Decimal.pow10(2e27)),
+        975: () => player.or.contaminants.points.gte(Decimal.pow10(5e27)),
+        976: () => player.or.contaminants.points.gte(Decimal.pow10(1e28)),
+        977: () => player.or.contaminants.points.gte(Decimal.pow10(2e28)),
+        978: () => player.or.contaminants.points.gte(Decimal.pow10(5e28)),
+        979: () => player.or.contaminants.points.gte(Decimal.pow10(1e29)),
+        980: () => player.or.contaminants.points.gte(Decimal.pow10(2e29)),
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -2076,7 +2097,6 @@ PROGRESSION_MILESTONES_TEXT = {
         936: "1e190 Species",
         937: "1e210 Species",
         938: "1e231 Species",
-
         939: "1e2e20 Contaminants",
         940: "1e5e20 Contaminants",
         941: "1e1e21 Contaminants",
@@ -2098,6 +2118,28 @@ PROGRESSION_MILESTONES_TEXT = {
         957: "1e1e24 Contaminants",
         958: "1e2e24 Contaminants",
         959: "1e5e24 Contaminants",
+
+        960: "1e512 Species",
+        961: "1e729 Species",
+        962: "1e1000 Species",
+        963: "1e1331 Species",
+        964: "1e1728 Species",
+        965: "1e2197 Species",
+        966: "1e2744 Species",
+        967: "1e1e25 Contaminants",
+        968: "1e2e25 Contaminants",
+        969: "1e5e25 Contaminants",
+        970: "1e1e26 Contaminants",
+        971: "1e2e26 Contaminants",
+        972: "1e5e26 Contaminants",
+        973: "1e1e27 Contaminants",
+        974: "1e2e27 Contaminants",
+        975: "1e5e27 Contaminants",
+        976: "1e1e28 Contaminants",
+        977: "1e2e28 Contaminants",
+        978: "1e5e28 Contaminants",
+        979: "1e1e29 Contaminants",
+        980: "1e2e29 Contaminants",
 }
 
 

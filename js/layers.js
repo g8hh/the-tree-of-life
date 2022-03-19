@@ -226,7 +226,7 @@ function dilate(x, exponent, base = 10){
 }
 
 var TAXONOMY_EFFECTS = {
-        101:() => false ? "to Bottom Quark base per .06" : "nothing (currently)",
+        101:() => hasUpgrade("sp", 114) ? "IN<u>tes</u>tine gain per Nucleuses" : "nothing (currently)",
         102:() => hasUpgrade("sp", 141) ? "Organ gain per Token II" : "nothing (currently)",
         103:() => false ? "Organ gain per Chromosomes" : "nothing (currently)",
         104:() => hasUpgrade("sp", 143) ? "gene gain per Mastery Tokens" : "nothing (currently)",
@@ -22852,7 +22852,6 @@ addLayer("cells", {
                         title: "Pluripotent",
                         cost(){
                                 let amt = getBuyableAmount("cells", 13)
-                                let exp = amt.pow(1.1)
                                 let base = new Decimal(1e30)
                                 if (hasUpgrade("t", 85))        base = new Decimal(1e28)
                                 if (hasUpgrade("t", 91))        base = new Decimal(1e27)
@@ -22868,9 +22867,15 @@ addLayer("cells", {
                                 }
                                 if (hasMilestone("nu", 4))      base = new Decimal(1e19)
 
-                                if (hasMilestone("ch", 18))     exp = amt.pow(1.09)
-                                if (hasMilestone("sp", 4))      exp = amt.pow(1.08)
-                                if (hasMilestone("sp", 18))     exp = amt.pow(1.07)
+                                let exp2 = 1.1
+
+                                if (hasMilestone("ch", 18))     exp2 = 1.09
+                                if (hasMilestone("sp", 4))      exp2 = 1.08
+                                if (hasMilestone("sp", 18))     exp2 = 1.07
+                                if (hasUpgrade("tokens", 142))  exp2 = 1.06
+
+                                let exp = amt.pow(exp2)
+
                                 let init = new Decimal(1e100)
                                 if (hasMilestone("t", 8)) init = decimalOne
                                 return init.times(base.pow(exp))
@@ -22903,6 +22908,7 @@ addLayer("cells", {
                                 if (hasMilestone("ch", 18))     exp = 1.09
                                 if (hasMilestone("sp", 4))      exp = 1.08
                                 if (hasMilestone("sp", 18))     exp = 1.07
+                                if (hasUpgrade("tokens", 142))  exp = 1.06
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
                         buy(){
@@ -22974,6 +22980,7 @@ addLayer("cells", {
                                 if (hasMilestone("ch", 18))     cost2 = cost2.replace("1.1", "1.09")
                                 if (hasMilestone("sp", 4))      cost2 = cost2.replace("1.09", "1.08")
                                 if (hasMilestone("sp", 18))     cost2 = cost2.replace("1.08", "1.07")
+                                if (hasUpgrade("tokens", 142))  cost2 = cost2.replace("1.07", "1.06")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -24028,6 +24035,7 @@ addLayer("t", {
                 if (hasUpgrade("sp", 51))       ret = ret.plus(1)
                 if (hasChallenge("sp", 12))     ret = ret.plus(tmp.sp.challenges[12].reward)
                 if (hasMilestone("sp", 24))     ret = ret.plus(1)
+                if (hasUpgrade("tokens", 272))  ret = ret.plus(1)
 
                 return ret
         },
@@ -26172,6 +26180,7 @@ addLayer("or", {
                 if (hasMilestone("nu", 8))      exp = exp.times(player.nu.points.plus(1))
                 if (hasMilestone("sp", 13))     exp = exp.times(player.sp.milestones.length ** (hasUpgrade("sp", 141) ? 1 : .5))
                 if (hasUpgrade("tokens", 121))  exp = exp.times(50)
+                if (hasUpgrade("tokens", 142))  exp = exp.times(player.tokens.mastery_tokens.total.max(10).log10())
 
                 let ret = pts.plus(1).pow(exp)
 
@@ -29795,8 +29804,9 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                 ret = ret.times(tmp.or.buyables[411].effect)
-                                if (!hasUpgrade("nu", 25)) ret = ret.times(tmp.an.effect)
-                                if (hasUpgrade("sp", 21)) ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (!hasUpgrade("nu", 25))      ret = ret.times(tmp.an.effect)
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 114))      ret = ret.times(player.an.grid[101].extras.plus(1).pow(player.nu.total))
 
                                 return ret
                         },
@@ -31543,7 +31553,8 @@ addLayer("an", {
                 if ((player.an.achActive[33] || hasMilestone("nu", 14)) && hasAchievement("an", 33)) {
                                                 ret = ret.times(Decimal.pow(5, player.nu.points.times(tmp.an.clickables.rowThreeOff)))
                 }
-                if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect.pow(hasMilestone("sp", 7) ? 1 + player.sp.milestones.length : 1))
+                if (hasUpgrade("sp", 11))       ret = ret.times(tmp.sp.effect.pow(hasUpgrade("sp", 111) ? player.nu.points : 1))
+                if (hasMilestone("sp", 7))      ret = ret.times(tmp.sp.effect.pow(player.sp.milestones.length))
                 if (hasMilestone("sp", 10)) {
                         let sub = hasUpgrade("nu", 45) ? 0 : 85800
                         let base = decimalOne.plus(player.sp.milestones.length/500)
@@ -37018,9 +37029,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect I"
                         },
                         description(){
-                                return "Effect I becomes per Nucleus"
+                                return "Effect I becomes per Nucleus and unlock M 82"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e1200"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 111)
@@ -37054,9 +37065,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect IV"
                         },
                         description(){
-                                return "[Eukaryote I effect]"
+                                return "Eukaryote I amount multiplies IN<u>tes</u>tine gain per Nucleus"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("3e1125"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 114)
@@ -38575,7 +38586,7 @@ addLayer("mc", {
                                 "clickables",
                         ],
                         unlocked(){
-                                return true
+                                return !hasUpgrade("tokens", 111)
                         },
                 },
                 "Mu": {
@@ -48432,6 +48443,10 @@ addLayer("tokens", {
                                         div = 2 + hasUpgrade("tokens", 101) + hasUpgrade("tokens", 102) + hasUpgrade("tokens", 103) + hasUpgrade("tokens", 104) + hasUpgrade("tokens", 105)
                                         add = 13000
                                 }
+                                if (hasUpgrade("tokens", 271) && lvls.gte(8974)) {
+                                        div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272)
+                                        add = 13000
+                                }
                                 return [add, div, exp]
                         },
                         maxAfford(){
@@ -48682,15 +48697,18 @@ addLayer("tokens", {
                 },
                 211: {
                         title: "Mastery IV",
-                        cost(){
+                        base(){
                                 let base = 82
-                                if (hasUpgrade("tokens", 141)) base = 81
+                                if (hasUpgrade("tokens", 141)) base = 81 - hasUpgrade("tokens", 142) - hasUpgrade("tokens", 143) - hasUpgrade("tokens", 144) - hasUpgrade("tokens", 145)
+                                return base
+                        },
+                        cost(){
+                                let base = tmp.tokens.buyables[211].base
                                 return Decimal.pow(2, player.tokens.buyables[211].plus(base)).pow10()
                         },
                         canAfford:() => player.or.contaminants.points.gte(tmp.tokens.buyables[211].cost),
                         maxAfford(){
-                                let base = 82
-                                if (hasUpgrade("tokens", 141)) base = 81
+                                let base = tmp.tokens.buyables[211].base
                                 return player.or.contaminants.points.max(10).log10().log(2).sub(base).max(0).ceil()
                         },
                         buy(){
@@ -48705,8 +48723,8 @@ addLayer("tokens", {
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[211]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 211), 3) + " Contaminants</b><br>"
-                                let eformula = "10<sup>2<sup>82+x</sup>"
-                                if (hasUpgrade("tokens", 141)) eformula = eformula.replace("82", "81")
+                                let eformula = "10<sup>2<sup>BASE+x</sup>"
+                                if (hasUpgrade("tokens", 141)) eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[211].base))
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -50220,7 +50238,7 @@ addLayer("tokens", {
                         fullDisplay(){
                                 let title = "<h3>Token<sup>2</sup> XXI</h3>" + br
                                 let cost = br2 + "Requires: 1,325,000 Token II"
-                                return title + "Upgraded Effect XXIII no longer boosts Species gain, Mastery IV adder is 81, and inTES<u>tine</u> cost base is 1.64" + cost
+                                return title + "<bdi style='font-size: 80%'>Upgraded Effect XXIII no longer boosts Species gain, Mastery IV adder is 82-[this row upgrades], and inTES<u>tine</u> cost base is 1.64</bdi>" + cost
                         },
                         canAfford(){
                                 return player.tokens.tokens2.total.gte(1325000)
@@ -50229,6 +50247,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 135)
                         }, // hasUpgrade("tokens", 141)
+                },
+                142: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> XXI</h3>" + br
+                                let cost = br2 + "Requires: 1,541,000 Token II"
+                                return title + "Pluripotent double exponent is 1.06 and log10(Mastery Tokens) multiplies Organ effect exponent" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(1541000)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 141)
+                        }, // hasUpgrade("tokens", 142)
                 },
 
                 201: {
@@ -50418,7 +50450,7 @@ addLayer("tokens", {
                                 return "<h2 style='color: #" + getUndulatingColor() + "'>M 71"
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 251)) return "Purchase either M 61 to unlock me!"
+                                if (!hasUpgrade("tokens", 251)) return "Purchase M 61 to unlock me!"
                                 return "Mastery I coefficient is 1245 and Up Quark divider is 2"
                         },
                         canAfford(){
@@ -50441,15 +50473,12 @@ addLayer("tokens", {
                                 return "<h2 style='color: #" + getUndulatingColor() + "'>M 72"
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 251)) return "Purchase either M 61 to unlock me!"
+                                if (!hasUpgrade("tokens", 251)) return "Purchase M 61 to unlock me!"
                                 return "<bdi style='font-size: 80%'>Mastery III's exponential base is 1.01 and <u>IN</u>testine cost is 1.01<sup>x<sup>2</sup></sup> but add 27 to Mastery III's coefficient</bdi>"
                         },
                         canAfford(){
                                 if (!hasUpgrade("tokens", 251)) return false
                                 return true
-                        },
-                        onPurchase(){
-                                player.tokens.everM61 = true
                         },
                         cost:() => new Decimal(22),
                         currencyLocation:() => player.tokens.mastery_tokens,
@@ -50458,6 +50487,46 @@ addLayer("tokens", {
                         unlocked(){
                                 return player.tokens.mastery_tokens.total.gte(47)
                         }, // hasUpgrade("tokens", 262)
+                },
+                271: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 81"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return "Purchase either M 71 or M 72 to unlock me!"
+                                return "Each upgrade in this row adds 1 to the Token II via Stem Cell divider"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(36),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(70)
+                        }, // hasUpgrade("tokens", 271)
+                },
+                272: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 82"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return "Purchase either M 71 or M 72 to unlock me!"
+                                return "Add 1 to the Tissue effect exponent"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(10),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(77) && hasUpgrade("sp", 111)
+                        }, // hasUpgrade("tokens", 272)
                 },
         },
         microtabs: {
@@ -50542,7 +50611,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272]]],
                                         ["clickables", [2]]
                                 ],
                         },
