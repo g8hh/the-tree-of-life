@@ -24088,7 +24088,7 @@ addLayer("t", {
 
                 if (hasUpgrade("t", 123) || forceAbContent)     layers.cells.buyables[13].buy()
                 if (hasUpgrade("t", 145) || forceAbContent)     layers.cells.buyables[21].buy()
-                if(hasUpgrade("or", 104)||hasMilestone("or", 1))layers.cells.buyables[22].buy()
+                if(hasUpgrade("or", 104)||hasMilestone("an", 1))layers.cells.buyables[22].buy()
         },
         row: 2, 
         prestigeButtonText(){
@@ -26135,7 +26135,9 @@ addLayer("or", {
                 }
                                                 ret = ret.times(tmp.an.effect)
                 if (hasUpgrade("an", 23))       ret = ret.times(player.an.grid[506].extras.plus(1))
-                if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.pow(player.ch.points))
+                if (hasMilestone("ch", 7) && !hasUpgrade("sp", 121)) {
+                                                ret = ret.times(player.ch.points.pow(player.ch.points))
+                }
                 if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
                                                 ret = ret.times(player.an.grid[308].extras.plus(1).pow(player.ch.points.min(5000).div(hasMilestone("sp", 21) ? 1 : 17)))
                 }
@@ -29460,7 +29462,7 @@ addLayer("or", {
                                 }
                                                                 ret = ret.times(tmp.or.buyables[401].effect)
                                 if (hasUpgrade("ch", 13))       ret = ret.times(player.an.grid[407].extras.plus(1).pow(7))
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[401].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[401].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 return ret
@@ -29589,7 +29591,7 @@ addLayer("or", {
                                                                 ret = ret.times(tmp.or.buyables[402].effect)
                                 if (!hasUpgrade("nu", 25))      ret = ret.times(tmp.an.effect)
                                 if (hasUpgrade("an", 31))       ret = ret.times(player.an.grid[507].extras.plus(1))
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[402].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[402].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 return ret
@@ -29711,7 +29713,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                                                 ret = ret.times(tmp.or.buyables[403].effect)
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[403].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[403].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 43))       ret = ret.times(player.an.grid[206].extras.plus(1).pow(player.tokens.tokens2.total.sqrt()))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
@@ -29814,7 +29816,7 @@ addLayer("or", {
                                 }
                                                                 ret = ret.times(tmp.or.buyables[411].effect)
                                 if (!hasUpgrade("nu", 25))      ret = ret.times(tmp.an.effect)
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[411].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 114))      ret = ret.times(player.an.grid[101].extras.plus(1).pow(player.nu.total))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
@@ -29938,7 +29940,7 @@ addLayer("or", {
                                 }
                                                                 ret = ret.times(tmp.or.buyables[412].effect)
                                 if (hasUpgrade("ch", 21))       ret = ret.times(player.an.grid[405].extras.plus(1).pow(player.ch.upgrades.length))
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[412].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[412].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 return ret
@@ -30062,7 +30064,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                                                 ret = ret.times(tmp.or.buyables[413].effect)
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[413].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[413].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 41))       ret = ret.times(player.an.grid[204].extras.plus(1).pow(player.nu.points.sqrt()))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
@@ -30190,7 +30192,7 @@ addLayer("or", {
                                 }
                                                                 ret = ret.times(tmp.or.buyables[421].effect)
                                 if (hasUpgrade("ch", 11))       ret = ret.times(player.an.grid[508].extras.plus(1))
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[421].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[421].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 return ret
@@ -30316,7 +30318,7 @@ addLayer("or", {
                                         ret = ret.times(player.or.extras[ids[i]].plus(1))
                                 }
                                                                 ret = ret.times(tmp.or.buyables[422].effect)
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[422].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[422].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 42))       ret = ret.times(player.an.grid[205].extras.pow(8))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
@@ -30420,7 +30422,7 @@ addLayer("or", {
                                 }
                                                                 ret = ret.times(tmp.or.buyables[423].effect)
                                 if (hasUpgrade("ch", 35))       ret = ret.times(player.an.grid[304].extras.plus(1))
-                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[423].pow(hasUpgrade("sp", 71) ? .75 : .5)))
+                                if (hasUpgrade("sp", 21))       ret = ret.times(tmp.sp.effect.pow(player.or.buyables[423].pow(hasUpgrade("sp", 121) ? .85 : hasUpgrade("sp", 71) ? .75 : .5)))
                                 if (hasUpgrade("sp", 142))      ret = ret.times(player.an.grid[103].extras.plus(1))
 
                                 return ret
@@ -31829,7 +31831,9 @@ addLayer("an", {
                                                         ret = ret.times(Decimal.pow(.5, player.ch.points))
                         }
                         if (hasMilestone("an", 23))     ret = ret.times(player.or.energy.points.div("1e14000").plus(1).pow(.002))
-                        if (hasMilestone("ch", 7))      ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
+                        if (hasMilestone("ch", 7) && !hasUpgrade("sp", 121)) {
+                                                        ret = ret.times(player.ch.points.div(67).plus(1).pow(player.ch.points))
+                        }
                         if (!hasUpgrade("nu", 23)) {
                                 if (hasMilestone("ch", 8))      ret = ret.times(player.ch.points.pow(player.ch.milestones.length/3).max(1))
                                 if (hasMilestone("ch", 16))     ret = ret.times(player.ch.points.plus(1))
@@ -33456,6 +33460,7 @@ addLayer("an", {
                         if (hasMilestone("ch", 32))     ret = player.nu.points.plus(1200)
 
                         if (hasChallenge("sp", 31))     ret = ret.plus(tmp.sp.challenges[31].reward)
+                        if (hasUpgrade("sp", 121))      ret = ret.plus(30)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -37104,9 +37109,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VI"
                         },
                         description(){
-                                return "Effect VI's exponent is .8"
+                                return "Effect VI's exponent is .85, increase the Taxonomy cap by 30, but disable Chromosome Milestone 7"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("5e1651"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 121)

@@ -541,7 +541,9 @@ function organFormulaDisplay(){
         }
         if (tmp.an.effect.gt(1))        c += "Animal effect multiplies AX by " + format(tmp.an.effect) + br
         if (hasUpgrade("an", 23))       c += "Animals VIII multiplies AX by " + format(player.an.grid[506].extras.plus(1)) + br
-        if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.pow(player.ch.points)) + br
+        if (hasMilestone("ch", 7) && !hasUpgrade("sp", 121)) {
+                                        c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.pow(player.ch.points)) + br
+        }
         if (player.an.achActive[13] && hasAchievement("an", 13) || hasAchievement("an", 23)) {
                                         c += "COM I being ON multiplies AX by " + format(player.an.grid[308].extras.plus(1).pow(player.ch.points.min(5000).div(hasMilestone("sp", 21) ? 1 : 17))) + br
         }
@@ -791,7 +793,9 @@ function geneFormulaDisplay(){
         if (hasUpgrade("tokens", 102))  c += "Token<sup>2</sup> II multiplies AX by " + format(player.sp.points.max(1).pow(player.tokens.upgrades.length)) + br
         
         if (c.includes(br))             c += br 
-        if (hasMilestone("ch", 7))      c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
+        if (hasMilestone("ch", 7) && !hasUpgrade("sp", 121)) {
+                                        c += "Chromosome Milestone 7 multiplies AX by " + format(player.ch.points.div(67).plus(1).pow(player.ch.points)) + br
+        }
         if (hasMilestone("sp", 26))     c += "Species Milestone 26 multiplies AX by " + format(Decimal.pow(1.1, player.tokens.tokens2.total)) + br
         if (hasMilestone("an", 23))     c += "Animal Milestone 23 multiplies AX by " + format(player.or.energy.points.div("1e14000").plus(1).pow(.002)) + br
         if (hasUpgrade("sp", 143))      c += "Boosted Species XVIII multiplies AX by " + format(player.an.grid[104].extras.plus(1).pow(player.tokens.mastery_tokens.total)) + br
