@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.283",
+	num: "1.284",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,19 +25,27 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.sp.total.gte("1e1353")
+	return player.sp.total.gte("1e1670")
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.283)<br><br>
+		Reaching the endgame screen (updated at least as of v1.284)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
-	<br><h3 style='color: #CC0000'>v1.282</h3><br>
+	<br><h3 style='color: #CC0000'>v1.284</h3><br>
+		- Balanced until 1e1670 Species.<br>
+		- Added a Mastery Token upgrade.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Various display improvements.<br>
+		- Added a custom save.<br>
+		- Fixed Oligopotent being bought too early.<br>
+	<br><h3 style='color: #CC0000'>v1.283</h3><br>
 		- Balanced until 1e1353 Species.<br>
 		- Added three Mastery Token upgrades.<br>
 		- Implemented and balanced various Boosted Upgrades.<br>

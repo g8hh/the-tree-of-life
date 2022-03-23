@@ -35298,6 +35298,9 @@ addLayer("nu", {
                 if (!hasMilestone("sp", 9)) {
                         return start + format(tmp.nu.effectSecondary) + " to Organ and Animal gain exponents and I'm base."
                 }
+                if (hasUpgrade("tokens", 242)) {
+                        return start + format(tmp.nu.effectSecondary) + " to Animal gain exponent."
+                }
                 return start + format(tmp.nu.effectSecondary) + " to Animal gain exponent and I'm base."
         },
         update(diff){
