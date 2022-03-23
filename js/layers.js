@@ -8106,7 +8106,7 @@ addLayer("n", {
 
         },
         effectDescription(){
-                if (player.shiftAlias) return "effect formula: (sqrt(x)*2+1)^log2(x+7)"
+                if (player.shiftAlias) return "effect formula: (sqrt(x)*2+1)<sup>log2(x+7)</sup>"
                 let effstr = format(tmp.n.effect)
                 let start = " multiplying Point, Hydrogen, Oxygen, Carbon, C Point, and color production gain by "
                 if (player.extremeMode) start = " multiplying Point, Hydrogen, Oxygen, Carbon, C Point, Carbon Science, Oxygen Science and color production gain by "
@@ -22549,7 +22549,7 @@ addLayer("cells", {
                         canComplete: () => player.cells.stem_cells.points.gte(tmp.cells.challenges[21].goal),
                         fullDisplay(){
                                 let a = "Disable the first" 
-                                if (player.cells.challenges[21] > 0) a += " " + formatWhole(player.cells.challenges[21]+1) 
+                                if (player.cells.challenges[21] > 0) a += " " + formatWhole(player.cells.challenges[21] + 1) 
                                 a += " Stem Cell buyable" + (player.cells.challenges[21] > 0 ? "s" : "")
                                 let b = "Goal: " + format(tmp.cells.challenges[21].goal) + " Stem Cells"
                                 let c = "Reward: To see all rewards go to the info tab"
@@ -22592,11 +22592,8 @@ addLayer("cells", {
                 cols: 5,
                 11: {
                         title: "Omnipotent",
-                        cost(){
-                                let amt = getBuyableAmount("cells", 11)
-                                let exp = amt.pow(1.05)
+                        costBase(){
                                 let base = new Decimal(10)
-                                let init = new Decimal(10)
                                 if (hasUpgrade("t", 33))        base = new Decimal(9.9)
                                 if (hasUpgrade("cells", 21))    base = new Decimal(9.8)
                                 if (hasUpgrade("cells", 22))    base = new Decimal(9.7)
@@ -22611,6 +22608,13 @@ addLayer("cells", {
                                 if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
                                 if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
                                 if (hasUpgrade("tokens", 132))  base = new Decimal(10)
+                                return base
+                        },
+                        cost(){
+                                let amt = getBuyableAmount("cells", 11)
+                                let exp = amt.pow(1.05)
+                                let base = tmp.cells.buyables[11].costBase
+                                let init = new Decimal(10)
                                 if (hasMilestone("cells", 20))  init = decimalOne
                                 return init.times(base.pow(exp))
                         },
@@ -22622,21 +22626,7 @@ addLayer("cells", {
                                 if (hasMilestone("cells", 20)) init = decimalOne
                                 let pts = player.cells.stem_cells.points
                                 if (pts.lt(init)) return decimalZero
-                                let base = new Decimal(10)
-                                if (hasUpgrade("t", 33))        base = new Decimal(9.9)
-                                if (hasUpgrade("cells", 21))    base = new Decimal(9.8)
-                                if (hasUpgrade("cells", 22))    base = new Decimal(9.7)
-                                if (hasUpgrade("cells", 23))    base = new Decimal(9.6)
-                                if (hasUpgrade("cells", 24))    base = new Decimal(9.5)
-                                if (hasUpgrade("cells", 25))    base = new Decimal(player.extremeMode ? 9.4 : 9.42)
-                                if (hasUpgrade("cells", 31))    base = new Decimal(player.extremeMode ? 9.2 : 9.34)
-                                if (hasUpgrade("cells", 32))    base = new Decimal(player.extremeMode ? 9.05 : 9.25)
-                                if (hasUpgrade("cells", 33))    base = new Decimal(player.extremeMode ? 8.85 : 9.19)
-                                if (hasUpgrade("cells", 34))    base = new Decimal(player.extremeMode ? 8.69 : 9.12)
-                                if (hasUpgrade("cells", 35))    base = new Decimal(player.extremeMode ? 8.55 : 9.1)
-                                if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
-                                if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
-                                if (hasUpgrade("tokens", 132))  base = new Decimal(10)
+                                let base = tmp.cells.buyables[11].costBase
                                 return pts.div(init).log(base).root(1.05).plus(1).floor()
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[11].cost),
@@ -22708,22 +22698,7 @@ addLayer("cells", {
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "10*10^(x<sup>1.05</sup>)" 
                                 if (hasMilestone("cells", 20))  cost2 = cost2.slice(3,)
-                                let base = new Decimal(10)
-                                if (hasUpgrade("t", 33))        base = new Decimal(9.9)
-                                if (hasUpgrade("cells", 21))    base = new Decimal(9.8)
-                                if (hasUpgrade("cells", 22))    base = new Decimal(9.7)
-                                if (hasUpgrade("cells", 23))    base = new Decimal(9.6)
-                                if (hasUpgrade("cells", 24))    base = new Decimal(9.5)
-                                if (hasUpgrade("cells", 25))    base = new Decimal(player.extremeMode ? 9.4 : 9.42)
-                                if (hasUpgrade("cells", 31))    base = new Decimal(player.extremeMode ? 9.2 : 9.34)
-                                if (hasUpgrade("cells", 32))    base = new Decimal(player.extremeMode ? 9.05 : 9.25)
-                                if (hasUpgrade("cells", 33))    base = new Decimal(player.extremeMode ? 8.85 : 9.19)
-                                if (hasUpgrade("cells", 34))    base = new Decimal(player.extremeMode ? 8.69 : 9.12)
-                                if (hasUpgrade("cells", 35))    base = new Decimal(player.extremeMode ? 8.55 : 9.1)
-                                if (hasUpgrade("cells", 41))    base = new Decimal(player.extremeMode ? 8.5 : 9.04)
-                                if (hasUpgrade("cells", 42))    base = new Decimal(player.extremeMode ? 8.5 : 9)
-                                if (hasUpgrade("tokens", 132))  base = new Decimal(10)
-                                cost2 = cost2.replace("10^", formatWhole(base) + "^")
+                                cost2 = cost2.replace("10^", formatWhole(tmp.cells.buyables[11].costBase) + "^")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -22731,51 +22706,42 @@ addLayer("cells", {
                 },
                 12: {
                         title: "Totipotent",
-                        cost(){
-                                let amt = getBuyableAmount("cells", 12)
-                                let exp = amt.pow(1.1)
-                                if (hasMilestone("ch", 14)) exp = amt.pow(1.08)
+                        costBase(){
                                 let base = new Decimal(1e10)
-                                let init = new Decimal(1e28)
-                                if (hasMilestone("cells", 27))  init = decimalOne
                                 if (hasMilestone("cells", 28))  base = new Decimal(1e9)
                                 if (hasMilestone("cells", 45))  base = new Decimal(5e8)
                                 if (hasMilestone("cells", 46))  base = new Decimal(3e8)
                                 if (hasMilestone("cells", 47))  base = new Decimal(1e8)
                                 if (hasMilestone("ch", 14))     base = new Decimal(1e9)
-                                if (hasMilestone("nu", 10)) {
-                                        base = new Decimal(1e23)
-                                        exp = amt.pow(1.05)
-                                }
+                                if (hasMilestone("nu", 10))     base = new Decimal(1e23)
                                 if (hasUpgrade("nu", 15))       base = new Decimal(1e21)
                                 if (hasUpgrade("tokens", 104))  base = new Decimal(1e20)
-                                return init.times(base.pow(exp))
+                                return base
+                        },
+                        cost(){
+                                let amt = getBuyableAmount("cells", 12)
+                                let exp2 = 1.1
+                                if (hasMilestone("ch", 14)) exp2 = 1.08
+                                if (hasMilestone("nu", 10)) exp2 = 1.05
+                                let base = tmp.cells.buyables[12].costBase
+                                let init = new Decimal(1e28)
+                                if (hasMilestone("cells", 27))  init = decimalOne
+                                
+                                return init.times(base.pow(amt.pow(exp2)))
                         },
                         unlocked(){
                                 return hasUpgrade("cells", 214)
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[12].cost),
                         maxAfford(){
-                                let init = new Decimal(10)
+                                let init = new Decimal(1e28)
                                 if (hasMilestone("cells", 27)) init = decimalOne
                                 let pts = player.cells.stem_cells.points
                                 if (pts.lt(init)) return decimalZero
-                                let base = new Decimal(1e10)
-                                if (hasMilestone("cells", 28)) base = new Decimal(1e9)
-                                if (hasMilestone("cells", 45)) base = new Decimal(5e8)
-                                if (hasMilestone("cells", 46)) base = new Decimal(3e8)
-                                if (hasMilestone("cells", 47)) base = new Decimal(1e8)
+                                let base = tmp.cells.buyables[12].costBase
                                 let exp = 1.1
-                                if (hasMilestone("ch", 14)) {
-                                        exp = 1.08
-                                        base = new Decimal(1e9)
-                                }
-                                if (hasMilestone("nu", 10)) {
-                                        base = new Decimal(1e23)
-                                        exp = 1.05
-                                }
-                                if (hasUpgrade("nu", 15))       base = new Decimal(1e21)
-                                if (hasUpgrade("tokens", 104))  base = new Decimal(1e20)
+                                if (hasMilestone("ch", 14)) exp = 1.08
+                                if (hasMilestone("nu", 10)) exp = 1.05
                                 return pts.div(init).log(base).root(exp).plus(1).floor()
                         },
                         buy(){
@@ -22831,19 +22797,11 @@ addLayer("cells", {
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
-                                let cost2 = "2e28*1e10^(x<sup>1.1</sup>)" 
+                                let cost2 = "2e28*BASE^(x<sup>1.1</sup>)" 
                                 if (hasMilestone("cells", 27)) cost2 = cost2.slice(5,)
-                                if (hasMilestone("cells", 28)) cost2 = cost2.replace("10", "9")
-                                if (hasMilestone("cells", 45)) cost2 = cost2.replace("1e9", "5e8")
-                                if (hasMilestone("cells", 46)) cost2 = cost2.replace("5e8", "3e8")
-                                if (hasMilestone("cells", 47)) cost2 = cost2.replace("3e8", "1e8")
-                                if (hasMilestone("ch", 14)) {
-                                        cost2 = cost2.replace("1e8", "1e9")
-                                        cost2 = cost2.replace("1.1", "1.08")
-                                }
-                                if (hasMilestone("nu", 10))     cost2 = "1e23^(x<sup>1.05</sup>)"
-                                if (hasUpgrade("nu", 15))       cost2 = cost2.replace("23", "21")
-                                if (hasUpgrade("tokens", 104))  cost2 = cost2.replace("21", "20")
+                                cost2 = cost2.replace("BASE", format(tmp.cells.buyables[12].costBase, 0))
+                                if (hasMilestone("ch", 14))     cost2 = cost2.replace("1.1", "1.08")
+                                if (hasMilestone("nu", 10))     cost2 = cost2.replace("1.08", "1.05")
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -22861,10 +22819,8 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 103))       base = new Decimal(2e21)
                                 if (hasUpgrade("t", 104))       base = new Decimal(2e20)
                                 if (hasUpgrade("t", 105))       base = new Decimal(1e20)
-                                if (player.extremeMode) {
-                                        if (hasUpgrade("cells", 23)) {
+                                if (player.extremeMode && hasUpgrade("cells", 23)) {
                                                                 base = new Decimal(1e19)
-                                        }
                                 }
                                 if (hasMilestone("nu", 4))      base = new Decimal(1e19)
 
@@ -22898,10 +22854,8 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 103))       base = new Decimal(2e21)
                                 if (hasUpgrade("t", 104))       base = new Decimal(2e20)
                                 if (hasUpgrade("t", 105))       base = new Decimal(1e20)
-                                if (player.extremeMode) {
-                                        if (hasUpgrade("cells", 23)) {
+                                if (player.extremeMode && hasUpgrade("cells", 23)) {
                                                                 base = new Decimal(1e19)
-                                        }
                                 }
                                 if (hasMilestone("nu", 4))      base = new Decimal(1e19)
 
@@ -22970,14 +22924,12 @@ addLayer("cells", {
                                 if (hasUpgrade("t", 102))       cost2 = cost2.replace("27", "25")
                                 if (hasMilestone("t", 16))      cost2 = cost2.replace("1e25", "5e22")
                                 if (hasUpgrade("t", 103))       cost2 = cost2.replace("5e22", "2e21")
-                                if (hasUpgrade("t", 104))       cost2 = cost2.replace("21", "20")
-                                if (hasUpgrade("t", 105))       cost2 = cost2.replace("2", "1")
-                                if (player.extremeMode) {
-                                        if (hasUpgrade("cells", 23)) {
-                                                                cost2 = cost2.replace("20", "19")
-                                        }
+                                if (hasUpgrade("t", 104))       cost2 = cost2.replace("2e21", "2e20")
+                                if (hasUpgrade("t", 105))       cost2 = cost2.replace("2e20", "1e10")
+                                if (player.extremeMode && hasUpgrade("cells", 23)) {
+                                                                cost2 = cost2.replace("1e20", "1e19")
                                 }
-                                if (hasMilestone("nu", 4))      cost2 = cost2.replace("20", "19")
+                                if (hasMilestone("nu", 4))      cost2 = cost2.replace("1e20", "1e19")
                                 if (hasMilestone("ch", 18))     cost2 = cost2.replace("1.1", "1.09")
                                 if (hasMilestone("sp", 4))      cost2 = cost2.replace("1.09", "1.08")
                                 if (hasMilestone("sp", 18))     cost2 = cost2.replace("1.08", "1.07")
@@ -32656,7 +32608,7 @@ addLayer("an", {
                         },
                         effectDescription(){
                                 let a = "Reward: <u>in</u>TEStine's log4 becomes log3, Mammalia I amount multiplies Energy gain per Chromosome,"
-                                return a + " and (Energy/1e14000+1)<sup>.002</sup> multiplies Gene gain."
+                                return a + " and (Energy / 1e14000 + 1)<sup>.002</sup> multiplies Gene gain."
                         },
                 }, // hasMilestone("an", 23)
                 24: {
@@ -33841,7 +33793,7 @@ addLayer("an", {
                                         
                                         a2 = a2.replace("EXP", format(tmp.an.getGainExp))
 
-                                        let a3 = "Initial Animal effect: (Animals+1)<sup>log10(99+Animals)</sup>"
+                                        let a3 = "Initial Animal effect: (Animals + 1)<sup>log10(99 + Animals)</sup>"
                                         let a = a1 + br + a2 + br2 + a3
                                         let b = "Animals resets all prior content that is not permanently kept, including Token content."
                                         let c = "Note that Tertiary completions are never reset."
@@ -34823,7 +34775,7 @@ addLayer("ch", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: PRI I's ON effect is always active and Chromosomes+1 multiplies Gene gain."
+                                return "Reward: PRI I's ON effect is always active and Chromosomes + 1 multiplies Gene gain."
                         },
                 }, // hasMilestone("ch", 16)
                 17: {
@@ -35812,7 +35764,7 @@ addLayer("nu", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Nucleuses+1 multiplies Organ effect exponent and INtes<u>tine</u> base becomes Tokens."
+                                return "Reward: Nucleuses + 1 multiplies Organ effect exponent and INtes<u>tine</u> base becomes Tokens."
                         },
                 }, // hasMilestone("nu", 8)
                 9: {
@@ -40120,7 +40072,7 @@ addLayer("mini", {
                         let order = [11,12,13  ,23,63,62  ,61,21,11]
                         let exp = tmp.mini.a_points.getColorGainExp
                         for (i = 0; i < 8; i++){
-                                addto = order[i+1]
+                                addto = order[i + 1]
                                 addfrom = order[i]
                                 let base = extras[addfrom].pow(exp).div(20).times(Decimal.pow(2, lvls[addfrom]))
                                 base = base.times(tmp.mini.a_points.colorGainMult)
@@ -45108,7 +45060,6 @@ addLayer("mini", {
                         },
                         description(){
                                 return "Remove 🛑 and remove the +1 from Unlock a slot exponent base"
-
                         },
                         cost:() => Decimal.pow(10, player.extremeMode ? 1322 : 1275),
                         currencyLocation:() => player.mini.c_points,
