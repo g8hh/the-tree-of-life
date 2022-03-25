@@ -138,49 +138,52 @@ function getPointExponentiation(){
 	return exp
 }
 
+function getDilationFromLifeChallenges(){
+        let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
+        let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0  
+        let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
+        let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
+
+        let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
+        let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
+        let c7Base = player.extremeMode ? .0188 : .023
+        c7Base -= layers.l.grid.getGemEffect(706).toNumber()
+        c6Base -= c7Base * c7depth ** .56
+
+        let portion = decimalOne
+        let challId = player.l.activeChallengeID
+        portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
+        portion = portion.times(Decimal.pow(c6Base, c6Layers))
+        if (challId > 801 && !player.extremeMode) {
+                portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
+        }
+        if (challId > 801 && player.extremeMode) {
+                portion = portion.div(Decimal.pow(406, Math.pow(challId-801, .55)))
+        }
+        if (challId > 803) {
+                let sub = player.extremeMode && challId > 804 ? .058 : 0
+                portion = portion.div(Decimal.pow(2.2 - sub, nCk(challId-802, 2)))
+        }
+        if (challId > 805 && player.extremeMode) portion = portion.times(1.53)
+        if (challId > 806 && player.extremeMode) portion = portion.div(4.47)
+        if (challId > 807 && player.extremeMode) portion = portion.div(1.55)
+
+        if (hasMilestone("d", 24)) portion = portion.pow(.94)
+        if (hasMilestone("d", 25) && player.extremeMode) portion = portion.pow(.973)
+        
+        let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
+        let c58base = layers.l.grid.getGemEffect(508)
+        
+        portion = portion.pow(c58base.pow(c58exp))
+
+        return portion
+}
+
 function getPointDilationExponent(){
 	let exp = decimalOne
 
 	if (inChallenge("l", 11))       exp = exp.times(tmp.l.challenges[11].challengeEffect)
-	if (inChallenge("l", 12)) {
-		let c2depth = tmp.l.challenges[12].getChallengeDepths[2] || 0
-		let c5depth = tmp.l.challenges[12].getChallengeDepths[5] || 0  
-		let c6depth = tmp.l.challenges[12].getChallengeDepths[6] || 0
-		let c7depth = tmp.l.challenges[12].getChallengeDepths[7] || 0
-
-		let c6Layers = (86 + c2depth) * c6depth ** (1/(player.extremeMode ? 10 : 8))
-		let c6Base = player.extremeMode ? (hasUpgrade("sci", 451) ? .952 : .951) : .96
-		let c7Base = player.extremeMode ? .0188 : .023
-		c7Base -= layers.l.grid.getGemEffect(706).toNumber()
-		c6Base -= c7Base * c7depth ** .56
-
-		let portion = decimalOne
-		let challId = player.l.activeChallengeID
-		portion = portion.times(Decimal.pow(player.extremeMode ? .713 : .665, Math.sqrt(c5depth)))
-		portion = portion.times(Decimal.pow(c6Base, c6Layers))
-		if (challId > 801 && !player.extremeMode) {
-			portion = portion.div(Decimal.pow(200, Math.pow(challId-801, .57)))
-		}
-		if (challId > 801 && player.extremeMode) {
-			portion = portion.div(Decimal.pow(406, Math.pow(challId-801, .55)))
-		}
-		if (challId > 803) {
-			let sub = player.extremeMode && challId > 804 ? .058 : 0
-			portion = portion.div(Decimal.pow(2.2 - sub, nCk(challId-802, 2)))
-		}
-		if (challId > 805 && player.extremeMode) portion = portion.times(1.53)
-		if (challId > 806 && player.extremeMode) portion = portion.div(4.47)
-		if (challId > 807 && player.extremeMode) portion = portion.div(1.55)
-
-		if (hasMilestone("d", 24)) portion = portion.pow(.94)
-		if (hasMilestone("d", 25) && player.extremeMode) portion = portion.pow(.973)
-		
-		let c58exp = Math.max(0, tmp.l.getNonZeroGemCount - 53)
-		let c58base = layers.l.grid.getGemEffect(508)
-		
-		portion = portion.pow(c58base.pow(c58exp))
-					exp = exp.times(portion)
-	}
+	if (inChallenge("l", 12))       exp = exp.times(getDilationFromLifeChallenges())
 	if (!hasMilestone("ch", 15)) {
 		if (hasUpgrade("cells", 11)) exp = exp.times(tmp.cells.upgrades[11].effect)
 		if (hasUpgrade("cells", 43)) exp = exp.times(Decimal.pow(13, player.tokens.tokens2.total))
@@ -46316,9 +46319,10 @@ addLayer("tokens", {
                 }
                 if (true) {
                         let data = tmp.tokens.buyables
-                        if (data[201].canAfford && !false) return true
-                        if (data[202].canAfford && !false) return true
-                        if (data[203].canAfford && !false) return true
+                        if (data[201].canAfford && data[201].unlocked && !false) return true
+                        if (data[202].canAfford && data[202].unlocked && !false) return true
+                        if (data[203].canAfford && data[203].unlocked && !false) return true
+                        if (data[211].canAfford && data[211].unlocked && !false) return true
                 }
                 
                 let x = ["11", "12", "13", "21", "22", 
@@ -48652,7 +48656,7 @@ addLayer("tokens", {
                         canAfford:() => player.nu.points.gte(tmp.tokens.buyables[203].cost),
                         maxAfford(){
                                 let base = tmp.tokens.buyables[203].baseCost
-                                return player.nu.points.div(base).max(1).log(tmp.tokens.buyables[203].expBase).ceil()
+                                return player.nu.points.div(base).max(1).log(tmp.tokens.buyables[203].expBase).floor().plus(1)
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -50609,7 +50613,7 @@ addLayer("tokens", {
                         "Genes": {
                                 content: [["display-text", geneFormulaDisplay]],
                                 unlocked(){
-                                        return player.an.unlocked
+                                        return hasUpgrade("or", 352) || player.ch.unlocked
                                 },
                         },
                 },
