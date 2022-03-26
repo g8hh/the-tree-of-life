@@ -358,8 +358,17 @@ var TAXONOMY_COSTS = {
         708: [new Decimal(5e8), new Decimal(50), new Decimal(1.1)],
         
         808: [new Decimal(10), new Decimal(5), new Decimal(1.1)],
-        
 }
+
+var TAXONOMY_KEYS = [
+        101, 102, 103, 104, 105, 106, 107, 108,
+        202, 203, 204, 205, 206, 207, 208, 
+        303, 304, 305, 306, 307, 308, 
+        404, 405, 406, 407, 408, 
+        505, 506, 507, 508, 
+        606, 607, 608, 
+        707, 708, 
+        808]
 
 var TOKEN_COSTS = [   6390,    7587,    7630,    8160,    8350, 
                       9350,   10000,   10860,   11230,   12600,
@@ -444,8 +453,7 @@ function resetPreLifeCurrencies(){
                                 233, 241]
 
         for (i in resetBuyableIds){
-                x = resetBuyableIds[i]
-                data6.buyables[x] = decimalZero
+                data6.buyables[resetBuyableIds[i]] = decimalZero
         }
         
         data6.a_points.points = decimalZero
@@ -594,16 +602,6 @@ function filterOut(list, out){
         return list.filter(x => !out.includes(x) && !out.includes(Number(x)))
 }
 
-var TAXONOMY_KEYS = [
-        101, 102, 103, 104, 105, 106, 107, 108,
-        202, 203, 204, 205, 206, 207, 208, 
-        303, 304, 305, 306, 307, 308, 
-        404, 405, 406, 407, 408, 
-        505, 506, 507, 508, 
-        606, 607, 608, 
-        707, 708, 
-        808]
-
 /*
 
 CODE FOR TOKEN COSTS
@@ -674,9 +672,8 @@ addLayer("h", {
         getResetGain(){
                 let base = player.points.ln().min(tmp.h.getDefaultMaximum)
                 if (base.lt(0)) return decimalZero
-                let mult = tmp.h.getGainMult
 
-                let ret = base.times(mult)
+                let ret = base.times(tmp.h.getGainMult)
 
                                                 ret = ret.pow(tmp.tokens.buyables[42].effect)
                 if (hasUpgrade("n", 11))        ret = ret.pow(1.001)
@@ -725,8 +722,8 @@ addLayer("h", {
         },
         getDefaultMaximum(){
                 let ret = new Decimal(4)
-                if (hasUpgrade("h", 12)) ret = ret.plus(tmp.h.upgrades[12].effect)
-                if (hasUpgrade("sci", 13)) ret = ret.plus(tmp.sci.upgrades[13].effect)
+                if (hasUpgrade("h", 12))        ret = ret.plus(tmp.h.upgrades[12].effect)
+                if (hasUpgrade("sci", 13))      ret = ret.plus(tmp.sci.upgrades[13].effect)
                 return ret
         },
         update(diff){
@@ -767,10 +764,7 @@ addLayer("h", {
         },
         deuterium: {
                 getResetGain(){
-                        let base = player.h.points.times(.0002)
-                        let mult = tmp.h.deuterium.getGainMult
-
-                        let ret = base.times(mult)
+                        let ret = player.h.points.times(.0002).times(tmp.h.deuterium.getGainMult)
 
                                                         ret = ret.pow(tmp.tokens.buyables[51].effect)
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
@@ -798,10 +792,7 @@ addLayer("h", {
         },
         atomic_hydrogen: {
                 getResetGain(){
-                        let base = player.h.points.times(.001)
-                        let mult = tmp.h.atomic_hydrogen.getGainMult
-
-                        let ret = base.times(mult)
+                        let ret = player.h.points.times(.001).times(tmp.h.atomic_hydrogen.getGainMult)
 
                                                         ret = ret.pow(tmp.tokens.buyables[43].effect)
                         if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
@@ -1985,8 +1976,8 @@ addLayer("sci", {
                 data.best = data.best.max(data.points)
 
                 let gain = tmp.sci.getResetGain
-                let g = gain.times(diff)
                 if (!hasUpgrade("sci", 215)) {
+                        let g = gain.times(diff)
                         data.points = data.points.plus(g)
                         data.total = data.total.plus(g)
                 } else if (data.points.div(gain.max(1)).lt(20)) {
@@ -2039,8 +2030,7 @@ addLayer("sci", {
                                         "21", "22", "23", "24", "25"]
                         for (i in hSciKeys) {
                                 if (boughtYet) break
-                                id = hSciKeys[i]
-                                boughtYet = buyUpg("sci", id) 
+                                boughtYet = buyUpg("sci", hSciKeys[i]) 
                         }
                 }
                 if (data.autobuyosciupg && hasMilestone("n", 5)) {
@@ -2050,8 +2040,7 @@ addLayer("sci", {
                                         "121", "122", "123", "124", "125"]
                         for (i in oSciKeys) {
                                 if (boughtYet) break
-                                id = oSciKeys[i]
-                                boughtYet = buyUpg("sci", id) 
+                                boughtYet = buyUpg("sci", oSciKeys[i]) 
                         }
                 }
                 if (data.autobuycsciupg && hasMilestone("n", 6)) {
@@ -2063,8 +2052,7 @@ addLayer("sci", {
                                         "241", "242", "243", "244", "245",]
                         for (i in cSciKeys) {
                                 if (boughtYet) break
-                                id = cSciKeys[i]
-                                boughtYet = buyUpg("sci", id) 
+                                boughtYet = buyUpg("sci", cSciKeys[i]) 
                         }
                 }
                 if (data.autobuynsciupg && hasMilestone("p", 5)) {
@@ -2078,8 +2066,7 @@ addLayer("sci", {
                                         "361", "362", "363", "364", "365",]
                         for (i in nSciKeys) {
                                 if (boughtYet) break
-                                id = nSciKeys[i]
-                                boughtYet = buyUpg("sci", id) 
+                                boughtYet = buyUpg("sci", nSciKeys[i]) 
                         }
                 }
         },
@@ -7077,11 +7064,8 @@ addLayer("c", {
         type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("c", 11)) return decimalZero
-                let base = tmp.c.getBaseGain
 
-                let mult = tmp.c.getGainMult
-
-                let ret = base.times(mult)
+                let ret = tmp.c.getBaseGain.times(tmp.c.getGainMult)
 
                 if (hasMilestone("mu", 8) && hasUpgrade("tokens", 51)) {
                                                 ret = ret.times(player.o.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
@@ -7559,11 +7543,8 @@ addLayer("o", {
         type: "custom", 
         getResetGain(){
                 if (!hasUpgrade("o", 11)) return decimalZero
-                let base = tmp.o.getBaseGain
-
-                let mult = tmp.o.getGainMult
-
-                let ret = base.times(mult)
+                
+                let ret = tmp.o.getBaseGain.times(tmp.o.getGainMult)
 
                 if (hasMilestone("mu", 8) && hasUpgrade("tokens", 52)) {
                                                 ret = ret.times(player.c.points.max(1).pow(.1).min(tmp.l.milestones[10].effect))
@@ -7595,11 +7576,8 @@ addLayer("o", {
                 let initialLogBase = 2 + 2 * player.extremeMode
                 let init = player.points.max(4).log(initialLogBase).log(2)
                 let base 
-                if (hasUpgrade("h", 74)){
-                        base = init.max(0).pow(2)
-                } else {
-                        base = init.sub(9).max(0).pow(2)
-                }
+                if (hasUpgrade("h", 74))        base = init.max(0).pow(2)
+                else                            base = init.sub(9).max(0).pow(2)
 
                 if (hasUpgrade("tokens", 21))   base = base.pow(3)
                 if (hasMilestone("tokens", 17)) base = base.pow(3)
@@ -7801,9 +7779,7 @@ addLayer("o", {
                                 if (hasUpgrade("tokens", 11))   exp = exp.plus(3)
                                 if (hasMilestone("tokens", 10)) exp = exp.pow(2)
 
-                                let ret = base.pow(exp)
-
-                                return ret
+                                return base.pow(exp)
                         },
                         effectDisplay(){
                                 return format(tmp.o.upgrades[15].effect)
@@ -8026,10 +8002,7 @@ addLayer("n", {
         baseAmount(){return player.points.floor()},
         type: "custom", 
         getResetGain(){
-                let base = tmp.n.getBaseGain
-                let mult = tmp.n.getGainMult
-
-                let ret = base.times(mult)
+                let ret = tmp.n.getBaseGain.times(tmp.n.getGainMult)
 
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
                 if (player.extremeMode)         ret = ret.pow(.75)
@@ -9341,10 +9314,7 @@ addLayer("p", {
         baseAmount(){return player.n.points.floor()},
         type: "custom", 
         getResetGain(){
-                let base = tmp.p.getBaseGain
-                let mult = tmp.p.getGainMult
-
-                let ret = base.times(mult)
+                let ret = tmp.p.getBaseGain.times(tmp.p.getGainMult)
 
                 if (hasMilestone("l", 1))       ret = ret.pow(tmp.l.milestones[1].effect)
                 if (hasMilestone("a", 1))       ret = ret.pow(2)
@@ -9521,9 +9491,9 @@ addLayer("p", {
                         }
                 }
                 
-                let x = tmp.p.getPassiveGainMult.times(diff)
-                data.points = data.points.plus(data.currentGainPerSec.times(x))
-                data.total = data.total.plus(data.currentGainPerSec.times(x))
+                let x = data.currentGainPerSec.times(tmp.p.getPassiveGainMult.times(diff))
+                data.points = data.points.plus(x)
+                data.total = data.total.plus(x)
                 
                 data.time += diff
         },
@@ -10617,8 +10587,7 @@ addLayer("mu", {
                 let ret = amt.div(100)
 
                 if (player.mu.points.gt(35)) {
-                        ret = ret.times(100/60)
-                        ret = Decimal.sub(1, ret.plus(.765).recip().times(7/8))
+                        ret = Decimal.sub(1, ret.times(5/3).plus(.765).recip().times(7/8))
                 }
                 if (ret.gt(.45) && !hasUpgrade("mu", 33)) ret = ret.pow(2).times(.69).plus(.31)
 
