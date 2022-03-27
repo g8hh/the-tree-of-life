@@ -454,7 +454,7 @@ function stemCellFormulaDisplay(){
         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                         c += "Kidney IX multiplies DX by 1.001" + br
         }
-        if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.0" + (hasUpgrade("sp", 104) ? "" : "0") +"1" + br
+        if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.0" + (hasUpgrade("sp", 154) ? "4" : hasUpgrade("sp", 104) ? "1" : "01") + br
         if (c.includes("DX"))           c += br
 
         let ret = a + br + b + br2 + c
@@ -636,6 +636,7 @@ function energyFormulaDisplay(){
                 let exp = hasMilestone("ch", 36) ? player.ch.points.times(player.ch.points.min(5000)).sqrt() : player.ch.points.min(5000)
                                         c += "Animal Milestone 23 multiplies AX by " + format(base.pow(exp)) + br
         }
+        if (hasUpgrade("sp", 151))      c += "Boosted Effect XXI multiplies AX by " + format(player.an.grid[107].extras.plus(1).pow(player.nu.points.times(2))) + br
         if (c.includes("AX"))           c += br
 
         // BELOW IS EXPONENTIAL THINGS

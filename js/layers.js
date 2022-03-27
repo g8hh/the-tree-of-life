@@ -235,7 +235,7 @@ var TAXONOMY_EFFECTS = {
         104:() => hasUpgrade("sp", 143) ? "gene gain per Mastery Tokens" : "nothing (currently)",
         105:() => false ? "inTES<u>tine</u> gain per 8" : "nothing (currently)",
         106:() => hasUpgrade("sp", 145) ? "species gain per .02" : "nothing (currently)",
-        107:() => false ? "Contaminant gain per Nucleuses<sup>6</sup>" : "nothing (currently)",
+        107:() => hasUpgrade("sp", 151) ? "Energy gain per Nucleus*2" : "nothing (currently)",
         108:() => hasUpgrade("sp", 152) ? "Animal gain per Mastery Token/100" : "nothing (currently)",
 
         202:() => hasUpgrade("sp", 35) ? "to Bottom Quark base per .06" : "nothing (currently)",
@@ -12737,7 +12737,7 @@ addLayer("l", {
                                 return Decimal.pow(1.01, exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), gain 10x D and E Points, and triple Phosphorus and Nitrogen reset times.<br>"
+                                let a = "Reward: Per reset (up to 50) exponentiate prior currencies ^1.01 (same as Life effect), gain 10x D and E Points, and gain 3x Phosphorus and Nitrogen resets.<br>"
                                 return a + "Currently: " + format(tmp.l.milestones[1].effect, 4)
                         },
                 }, // hasMilestone("l", 1)
@@ -20273,7 +20273,7 @@ addLayer("cells", {
                         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                         ret = ret.pow(1.001)
                         }
-                        if (hasUpgrade("sp", 54))       ret = ret.pow(hasUpgrade("sp", 104) ? 1.01 : 1.001)
+                        if (hasUpgrade("sp", 54))       ret = ret.pow(hasUpgrade("sp", 154) ? 1.04 : hasUpgrade("sp", 104) ? 1.01 : 1.001)
 
                         return ret
                 },
@@ -26360,6 +26360,7 @@ addLayer("or", {
                                 let exp = hasMilestone("ch", 36) ? player.ch.points.times(player.ch.points.min(5000)).sqrt() : player.ch.points.min(5000)
                                                         ret = ret.times(base.pow(exp))
                         }
+                        if (hasUpgrade("sp", 151))      ret = ret.times(player.an.grid[107].extras.plus(1).pow(player.nu.points.times(2)))
 
                         // BELOW IS EXPONENTIAL THINGS
                         if (player.extremeMode)         ret = ret.pow(.75) 
@@ -37216,9 +37217,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXI"
                         },
                         description(){
-                                return "[Prokaryota I effect]"
+                                return "Prokaryota I amount multiplies Energy gain per Nucleus*2"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("5e1706"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 151)
@@ -37252,9 +37253,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XXIV"
                         },
                         description(){
-                                return "Effect XXIV's 1.01 becomes 1.02"
+                                return "Effect XXIV's 1.01 becomes 1.04"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e1692"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 154)
@@ -46436,8 +46437,7 @@ addLayer("tokens", {
                 data.best_over_all_time = data.best_over_all_time.max(data.total)
                 if (player.points.gte("e5000")) data.unlocked = true
 
-                if (hasUpgrade("c", 21)) {
-                        //tick coins
+                if (hasUpgrade("c", 21)) { //tick coins
                         /*
                         dc/dt = N/1+c
                         dc(1+c) = Ndt
@@ -46452,6 +46452,19 @@ addLayer("tokens", {
                         let nt = tmp.tokens.coins.getGainMult.times(diff)
                         datac.points = a.plus(nt).times(2).plus(1).sqrt().sub(1)
                         datac.best = datac.best.max(datac.points)
+                }
+
+                if (hasUpgrade("tokens", 145)) {
+                        let mult = 100
+                        let ids = [191, 192, 193]
+                        for (i in ids) {
+                                let id = ids[i]
+                                let target = player.tokens.buyables[id].div(mult).ceil().times(mult)
+                                let diff = target.sub(player.tokens.buyables[id])
+                                player.tokens.tokens2.total = player.tokens.tokens2.total.plus(diff)
+                                player.tokens.tokens2.points = player.tokens.tokens2.points.plus(diff)
+                                player.tokens.buyables[id] = player.tokens.buyables[id].plus(diff)
+                        }
                 }
 
                 data.bestStrange = data.bestStrange.max(tmp.tokens.buyables[112].effect)
@@ -48336,7 +48349,7 @@ addLayer("tokens", {
                         },
                         display(){
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[191]) + "</b><br>"
-                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 191)) + " Tokens</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 191), true, 3) + " Tokens</b><br>"
                                 let eformula = "(21+x)<sup>2</sup>"
                                 if (player.extremeMode) eformula = eformula.replace("21", "25")
                                 if (hasUpgrade("sci", 571)) eformula = eformula.replace("25", "24")
@@ -50242,6 +50255,20 @@ addLayer("tokens", {
                         unlocked(){
                                 return hasUpgrade("tokens", 143)
                         }, // hasUpgrade("tokens", 144)
+                },
+                145: {
+                        fullDisplay(){
+                                let title = "<h3>Token<sup>2</sup> XXV</h3>" + br
+                                let cost = br2 + "Requires: 1,727,000 Token II"
+                                return title + "Levels of Token II via X are continually brought up to multiples of 100" + cost
+                        },
+                        canAfford(){
+                                return player.tokens.tokens2.total.gte(1727000)
+                        },
+                        pay(){}, // doesnt cost anything
+                        unlocked(){
+                                return hasUpgrade("tokens", 144)
+                        }, // hasUpgrade("tokens", 145)
                 },
 
                 201: {
