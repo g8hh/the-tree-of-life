@@ -31508,6 +31508,7 @@ addLayer("an", {
                 if (hasUpgrade("nu", 33))       ret = ret.times(tmp.sp.challenges[11].reward.pow(player.nu.upgrades.length ** .5))
                 if (hasUpgrade("sp", 152))      ret = ret.times(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100)))
                 if (hasUpgrade("sp", 144))      ret = ret.times(player.an.grid[105].extras.plus(1))
+                                                ret = ret.times(tmp.e.effect)
 
                 return ret.max(1)
         },
@@ -31688,6 +31689,7 @@ addLayer("an", {
                                         gain = gain.times(getLevels(id).pow(exp).plus(2).log(2))
                                 }
                                 gain = gain.times(tmp.sp.effect.pow(spExp[row]))
+                                gain = gain.times(tmp.e.effect)
 
 
                                 if (hasAchievement("an", 33)) {
@@ -31698,7 +31700,7 @@ addLayer("an", {
                         }
                 }
 
-                if (hasMilestone("an", 26) || (hasMilestone("an", 20) && player.nu.unlocked) || hasMilestone("nu", 2)) {
+                if (hasMilestone("an", 26) || hasMilestone("e", 1) || (hasMilestone("an", 20) && player.nu.unlocked) || hasMilestone("nu", 2)) {
                         let subD = data.grid
                         let ml = tmp.an.grid.maxLevels
 
@@ -31725,8 +31727,8 @@ addLayer("an", {
 
                                 subD[id].buyables = subD[id].buyables.plus(buy)
                                 if (buy.gt(0)) {
-                                        if (!hasAchievement("an", 13) && !hasMilestone("nu", 2)) break
                                         if (subD[id].buyables.gte(tmp.an.grid.maxLevels)) subD[id].everMaxed = true
+                                        if (!hasAchievement("an", 13) && !hasMilestone("nu", 2) && !hasMilestone("e", 1)) break
                                 }
                         }
                 }
@@ -33391,6 +33393,7 @@ addLayer("an", {
                         if (hasChallenge("sp", 31))     ret = ret.plus(tmp.sp.challenges[31].reward)
                         if (hasUpgrade("sp", 121))      ret = ret.plus(30)
                         if (hasUpgrade("sp", 144))      ret = ret.plus(20)
+                        if (hasMilestone("e", 1))       ret = ret.plus(Math.min(10, player.e.milestones.length) * 5)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -33404,9 +33407,9 @@ addLayer("an", {
                         let data = player.an.grid[id]
 
                         if (data.everMaxed) return true
-                        if (data.ever400) if (hasMilestone("nu", 6) || hasMilestone("sp", 2)) return true
+                        if (data.ever400) if (hasMilestone("nu", 6) || hasMilestone("sp", 2) || hasMilestone("e", 1)) return true
                         if (data.buyables.lt(100)) return false
-                        if (hasMilestone("nu", 2) || hasAchievement("an", 14)) return true
+                        if (hasMilestone("nu", 2) || hasAchievement("an", 14) || hasMilestone("e", 1)) return true
                         if (hasMilestone("an", 27) && player.nu.unlocked) return true
                         if (hasMilestone("an", 20) && player.sp.unlocked) return true
                         return false
@@ -34176,7 +34179,7 @@ addLayer("ch", {
                 return decimalOne
         },
         autoPrestige(){
-                return hasUpgrade("an", 35) || hasMilestone("nu", 2)
+                return hasUpgrade("an", 35) || hasMilestone("nu", 2) || hasMilestone("e", 1)
         },
         resetsNothing(){
                 return player.ch.everUpgrade32
@@ -35188,7 +35191,7 @@ addLayer("nu", {
                 return tmp.nu.getResetGain.gt(0) && ((!player.an.achActive[24] && hasAchievement("an", 24)) || hasUpgrade("ch", 43))
         },
         autoPrestige(){
-                return hasMilestone("sp", 3)
+                return hasMilestone("sp", 3) || hasMilestone("e", 1)
         },
         resetsNothing(){
                 if (hasMilestone("nu", 10) && player.sp.unlocked) return true
@@ -36063,7 +36066,7 @@ addLayer("nu", {
                 data2.genes.total = decimalZero
                 
                 // 4. Organ content
-                if (!false) {
+                if (!player.e.unlocked) {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
@@ -36256,6 +36259,7 @@ addLayer("sp", {
                 if (hasUpgrade("nu", 41))       ret = ret.plus(player.nu.points.sub(150).max(0))
                 if (hasUpgrade("tokens", 104))  ret = ret.plus(player.tokens.upgrades.length)
                 if (hasUpgrade("tokens", 113))  ret = ret.plus(player.tokens.mastery_tokens.total.min(1000))
+                if (hasMilestone("e", 1))       ret = ret.plus(player.e.milestones.length)
 
                 return ret
         },
@@ -36293,6 +36297,7 @@ addLayer("sp", {
                 if (hasUpgrade("tokens", 124))  ret = ret.times(Decimal.pow(player.sp.upgrades.length, player.tokens.mastery_tokens.total.div(3)))
                 if (hasUpgrade("tokens", 251))  ret = ret.times(10)
                 if (hasUpgrade("sp", 145))      ret = ret.times(player.an.grid[106].extras.plus(1).pow(.02))
+                                                ret = ret.times(tmp.e.effect)
 
                 return ret
         },
@@ -38185,6 +38190,463 @@ addLayer("sp", {
                 }
 
                 player.tokens.lastRespecDisplayFormulaID = layers.tokens.buyables.costFormula1ID()
+                resetPreOrganCurrencies()
+        },
+})
+
+addLayer("e", {
+        name: "Ecosystems", 
+        symbol: "E", 
+        position: 6, 
+        startData(){ return {
+                unlocked: false,
+		points: decimalZero,
+                best: decimalZero,
+                total: decimalZero,
+                abtime: 0,
+                time: 0,
+                times: 0,
+                passiveTime: 0,
+        }},
+        color: "#B5A225",
+        branches: [],
+        requires:() => new Decimal("1e1882"), 
+        resource: "Ecosystems", 
+        baseResource: "Species", 
+        baseAmount(){return player.sp.points},
+        type: "custom",
+        getNextAt(){
+                let baseGain = tmp.e.getResetGain
+
+                baseGain = baseGain.plus(1).div(tmp.e.getGainMult).max(1)
+
+                return baseGain.plus(false ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10()
+        },
+        getGainExp(){
+                let ret = new Decimal(1/3)
+
+                return ret
+        },
+        getResetSub(){
+                let ret = new Decimal(154)
+
+                return ret
+        },
+        getResetGain(){
+                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(false ? 0 : 11).max(0)
+
+                ret = ret.times(tmp.e.getGainMult)
+                
+                return ret.floor()
+        },
+        getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain 
+                let ret = decimalOne
+
+                return ret
+        },
+        canReset(){
+                return tmp.e.getResetGain.gt(0) && hasUpgrade("sp", 123)
+        },
+        resetsNothing(){
+                return false
+        },
+        effect(){
+                let ret = player.e.total.plus(1).pow(5)
+
+                return ret
+        },
+        effectDescription(){
+                let start = " affecting most prior currency gain by " + format(tmp.e.effect)
+                return start + "."
+        },
+        update(diff){
+                let data = player.e
+                
+                if (tmp.e.getResetGain.gt(0)) data.unlocked = true
+                data.best = data.best.max(data.points)
+
+                if (false) {
+                        let gainThisTick = tmp.e.getResetGain.times(diff)
+                        data.points = data.points.plus(gainThisTick)
+                        data.total = data.total.plus(gainThisTick)
+                }
+                if (false) data.passiveTime += diff
+
+                if (data.passiveTime > 1) {
+                        data.passiveTime += -1
+                        data.times ++
+                }
+                if (data.passiveTime > 10) data.passiveTime = 10
+
+                data.time += diff
+        },
+        row: 2,
+        prestigeButtonText(){
+                let b = ""
+                if (tmp.e.getResetGain.lt(1e3)) b = "<br>Next: " + format(tmp.e.getNextAt) + " Species."
+
+                return "Reset for <b>" + formatWhole(tmp.e.getResetGain) + "</b> Ecosystems" + b
+        },
+        layerShown(){
+                if (tmp.e.deactivated) return false
+                return player.e.unlocked || hasUpgrade("sp", 123)
+        },
+        upgrades: {
+                rows: 10,
+                cols: 5,
+                11: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystem I"
+                        },
+                        description(){
+                                return "Idk yet"
+                        },
+                        cost:() => new Decimal(10),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("e", 11)
+                },
+        },
+        milestones: {
+                1: {
+                        requirementDescription(){
+                                return "1 Ecosystem reset"
+                        },
+                        done(){
+                                return player.e.times >= 1
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep all prior automation and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
+                        },
+                }, // hasMilestone("e", 1)
+        },
+        tabFormat: {
+                "Upgrades": {
+                        content: [
+                                "main-display",
+                                ["prestige-button", "", function (){ return false ? {'display': 'none'} : {}}],
+                                "blank",
+                                ["upgrades", [1,2,3,4,5]]
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Milestones": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        return "You have done " + formatWhole(player.e.times) + " Ecosystems resets"
+                                }],
+                                "milestones",
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+                "Info": {
+                        content: [
+                                "main-display",
+                                ["display-text", function(){
+                                        let a = "Ecosystems resets all prior content not permanently kept."
+                                        let b = "Initial effect: (Total Ecosystems + 1)<sup>5</sup>"
+                                        let c = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
+                                        c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
+                                        let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets."
+                                        let e = "Ecosystem effect affects Species, Animal, Gene amounts."
+
+                                        return a + br2 + b + br2 + c + br2 + d + br + e
+                                }],
+                        ],
+                        unlocked(){
+                                return true
+                        },
+                },
+        },
+        onPrestige(){
+                let timesAdd = 1
+                if (player.easyMode) timesAdd *= 2
+                player.e.times += timesAdd
+        },
+        doReset(layer){
+                if (layer != "e") return
+                player.e.time = 0
+
+                /*
+                1. Species content
+                2. Nucleuses content
+                3. Chromosomes content
+                4. Animals content
+                5. Gene content
+                6. Organ content
+                6a. DB/OB
+                6b. Contaminant
+                6c. Air
+                6d. Energy
+                7. Token II content
+                */
+
+                let data1 = player.sp
+                let data2 = player.nu
+                let data3 = player.ch 
+                let data4 = player.an
+                let data5 = player.or 
+                let data6 = player.tokens 
+
+                // 1. Species content
+                if (!false) {
+                        let spKeptMilestones = 0
+                        if (!false) {
+                                data1.milestones = data1.milestones.slice(0, spKeptMilestones)
+                        }
+
+                        let spKeptUpgrades = 0
+                        if (!false) {
+                                data1.upgrades = data1.upgrades.slice(0, spKeptUpgrades)
+                        }
+
+                        let spKeptTimes = 0
+                        if (!false) {
+                                data1.times = Math.min(data1.times, spKeptTimes)
+                        }
+
+                        let spKeptChallenges = 0
+                        let ids = [11, 12, 21, 22, 31, 32]
+                        for (i in ids) {
+                                let id = ids[i]
+                                data1.challenges[id] = Math.min(data1.challenges[id], spKeptChallenges)
+                                spKeptChallenges -= data1.challenges[id]
+                        }
+                }
+                data1.points = decimalZero
+                data1.total = decimalZero
+                data1.best = decimalZero
+
+                // 1.5: Token II content
+                if (!false) {
+                        data6.total = decimalZero
+                        data6.points = decimalZero
+                        data6.tokens2.total = decimalZero
+                        data6.tokens2.points = decimalZero
+
+                        let resetIds = [
+                                11, 12, 13,
+                                21, 22, 23,
+                                31, 32, 33,
+                                41, 42, 43,
+                                51, 52, 53, 
+                                61, 62, 63,
+                                101, 102,
+                                111, 112,
+                                121, 122,
+
+                                191, 192, 193,
+                                201, 202, 203,
+                                211]
+                                
+                        let resetbbids = [
+                                11, 12, 13,
+                                21, 22, 23,
+                                31, 32, 33,
+                                41, 42, 43,
+                                51, 52, 53, 
+                                61, 62, 63,
+                                101, 102,
+                                111, 112,
+                                121, 122,]
+
+                        for (i in resetIds){
+                                let id = resetIds[i]
+                                data6.buyables[id] = decimalZero
+                                if (resetbbids.includes(id)) data6.best_buyables[id] = decimalZero
+                        }
+
+                        data6.bestStrange = decimalZero
+                        data6.bestTop = decimalZero
+                        data6.bestBottom = decimalOne
+                        data6.bestCharm = decimalZero
+
+                        data6.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
+
+                        let tokenKeptUpgrades = 0
+                        if (!false) {
+                                data6.upgrades = data6.upgrades.filter(x => x < 200).slice(0, tokenKeptUpgrades)
+                        }
+                        if (tokenKeptUpgrades < 20) {
+                                player.subtabs.tokens.mainTabs = "II"
+                        }
+
+                        data6.mastery_tokens.points = decimalZero
+                        data6.mastery_tokens.total = decimalZero
+                        data6.mastery_tokens.best = decimalZero
+                }
+
+                // 2. Nucleus content
+                if (!false) {
+                        let nuKeptMilestones = 0
+                        if (hasMilestone("sp", 1)) nuKeptMilestones += player.sp.times
+                        if (!false) {
+                                data2.milestones = data2.milestones.slice(0, nuKeptMilestones)
+                        }
+
+                        let nuKeptUpgrades = 0
+                        if (!hasMilestone("sp", 4)) {
+                                data2.upgrades = data2.upgrades.slice(0, nuKeptUpgrades)
+                        }
+                }
+                data2.points = data2.points.min(hasMilestone("sp", 3) ? player.sp.times : 0)
+                data2.total = data2.points
+                data2.best = data2.points
+                
+                // 3. Chromosomes content
+                if (!false) {
+                        let chKeptMilestones = 0 
+                        if (hasMilestone("nu", 10)) chKeptMilestones += player.nu.best.round().toNumber()
+                        if (hasMilestone("sp", 1)) chKeptMilestones += player.sp.times
+                        if (!false) {
+                                data3.milestones = data3.milestones.slice(0, chKeptMilestones)
+                        }
+
+                        let chKeptUpgrades = 0 
+                        if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
+                        if (!hasMilestone("sp", 16)) {
+                                data3.upgrades = data3.upgrades.slice(0, chKeptUpgrades)
+                        }
+                }
+                data3.total = decimalZero
+                data3.best = decimalZero
+                data3.points = decimalZero
+
+                // 4. Animals content
+                if (!false) {
+                        let anKeptMilestones = 0 
+                        if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.best.round().toNumber()
+                        if (hasMilestone("sp", 1)) anKeptMilestones += player.sp.times
+                        if (!false) {
+                                sortStrings(data4.milestones)
+                                data4.milestones = data4.milestones.slice(0, anKeptMilestones)
+                        }
+
+                        let anKeptUpgrades = 0 
+                        if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
+                        if (!false) {
+                                data4.upgrades = data4.upgrades.slice(0, anKeptUpgrades)
+                        }
+
+                        let anKeptAchievements = 0
+                        if (!hasMilestone("nu", 5)) {
+                                data4.achievements = data4.achievements.slice(0, anKeptAchievements)
+                        }
+
+                        let anKeptTimes = 0
+                        if (hasMilestone("nu", 1)) anKeptTimes += player.nu.best.toNumber()
+                        if (hasMilestone("nu", 5)) anKeptTimes += player.nu.best.toNumber()
+                        if (!false) data4.times = Math.min(data4.times, anKeptTimes)
+                }
+                data4.total = decimalZero
+                data4.best = decimalZero
+                data4.points = decimalZero
+
+                // 5. Gene content
+                if (!false) {
+                        let data = data4.grid
+
+                        for (i in TAXONOMY_KEYS) {
+                                data[TAXONOMY_KEYS[i]].extras = decimalZero
+                                data[TAXONOMY_KEYS[i]].buyables = decimalZero
+                                data[TAXONOMY_KEYS[i]].savedValue = decimalZero
+                        }
+                }
+                data4.genes.points = decimalZero
+                data4.genes.best = decimalZero
+                data4.genes.total = decimalZero
+                
+                // 6. Organ content
+                if (!false) {
+                        // 6b
+                        if (!hasMilestone("an", 10)) {
+                                let data = data5.buyables 
+                                data[201] = decimalZero
+                                data[202] = decimalZero
+                                data[203] = decimalZero
+                                data[211] = decimalZero
+                                data[212] = decimalZero
+                                data[213] = decimalZero
+                                data[221] = decimalZero
+                                data[222] = decimalZero
+                                data[223] = decimalZero
+                        }
+
+                        // 6c
+                        if (!hasMilestone("an", 12)) {
+                                let data = data5.bankedAir
+                                data[11] = decimalZero
+                                data[12] = decimalZero
+                                data[21] = decimalZero
+                                data[22] = decimalZero
+                                data[31] = decimalZero
+                                data[32] = decimalZero
+                        }
+
+                        // 6d
+                        if (!false) {
+                                let data = data5.buyables 
+                                if (!hasMilestone("an", 11)) {
+                                        data[401] = decimalZero
+                                        data[402] = decimalZero
+                                        data[403] = decimalZero
+                                        data[411] = decimalZero
+                                        data[412] = decimalZero
+                                        data[413] = decimalZero
+                                        data[421] = decimalZero
+                                        data[422] = decimalZero
+                                        data[423] = decimalZero
+                                }
+                                let dataAlt = data5.extras 
+                                dataAlt[401] = decimalZero
+                                dataAlt[402] = decimalZero
+                                dataAlt[403] = decimalZero
+                                dataAlt[411] = decimalZero
+                                dataAlt[412] = decimalZero
+                                dataAlt[413] = decimalZero
+                                dataAlt[421] = decimalZero
+                                dataAlt[422] = decimalZero
+                                dataAlt[423] = decimalZero
+                        }
+                }
+                
+                data5.points = decimalZero
+                data5.total = decimalZero
+                data5.best = decimalZero
+                data5.deoxygenated_blood.points = decimalZero
+                data5.deoxygenated_blood.total = decimalZero
+                data5.deoxygenated_blood.best = decimalZero
+                data5.oxygenated_blood.points = decimalZero
+                data5.oxygenated_blood.total = decimalZero
+                data5.oxygenated_blood.best = decimalZero
+                data5.air.points = decimalZero
+                data5.air.total = decimalZero
+                data5.air.best = decimalZero
+                data5.contaminants.points = decimalZero
+                data5.contaminants.total = decimalZero
+                data5.contaminants.best = decimalZero
+                data5.energy.points = decimalZero
+                data5.energy.total = decimalZero
+                data5.energy.best = decimalZero
+                data5.challengeAir = decimalZero
+                data5.challenges[11] = 0
+                data5.challenges[12] = 0
+                data5.challenges[21] = 0
+                data5.challenges[22] = 0
+                data5.challenges[31] = 0
+                data5.challenges[32] = 0
+
+                player.cells.best_across_sp = decimalZero
+                player.cells.stem_cells.best_across_sp = decimalZero
+
                 resetPreOrganCurrencies()
         },
 })
@@ -50306,7 +50768,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
-                                return true
+                                return hasUpgrade("tokens", 105)
                         }, // hasUpgrade("tokens", 201)
                 },
                 211: {
