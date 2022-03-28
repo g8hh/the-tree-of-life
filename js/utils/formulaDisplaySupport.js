@@ -647,7 +647,7 @@ function energyFormulaDisplay(){
         }
         if (hasUpgrade("nu", 21))       c += "Nucleuses VI multiplies BX by " + format(player.ch.points.max(1234).div(1234).cbrt().min(1.01), 4) + br
         if (hasMilestone("an", 42))     c += "Animal Milestone 42 multiplies BX by " + format(player.ch.points.max(1465).div(1465).sqrt().min(1.1), 4) + br
-        if (hasUpgrade("sp", 53))       c += "Effect XXIII multplies BX by 1.001" + br
+        if (hasUpgrade("sp", 53))       c += "Effect XXIII multplies BX by 1.0" + (hasUpgrade("sp", 153) ? "03" : "01") + br
         if (hasUpgrade("sp", 103))      c += "Upgraded Effect XXIII multiplies BX by 1.003" + br
         if (c.includes("BX"))           c += br
 
@@ -692,7 +692,8 @@ function animalFormulaDisplay(){
                 let base = decimalOne.plus(player.sp.milestones.length/500)
                                         c += "Species Milestone 10 multiplies AX by " + format(base.pow(player.tokens.tokens2.total.sub(sub).max(0))) + br
         }
-        if (hasUpgrade("sp", 152))      c += "Boosted Upgrade XXII multiplies AX by " + format(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100))) + br
+        if (hasUpgrade("sp", 152))      c += "Boosted Effect XXII multiplies AX by " + format(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100))) + br
+        if (hasUpgrade("sp", 144))      c += "Boosted Effect XIX multiplies AX by " + format(player.an.grid[105].extras.plus(1)) + br
 
         return (a + br + b + br2 + c).replaceAll("AX", makeRed("A"))
 }

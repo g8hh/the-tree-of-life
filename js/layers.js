@@ -233,7 +233,7 @@ var TAXONOMY_EFFECTS = {
         102:() => hasUpgrade("sp", 141) ? "Organ gain per Token II" : "nothing (currently)",
         103:() => hasUpgrade("sp", 142) ? "all Energy buyable amount gain" : "nothing (currently)",
         104:() => hasUpgrade("sp", 143) ? "gene gain per Mastery Tokens" : "nothing (currently)",
-        105:() => false ? "inTES<u>tine</u> gain per 8" : "nothing (currently)",
+        105:() => hasUpgrade("sp", 144) ? "Animal gain" : "nothing (currently)",
         106:() => hasUpgrade("sp", 145) ? "species gain per .02" : "nothing (currently)",
         107:() => hasUpgrade("sp", 151) ? "Energy gain per Nucleus*2" : "nothing (currently)",
         108:() => hasUpgrade("sp", 152) ? "Animal gain per Mastery Token/100" : "nothing (currently)",
@@ -19834,6 +19834,7 @@ addLayer("cells", {
                 if (hasMilestone("sp", 9))      exp = exp.plus(1)
                 if (hasUpgrade("sp", 102))      exp = exp.plus(tmp.sp.challenges[12].reward)
                 if (hasUpgrade("tokens", 273))  exp = exp.plus(1)
+                if (hasUpgrade("sp", 131))      exp = exp.plus(1)
 
                 return exp
         },
@@ -26371,7 +26372,7 @@ addLayer("or", {
                         }
                         if (hasUpgrade("nu", 21))       ret = ret.pow(player.ch.points.max(1234).div(1234).cbrt().min(1.01))
                         if (hasMilestone("an", 42))     ret = ret.pow(player.ch.points.max(1465).div(1465).sqrt().min(1.1))
-                        if (hasUpgrade("sp", 53))       ret = ret.pow(1.001)
+                        if (hasUpgrade("sp", 53))       ret = ret.pow(hasUpgrade("sp", 153) ? 1.003 : 1.001)
                         if (hasUpgrade("sp", 103) && !hasUpgrade("tokens", 141)) {
                                                         ret = ret.pow(1.003)
                         }
@@ -30299,6 +30300,7 @@ addLayer("or", {
                                         c = new Decimal(8)
                                 }
                                 if (hasUpgrade("nu", 24)) c = new Decimal(2.5)
+                                if (hasUpgrade("tokens", 274))  c = new Decimal(1.81)
                                 return [a,b,c]
                         },
                         cost(){
@@ -30409,8 +30411,9 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e1526*1e60<sup>x</sup>*99<sup>x<sup>2</sup></sup>" 
-                                if (hasMilestone("ch", 27)) cost2 = "8<sup>x<sup>2</sup></sup>" 
-                                if (hasUpgrade("nu", 24)) cost2 = cost2.replace("8", "2.5")
+                                if (hasMilestone("ch", 27))     cost2 = "8<sup>x<sup>2</sup></sup>" 
+                                if (hasUpgrade("nu", 24))       cost2 = cost2.replace("8", "2.5")
+                                if (hasUpgrade("tokens", 274))  cost2 = cost2.replace("2.5", "1.81")
                                 let cost3 = "</b><br>"
 
                                 let start = "Amount gain/s: " + format(tmp.or.buyables[id].amountGain)
@@ -31504,6 +31507,7 @@ addLayer("an", {
                 }
                 if (hasUpgrade("nu", 33))       ret = ret.times(tmp.sp.challenges[11].reward.pow(player.nu.upgrades.length ** .5))
                 if (hasUpgrade("sp", 152))      ret = ret.times(player.an.grid[108].extras.plus(1).pow(player.tokens.mastery_tokens.total.div(100)))
+                if (hasUpgrade("sp", 144))      ret = ret.times(player.an.grid[105].extras.plus(1))
 
                 return ret.max(1)
         },
@@ -31666,10 +31670,10 @@ addLayer("an", {
                         let spExp = [0, 0, 0, 0, 0, 0, 0, 0, 0] // 9 0's
                         
                         if (hasUpgrade("sp", 22)) spExp[8] = getLevels(808).div(hasUpgrade("sp", 122) ? 2 : hasUpgrade("sp", 72) ? 8 : 15)
-                        if (hasUpgrade("sp", 23)) spExp[7] = player.ch.points.plus(10).pow(hasUpgrade("sp", 73) ? .6 : .5)
+                        if (hasUpgrade("sp", 23)) spExp[7] = player.ch.points.plus(10).pow(hasUpgrade("sp", 123) ? .65 : hasUpgrade("sp", 73) ? .6 : .5)
                         if (hasUpgrade("sp", 24)) spExp[6] = player.nu.points.plus(8).pow(hasUpgrade("sp", 124) ? .96 : hasUpgrade("sp", 74) ? .7 : 1/3)
                         if (hasUpgrade("sp", 25)) spExp[5] = hasUpgrade("sp", 125) ? player.sp.upgrades.length + player.tokens.upgrades.length : hasUpgrade("sp", 75) ? player.sp.upgrades.length : new Decimal(player.sp.times).min(hasMilestone("nu", 21) ? 222 : 22).plus(3).sqrt()
-                        if (hasUpgrade("sp", 31)) spExp[4] = player.nu.points.div(hasUpgrade("sp", 81) ? 20 : 50)
+                        if (hasUpgrade("sp", 31)) spExp[4] = player.nu.points.div(hasUpgrade("sp", 131) ? 7 : hasUpgrade("sp", 81) ? 20 : 50)
                         if (hasUpgrade("sp", 32)) spExp[3] = player.ch.points.max(1).log(2).div(hasUpgrade("sp", 132) ? 1 : hasUpgrade("sp", 82) ? 2 : 25)
                         if (hasUpgrade("sp", 33)) spExp[2] = player.tokens.tokens2.total.max(1).log10().div(hasUpgrade("sp", 133) ? 1 : hasUpgrade("sp", 83) ? 4 : 25)
                         
@@ -33386,6 +33390,7 @@ addLayer("an", {
 
                         if (hasChallenge("sp", 31))     ret = ret.plus(tmp.sp.challenges[31].reward)
                         if (hasUpgrade("sp", 121))      ret = ret.plus(30)
+                        if (hasUpgrade("sp", 144))      ret = ret.plus(20)
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -37061,9 +37066,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect VIII"
                         },
                         description(){
-                                return "Effect VIII's exponent is .65"
+                                return "Effect VIII's exponent is .65 and unlock Ecosystems"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("2e1864"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 123)
@@ -37097,9 +37102,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XI"
                         },
                         description(){
-                                return "Effect XI's divider is 7"
+                                return "Effect XI's divider is 7 and add 1 to the Cell Effect exponent"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e1724"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 131)
@@ -37193,9 +37198,9 @@ addLayer("sp", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Boosted Effect XIX"
                         },
                         description(){
-                                return "[Bacteria I effect]"
+                                return "Bacteria I amount multiplies Animal gain and increase the Taxonomy limit by 20"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("5e1746"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 144)
@@ -37243,7 +37248,7 @@ addLayer("sp", {
                         description(){
                                 return "Effect XXIII's 1.001 becomes 1.003"
                         },
-                        cost:() => new Decimal("1e9999"),
+                        cost:() => new Decimal("1e1786"),
                         unlocked(){
                                 return hasUpgrade("tokens", 115)
                         }, // hasUpgrade("sp", 153)
@@ -38252,7 +38257,13 @@ addLayer("mc", {
                 data.total = data.total.plus(tmp.mc.getResetGain.times(diff))
 
                 if (hasUpgrade("mc", 14)) layers.mc.buyables[11].buy()
+                if (hasUpgrade("mc", 21)) layers.mc.buyables[12].buy()
                 if (hasUpgrade("mc", 15)) layers.mc.buyables[13].buy()
+
+                if (hasUpgrade("mc", 21)) {
+                        player.mc.buyables[11] = player.mc.buyables[11].div(10).ceil().times(10)
+
+                }
         },
         getMinigameMaximum(){
                 if (player.cells.currentMinigame == undefined) return Infinity
@@ -38354,6 +38365,18 @@ addLayer("mc", {
                         unlocked(){
                                 return player.mc.points.gte("1e9900")
                         }, // hasUpgrade("mc", 15)
+                },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Microfiber"
+                        },
+                        description(){
+                                return "Autobuy ...soft and waves levels are brought up to multiples of 10"
+                        },
+                        cost:() => new Decimal("1e181e3"),
+                        unlocked(){
+                                return player.mc.points.gte("1e180e3")
+                        }, // hasUpgrade("mc", 21)
                 },
         },
         buyables: {
@@ -48408,7 +48431,7 @@ addLayer("tokens", {
                                         add = 13000
                                 }
                                 if (hasUpgrade("tokens", 271) && lvls.gte(8974)) {
-                                        div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272) + hasUpgrade("tokens", 273)
+                                        div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272) + hasUpgrade("tokens", 273) + hasUpgrade("tokens", 274)
                                         add = 13000
                                 }
                                 return [add, div, exp]
@@ -50556,6 +50579,26 @@ addLayer("tokens", {
                                 return player.tokens.mastery_tokens.total.gte(97)
                         }, // hasUpgrade("tokens", 273)
                 },
+                274: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 84"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return "Purchase either M 71 or M 72 to unlock me!"
+                                return "intes<u>TINE</u> cost base is 1.81"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(37),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        unlocked(){
+                                return player.tokens.mastery_tokens.total.gte(121)
+                        }, // hasUpgrade("tokens", 274)
+                },
         },
         microtabs: {
                 currency_displays: {
@@ -50639,7 +50682,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274]]],
                                         ["clickables", [2]]
                                 ],
                         },
