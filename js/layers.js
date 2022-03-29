@@ -33832,7 +33832,7 @@ addLayer("an", {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
-                        if (!false) {
+                        if (!player.e.unlocked) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data1.milestones)
                                 data1.milestones = data1.milestones.slice(0, oKeptMilestones)
@@ -33844,13 +33844,13 @@ addLayer("an", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!hasMilestone("sp", 2)) {
+                        if (!hasMilestone("sp", 2) && !player.e.unlocked) {
                                 data1.upgrades = data1.upgrades.slice(0, oKeptUpgrades)
                         }
 
                         let oKeptTimes = 0
                         if (hasMilestone("an", 2)) oKeptTimes += player.an.times
-                        if (!false) data1.times = Math.min(data1.times, oKeptTimes)
+                        if (!player.e.unlocked) data1.times = Math.min(data1.times, oKeptTimes)
 
                         // 1b
                         if (!hasMilestone("an", 10)) {
@@ -35244,7 +35244,7 @@ addLayer("nu", {
 
                 data.time += diff
 
-                if (data.autobuyanch && hasMilestone("nu", 6)) {
+                if (data.autobuyanch && (hasMilestone("nu", 6) || hasMilestone("e", 1))) {
                         let anKeys = [
                                 '11', '12', '13', '14', '15', 
                                 '21', '22', '23', '24', '25', 
@@ -36037,9 +36037,8 @@ addLayer("nu", {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
 
-                        let anKeptAchievements = 0
-                        if (!hasMilestone("nu", 5) && !hasMilestone("sp", 2)) {
-                                data2.achievements = data2.achievements.slice(0, anKeptAchievements)
+                        if (!hasMilestone("nu", 5) && !hasMilestone("sp", 2) && !hasMilestone("e", 1)) {
+                                data2.achievements = []
                         }
 
                         let anKeptTimes = 0
@@ -36066,11 +36065,11 @@ addLayer("nu", {
                 data2.genes.total = decimalZero
                 
                 // 4. Organ content
-                if (!player.e.unlocked) {
+                if (!false) {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
-                        if (!false) {
+                        if (!player.e.unlocked) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data3.milestones)
                                 data3.milestones = data3.milestones.slice(0, oKeptMilestones)
@@ -36082,13 +36081,13 @@ addLayer("nu", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!hasMilestone("sp", 2)) {
+                        if (!hasMilestone("sp", 2) && !player.e.unlocked) {
                                 data3.upgrades = data3.upgrades.slice(0, oKeptUpgrades)
                         }
 
                         let oKeptTimes = 0
                         if (hasMilestone("an", 2)) oKeptTimes += player.an.times
-                        if (!false) data3.times = Math.min(data3.times, oKeptTimes)
+                        if (!player.e.unlocked) data3.times = Math.min(data3.times, oKeptTimes)
 
                         // 4b
                         if (!hasMilestone("an", 10)) {
@@ -36271,6 +36270,7 @@ addLayer("sp", {
                 return ret
         },
         getResetGain(){
+                if (player.an.points.lt("1e900")) return decimalZero
                 let ret = player.an.points.max(1).log10().div(tmp.sp.getResetDiv).pow(tmp.sp.getGainExp)
 
                 ret = ret.times(tmp.sp.getGainMult)
@@ -37937,6 +37937,7 @@ addLayer("sp", {
         onPrestige(){
                 let timesAdd = 1
                 if (player.easyMode) timesAdd *= 2
+                if (hasMilestone("e", 1)) timesAdd *= 3
                 player.sp.times += timesAdd
         },
         doReset(layer){
@@ -38014,9 +38015,8 @@ addLayer("sp", {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
 
-                        let anKeptAchievements = 0
-                        if (!hasMilestone("nu", 5)) {
-                                data2.achievements = data2.achievements.slice(0, anKeptAchievements)
+                        if (!hasMilestone("nu", 5) && !hasMilestone("e", 1)) {
+                                data2.achievements = []
                         }
 
                         let anKeptTimes = 0
@@ -38047,7 +38047,7 @@ addLayer("sp", {
                         let oKeptMilestones = 0
                         if (hasMilestone("an", 5)) oKeptMilestones += player.an.times 
                         if (hasMilestone("nu", 4)) oKeptMilestones += player.nu.best.round().toNumber()
-                        if (!hasMilestone("sp", 6)) {
+                        if (!hasMilestone("sp", 6) && !player.e.unlocked) {
                                 oKeptMilestones = Math.max(4, oKeptMilestones)
                                 sortStrings(data3.milestones)
                                 data3.milestones = data3.milestones.slice(0, oKeptMilestones)
@@ -38059,13 +38059,13 @@ addLayer("sp", {
                         if (hasMilestone("an", 8)) oKeptUpgrades += player.an.times
                         if (hasMilestone("an", 10)) oKeptUpgrades += player.an.times
                         if (hasMilestone("nu", 4)) oKeptUpgrades += player.nu.best.round().toNumber()
-                        if (!hasMilestone("sp", 2)) {
+                        if (!hasMilestone("sp", 2) && !player.e.unlocked) {
                                 data3.upgrades = data3.upgrades.slice(0, oKeptUpgrades)
                         }
 
                         let oKeptTimes = 0
                         if (hasMilestone("an", 2)) oKeptTimes += player.an.times
-                        if (!false) data3.times = Math.min(data3.times, oKeptTimes)
+                        if (!player.e.unlocked) data3.times = Math.min(data3.times, oKeptTimes)
 
                         // 4b
                         if (!hasMilestone("an", 10)) {
@@ -38319,7 +38319,7 @@ addLayer("e", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep all prior automation and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
+                                return "Reward: Keep all prior automation, gain 3x Species resets, and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
                         },
                 }, // hasMilestone("e", 1)
         },
@@ -38355,7 +38355,7 @@ addLayer("e", {
                                         let b = "Initial effect: (Total Ecosystems + 1)<sup>5</sup>"
                                         let c = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
                                         c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
-                                        let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets."
+                                        let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets and Animal Achievements."
                                         let e = "Ecosystem effect affects Species, Animal, Gene amounts."
 
                                         return a + br2 + b + br2 + c + br2 + d + br + e
@@ -38534,11 +38534,6 @@ addLayer("e", {
                         if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
                         if (!false) {
                                 data4.upgrades = data4.upgrades.slice(0, anKeptUpgrades)
-                        }
-
-                        let anKeptAchievements = 0
-                        if (!hasMilestone("nu", 5)) {
-                                data4.achievements = data4.achievements.slice(0, anKeptAchievements)
                         }
 
                         let anKeptTimes = 0
