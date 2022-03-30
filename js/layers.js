@@ -19835,6 +19835,7 @@ addLayer("cells", {
                 if (hasUpgrade("sp", 102))      exp = exp.plus(tmp.sp.challenges[12].reward)
                 if (hasUpgrade("tokens", 273))  exp = exp.plus(1)
                 if (hasUpgrade("sp", 131))      exp = exp.plus(1)
+                if (hasMilestone("e", 1))       exp = exp.plus(1)
 
                 return exp
         },
@@ -38319,7 +38320,7 @@ addLayer("e", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Keep all prior automation, gain 3x Species resets, and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
+                                return "Reward: Keep all prior automation, gain 3x Species resets, add 1 to the Cell effect exponent, and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
                         },
                 }, // hasMilestone("e", 1)
         },
@@ -49169,7 +49170,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[211]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 211), 3) + " Contaminants</b><br>"
                                 let eformula = "10<sup>2<sup>BASE+x</sup>"
-                                if (hasUpgrade("tokens", 141)) eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[211].base))
+                                eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[211].base))
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -50784,6 +50785,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(1)
                         }, // hasUpgrade("tokens", 211)
                 },
@@ -50805,6 +50807,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(1)
                         }, // hasUpgrade("tokens", 212)
                 },
@@ -50826,6 +50829,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(5)
                         }, // hasUpgrade("tokens", 221)
                 },
@@ -50847,6 +50851,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(5)
                         }, // hasUpgrade("tokens", 222)
                 },
@@ -50867,6 +50872,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(7)
                         }, // hasUpgrade("tokens", 231)
                 },
@@ -50887,6 +50893,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(10)
                         }, // hasUpgrade("tokens", 241)
                 },
@@ -50907,6 +50914,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(16)
                         }, // hasUpgrade("tokens", 242)
                 },
@@ -50930,6 +50938,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(24)
                         }, // hasUpgrade("tokens", 251)
                 },
@@ -50953,6 +50962,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(37)
                         }, // hasUpgrade("tokens", 261)
                 },
@@ -50973,6 +50983,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(47)
                         }, // hasUpgrade("tokens", 262)
                 },
@@ -50993,6 +51004,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(70)
                         }, // hasUpgrade("tokens", 271)
                 },
@@ -51013,6 +51025,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(77) && hasUpgrade("sp", 111)
                         }, // hasUpgrade("tokens", 272)
                 },
@@ -51033,6 +51046,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(97)
                         }, // hasUpgrade("tokens", 273)
                 },
@@ -51053,6 +51067,7 @@ addLayer("tokens", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
+                                if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(121)
                         }, // hasUpgrade("tokens", 274)
                 },
