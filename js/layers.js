@@ -28721,6 +28721,7 @@ addLayer("or", {
                         cost(){
                                 let amt = getBuyableAmount("or", 201)
                                 let base = new Decimal(100)
+                                if (player.e.unlocked) base = decimalOne
                                 let exp = decimalOne
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -28731,7 +28732,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[201].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div(100)
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 100)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = decimalOne // if y^y = e^x then y = x/W(x)
@@ -28792,6 +28793,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "100*x<sup>x</sup>" 
+                                if (player.e.unlocked) cost2 = "x<sup>x</sup>"
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -28801,7 +28803,7 @@ addLayer("or", {
                         title: "gonna",
                         cost(){
                                 let amt = getBuyableAmount("or", 202)
-                                let base = new Decimal(5e4)
+                                let base = new Decimal(player.e.unlocked ? 1 : 5e4)
                                 let exp = new Decimal(2)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -28812,7 +28814,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[202].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div(5e4)
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 5e4)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(2) // if y^y = e^x then y = x/W(x)
@@ -28855,6 +28857,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "50,000*x<sup>2x</sup>" 
+                                if (player.e.unlocked) cost2 = cost2.slice(7,)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -28864,7 +28867,7 @@ addLayer("or", {
                         title: "make",
                         cost(){
                                 let amt = getBuyableAmount("or", 203)
-                                let base = new Decimal(5e45)
+                                let base = new Decimal(player.e.unlocked ? 1 : 5e45)
                                 let exp = new Decimal(4)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -28875,7 +28878,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[203].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div(5e45)
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : 5e45)
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(4) // if y^y = e^x then y = x/W(x)
@@ -28939,6 +28942,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e45*x<sup>4x</sup>" 
+                                if (player.e.unlocked) cost2 = cost2.slice(5,)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -28948,7 +28952,7 @@ addLayer("or", {
                         title: "him",
                         cost(){
                                 let amt = getBuyableAmount("or", 211)
-                                let base = new Decimal("5e442")
+                                let base = new Decimal(player.e.unlocked ? 1 : "5e442")
                                 let exp = new Decimal(8)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -28959,7 +28963,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[211].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("5e442")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "5e442")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(8) // if y^y = e^x then y = x/W(x)
@@ -29006,6 +29010,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "5e442*x<sup>8x</sup>" 
+                                if (player.e.unlocked) cost2 = cost2.slice(6,)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -29015,7 +29020,7 @@ addLayer("or", {
                         title: "an",
                         cost(){
                                 let amt = getBuyableAmount("or", 212)
-                                let base = new Decimal("1e3486")
+                                let base = new Decimal(player.e.unlocked ? 1 : "1e3486")
                                 let exp = new Decimal(16)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -29026,7 +29031,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[212].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("1e3486")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e3486")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(16) // if y^y = e^x then y = x/W(x)
@@ -29069,6 +29074,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e3,486*x<sup>16x</sup>" 
+                                if (player.e.unlocked) cost2 = cost2.slice(8,)
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -29078,7 +29084,7 @@ addLayer("or", {
                         title: "offer", // "I'm gonna make him an offer he can't refuse."
                         cost(){
                                 let amt = getBuyableAmount("or", 213)
-                                let base = new Decimal("1e17147")
+                                let base = new Decimal(player.e.unlocked ? 1 : "1e17147")
                                 let exp = new Decimal(32)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -29089,7 +29095,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[213].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("1e17147")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e17147")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(32) // if y^y = e^x then y = x/W(x)
@@ -29132,6 +29138,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e17,147*x<sup>32x</sup>" 
+                                if (player.e.unlocked) cost2 = "x<sup>32x</sup>"
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -29141,7 +29148,7 @@ addLayer("or", {
                         title: "he", // "I'm gonna make him an offer he can't refuse."
                         cost(){
                                 let amt = getBuyableAmount("or", 221)
-                                let base = new Decimal("1e64100")
+                                let base = new Decimal(player.e.unlocked ? 1 : "1e64100")
                                 let exp = new Decimal(64)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -29152,7 +29159,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[221].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("1e64100")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e64100")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(64) // if y^y = e^x then y = x/W(x)
@@ -29195,6 +29202,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e64,100*x<sup>64x</sup>" 
+                                if (player.e.unlocked) cost2 = "x<sup>64x</sup>"
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -29204,7 +29212,7 @@ addLayer("or", {
                         title: "can't", // "I'm gonna make him an offer he can't refuse."
                         cost(){
                                 let amt = getBuyableAmount("or", 222)
-                                let base = new Decimal("1e148127")
+                                let base = new Decimal(player.e.unlocked ? 1 : "1e148127")
                                 let exp = new Decimal(128)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -29215,7 +29223,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[222].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("1e148127")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e148127")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(128) // if y^y = e^x then y = x/W(x)
@@ -29258,6 +29266,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e148,127*x<sup>128x</sup>" 
+                                if (player.e.unlocked) cost2 = "x<sup>128x</sup>"
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -29267,7 +29276,7 @@ addLayer("or", {
                         title: "refuse", // "I'm gonna make him an offer he can't refuse."
                         cost(){
                                 let amt = getBuyableAmount("or", 223)
-                                let base = new Decimal("1e289805")
+                                let base = new Decimal(player.e.unlocked ? 1 : "1e289805")
                                 let exp = new Decimal(256)
                                 return amt.pow(amt.times(exp)).times(base)
                         },
@@ -29278,7 +29287,7 @@ addLayer("or", {
                                 return player.or.contaminants.points.gte(tmp.or.buyables[223].cost)
                         },
                         getMaxAfford(){
-                                let pts = player.or.contaminants.points.div("1e289805")
+                                let pts = player.or.contaminants.points.div(player.e.unlocked ? 1 : "1e289805")
                                 if (pts.lt(1)) return decimalZero
                                 if (pts.eq(1)) return new Decimal(2)
                                 let exp = new Decimal(256) // if y^y = e^x then y = x/W(x)
@@ -29319,6 +29328,7 @@ addLayer("or", {
 
                                 let cost1 = "<b><h2>Cost formula</h2>:<br>"
                                 let cost2 = "1e259,805*x<sup>256x</sup>" 
+                                if (player.e.unlocked) cost2 = "x<sup>256x</sup>"
                                 let cost3 = "</b><br>"
 
                                 return br + allEff + cost1 + cost2 + cost3
@@ -38356,7 +38366,8 @@ addLayer("e", {
                                         let b = "Initial effect: (Total Ecosystems + 1)<sup>5</sup>"
                                         let c = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
                                         c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
-                                        let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets and Animal Achievements."
+                                        let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets," + br
+                                        d += "permanently keep Animal Achievements and permanently remove Contaminant buyables' base costs."
                                         let e = "Ecosystem effect affects Species, Animal, Gene amounts."
 
                                         return a + br2 + b + br2 + c + br2 + d + br + e
