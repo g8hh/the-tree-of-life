@@ -16766,7 +16766,7 @@ addLayer("a", {
                                 player.a.everMilestone3 = true
                         },
                         effectDescription(){
-                                return "Reward: Permanently keep Hydrogen, Carbon, Oxygen, and minigame content upon Life reset, gain 2021x Lives but nullify boosted Life gain, and you gain two dilation completions at once<sup>*</sup>."
+                                return "Reward: Permanently keep Hydrogen, Carbon, Oxygen, and minigame content upon Life reset, gain 2021x Lives but nullify boosted Life gain (Life Milestone 13), and you gain two dilation completions at once<sup>*</sup>."
                         },
                 }, // hasMilestone("a", 3)
                 4: {
@@ -30394,7 +30394,7 @@ addLayer("or", {
                                         let amt = "<b><h2>Amount</h2>: " + formatWhole(player.or.extras[id]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
                                         let eff2 = format(tmp.or.buyables[id].effect) + " to "
-                                        eff2 += tmp.or.buyables[id].title + " amount and Organ gain</b><br>"
+                                        eff2 += tmp.or.buyables[id].title + " amount " + (hasUpgrade("sp", 112) ? "" : "and Organ ") + "gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("or", id)) + " Energy</b><br>"
                                 
                                         return br + lvl + amt + eff1 + eff2 + cost + "Shift to see details"
@@ -51037,7 +51037,7 @@ addLayer("tokens", {
                         currencyDisplayName:() => "Mastery Token",
                         unlocked(){
                                 if (player.e.unlocked) return true
-                                return player.tokens.mastery_tokens.total.gte(77) && hasUpgrade("sp", 111)
+                                return hasUpgrade("sp", 111)
                         }, // hasUpgrade("tokens", 272)
                 },
                 273: {
