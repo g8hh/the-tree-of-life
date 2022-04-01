@@ -22936,6 +22936,7 @@ addLayer("cells", {
                                 if (hasUpgrade("tokens", 111))  ret = ret.div(20)
                                 if (hasUpgrade("tokens", 121))  ret = ret.div(50)
                                 if (hasUpgrade("tokens", 143))  ret = ret.div(10)
+                                if (hasMilestone("e", 2))       ret = ret.div(2)
                                 
                                 return ret
                         },
@@ -34161,7 +34162,7 @@ addLayer("ch", {
         baseAmount(){return player.an.genes.points},
         type: "static",
         canBuyMax(){
-                return hasUpgrade("ch", 32) || hasMilestone("nu", 2)
+                return hasUpgrade("ch", 32) || hasMilestone("nu", 2) || hasMilestone("e", 2)
         },
         base(){
                 let ret = new Decimal(1e10)
@@ -38333,6 +38334,20 @@ addLayer("e", {
                                 return "Reward: Keep all prior automation, gain 3x Species resets, add 1 to the Cell effect exponent, and per milestone add 1 to the Species Gain exponent and five to the Taxonomy limit (max +50)."
                         },
                 }, // hasMilestone("e", 1)
+                2: {
+                        requirementDescription(){
+                                return "2 Ecosystem resets"
+                        },
+                        done(){
+                                return player.e.times >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Halve Multipotent base cost, you can always bulk Chromosomes, bulk 5x Token II buyables, and Mastery I cost adder is 19."
+                        },
+                }, // hasMilestone("e", 2)
         },
         tabFormat: {
                 "Upgrades": {
@@ -48302,6 +48317,7 @@ addLayer("tokens", {
                                 let maxNewLevels = tmp.tokens.buyables.maxAffordTokenIIBuyables - data.buyables[101].round().toNumber()
                                 let ma = hasMilestone("sp", 3) ? 5 : 1
                                 if (hasUpgrade("tokens", 101))  ma *= 4
+                                if (hasMilestone("e", 2))       ma *= 5
 
                                 maxNewLevels = Math.min(ma, maxNewLevels)
 
@@ -49035,11 +49051,14 @@ addLayer("tokens", {
                         title: "Mastery I",
                         getBases(){
                                 let add = 20
+                                if (hasMilestone("e", 2))       add = 19
+                                
                                 let mult = 1500
                                 if (hasUpgrade("sp", 132))      mult = 1400
                                 if (hasUpgrade("tokens", 261))  mult = 1245
                                 if (hasUpgrade("tokens", 133))  mult = 1140
                                 if (hasUpgrade("sp", 135))      mult = 1095
+                                
                                 return [add, mult]
                         },
                         cost(){
