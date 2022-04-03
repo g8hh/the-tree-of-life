@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.286",
+	num: "1.287",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,18 +25,22 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.e.total.gte(2)
+	return player.e.total.gte(4)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.286)<br><br>
+		Reaching the endgame screen (updated at least as of v1.287)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.287</h3><br>
+		- Balanced until 4 Ecosystems.<br>
+		- Added a custom save.<br>
+		- Added a Ecosystem milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.286</h3><br>
 		- Balanced until 2 Ecosystems.<br>
 		- Added a new layer, Ecosystems!<br>

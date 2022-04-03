@@ -35267,6 +35267,7 @@ addLayer("nu", {
                                 '11', '12', '13', '14', '15', 
                                 '21', '22', '23', '24', '25', 
                                 '31', '32', '33', '34', '35', ]
+                        if (hasMilestone("e", 3)) chKeys = chKeys.concat(['41', '42', '43', '44', '45'])
                         let boughtYet = false
                         for (i in anKeys) {
                                 if (boughtYet) break
@@ -35493,7 +35494,7 @@ addLayer("nu", {
                                 return player.tokens.tokens2.total.gte(78930)
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 31)) return true
+                                if (hasUpgrade("nu", 31) || player.e.unlocked) return true
                                 return player.tokens.tokens2.total.gte(78800)
                         }, // hasUpgrade("nu", 31)
                 },
@@ -35510,7 +35511,7 @@ addLayer("nu", {
                                 return player.an.points.gte("1e1965")
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 32)) return true
+                                if (hasUpgrade("nu", 32) || player.e.unlocked) return true
                                 return player.an.points.gte("1e1960")
                         }, // hasUpgrade("nu", 32)
                 },
@@ -35527,7 +35528,7 @@ addLayer("nu", {
                                 return player.an.points.gte("5e2948")
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 33)) return true
+                                if (hasUpgrade("nu", 33) || player.e.unlocked) return true
                                 return player.an.points.gte("1e2940")
                         }, // hasUpgrade("nu", 33)
                 },
@@ -35540,7 +35541,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(95),
                         unlocked(){
-                                if (hasUpgrade("nu", 34)) return true
+                                if (hasUpgrade("nu", 34) || player.e.unlocked) return true
                                 return player.ch.points.gte(2209)
                         }, // hasUpgrade("nu", 34)
                 },
@@ -35553,7 +35554,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(105),
                         unlocked(){
-                                if (hasUpgrade("nu", 35)) return true
+                                if (hasUpgrade("nu", 35) || player.e.unlocked) return true
                                 return player.ch.points.gte(2481)
                         }, // hasUpgrade("nu", 35)
                 },
@@ -35566,7 +35567,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(165),
                         unlocked(){
-                                if (hasUpgrade("nu", 41)) return true
+                                if (hasUpgrade("nu", 41) || player.e.unlocked) return true
                                 return player.ch.points.gte(4707)
                         }, // hasUpgrade("nu", 41)
                 },
@@ -35586,7 +35587,7 @@ addLayer("nu", {
                                 return 9
                         },
                         unlocked(){
-                                if (hasUpgrade("nu", 42)) return true
+                                if (hasUpgrade("nu", 42) || player.e.unlocked) return true
                                 return player.ch.points.gte(5252)
                         }, // hasUpgrade("nu", 42)
                 },
@@ -35599,7 +35600,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(177),
                         unlocked(){
-                                if (hasUpgrade("nu", 43)) return true
+                                if (hasUpgrade("nu", 43) || player.e.unlocked) return true
                                 return player.ch.points.gte(5407)
                         }, // hasUpgrade("nu", 43)
                 },
@@ -35612,7 +35613,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(181),
                         unlocked(){
-                                if (hasUpgrade("nu", 44)) return true
+                                if (hasUpgrade("nu", 44) || player.e.unlocked) return true
                                 return player.ch.points.gte(5638)
                         }, // hasUpgrade("nu", 44)
                 },
@@ -35625,7 +35626,7 @@ addLayer("nu", {
                         },
                         cost:() => new Decimal(188),
                         unlocked(){
-                                if (hasUpgrade("nu", 45)) return true
+                                if (hasUpgrade("nu", 45) || player.e.unlocked) return true
                                 return player.ch.points.gte(6090)
                         }, // hasUpgrade("nu", 45)
                 },
@@ -36019,12 +36020,14 @@ addLayer("nu", {
                         let chKeptMilestones = 0 
                         if (hasMilestone("nu", 10)) chKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) chKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3)) chKeptMilestones += player.e.times
                         if (!false) {
                                 data1.milestones = data1.milestones.slice(0, chKeptMilestones)
                         }
 
                         let chKeptUpgrades = 0 
                         if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
+                        if (hasMilestone("e", 3))   chKeptUpgrades += player.e.times
                         if (!false) {
                                 data1.upgrades = data1.upgrades.slice(0, chKeptUpgrades)
                         }
@@ -36038,6 +36041,7 @@ addLayer("nu", {
                         let anKeptMilestones = 0 
                         if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) anKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3))  anKeptMilestones += player.e.times
                         if (!false) {
                                 sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, anKeptMilestones)
@@ -36045,6 +36049,7 @@ addLayer("nu", {
 
                         let anKeptUpgrades = 0 
                         if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
+                        if (hasMilestone("e", 3))  anKeptUpgrades += player.e.times
                         if (!false) {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
@@ -37979,11 +37984,13 @@ addLayer("sp", {
                 if (!false) {
                         let nuKeptMilestones = 0
                         if (hasMilestone("sp", 1)) nuKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3))  nuKeptMilestones += player.e.times
                         if (!false) {
                                 data0.milestones = data0.milestones.slice(0, nuKeptMilestones)
                         }
 
                         let nuKeptUpgrades = 0
+                        if (hasMilestone("e", 3)) nuKeptUpgrades += player.e.times
                         if (!hasMilestone("sp", 4)) {
                                 data0.upgrades = data0.upgrades.slice(0, nuKeptUpgrades)
                         }
@@ -37997,12 +38004,14 @@ addLayer("sp", {
                         let chKeptMilestones = 0 
                         if (hasMilestone("nu", 10)) chKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) chKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3)) chKeptMilestones += player.e.times
                         if (!false) {
                                 data1.milestones = data1.milestones.slice(0, chKeptMilestones)
                         }
 
                         let chKeptUpgrades = 0 
                         if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
+                        if (hasMilestone("e", 3)) chKeptUpgrades += player.e.times
                         if (!hasMilestone("sp", 16)) {
                                 data1.upgrades = data1.upgrades.slice(0, chKeptUpgrades)
                         }
@@ -38016,6 +38025,7 @@ addLayer("sp", {
                         let anKeptMilestones = 0 
                         if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) anKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3))  anKeptMilestones += player.e.times
                         if (!false) {
                                 sortStrings(data2.milestones)
                                 data2.milestones = data2.milestones.slice(0, anKeptMilestones)
@@ -38023,6 +38033,7 @@ addLayer("sp", {
 
                         let anKeptUpgrades = 0 
                         if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
+                        if (hasMilestone("e", 3))  anKeptUpgrades += player.e.times
                         if (!false) {
                                 data2.upgrades = data2.upgrades.slice(0, anKeptUpgrades)
                         }
@@ -38345,9 +38356,23 @@ addLayer("e", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Halve Multipotent base cost, you can always bulk Chromosomes, bulk 5x Token II buyables, and Mastery I cost adder is 19."
+                                return "Reward: Halve Multipotent base cost, you can always bulk Chromosomes, bulk 5x Token II buyables, and Mastery I cost adder is 21-milestones (minimum 0)."
                         },
                 }, // hasMilestone("e", 2)
+                3: {
+                        requirementDescription(){
+                                return "3 Ecosystem resets"
+                        },
+                        done(){
+                                return player.e.times >= 3
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Per reset keep a Species, Nucleus, Chromosome, and Animal upgrade and milestone and you can autobuy all Chromosome upgrades."
+                        },
+                }, // hasMilestone("e", 3)
         },
         tabFormat: {
                 "Upgrades": {
@@ -38426,11 +38451,13 @@ addLayer("e", {
                 // 1. Species content
                 if (!false) {
                         let spKeptMilestones = 0
+                        if (hasMilestone("e", 3)) spKeptMilestones += player.e.times
                         if (!false) {
                                 data1.milestones = data1.milestones.slice(0, spKeptMilestones)
                         }
 
                         let spKeptUpgrades = 0
+                        if (hasMilestone("e", 3)) spKeptUpgrades += player.e.times
                         if (!false) {
                                 data1.upgrades = data1.upgrades.slice(0, spKeptUpgrades)
                         }
@@ -38515,11 +38542,13 @@ addLayer("e", {
                 if (!false) {
                         let nuKeptMilestones = 0
                         if (hasMilestone("sp", 1)) nuKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3))  nuKeptMilestones += player.e.times
                         if (!false) {
                                 data2.milestones = data2.milestones.slice(0, nuKeptMilestones)
                         }
 
                         let nuKeptUpgrades = 0
+                        if (hasMilestone("e", 3)) nuKeptUpgrades += player.e.times
                         if (!hasMilestone("sp", 4)) {
                                 data2.upgrades = data2.upgrades.slice(0, nuKeptUpgrades)
                         }
@@ -38533,12 +38562,14 @@ addLayer("e", {
                         let chKeptMilestones = 0 
                         if (hasMilestone("nu", 10)) chKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) chKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3)) chKeptMilestones += player.e.times
                         if (!false) {
                                 data3.milestones = data3.milestones.slice(0, chKeptMilestones)
                         }
 
                         let chKeptUpgrades = 0 
                         if (hasMilestone("nu", 10)) chKeptUpgrades += player.nu.best.round().toNumber()
+                        if (hasMilestone("e", 3)) chKeptUpgrades += player.e.times
                         if (!hasMilestone("sp", 16)) {
                                 data3.upgrades = data3.upgrades.slice(0, chKeptUpgrades)
                         }
@@ -38552,6 +38583,7 @@ addLayer("e", {
                         let anKeptMilestones = 0 
                         if (hasMilestone("nu", 3)) anKeptMilestones += player.nu.best.round().toNumber()
                         if (hasMilestone("sp", 1)) anKeptMilestones += player.sp.times
+                        if (hasMilestone("e", 3))  anKeptMilestones += player.e.times
                         if (!false) {
                                 sortStrings(data4.milestones)
                                 data4.milestones = data4.milestones.slice(0, anKeptMilestones)
@@ -38559,6 +38591,7 @@ addLayer("e", {
 
                         let anKeptUpgrades = 0 
                         if (hasMilestone("nu", 1)) anKeptUpgrades += player.nu.best.toNumber()
+                        if (hasMilestone("e", 3))  anKeptUpgrades += player.e.times
                         if (!false) {
                                 data4.upgrades = data4.upgrades.slice(0, anKeptUpgrades)
                         }
@@ -49051,7 +49084,7 @@ addLayer("tokens", {
                         title: "Mastery I",
                         getBases(){
                                 let add = 20
-                                if (hasMilestone("e", 2))       add = 19
+                                if (hasMilestone("e", 2))       add = Math.max(0, 21 - player.e.milestones.length)
                                 
                                 let mult = 1500
                                 if (hasUpgrade("sp", 132))      mult = 1400
