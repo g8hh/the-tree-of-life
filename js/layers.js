@@ -38322,9 +38322,9 @@ addLayer("e", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystem I"
                         },
                         description(){
-                                return "Idk yet"
+                                return "Each milestone subtracts 1 from the Mastery III base and Strange Quark coefficient is 5"
                         },
-                        cost:() => new Decimal(10),
+                        cost:() => new Decimal(3),
                         unlocked(){
                                 return true
                         }, // hasUpgrade("e", 11)
@@ -38373,6 +38373,20 @@ addLayer("e", {
                                 return "Reward: Per reset keep a Species, Nucleus, Chromosome, and Animal upgrade and milestone and you can autobuy all Chromosome upgrades."
                         },
                 }, // hasMilestone("e", 3)
+                4: {
+                        requirementDescription(){
+                                return "4 Ecosystem resets"
+                        },
+                        done(){
+                                return player.e.times >= 4
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep a Token II upgrade and Species upgrade per reset [not yet] and unlock autobuyers for Nucleus and Species upgrades [not yet]."
+                        },
+                }, // hasMilestone("e", 4)
         },
         tabFormat: {
                 "Upgrades": {
@@ -48605,8 +48619,9 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(112)
                         },
                         coefficient(){
-                                if (hasMilestone("ch", 34)) return new Decimal(4)
-                                if (hasUpgrade("or", 111)) return new Decimal(10)
+                                if (hasUpgrade("e", 11))        return new Decimal(5)
+                                if (hasMilestone("ch", 34))     return new Decimal(4)
+                                if (hasUpgrade("or", 111))      return new Decimal(10)
                                 let ret = new Decimal(10)
                                 if (hasUpgrade("t", 134))       ret = ret.plus(.7)
                                 if (hasUpgrade("t", 144))       ret = ret.plus(1.5)
@@ -49165,6 +49180,7 @@ addLayer("tokens", {
 
                                 if (hasUpgrade("tokens", 122))  ret = Math.min(ret, 241 - player.tokens.upgrades.length - (hasUpgrade("sp", 122) ? player.sp.upgrades.filter(x => x > 110 && x < 160).length : 0))
                                 if (hasUpgrade("tokens", 262))  ret += 27
+                                if (hasUpgrade("e", 11))        ret -= player.e.milestones.length
 
                                 return ret
                         },
