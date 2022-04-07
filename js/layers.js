@@ -31480,8 +31480,11 @@ addLayer("an", {
                 if (pts.lt("1e100")) return decimalZero
                 let exp = tmp.an.getGainExp
 
-                if (hasUpgrade("tokens", 221))  return pts.log10().pow(.15).pow10().times(tmp.sp.effect).pow(exp)
-                if (hasUpgrade("tokens", 102))  return pts.log10().pow(.11).pow10().times(tmp.sp.effect).pow(exp)
+                let exp2 = hasUpgrade("tokens", 221) ? .15 : .11
+
+                if (hasUpgrade("tokens", 102) && pts.log10().pow(exp2).pow10().gte(pts.log10())) {
+                                                return pts.log10().pow(exp2).pow10().times(tmp.sp.effect).pow(exp)
+                }
                 if (hasUpgrade("sp", 61))       return pts.log10().times(tmp.sp.effect).pow(exp)
                 if (hasUpgrade("or", 33))       return pts.log10().pow(exp)
                                                 return pts.log10().sub(99).pow(exp)
@@ -38295,6 +38298,41 @@ addLayer("e", {
                 }
                 if (false) data.passiveTime += diff
 
+                if (hasMilestone("e", 4)) {
+                        if (player.e.autobuyspecies) {
+                                let keys = [
+                                        11, 12, 13, 14, 15, 
+                                        21, 22, 23, 24, 25, 
+                                        31, 32, 33, 34, 35, 
+                                        41, 42, 43, 44, 45, 
+                                        51, 52, 53, 54, 55, 
+                                        61, 62, 63, 64, 65, 
+                                        71, 72, 73, 74, 75, 
+                                        81, 82, 83, 84, 85, 
+                                        91, 92, 93, 94, 95, 
+                                        101, 102, 103, 104, 105, 
+                                        111, 112, 113, 114, 115, 
+                                        121, 122, 123, 124, 125, 
+                                        131, 132, 133, 134, 135, 
+                                        141, 142, 143, 144, 145, 
+                                        151, 152, 153, 154, 155]
+                                for (i in keys) {
+                                        buyUpg("sp", keys[i])
+                                }
+                        }
+                        if (player.e.autobuytokenii) {
+                                let keys = [
+                                        101, 102, 103, 104, 105, 
+                                        111, 112, 113, 114, 115, 
+                                        121, 122, 123, 124, 125, 
+                                        131, 132, 133, 134, 135, 
+                                        141, 142, 143, 144, 145,]
+                                for (i in keys) {
+                                        buyUpg("tokens", keys[i])
+                                }
+                        }
+                }
+
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
                         data.times ++
@@ -38383,8 +38421,9 @@ addLayer("e", {
                         unlocked(){
                                 return true
                         },
+                        toggles(){return [["e", "autobuyspecies"], ["e", "autobuytokenii"]]},
                         effectDescription(){
-                                return "Reward: Keep a Token II upgrade and Species upgrade per reset [not yet] and unlock autobuyers for Nucleus and Species upgrades [not yet]."
+                                return "Reward: Keep a Species upgrade and Token II upgrade per reset and unlock autobuyers for Species and Token II upgrades."
                         },
                 }, // hasMilestone("e", 4)
         },
@@ -38472,6 +38511,7 @@ addLayer("e", {
 
                         let spKeptUpgrades = 0
                         if (hasMilestone("e", 3)) spKeptUpgrades += player.e.times
+                        if (hasMilestone("e", 4)) spKeptUpgrades += player.e.times
                         if (!false) {
                                 data1.upgrades = data1.upgrades.slice(0, spKeptUpgrades)
                         }
@@ -38540,6 +38580,7 @@ addLayer("e", {
                         data6.lastRespecDisplayFormula2ID = layers.tokens.buyables.costFormulaText2ID()
 
                         let tokenKeptUpgrades = 0
+                        if (hasMilestone("e", 4)) tokenKeptUpgrades += player.e.times
                         if (!false) {
                                 data6.upgrades = data6.upgrades.filter(x => x < 200).slice(0, tokenKeptUpgrades)
                         }
@@ -38564,6 +38605,7 @@ addLayer("e", {
                         let nuKeptUpgrades = 0
                         if (hasMilestone("e", 3)) nuKeptUpgrades += player.e.times
                         if (!hasMilestone("sp", 4)) {
+                                sortStrings(data2.upgrades)
                                 data2.upgrades = data2.upgrades.slice(0, nuKeptUpgrades)
                         }
                 }
@@ -39706,7 +39748,7 @@ addLayer("mt", {
                         },
                 },
         },
-        layerShown(){return hasUpgrade("an", 44)},
+        layerShown(){return hasUpgrade("an", 44) || player.sp.total.gte(1e100)},
         tabFormat: {
                 "Taxonomy": {
                         content: [
@@ -48924,14 +48966,17 @@ addLayer("tokens", {
                                 if (hasUpgrade("or", 313) && lvls.gte(57)) {
                                         div = 5
                                         add = 50
+                                        exp = .5
                                 }
                                 if (hasUpgrade("or", 343) && lvls.gte(250)) {
                                         div = 10
                                         add = 75
+                                        exp = .5
                                 }
                                 if (hasMilestone("ch", 3) && lvls.gte(560)) {
                                         div = 20
                                         add = 103
+                                        exp = .5
                                 }
                                 if (hasUpgrade("ch", 21) && lvls.gte(555)) {
                                         div = 5
@@ -48941,10 +48986,12 @@ addLayer("tokens", {
                                 if (hasUpgrade("an", 42) && lvls.gte(1500)) {
                                         div = 10
                                         add = 480
+                                        exp = .4
                                 }
                                 if (hasUpgrade("ch", 45) && lvls.gte(6400)) {
                                         div = 20
                                         add = 800
+                                        exp = .4
                                 }
                                 if (hasMilestone("an", 40) && lvls.gte(11911)) {
                                         div = 2
@@ -48954,18 +49001,22 @@ addLayer("tokens", {
                                 if (hasMilestone("sp", 10) && lvls.gte(20190)) {
                                         div = 3
                                         add = 13000
+                                        exp = .3
                                 }
                                 if (hasMilestone("sp", 14) && lvls.gte(13460)) {
                                         div = 4
                                         add = 13000
+                                        exp = .3
                                 }
                                 if (hasUpgrade("tokens", 103) && lvls.gte(11518)) {
                                         div = 2 + hasUpgrade("tokens", 101) + hasUpgrade("tokens", 102) + hasUpgrade("tokens", 103) + hasUpgrade("tokens", 104) + hasUpgrade("tokens", 105)
                                         add = 13000
+                                        exp = .3
                                 }
                                 if (hasUpgrade("tokens", 271) && lvls.gte(8974)) {
                                         div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272) + hasUpgrade("tokens", 273) + hasUpgrade("tokens", 274)
                                         add = 13000
+                                        exp = .3
                                 }
                                 return [add, div, exp]
                         },
@@ -51220,7 +51271,7 @@ addLayer("tokens", {
                                         ["upgrades", [10, 11, 12, 13, 14]],
                                 ],
                                 unlocked(){
-                                        return hasChallenge("sp", 31)
+                                        return hasChallenge("sp", 31) || player.e.unlocked
                                 },
                         },
                 },
