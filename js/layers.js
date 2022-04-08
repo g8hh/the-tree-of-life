@@ -38226,7 +38226,7 @@ addLayer("sp", {
 addLayer("e", {
         name: "Ecosystems", 
         symbol: "E", 
-        position: 6, 
+        position: 7, 
         startData(){ return {
                 unlocked: false,
 		points: decimalZero,
