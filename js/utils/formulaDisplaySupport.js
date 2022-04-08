@@ -726,7 +726,9 @@ function geneFormulaDisplay(){
         if (hasMilestone("an", 34) && !hasMilestone("an", 36)) {
                                         c += "Animal Milestone 34 multiplies AX by 10" + br
         }
-        if (hasMilestone("an", 39))     c += "Animal Milestone 39 multiplies AX by 1000" + br
+        if (hasMilestone("an", 39) && !hasMilestone("e", 5)) {
+                                        c += "Animal Milestone 39 multiplies AX by 1000" + br
+        }
         if (hasMilestone("ch", 5) && !hasUpgrade("an", 31)) {
                                         c += "Chromosome Milestone 5 divides AX by " + format(Decimal.pow(2, player.ch.points.sub(8))) + br
         }

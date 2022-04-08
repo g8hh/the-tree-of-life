@@ -22937,6 +22937,7 @@ addLayer("cells", {
                                 if (hasUpgrade("tokens", 121))  ret = ret.div(50)
                                 if (hasUpgrade("tokens", 143))  ret = ret.div(10)
                                 if (hasMilestone("e", 2))       ret = ret.div(2)
+                                if (hasMilestone("e", 9))       ret = ret.div(2.5)
                                 
                                 return ret
                         },
@@ -31849,7 +31850,9 @@ addLayer("an", {
                         if (hasMilestone("ch", 10) && player.ch.points.eq(100)) {
                                                         ret = ret.times(20)
                         } 
-                        if (hasMilestone("an", 39))     ret = ret.times(1e3)
+                        if (hasMilestone("an", 39) && !hasMilestone("e", 5)) {
+                                                        ret = ret.times(1e3)
+                        }
                         if (hasUpgrade("tokens", 102))  ret = ret.times(player.sp.points.max(1).pow(player.tokens.upgrades.length))
                         if (hasUpgrade("sp", 143))      ret = ret.times(player.an.grid[104].extras.plus(1).pow(player.tokens.mastery_tokens.total))
 
@@ -35036,7 +35039,7 @@ addLayer("ch", {
                                 player.an.points = decimalZero
                         },
                         effectDescription(){
-                                return "Reward: Chromosomes effect is x*.03+7.78 and Token II via Stem Cells' adder is 9635 but the Taxonomy limit is 1200+Nucleuses and reset Taxonomy buyables and Animals."
+                                return "Reward: Chromosomes effect is x*.03+7.78 and Token II via Stem Cell's adder is 9635 but the Taxonomy limit is 1200+Nucleuses and reset Taxonomy buyables and Animals."
                         },
                 }, // hasMilestone("ch", 32)
                 33: {
@@ -37511,7 +37514,7 @@ addLayer("sp", {
                                 data.points = decimalZero
                         },
                         effectDescription(){
-                                return "Reward: Token II via Stem Cells' double exponent is (13,000 + x/4)<sup>.3</sup> but zero Tokens, Tokens tetrational base is 10, and reduce Token II via Token levels to 50,000."
+                                return "Reward: Token II via Stem Cell's double exponent is (13,000 + x/4)<sup>.3</sup> but zero Tokens, Tokens tetrational base is 10, and reduce Token II via Token levels to 50,000."
                         },
                 }, // hasMilestone("sp", 14)
                 15: {
@@ -38277,7 +38280,9 @@ addLayer("e", {
                 return false
         },
         effect(){
-                let ret = player.e.total.plus(1).pow(5)
+                let exp = hasMilestone("e", 9) ? player.e.milestones.length : 5
+                
+                let ret = player.e.total.plus(1).pow(exp)
 
                 return ret
         },
@@ -38332,6 +38337,35 @@ addLayer("e", {
                                 }
                         }
                 }
+                if (hasMilestone("e", 5)) {
+                        if (player.e.autobuynu) {
+                                let keys = [
+                                        11, 12, 13, 14, 15, 
+                                        21, 22, 23, 24, 25, 
+                                        31, 32, 33, 34, 35, 
+                                        41, 42, 43, 44, 45,]
+                                for (i in keys) {
+                                        buyUpg("nu", keys[i])
+                                }
+                        }
+                }
+                if (hasMilestone("e", 6)) {
+                        if (player.e.autobuymasteri) {
+                                if (tmp.tokens.buyables[201].unlocked) layers.tokens.buyables[201].buy()
+                        }
+                        if (player.e.autobuymasterii) {
+                                if (tmp.tokens.buyables[202].unlocked) layers.tokens.buyables[202].buy()
+                        }
+                }
+                if (hasMilestone("e", 7)) {
+                        if (player.e.autobuymasteriii) {
+                                if (tmp.tokens.buyables[203].unlocked) layers.tokens.buyables[203].buy()
+                        }
+                        if (player.e.autobuymasteriv) {
+                                if (tmp.tokens.buyables[211].unlocked) layers.tokens.buyables[211].buy()
+                        }
+                }
+                
 
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
@@ -38426,6 +38460,79 @@ addLayer("e", {
                                 return "Reward: Keep a Species upgrade and Token II upgrade per reset and unlock autobuyers for Species and Token II upgrades."
                         },
                 }, // hasMilestone("e", 4)
+                5: {
+                        requirementDescription(){
+                                return "5 Ecosystem resets"
+                        },
+                        done(){
+                                return player.e.times >= 5
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        toggles(){return [["e", "autobuynu"]]},
+                        effectDescription(){
+                                return "Reward: Keep a Species reset and Species challenge per reset and unlock an autobuyer for Nucleus upgrades but Animal Milestone 39 no longer multiplies Gene gain."
+                        },
+                }, // hasMilestone("e", 5)
+                6: {
+                        requirementDescription(){
+                                return "6 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(6)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        toggles(){return [["e", "autobuymasteri"], ["e", "autobuymasterii"]]},
+                        effectDescription(){
+                                return "Reward: Keep a Species challenge per reset and autobuy Mastery I and Mastery II."
+                        },
+                }, // hasMilestone("e", 6)
+                7: {
+                        requirementDescription(){
+                                return "10 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(10)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        toggles(){return [["e", "autobuymasteriii"], ["e", "autobuymasteriv"]]},
+                        effectDescription(){
+                                return "Reward: Bulk 4x Token II, keep the first 3 rows of Mastery upgrades on sell, and autobuy Mastery III and Mastery IV."
+                        },
+                }, // hasMilestone("e", 7)
+                8: {
+                        requirementDescription(){
+                                return "15 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(15)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Keep Token II content on reset and keep best Cells and best Stem Cells."
+                        },
+                }, // hasMilestone("e", 8)
+                9: {
+                        requirementDescription(){
+                                return "30 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(30)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: The Ecosystem effect exponent is milestones and Multipotent base is 2.5x less."
+                        },
+                }, // hasMilestone("e", 9)
         },
         tabFormat: {
                 "Upgrades": {
@@ -38461,6 +38568,7 @@ addLayer("e", {
                                         c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
                                         let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets," + br
                                         d += "permanently keep Animal Achievements and permanently remove Contaminant buyables' base costs."
+                                        d += " Furthermore, bulk 5x Token II."
                                         let e = "Ecosystem effect affects Species, Animal, Gene amounts."
 
                                         return a + br2 + b + br2 + c + br2 + d + br + e
@@ -38517,11 +38625,14 @@ addLayer("e", {
                         }
 
                         let spKeptTimes = 0
+                        if (hasMilestone("e", 5)) spKeptTimes += player.e.times
                         if (!false) {
                                 data1.times = Math.min(data1.times, spKeptTimes)
                         }
 
                         let spKeptChallenges = 0
+                        if (hasMilestone("e", 5)) spKeptChallenges += player.e.times
+                        if (hasMilestone("e", 6)) spKeptChallenges += player.e.times
                         let ids = [11, 12, 21, 22, 31, 32]
                         for (i in ids) {
                                 let id = ids[i]
@@ -38534,7 +38645,7 @@ addLayer("e", {
                 data1.best = decimalZero
 
                 // 1.5: Token II content
-                if (!false) {
+                if (!hasMilestone("e", 8)) {
                         data6.total = decimalZero
                         data6.points = decimalZero
                         data6.tokens2.total = decimalZero
@@ -38755,8 +38866,10 @@ addLayer("e", {
                 data5.challenges[31] = 0
                 data5.challenges[32] = 0
 
-                player.cells.best_across_sp = decimalZero
-                player.cells.stem_cells.best_across_sp = decimalZero
+                if (!hasMilestone("e", 8)) {
+                        player.cells.best_across_sp = decimalZero
+                        player.cells.stem_cells.best_across_sp = decimalZero
+                }
 
                 resetPreOrganCurrencies()
         },
@@ -40059,6 +40172,15 @@ addLayer("ach", {
                         },
                 },
                 {
+                        key: "shift+E", 
+                        description: "Shift+E: Go to Ecosystems", onPress(){
+                                showTab("e")
+                        },
+                        unlocked(){
+                                return tmp.e.layerShown
+                        },
+                },
+                {
                         key: "shift+H", 
                         description: "Shift+H: Go to Hydrogen", onPress(){
                                 showTab("h")
@@ -40226,6 +40348,16 @@ addLayer("ach", {
                         },
                         unlocked(){
                                 return tmp.d.layerShown
+                        },
+                },
+                {
+                        key: "e", 
+                        description: "E: Reset for Ecosystems", 
+                        onPress(){
+                                if (canReset("e")) doReset("e")
+                        },
+                        unlocked(){
+                                return tmp.e.layerShown
                         },
                 },
                 {
@@ -48921,6 +49053,8 @@ addLayer("tokens", {
                         if (hasMilestone("ch", 28))     ret *= 5
                         if (player.sp.unlocked)         ret *= 5
                         if (hasUpgrade("tokens", 101))  ret *= 4
+                        if (player.e.unlocked)          ret *= 5
+                        if (hasMilestone("e", 7))       ret *= 4
                         return ret
                 },
                 191: {
@@ -49350,7 +49484,7 @@ addLayer("tokens", {
                                 return true
                         },
                         onClick(){
-                                let limit = hasUpgrade("tokens", 144) ? 250 : 200
+                                let limit = hasUpgrade("tokens", 144) ? 250 : hasMilestone("e", 7) ? 230 : 200
                                 player.tokens.upgrades = player.tokens.upgrades.filter(x => x < limit)
                                 doReset("sp", true) // forced reset
                                 player.tokens.mastery_tokens.points = player.tokens.mastery_tokens.total
