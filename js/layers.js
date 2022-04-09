@@ -38367,6 +38367,7 @@ addLayer("e", {
                 }
                 
 
+                if (hasUpgrade("e", 12)) data.passiveTime += diff
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
                         data.times ++
@@ -38391,7 +38392,7 @@ addLayer("e", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystem I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems I"
                         },
                         description(){
                                 return "Each milestone subtracts 1 from the Mastery III base and Strange Quark coefficient is 5"
@@ -38400,6 +38401,18 @@ addLayer("e", {
                         unlocked(){
                                 return true
                         }, // hasUpgrade("e", 11)
+                },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems II"
+                        },
+                        description(){
+                                return "Up Quark coefficient is x<sup>.6</sup> and gain a Ecosystem reset per second"
+                        },
+                        cost:() => new Decimal(33),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("e", 12)
                 },
         },
         milestones: {
@@ -47243,7 +47256,7 @@ addLayer("tokens", {
         },
         tooltip(){
                 let data = player.tokens
-                if (player.sp.total.gte(1e5)) {
+                if (player.sp.total.gte(1e5) || data.tokens2.points.gte(2e5)) {
                         return formatWhole(data.tokens2.points) + " Token II"
                 }
                 if (player.ch.everUpgrade33) {
@@ -48553,6 +48566,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("e", 12))        return c.pow(.6)
                                 if (hasUpgrade("tokens", 133))  return c.plus(1).sqrt()
                                 if (hasUpgrade("tokens", 261))  return c.plus(1).sqrt().div(2)
                                 if (hasUpgrade("tokens", 131))  return c.plus(1).sqrt().div(4)
@@ -48587,7 +48601,7 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "(1+C)<sup>.5</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
+                                let eformula = "(1+C)<sup>EXP</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
                                 let div = "(40+R)"
                                 if (hasMilestone("or", 12))     div = "40"
                                 if (hasMilestone("nu", 7))      div = "25"
@@ -48603,6 +48617,11 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 261))  div = "2"
                                 if (hasUpgrade("tokens", 133))  div = "1"
                                 eformula = eformula.replace("DIV", div).replace("/1*", "*")
+
+                                let exp = ".5"
+                                if (hasUpgrade("e", 12))        exp = ".6"
+                                if (exp == ".5") eformula = eformula.replace("EXP", ".5")
+                                else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
