@@ -44738,7 +44738,9 @@ addLayer("mini", {
                         },
                 },
                 221: {
-                        title: "∃0 0+x=x+0=x",
+                        title(){
+                                return player.shiftAlias ? "Existence of 0" : "∃0 0+x=x+0=x"
+                        },
                         cost(){
                                 let init = new Decimal("1e138")
                                 if (player.extremeMode) init = new Decimal("1e122")
@@ -44799,7 +44801,9 @@ addLayer("mini", {
                         },
                 },
                 222: {
-                        title: "∃1 1*x=x*1=x",
+                        title(){
+                                return player.shiftAlias ? "Existence of 1" : "∃1 1*x=x*1=x"
+                        },
                         cost(){
                                 let init = new Decimal("1e176")
                                 if (player.sci.buyables[301].gt(1)) init = decimalOne
@@ -44853,7 +44857,9 @@ addLayer("mini", {
                         },
                 },
                 223: {
-                        title: "a+b=b+a",
+                        title(){
+                                return player.shiftAlias ? "Commutativity of Addition" : "a+b=b+a"
+                        },
                         cost(){
                                 let init = new Decimal("1e1507")
                                 if (player.extremeMode) init = new Decimal("1e1702")
@@ -44923,7 +44929,9 @@ addLayer("mini", {
                         },
                 },
                 231: {
-                        title: "(a+b)+c=a+(b+c)",
+                        title(){
+                                return player.shiftAlias ? "Associativity of addition" : "(a+b)+c=a+(b+c)"
+                        },
                         cost(){
                                 let init = new Decimal("1e9864")
                                 if (player.extremeMode) init = new Decimal("1e9280")
@@ -44990,7 +44998,9 @@ addLayer("mini", {
                         },
                 },
                 232: {
-                        title: "a*(b+c)=a*b+a*c",
+                        title(){
+                                return player.shiftAlias ? "Left Distributivity" : "a*(b+c)=a*b+a*c"
+                        },
                         cost(){
                                 let init = new Decimal("1e34464")
                                 if (player.extremeMode) init = new Decimal("1e35768")
@@ -45052,7 +45062,9 @@ addLayer("mini", {
                         },
                 },
                 233: {
-                        title: "(a+b)*c=a*c+b*c",
+                        title(){
+                                return player.shiftAlias ? "Right Distributivity" : "(a+b)*c=a*c+b*c"
+                        },
                         cost(){
                                 let init = new Decimal("1e34833")
                                 if (player.extremeMode) init = new Decimal("1e36530")
@@ -45109,7 +45121,9 @@ addLayer("mini", {
                         },
                 },
                 241: {
-                        title: "(a*b)*c=a*(b*c)",
+                        title(){
+                                return player.shiftAlias ? "Associativity of Multiplication" : "(a*b)*c=a*(b*c)"
+                        },
                         cost(){
                                 let init = new Decimal("1e122e4")
                                 if (player.extremeMode) init = new Decimal("1e1112e3")
