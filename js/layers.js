@@ -34294,7 +34294,7 @@ addLayer("ch", {
                         cost:() => new Decimal(35),
                         unlocked(){
                                 if (player.sp.unlocked) return true
-                                return player.an.grid[505].buyables.gte(52) || player.nu.best.gte(1)
+                                return hasUpgrade("ch", 11) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 12)
                 },
                 13: {
