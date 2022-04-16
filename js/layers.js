@@ -46999,6 +46999,7 @@ addLayer("tokens", {
                 lastRespecDisplayFormulaID: 0,
                 lastRespecDisplayFormula2ID: 0,
                 everM61: false,
+                everM91: false,
         }},
         color: "#7DC71C",
         branches: [],
@@ -49181,7 +49182,7 @@ addLayer("tokens", {
                                         exp = .3
                                 }
                                 if (hasUpgrade("tokens", 271) && lvls.gte(8974)) {
-                                        div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272) + hasUpgrade("tokens", 273) + hasUpgrade("tokens", 274)
+                                        div = 7 + player.tokens.upgrades.filter(x => x > 270).length
                                         add = 13000
                                         exp = .3
                                 }
@@ -49473,6 +49474,44 @@ addLayer("tokens", {
                         },
                         unlocked(){
                                 return hasUpgrade("sp", 115)
+                        },
+                },
+                212: {
+                        title: "Mastery V",
+                        costExp(){
+                                let exp = new Decimal(1.3)
+
+                                return exp
+                        },
+                        cost(){
+                                let exp = tmp.tokens.buyables[212].costExp
+                                return Decimal.pow(3, player.tokens.buyables[212].pow(exp)).ceil()
+                        },
+                        canAfford:() => player.e.points.gte(tmp.tokens.buyables[212].cost),
+                        maxAfford(){
+                                let exp = tmp.tokens.buyables[212].costExp
+                                if (player.e.points.eq(0)) return decimalZero
+                                return player.e.points.max(1).log(3).root(exp).floor().plus(1)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[212].maxAfford
+                                ma = ma.sub(player.tokens.buyables[212]).max(0).min(1)
+                                let data = player.tokens
+                                data.buyables[212] = data.buyables[212].plus(ma)
+                                data.mastery_tokens.points = data.mastery_tokens.points.plus(ma)
+                                data.mastery_tokens.total = data.mastery_tokens.total.plus(ma)
+                        },
+                        display(){
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[212]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 212), 3) + " Ecosystems</b><br>"
+                                let eformula = "3<sup>x<sup>EXP</sup>"
+                                eformula = eformula.replace("EXP", formatWhole(tmp.tokens.buyables[212].costExp))
+                                
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                        },
+                        unlocked(){
+                                return hasUpgrade("tokens", 281)
                         },
                 },
         },
@@ -51275,7 +51314,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 251)) return false
                                 return true
                         },
-                        cost:() => new Decimal(22),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 22),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51290,7 +51329,7 @@ addLayer("tokens", {
                         },
                         description(){
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return "Purchase either M 71 or M 72 to unlock me!"
-                                return "Each upgrade in this row adds 1 to the Token II via Stem Cell divider"
+                                return "Each upgrade in this row or lower adds 1 to the Token II via Stem Cell divider"
                         },
                         canAfford(){
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
@@ -51317,7 +51356,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(10),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 10),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51338,7 +51377,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(11),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 11),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51359,7 +51398,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(37),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 37),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51367,6 +51406,30 @@ addLayer("tokens", {
                                 if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(121)
                         }, // hasUpgrade("tokens", 274)
+                },
+                281: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 91"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 261) || !hasUpgrade("tokens", 262)) return "Purchase both M 71 and M 72 to unlock me!"
+                                return "M 72, 82, 83 and 84 are all permanently free and unlock a new way to get Mastery Tokens"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 261) || !hasUpgrade("tokens", 262)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(98),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        onPurchase(){
+                                player.tokens.everM91 = true
+                        },
+                        unlocked(){
+                                if (player.e.unlocked) return true
+                                return player.tokens.mastery_tokens.total.gte(155)
+                        }, // hasUpgrade("tokens", 281)
                 },
         },
         microtabs: {
@@ -51451,7 +51514,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281]]],
                                         ["clickables", [2]]
                                 ],
                         },
