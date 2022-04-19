@@ -1499,7 +1499,7 @@ var cnItems = {
     "Double Tissues in base Tissue effect": "基础组织效果中的双重组织",
     "Each": "每个",
     "For unlocking Amino, Nitrogen and Phosphorus resets permanently do nothing and token and Nitrogen content is permanently kept upon Life resets.": "对于解锁氨基，氮和磷重置永久不执行任何操作，并且标记和氮含量在生命重置时永久保留。",
-    "For unlocking Life, you maintain all minigame autobuyers and token resets do nothing.": "为了解锁生命，您需要维护所有小游戏自动购买者，而代币重置则无济于事。",
+    "For unlocking Life, you maintain all minigame autobuyers and token resets do nothing.": "为了解锁生命，您需要维护所有迷你游戏自动购买者，并且代币重置什么也不做",
     "Gain 100x Iota and Even is always active": "获得 100 倍 Iota 并且 Even 始终处于活动状态",
     "Gain 100x Kappa": "获得 100x Kappa",
     "Gain 100x Lambda": "获得 100x Lambda",
