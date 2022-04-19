@@ -6,7 +6,7 @@ var systemComponents = {
 				<div v-for="tab in Object.keys(data)">
 					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
 					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + (data[tab].glowColor || defaultGlow)} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
-						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
+						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}"><span v-html="tab"></span></button>
 				</div>
 			</div>
 		`
@@ -223,9 +223,9 @@ var systemComponents = {
 			<h2 style='color: #00FF99'>Built in saves</h2><br>
 			To import: import the string with <i>capitalization</i> correct and no trailing spaces.<br>
 			<bdi style='color: #F16105'>Warning: Scrolling past here may contains spoilers.</bdi><br><br>
-			<span v-for="key in CUSTOM_SAVES_IDS">{{key}}<br></span>
+			<span v-for="(key, i) in CUSTOM_SAVES_IDS">{{key}}<bdi style='color: #FF0000'>,</bdi>  <span v-if="i % 3 == 2"><br></span></span> 
 		</span>
-		<br><br>
+		<br><br><br><br>
 		</span>
 
 		</div>

@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.268",
+	num: "1.289",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -20,19 +20,180 @@ let VERSION = {
 var forceEndgame = false
 function isEndgame() {
 	if (forceEndgame) return true
+	return isEndgameRaw()
+}
+
+function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.sp.times >= 2
+	return player.e.total.gte(30)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.268)<br><br>
+		Reaching the endgame screen (updated at least as of v1.289)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.289</h3><br>
+		- Balanced until 30 Ecosystems.<br>
+		- Added five Ecosystem milestones.<br>
+		- Added a hotkey for Ecosystems.<br>
+		- Added a new buff for Ecosystem unlock.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.288</h3><br>
+		- Balanced until 5 Ecosystems.<br>
+		- Added a Ecosystem upgrade.<br>
+		- Added a Ecosystem milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.287</h3><br>
+		- Balanced until 4 Ecosystems.<br>
+		- Added a custom save.<br>
+		- Added a Ecosystem milestone.<br>
+	<br><h3 style='color: #CC0000'>v1.286</h3><br>
+		- Balanced until 2 Ecosystems.<br>
+		- Added a new layer, Ecosystems!<br>
+		- Added a custom save.<br>
+		- Various buffs for resetting for Ecosystems.<br>
+	<br><h3 style='color: #CC0000'>v1.285</h3><br>
+		- Balanced until 1e1882 Species.<br>
+		- Added a custom save.<br>
+		- Added a Token<sup>2</sup> upgrade.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Various display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.284</h3><br>
+		- Balanced until 1e1670 Species.<br>
+		- Added a Mastery Token upgrade.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Various display improvements.<br>
+		- Added a custom save.<br>
+		- Fixed Oligopotent being bought too early.<br>
+	<br><h3 style='color: #CC0000'>v1.283</h3><br>
+		- Balanced until 1e1353 Species.<br>
+		- Added three Mastery Token upgrades.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Added five Token<sup>2</sup> upgrades.<br>
+		- Various display improvements.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.282</h3><br>
+		- Balanced until 5e871 Species.<br>
+		- Added two Mastery Token upgrades.<br>
+		- Implemented and balanced various Boosted Upgrades.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Added a Species milestone.<br>
+		- Various wording and code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.281</h3><br>
+		- Balanced until 1e673 Species.<br>
+		- Added two Mastery Token upgrades.<br>
+		- Added 4 Token<sup>2</sup> upgrades.<br>
+		- Added Mastery IV.<br>
+		- Added a Species milestone.<br>
+		- Added a custom save.<br>
+		- Various display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.280</h3><br>
+		- Balanced until 749,000 Token II.<br>
+		- Implemented more challenge completions.<br>
+		- Added a custom save.<br>
+		- Added a Species milestone.<br>
+		- Added two Token<sup>2</sup> upgrades.<br>
+		- Added two Mastery Token upgrades.<br>
+		- Various code clean up and display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.279</h3><br>
+		- Balanced until 682,300 Token II.<br>
+		- Added more challenge completions.<br>
+		- Fixed various issues with Token<sup>2</sup> upgrades unlocking too early.<br>
+		- Lots of code cleanup (almost 600 lines from layers.js).<br>
+		- Added a new file, formulaDisplaySupport.js .<br>
+	<br><h3 style='color: #CC0000'>v1.278</h3><br>
+		- Balanced until 600,000 Token II.<br>
+		- Added one more challenge completion.<br>
+		- Added a custom save.<br>
+		- Added the introduction infobox to the achievements tab.<br>
+		- Added a layer for Taxonomy.<br>
+		- Changed token the respec display.<br>
+	<br><h3 style='color: #CC0000'>v1.277</h3><br>
+		- Balanced until 1e396 Species.<br>
+		- Added five Token upgrades.<br>
+		- Added two Species challenges.<br>
+		- Various code cleanup and display fixes.<br>
+	<br><h3 style='color: #CC0000'>v1.276</h3><br>
+		- Added four Nucleus upgrades.<br>
+		- Implemented various upgraded effects.<br>
+		- Added three rows of achievements.<br>
+		- Various display fixes and improvements.<br>
+	<br><h3 style='color: #CC0000'>v1.275</h3><br>
+		- Balanced until 1e233 Species.<br>
+		- Implemented more Species challenges, Upgraded Effects, and Taxonomy buyables.<br>
+		- Added three Species milestones.<br>
+		- Added a Nucleus upgrade.<br>
+		- Added a scaling cost to Nucleuses after 150.<br>
+		- Added a hardcap for Chromosomes in Taxonomy effects at 5000.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.274</h3><br>
+		- Balanced until 1e112 Species.<br>
+		- Added a new row of Taxonomy.<br>
+		- Added five Species milestones.<br>
+		- Added a Species challenge.<br>
+		- Added twenty-five Species upgrades, of which twelve are effective.<br>
+		- Added three Nucleus upgrades.<br>
+		- Added a custom save.<br>
+		- Various code cleanup, display fixes, and wording fixes.<br>
+		- Added a display for the cheapest Taxonomy buyable.<br>
+		- Added four rows of achievements.<br>
+	<br><h3 style='color: #CC0000'>v1.273</h3><br>
+		- Added a Nucleus upgrade.<br>
+		- Added two Species milestones.<br>
+		- Added a custom save.<br>
+		- Added a Species challenge.<br>
+		- Balanced until 1e31 Species.<br>
+	<br><h3 style='color: #CC0000'>v1.272</h3><br>
+		- Balanced until 9.5e19 Species.<br>
+		- Added an Animal milestone.<br>
+		- Added a Nucleus milestone.<br>
+		- Added four Species milestones.<br>
+		- Added two Species challenges.<br>
+		- Various code cleanup and wording fixes.<br>
+		- Added a display for autobought/autobuying Taxonomy buyables.<br>
+		- Made Animals V and Animals XIII not nerf DNA gain.<br>
+	<br><h3 style='color: #CC0000'>v1.271</h3><br>
+		- Balanced until 1785 Chromosomes.<br><span (just got it)></span>
+		- Added five Species milestones.<br>
+		- Added a Nucleus milestone.<br>
+		- Added a Nucleus upgrade.<br>
+		- Various wording, code clean up, and display fixes.<br>
+		- Added a display for the Speices gain formula.<br>
+		- Added a custom save.<br>
+		- Improved the visuals for Animal Achievements' clickables.<br>
+	<br><h3 style='color: #CC0000'>v1.270.1</h3><br>
+		- Added a load and save Taxonomy system, but removed selling.<br>
+		- Various code cleanup.<br>
+	<br><h3 style='color: #CC0000'>v1.270</h3><br>
+		- Added 5 Effect upgrades.<br>
+		- Added two Chromosome milestone.<br>
+		- Added two Spcies milestones.<br>
+		- Buffed Species gain.<br>
+		- Various bugfixes.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.269.2</h3><br>
+		- Various code cleanup.<br>
+		- You now need Six to initially Nucleuse reset (post Species).<br>
+		- Nucleus resetting while paused issues are fixed.<br>
+	<br><h3 style='color: #CC0000'>v1.269.1</h3><br>
+		- Various code cleanup.<br>
+		- Various text improvements and clarifications.<br>
+		- Made selling Taxonomy buyables sell the correct one.<br>
+		- Made the custom save display cleaner.<br>
+	<br><h3 style='color: #CC0000'>v1.269</h3><br>
+		- Balanced until 4 Species resets.<br>
+		- Nerfed the Species effect formula.<br>
+		- Added a Species milestone.<br>
+		- Fixed Animal next at to always be at least 1e100.<br>
+		- Made Chromosomes XVIII actually do something.<br>
+		- Species now gives a bonus to Nucleus Milestone 10.<br>
+		- Upgrading Token II buyables' formulas will not make them more expensive.<br>
+		- Added Species hotkeys.<br>
 	<br><h3 style='color: #CC0000'>v1.268</h3><br>
 		- Balanced until 2 Species resets.<br>
 		- Added a new layer, Species!<br>
@@ -2203,7 +2364,7 @@ var displayThings = [
 		if (paused || player.paused) return "<bdi style='color:#CC0033'>THE GAME IS PAUSED</bdi>"
 		if (player.cells.slowTime > 0) return "For the next " + makeGreen(formatTime(player.cells.slowTime)) + " real seconds,<br>the game will tick 100x slower"
 		if (inChallenge("l", 11)) return "Dilation exponent is currently 1/" + format(getPointDilationExponent().pow(-1))
-		if (player.keepGoing) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
+		if (player.keepGoing && isEndgameRaw()) return makeBlue("You are past endgame,<br>and the game might not be balanced here.")
 		if (player.extremeMode) return "You are in extreme mode"
 	},
 ]
