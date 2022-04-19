@@ -9,7 +9,7 @@ function loadVue() {
 		`
 	})
 
-// data = a function returning the content (actually HTML)
+	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
 			props: ['layer', 'data'],
 			template: `
@@ -590,6 +590,7 @@ function loadVue() {
 		</div>
 		`
 	})
+	
 	Vue.component('microtab', { // copy it
 		props: ['layer', 'data'],
 		computed: {
@@ -625,7 +626,6 @@ function loadVue() {
 		</div></div>
 		`
 	})
-
 
 	Vue.component('achievements', {
 		props: ['layer', 'data'],
@@ -710,7 +710,7 @@ function loadVue() {
 			<span v-for="id in row" style = "{width: 0px; height: 0px;}" v-if="tmp[layer][type+'s'][id]!== undefined && tmp[layer][type+'s'][id].unlocked" class="upgAlign">
 				<div v-bind:is="type" :layer = "layer" :data = "id" v-bind:style="tmp[layer].componentStyles[type]" class = "treeThing"></div>
 			</span>
-			<tr><table><button class="treeNode hidden"></button></table></tr>
+			<br><br>
 		</span></div>
 	`
 	})
@@ -794,7 +794,6 @@ function loadVue() {
 	Vue.component('tooltip', systemComponents['tooltip'])
 	Vue.component('particle', systemComponents['particle'])
 	Vue.component('bg', systemComponents['bg'])
-
 
 	app = new Vue({
 		el: "#app",

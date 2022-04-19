@@ -11,7 +11,7 @@ function save(name = allSaves.set, force) {
 }
 
 function hardReset(resetOptions) {
-	if (!confirm("你确定要这么做吗？ 你将失去所有的进度！")) return
+	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
 	player = getStartPlayer()
 	save()
 	window.location.reload()
@@ -39,13 +39,13 @@ function renameSave(name) {
 	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
-		alert("抱歉，该名称已在游戏数据中使用，因此您不能个人使用，否则会导致严重故障！")
+		alert("Sorry, that name is used in the game's data, so you can't use it personally or it will cause terrible glitches!")
 		return
 	} else if (allSaves[newName] !== undefined) {
-		alert("这个名字已经被占用了，抱歉！")
+		alert("That name is taken already, sorry!")
 		return
 	} else if (newName.length>20) {
-		alert("这个名字太长了！")
+		alert("This name is too long!")
 		return
 	} else {
 		if (name==allSaves.set) save()
@@ -62,10 +62,10 @@ function deleteSave(name) {
 		hardReset()
 		return
 	}
-	if (!confirm("您确定要删除命名为 " + name + " 的存档吗?")) return
+	if (!confirm("Are you sure you wish to delete your save named " + name + "?")) return
 	allSaves[name] = undefined
-	if (name==allSaves.set) {
-		let valid = Object.keys(allSaves).filter(x => (x!="set" && (allSaves[x]!==undefined||x==name)))
+	if (name == allSaves.set) {
+		let valid = Object.keys(allSaves).filter(x => (x != "set" && (allSaves[x] !== undefined || x == name)))
 		let toLoad = valid[(valid.indexOf(name)+1)%valid.length]
 		loadSave(toLoad)
 	}
@@ -77,13 +77,13 @@ function newSave(mode) {
 	let newName = prompt("Enter save name: ")
 	newName = newName.replace(saveRegexCode, "") // Removes all non-alphanumeric characters
 	if (newName=="set") {
-		alert("抱歉，该名称已在游戏数据中使用，因此您不能个人使用，否则会导致严重故障！")
+		alert("Sorry, that name is used in the game's data, so you can't use it personally or it will cause terrible glitches!")
 		return
 	} else if (allSaves[newName] !== undefined) {
-		alert("这个名字已经被占用了，抱歉！")
+		alert("That name is taken already, sorry!")
 		return
 	} else if (newName.length > 20) {
-		alert("这个名字太长了!")
+		alert("This name is too long!")
 		return
 	} else {
 		startPlayer = getStartPlayer()
@@ -134,8 +134,6 @@ function resetSaveMenu() { // reset the menu display
 	player.saveMenuOpen = true
 }
 
-
-
 // **LOADING SAVE STUFF**
 
 function load() {
@@ -182,10 +180,8 @@ function load() {
 
 function loadOptions() {
 	let get2 = localStorage.getItem(modInfo.id+"_options")
-	if (get2) 
-		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))))
-	else 
-		options = getStartOptions()
+	if (get2) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))))
+	else options = getStartOptions()
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
 }
@@ -211,7 +207,8 @@ function NaNcheck(data) {
 			if (!NaNalert) {
 				clearInterval(interval)
 				NaNalert = true
-				alert("在玩家数据中发现无效值，名为 '" + item + "'. 请让这个mod的创建者知道！ 您可以刷新页面，您将取消 NaNed。")
+				console.log(data, item)
+				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.")
 				return false
 			}
 		}
@@ -223,6 +220,7 @@ function NaNcheck(data) {
 	}
 	return curr
 }
+
 function exportSave() {
 	//if (NaNalert) return
 	let str = btoa(JSON.stringify(player))
@@ -238,9 +236,9 @@ function exportSave() {
 }
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("这个这里粘贴你的存档")
+	if (imported === undefined) imported = prompt("Paste your save here")
 	try {
-		let confirmString = "这个存档似乎是针对不同的模组！ 您确定要导入吗？"
+		let confirmString = "This save appears to be for a different mod! Are you sure you want to import?"
 		if (CUSTOM_SAVES_IDS.includes(imported)) imported = CUSTOM_SAVES[imported]
 		let x = atob(imported)
 		console.log(x)

@@ -12,7 +12,7 @@ var activeFunctions = [
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay",
-	"getMinigameMaximum", "maxTimes", "exitMinigame", 
+	"getMinigameMaximum", "maxTimes", "exitMinigame", "isAutobought",
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick

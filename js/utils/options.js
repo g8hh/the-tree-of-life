@@ -50,7 +50,7 @@ function toggleAuto(toggle) {
 	needCanvasUpdate=true
 }
 
-const MS_DISPLAYS = ["ALL", "LAST, AUTO, INCOMPLETE", "AUTOMATION, INCOMPLETE", "INCOMPLETE", "NONE"];
+const MS_DISPLAYS = ["ALL (recommended)", "LAST, AUTO, INCOMPLETE", "AUTOMATION, INCOMPLETE", "INCOMPLETE", "NONE"];
 
 const MS_SETTINGS = ["always", "last", "automation", "incomplete", "never"];
 
@@ -61,7 +61,7 @@ function adjustMSDisp() {
 function milestoneShown(layer, id) {
 	id = toNumber(id)
 	complete = player[layer].milestones.includes(id);
-	auto = layers[layer].milestones[id].toggles;
+	auto = tmp[layer].milestones[id].toggles && tmp[layer].milestones[id].toggles.length > 0;
 
 	switch (options.msDisplay) {
 		case "always":
