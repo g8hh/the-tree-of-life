@@ -34185,11 +34185,13 @@ addLayer("ch", {
         exponent(){
                 let ret = new Decimal(1.35)
 
-                if (hasUpgrade("ch", 12)) ret = new Decimal(1.34)
-                if (hasMilestone("an", 26)) ret = new Decimal(1.33)
-                if (hasMilestone("ch", 10)) ret = new Decimal(1.32)
+                if (hasUpgrade("ch", 12))       ret = new Decimal(1.34)
+                if (hasMilestone("an", 26))     ret = new Decimal(1.33)
+                if (hasMilestone("ch", 10))     ret = new Decimal(1.32)
 
-                if (hasMilestone("ch", 19)) ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 144) ? 400 : hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
+                if (hasMilestone("ch", 19))     ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 144) ? 400 : hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
+
+                if (inChallenge("e", 11))       ret = ret.plus(.1)
 
                 return ret
         },
@@ -36289,6 +36291,7 @@ addLayer("sp", {
                 let ret = new Decimal(900)
 
                 if (hasUpgrade("tokens", 112))  ret = ret.sub(player.tokens.mastery_tokens.total.min(100).times(8))
+                                                ret = ret.sub(player.e.challenges[11])
 
                 return ret
         },
@@ -37707,6 +37710,7 @@ addLayer("sp", {
                                 return tmp.sp.challenges[11].rewardBase.pow(layerChallengeCompletions("sp"))
                         },
                         rewardBase(){
+                                if (player.e.challenges[11] > 0) return tmp.e.challenges[11].chromosomelessBase
                                 return new Decimal(player.sp.challenges[11]).pow(1 + hasMilestone("sp", 17)).times(50).max(1)
                         },
                         goal: () => Decimal.pow(10, [54153.7, 62138.7, 67327, 74132, 77414, 1e6][player.sp.challenges[11]]),
@@ -38249,7 +38253,7 @@ addLayer("e", {
 
                 baseGain = baseGain.plus(1).div(tmp.e.getGainMult).max(1)
 
-                return baseGain.plus(false ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10()
+                return baseGain.plus(player.e.challenges[11] ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10().max("1e1882")
         },
         getGainExp(){
                 let ret = new Decimal(1/3)
@@ -38262,7 +38266,8 @@ addLayer("e", {
                 return ret
         },
         getResetGain(){
-                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(false ? 0 : 11).max(0)
+                if (player.sp.points.lt("1e1882")) return decimalZero
+                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(player.e.challenges[11] ? 0 : 11).max(0)
 
                 ret = ret.times(tmp.e.getGainMult)
                 
@@ -38415,6 +38420,35 @@ addLayer("e", {
                         }, // hasUpgrade("e", 12)
                 },
         },
+        challenges: {
+                11: {
+                        name: "Chromosomeless?",
+                        goal(){
+                                return new Decimal(180).plus(player.e.challenges[11])
+                        },
+                        canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
+                        fullDisplay(){
+                                let a = "Add .1 to the Chromosome cost exponent" + br 
+                                a += "Goal: " + formatWhole(tmp.e.challenges[11].goal) + " Nucleuses" + br2
+                                a += "Reward: Chromosomeless base is " + formatWhole(tmp.e.challenges[11].chromosomelessBase) + br
+                                a += "subtract " + formatWhole(player.e.challenges[11]) + " from the Species base gain divider, "
+                                a += "and add " + (player.e.challenges[11] ? "11" : "0") + " to base Ecosystem gain"
+                                return a + br2 + "Completions: " + player.e.challenges[11] + "/75"
+                        },
+                        chromosomelessBase(){
+                                if (player.e.challenges[11] <= 0) return new Decimal(1250)
+                                return Decimal.pow(1e4, player.e.challenges[11] ** .25)
+                        },
+                        onEnter(){
+                                player.nu.points = decimalZero
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        countsAs: [],
+                        completionLimit: 75,
+                }, // inChallenge("e", 11)
+        },
         milestones: {
                 1: {
                         requirementDescription(){
@@ -38546,6 +38580,20 @@ addLayer("e", {
                                 return "Reward: The Ecosystem effect exponent is milestones and Multipotent base is 2.5x less."
                         },
                 }, // hasMilestone("e", 9)
+                10: {
+                        requirementDescription(){
+                                return "100 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(100)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock an Ecosystem challenge."
+                        },
+                }, // hasMilestone("e", 10)
         },
         tabFormat: {
                 "Upgrades": {
@@ -38571,20 +38619,30 @@ addLayer("e", {
                                 return true
                         },
                 },
+                "Challenges": {
+                        content: [
+                                "main-display",
+                                "challenges",
+                        ],
+                        unlocked(){
+                                return hasMilestone("e", 10)
+                        },
+                },
                 "Info": {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Ecosystems resets all prior content not permanently kept."
                                         let b = "Initial effect: (Total Ecosystems + 1)<sup>5</sup>"
-                                        let c = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
-                                        c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
+                                        let c1 = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
+                                        let c2 = br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
+                                        if (player.e.challenges[11]) c2 = c2.replace("-11", "")
                                         let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets," + br
                                         d += "permanently keep Animal Achievements and permanently remove Contaminant buyables' base costs."
                                         d += " Furthermore, bulk 5x Token II."
                                         let e = "Ecosystem effect affects Species, Animal, Gene amounts."
 
-                                        return a + br2 + b + br2 + c + br2 + d + br + e
+                                        return a + br2 + b + br2 + c1 + c2 + br2 + d + br + e
                                 }],
                         ],
                         unlocked(){
