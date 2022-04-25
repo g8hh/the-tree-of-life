@@ -37707,7 +37707,9 @@ addLayer("sp", {
                 11: {
                         name: "Chromosomeless", 
                         reward(){
-                                return tmp.sp.challenges[11].rewardBase.pow(layerChallengeCompletions("sp"))
+                                let exp = layerChallengeCompletions("sp")
+                                if (hasMilestone("e", 11)) exp += layerChallengeCompletions("e")
+                                return tmp.sp.challenges[11].rewardBase.pow(exp)
                         },
                         rewardBase(){
                                 if (player.e.challenges[11] > 0) return tmp.e.challenges[11].chromosomelessBase
@@ -38258,6 +38260,8 @@ addLayer("e", {
         getGainExp(){
                 let ret = new Decimal(1/3)
 
+                if (hasMilestone("e", 12)) ret = new Decimal(.04).times(player.e.challenges[11]).plus(.2)
+
                 return ret
         },
         getResetSub(){
@@ -38440,7 +38444,7 @@ addLayer("e", {
                                 return Decimal.pow(1e4, player.e.challenges[11] ** .25)
                         },
                         onEnter(){
-                                player.nu.points = decimalZero
+                                player.nu.points = hasMilestone("e", 12) ? tmp.e.challenges[11].goal.sub(10) : decimalZero
                         },
                         unlocked(){
                                 return true
@@ -38594,6 +38598,34 @@ addLayer("e", {
                                 return "Reward: Unlock an Ecosystem challenge."
                         },
                 }, // hasMilestone("e", 10)
+                11: {
+                        requirementDescription(){
+                                return "500 Ecosystems and 2 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.points.gte(500) && player.e.challenges[11] >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Ecosystem challenges count towards Chromosomeless effect and Token II via Cell's divider is 42,000."
+                        },
+                }, // hasMilestone("e", 11)
+                12: {
+                        requirementDescription(){
+                                return "4 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.challenges[11] >= 4
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: You start Chromosomeless? with 10 Nucleuses less than the goal and the Ecosystem gain exponent is .2 + .04 * Chromosomeless? completions."
+                        },
+                }, // hasMilestone("e", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -49341,6 +49373,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 135) && lvls.gte(48000)) {
                                         add = 20
                                         div = 40000
+                                        if (hasMilestone("e", 11)) div = 42000
                                 }
                                 return [add, div]
                         },
@@ -49422,13 +49455,16 @@ addLayer("tokens", {
                 202: {
                         title: "Mastery II",
                         cost(){
+                                if (player.tokens.buyables[202].gte(50)) return Decimal.pow(9, player.tokens.buyables[202].pow(2))
                                 let add = 11
                                 return player.tokens.buyables[202].plus(add).pow10().pow(39)
                         },
                         canAfford:() => player.sp.points.gte(tmp.tokens.buyables[202].cost),
                         maxAfford(){
                                 let add = 11
-                                return player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
+                                let x = player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
+                                if (x.lte(49)) return x 
+                                return player.sp.points.log(9).sqrt().ceil()
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -49443,6 +49479,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[202]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 202)) + " Species</b><br>"
                                 let eformula = "10<sup>39(x+11)</sup>"
+                                if (player.tokens.buyables[202].gte(50)) eformula = "9<sup>x<sup>2</sup></sup>"
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
