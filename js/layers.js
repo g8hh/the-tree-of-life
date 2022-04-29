@@ -37702,6 +37702,20 @@ addLayer("sp", {
                                 return "Reward: in<u>tes</u>TINE base is 1.36 but disable Organs IV, VI, VIII, and XI."
                         },
                 }, // hasMilestone("sp", 27)
+                28: {
+                        requirementDescription(){
+                                return "1e2555 Species"
+                        },
+                        done(){
+                                return player.sp.points.gte("1e2555")
+                        },
+                        unlocked(){
+                                return player.e.unlocked
+                        },
+                        effectDescription(){
+                                return "Reward: Token II via Cell's divider is 40,000 + 500 * Chromosomeless? completion."
+                        },
+                }, // hasMilestone("sp", 28)
         },
         challenges:{
                 11: {
@@ -38280,6 +38294,8 @@ addLayer("e", {
         getGainMult(){//e gain egain ecosystemsgain ecosystems gain ecogain eco gain 
                 let ret = decimalOne
 
+                if (hasUpgrade("e", 13))        ret = ret.times(Decimal.pow(1.02, player.tokens.mastery_tokens.total))
+
                 return ret
         },
         canReset(){
@@ -38305,12 +38321,11 @@ addLayer("e", {
                 if (tmp.e.getResetGain.gt(0)) data.unlocked = true
                 data.best = data.best.max(data.points)
 
-                if (false) {
+                if (hasUpgrade("e", 13)) {
                         let gainThisTick = tmp.e.getResetGain.times(diff)
                         data.points = data.points.plus(gainThisTick)
                         data.total = data.total.plus(gainThisTick)
                 }
-                if (false) data.passiveTime += diff
 
                 if (hasMilestone("e", 4)) {
                         if (player.e.autobuyspecies) {
@@ -38420,8 +38435,20 @@ addLayer("e", {
                         },
                         cost:() => new Decimal(33),
                         unlocked(){
-                                return true
+                                return hasUpgrade("e", 11)
                         }, // hasUpgrade("e", 12)
+                },
+                13: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems III"
+                        },
+                        description(){
+                                return "Each Mastery token increases Ecosystem gain by 2% and gain 100% of Ecosystems on reset per second"
+                        },
+                        cost:() => new Decimal(1e3),
+                        unlocked(){
+                                return player.e.challenges[11] >= 4
+                        }, // hasUpgrade("e", 13)
                 },
         },
         challenges: {
@@ -47139,6 +47166,7 @@ addLayer("tokens", {
                         if (data[202].canAfford && data[202].unlocked && !false) return true
                         if (data[203].canAfford && data[203].unlocked && !false) return true
                         if (data[211].canAfford && data[211].unlocked && !false) return true
+                        if (data[212].canAfford && data[212].unlocked && !false) return true
                 }
                 
                 let x = ["11", "12", "13", "21", "22", 
@@ -49374,6 +49402,7 @@ addLayer("tokens", {
                                         add = 20
                                         div = 40000
                                         if (hasMilestone("e", 11)) div = 42000
+                                        if (hasMilestone("sp", 28)) div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
                                 }
                                 return [add, div]
                         },
