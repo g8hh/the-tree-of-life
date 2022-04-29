@@ -12,7 +12,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.289",
+	num: "1.292",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -25,18 +25,32 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.e.total.gte(30)
+	return player.e.challenges[11] > 3
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.289)<br><br>
+		Reaching the endgame screen (updated at least as of v1.292)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.292</h3><br>
+		- Balanced until 2 Chromosomeless? completions.<br>
+		- Added two Ecosystem milestones.<br>
+	<br><h3 style='color: #CC0000'>v1.291</h3><br>
+		- Balanced until 2 Chromosomeless? completions.<br>
+		- Added an Ecosystem challenge.<br>
+		- Added an Ecosystem milestone.<br>
+		- Added a custom save.<br>
+	<br><h3 style='color: #CC0000'>v1.290</h3><br>
+		- Added a Ecosystem upgrade.<br>
+		- Added a Mastery Token upgrade and a new way to get Mastery tokens.<br>
+		- Various wording and bugfixes.<br>
+		- E minigame buyables now show their English name when shift is held.<br>
+		- Balanced until 166 Mastery Tokens.<br>
 	<br><h3 style='color: #CC0000'>v1.289</h3><br>
 		- Balanced until 30 Ecosystems.<br>
 		- Added five Ecosystem milestones.<br>
