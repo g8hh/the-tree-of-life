@@ -833,7 +833,7 @@ function contaminantFormulaDisplay(){
                                         c += "I'm multiplies AX by " + format(tmp.or.buyables[201].effect) + br
                                         c += "gonna multiplies AX by " + format(tmp.or.buyables[202].effect) + br
                                         c += "make multiplies AX by " + format(tmp.or.buyables[203].effect) + br
-                                        c += "you multiplies AX by " + format(tmp.or.buyables[211].effect) + br
+                                        c += "him multiplies AX by " + format(tmp.or.buyables[211].effect) + br
                                         c += "an multiplies AX by " + format(tmp.or.buyables[212].effect) + br
                                         c += "offer multiplies AX by " + format(tmp.or.buyables[213].effect) + br
                                         c += "you multiplies AX by " + format(tmp.or.buyables[221].effect) + br

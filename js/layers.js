@@ -34185,11 +34185,13 @@ addLayer("ch", {
         exponent(){
                 let ret = new Decimal(1.35)
 
-                if (hasUpgrade("ch", 12)) ret = new Decimal(1.34)
-                if (hasMilestone("an", 26)) ret = new Decimal(1.33)
-                if (hasMilestone("ch", 10)) ret = new Decimal(1.32)
+                if (hasUpgrade("ch", 12))       ret = new Decimal(1.34)
+                if (hasMilestone("an", 26))     ret = new Decimal(1.33)
+                if (hasMilestone("ch", 10))     ret = new Decimal(1.32)
 
-                if (hasMilestone("ch", 19)) ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 144) ? 400 : hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
+                if (hasMilestone("ch", 19))     ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 144) ? 400 : hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
+
+                if (inChallenge("e", 11))       ret = ret.plus(.1)
 
                 return ret
         },
@@ -34294,7 +34296,7 @@ addLayer("ch", {
                         cost:() => new Decimal(35),
                         unlocked(){
                                 if (player.sp.unlocked) return true
-                                return player.an.grid[505].buyables.gte(52) || player.nu.best.gte(1)
+                                return hasUpgrade("ch", 11) || player.nu.best.gte(1)
                         }, // hasUpgrade("ch", 12)
                 },
                 13: {
@@ -36289,6 +36291,7 @@ addLayer("sp", {
                 let ret = new Decimal(900)
 
                 if (hasUpgrade("tokens", 112))  ret = ret.sub(player.tokens.mastery_tokens.total.min(100).times(8))
+                                                ret = ret.sub(player.e.challenges[11])
 
                 return ret
         },
@@ -37704,9 +37707,12 @@ addLayer("sp", {
                 11: {
                         name: "Chromosomeless", 
                         reward(){
-                                return tmp.sp.challenges[11].rewardBase.pow(layerChallengeCompletions("sp"))
+                                let exp = layerChallengeCompletions("sp")
+                                if (hasMilestone("e", 11)) exp += layerChallengeCompletions("e")
+                                return tmp.sp.challenges[11].rewardBase.pow(exp)
                         },
                         rewardBase(){
+                                if (player.e.challenges[11] > 0) return tmp.e.challenges[11].chromosomelessBase
                                 return new Decimal(player.sp.challenges[11]).pow(1 + hasMilestone("sp", 17)).times(50).max(1)
                         },
                         goal: () => Decimal.pow(10, [54153.7, 62138.7, 67327, 74132, 77414, 1e6][player.sp.challenges[11]]),
@@ -38249,10 +38255,12 @@ addLayer("e", {
 
                 baseGain = baseGain.plus(1).div(tmp.e.getGainMult).max(1)
 
-                return baseGain.plus(false ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10()
+                return baseGain.plus(player.e.challenges[11] ? 0 : 11).root(tmp.e.getGainExp).plus(tmp.e.getResetSub).pow10().max("1e1882")
         },
         getGainExp(){
                 let ret = new Decimal(1/3)
+
+                if (hasMilestone("e", 12)) ret = new Decimal(.04).times(player.e.challenges[11]).plus(.2)
 
                 return ret
         },
@@ -38262,7 +38270,8 @@ addLayer("e", {
                 return ret
         },
         getResetGain(){
-                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(false ? 0 : 11).max(0)
+                if (player.sp.points.lt("1e1882")) return decimalZero
+                let ret = player.sp.points.max(1).log10().sub(tmp.e.getResetSub).pow(tmp.e.getGainExp).sub(player.e.challenges[11] ? 0 : 11).max(0)
 
                 ret = ret.times(tmp.e.getGainMult)
                 
@@ -38367,6 +38376,7 @@ addLayer("e", {
                 }
                 
 
+                if (hasUpgrade("e", 12)) data.passiveTime += diff
                 if (data.passiveTime > 1) {
                         data.passiveTime += -1
                         data.times ++
@@ -38391,7 +38401,7 @@ addLayer("e", {
                 cols: 5,
                 11: {
                         title(){
-                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystem I"
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems I"
                         },
                         description(){
                                 return "Each milestone subtracts 1 from the Mastery III base and Strange Quark coefficient is 5"
@@ -38401,6 +38411,47 @@ addLayer("e", {
                                 return true
                         }, // hasUpgrade("e", 11)
                 },
+                12: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems II"
+                        },
+                        description(){
+                                return "Up Quark coefficient is x<sup>.6</sup> and gain a Ecosystem reset per second"
+                        },
+                        cost:() => new Decimal(33),
+                        unlocked(){
+                                return true
+                        }, // hasUpgrade("e", 12)
+                },
+        },
+        challenges: {
+                11: {
+                        name: "Chromosomeless?",
+                        goal(){
+                                return new Decimal(180).plus(player.e.challenges[11])
+                        },
+                        canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
+                        fullDisplay(){
+                                let a = "Add .1 to the Chromosome cost exponent" + br 
+                                a += "Goal: " + formatWhole(tmp.e.challenges[11].goal) + " Nucleuses" + br2
+                                a += "Reward: Chromosomeless base is " + formatWhole(tmp.e.challenges[11].chromosomelessBase) + br
+                                a += "subtract " + formatWhole(player.e.challenges[11]) + " from the Species base gain divider, "
+                                a += "and add " + (player.e.challenges[11] ? "11" : "0") + " to base Ecosystem gain"
+                                return a + br2 + "Completions: " + player.e.challenges[11] + "/75"
+                        },
+                        chromosomelessBase(){
+                                if (player.e.challenges[11] <= 0) return new Decimal(1250)
+                                return Decimal.pow(1e4, player.e.challenges[11] ** .25)
+                        },
+                        onEnter(){
+                                player.nu.points = hasMilestone("e", 12) ? tmp.e.challenges[11].goal.sub(10) : decimalZero
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        countsAs: [],
+                        completionLimit: 75,
+                }, // inChallenge("e", 11)
         },
         milestones: {
                 1: {
@@ -38533,6 +38584,48 @@ addLayer("e", {
                                 return "Reward: The Ecosystem effect exponent is milestones and Multipotent base is 2.5x less."
                         },
                 }, // hasMilestone("e", 9)
+                10: {
+                        requirementDescription(){
+                                return "100 Ecosystems"
+                        },
+                        done(){
+                                return player.e.points.gte(100)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Unlock an Ecosystem challenge."
+                        },
+                }, // hasMilestone("e", 10)
+                11: {
+                        requirementDescription(){
+                                return "500 Ecosystems and 2 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.points.gte(500) && player.e.challenges[11] >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Ecosystem challenges count towards Chromosomeless effect and Token II via Cell's divider is 42,000."
+                        },
+                }, // hasMilestone("e", 11)
+                12: {
+                        requirementDescription(){
+                                return "4 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.challenges[11] >= 4
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: You start Chromosomeless? with 10 Nucleuses less than the goal and the Ecosystem gain exponent is .2 + .04 * Chromosomeless? completions."
+                        },
+                }, // hasMilestone("e", 12)
         },
         tabFormat: {
                 "Upgrades": {
@@ -38558,20 +38651,30 @@ addLayer("e", {
                                 return true
                         },
                 },
+                "Challenges": {
+                        content: [
+                                "main-display",
+                                "challenges",
+                        ],
+                        unlocked(){
+                                return hasMilestone("e", 10)
+                        },
+                },
                 "Info": {
                         content: [
                                 "main-display",
                                 ["display-text", function(){
                                         let a = "Ecosystems resets all prior content not permanently kept."
                                         let b = "Initial effect: (Total Ecosystems + 1)<sup>5</sup>"
-                                        let c = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
-                                        c += br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
+                                        let c1 = "Initial gain: (log10(Species)-154)<sup>1/3</sup>-11"
+                                        let c2 = br + "Current gain: (log10(Species)-" + formatWhole(tmp.e.getResetSub) + ")<sup>" + format(tmp.e.getGainExp) + "</sup>-11"
+                                        if (player.e.challenges[11]) c2 = c2.replace("-11", "")
                                         let d = "For unlocking Ecosystems, permanently keep Organ upgrades, milestones, and resets," + br
                                         d += "permanently keep Animal Achievements and permanently remove Contaminant buyables' base costs."
                                         d += " Furthermore, bulk 5x Token II."
                                         let e = "Ecosystem effect affects Species, Animal, Gene amounts."
 
-                                        return a + br2 + b + br2 + c + br2 + d + br + e
+                                        return a + br2 + b + br2 + c1 + c2 + br2 + d + br + e
                                 }],
                         ],
                         unlocked(){
@@ -44725,7 +44828,9 @@ addLayer("mini", {
                         },
                 },
                 221: {
-                        title: "∃0 0+x=x+0=x",
+                        title(){
+                                return player.shiftAlias ? "Existence of 0" : "∃0 0+x=x+0=x"
+                        },
                         cost(){
                                 let init = new Decimal("1e138")
                                 if (player.extremeMode) init = new Decimal("1e122")
@@ -44786,7 +44891,9 @@ addLayer("mini", {
                         },
                 },
                 222: {
-                        title: "∃1 1*x=x*1=x",
+                        title(){
+                                return player.shiftAlias ? "Existence of 1" : "∃1 1*x=x*1=x"
+                        },
                         cost(){
                                 let init = new Decimal("1e176")
                                 if (player.sci.buyables[301].gt(1)) init = decimalOne
@@ -44840,7 +44947,9 @@ addLayer("mini", {
                         },
                 },
                 223: {
-                        title: "a+b=b+a",
+                        title(){
+                                return player.shiftAlias ? "Commutativity of Addition" : "a+b=b+a"
+                        },
                         cost(){
                                 let init = new Decimal("1e1507")
                                 if (player.extremeMode) init = new Decimal("1e1702")
@@ -44910,7 +45019,9 @@ addLayer("mini", {
                         },
                 },
                 231: {
-                        title: "(a+b)+c=a+(b+c)",
+                        title(){
+                                return player.shiftAlias ? "Associativity of addition" : "(a+b)+c=a+(b+c)"
+                        },
                         cost(){
                                 let init = new Decimal("1e9864")
                                 if (player.extremeMode) init = new Decimal("1e9280")
@@ -44977,7 +45088,9 @@ addLayer("mini", {
                         },
                 },
                 232: {
-                        title: "a*(b+c)=a*b+a*c",
+                        title(){
+                                return player.shiftAlias ? "Left Distributivity" : "a*(b+c)=a*b+a*c"
+                        },
                         cost(){
                                 let init = new Decimal("1e34464")
                                 if (player.extremeMode) init = new Decimal("1e35768")
@@ -45039,7 +45152,9 @@ addLayer("mini", {
                         },
                 },
                 233: {
-                        title: "(a+b)*c=a*c+b*c",
+                        title(){
+                                return player.shiftAlias ? "Right Distributivity" : "(a+b)*c=a*c+b*c"
+                        },
                         cost(){
                                 let init = new Decimal("1e34833")
                                 if (player.extremeMode) init = new Decimal("1e36530")
@@ -45096,7 +45211,9 @@ addLayer("mini", {
                         },
                 },
                 241: {
-                        title: "(a*b)*c=a*(b*c)",
+                        title(){
+                                return player.shiftAlias ? "Associativity of Multiplication" : "(a*b)*c=a*(b*c)"
+                        },
                         cost(){
                                 let init = new Decimal("1e122e4")
                                 if (player.extremeMode) init = new Decimal("1e1112e3")
@@ -46972,6 +47089,7 @@ addLayer("tokens", {
                 lastRespecDisplayFormulaID: 0,
                 lastRespecDisplayFormula2ID: 0,
                 everM61: false,
+                everM91: false,
         }},
         color: "#7DC71C",
         branches: [],
@@ -47243,7 +47361,7 @@ addLayer("tokens", {
         },
         tooltip(){
                 let data = player.tokens
-                if (player.sp.total.gte(1e5)) {
+                if (player.sp.total.gte(1e5) || data.tokens2.points.gte(2e5)) {
                         return formatWhole(data.tokens2.points) + " Token II"
                 }
                 if (player.ch.everUpgrade33) {
@@ -48553,6 +48671,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("e", 12))        return c.pow(.6)
                                 if (hasUpgrade("tokens", 133))  return c.plus(1).sqrt()
                                 if (hasUpgrade("tokens", 261))  return c.plus(1).sqrt().div(2)
                                 if (hasUpgrade("tokens", 131))  return c.plus(1).sqrt().div(4)
@@ -48587,7 +48706,7 @@ addLayer("tokens", {
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
                                 }
 
-                                let eformula = "(1+C)<sup>.5</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
+                                let eformula = "(1+C)<sup>EXP</sup>/DIV*x<br>" + format(tmp.tokens.buyables[101].base, 4) + "*x" 
                                 let div = "(40+R)"
                                 if (hasMilestone("or", 12))     div = "40"
                                 if (hasMilestone("nu", 7))      div = "25"
@@ -48603,6 +48722,11 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 261))  div = "2"
                                 if (hasUpgrade("tokens", 133))  div = "1"
                                 eformula = eformula.replace("DIV", div).replace("/1*", "*")
+
+                                let exp = ".5"
+                                if (hasUpgrade("e", 12))        exp = ".6"
+                                if (exp == ".5") eformula = eformula.replace("EXP", ".5")
+                                else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
                                 
                                 let allEff = "<b><h2>Effect formula</h2>:<br>" + eformula + "</b><br>"
 
@@ -49148,7 +49272,7 @@ addLayer("tokens", {
                                         exp = .3
                                 }
                                 if (hasUpgrade("tokens", 271) && lvls.gte(8974)) {
-                                        div = 7 + hasUpgrade("tokens", 271) + hasUpgrade("tokens", 272) + hasUpgrade("tokens", 273) + hasUpgrade("tokens", 274)
+                                        div = 7 + player.tokens.upgrades.filter(x => x > 270).length
                                         add = 13000
                                         exp = .3
                                 }
@@ -49249,6 +49373,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 135) && lvls.gte(48000)) {
                                         add = 20
                                         div = 40000
+                                        if (hasMilestone("e", 11)) div = 42000
                                 }
                                 return [add, div]
                         },
@@ -49330,13 +49455,16 @@ addLayer("tokens", {
                 202: {
                         title: "Mastery II",
                         cost(){
+                                if (player.tokens.buyables[202].gte(50)) return Decimal.pow(9, player.tokens.buyables[202].pow(2))
                                 let add = 11
                                 return player.tokens.buyables[202].plus(add).pow10().pow(39)
                         },
                         canAfford:() => player.sp.points.gte(tmp.tokens.buyables[202].cost),
                         maxAfford(){
                                 let add = 11
-                                return player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
+                                let x = player.sp.points.root(39).max(1).log10().sub(add).ceil().max(0)
+                                if (x.lte(49)) return x 
+                                return player.sp.points.log(9).sqrt().ceil()
                         },
                         buy(){
                                 if (!this.canAfford()) return
@@ -49351,6 +49479,7 @@ addLayer("tokens", {
                                 let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[202]) + "</b><br>"
                                 let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 202)) + " Species</b><br>"
                                 let eformula = "10<sup>39(x+11)</sup>"
+                                if (player.tokens.buyables[202].gte(50)) eformula = "9<sup>x<sup>2</sup></sup>"
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
@@ -49440,6 +49569,44 @@ addLayer("tokens", {
                         },
                         unlocked(){
                                 return hasUpgrade("sp", 115)
+                        },
+                },
+                212: {
+                        title: "Mastery V",
+                        costExp(){
+                                let exp = new Decimal(1.3)
+
+                                return exp
+                        },
+                        cost(){
+                                let exp = tmp.tokens.buyables[212].costExp
+                                return Decimal.pow(3, player.tokens.buyables[212].pow(exp)).ceil()
+                        },
+                        canAfford:() => player.e.points.gte(tmp.tokens.buyables[212].cost),
+                        maxAfford(){
+                                let exp = tmp.tokens.buyables[212].costExp
+                                if (player.e.points.eq(0)) return decimalZero
+                                return player.e.points.max(1).log(3).root(exp).floor().plus(1)
+                        },
+                        buy(){
+                                if (!this.canAfford()) return
+                                let ma = tmp.tokens.buyables[212].maxAfford
+                                ma = ma.sub(player.tokens.buyables[212]).max(0).min(1)
+                                let data = player.tokens
+                                data.buyables[212] = data.buyables[212].plus(ma)
+                                data.mastery_tokens.points = data.mastery_tokens.points.plus(ma)
+                                data.mastery_tokens.total = data.mastery_tokens.total.plus(ma)
+                        },
+                        display(){
+                                let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.tokens.buyables[212]) + "</b><br>"
+                                let cost = "<b><h2>Requires</h2>:<br>" + formatWhole(getBuyableCost("tokens", 212), 3) + " Ecosystems</b><br>"
+                                let eformula = "3<sup>x<sup>EXP</sup>"
+                                eformula = eformula.replace("EXP", formatWhole(tmp.tokens.buyables[212].costExp))
+                                
+                                return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
+                        },
+                        unlocked(){
+                                return hasUpgrade("tokens", 281)
                         },
                 },
         },
@@ -51242,7 +51409,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 251)) return false
                                 return true
                         },
-                        cost:() => new Decimal(22),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 22),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51257,7 +51424,7 @@ addLayer("tokens", {
                         },
                         description(){
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return "Purchase either M 71 or M 72 to unlock me!"
-                                return "Each upgrade in this row adds 1 to the Token II via Stem Cell divider"
+                                return "Each upgrade in this row or lower adds 1 to the Token II via Stem Cell divider"
                         },
                         canAfford(){
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
@@ -51284,7 +51451,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(10),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 10),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51305,7 +51472,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(11),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 11),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51326,7 +51493,7 @@ addLayer("tokens", {
                                 if (!hasUpgrade("tokens", 261) && !hasUpgrade("tokens", 262)) return false
                                 return true
                         },
-                        cost:() => new Decimal(37),
+                        cost:() => new Decimal(player.tokens.everM91 ? 0 : 37),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51334,6 +51501,30 @@ addLayer("tokens", {
                                 if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(121)
                         }, // hasUpgrade("tokens", 274)
+                },
+                281: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 91"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 261) || !hasUpgrade("tokens", 262)) return "Purchase both M 71 and M 72 to unlock me!"
+                                return "M 72, 82, 83 and 84 are all permanently free and unlock a new way to get Mastery Tokens"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 261) || !hasUpgrade("tokens", 262)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(98),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        onPurchase(){
+                                player.tokens.everM91 = true
+                        },
+                        unlocked(){
+                                if (player.e.unlocked) return true
+                                return player.tokens.mastery_tokens.total.gte(155)
+                        }, // hasUpgrade("tokens", 281)
                 },
         },
         microtabs: {
@@ -51418,7 +51609,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281]]],
                                         ["clickables", [2]]
                                 ],
                         },
