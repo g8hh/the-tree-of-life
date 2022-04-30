@@ -51704,7 +51704,6 @@ addLayer("tokens", {
                                 if (data[191].canAfford && !hasMilestone("or", 6)) return true
                                 if (data[192].canAfford && !hasMilestone("or", 7)) return true
                                 if (data[193].canAfford && !hasMilestone("or", 8) && data[193].unlocked) return true
-                                return false
                         },
                 },
                 "Mastery": {
@@ -51818,7 +51817,6 @@ addLayer("tokens", {
                         },
                 },
         },
-
         doReset(layer){
                 if (layer != "tokens") return
                 /*
