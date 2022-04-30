@@ -47162,10 +47162,10 @@ addLayer("tokens", {
                 }
                 if (true) {
                         let data = tmp.tokens.buyables
-                        if (data[201].canAfford && data[201].unlocked && !false) return true
-                        if (data[202].canAfford && data[202].unlocked && !false) return true
-                        if (data[203].canAfford && data[203].unlocked && !false) return true
-                        if (data[211].canAfford && data[211].unlocked && !false) return true
+                        if (data[201].canAfford && data[201].unlocked && !player.e.autobuymasteri) return true
+                        if (data[202].canAfford && data[202].unlocked && !player.e.autobuymasterii) return true
+                        if (data[203].canAfford && data[203].unlocked && !player.e.autobuymasteriii) return true
+                        if (data[211].canAfford && data[211].unlocked && !player.e.autobuymasteriv) return true
                         if (data[212].canAfford && data[212].unlocked && !false) return true
                 }
                 
@@ -47311,22 +47311,7 @@ addLayer("tokens", {
                 data.best_over_all_time = data.best_over_all_time.max(data.total)
                 if (player.points.gte("e5000")) data.unlocked = true
 
-                if (hasUpgrade("c", 21)) { //tick coins
-                        /*
-                        dc/dt = N/1+c
-                        dc(1+c) = Ndt
-                        cc/2+c = Nt+A
-                        A = cc/2+c
-                        c = -1+sqrt(1+4/2*(Nt+A))
-                        = -1+sqrt(1+2(Nt+A))
-                        */
-                        let datac = data.coins
-                        let c = datac.points
-                        let a = c.div(2).plus(1).times(c)
-                        let nt = tmp.tokens.coins.getGainMult.times(diff)
-                        datac.points = a.plus(nt).times(2).plus(1).sqrt().sub(1)
-                        datac.best = datac.best.max(datac.points)
-                }
+                layers.tokens.updateCoins(diff)
 
                 if (hasUpgrade("tokens", 145)) {
                         let mult = 100
@@ -47345,6 +47330,24 @@ addLayer("tokens", {
                 data.bestTop = data.bestTop.max(tmp.tokens.buyables[121].effect)
                 data.bestBottom = data.bestBottom.max(tmp.tokens.buyables[122].effect)
                 data.bestCharm = data.bestCharm.max(tmp.tokens.buyables[111].effect)
+        },
+        updateCoins(diff){
+                if (hasUpgrade("c", 21)) { //tick coins
+                        /*
+                        dc/dt = N/1+c
+                        dc(1+c) = Ndt
+                        cc/2+c = Nt+A
+                        A = cc/2+c
+                        c = -1+sqrt(1+4/2*(Nt+A))
+                        = -1+sqrt(1+2(Nt+A))
+                        */
+                        let datac = data.coins
+                        let c = datac.points
+                        let a = c.div(2).plus(1).times(c)
+                        let nt = tmp.tokens.coins.getGainMult.times(diff)
+                        datac.points = a.plus(nt).times(2).plus(1).sqrt().sub(1)
+                        datac.best = datac.best.max(datac.points)
+                }
         },
         resetsNothing(){
                 return hasMilestone("n", 11) || player.l.unlocked
