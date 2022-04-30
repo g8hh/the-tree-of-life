@@ -44728,7 +44728,9 @@ addLayer("mini", {
                         },
                 },
                 212: {
-                        title: "a<bdi style='color:#B00E00'>f</bdi>(x) = <bdi style='color:#B00E00'>f</bdi>(ax)",
+                        title(){
+                                return player.shiftAlias ? "Respecting Scalars" : "a<bdi style='color:#B00E00'>f</bdi>(x) = <bdi style='color:#B00E00'>f</bdi>(ax)"
+                        },
                         cost(){
                                 let init = new Decimal("1e8")
                                 let base = player.extremeMode ? 3 : 7
@@ -44786,7 +44788,9 @@ addLayer("mini", {
                         },
                 },
                 213: {
-                        title: "<bdi style='color:#B00E00'>f</bdi>(x+y) = <bdi style='color:#B00E00'>f</bdi>(x)+<bdi style='color:#B00E00'>f</bdi>(y)",
+                        title(){
+                                return player.shiftAlias ? "Respecting Addition" : "<bdi style='color:#B00E00'>f</bdi>(x+y) = <bdi style='color:#B00E00'>f</bdi>(x)+<bdi style='color:#B00E00'>f</bdi>(y)"
+                        },
                         cost(){
                                 let init = new Decimal("1e9")
                                 if (player.extremeMode) init = new Decimal(5e7)
