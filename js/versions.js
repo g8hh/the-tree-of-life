@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.293",
+	num: "1.294",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,7 +12,7 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.e.challenges[11] > 6
+	return player.e.challenges[11] > 15
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -24,6 +24,9 @@ let changelog = `<h1>Changelog:</h1><br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.294</h3><br>
+		- Balanced until 16 Chromosomeless? completions.<br>
+		- Added a Ecosystem upgrade.<br>
 	<br><h3 style='color: #CC0000'>v1.293</h3><br>
 		- Balanced until 7 Chromosomeless? completions.<br>
 		- Added a Species milestone.<br>
