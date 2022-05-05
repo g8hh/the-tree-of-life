@@ -33412,6 +33412,7 @@ addLayer("an", {
                         if (hasUpgrade("sp", 121))      ret = ret.plus(30)
                         if (hasUpgrade("sp", 144))      ret = ret.plus(20)
                         if (hasMilestone("e", 1))       ret = ret.plus(Math.min(10, player.e.milestones.length) * 5)
+                        if (hasUpgrade("e", 14))        ret = ret.plus(4 * player.e.challenges[11])
 
                         return ret.floor()
                 }, // tmp.an.grid.maxLevels cap buyablecap buyable cap taxonomylimit taxnomoy limit
@@ -38450,6 +38451,18 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 4
                         }, // hasUpgrade("e", 13)
                 },
+                14: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems IV"
+                        },
+                        description(){
+                                return "Mastery I coefficient is 1,000 and each Chromosomeless increases the Taxonomy limit by 4"
+                        },
+                        cost:() => new Decimal(25e4),
+                        unlocked(){
+                                return player.e.challenges[11] >= 7
+                        }, // hasUpgrade("e", 14)
+                },
         },
         challenges: {
                 11: {
@@ -38461,7 +38474,7 @@ addLayer("e", {
                         fullDisplay(){
                                 let a = "Add .1 to the Chromosome cost exponent" + br 
                                 a += "Goal: " + formatWhole(tmp.e.challenges[11].goal) + " Nucleuses" + br2
-                                a += "Reward: Chromosomeless base is " + formatWhole(tmp.e.challenges[11].chromosomelessBase) + br
+                                a += "Reward:<br>Chromosomeless base is " + formatWhole(tmp.e.challenges[11].chromosomelessBase) + br
                                 a += "subtract " + formatWhole(player.e.challenges[11]) + " from the Species base gain divider, "
                                 a += "and add " + (player.e.challenges[11] ? "11" : "0") + " to base Ecosystem gain"
                                 return a + br2 + "Completions: " + player.e.challenges[11] + "/75"
@@ -47345,7 +47358,7 @@ addLayer("tokens", {
                         c = -1+sqrt(1+4/2*(Nt+A))
                         = -1+sqrt(1+2(Nt+A))
                         */
-                        let datac = data.coins
+                        let datac = player.tokens.coins
                         let c = datac.points
                         let a = c.div(2).plus(1).times(c)
                         let nt = tmp.tokens.coins.getGainMult.times(diff)
@@ -49452,6 +49465,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 261))  mult = 1245
                                 if (hasUpgrade("tokens", 133))  mult = 1140
                                 if (hasUpgrade("sp", 135))      mult = 1095
+                                if (hasUpgrade("e", 14))        mult = 1000
                                 
                                 return [add, mult]
                         },
