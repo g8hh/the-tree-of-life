@@ -74,18 +74,24 @@ function getAchStuffFromNumber(n){
         let tooltip = function(){
                 return startStr + PROGRESSION_MILESTONES_TEXT[n]
         }
+
+        // KEEP IN THIS FILE
+
+        let tens = id - id % 10
+        
+        let a = Math.sin(tens/35 + 0) 
+        let b = Math.sin(tens/35 + 1.5)
+        let c = Math.sin(tens/35 + 3)
+        a = convertToB16(Math.floor(a*128) + 128)
+        b = convertToB16(Math.floor(b*128) + 128)
+        c = convertToB16(Math.floor(c*128) + 128)
+
+        // END OF KEEP IN THIS FILE
+
         let style = function(){
-                let tens = id - id % 10
                 for (i = 1; i <= 7; i++){
                         if (!hasAchievement("ach", tens + i)) return {}
                 }
-                
-                let a = Math.sin(tens/35 + 0) 
-                let b = Math.sin(tens/35 + 1.5)
-                let c = Math.sin(tens/35 + 3)
-                a = convertToB16(Math.floor(a*128) + 128)
-                b = convertToB16(Math.floor(b*128) + 128)
-                c = convertToB16(Math.floor(c*128) + 128)
                 return {"background-color": "#" + String(a) + String(b) + String(c)}
         }
         let unlocked 
@@ -139,10 +145,15 @@ function getAchStuffFromNumber(n){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.nu.unlocked
                 }
-        } else if (n <= 7777) {
+        } else if (n <= 987) {
                 unlocked = function(){
                         if (player.ach.hiddenRows >= n/7) return false
                         return player.sp.unlocked
+                }
+        } else if (n <= 7777) {
+                unlocked = function(){
+                        if (player.ach.hiddenRows >= n/7) return false
+                        return player.e.unlocked
                 }
         } else if (n <= Infinity) {
                 unlocked = function(){
@@ -1134,7 +1145,6 @@ PROGRESSION_MILESTONES = {
         957: () => player.or.contaminants.points.gte(Decimal.pow10(1e24)),
         958: () => player.or.contaminants.points.gte(Decimal.pow10(2e24)),
         959: () => player.or.contaminants.points.gte(Decimal.pow10(5e24)),
-
         960: () => player.sp.points.gte("1e512"),
         961: () => player.sp.points.gte("1e729"),
         962: () => player.sp.points.gte("1e1000"),
@@ -1156,6 +1166,35 @@ PROGRESSION_MILESTONES = {
         978: () => player.or.contaminants.points.gte(Decimal.pow10(5e28)),
         979: () => player.or.contaminants.points.gte(Decimal.pow10(1e29)),
         980: () => player.or.contaminants.points.gte(Decimal.pow10(2e29)),
+
+        981: () => player.e.points.gte(1),
+        982: () => player.e.points.gte(6),
+        983: () => player.e.points.gte(120),
+        984: () => player.e.points.gte(5040),
+        985: () => player.e.points.gte(362880),
+        986: () => player.e.points.gte(39916800),
+        987: () => player.e.points.gte(6227020800),
+        988: () => player.e.challenges[11] >= 1,
+        989: () => player.e.challenges[11] >= 2,
+        990: () => player.e.challenges[11] >= 3,
+        991: () => player.e.challenges[11] >= 4,
+        992: () => player.e.challenges[11] >= 5,
+        993: () => player.e.challenges[11] >= 6,
+        994: () => player.e.challenges[11] >= 7,
+        995: () => player.or.contaminants.points.gte(Decimal.pow10(5e29)),
+        996: () => player.or.contaminants.points.gte(Decimal.pow10(1e30)),
+        997: () => player.or.contaminants.points.gte(Decimal.pow10(3e30)),
+        998: () => player.or.contaminants.points.gte(Decimal.pow10(1e31)),
+        999: () => player.or.contaminants.points.gte(Decimal.pow10(3e31)),
+        1000:() => player.or.contaminants.points.gte(Decimal.pow10(1e32)),
+        1001:() => player.or.contaminants.points.gte(Decimal.pow10(3e32)),
+        1002:() => player.e.challenges[11] >= 8,
+        1003:() => player.e.challenges[11] >= 10,
+        1004:() => player.e.challenges[11] >= 12,
+        1005:() => player.e.challenges[11] >= 14,
+        1006:() => player.e.challenges[11] >= 16,
+        1007:() => player.e.challenges[11] >= 18,
+        1008:() => player.e.challenges[11] >= 20,
 }
 
 PROGRESSION_MILESTONES_TEXT = {
@@ -2118,7 +2157,6 @@ PROGRESSION_MILESTONES_TEXT = {
         957: "1e1e24 Contaminants",
         958: "1e2e24 Contaminants",
         959: "1e5e24 Contaminants",
-
         960: "1e512 Species",
         961: "1e729 Species",
         962: "1e1000 Species",
@@ -2140,6 +2178,35 @@ PROGRESSION_MILESTONES_TEXT = {
         978: "1e5e28 Contaminants",
         979: "1e1e29 Contaminants",
         980: "1e2e29 Contaminants",
+
+        981: "1 Ecosystem",
+        982: "6 Ecosystems",
+        983: "120 Ecosystems",
+        984: "5,040 Ecosystems",
+        985: "362,880 Ecosystems",
+        986: "39,916,800 Ecosystems",
+        987: "6.22e9 Ecosystems",
+        988: "1 Chromosomeless? completion",
+        989: "2 Chromosomeless? completions",
+        990: "3 Chromosomeless? completions",
+        991: "4 Chromosomeless? completions",
+        992: "5 Chromosomeless? completions",
+        993: "6 Chromosomeless? completions",
+        994: "7 Chromosomeless? completions",
+        995: "1e5e29 Contaminants",
+        996: "1e1e30 Contaminants",
+        997: "1e3e30 Contaminants",
+        998: "1e1e31 Contaminants",
+        999: "1e3e31 Contaminants",
+        1000:"1e1e32 Contaminants",
+        1001:"1e3e32 Contaminants",
+        1002:"8 Chromosomeless? completions",
+        1003:"10 Chromosomeless? completions",
+        1004:"12 Chromosomeless? completions",
+        1005:"14 Chromosomeless? completions",
+        1006:"16 Chromosomeless? completions",
+        1007:"18 Chromosomeless? completions",
+        1008:"20 Chromosomeless? completions",
 }
 
 

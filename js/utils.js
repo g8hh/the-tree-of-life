@@ -6,7 +6,7 @@ function nerfBminigameBuyableAmounts(x){
 }
 
 function combineStrings(l){
-	a = ""
+	let a = ""
 	for (i = 0; i < l.length; i++){
 		if (i != 0) a += ", "
 		a += l[i]
@@ -18,14 +18,13 @@ function combineStrings(l){
 
 function improveName(s){
 	if (s == "dna_science") return "DNA Science"
-	x = s.split("_")
-	l = x.length
+	let x = s.split("_")
 	ret = ""
 	let uppercaseWord = function(s){
 		a = s.toLowerCase()
 		return a.slice(0,1).toUpperCase() + a.slice(1,)
 	}
-	for (i = 0; i < l; i++){
+	for (i = 0; i < x.length; i++){
 		if (i > 0) ret += " "
 		ret += uppercaseWord(x[i])
 	}
@@ -87,7 +86,6 @@ function canAffordUpgrade(layer, id) {
 	if (tmp[layer].upgrades[id].canAfford === false) return false
 	let cost = tmp[layer].upgrades[id].cost
 	if (cost !== undefined) return canAffordPurchase(layer, upg, cost)
-
 	return true
 }
 
@@ -232,7 +230,6 @@ function showTab(name, prev) {
 	updateTabFormats()
 	needCanvasUpdate = true
 	document.activeElement.blur()
-
 }
 
 function showNavTab(name, prev) {
@@ -248,7 +245,6 @@ function showNavTab(name, prev) {
 	updateTabFormats()
 	needCanvasUpdate = true
 }
-
 
 function goBack(layer) {
 	let nextTab = "none"
@@ -352,7 +348,7 @@ function updateAchievements(layer) {
 	for (id in layers[layer].achievements) {
 		if (!isPlainObject(layers[layer].achievements[id])) continue
 		if (hasAchievement(layer, Number(id))) continue
-		if (!tmp[layer].achievements[id].unlocked) continue
+		if (!tmp[layer].achievements[id].unlocked) return // none more should be unlockable
 		if (layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(Number(id))
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete()

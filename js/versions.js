@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.294",
+	num: "1.294.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -17,13 +17,16 @@ function isEndgameRaw(){
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.293)<br><br>
+		Reaching the endgame screen (updated at least as of v1.294.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.294.1</h3><br>
+		- Added four rows of achievements.<br>
+		- The game should run a bit faster now.<br>
 	<br><h3 style='color: #CC0000'>v1.294</h3><br>
 		- Balanced until 16 Chromosomeless? completions.<br>
 		- Added a Ecosystem upgrade.<br>

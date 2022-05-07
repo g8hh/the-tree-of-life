@@ -2089,6 +2089,7 @@ addLayer("sci", {
         },
         hydrogen_science: {
                 getResetGain(){ // hscigain hsci gain h sci hydrogenscience hydrogensci hscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.h.points.plus(10).log10()
 
                         ret = ret.times(player.h.deuterium.points.plus(10).log10())
@@ -2142,6 +2143,7 @@ addLayer("sci", {
         },
         oxygen_science: {
                 getResetGain(){ // oscigain osci gain o sci oxygenscience oxygensci oscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.o.points.plus(10).log10()
 
                         ret = ret.times(player.sci.hydrogen_science.points.plus(10).log10())
@@ -2187,6 +2189,7 @@ addLayer("sci", {
         },
         carbon_science: {
                 getResetGain(){ // cscigain csci gain c sci carbonscience carbonsci cscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.mini.c_points.points.plus(10).log10()
 
                         ret = ret.times(player.sci.oxygen_science.points.plus(10).log10())
@@ -2229,6 +2232,7 @@ addLayer("sci", {
         },
         nitrogen_science: {
                 getResetGain(){ // nscigain nsci gain n sci nitrogenscience nitrogensci nscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.n.points.plus(10).log10()
 
                         ret = ret.times(player.sci.carbon_science.points.plus(10).log10())
@@ -2276,6 +2280,7 @@ addLayer("sci", {
         },
         protein_science: {
                 getResetGain(){ // proscigain prosci gain pro sci proteinscience proteinsci pscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.a.protein.points.plus(10).log10()
 
                         ret = ret.times(player.sci.nitrogen_science.points.plus(10).log10())
@@ -2316,6 +2321,7 @@ addLayer("sci", {
         },
         dna_science: {
                 getResetGain(){ // dnascigain dnasci gain dna sci gain dnascience dnasci pscience
+                        if (!player.extremeMode) return decimalZero
                         let ret = player.d.points.plus(10).log10()
 
                         let data = player.l.challenges
