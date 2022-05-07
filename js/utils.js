@@ -123,7 +123,7 @@ function buyUpgrade(layer, id) {
 function buyUpg(layer, id) {
 	if (!tmp[layer].upgrades || !tmp[layer].upgrades[id]) return
 	let upg = tmp[layer].upgrades[id]
-	if (!player[layer].unlocked || player[layer].deactivated) return
+	if (!player[layer].unlocked) return
 	if (!tmp[layer].upgrades[id].unlocked) return
 	if (player[layer].upgrades.includes(Number(id))) return
 	if (tmp[layer].deactivated) return 
@@ -328,7 +328,7 @@ function toNumber(x) {
 }
 
 function updateMilestones(layer) {
-	if (tmp[layer].deactivated) return
+	if (tmp[layer].deactivated || !player[layer].unlocked) return
 	shouldPopup = !options.hideMilestonePopups && (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined)
 	for (id in layers[layer].milestones) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
@@ -344,7 +344,7 @@ function updateMilestones(layer) {
 }
 
 function updateAchievements(layer) {
-	if (tmp[layer].deactivated) return
+	if (tmp[layer].deactivated || !player[layer].unlocked) return
 	for (id in layers[layer].achievements) {
 		if (!isPlainObject(layers[layer].achievements[id])) continue
 		if (hasAchievement(layer, Number(id))) continue

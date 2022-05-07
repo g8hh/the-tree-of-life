@@ -19685,7 +19685,10 @@ addLayer("cells", {
         effectExp(){
                 let exp = player.cells.best.cbrt().min(10)
 
-                if (hasMilestone("cells", 11))  exp = exp.plus(player.cells.upgrades.length)
+                
+                if (hasMilestone("e", 13))              exp = exp.plus(50)
+                else if (hasMilestone("cells", 11))     exp = exp.plus(player.cells.upgrades.length)
+                
                 if (hasUpgrade("or", 121))      exp = exp.plus(player.or.upgrades.length)
                 if (hasUpgrade("t", 95)) {
                         let upgs = player.t.upgrades.length
@@ -19763,7 +19766,7 @@ addLayer("cells", {
                         }
                 }
 
-                if (hasUpgrade("cells", 13)) layers.cells.stem_cells.update(diff)
+                if (hasUpgrade("cells", 13) || player.t.unlocked) layers.cells.stem_cells.update(diff)
                 if (layers.cells.buyables[11].base().lte(0)) player.cells.activeChallenge = undefined
 
                 if (!inChallenge("cells", 12)) {
@@ -19991,7 +19994,7 @@ addLayer("cells", {
         },
         stem_cells: {
                 getResetGain(){ //stem gain stemgain stemcellgain stem cellgain stem cell gain
-                        if (!hasUpgrade("cells", 13)) return decimalZero
+                        if (!hasUpgrade("cells", 13) && !player.t.unlocked) return decimalZero
                         let ret = decimalOne
                         
                                                         ret = ret.times(tmp.cells.buyables[11].effect)
@@ -20248,6 +20251,7 @@ addLayer("cells", {
                         },
                         cost:() => decimalOne,
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return true
                         }, // hasUpgrade("cells", 11)
                 },
@@ -20260,6 +20264,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(5e8),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 12)
                 },
@@ -20276,6 +20281,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? 1e11 : 5.43e12),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 12) || player.t.unlocked
                         }, // hasUpgrade("cells", 13)
                 },
@@ -20298,6 +20304,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Stem Cells",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 13) || player.t.unlocked
                         }, // hasUpgrade("cells", 14)
                 },
@@ -20321,6 +20328,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "2.9e3571" : "1e5293"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("t", 105) || player.or.unlocked
                         }, // hasUpgrade("cells", 15)
                 },
@@ -20334,6 +20342,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "2.1e3367" : "5e5363"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 15) || player.or.unlocked
                         }, // hasUpgrade("cells", 21)
                 },
@@ -20347,6 +20356,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1.65e3924" : "4e5696"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 21) || player.or.unlocked
                         }, // hasUpgrade("cells", 22)
                 },
@@ -20360,6 +20370,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e4237" : "1e6066"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 22) || player.or.unlocked
                         }, // hasUpgrade("cells", 23)
                 },
@@ -20373,6 +20384,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e4657" : "1e6479"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 23) || player.or.unlocked
                         }, // hasUpgrade("cells", 24)
                 },
@@ -20386,6 +20398,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e4973" : "3e6941"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 24) || player.or.unlocked
                         }, // hasUpgrade("cells", 25)
                 },
@@ -20399,6 +20412,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1.7e5313" : "3e7377"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 25) || player.or.unlocked
                         }, // hasUpgrade("cells", 31)
                 },
@@ -20412,6 +20426,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e6044" : "5e7850"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 31) || player.or.unlocked
                         }, // hasUpgrade("cells", 32)
                 },
@@ -20425,6 +20440,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "5e6738" : "3e8431"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 32) || player.or.unlocked
                         }, // hasUpgrade("cells", 33)
                 },
@@ -20438,6 +20454,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e7861" : "3e8884"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 33) || player.or.unlocked
                         }, // hasUpgrade("cells", 34)
                 },
@@ -20451,6 +20468,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "6e9022" : "6e9512"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 34) || player.or.unlocked
                         }, // hasUpgrade("cells", 35)
                 },
@@ -20464,6 +20482,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "5e10289" : "2e9746"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 35) || player.or.unlocked
                         }, // hasUpgrade("cells", 41)
                 },
@@ -20484,6 +20503,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e10888" : "9e10301"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 41) || player.or.unlocked
                         }, // hasUpgrade("cells", 42)
                 },
@@ -20497,6 +20517,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "5e12521" : "2e12664"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return player.tokens.total.gt(500) && hasUpgrade("cells", 42) || player.or.unlocked
                         }, // hasUpgrade("cells", 43)
                 },
@@ -20509,6 +20530,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e114545" : "1e12973"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 43) || player.or.unlocked
                         }, // hasUpgrade("cells", 44)
                 },
@@ -20521,6 +20543,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("3e13236"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 44) || player.or.unlocked
                         }, // hasUpgrade("cells", 45)
                 },
@@ -20533,6 +20556,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e13440"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 45) || player.or.unlocked
                         }, // hasUpgrade("cells", 51)
                 },
@@ -20545,6 +20569,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e13639"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 51) || player.or.unlocked
                         }, // hasUpgrade("cells", 52)
                 },
@@ -20557,6 +20582,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("5e14023"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 52) || player.or.unlocked
                         }, // hasUpgrade("cells", 53)
                 },
@@ -20572,6 +20598,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e14272"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 53) || player.or.unlocked
                         }, // hasUpgrade("cells", 54)
                 },
@@ -20584,6 +20611,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e14491"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 54) || player.or.unlocked
                         }, // hasUpgrade("cells", 55)
                 },
@@ -20596,6 +20624,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e22305"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return player.cells.challenges[11] >= 24 || player.or.unlocked
                         }, // hasUpgrade("cells", 61)
                 },
@@ -20608,6 +20637,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e36963"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("t", 145) || player.or.unlocked
                         }, // hasUpgrade("cells", 62)
                 },
@@ -20620,6 +20650,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e37682"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 62) || player.or.unlocked
                         }, // hasUpgrade("cells", 63)
                 },
@@ -20645,6 +20676,7 @@ addLayer("cells", {
                                 if (player.subtabs.l.mainTabs == "Buyables") player.subtabs.l.mainTabs = "Info"
                         },
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 63) || player.or.unlocked
                         }, // hasUpgrade("cells", 64)
                 },
@@ -20657,6 +20689,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal("1e38590"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 64) || player.or.unlocked
                         }, // hasUpgrade("cells", 65)
                 },
@@ -20677,6 +20710,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return true
                         }, // hasUpgrade("cells", 111)
                 },
@@ -20692,6 +20726,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 111) || player.t.unlocked
                         }, // hasUpgrade("cells", 112)
                 },
@@ -20711,6 +20746,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 113)
                 },
@@ -20726,6 +20762,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mu",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 113) || player.t.unlocked
                         }, // hasUpgrade("cells", 114)
                 },
@@ -20739,6 +20776,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e761" : "e1253"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasChallenge("l", 112) || player.t.unlocked
                         }, // hasUpgrade("cells", 115)
                 },
@@ -20761,6 +20799,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return true
                         }, // hasUpgrade("cells", 211)
                 },
@@ -20782,6 +20821,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 211) || player.t.unlocked
                         }, // hasUpgrade("cells", 212)
                 },
@@ -20797,6 +20837,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 212) || player.t.unlocked
                         }, // hasUpgrade("cells", 213)
                 },
@@ -20817,6 +20858,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Lambda",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 213) || player.t.unlocked
                         }, // hasUpgrade("cells", 214)
                 },
@@ -20829,6 +20871,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "3.9e798" : "e1315"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 115) || player.t.unlocked
                         }, // hasUpgrade("cells", 215)
                 },
@@ -20849,6 +20892,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return true
                         }, // hasUpgrade("cells", 311)
                 },
@@ -20868,6 +20912,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 311) || player.t.unlocked
                         }, // hasUpgrade("cells", 312)
                 },
@@ -20888,6 +20933,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 312) || player.t.unlocked
                         }, // hasUpgrade("cells", 313)
                 },
@@ -20906,6 +20952,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Kappa",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 313) || player.t.unlocked
                         }, // hasUpgrade("cells", 314)
                 },
@@ -20919,6 +20966,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e809" : "e1377"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 215) || player.t.unlocked
                         }, // hasUpgrade("cells", 315)
                 },
@@ -20939,6 +20987,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return true
                         }, // hasUpgrade("cells", 411)
                 },
@@ -20958,6 +21007,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 411) || player.t.unlocked
                         }, // hasUpgrade("cells", 412)
                 },
@@ -20973,6 +21023,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 412) || player.t.unlocked
                         }, // hasUpgrade("cells", 413)
                 },
@@ -20992,6 +21043,7 @@ addLayer("cells", {
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Iota",
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 413) || player.t.unlocked
                         }, // hasUpgrade("cells", 414)
                 },
@@ -21004,6 +21056,7 @@ addLayer("cells", {
                         },
                         cost:() => new Decimal(player.extremeMode ? "1.3e811" : "e1381"),
                         unlocked(){
+                                if (hasMilestone("e", 13)) return false
                                 return hasUpgrade("cells", 315) || player.t.unlocked
                         }, // hasUpgrade("cells", 415)
                 },
@@ -22568,7 +22621,7 @@ addLayer("cells", {
                                 return init.times(base.pow(amt.pow(exp2)))
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 214)
+                                return hasUpgrade("cells", 214) || player.or.unlocked
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[12].cost),
                         maxAfford(){
@@ -22676,7 +22729,7 @@ addLayer("cells", {
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
-                                return hasUpgrade("t", 72)
+                                return hasUpgrade("t", 72) || player.or.unlocked
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[13].cost),
                         maxAfford(){
@@ -22806,7 +22859,7 @@ addLayer("cells", {
                                 return ret
                         },
                         unlocked(){
-                                return hasUpgrade("t", 142)
+                                return hasUpgrade("t", 142) || player.or.unlocked
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[21].cost),
                         maxAfford(){
@@ -22878,7 +22931,7 @@ addLayer("cells", {
                                 return init.times(base.pow(exp))
                         },
                         unlocked(){
-                                return player.cells.challenges[21] >= 3
+                                return player.cells.challenges[21] >= 3 || player.an.unlocked
                         },
                         canAfford:() => player.cells.stem_cells.points.gte(tmp.cells.buyables[22].cost),
                         maxAfford(){
@@ -23475,7 +23528,7 @@ addLayer("cells", {
 
                                         let part3 = part1 + (player.or.unlocked ? "" : br2 + d + br + e + br + f + br + g)
 
-                                        if (!hasUpgrade("cells", 13)) return part3
+                                        if (!hasUpgrade("cells", 13) && !player.t.unlocked) return part3
 
                                         let h = "log10(10+Stem cells) multiplies Cells and all minigame gain"
 
@@ -23778,7 +23831,7 @@ addLayer("t", {
                 return hasUpgrade("or", 153)
         },
         effectAdd(){
-                if (hasUpgrade("cells", 44)) return decimalZero
+                if (hasUpgrade("cells", 44) || player.an.unlocked) return decimalZero
                 let ret = decimalOne
                 
                 if (hasUpgrade("t", 21)) ret = ret.plus(2)
@@ -23786,7 +23839,7 @@ addLayer("t", {
                 return ret
         },
         effectMult(){
-                if (hasUpgrade("cells", 44)) return decimalOne
+                if (hasUpgrade("cells", 44) || player.an.unlocked) return decimalOne
                 let ret = decimalOne
 
                 if (hasUpgrade("t", 22)) ret = ret.times(2)
@@ -23830,6 +23883,7 @@ addLayer("t", {
                 if (hasChallenge("sp", 12))     ret = ret.plus(tmp.sp.challenges[12].reward)
                 if (hasMilestone("sp", 24))     ret = ret.plus(1)
                 if (hasUpgrade("tokens", 272))  ret = ret.plus(1)
+                if (hasMilestone("e", 13))      ret = ret.plus(1.4)
 
                 return ret
         },
@@ -34007,6 +34061,7 @@ addLayer("ch", {
                                                 pts = pts.plus(tmp.an.clickables.rowThreeOff)
                 }
                 if (hasUpgrade("tokens", 212))  pts = pts.plus(player.tokens.mastery_tokens.total.min(20).times(player.tokens.upgrades.length))
+                if (hasUpgrade("e", 15))        pts = pts.plus(player.e.challenges[11])
 
                 return pts
         },
@@ -38184,6 +38239,10 @@ addLayer("e", {
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
 
+                /*if (hasMilestone("e", 13) && data.time > 1 && !player.e.activeChallenge) {
+                        player.nu.points = player.nu.points.max(player.nu.best.sub(10))
+                }*/
+
                 data.time += diff
         },
         row: 2,
@@ -38248,12 +38307,26 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 7
                         }, // hasUpgrade("e", 14)
                 },
+                15: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems V"
+                        },
+                        description(){
+                                return "Each Chromosomeless? gives an effective Chromosome for effect purposes and subtracts 1 from the Mastery IV adder"
+                        },
+                        cost:() => new Decimal(1e7),
+                        unlocked(){
+                                return player.e.challenges[11] >= 18
+                        }, // hasUpgrade("e", 15)
+                },
         },
         challenges: {
                 11: {
                         name: "Chromosomeless?",
                         goal(){
-                                return new Decimal(180).plus(player.e.challenges[11])
+                                let ret = new Decimal(180).plus(player.e.challenges[11])
+                                if (ret.gte(200)) ret = ret.times(2).sub(190)
+                                return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
                         fullDisplay(){
@@ -38451,6 +38524,23 @@ addLayer("e", {
                                 return "Reward: You start Chromosomeless? with 10 Nucleuses less than the goal and the Ecosystem gain exponent is .2 + .04 * Chromosomeless? completions."
                         },
                 }, // hasMilestone("e", 12)
+                13: {
+                        requirementDescription(){
+                                return "16 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.challenges[11] >= 16
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        onComplete(){
+                                player.cells.upgrades = []
+                        },
+                        effectDescription(){
+                                return "Reward: Add 50 to the Cell effect exponent and add 1.4 to the Tissue effect exponent but remove Cell upgrades."
+                        },
+                }, // hasMilestone("e", 13)
         },
         tabFormat: {
                 "Upgrades": {
@@ -40172,12 +40262,12 @@ addLayer("ach", {
                         key: "shift+R", 
                         description: "Shift+R: Go to Stem Cells", 
                         onPress(){
-                                if (!hasUpgrade("cells", 13)) return
+                                if (!hasUpgrade("cells", 13) && !player.t.unlocked) return
                                 showTab("cells")
                                 player.subtabs.cells.mainTabs = "Stem"
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 13)
+                                return hasUpgrade("cells", 13) || player.t.unlocked
                         },
                 },
                 {
@@ -40889,7 +40979,7 @@ addLayer("mini", {
                         let buy = player.cells.unlocked
                         if (player.tokens.autobuyradio && hasMilestone("n", 7)) buy = true
                         if (layers.l.grid.getGemEffect(803)) buy = true
-                        if (hasUpgrade("cells", 42)) buy = false
+                        if (hasUpgrade("cells", 42) || player.an.unlocked) buy = false
                         if (buy) layers.tokens.buyables[11].buy(true)
                 }
 
@@ -46934,7 +47024,7 @@ addLayer("tokens", {
                 if (tmp.tokens.canReset && (!player.tokens.autobuytokens || !hasMilestone("n", 4))) {
                         if (player.tokens.tokens2.total.eq(0)) return true
                 }
-                if (hasUpgrade("cells", 42)) {
+                if (hasUpgrade("cells", 42) || player.an.unlocked) {
                         let data = tmp.tokens.buyables
                         if (data[191].canAfford && !hasMilestone("or", 6)) return true
                         if (data[192].canAfford && !hasMilestone("or", 7)) return true
@@ -47178,7 +47268,7 @@ addLayer("tokens", {
                 if (player.ch.everUpgrade33) {
                         return formatWhole(data.tokens2.points) + "/" + formatWhole(tmp.tokens.buyables[101].cost) + " Token II"
                 }
-                if (hasUpgrade("cells", 42)){
+                if (hasUpgrade("cells", 42) || player.an.unlocked){
                         let end = ""
                         if (player.tokens.lastRespecDisplayFormula2ID < tmp.tokens.buyables.costFormulaText2ID) {
                                 end = br + "Need Respec"
@@ -48672,7 +48762,7 @@ addLayer("tokens", {
                                 return base.times(player.tokens.buyables[111].sqrt())
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 45)
+                                return hasUpgrade("cells", 45) || player.an.unlocked
                         },
                         display(){
                                 if (!player.shiftAlias) {
@@ -48763,7 +48853,7 @@ addLayer("tokens", {
                                 return base.times(player.tokens.buyables[112])
                         },
                         unlocked(){
-                                return hasUpgrade("cells", 45)
+                                return hasUpgrade("cells", 45) || player.an.unlocked
                         },
                         display(){
                                 if (!player.tokens.tokens2Unl.includes(112)) return "<br>You need 5e13435 Cells to unlock this buyable"
@@ -49351,7 +49441,8 @@ addLayer("tokens", {
                         title: "Mastery IV",
                         base(){
                                 let base = 82
-                                if (hasUpgrade("tokens", 141)) base = 81 - hasUpgrade("tokens", 142) - hasUpgrade("tokens", 143) - hasUpgrade("tokens", 144) - hasUpgrade("tokens", 145)
+                                if (hasUpgrade("tokens", 141))  base = 81 - hasUpgrade("tokens", 142) - hasUpgrade("tokens", 143) - hasUpgrade("tokens", 144) - hasUpgrade("tokens", 145)
+                                if (hasUpgrade("e", 15))        base -= player.e.challenges[11]
                                 return base
                         },
                         cost(){
@@ -51436,7 +51527,7 @@ addLayer("tokens", {
                                 "milestones",
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42)
+                                return !hasUpgrade("cells", 42) && !player.an.unlocked
                         },
                         shouldNotify(){
                                 return canReset("tokens")
@@ -51461,7 +51552,7 @@ addLayer("tokens", {
                                 "blank",
                         ],
                         unlocked(){
-                                return hasUpgrade("cells", 42)
+                                return hasUpgrade("cells", 42) || player.an.unlocked
                         },
                         shouldNotify(){
                                 return canReset("tokens") && player.tokens.total.lt(1e4)
@@ -51474,7 +51565,7 @@ addLayer("tokens", {
                                 ["microtabs", "token_ii_displays"],
                         ],
                         unlocked(){
-                                return hasUpgrade("cells", 42)
+                                return hasUpgrade("cells", 42) || player.an.unlocked
                         },
                         shouldNotify(){
                                 let data = tmp.tokens.buyables
@@ -51511,10 +51602,10 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42)
+                                return !hasUpgrade("cells", 42) && !player.an.unlocked
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42)) return false
+                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -51544,10 +51635,10 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42)
+                                return !hasUpgrade("cells", 42) && !player.an.unlocked
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42)) return false
+                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -51578,7 +51669,7 @@ addLayer("tokens", {
                                 return hasUpgrade("c", 21) || hasMilestone("n", 9) || hasChallenge("l", 31)
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42)) return false
+                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
                                 let x = ["11", "21", "22", "31", "32", 
                                          "33", "34", "41", "42", "51", 
                                          "52", "61", "62", "71", "72", 
