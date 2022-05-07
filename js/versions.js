@@ -27,6 +27,8 @@ let changelog = `<h1>Changelog:</h1><br>
 	<br><h3 style='color: #CC0000'>v1.294.1</h3><br>
 		- Added four rows of achievements.<br>
 		- The game should run a bit faster now.<br>
+		- The challenge boarder is 25% larger.<br>
+		- A new file, utils/taxonomySupport.js!<br>
 	<br><h3 style='color: #CC0000'>v1.294</h3><br>
 		- Balanced until 16 Chromosomeless? completions.<br>
 		- Added a Ecosystem upgrade.<br>
