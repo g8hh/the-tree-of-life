@@ -37680,7 +37680,7 @@ addLayer("sp", {
                         countsAs: [],
                 }, // inChallenge("sp", 22) hasChallenge("sp", 22)
                 31: {
-                        name: "Truely Chromosomeless", 
+                        name: "Truly Chromosomeless", 
                         reward(){
                                 return new Decimal(player.sp.challenges[31] * 20)
                         },
@@ -37709,7 +37709,7 @@ addLayer("sp", {
                         countsAs: [11, 12],
                 }, // inChallenge("sp", 31) hasChallenge("sp", 31)
                 32: {
-                        name: "Truely Energyless", 
+                        name: "Truly Energyless", 
                         reward(){
                                 return new Decimal(player.sp.challenges[32]).times(.4).plus(1).pow(player.sp.challenges[32] + 3).root(4)
                         },
