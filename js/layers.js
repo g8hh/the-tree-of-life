@@ -23831,7 +23831,7 @@ addLayer("t", {
                 return hasUpgrade("or", 153)
         },
         effectAdd(){
-                if (hasUpgrade("cells", 44) || player.an.unlocked) return decimalZero
+                if (hasUpgrade("cells", 44) || player.e.unlocked) return decimalZero
                 let ret = decimalOne
                 
                 if (hasUpgrade("t", 21)) ret = ret.plus(2)
@@ -23839,7 +23839,7 @@ addLayer("t", {
                 return ret
         },
         effectMult(){
-                if (hasUpgrade("cells", 44) || player.an.unlocked) return decimalOne
+                if (hasUpgrade("cells", 44) || player.e.unlocked) return decimalOne
                 let ret = decimalOne
 
                 if (hasUpgrade("t", 22)) ret = ret.times(2)
@@ -41023,14 +41023,6 @@ addLayer("mini", {
                         }
                 }
 
-                if (tmp.tokens.buyables[11].canAfford) {
-                        let buy = player.cells.unlocked
-                        if (player.tokens.autobuyradio && hasMilestone("n", 7)) buy = true
-                        if (layers.l.grid.getGemEffect(803)) buy = true
-                        if (hasUpgrade("cells", 42) || player.an.unlocked) buy = false
-                        if (buy) layers.tokens.buyables[11].buy(true)
-                }
-
                 if (tmp.mini.tabFormat.D.unlocked) {
                         dpts.fuel = dpts.fuel.times(Decimal.pow(.99, diff))
                         if (hasUpgrade("mini", 54)) {
@@ -47244,6 +47236,14 @@ addLayer("tokens", {
                         }
                 }
 
+                if (tmp.tokens.buyables[11].canAfford) {
+                        let buy = player.cells.unlocked
+                        if (player.tokens.autobuyradio && hasMilestone("n", 7)) buy = true
+                        if (layers.l.grid.getGemEffect(803)) buy = true
+                        if (hasUpgrade("cells", 42) || player.e.unlocked) buy = false
+                        if (buy) layers.tokens.buyables[11].buy(true)
+                }
+
                 data.bestStrange = data.bestStrange.max(tmp.tokens.buyables[112].effect)
                 data.bestTop = data.bestTop.max(tmp.tokens.buyables[121].effect)
                 data.bestBottom = data.bestBottom.max(tmp.tokens.buyables[122].effect)
@@ -47316,7 +47316,7 @@ addLayer("tokens", {
                 if (player.ch.everUpgrade33) {
                         return formatWhole(data.tokens2.points) + "/" + formatWhole(tmp.tokens.buyables[101].cost) + " Token II"
                 }
-                if (hasUpgrade("cells", 42) || player.an.unlocked){
+                if (hasUpgrade("cells", 42) || player.e.unlocked){
                         let end = ""
                         if (player.tokens.lastRespecDisplayFormula2ID < tmp.tokens.buyables.costFormulaText2ID) {
                                 end = br + "Need Respec"
@@ -51575,7 +51575,7 @@ addLayer("tokens", {
                                 "milestones",
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42) && !player.an.unlocked
+                                return !hasUpgrade("cells", 42) && !player.e.unlocked
                         },
                         shouldNotify(){
                                 return canReset("tokens")
@@ -51600,7 +51600,7 @@ addLayer("tokens", {
                                 "blank",
                         ],
                         unlocked(){
-                                return hasUpgrade("cells", 42) || player.an.unlocked
+                                return hasUpgrade("cells", 42) || player.e.unlocked
                         },
                         shouldNotify(){
                                 return canReset("tokens") && player.tokens.total.lt(1e4)
@@ -51613,7 +51613,7 @@ addLayer("tokens", {
                                 ["microtabs", "token_ii_displays"],
                         ],
                         unlocked(){
-                                return hasUpgrade("cells", 42) || player.an.unlocked
+                                return hasUpgrade("cells", 42) || player.e.unlocked
                         },
                         shouldNotify(){
                                 let data = tmp.tokens.buyables
@@ -51650,10 +51650,10 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42) && !player.an.unlocked
+                                return !hasUpgrade("cells", 42) && !player.e.unlocked
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
+                                if (hasUpgrade("cells", 42) || player.e.unlocked) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -51683,10 +51683,10 @@ addLayer("tokens", {
                                 ["buyables", [7]],
                         ],
                         unlocked(){
-                                return !hasUpgrade("cells", 42) && !player.an.unlocked
+                                return !hasUpgrade("cells", 42) && !player.e.unlocked
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
+                                if (hasUpgrade("cells", 42) || player.e.unlocked) return false
                                 let x = ["11", "12", "13", "21", "22", 
                                         "23", "31", "32", "33", "41", 
                                         "42", "43", "51", "52", "53", 
@@ -51717,7 +51717,7 @@ addLayer("tokens", {
                                 return hasUpgrade("c", 21) || hasMilestone("n", 9) || hasChallenge("l", 31)
                         },
                         shouldNotify(){
-                                if (hasUpgrade("cells", 42) || player.an.unlocked) return false
+                                if (hasUpgrade("cells", 42) || player.e.unlocked) return false
                                 let x = ["11", "21", "22", "31", "32", 
                                          "33", "34", "41", "42", "51", 
                                          "52", "61", "62", "71", "72", 

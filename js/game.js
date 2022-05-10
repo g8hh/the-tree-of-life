@@ -183,6 +183,7 @@ function doReset(layer, force=false) {
 		if (layers[layer].onPrestige) run(layers[layer].onPrestige, layers[layer], gain)
 		
 		addPoints(layer, gain)
+		player[layer].unlocked = true
 		updateMilestones(layer)
 		updateAchievements(layer)
 
