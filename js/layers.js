@@ -34034,7 +34034,10 @@ addLayer("ch", {
                 if (hasMilestone("an", 26))     ret = new Decimal(1.33)
                 if (hasMilestone("ch", 10))     ret = new Decimal(1.32)
 
-                if (hasMilestone("ch", 19))     ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(hasUpgrade("tokens", 144) ? 400 : hasUpgrade("tokens", 105) ? 300 : 200).div(1e4))
+                let ch19lim = hasUpgrade("tokens", 105) ? 300 : 200
+                if (hasUpgrade("tokens", 144))  ch19lim = 400
+                if (hasMilestone("e", 14))      ch19lim = 500
+                if (hasMilestone("ch", 19))     ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(ch19lim).div(1e4))
 
                 if (inChallenge("e", 11))       ret = ret.plus(.1)
 
@@ -35039,6 +35042,8 @@ addLayer("nu", {
                 if (hasMilestone("an", 42))     ret = ret.sub(player.nu.points.sub(50).max(0).min(70).div(1e4))
                 if (hasChallenge("sp", 22))     ret = ret.sub(tmp.sp.challenges[22].reward)
                 if (hasUpgrade("sp", 145))      ret = new Decimal(1.7)
+
+                if (inChallenge("e", 12))       ret = ret.plus(.1)
 
                 return ret
         },
@@ -38136,6 +38141,7 @@ addLayer("e", {
                 let ret = decimalOne
 
                 if (hasUpgrade("e", 13))        ret = ret.times(Decimal.pow(1.02, player.tokens.mastery_tokens.total))
+                                                ret = ret.times(tmp.e.challenges[12].ecoMult)
 
                 return ret
         },
@@ -38325,7 +38331,7 @@ addLayer("e", {
                         name: "Chromosomeless?",
                         goal(){
                                 let ret = new Decimal(180).plus(player.e.challenges[11])
-                                if (ret.gte(200)) ret = ret.times(2).sub(190)
+                                if (ret.gte(200)) ret = ret.times(2).sub(200)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
@@ -38350,6 +38356,34 @@ addLayer("e", {
                         countsAs: [],
                         completionLimit: 75,
                 }, // inChallenge("e", 11)
+                12: {
+                        name: "Nucleusless?",
+                        goal(){
+                                let ret = new Decimal(260).plus(player.e.challenges[12] * 2)
+                                if (ret.gte(270)) ret = ret.times(1.5).sub(135)
+                                return ret
+                        },
+                        canComplete: () => player.nu.points.gte(tmp.e.challenges[12].goal),
+                        fullDisplay(){
+                                let a = "Add .1 to the Nucleus cost exponent" + br 
+                                a += "Goal: " + formatWhole(tmp.e.challenges[12].goal) + " Nucleuses" + br2
+                                a += "Reward: Multiply Ecosystem gain by " + format(player.e.challenges[12] * .05 + 1) 
+                                a += " per challenge for a total of " + format(tmp.e.challenges[12].ecoMult) 
+                                //a += " from the Species base gain divider, "
+                                return a + br2 + "Completions: " + player.e.challenges[12] + "/50"
+                        },
+                        ecoMult(){
+                                return new Decimal(player.e.challenges[12]).times(.05).plus(1).pow(layerChallengeCompletions("e"))
+                        },
+                        onEnter(){
+                                player.nu.points = hasMilestone("e", 14) ? tmp.e.challenges[12].goal.sub(10) : decimalZero
+                        },
+                        unlocked(){
+                                return player.e.challenges[11] >= 20
+                        },
+                        countsAs: [],
+                        completionLimit: 50,
+                }, // inChallenge("e", 12)
         },
         milestones: {
                 1: {
@@ -38541,6 +38575,20 @@ addLayer("e", {
                                 return "Reward: Add 50 to the Cell effect exponent and add 1.4 to the Tissue effect exponent but remove Cell upgrades."
                         },
                 }, // hasMilestone("e", 13)
+                14: {
+                        requirementDescription(){
+                                return "2 Nucleusless?"
+                        },
+                        done(){
+                                return player.e.challenges[12] >= 2
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: You start Nucleusless? with 10 Nucleuses less than the goal and the Chromosome Mileston 19 limit is 500."
+                        },
+                }, // hasMilestone("e", 14)
         },
         tabFormat: {
                 "Upgrades": {
