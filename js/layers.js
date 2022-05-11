@@ -20132,7 +20132,9 @@ addLayer("cells", {
                                                         ret = ret.times(Decimal.pow(1.5, player.tokens.tokens2.total))
                         }
 
-                        if (hasUpgrade("t", 35))        ret = ret.pow(1.001)
+                        if (hasUpgrade("t", 35) && !hasUpgrade("e", 21)) {
+                                                        ret = ret.pow(1.001)
+                        }
                         if (hasUpgrade("sci", 513))     ret = ret.pow(tmp.sci.upgrades[513].effect)
                         if (hasUpgrade("sci", 525))     ret = ret.pow(1.01)
                         if (player.extremeMode)         ret = ret.pow(.75)
@@ -20142,7 +20144,9 @@ addLayer("cells", {
                         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                                         ret = ret.pow(1.001)
                         }
-                        if (hasUpgrade("sp", 54))       ret = ret.pow(hasUpgrade("sp", 154) ? 1.04 : hasUpgrade("sp", 104) ? 1.01 : 1.001)
+                        if (hasUpgrade("sp", 54) && !hasUpgrade("e", 21)) {
+                                                        ret = ret.pow(hasUpgrade("sp", 154) ? 1.04 : hasUpgrade("sp", 104) ? 1.01 : 1.001)
+                        }
 
                         return ret
                 },
@@ -26420,7 +26424,7 @@ addLayer("or", {
                                 subdata.best = subdata.best.max(subdata.points)
                         }
 
-                        data.kidneyABTime += diff * 25 // 20 tim per second
+                        data.kidneyABTime += diff * 40
 
                         if (data.kidneyABTime > 1) {
                                 data.kidneyABTime += -1
@@ -38325,6 +38329,18 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 18
                         }, // hasUpgrade("e", 15)
                 },
+                21: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems VI"
+                        },
+                        description(){
+                                return "The Token II buyables' cost exponent is 1.18 but disable Tissues XV and Effect XXIV"
+                        },
+                        cost:() => new Decimal(1e17),
+                        unlocked(){
+                                return player.e.challenges[11] >= 30
+                        }, // hasUpgrade("e", 21)
+                },
         },
         challenges: {
                 11: {
@@ -38332,6 +38348,7 @@ addLayer("e", {
                         goal(){
                                 let ret = new Decimal(180).plus(player.e.challenges[11])
                                 if (ret.gte(200)) ret = ret.times(2).sub(200)
+                                if (ret.gte(220)) ret = ret.plus(10)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
@@ -38359,8 +38376,10 @@ addLayer("e", {
                 12: {
                         name: "Nucleusless?",
                         goal(){
-                                let ret = new Decimal(260).plus(player.e.challenges[12] * 2)
+                                let c = player.e.challenges[12]
+                                let ret = new Decimal(260).plus(c * 2)
                                 if (ret.gte(270)) ret = ret.times(1.5).sub(135)
+                                if (ret.gte(288)) ret = ret.plus(12)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[12].goal),
@@ -47036,12 +47055,14 @@ addLayer("tokens", {
         baseAmount(){return player.points.floor()},
         type: "custom",
         getResetGain(){
-                if (hasMilestone("or", 2) && player.points.slog().gt(4)) {
+                if (hasMilestone("or", 2) && player.points.gt("eee10")) {
                         let tetBase = tmp.tokens.getTetrationBase
 
                         let len = (player.extremeMode ? TOKEN_COSTS_EXTREME : TOKEN_COSTS).length
 
-                        let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
+                        //let portion = player.points.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
+                        let portion = Decimal.fromComponents(player.points.sign, player.points.layer, player.points.mag)
+                        portion = portion.slog(tetBase).sub(4).times(tmp.tokens.getTetrationScalingDivisor)
                         let canAff = portion.plus(len).plus(tmp.tokens.getMinusEffectiveTokens).ceil()
                         return canAff.sub(player.tokens.total).max(0)
                 } 
@@ -47348,6 +47369,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 21))        return x.pow(1.18).ceil()
                         if (hasUpgrade("tokens", 134))  return x.pow(1.19).ceil()
                         if (hasUpgrade("tokens", 125))  return x.pow(1.2).ceil()
                         if (hasUpgrade("tokens", 201))  return x.pow(1.21).ceil()
@@ -47407,6 +47429,7 @@ addLayer("tokens", {
                         let m3 = m1 && r3c >= 3
                         let m4 = m1 && r3c >= 4
 
+                        if (hasUpgrade("e", 21))        return "ceil(x<sup>1.18</sup>)"
                         if (hasUpgrade("tokens", 134))  return "ceil(x<sup>1.19</sup>)"
                         if (hasUpgrade("tokens", 125))  return "ceil(x<sup>1.2</sup>)"
                         if (hasUpgrade("tokens", 201))  return "ceil(x<sup>1.21</sup>)"
@@ -47460,6 +47483,7 @@ addLayer("tokens", {
                 costFormulaText2ID(){
                         let tertComps = player.cells.challenges[21]
                         
+                        if (hasUpgrade("e", 21))        return 36
                         if (hasUpgrade("tokens", 134))  return 35
                         if (hasUpgrade("tokens", 125))  return 34
                         if (hasUpgrade("tokens", 201))  return 33
