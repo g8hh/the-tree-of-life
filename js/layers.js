@@ -28086,7 +28086,7 @@ addLayer("or", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Lung III"
                         },
                         description(){
-                                return "You always bank air to Trachea and Larynx's log10 is rasied to log2(Lung upgrades)"
+                                return "You always bank air to Trachea and Larynx's log10 is raised to log2(Lung upgrades)"
                         },
                         cost(){
                                 return new Decimal("1e79")
@@ -38605,7 +38605,7 @@ addLayer("e", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: You start Nucleusless? with 10 Nucleuses less than the goal and the Chromosome Mileston 19 limit is 500."
+                                return "Reward: You start Nucleusless? with 10 Nucleuses less than the goal and the Chromosome Milestone 19 limit is 500."
                         },
                 }, // hasMilestone("e", 14)
         },
