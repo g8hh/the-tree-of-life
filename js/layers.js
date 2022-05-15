@@ -528,7 +528,7 @@ addLayer("h", {
         baseAmount(){return player.points.floor()}, // Get the current amount of baseResource
         type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
         getResetGain(){
-                let base = player.points.ln().min(tmp.h.getDefaultMaximum)
+                let base = player.points.max(1).ln().min(tmp.h.getDefaultMaximum)
                 if (base.lt(0)) return decimalZero
 
                 let ret = base.times(tmp.h.getGainMult)
