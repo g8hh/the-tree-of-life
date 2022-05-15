@@ -444,7 +444,9 @@ function stemCellFormulaDisplay(){
         }
         if (c.includes("CX"))           c += br
 
-        if (hasUpgrade("t", 35))        c += "Tissues XV multiplies DX by 1.001" + br
+        if (hasUpgrade("t", 35) && !hasUpgrade("e", 21)) {
+                                        c += "Tissues XV multiplies DX by 1.001" + br
+        }
         if (hasUpgrade("sci", 513))     c += "DNA Sci VIII multiplies DX by " + format(tmp.sci.upgrades[513].effect, 4) + br
         if (hasUpgrade("sci", 525))     c += "DNA Sci XV multiplies DX by 1.01" + br
         if (player.extremeMode)         c += "Extreme mode multiplies DX by .75" + br
@@ -454,7 +456,9 @@ function stemCellFormulaDisplay(){
         if (hasUpgrade("or", 214) && !player.or.filterLeftKidney) {
                                         c += "Kidney IX multiplies DX by 1.001" + br
         }
-        if (hasUpgrade("sp", 54))       c += "Effect XXIV multiplies DX by 1.0" + (hasUpgrade("sp", 154) ? "4" : hasUpgrade("sp", 104) ? "1" : "01") + br
+        if (hasUpgrade("sp", 54) && !hasUpgrade("e", 21)) {
+                                        c += "Effect XXIV multiplies DX by 1.0" + (hasUpgrade("sp", 154) ? "4" : hasUpgrade("sp", 104) ? "1" : "01") + br
+        }
         if (c.includes("DX"))           c += br
 
         let ret = a + br + b + br2 + c
