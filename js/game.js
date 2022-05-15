@@ -183,6 +183,7 @@ function doReset(layer, force=false) {
 		if (layers[layer].onPrestige) run(layers[layer].onPrestige, layers[layer], gain)
 		
 		addPoints(layer, gain)
+		player[layer].unlocked = true
 		updateMilestones(layer)
 		updateAchievements(layer)
 
@@ -323,7 +324,7 @@ function gameLoop(diff) {
 			let layer = TREE_LAYERS[x][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-			if (layers[layer].update) layers[layer].update(diff);
+			if (layers[layer].update && !tmp[layer].deactivated) layers[layer].update(diff);
 		}
 	}
 
@@ -332,7 +333,7 @@ function gameLoop(diff) {
 			let layer = OTHER_LAYERS[row][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-			if (layers[layer].update) layers[layer].update(diff);
+			if (layers[layer].update && !tmp[layer].deactivated) layers[layer].update(diff);
 		}
 	}	
 
