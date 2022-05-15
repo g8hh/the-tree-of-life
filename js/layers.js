@@ -34056,7 +34056,7 @@ addLayer("ch", {
                 if (hasMilestone("ch", 32))     ret = pts.times(.03).plus(7.78)
                 if (hasUpgrade("tokens", 123))  ret = pts.times(.03)
 
-                return ret
+                return ret.max(2)
         },
         effectDescription(){
                 let start = " making the Gene amount gain per level base " 
