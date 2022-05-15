@@ -19694,7 +19694,7 @@ addLayer("cells", {
                 }
                 if (data.passiveTime > 10) data.passiveTime = 10
 
-                layers.cells.updateMinigames()
+                layers.cells.updateMinigames(diff)
 
                 if (hasMilestone("cells", 9) || hasMilestone("cells", 14)) {
                         if (player.cells.points.lt(tmp.cells.getResetGain) || !hasMilestone("cells", 14)) {
