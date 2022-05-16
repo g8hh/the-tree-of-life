@@ -38331,6 +38331,18 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 36
                         }, // hasUpgrade("e", 22)
                 },
+                23: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems VIII"
+                        },
+                        description(){
+                                return "Strange Quark coefficient is 6 and Up Quark coefficient is x<sup>.7</sup>"
+                        },
+                        cost:() => new Decimal(1e32),
+                        unlocked(){
+                                return player.e.challenges[11] >= 43
+                        }, // hasUpgrade("e", 23)
+                },
         },
         challenges: {
                 11: {
@@ -38339,6 +38351,7 @@ addLayer("e", {
                                 let ret = new Decimal(180).plus(player.e.challenges[11])
                                 if (ret.gte(200)) ret = ret.times(2).sub(200)
                                 if (ret.gte(220)) ret = ret.plus(10)
+                                if (ret.gte(268)) ret = ret.times(1.5).sub(126)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[11].goal),
@@ -38371,6 +38384,7 @@ addLayer("e", {
                                 if (ret.gte(270)) ret = ret.times(1.5).sub(135)
                                 if (ret.gte(288)) ret = ret.plus(12)
                                 if (ret.gte(312)) ret = ret.times(4/3).sub(102)
+                                if (ret.gte(390)) ret = ret.times(5/4).sub(97.5)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[12].goal),
@@ -48659,6 +48673,7 @@ addLayer("tokens", {
                                 let r = tmp.tokens.buyables.getRow10Total
                                 let c = tmp.tokens.buyables.getCol1Total
 
+                                if (hasUpgrade("e", 23))        return c.pow(.7)
                                 if (hasUpgrade("e", 12))        return c.pow(.6)
                                 if (hasUpgrade("tokens", 133))  return c.plus(1).sqrt()
                                 if (hasUpgrade("tokens", 261))  return c.plus(1).sqrt().div(2)
@@ -48713,6 +48728,7 @@ addLayer("tokens", {
 
                                 let exp = ".5"
                                 if (hasUpgrade("e", 12))        exp = ".6"
+                                if (hasUpgrade("e", 23))        exp = ".7"
                                 if (exp == ".5") eformula = eformula.replace("EXP", ".5")
                                 else eformula = eformula.replace("(1+C)<sup>EXP</sup>", "C<sup>" + exp + "</sup>")
                                 
@@ -48905,6 +48921,7 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(112)
                         },
                         coefficient(){
+                                if (hasUpgrade("e", 23))        return new Decimal(6)
                                 if (hasUpgrade("e", 11))        return new Decimal(5)
                                 if (hasMilestone("ch", 34))     return new Decimal(4)
                                 if (hasUpgrade("or", 111))      return new Decimal(10)
