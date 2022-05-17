@@ -144,8 +144,8 @@ function updateTempData(layerData, tmpData, funcsData, useThis, noError = false,
 			else value = layerData[item]()
 			if (value !== value || checkDecimalNaN(value)){
 				if (!NaNalert && !noError) {
-					console.log(value, layerData, funcsData, tmpData, useThis)
-					confirm("在 tmp 中发现无效值，命名为 '" + item + "'. 请通过控制台和保存的屏幕截图让此 mod 的创建者知道！ 您可以刷新页面，您将被取消 NaNed。")
+					console.log("a", value, "b", item, "c", layerData[item], layerData, funcsData, tmpData, useThis)
+					confirm("Invalid value found in tmp, named '" + item + "'. Please let the creator of this mod know with a screenshot of the console and the save! You can refresh the page, and you will be un-NaNed.")
 					clearInterval(interval);
 					NaNalert = true;
 					return
