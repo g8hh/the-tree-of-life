@@ -22,7 +22,9 @@ var doNotCallTheseFunctionsEveryTick = [
 	"getCoords",
 	"getMaxCoord",
 	"getGemEffect",
-	"updateCoins",]
+	"updateCoins",
+	"updateUpgradeAutobuyers",
+	"updateMinigames",]
 
 function getStartPoints(){
     	return new Decimal(modInfo.initialStartPoints)
