@@ -47075,6 +47075,7 @@ addLayer("tokens", {
                 lastRespecDisplayFormula2ID: 0,
                 everM61: false,
                 everM91: false,
+                everM93: false,
         }},
         color: "#7DC71C",
         branches: [],
@@ -48921,6 +48922,7 @@ addLayer("tokens", {
                                 if (!player.ch.everUpgrade33) player.tokens.buyablesBoughtThisTick.push(112)
                         },
                         coefficient(){
+                                if (hasUpgrade("tokens", 283))  return new Decimal(7)
                                 if (hasUpgrade("e", 23))        return new Decimal(6)
                                 if (hasUpgrade("e", 11))        return new Decimal(5)
                                 if (hasMilestone("ch", 34))     return new Decimal(4)
@@ -51372,7 +51374,7 @@ addLayer("tokens", {
                         onPurchase(){
                                 player.tokens.everM61 = true
                         },
-                        cost:() => new Decimal(14),
+                        cost:() => new Decimal(player.tokens.everM93 ? 0 : 14),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51396,7 +51398,7 @@ addLayer("tokens", {
                         onPurchase(){
                                 player.tokens.everM61 = true
                         },
-                        cost:() => new Decimal(13),
+                        cost:() => new Decimal(player.tokens.everM93 ? 0 : 13),
                         currencyLocation:() => player.tokens.mastery_tokens,
                         currencyInternalName:() => "points",
                         currencyDisplayName:() => "Mastery Token",
@@ -51539,7 +51541,7 @@ addLayer("tokens", {
                                 return "<h2 style='color: #" + getUndulatingColor() + "'>M 92"
                         },
                         description(){
-                                if (!hasUpgrade("tokens", 281)) return "Purchase both M 91 to unlock me!"
+                                if (!hasUpgrade("tokens", 281)) return "Purchase M 91 to unlock me!"
                                 return "Each Mastery Token after 300 adds .02 to the Ecosystem effect exponent and get 500 Nucleuses when not in challenges"
                         },
                         canAfford(){
@@ -51554,6 +51556,30 @@ addLayer("tokens", {
                                 if (player.e.unlocked) return true
                                 return player.tokens.mastery_tokens.total.gte(323)
                         }, // hasUpgrade("tokens", 282)
+                },
+                283: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 93"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 282)) return "Purchase M 92 to unlock me!"
+                                return "M 71 and M 61 are permanently free and Strange Quark coefficient is 7"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 282)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(82),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        onPurchase(){
+                                player.tokens.everM93 = true
+                        },
+                        unlocked(){
+                                if (player.e.unlocked) return true
+                                return player.tokens.mastery_tokens.total.gte(400)
+                        }, // hasUpgrade("tokens", 283)
                 },
         },
         microtabs: {
@@ -51638,7 +51664,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282, 283]]],
                                         ["clickables", [2]]
                                 ],
                         },
