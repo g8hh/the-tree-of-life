@@ -22790,7 +22790,7 @@ addLayer("cells", {
                                 if (hasMilestone("t", 16))      cost2 = cost2.replace("1e25", "5e22")
                                 if (hasUpgrade("t", 103))       cost2 = cost2.replace("5e22", "2e21")
                                 if (hasUpgrade("t", 104))       cost2 = cost2.replace("2e21", "2e20")
-                                if (hasUpgrade("t", 105))       cost2 = cost2.replace("2e20", "1e10")
+                                if (hasUpgrade("t", 105))       cost2 = cost2.replace("2e20", "1e20")
                                 if (player.extremeMode && hasUpgrade("cells", 23)) {
                                                                 cost2 = cost2.replace("1e20", "1e19")
                                 }
