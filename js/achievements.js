@@ -2141,7 +2141,7 @@ PROGRESSION_MILESTONES_TEXT = {
         913: "1,000,000 Species",
         914: "1e10 Species",
         915: "1e15 Species",
-        916: "1e10 Species",
+        916: "1e21 Species",
         917: "1e28 Species",
         918: "1e36 Species",
         919: "1e45 Species",
