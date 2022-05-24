@@ -49383,6 +49383,7 @@ addLayer("tokens", {
                                         if (hasMilestone("e", 11)) div = 42000
                                         if (hasMilestone("sp", 28)) div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
                                 }
+                                if (hasUpgrade("tokens", 284) && add >= 19) add = 19 
                                 return [add, div]
                         },
                         maxAfford(){
@@ -49549,6 +49550,7 @@ addLayer("tokens", {
                                 let base = 82
                                 if (hasUpgrade("tokens", 141))  base = 81 - hasUpgrade("tokens", 142) - hasUpgrade("tokens", 143) - hasUpgrade("tokens", 144) - hasUpgrade("tokens", 145)
                                 if (hasUpgrade("e", 15))        base -= player.e.challenges[11]
+                                if (hasUpgrade("tokens", 284))  base -= 2
                                 return base
                         },
                         cost(){
@@ -49661,7 +49663,7 @@ addLayer("tokens", {
                                 return true
                         },
                         onClick(){
-                                let limit = hasUpgrade("tokens", 144) ? 250 : hasMilestone("e", 7) ? 230 : 200
+                                let limit = player.tokens.everM94 ? 270 : hasUpgrade("tokens", 144) ? 250 : hasMilestone("e", 7) ? 230 : 200
                                 player.tokens.upgrades = player.tokens.upgrades.filter(x => x < limit)
                                 doReset("sp", true) // forced reset
                                 player.tokens.mastery_tokens.points = player.tokens.mastery_tokens.total
@@ -51581,6 +51583,30 @@ addLayer("tokens", {
                                 return player.tokens.mastery_tokens.total.gte(400)
                         }, // hasUpgrade("tokens", 283)
                 },
+                284: {
+                        title(){
+                                return "<h2 style='color: #" + getUndulatingColor() + "'>M 94"
+                        },
+                        description(){
+                                if (!hasUpgrade("tokens", 283)) return "Purchase M 93 to unlock me!"
+                                return "Selling Mastery upgrade permanently keeps the first seven rows, Token II via Cell's adder is 19, and subtract 2 from Mastery IV adder"
+                        },
+                        canAfford(){
+                                if (!hasUpgrade("tokens", 283)) return false
+                                return true
+                        },
+                        cost:() => new Decimal(84),
+                        currencyLocation:() => player.tokens.mastery_tokens,
+                        currencyInternalName:() => "points",
+                        currencyDisplayName:() => "Mastery Token",
+                        onPurchase(){
+                                player.tokens.everM94 = true
+                        },
+                        unlocked(){
+                                if (player.e.unlocked) return true
+                                return player.tokens.mastery_tokens.total.gte(462)
+                        }, // hasUpgrade("tokens", 284)
+                },
         },
         microtabs: {
                 currency_displays: {
@@ -51664,7 +51690,7 @@ addLayer("tokens", {
                         "Upgrade Tree": {
                                 content: [
                                         ["display-text", function(){return "    You have a total of " + formatWhole(player.tokens.mastery_tokens.total) + " Mastery Tokens.    "}],
-                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282, 283]]],
+                                        ["upgrade-tree", [[201], [211, 212], [221, 222], [231], [241, 242], [251], [261, 262], [271, 272, 273, 274], [281, 282, 283, 284]]],
                                         ["clickables", [2]]
                                 ],
                         },
