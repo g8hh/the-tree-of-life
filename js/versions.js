@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.301",
+	num: "1.302",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,22 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.e.challenges[11] >= 74
+	return player.e.challenges[11] >= 75
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.301)<br><br>
+		Reaching the endgame screen (updated at least as of v1.302)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.302</h3><br>
+		- Balanced until 75 Chromosomeless? completions.<br>
+		- Added a Ecosystem upgrade.<br>
+		- Added a Ecosystem milestone.<br>
 	<br><h3 style='color: #CC0000'>v1.301</h3><br>
 		- Balanced until 74 Chromosomeless? completions.<br>
 		- Added a Mastery Token upgrade.<br>

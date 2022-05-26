@@ -18547,6 +18547,7 @@ addLayer("d", {
                 if (hasMilestone("nu", 17))     ret = ret.times(Decimal.pow(1.01, player.nu.points))
                 if (hasUpgrade("sp", 84))       ret = ret.times(Decimal.pow(1.01, player.sp.upgrades.length ** (hasUpgrade("sp", 134) ? 1.1 : 1)))
                 if (hasChallenge("sp", 32))     ret = ret.times(tmp.sp.challenges[32].reward)
+                if (hasUpgrade("e", 24))        ret = ret.times(player.tokens.mastery_tokens.total.max(1).sqrt())
 
                 return ret
         },
@@ -22830,6 +22831,7 @@ addLayer("cells", {
                                 if (hasUpgrade("tokens", 143))  ret = ret.div(10)
                                 if (hasMilestone("e", 2))       ret = ret.div(2)
                                 if (hasMilestone("e", 9))       ret = ret.div(2.5)
+                                if (hasUpgrade("e", 24))        ret = ret.div(4)
                                 
                                 return ret
                         },
@@ -34013,6 +34015,11 @@ addLayer("ch", {
                 if (hasUpgrade("tokens", 144))  ch19lim = 400
                 if (hasMilestone("e", 14))      ch19lim = 500
                 if (hasMilestone("ch", 19))     ret = ret.sub(player.nu.points.sub(hasMilestone("nu", 13) ? 0 : 7).max(0).min(ch19lim).div(1e4))
+                if (hasMilestone("e", 15)) {
+                        let l = player.nu.points.sub(500).div(10).floor().times(.0001)
+                        l = l.min(.01)
+                                                ret = ret.sub(l)
+                }
 
                 if (inChallenge("e", 11))       ret = ret.plus(.1)
 
@@ -38343,6 +38350,18 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 43
                         }, // hasUpgrade("e", 23)
                 },
+                24: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems IX"
+                        },
+                        description(){
+                                return "DNA gain exponent is multiplied by sqrt(Mastery Tokens) and halve Multipotent cost base"
+                        },
+                        cost:() => new Decimal(1e86),
+                        unlocked(){
+                                return player.e.challenges[11] >= 74
+                        }, // hasUpgrade("e", 24)
+                },
         },
         challenges: {
                 11: {
@@ -38613,6 +38632,20 @@ addLayer("e", {
                                 return "Reward: You start Nucleusless? with 10 Nucleuses less than the goal and the Chromosome Milestone 19 limit is 500."
                         },
                 }, // hasMilestone("e", 14)
+                15: {
+                        requirementDescription(){
+                                return "75 Chromosomeless?"
+                        },
+                        done(){
+                                return player.e.challenges[11] >= 75
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: Token II via Cell's adder is 18 and per 10th Nucleus after 500 (max 1500) subtract .0001 from the Chromosome cost exponent."
+                        },
+                }, // hasMilestone("e", 15)
         },
         tabFormat: {
                 "Upgrades": {
@@ -49383,7 +49416,8 @@ addLayer("tokens", {
                                         if (hasMilestone("e", 11)) div = 42000
                                         if (hasMilestone("sp", 28)) div = Math.max(div, player.e.challenges[11] * 500 + 4e4)
                                 }
-                                if (hasUpgrade("tokens", 284) && add >= 19) add = 19 
+                                if (hasUpgrade("tokens", 284) && add >= 19)     add = 19 
+                                if (hasMilestone("e", 15) && add >= 18)         add = 18
                                 return [add, div]
                         },
                         maxAfford(){
@@ -49576,6 +49610,7 @@ addLayer("tokens", {
                                 let cost = "<b><h2>Requires</h2>:<br>" + format(getBuyableCost("tokens", 211), 3) + " Contaminants</b><br>"
                                 let eformula = "10<sup>2<sup>BASE+x</sup>"
                                 eformula = eformula.replace("BASE", formatWhole(tmp.tokens.buyables[211].base))
+                                eformula = eformula.replace(">0+x", ">x")
                                 
                                 return br + lvl + cost + "<b><h2>Cost formula</h2>:<br>" + eformula + "</b><br>"
                         },
