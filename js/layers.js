@@ -19665,6 +19665,7 @@ addLayer("cells", {
                 if (hasUpgrade("tokens", 273))  exp = exp.plus(1)
                 if (hasUpgrade("sp", 131))      exp = exp.plus(1)
                 if (hasMilestone("e", 1))       exp = exp.plus(1)
+                                                exp = exp.plus(player.e.challenges[21] / 10)
 
                 return exp
         },
@@ -26241,6 +26242,10 @@ addLayer("or", {
                                                         ret = ret.times(data[421].plus(1))
                                                         ret = ret.times(data[422].plus(1))
                                                         ret = ret.times(data[423].plus(1))
+                        
+                        if (inChallenge("e", 21))       return ret
+                        /*  RETURN IF IN ENERGYLESS? */
+
                         if (hasMilestone("or", 20) && !hasUpgrade("nu", 35)) {
                                                         ret = ret.times(player.or.milestones.length)
                         }
@@ -38427,6 +38432,31 @@ addLayer("e", {
                         countsAs: [],
                         completionLimit: 50,
                 }, // inChallenge("e", 12)
+                21: {
+                        name: "Energyless?",
+                        goal(){
+                                let c = player.e.challenges[21]
+                                let ret = new Decimal(366).plus(c * 2)
+                                return ret
+                        },
+                        canComplete: () => player.nu.points.gte(tmp.e.challenges[21].goal),
+                        fullDisplay(){
+                                let a = "You only gain Energy from intestine buyables" + br 
+                                a += "Goal: " + formatWhole(tmp.e.challenges[21].goal) + " Nucleuses" + br2
+                                a += "Reward: Add " + format(player.e.challenges[21] / 10) + " to the Cell effect exponent"
+                                a += " and subtract " + format(player.e.challenges[21] * 18) + " from the Mastery I coefficient"
+                                //a += " from the Species base gain divider, "
+                                return a + br2 + "Completions: " + player.e.challenges[21] + "/50"
+                        },
+                        onEnter(){
+                                player.nu.points = false ? tmp.e.challenges[21].goal.sub(10) : decimalZero
+                        },
+                        unlocked(){
+                                return player.e.challenges[11] >= 75
+                        },
+                        countsAs: [],
+                        completionLimit: 50,
+                }, // inChallenge("e", 21)
         },
         milestones: {
                 1: {
@@ -49460,6 +49490,7 @@ addLayer("tokens", {
                                 if (hasUpgrade("tokens", 133))  mult = 1140
                                 if (hasUpgrade("sp", 135))      mult = 1095
                                 if (hasUpgrade("e", 14))        mult = 1000
+                                                                mult -= 18 * player.e.challenges[21]
                                 
                                 return [add, mult]
                         },
