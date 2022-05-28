@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.303",
+	num: "1.304",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -12,18 +12,23 @@ function isEndgame() {
 
 function isEndgameRaw(){
 	if (player.extremeMode) return player.cells.points.gte("1e14545")
-	return player.e.challenges[21] >= 2
+	return player.nu.points.gte(832)
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.303)<br><br>
+		Reaching the endgame screen (updated at least as of v1.304)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.304</h3><br>
+		- Balanced until 832 Nucleuses.<br>
+		- Added a Ecosystem upgrade.<br>
+		- Added a Ecosystem milestone.<br>
+		- Added a custom save.<br>
 	<br><h3 style='color: #CC0000'>v1.303</h3><br>
 		- Balanced until 2 Energyless? completions.<br>
 		- Added a Ecosystem challenge.<br>

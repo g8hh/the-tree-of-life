@@ -35039,6 +35039,9 @@ addLayer("nu", {
                 return player.nu.points.plus(tmp.nu.costAdd).pow(tmp.nu.costExponent).plus(.999999)
         },
         getResetGain(){
+                if (hasMilestone("e", 16) && tmp.nu.costExponent.gte(1.7)) {
+                        return player.ch.points.root(tmp.nu.costExponent).floor().plus(1).sub(player.nu.points)
+                }
                 return tmp.nu.baseAmount.gte(tmp.nu.getNextAt) ? decimalOne : decimalZero
         },
         canReset(){
@@ -38367,6 +38370,18 @@ addLayer("e", {
                                 return player.e.challenges[11] >= 74
                         }, // hasUpgrade("e", 24)
                 },
+                25: {
+                        title(){
+                                return "<bdi style='color: #" + getUndulatingColor() + "'>Ecosystems X"
+                        },
+                        description(){
+                                return "Mastery V double exponent is 1.26 and start Energyless? with 10 less Nucleuses than the goal"
+                        },
+                        cost:() => new Decimal(1e88),
+                        unlocked(){
+                                return player.e.challenges[21] >= 2
+                        }, // hasUpgrade("e", 25)
+                },
         },
         challenges: {
                 11: {
@@ -38437,6 +38452,7 @@ addLayer("e", {
                         goal(){
                                 let c = player.e.challenges[21]
                                 let ret = new Decimal(366).plus(c * 2)
+                                if (ret.gte(407)) ret = ret.times(1.5).sub(203)
                                 return ret
                         },
                         canComplete: () => player.nu.points.gte(tmp.e.challenges[21].goal),
@@ -38449,7 +38465,7 @@ addLayer("e", {
                                 return a + br2 + "Completions: " + player.e.challenges[21] + "/50"
                         },
                         onEnter(){
-                                player.nu.points = false ? tmp.e.challenges[21].goal.sub(10) : decimalZero
+                                player.nu.points = hasUpgrade("e", 25) ? tmp.e.challenges[21].goal.sub(10) : decimalZero
                         },
                         unlocked(){
                                 return player.e.challenges[11] >= 75
@@ -38676,6 +38692,20 @@ addLayer("e", {
                                 return "Reward: Token II via Cell's adder is 18 and per 10th Nucleus after 500 (max 1500) subtract .0001 from the Chromosome cost exponent."
                         },
                 }, // hasMilestone("e", 15)
+                16: {
+                        requirementDescription(){
+                                return "799 Nucleuses"
+                        },
+                        done(){
+                                return player.nu.points.gte(799)
+                        },
+                        unlocked(){
+                                return true
+                        },
+                        effectDescription(){
+                                return "Reward: You can bulk buy Nucleuses."
+                        },
+                }, // hasMilestone("e", 16)
         },
         tabFormat: {
                 "Upgrades": {
@@ -49653,6 +49683,8 @@ addLayer("tokens", {
                         title: "Mastery V",
                         costExp(){
                                 let exp = new Decimal(1.3)
+
+                                if (hasUpgrade("e", 25)) exp = new Decimal(1.26)
 
                                 return exp
                         },
