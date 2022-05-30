@@ -1,6 +1,6 @@
 // Set your version in num and name
 var VERSION = {
-	num: "1.304",
+	num: "1.304.1",
 	name: "Advil's Auspicious Acension",
 }
 
@@ -17,13 +17,16 @@ function isEndgameRaw(){
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br><h2 style='color: #DDDD00'>Endgame:</h2><br>
-		Reaching the endgame screen (updated at least as of v1.304)<br><br>
+		Reaching the endgame screen (updated at least as of v1.304.1)<br><br>
 	<br><h2 style='color: #00CC00'>Notes</h2><br>
 		- Versions will be vA.B.C<br>
 		- A will be big releases.<br>
 		- B will be each content patch.<br>
 		- C will be small patches without content (bug/wording fixes).<br><br><br>
 
+	<br><h3 style='color: #CC0000'>v1.304.1</h3><br>
+		- Various wording fixes.<br>
+		- Made it so that if your current subtab is locked it'll put you into an unlocked subtab.<br>
 	<br><h3 style='color: #CC0000'>v1.304</h3><br>
 		- Balanced until 832 Nucleuses.<br>
 		- Added a Ecosystem upgrade.<br>

@@ -32569,7 +32569,7 @@ addLayer("an", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Fully reinstate Animal Milestone 21 but Prime when toggled off becomes 2x per."
+                                return "Reward: Fully reinstate Animal Milestone 21 but Prime I when toggled off becomes 2x per."
                         },
                 }, // hasMilestone("an", 31)
                 32: {
