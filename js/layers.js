@@ -1939,7 +1939,7 @@ addLayer("sci", {
                 return player.sci.points.plus(10).log10()
         },
         effectDescription(){
-                return " multiplying Point gain by " + format(tmp.sci.effect) + "."
+                return " multiplying Life Point gain by " + format(tmp.sci.effect) + "."
         },
         row: 0,
         layerShown(){
@@ -2762,7 +2762,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 202) && !hasMilestone("n", 3) && !player.shiftAlias) return "Requires: 1e15 C Points<br>Shift for effect"
-                                return "Per upgrade multiply Point gain by C Points"
+                                return "Per upgrade multiply Life Point gain by C Points"
                         },
                         effect(){
                                 return player.mini.c_points.points.max(1).pow(tmp.sci.upgrades.carbonUpgradesLength)
@@ -3261,7 +3261,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>N Sci II"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable's base costs and per upgrade multiply Point gain by 1e10,000</bdi>"
+                                return "<bdi style='font-size: 80%'>Permanently remove all A, B, and C minigame buyable's base costs and per upgrade multiply Life Point gain by 1e10,000</bdi>"
                         },
                         onPurchase(){
                                 player.sci.everhasnsci2 = true
@@ -4060,7 +4060,7 @@ addLayer("sci", {
                         },
                         description(){
                                 if (!hasUpgrade("sci", 411) && !player.shiftAlias) return "Requires: 1.00e7654 Protein<br>Shift for effect"
-                                return "Remove miRNA's base cost and Protein Science exponentiates point gain"
+                                return "Remove miRNA's base cost and Protein Science exponentiates Life Point gain"
                         },
                         canAfford(){
                                 return player.a.protein.points.gte("1e7654") || false
@@ -4543,7 +4543,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci II"
                         },
                         description(){
-                                return "<bdi style='font-size: 80%'>Per upgrade multiply DNA Science gain by the number of upgrades and each ncRNA and each miRNA exponentiates point gain ^DNA</bdi>"
+                                return "<bdi style='font-size: 80%'>Per upgrade multiply DNA Science gain by the number of upgrades and each ncRNA and each miRNA exponentiates Life Point gain ^DNA</bdi>"
                         },
                         cost:() => new Decimal(2000),
                         currencyLocation:() => player.sci.dna_science,
@@ -4573,7 +4573,7 @@ addLayer("sci", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA Sci IV"
                         },
                         description(){
-                                let a = "DNA Science<sup>" + makePurple("ABC") + "</sup> exponentiates point gain and multiplies Life gain"
+                                let a = "DNA Science<sup>" + makePurple("ABC") + "</sup> exponentiates Life Point gain and multiplies Life gain"
                                 return a + br + "Currently: " + format(tmp.sci.upgrades[504].effect)
                         },
                         effect(){
@@ -5164,7 +5164,7 @@ addLayer("sci", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.sci.buyables[11]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: *"
-                                        let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Point gain</b><br>"
+                                        let eff2 = format(tmp.sci.buyables[11].effect) + " to Hydrogen Science and Life Point gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("sci", 11)) + " Hydrogen Science</b><br>"
                                 
                                         return br + lvl + eff1 + eff2 + cost + "Shift to see details"
@@ -9592,7 +9592,7 @@ addLayer("p", {
                         },
                         description(){
                                 let a = "N → ΔP cost base is 5.5"
-                                if (player.extremeMode) a += " and each upgrade squares point gain"
+                                if (player.extremeMode) a += " and each upgrade squares Life Point gain"
                                 return a
                         },
                         cost:() => new Decimal(player.extremeMode ? "e8e45" : "e2.5e45"),
@@ -10879,7 +10879,7 @@ addLayer("mu", {
                         description(){
                                 let a = "α → ∂α log6's become log5"
                                 if (player.extremeMode) a += ", Universe is e2e44," 
-                                return a + " and log10(Lives) exponentiates point gain"
+                                return a + " and log10(Lives) exponentiates Life Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? 2e32 : 7e31),
                         unlocked(){
@@ -12300,7 +12300,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life IV"
                         },
                         description(){
-                                let a = "Every second Dilation completion makes Reuse base exponentiate point gain"
+                                let a = "Every second Dilation completion makes Reuse base exponentiate Life Point gain"
                                 return a + br + "Currently: " + format(tmp.l.upgrades[14].effect)
                         },
                         cost:() => new Decimal(270),
@@ -12527,7 +12527,7 @@ addLayer("l", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Life XX"
                         },
                         description(){
-                                return "β → ∂β levels exponentiate point gain"
+                                return "β → ∂β levels exponentiate Life Point gain"
                         },
                         cost:() => new Decimal("1e537"),
                         unlocked(){
@@ -12839,7 +12839,7 @@ addLayer("l", {
                         effectDescription(){
                                 let a = "Reward: Reduce token cost exponent to .49"
                                 if (player.extremeMode) return a + "."
-                                return a + ", square point gain, and raise point gain ^1.5 if you are at exactly 33 completions."
+                                return a + ", square Life Point gain, and raise Life point gain ^1.5 if you are at exactly 33 completions."
                         },
                 }, // hasMilestone("l", 18)
                 19: {
@@ -13062,8 +13062,8 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^9 per Dilation completion over 100."
-                                return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and point gain is raised ^100 per Dilation completion over 100."
+                                if (player.extremeMode) return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and Life Point gain is raised ^9 per Dilation completion over 100."
+                                return "Reward: α → ∂β log4 becomes ln and token cost exponent is .4 and Life Point gain is raised ^100 per Dilation completion over 100."
                         },
                 }, // hasMilestone("l", 31)
                 32: {
@@ -13079,7 +13079,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
+                                return "Reward: Life Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
                         },
                 }, // hasMilestone("l", 32)
                 33: {
@@ -13095,7 +13095,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                let a = "Reward: Point gain is raised Dilation completions/100 per N → ΔN level and per milestone double life gain."
+                                let a = "Reward: Life Point gain is raised Dilation completions/100 per N → ΔN level and per milestone double life gain."
                                 if (player.extremeMode) a = a.replace("100", "98")
                                 return a
                         },
@@ -13113,7 +13113,7 @@ addLayer("l", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
+                                return "Reward: Life Point gain is raised ^10 per Dilation completion over 100 and per milestone double life gain."
                         },
                 }, // hasMilestone("l", 34)
                 35: {
@@ -13146,7 +13146,7 @@ addLayer("l", {
                         },
                         effectDescription(){
                                 if (player.extremeMode) return "Reward: α → ∂β ln becomes log2, Universe is ee51."
-                                return "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise point gain ^1.1.<br>Note: Requires 5e311 Lives."
+                                return "Reward: α → ∂β ln becomes log2, Universe is ee51, and raise Life Point gain ^1.1.<br>Note: Requires 5e311 Lives."
                         },
                 }, // hasMilestone("l", 36)
                 37: {
@@ -14457,7 +14457,7 @@ addLayer("l", {
                                 let a = "Dilation at 110 completions and all hydrogen content is disabled"
                                 let b = "Goal: " + (player.extremeMode ? "e1e277,340" : "e1e140,400") + " Points"
                                 let c = "Reward: Per Anti- challenge per non-zero gem log10(Amino Acid) multiplies Amino Acid gain"
-                                c += " and add 1.9 to base point gain but disable hydrogen content"
+                                c += " and add 1.9 to base Life Point gain but disable hydrogen content"
                                 let d = "Currently: " + format(tmp.l.challenges[21].reward)
 
                                 return a + br + b + br + c + br + d
@@ -15286,8 +15286,8 @@ addLayer("l", {
                                                 let c2 = "Challenge 2: Add .01 to µ cost exponent per depth"
                                                 let c3 = "Challenge 3: Dilate Oxygen and Carbon gain ^.99 per depth+1 choose 2"
                                                 let c4 = "Challenge 4: Subtract floor(35*depth<sup>.5</sup>)/1000 from the Dilation exponent"
-                                                let c5 = "Challenge 5: Dilate Point gain ^.665<sup>sqrt(depth)</sup>"
-                                                let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate point gain ^(.96^depth<sup>1/8</sup>)"
+                                                let c5 = "Challenge 5: Dilate Life Point gain ^.665<sup>sqrt(depth)</sup>"
+                                                let c6 = "Challenge 6: Per challenge 2 depth + 86 dilate Life Point gain ^(.96^depth<sup>1/8</sup>)"
                                                 let c7 = "Challenge 7: Challenge 6 base is reduced by .023*depth<sup>.56</sup>"
                                                 let c8 = "Challenge 8: Challenge 3 to 7 depths are 3.3 + depths/2 times more and<br>challenge 2 is .5 + depths/2 times more"
                                                 if (player.extremeMode) {
@@ -16125,7 +16125,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid I"
                         },
                         description(){
-                                return "Unlock Protein and each upgrade cubes point gain"
+                                return "Unlock Protein and each upgrade cubes Life Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? "1e1234" : "1e1465"),
                         currencyLocation:() => player.l,
@@ -16155,7 +16155,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid III"
                         },
                         description(){
-                                return "The number of tRNA's multiplies Protein gain and exponentiates Point gain"
+                                return "The number of tRNA's multiplies Protein gain and exponentiates Life Point gain"
                         },
                         cost:() => new Decimal(2e5),
                         currencyLocation:() => player.a.protein,
@@ -16187,7 +16187,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid V"
                         },
                         description(){
-                                return "The number of mRNA's multiplies Protein gain and exponentiates Point gain"
+                                return "The number of mRNA's multiplies Protein gain and exponentiates Life Point gain"
                         },
                         cost:() => new Decimal(3e35),
                         currencyLocation:() => player.a.protein,
@@ -16311,7 +16311,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XIII"
                         },
                         description(){
-                                return "Unlock the next set of challenges, gain a C14 gem per second, and each miRNA raises point gain ^100"
+                                return "Unlock the next set of challenges, gain a C14 gem per second, and each miRNA raises Life Point gain ^100"
                         },
                         cost:() => new Decimal("1e5100"),
                         currencyLocation:() => player.a.protein,
@@ -16326,7 +16326,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XIV"
                         },
                         description(){
-                                return "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
+                                return "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates Life Point gain"
                         },
                         cost:() => new Decimal("1e5432"),
                         currencyLocation:() => player.a.protein,
@@ -16341,7 +16341,7 @@ addLayer("a", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Amino Acid XV"
                         },
                         description(){
-                                return "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates point gain"
+                                return "Add .001 to tRNA and mRNA bases and log10(Protein) exponentiates Life Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? "ee4" : "1e9000"),
                         currencyLocation:() => player.a.protein,
@@ -16802,7 +16802,7 @@ addLayer("a", {
                         },
                         effectDescription(){
                                 let a = "Reward: You can buy all Lives buyables at once and each milestone adds 1 to 𝛾 → ∂𝛾's exponent divider"
-                                if (player.extremeMode) a += " and cubes point gain"
+                                if (player.extremeMode) a += " and cubes Life Point gain"
                                 return a + "."
                         },
                 }, // hasMilestone("a", 17)
@@ -16819,7 +16819,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Each β → ∂𝛾 cubes point gain and gain an Amino Acid reset per second."
+                                return "Reward: Each β → ∂𝛾 cubes Life Point gain and gain an Amino Acid reset per second."
                         },
                 }, // hasMilestone("a", 18)
                 19: {
@@ -16838,7 +16838,7 @@ addLayer("a", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate point gain ^1.05"
+                                let a = "Reward: Per N → Δµ<sup>1.5</sup> exponentiate Life Point gain ^1.05"
                                 if (player.extremeMode) a += " and double protein gain"
                                 let b = "<br>Currently: ^" + format(tmp.a.milestones[19].effect) 
                                 return a + "." + b
@@ -16885,7 +16885,7 @@ addLayer("a", {
                                 return true
                         },
                         effectDescription(){
-                                if (player.extremeMode) return "Reward: Unlock rRNA and each milestones multiples Protein gain and exponentiates point gain by 1+milestones/100."
+                                if (player.extremeMode) return "Reward: Unlock rRNA and each milestones multiples Protein gain and exponentiates Life Point gain by 1+milestones/100."
                                 return "Reward: Unlock rRNA and each milestones multiples Protein gain by 1+milestones/100."
                         },
                 }, // hasMilestone("a", 22)
@@ -16920,7 +16920,7 @@ addLayer("a", {
                                 return l.div(50).plus(1).pow(l)
                         },
                         effectDescription(){
-                                return "Reward: Each rRNA raises point gain ^1+rRNA/50.<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
+                                return "Reward: Each rRNA raises Life Point gain ^1+rRNA/50.<br>Currently: ^" + format(tmp.a.milestones[24].effect) 
                         },
                 }, // hasMilestone("a", 24)
                 25: {
@@ -17718,7 +17718,7 @@ addLayer("a", {
                                 if (!player.shiftAlias) {
                                         let lvl = "<b><h2>Levels</h2>: " + formatWhole(player.a.buyables[22]) + "</b><br>"
                                         let eff1 = "<b><h2>Effect</h2>: ^"
-                                        let eff2 = format(tmp.a.buyables[22].effect) + " to Point gain</b><br>"
+                                        let eff2 = format(tmp.a.buyables[22].effect) + " to Life Point gain</b><br>"
                                         let cost = "<b><h2>Cost</h2>: " + formatWhole(getBuyableCost("a", 22)) + " Protein</b><br>"
 
                                         let end = "<br>Note: hardcapped at 1e125 in Customizable"
@@ -18640,7 +18640,7 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA II"
                         },
                         description(){
-                                return "Per upgrade per ncRNA exponentiate point gain to the number of ncRNA's and per upgrade double DNA gain"
+                                return "Per upgrade per ncRNA exponentiate Life Point gain to the number of ncRNA's and per upgrade double DNA gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? 40 : 30),
                         unlocked(){
@@ -18653,7 +18653,7 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA III"
                         },
                         description(){
-                                let a = "Per upgrade per miRNA exponentiate point gain to the number of miRNAs and per upgrade double DNA gain"
+                                let a = "Per upgrade per miRNA exponentiate Life Point gain to the number of miRNAs and per upgrade double DNA gain"
                                 if (player.extremeMode) a = a.replace("er upgrade p", "")
                                 return a
                         },
@@ -18801,7 +18801,7 @@ addLayer("d", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>DNA XIV"
                         },
                         description(){
-                                return "Per upgrade per α → ∂α exponentiate point gain to the number of α → ∂α's"
+                                return "Per upgrade per α → ∂α exponentiate Life Point gain to the number of α → ∂α's"
                         },
                         cost:() => new Decimal(player.extremeMode ? "1.5e1007" : "5.010e322"),
                         unlocked(){
@@ -19254,7 +19254,7 @@ addLayer("d", {
                                 return Decimal.pow(2, getBuyableAmount("mu", 31).pow(1.41))
                         },
                         effectDescription(){
-                                return "Reward: Per N → Δµ<sup>1.41</sup> square point gain." + br + "Currently: " + format(tmp.d.milestones[27].effect)
+                                return "Reward: Per N → Δµ<sup>1.41</sup> square Life Point gain." + br + "Currently: " + format(tmp.d.milestones[27].effect)
                         },
                 }, // hasMilestone("d", 27)
                 28: {
@@ -20215,7 +20215,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells I"
                         },
                         description(){
-                                let a = "<bdi style='font-size: 80%'>Gain 3x DNA resets, bulk 50x Life buyables, keep all prior autobuyer content, and per Cell reset (max 10) dilate point gain ^1.02</bdi>"
+                                let a = "<bdi style='font-size: 80%'>Gain 3x DNA resets, bulk 50x Life buyables, keep all prior autobuyer content, and per Cell reset (max 10) dilate Life Point gain ^1.02</bdi>"
                                 return a + br + "Currently: " + format(tmp.cells.upgrades[11].effect)
                         },
                         effect(){
@@ -20486,8 +20486,8 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XVIII"
                         },
                         description(){
-                                if (player.extremeMode) return "Per Token II dilate point gain ^13 and Secondary is 1e40x easier"
-                                return "Per Token II dilate point gain ^13"
+                                if (player.extremeMode) return "Per Token II dilate Life Point gain ^13 and Secondary is 1e40x easier"
+                                return "Per Token II dilate Life Point gain ^13"
                         },
                         cost:() => new Decimal(player.extremeMode ? "5e12521" : "2e12664"),
                         unlocked(){
@@ -20594,7 +20594,7 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Cells XXVI"
                         },
                         description(){
-                                return "Raise the 3 in Down Quark's base to Token II - 20 and per upgrade dilate Point gain ^1.1"
+                                return "Raise the 3 in Down Quark's base to Token II - 20 and per upgrade dilate Life Point gain ^1.1"
                         },
                         cost:() => new Decimal("1e22305"),
                         unlocked(){
@@ -20935,8 +20935,8 @@ addLayer("cells", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Kappa V"
                         },
                         description(){
-                                if (player.extremeMode) return "Tokens multiply Infrared base and dilate point gain"
-                                return "Tokens exponentiates Infrared base and dilate point gain"
+                                if (player.extremeMode) return "Tokens multiply Infrared base and dilate Life Pint gain"
+                                return "Tokens exponentiates Infrared base and dilate Life Point gain"
                         },
                         cost:() => new Decimal(player.extremeMode ? "3e809" : "e1377"),
                         unlocked(){
@@ -22071,7 +22071,7 @@ addLayer("cells", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Add .0001 to tRNA base, token exponent is .37, and per challenge per milestone dilate point gain ^1.001."
+                                let a = "Reward: Add .0001 to tRNA base, token exponent is .37, and per challenge per milestone dilate Life Point gain ^1.001."
                                 let b = br + "Currently: ^" + format(tmp.cells.milestones[56].effect)
                                 return a + b
                         },
@@ -23502,7 +23502,7 @@ addLayer("cells", {
                                         let d = "Entering a minigame unlocks a tab for said minigame."
                                         let e = "The only thing kept upon resetting a minigame is upgrades, unless otherwise stated."
                                         let f = "Initially there is a 60 second timer for the minigame,<br>at which point your progress is reset and you are kicked out of the tab."
-                                        let g = "Your total point gain in each minigame is kept track of, and the basis of some upgrades."
+                                        let g = "Your total resource gain in each minigame is kept track of, and the basis of some upgrades."
 
                                         let part3 = part1 + (player.or.unlocked ? "" : br2 + d + br + e + br + f + br + g)
 
@@ -24804,7 +24804,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LIV"
                         },
                         description(){
-                                let a = "Tissues IX becomes .165 and the number of upgrades dilates point gain"
+                                let a = "Tissues IX becomes .165 and the number of upgrades dilates Life Point gain"
                                 let b = "<br>Requires: 85 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 114)) return a + b
                                 return a + "</bdi>"
@@ -24894,7 +24894,7 @@ addLayer("t", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Tissues LIX"
                         },
                         description(){
-                                let a = "Primary completions<sup>2.5</sup> dilate point gain and multiply Stem Cell gain after Secondary nerf"
+                                let a = "Primary completions<sup>2.5</sup> dilate Life Point gain and multiply Stem Cell gain after Secondary nerf"
                                 let b = "<br>Requires: 91 Secondary completions</bdi>"
                                 if (!hasUpgrade("t", 124)) return a + b
                                 return a + "</bdi>"
@@ -25201,7 +25201,7 @@ addLayer("t", {
                                 return base.pow(exp)
                         },
                         effectDescription(){
-                                let a = "Reward: Gain a Tissue reset per second and per upgrade dilate point gain ^ 1 + milestones/100."
+                                let a = "Reward: Gain a Tissue reset per second and per upgrade dilate Life Point gain ^ 1 + milestones/100."
                                 let b = br + "Currently: " + format(tmp.t.milestones[4].effect)
                                 return a + b
                         },
@@ -25470,7 +25470,7 @@ addLayer("t", {
                                 return true
                         },
                         effectDescription(){
-                                return "Reward: Milestones dilate point gain."
+                                return "Reward: Milestones dilate Life Point gain."
                         },
                 }, // hasMilestone("t", 21)
                 22: {
@@ -30700,7 +30700,7 @@ addLayer("or", {
                                 return [["or", "dontshoworgans"]]
                         },
                         effectDescription(){
-                                return "Reward: in<u>TES</u>tine's log10 becomes log9, per milestone Energy<sup>.01</sup> dilates point gain and unlock a toggle for hiding the Organs subtab [doesn't affect gameplay]."
+                                return "Reward: in<u>TES</u>tine's log10 becomes log9, per milestone Energy<sup>.01</sup> dilates Life Point gain and unlock a toggle for hiding the Organs subtab [doesn't affect gameplay]."
                         },
                 }, // hasMilestone("or", 23)
                 24: {
@@ -31851,7 +31851,7 @@ addLayer("an", {
                                 return "<bdi style='color: #" + getUndulatingColor() + "'>Animals X"
                         },
                         description(){
-                                return "<u>IN</u>testine's log6 becomes log5 and per upgrade Air<sup>.01</sup> dilates point gain"
+                                return "<u>IN</u>testine's log6 becomes log5 and per upgrade Air<sup>.01</sup> dilates Life Point gain"
                         },
                         cost:() => new Decimal(3237330),
                         unlocked(){
@@ -32527,7 +32527,7 @@ addLayer("an", {
                                 player.d.upgrades = []
                         },
                         effectDescription(){
-                                return "Reward: Chordata IV amount multiplies Gene gain and Genes multiply point gain but repeal and remove DNA upgrades."
+                                return "Reward: Chordata IV amount multiplies Gene gain and Genes multiply Life Point gain but repeal and remove DNA upgrades."
                         },
                 }, // hasMilestone("an", 28)
                 29: {
@@ -35350,7 +35350,7 @@ addLayer("nu", {
                         },
                         description(){
                                 if (!hasUpgrade("nu", 32) && !player.shiftAlias) return "Requires: 1e1965 Animals<br>Shift for effect"
-                                return "Per Chromosome Organs dilate Point gain and unlock 25 more Species upgrades"
+                                return "Per Chromosome Organs dilate Life Point gain and unlock 25 more Species upgrades"
                         },
                         cost:() => new Decimal(87),
                         canAfford(){
@@ -46661,7 +46661,7 @@ addLayer("mini", {
                                                 a += "<br>the more powerful its value is."
 
                                                 let b = "<br>Additionally, per set of suits squared, you gain 30x points.<br>"
-                                                b += "Finally, point gain is the product of all above values time multipliers."
+                                                b += "Finally, C point gain is the product of all above values time multipliers."
                                                 b += "<br>Multipliers: x" + format(tmp.mini.c_points.getGainMult) + " C Point gain"
 
                                                 return a + b
@@ -46952,7 +46952,7 @@ addLayer("mini", {
                                 ["display-text", function(){
                                         let a = "You can refuel the car by clicking. The car goes faster based on how much fuel it has."
 
-                                        let b = "<br>Point gain is based on speed (which is based on fuel), but you lose 1% of your fuel every second."
+                                        let b = "<br>D Point gain is based on speed (which is based on fuel), but you lose 1% of your fuel every second."
                                         if (player.shiftAlias) {
                                                 b += "<br>Multipliers: x" + format(tmp.mini.d_points.getGainMult)
                                                 b += "   Multiplier from fuel: x" + format(tmp.mini.d_points.getFuelMultiplier)
