@@ -2268,19 +2268,19 @@ addLayer("sci", {
                 cols: 5,
                 carbonUpgradesLength(){
                         if (!player.extremeMode) return 0
-                        return player.sci.upgrades.filter(x > 200 && x < 250).length
+                        return player.sci.upgrades.filter(x => return x > 200 && x < 250).length
                 },
                 nitrogenUpgradesLength(){
                         if (!player.extremeMode) return 0
-                        return player.sci.upgrades.filter(x > 300 && x < 370).length
+                        return player.sci.upgrades.filter(x => return x > 300 && x < 370).length
                 },
                 proteinUpgradesLength(){
                         if (!player.extremeMode) return 0
-                        return player.sci.upgrades.filter(x > 400 && x < 460).length
+                        return player.sci.upgrades.filter(x => return x > 400 && x < 460).length
                 },
                 dnaUpgradesLength(){
                         if (!player.extremeMode) return 0
-                        return player.sci.upgrades.filter(x > 500 && x < 580).length
+                        return player.sci.upgrades.filter(x => return x > 500 && x < 580).length
                 },
                 11: {
                         title(){
